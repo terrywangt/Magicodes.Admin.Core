@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <VersionPrefix>1.0.0.0</VersionPrefix>
+    <TargetFramework>net461</TargetFramework>
+    <AssemblyName>Magicodes.Admin.Core</AssemblyName>
+    <PackageId>Magicodes.Admin.Core</PackageId>
+    <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
+    <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <UserSecretsId>Magicodes-Admin-894FDFC1-6482-4A56-926A-3C46C9FE0329</UserSecretsId>
+    <RootNamespace>Magicodes.Admin</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Localization\Admin\*.xml;Emailing\EmailTemplates\default.html" Exclude="bin\**;obj\**;**\*.xproj;packages\**;@(EmbeddedResource)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Abp" Version="1.5.0" />
+    <PackageReference Include="Abp.AutoMapper" Version="1.5.0" />
+    <PackageReference Include="Abp.EntityFramework" Version="1.5.0" />
+    <PackageReference Include="Abp.Zero" Version="1.5.0" />
+    <PackageReference Include="Abp.Zero.Ldap" Version="1.5.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="1.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="1.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="1.1.1" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
+    <Reference Include="System" />
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.Extensions.SecretManager.Tools" Version="1.0.0" />
+  </ItemGroup>
+  
+</Project>

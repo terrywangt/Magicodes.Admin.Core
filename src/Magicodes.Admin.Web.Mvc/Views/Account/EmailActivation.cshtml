@@ -1,0 +1,26 @@
+﻿@using Abp.Authorization.Users
+@section Scripts
+{
+    <environment names="Development">
+        <script src="~/view-resources/Views/Account/EmailActivation.js" asp-append-version="true"></script>
+    </environment>
+
+    <environment names="Staging,Production">
+        <script src="~/view-resources/Views/Account/EmailActivation.min.js" asp-append-version="true"></script>
+    </environment>
+}
+<form class="email-activation-form" asp-action="SendEmailActivationLink" method="post">
+    <h3>@L("EmailActivation")</h3>
+    <p>
+        @L("SendEmailActivationLink_Information")
+    </p>
+
+    <div class="form-group">
+        <label class="control-label visible-ie8 visible-ie9">@L("EmailAddress")</label>
+        <input class="form-control placeholder-no-fix" type="email" autocomplete="off" placeholder="@L("EmailAddress")" name="EmailAddress" required maxlength="@AbpUserBase.MaxEmailAddressLength" />
+    </div>
+    <div class="form-actions">
+        <a asp-action="Login"><button type="button" id="back-btn" class="btn btn-default">@L("Back")</button></a>
+        <button type="submit" class="btn btn-success uppercase pull-right">@L("Submit")</button>
+    </div>
+</form>

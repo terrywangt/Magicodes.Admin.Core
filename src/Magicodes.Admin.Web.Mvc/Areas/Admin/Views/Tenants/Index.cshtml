@@ -1,0 +1,74 @@
+﻿@using System.Threading.Tasks
+@using Magicodes.Admin.Authorization
+@using Magicodes.Admin.Web.Areas.Admin.Startup
+@{
+    ViewBag.CurrentPageName = AdminPageNames.Host.Tenants;
+}
+@section Styles
+{
+    <environment names="Development">
+        <link rel="stylesheet" href="~/view-resources/Areas/Admin/Views/Common/_FeaturesTree.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/view-resources/Areas/Admin/Views/Tenants/Index.css" asp-append-version="true" />
+    </environment>
+
+    <environment names="Staging,Production">
+        <link rel="stylesheet" href="~/view-resources/Areas/Admin/Views/Common/_FeaturesTree.min.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/view-resources/Areas/Admin/Views/Tenants/Index.min.css" asp-append-version="true" />
+    </environment>
+}
+@section Scripts
+{
+    <environment names="Development">
+        <script src="~/view-resources/Areas/Admin/Views/Common/_FeaturesTree.js" asp-append-version="true"></script>
+        <script src="~/view-resources/Areas/Admin/Views/Tenants/_CreateModal.js" asp-append-version="true"></script>
+        <script src="~/view-resources/Areas/Admin/Views/Tenants/_EditModal.js" asp-append-version="true"></script>
+        <script src="~/view-resources/Areas/Admin/Views/Tenants/_FeaturesModal.js" asp-append-version="true"></script>
+        <script src="~/view-resources/Areas/Admin/Views/Tenants/Index.js" asp-append-version="true"></script>
+    </environment>
+
+    <environment names="Staging,Production">
+        <script src="~/view-resources/Areas/Admin/Views/Common/_FeaturesTree.min.js" asp-append-version="true"></script>
+        <script src="~/view-resources/Areas/Admin/Views/Tenants/_CreateModal.min.js" asp-append-version="true"></script>
+        <script src="~/view-resources/Areas/Admin/Views/Tenants/_EditModal.min.js" asp-append-version="true"></script>
+        <script src="~/view-resources/Areas/Admin/Views/Tenants/_FeaturesModal.min.js" asp-append-version="true"></script>
+        <script src="~/view-resources/Areas/Admin/Views/Tenants/Index.min.js" asp-append-version="true"></script>
+    </environment>
+}
+<div class="row margin-bottom-5">
+    <div class="col-xs-6">
+        <div class="page-head">
+            <div class="page-title">
+                <h1>
+                    <span>@L("Tenants")</span> <small>@L("TenantsHeaderInfo")</small>
+                </h1>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-6 text-right">
+        @if (IsGranted(AppPermissions.Pages_Tenants_Create))
+        {
+            <button id="CreateNewTenantButton" class="btn btn-primary blue"><i class="fa fa-plus"></i> @L("CreateNewTenant")</button>
+        }
+    </div>
+</div>
+<div class="portlet light margin-bottom-0">
+    <div class="portlet-title portlet-title-filter">
+        <div class="inputs inputs-full-width">
+            <div class="portlet-input">
+                <form>
+                    <div class="input-group">
+                        <input id="TenantsTableFilter" class="form-control" placeholder="@L("SearchWithThreeDot")" type="text" value="@ViewBag.FilterText">
+                        <span class="input-group-btn">
+                            <button id="GetTenantsButton" class="btn default" type="submit"><i class="icon-magnifier"></i></button>
+                        </span>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div>
+            <div id="TenantsTable"></div>
+        </div>
+    </div>
+</div>

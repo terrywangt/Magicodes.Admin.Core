@@ -1,0 +1,83 @@
+﻿@using System.Threading.Tasks
+@using Abp.Application.Services.Dto
+@using Magicodes.Admin.Authorization
+@using Magicodes.Admin.Web.Areas.Admin.Models.Roles
+@using Magicodes.Admin.Web.Areas.Admin.Startup
+@using Magicodes.Admin.Web.Startup
+@model RoleListViewModel
+@{
+    ViewBag.CurrentPageName = AdminPageNames.Common.Roles;
+}
+@section Styles
+{
+    <environment names="Development">
+        <link rel="stylesheet" href="~/view-resources/Areas/Admin/Views/Roles/Index.css" asp-append-version="true" />
+    </environment>
+
+    <environment names="Staging,Production">
+        <link rel="stylesheet" href="~/view-resources/Areas/Admin/Views/Roles/Index.min.css" asp-append-version="true" />
+    </environment>
+}
+@section Scripts
+{
+    <environment names="Development">
+        <script src="~/view-resources/Areas/Admin/Views/Common/_PermissionTree.js" asp-append-version="true"></script>
+        <script src="~/view-resources/Areas/Admin/Views/Roles/_CreateOrEditModal.js" asp-append-version="true"></script>
+        <script src="~/view-resources/Areas/Admin/Views/Roles/Index.js" asp-append-version="true"></script>
+    </environment>
+
+    <environment names="Staging,Production">
+        <script src="~/view-resources/Areas/Admin/Views/Common/_PermissionTree.min.js" asp-append-version="true"></script>
+        <script src="~/view-resources/Areas/Admin/Views/Roles/_CreateOrEditModal.min.js" asp-append-version="true"></script>
+        <script src="~/view-resources/Areas/Admin/Views/Roles/Index.min.js" asp-append-version="true"></script>
+    </environment>
+}
+<div class="row margin-bottom-5">
+    <div class="col-xs-6">
+        <div class="page-head">
+            <div class="page-title">
+                <h1>
+                    <span>@L("Roles")</span> <small>@L("RolesHeaderInfo")</small>
+                </h1>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-6 text-right">
+        @if (IsGranted(AppPermissions.Pages_Administration_Roles_Create))
+        {
+            <button id="CreateNewRoleButton" class="btn btn-primary blue"><i class="fa fa-plus"></i> @L("CreateNewRole")</button>
+        }
+    </div>
+</div>
+
+<div class="portlet light margin-bottom-0">
+    <div class="portlet-title portlet-title-filter">
+        <div class="inputs inputs-full-width">
+            <div class="portlet-input">
+                <form>
+                    <div class="row">
+                        <div class="col-xs-6">
+                            @Html.DropDownList(
+                                "PermissionSelectionCombobox", Model.Permissions.Select(i => i.ToSelectListItem()),
+                                new
+                                {
+                                    @class = "form-control selectpicker",
+                                    data_live_search = "true",
+                                    data_none_selected_text = L("FilterByPermission"),
+                                    id = "PermissionSelectionCombo"
+                                })
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <button id="RefreshRolesButton" class="btn btn-default" style="display: block; width: 100%"><i class="fa fa-refresh"></i> @L("Refresh")</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div id="RolesTable"></div>
+    </div>
+</div>

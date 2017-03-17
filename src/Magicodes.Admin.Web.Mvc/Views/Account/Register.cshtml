@@ -1,0 +1,85 @@
+﻿@model Magicodes.Admin.Web.Models.Account.RegisterViewModel
+@using Abp.Extensions
+@using Abp.Json
+@using Magicodes.Admin.MultiTenancy
+@addTagHelper *, PaulMiami.AspNetCore.Mvc.Recaptcha
+@section Scripts
+{
+    <script>
+        window.passwordComplexitySetting = @Html.Raw(Model.PasswordComplexitySetting.ToJsonString(indented: true));
+    </script>
+
+    <environment names="Development">
+        <script src="~/view-resources/Views/Account/Register.js" asp-append-version="true"></script>
+    </environment>
+
+    <environment names="Staging,Production">
+        <script src="~/view-resources/Views/Account/Register.min.js" asp-append-version="true"></script>
+    </environment>
+
+    <recaptcha-script />
+}
+<form class="register-form" asp-action="Register" method="post">
+
+    <h3>@L("SignUp")</h3>
+
+    @if (@ViewBag.ErrorMessage != null)
+    {
+        <div class="alert alert-danger">
+            <i class="fa fa-warning"></i> @ViewBag.ErrorMessage
+        </div>
+    }
+
+    <input type="hidden" name="IsExternalLogin" value="@Model.IsExternalLogin.ToString()" />
+    <input type="hidden" name="ExternalLoginAuthSchema" value="@Model.ExternalLoginAuthSchema" />
+
+    <p class="hint">
+        @L("PersonalInformations")
+    </p>
+    <div class="form-group">
+        <label class="control-label visible-ie8 visible-ie9">@L("Name")</label>
+        <input class="form-control placeholder-no-fix" type="text" placeholder="@L("Name")" name="Name" required value="@Model.Name" maxlength="@Magicodes.Admin.Authorization.Users.User.MaxNameLength" />
+    </div>
+    <div class="form-group">
+        <label class="control-label visible-ie8 visible-ie9">@L("Surname")</label>
+        <input class="form-control placeholder-no-fix" type="text" placeholder="@L("Surname")" name="Surname" required value="@Model.Surname" maxlength="@Magicodes.Admin.Authorization.Users.User.MaxSurnameLength" />
+    </div>
+    <div class="form-group">
+        <label class="control-label visible-ie8 visible-ie9">@L("EmailAddress")</label>
+        <input class="form-control placeholder-no-fix" type="email" placeholder="@L("EmailAddress")" name="EmailAddress" required value="@Model.EmailAddress" maxlength="@Magicodes.Admin.Authorization.Users.User.MaxEmailAddressLength" />
+    </div>
+
+    @if (!Model.IsExternalLogin)
+    {
+        <p class="hint">
+            @L("AccountSettings")
+        </p>
+        <div class="form-group">
+            <label class="control-label visible-ie8 visible-ie9">@L("UserName")</label>
+            <input class="form-control placeholder-no-fix input-ltr" type="text" autocomplete="off" placeholder="@L("UserName")" name="UserName" value="@Model.UserName" required maxlength="@Magicodes.Admin.Authorization.Users.User.MaxUserNameLength" />
+        </div>
+        <div class="form-group">
+            <label class="control-label visible-ie8 visible-ie9">@L("Password")</label>
+            <input class="form-control placeholder-no-fix" type="password" autocomplete="off" id="RegisterPassword" placeholder="@L("Password")" name="Password" required />
+        </div>
+        <div class="form-group">
+            <label class="control-label visible-ie8 visible-ie9">@L("PasswordRepeat")</label>
+            <input class="form-control placeholder-no-fix" type="password" autocomplete="off" placeholder="@L("PasswordRepeat")" name="PasswordRepeat" required />
+        </div>
+    }
+
+    @if (ViewBag.UseCaptcha)
+    {
+        <p class="hint">
+            @L("Captha_Hint")
+        </p>
+        <div class="form-group margin-bottom-20">
+            <recaptcha />
+        </div>
+    }
+
+    <div class="form-actions">
+        <a asp-action="Login"><button type="button" id="register-back-btn" class="btn btn-default">@L("Back")</button></a>
+        <button type="submit" id="register-submit-btn" class="btn btn-success uppercase pull-right">@L("Submit")</button>
+    </div>
+</form>

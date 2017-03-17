@@ -1,0 +1,13 @@
+﻿@using Magicodes.Admin.Web.Views.Shared.Components.AccountLanguages
+@model LanguageSelectionViewModel
+@if (Model.Languages.Count > 1)
+{
+    <div class="language-switch-area">
+        @foreach (var languageInfo in Model.Languages)
+        {
+            <a href="~/AbpLocalization/ChangeCulture?cultureName=@(languageInfo.Name)&returnUrl=@Context.Request.Path">
+                <span class="language-icon @(languageInfo == Model.CurrentLanguage ? "language-icon-current" : "")" title="@languageInfo.DisplayName"><i class="@languageInfo.Icon"></i></span>
+            </a>
+        }
+    </div>
+}

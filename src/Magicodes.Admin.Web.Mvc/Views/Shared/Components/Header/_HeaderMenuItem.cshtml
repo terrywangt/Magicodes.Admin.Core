@@ -1,0 +1,31 @@
+﻿@using Abp.Collections.Extensions
+@using Abp.Extensions
+@using System.Threading.Tasks
+@using Magicodes.Admin.Web.Views
+@using Magicodes.Admin.Web.Views.Shared.Components.Header
+@model HeaderMenuItemViewModel
+<li class="@(Model.MenuItem.Name == Model.CurrentPageName ? "active" : "") @(Model.MenuItem.Items.IsNullOrEmpty() ? "" : (Model.CurrentLevel == 0 ? "dropdown" : "dropdown-submenu"))">
+    @if (Model.MenuItem.Items.IsNullOrEmpty())
+    {
+        if (!Model.MenuItem.Url.IsNullOrEmpty())
+        {
+            <a href="@(UrlChecker.IsRooted(Model.MenuItem.Url) ? Model.MenuItem.Url : (ApplicationPath + Model.MenuItem.Url))">@Model.MenuItem.DisplayName</a>
+        }
+        else
+        {
+            <a href="@ApplicationPath">@Model.MenuItem.DisplayName</a>
+        }
+    }
+    else
+    {
+        <a class="dropdown-toggle" data-toggle="dropdown" data-target="#" href="javascript:;">
+            @Model.MenuItem.DisplayName
+        </a>
+            <ul class="dropdown-menu">
+                @foreach (var childMenuItem in Model.MenuItem.Items)
+                {
+                    @Html.Partial("Components/Header/_HeaderMenuItem", new HeaderMenuItemViewModel(childMenuItem, Model.CurrentLevel + 1, Model.CurrentPageName))
+                }
+            </ul>
+    }
+</li>

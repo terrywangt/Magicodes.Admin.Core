@@ -1,0 +1,58 @@
+﻿[
+  {
+    "outputFile": "wwwroot/view-resources/Areas/Admin/Views/AuditLogs/index.css",
+    "inputFile": "wwwroot/view-resources/Areas/Admin/Views/AuditLogs/index.less"
+  },
+  {
+    "outputFile": "wwwroot/view-resources/Areas/Admin/Views/Common/_FeaturesTree.css",
+    "inputFile": "wwwroot/view-resources/Areas/Admin/Views/Common/_FeaturesTree.less"
+  },
+  {
+    "outputFile": "wwwroot/view-resources/Areas/Admin/Views/Editions/index.css",
+    "inputFile": "wwwroot/view-resources/Areas/Admin/Views/Editions/index.less"
+  },
+  {
+    "outputFile": "wwwroot/view-resources/Areas/Admin/Views/Languages/index.css",
+    "inputFile": "wwwroot/view-resources/Areas/Admin/Views/Languages/index.less"
+  },
+  {
+    "outputFile": "wwwroot/view-resources/Areas/Admin/Views/Languages/Texts.css",
+    "inputFile": "wwwroot/view-resources/Areas/Admin/Views/Languages/Texts.less"
+  },
+  {
+    "outputFile": "wwwroot/view-resources/Areas/Admin/Views/Maintenance/Index.css",
+    "inputFile": "wwwroot/view-resources/Areas/Admin/Views/Maintenance/Index.less"
+  },
+  {
+    "outputFile": "wwwroot/view-resources/Areas/Admin/Views/Notifications/Index.css",
+    "inputFile": "wwwroot/view-resources/Areas/Admin/Views/Notifications/Index.less"
+  },
+  {
+    "outputFile": "wwwroot/view-resources/Areas/Admin/Views/OrganizationUnits/Index.css",
+    "inputFile": "wwwroot/view-resources/Areas/Admin/Views/OrganizationUnits/Index.less"
+  },
+  {
+    "outputFile": "wwwroot/view-resources/Areas/Admin/Views/Roles/index.css",
+    "inputFile": "wwwroot/view-resources/Areas/Admin/Views/Roles/index.less"
+  },
+  {
+    "outputFile": "wwwroot/view-resources/Areas/Admin/Views/Tenants/index.css",
+    "inputFile": "wwwroot/view-resources/Areas/Admin/Views/Tenants/index.less"
+  },
+  {
+    "outputFile": "wwwroot/view-resources/Areas/Admin/Views/Users/index.css",
+    "inputFile": "wwwroot/view-resources/Areas/Admin/Views/Users/index.less"
+  },
+  {
+    "outputFile": "wwwroot/view-resources/Areas/Admin/Views/Layout/_ChatBar.css",
+    "inputFile": "wwwroot/view-resources/Areas/Admin/Views/Layout/_ChatBar.less"
+  },
+  {
+    "outputFile": "wwwroot/view-resources/Areas/Admin/Views/Layout/_Layout.css",
+    "inputFile": "wwwroot/view-resources/Areas/Admin/Views/Layout/_Layout.less"
+  },
+  {
+    "outputFile": "wwwroot/Common/Styles/core.css",
+    "inputFile": "wwwroot/Common/Styles/core.less"
+  }
+]

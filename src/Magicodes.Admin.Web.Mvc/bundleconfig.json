@@ -1,0 +1,591 @@
+[
+  {
+    "outputFileName": "wwwroot/Common/_Bundles/common-styles.css",
+    "inputFiles": [
+      "wwwroot/Common/Styles/**/*.css",
+      "!wwwroot/Common/Styles/**/*min.css"
+    ],
+    "minify": {
+      "enabled": false
+    }
+  },
+  {
+    "outputFileName": "wwwroot/Common/_Bundles/common-styles.min.css",
+    "inputFiles": [
+      "wwwroot/Common/Styles/**/*.css",
+      "!wwwroot/Common/Styles/**/*min.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/Common/_Bundles/common-scripts.js",
+    "inputFiles": [
+      "wwwroot/Common/Scripts/**/*.js",
+      "!wwwroot/Common/Scripts/**/*min.js"
+    ],
+    "minify": {
+      "enabled": false
+    }
+  },
+  {
+    "outputFileName": "wwwroot/Common/_Bundles/common-scripts.min.js",
+    "inputFiles": [
+      "wwwroot/Common/Scripts/**/*.js",
+      "!wwwroot/Common/Scripts/**/*min.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Areas/Admin/Common/_Bundles/common-scripts.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Areas/Admin/Common/Scripts/**/*.js",
+      "!wwwroot/view-resources/Areas/Admin/Common/Scripts/**/*min.js",
+      "wwwroot/view-resources/Areas/Admin/Views/Common/Modals/_LookupModal.js"
+    ],
+    "minify": {
+      "enabled": false
+    }
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Areas/Admin/Common/_Bundles/common-scripts.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Areas/Admin/Common/Scripts/**/*.js",
+      "!wwwroot/view-resources/Areas/Admin/Common/Scripts/**/*min.js",
+      "wwwroot/view-resources/Areas/Admin/Views/Common/Modals/_LookupModal.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Views/_Bundles/frontend-libs.min.css",
+    "inputFiles": [
+      "wwwroot/lib/simple-line-icons/css/simple-line-icons.css",
+      "wwwroot/lib/font-awesome/css/font-awesome.css",
+      "wwwroot/lib/famfamfam-flags/dist/sprite/famfamfam-flags.css",
+      "wwwroot/lib/bootstrap/dist/css/bootstrap.css",
+      "wwwroot/lib/sweetalert/dist/sweetalert.css",
+      "wwwroot/lib/toastr/toastr.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Views/_Bundles/frontend-libs-rtl.min.css",
+    "inputFiles": [
+      "wwwroot/lib/simple-line-icons/css/simple-line-icons.css",
+      "wwwroot/lib/font-awesome/css/font-awesome.css",
+      "wwwroot/lib/famfamfam-flags/dist/sprite/famfamfam-flags.css",
+      "wwwroot/lib/bootstrap-rtl/bootstrap-rtl.css",
+      "wwwroot/lib/sweetalert/dist/sweetalert.css",
+      "wwwroot/lib/toastr/toastr.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Views/_Bundles/frontend-metronic.min.css",
+    "inputFiles": [
+      "wwwroot/metronic/assets/global/css/components.css",
+      "wwwroot/metronic/assets/frontend/layout/css/style.css",
+      "wwwroot/metronic/assets/frontend/pages/css/style-revolution-slider.css",
+      "wwwroot/metronic/assets/frontend/layout/css/style-responsive.css",
+      "wwwroot/metronic/assets/frontend/layout/css/themes/red.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Views/_Bundles/frontend-metronic-rtl.min.css",
+    "inputFiles": [
+      "wwwroot/metronic/assets/global/css/components-rtl.css",
+      "wwwroot/metronic/assets/frontend/layout/css/style-rtl.css",
+      "wwwroot/metronic/assets/frontend/pages/css/style-revolution-slider.css",
+      "wwwroot/metronic/assets/frontend/layout/css/style-responsive-rtl.css",
+      "wwwroot/metronic/assets/frontend/layout/css/themes/red-rtl.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Views/_Bundles/frontend-libs.min.js",
+    "inputFiles": [
+      "wwwroot/lib/json2/json2.js",
+      "wwwroot/lib/jquery/dist/jquery.js",
+      "wwwroot/lib/bootstrap/dist/js/bootstrap.js",
+      "wwwroot/lib/bootstrap-hover-dropdown/bootstrap-hover-dropdown.js",
+      "wwwroot/lib/jquery-slimscroll/jquery.slimscroll.js",
+      "wwwroot/lib/blockUI/jquery.blockUI.js",
+      "wwwroot/lib/js-cookie/src/js.cookie.js",
+      "wwwroot/lib/spin.js/spin.js",
+      "wwwroot/lib/spin.js/jquery.spin.js",
+      "wwwroot/lib/sweetalert/dist/sweetalert-dev.js",
+      "wwwroot/lib/toastr/toastr.js",
+      "wwwroot/lib/moment/min/moment-with-locales.js",
+      "wwwroot/lib/moment-timezone/builds/moment-timezone-with-data.js",
+      "wwwroot/lib/abp-web-resources/Abp/Framework/scripts/abp.js",
+      "wwwroot/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.jquery.js",
+      "wwwroot/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.toastr.js",
+      "wwwroot/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.blockUI.js",
+      "wwwroot/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.spin.js",
+      "wwwroot/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.sweet-alert.js",
+      "wwwroot/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.moment.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Views/_Bundles/frontend-metronic.min.js",
+    "inputFiles": [
+      "wwwroot/metronic/assets/frontend/layout/scripts/back-to-top.js",
+      "wwwroot/metronic/assets/frontend/layout/scripts/layout.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Views/_Bundles/account-layout-libs.min.js",
+    "inputFiles": [
+      "wwwroot/lib/json2/json2.js",
+      "wwwroot/lib/jquery/dist/jquery.js",
+      "wwwroot/lib/bootstrap/dist/js/bootstrap.js",
+      "wwwroot/lib/jquery-validation/dist/jquery.validate.js",
+      "wwwroot/lib/blockUI/jquery.blockUI.js",
+      "wwwroot/lib/jquery-uniform/jquery.uniform.js",
+      "wwwroot/lib/js-cookie/src/js.cookie.js",
+      "wwwroot/lib/toastr/toastr.js",
+      "wwwroot/lib/spin.js/spin.js",
+      "wwwroot/lib/spin.js/jquery.spin.js",
+      "wwwroot/lib/sweetalert/dist/sweetalert-dev.js",
+      "wwwroot/lib/abp-web-resources/Abp/Framework/scripts/abp.js",
+      "wwwroot/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.jquery.js",
+      "wwwroot/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.toastr.js",
+      "wwwroot/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.blockUI.js",
+      "wwwroot/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.spin.js",
+      "wwwroot/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.sweet-alert.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Views/_Bundles/account-layout-libs.min.css",
+    "inputFiles": [
+      "wwwroot/lib/simple-line-icons/css/simple-line-icons.css",
+      "wwwroot/lib/font-awesome/css/font-awesome.css",
+      "wwwroot/lib/famfamfam-flags/dist/sprite/famfamfam-flags.css",
+      "wwwroot/lib/bootstrap/dist/css/bootstrap.css",
+      "wwwroot/lib/jquery-uniform/css/uniform.default.css",
+      "wwwroot/lib/toastr/toastr.css",
+      "wwwroot/lib/sweetalert/dist/sweetalert.css",
+      "wwwroot/metronic/assets/global/css/components-md.css",
+      "wwwroot/metronic/assets/global/css/plugins-md.css",
+      "wwwroot/metronic/assets/admin/layout/css/layout.css",
+      "wwwroot/metronic/assets/admin/layout/css/themes/default.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Views/_Bundles/account-layout-libs-rtl.min.css",
+    "inputFiles": [
+      "wwwroot/lib/simple-line-icons/css/simple-line-icons.css",
+      "wwwroot/lib/font-awesome/css/font-awesome.css",
+      "wwwroot/lib/famfamfam-flags/dist/sprite/famfamfam-flags.css",
+      "wwwroot/lib/bootstrap-rtl/bootstrap-rtl.css",
+      "wwwroot/lib/jquery-uniform/css/uniform.default.css",
+      "wwwroot/lib/toastr/toastr.css",
+      "wwwroot/lib/sweetalert/dist/sweetalert.css",
+      "wwwroot/metronic/assets/global/css/components-md-rtl.css",
+      "wwwroot/metronic/assets/global/css/plugins-md-rtl.css",
+      "wwwroot/metronic/assets/admin/layout/css/layout-rtl.css",
+      "wwwroot/metronic/assets/admin/layout/css/themes/default-rtl.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Areas/Admin/Views/_Bundles/layout-libs.min.css",
+    "inputFiles": [
+      "wwwroot/lib/jquery-ui/themes/base/all.css",
+      "wwwroot/lib/jtable/lib/themes/metro/blue/jtable.css",
+      "wwwroot/lib/simple-line-icons/css/simple-line-icons.css",
+      "wwwroot/lib/font-awesome/css/font-awesome.css",
+      "wwwroot/lib/famfamfam-flags/dist/sprite/famfamfam-flags.css",
+      "wwwroot/lib/bootstrap/dist/css/bootstrap.css",
+      "wwwroot/lib/jquery-uniform/css/uniform.default.css",
+      "wwwroot/lib/jstree/dist/themes/default/style.css",
+      "wwwroot/lib/morris.js/morris.css",
+      "wwwroot/lib/toastr/toastr.css",
+      "wwwroot/lib/sweetalert/dist/sweetalert.css",
+      "wwwroot/lib/bootstrap-daterangepicker/daterangepicker.css",
+      "wwwroot/lib/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.css",
+      "wwwroot/lib/bootstrap-select/dist/css/bootstrap-select.css",
+      "wwwroot/lib/Jcrop/css/Jcrop.css",
+      "wwwroot/metronic/assets/global/css/components-md.css",
+      "wwwroot/metronic/assets/global/css/plugins-md.css",
+      "wwwroot/metronic/assets/admin/layout4/css/layout.css",
+      "wwwroot/metronic/assets/admin/layout4/css/themes/light.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Areas/Admin/Views/_Bundles/layout-libs-rtl.min.css",
+    "inputFiles": [
+      "wwwroot/lib/jquery-ui/themes/base/all.css",
+      "wwwroot/lib/jtable/lib/themes/metro/blue/jtable.css",
+      "wwwroot/lib/simple-line-icons/css/simple-line-icons.css",
+      "wwwroot/lib/font-awesome/css/font-awesome.css",
+      "wwwroot/lib/famfamfam-flags/dist/sprite/famfamfam-flags.css",
+      "wwwroot/lib/bootstrap-rtl/bootstrap-rtl.css",
+      "wwwroot/lib/jquery-uniform/css/uniform.default.css",
+      "wwwroot/lib/jstree/dist/themes/default/style.css",
+      "wwwroot/lib/morris.js/morris.css",
+      "wwwroot/lib/toastr/toastr.css",
+      "wwwroot/lib/sweetalert/dist/sweetalert.css",
+      "wwwroot/lib/bootstrap-daterangepicker/daterangepicker.css",
+      "wwwroot/lib/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.css",
+      "wwwroot/lib/bootstrap-select/dist/css/bootstrap-select.css",
+      "wwwroot/lib/Jcrop/css/Jcrop.css",
+      "wwwroot/metronic/assets/global/css/components-md-rtl.css",
+      "wwwroot/metronic/assets/global/css/plugins-md-rtl.css",
+      "wwwroot/metronic/assets/admin/layout4/css/layout-rtl.css",
+      "wwwroot/metronic/assets/admin/layout4/css/themes/light-rtl.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Areas/Admin/Views/_Bundles/layout-libs.min.js",
+    "inputFiles": [
+      "wwwroot/lib/json2/json2.js",
+      "wwwroot/lib/jquery/dist/jquery.js",
+      "wwwroot/lib/jquery-ui/jquery-ui.js",
+      "wwwroot/lib/jquery-validation/dist/jquery.validate.js",
+      "wwwroot/lib/bootstrap/dist/js/bootstrap.js",
+      "wwwroot/lib/bootstrap-hover-dropdown/bootstrap-hover-dropdown.js",
+      "wwwroot/lib/jquery-slimscroll/jquery.slimscroll.js",
+      "wwwroot/lib/blockUI/jquery.blockUI.js",
+      "wwwroot/lib/js-cookie/src/js.cookie.js",
+      "wwwroot/lib/jquery-uniform/jquery.uniform.js",
+      "wwwroot/lib/jquery-form/jquery.form.js",
+      "wwwroot/lib/jtable/lib/jquery.jtable.js",
+      "wwwroot/lib/Jcrop/js/jquery.color.js",
+      "wwwroot/lib/Jcrop/js/Jcrop.js",
+      "wwwroot/lib/jquery-timeago/jquery.timeago.js",
+      "wwwroot/lib/signalr/jquery.signalR.js",
+      "wwwroot/lib/localforage/dist/localforage.js",
+      "wwwroot/lib/morris.js/morris.js",
+      "wwwroot/lib/raphael/raphael.js",
+      "wwwroot/lib/jquery.sparkline/jquery.sparkline.js",
+      "wwwroot/lib/jstree/dist/jstree.js",
+      "wwwroot/lib/bootstrap-switch/dist/js/bootstrap-switch.js",
+      "wwwroot/lib/spin.js/spin.js",
+      "wwwroot/lib/spin.js/jquery.spin.js",
+      "wwwroot/lib/sweetalert/dist/sweetalert-dev.js",
+      "wwwroot/lib/toastr/toastr.js",
+      "wwwroot/lib/moment/min/moment-with-locales.js",
+      "wwwroot/lib/moment-timezone/builds/moment-timezone-with-data.js",
+      "wwwroot/lib/bootstrap-daterangepicker/daterangepicker.js",
+      "wwwroot/lib/bootstrap-select/dist/js/bootstrap-select.js",
+      "wwwroot/lib/underscore/underscore.js",
+      "wwwroot/lib/mustache.js/mustache.js",
+      "wwwroot/lib/push.js/push.js",
+      "wwwroot/lib/abp-web-resources/Abp/Framework/scripts/abp.js",
+      "wwwroot/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.jquery.js",
+      "wwwroot/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.toastr.js",
+      "wwwroot/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.blockUI.js",
+      "wwwroot/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.spin.js",
+      "wwwroot/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.sweet-alert.js",
+      "wwwroot/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.moment.js",
+      "wwwroot/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.jtable.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Areas/Admin/Views/_Bundles/layout-metronic.min.js",
+    "inputFiles": [
+      "wwwroot/metronic/assets/global/scripts/app.js",
+      "wwwroot/metronic/assets/admin/layout4/scripts/layout.js",
+      "wwwroot/metronic/assets/layouts/global/scripts/quick-sidebar.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/views/home/index.min.js",
+    "inputFiles": [
+      "wwwroot/js/views/home/index.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Areas/Admin/Views/AuditLogs/Index.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Areas/Admin/Views/AuditLogs/Index.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Areas/Admin/Views/Common/_FeaturesTree.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Areas/Admin/Views/Common/_FeaturesTree.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Areas/Admin/Views/Common/_PermissionTree.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Areas/Admin/Views/Common/_PermissionTree.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Areas/Admin/Views/Dashboard/Index.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Areas/Admin/Views/Dashboard/Index.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Areas/Admin/Views/Editions/Index.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Areas/Admin/Views/Editions/Index.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Areas/Admin/Views/Editions/_CreateOrEditModal.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Areas/Admin/Views/Editions/_CreateOrEditModal.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Areas/Admin/Views/HostSettings/Index.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Areas/Admin/Views/HostSettings/Index.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Areas/Admin/Views/Languages/_CreateOrEditModal.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Areas/Admin/Views/Languages/_CreateOrEditModal.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Areas/Admin/Views/Languages/_EditTextModal.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Areas/Admin/Views/Languages/_EditTextModal.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Areas/Admin/Views/Languages/Index.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Areas/Admin/Views/Languages/Index.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Areas/Admin/Views/Languages/Texts.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Areas/Admin/Views/Languages/Texts.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Areas/Admin/Views/Maintenance/Index.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Areas/Admin/Views/Maintenance/Index.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Areas/Admin/Views/Notifications/_SettingsModal.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Areas/Admin/Views/Notifications/_SettingsModal.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Areas/Admin/Views/Notifications/Index.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Areas/Admin/Views/Notifications/Index.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Areas/Admin/Views/OrganizationUnits/_CreateModal.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Areas/Admin/Views/OrganizationUnits/_CreateModal.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Areas/Admin/Views/OrganizationUnits/_EditModal.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Areas/Admin/Views/OrganizationUnits/_EditModal.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Areas/Admin/Views/OrganizationUnits/Index.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Areas/Admin/Views/OrganizationUnits/Index.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Areas/Admin/Views/Profile/_ChangePasswordModal.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Areas/Admin/Views/Profile/_ChangePasswordModal.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Areas/Admin/Views/Profile/_ChangePictureModal.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Areas/Admin/Views/Profile/_ChangePictureModal.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Areas/Admin/Views/Profile/_LinkAccountModal.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Areas/Admin/Views/Profile/_LinkAccountModal.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Areas/Admin/Views/Profile/_LinkedAccountsModal.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Areas/Admin/Views/Profile/_LinkedAccountsModal.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Areas/Admin/Views/Profile/_MySettingsModal.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Areas/Admin/Views/Profile/_MySettingsModal.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Areas/Admin/Views/Roles/_CreateOrEditModal.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Areas/Admin/Views/Roles/_CreateOrEditModal.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Areas/Admin/Views/Roles/Index.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Areas/Admin/Views/Roles/Index.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Areas/Admin/Views/Settings/Index.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Areas/Admin/Views/Settings/Index.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Areas/Admin/Views/Tenants/_CreateModal.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Areas/Admin/Views/Tenants/_CreateModal.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Areas/Admin/Views/Tenants/_EditModal.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Areas/Admin/Views/Tenants/_EditModal.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Areas/Admin/Views/Tenants/_FeaturesModal.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Areas/Admin/Views/Tenants/_FeaturesModal.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Areas/Admin/Views/Tenants/Index.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Areas/Admin/Views/Tenants/Index.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Areas/Admin/Views/Users/_CreateOrEditModal.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Areas/Admin/Views/Users/_CreateOrEditModal.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Areas/Admin/Views/Users/_LoginAttemptsModal.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Areas/Admin/Views/Users/_LoginAttemptsModal.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Areas/Admin/Views/Users/_PermissionsModal.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Areas/Admin/Views/Users/_PermissionsModal.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Areas/Admin/Views/Users/Index.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Areas/Admin/Views/Users/Index.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Areas/Admin/Views/Layout/_ChatBar.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Areas/Admin/Views/Layout/_ChatBar.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Areas/Admin/Views/Layout/_Header.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Areas/Admin/Views/Layout/_Header.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Views/Account/_Layout.min.css",
+    "inputFiles": [
+      "wwwroot/view-resources/Views/Account/_Layout.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Views/Account/ForgotPassword.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Views/Account/ForgotPassword.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Views/Account/_Layout-rtl.min.css",
+    "inputFiles": [
+      "wwwroot/view-resources/Views/Account/_Layout-rtl.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Views/Account/EmailActivation.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Views/Account/EmailActivation.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Views/Account/Login.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Views/Account/Login.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Views/Account/Register.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Views/Account/Register.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Views/Account/ResetPassword.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Views/Account/ResetPassword.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Views/Error/_Layout.min.css",
+    "inputFiles": [
+      "wwwroot/view-resources/Views/Error/_Layout.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Views/Layout/layout.min.css",
+    "inputFiles": [
+      "wwwroot/view-resources/Views/Layout/layout.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Views/TenantRegistration/Index.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Views/TenantRegistration/Index.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/fonts/fonts-open-sans.min.css",
+    "inputFiles": [
+      "wwwroot/fonts/fonts-open-sans.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/fonts/fonts-ptsans-narrow.min.css",
+    "inputFiles": [
+      "wwwroot/fonts/fonts-ptsans-narrow.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/fonts/fonts-sourcesans-pro.min.css",
+    "inputFiles": [
+      "wwwroot/fonts/fonts-sourcesans-pro.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Views/Account/VerifySecurityCode.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Views/Account/VerifySecurityCode.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Views/Shared/Components/TenantChange/Default.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Views/Shared/Components/TenantChange/Default.js"
+    ]
+  }
+]
