@@ -6,8 +6,8 @@
         <div class="row">
             <div class="col-md-6 col-sm-6 additional-shop-info">
                 <ul class="list-unstyled list-inline">
-                    <li><i class="fa fa-phone"></i><span>+1 456 6717</span></li>
-                    <li><i class="fa fa-envelope-o"></i><span>info@mydomain.com</span></li>
+                    <li><i class="fa fa-phone"></i><span>13671974358</span></li>
+                    <li><i class="fa fa-envelope-o"></i><span>xinlai@xin-lai.com</span></li>
                 </ul>
             </div>
             <div class="col-md-6 col-sm-6 additional-nav">
@@ -57,7 +57,7 @@
 <div class="header">
     <div class="container">
         <a class="site-logo" href="@Url.Action("Index", "Home")">
-            <img src="@Model.GetLogoUrl(ApplicationPath)" alt="" width="168" height="33" />
+            <img src="@string.IsNullOrWhiteSpace(Model.GetLogoUrl(ApplicationPath))?"/Common/Images/app-logo-on-light.png":Model.GetLogoUrl(ApplicationPath)" alt="" style="max-height:33px;max-width:168px" />
         </a>
         <a href="javascript:void(0);" class="mobi-toggler"><i class="fa fa-bars"></i></a>
         <div class="header-navigation pull-right font-transform-inherit">

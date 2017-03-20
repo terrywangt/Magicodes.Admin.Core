@@ -45,7 +45,8 @@ namespace Magicodes.Admin.Configuration.Host
                 TenantManagement = await GetTenantManagementSettingsAsync(),
                 UserManagement = await GetUserManagementAsync(),
                 Email = await GetEmailSettingsAsync(),
-                Security = await GetSecuritySettingsAsync()
+                Security = await GetSecuritySettingsAsync(),
+                Site = await GetSiteAsync()
             };
         }
 
@@ -90,6 +91,14 @@ namespace Magicodes.Admin.Configuration.Host
             return new HostUserManagementSettingsEditDto
             {
                 IsEmailConfirmationRequiredForLogin = await SettingManager.GetSettingValueAsync<bool>(AbpZeroSettingNames.UserManagement.IsEmailConfirmationRequiredForLogin)
+            };
+        }
+
+        private async Task<SiteSettingsEditDto> GetSiteAsync()
+        {
+            return new SiteSettingsEditDto
+            {
+                DefaultUrl = await SettingManager.GetSettingValueAsync(AppSettings.TenantManagement.DefaultUrl)
             };
         }
 
@@ -156,6 +165,12 @@ namespace Magicodes.Admin.Configuration.Host
             await UpdateUserManagementSettingsAsync(input.UserManagement);
             await UpdateSecuritySettingsAsync(input.Security);
             await UpdateEmailSettingsAsync(input.Email);
+            await UpdateSiteSettingsAsync(input.Site);
+        }
+
+        private async Task UpdateSiteSettingsAsync(SiteSettingsEditDto settings)
+        {
+            await SettingManager.ChangeSettingForApplicationAsync(AppSettings.TenantManagement.DefaultUrl, settings.DefaultUrl);
         }
 
         private async Task UpdateGeneralSettingsAsync(GeneralSettingsEditDto settings)

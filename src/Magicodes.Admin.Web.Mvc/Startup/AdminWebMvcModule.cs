@@ -27,6 +27,7 @@ namespace Magicodes.Admin.Web.Startup
             Configuration.Get<IAbpZeroAspNetCoreConfiguration>().AuthenticationScheme = AuthConfigurer.AuthenticationScheme;
 
             Configuration.Navigation.Providers.Add<FrontEndNavigationProvider>();
+            //后台导航提供程序
             Configuration.Navigation.Providers.Add<AdminNavigationProvider>();
         }
 

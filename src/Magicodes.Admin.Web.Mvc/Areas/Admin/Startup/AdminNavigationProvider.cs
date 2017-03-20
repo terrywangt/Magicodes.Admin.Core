@@ -7,7 +7,7 @@ namespace Magicodes.Admin.Web.Areas.Admin.Startup
 {
     public class AdminNavigationProvider : NavigationProvider
     {
-        public const string MenuName = "App";
+        public const string MenuName = "AdminMenus";
         
         public override void SetNavigation(INavigationProviderContext context)
         {
@@ -100,7 +100,7 @@ namespace Magicodes.Admin.Web.Areas.Admin.Startup
                 );
         }
 
-        private static ILocalizableString L(string name)
+        protected static ILocalizableString L(string name)
         {
             return new LocalizableString(name, AdminConsts.LocalizationSourceName);
         }

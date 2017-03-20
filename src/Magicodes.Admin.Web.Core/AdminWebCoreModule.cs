@@ -68,7 +68,7 @@ namespace Magicodes.Admin.Web
             });
 
             ConfigureTokenAuth();
-            
+
             //Uncomment this line to use Redis cache instead of in-memory cache.
             //See app.config for Redis configuration and connection string
             //Configuration.Caching.UseRedis(options =>
@@ -77,11 +77,11 @@ namespace Magicodes.Admin.Web
             //    options.DatabaseId = _appConfiguration.GetValue<int>("Abp:RedisCache:DatabaseId");
             //});
 
-            //Uncomment these lines to use HangFire as background job manager, instead of default background job manager.
-            //Configuration.BackgroundJobs.UseHangfire(configuration =>
-            //{
-            //    configuration.GlobalConfiguration.UseSqlServerStorage(Configuration.DefaultNameOrConnectionString);
-            //});
+            //使用Hangfire来替换ABP中默认实现的后台作业管理
+            Configuration.BackgroundJobs.UseHangfire(configuration =>
+            {
+                configuration.GlobalConfiguration.UseSqlServerStorage(Configuration.DefaultNameOrConnectionString);
+            });
         }
 
         private void ConfigureTokenAuth()

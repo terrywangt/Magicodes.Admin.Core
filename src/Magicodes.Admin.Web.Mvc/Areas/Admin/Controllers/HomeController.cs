@@ -15,17 +15,15 @@ namespace Magicodes.Admin.Web.Areas.Admin.Controllers
         {
             if (AbpSession.MultiTenancySide == MultiTenancySides.Host)
             {
-                if (await IsGrantedAsync(AppPermissions.Pages_Tenants))
-                {
-                    return RedirectToAction("Index", "Tenants");
-                }
+                return View();
             }
             else
             {
-                if (await IsGrantedAsync(AppPermissions.Pages_Tenant_Dashboard))
-                {
-                    return RedirectToAction("Index", "Dashboard");
-                }
+                return View();
+                //if (await IsGrantedAsync(AppPermissions.Pages_Tenant_Dashboard))
+                //{
+                //    return RedirectToAction("Index", "Dashboard");
+                //}
             }
 
             //Default page if no permission to the pages above

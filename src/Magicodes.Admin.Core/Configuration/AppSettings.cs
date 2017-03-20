@@ -12,6 +12,7 @@ namespace Magicodes.Admin.Configuration
             public const string IsNewRegisteredTenantActiveByDefault = "App.TenantManagement.IsNewRegisteredTenantActiveByDefault";
             public const string UseCaptchaOnRegistration = "App.TenantManagement.UseCaptchaOnRegistration";
             public const string DefaultEdition = "App.TenantManagement.DefaultEdition";
+            public const string DefaultUrl = "App.TenantManagement.DefaultUrl";
         }
 
         public static class UserManagement

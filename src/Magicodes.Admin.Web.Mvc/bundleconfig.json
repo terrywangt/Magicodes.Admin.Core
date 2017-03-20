@@ -184,7 +184,7 @@
     "outputFileName": "wwwroot/view-resources/Areas/Admin/Views/_Bundles/layout-libs.min.css",
     "inputFiles": [
       "wwwroot/lib/jquery-ui/themes/base/all.css",
-      "wwwroot/lib/jtable/lib/themes/metro/blue/jtable.css",
+      "wwwroot/lib/jtable/lib/themes/lightcolor/blue/jtable.css",
       "wwwroot/lib/simple-line-icons/css/simple-line-icons.css",
       "wwwroot/lib/font-awesome/css/font-awesome.css",
       "wwwroot/lib/famfamfam-flags/dist/sprite/famfamfam-flags.css",
@@ -208,7 +208,7 @@
     "outputFileName": "wwwroot/view-resources/Areas/Admin/Views/_Bundles/layout-libs-rtl.min.css",
     "inputFiles": [
       "wwwroot/lib/jquery-ui/themes/base/all.css",
-      "wwwroot/lib/jtable/lib/themes/metro/blue/jtable.css",
+      "wwwroot/lib/jtable/lib/themes/lightcolor/blue/jtable.css",
       "wwwroot/lib/simple-line-icons/css/simple-line-icons.css",
       "wwwroot/lib/font-awesome/css/font-awesome.css",
       "wwwroot/lib/famfamfam-flags/dist/sprite/famfamfam-flags.css",
@@ -586,6 +586,12 @@
     "outputFileName": "wwwroot/view-resources/Views/Shared/Components/TenantChange/Default.min.js",
     "inputFiles": [
       "wwwroot/view-resources/Views/Shared/Components/TenantChange/Default.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Areas/Admin/Views/Home/Index.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Areas/Admin/Views/Home/Index.js"
     ]
   }
 ]

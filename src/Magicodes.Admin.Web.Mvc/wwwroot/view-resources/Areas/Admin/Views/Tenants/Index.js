@@ -12,13 +12,13 @@
             'delete': abp.auth.hasPermission('Pages.Tenants.Delete')
         };
 
-        var _createModal = new app.ModalManager({
+        var _createModal = new top.app.ModalManager({
             viewUrl: abp.appPath + 'Admin/Tenants/CreateModal',
             scriptUrl: abp.appPath + 'view-resources/Areas/Admin/Views/Tenants/_CreateModal.js',
             modalClass: 'CreateTenantModal'
         });
 
-        var _editModal = new app.ModalManager({
+        var _editModal = new top.app.ModalManager({
             viewUrl: abp.appPath + 'Admin/Tenants/EditModal',
             scriptUrl: abp.appPath + 'view-resources/Areas/Admin/Views/Tenants/_EditModal.js',
             modalClass: 'EditTenantModal'
@@ -72,7 +72,7 @@
                                         },
                                         title: app.localize('SelectAUser')
                                     }, function (selectedItem) {
-                                        abp.ajax({
+                                        top.abp.ajax({
                                             url: abp.appPath + 'Account/Impersonate',
                                             data: JSON.stringify({
                                                 tenantId: data.record.id,
@@ -192,11 +192,11 @@
             getTenants();
         });
 
-        abp.event.on('app.editTenantModalSaved', function () {
+        top.abp.event.on('app.editTenantModalSaved', function () {
             getTenants(true);
         });
 
-        abp.event.on('app.createTenantModalSaved', function () {
+        top.abp.event.on('app.createTenantModalSaved', function () {
             getTenants(true);
         });
 

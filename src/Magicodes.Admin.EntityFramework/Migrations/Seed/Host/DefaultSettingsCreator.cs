@@ -18,11 +18,11 @@ namespace Magicodes.Admin.Migrations.Seed.Host
         public void Create()
         {
             //Emailing
-            AddSettingIfNotExists(EmailSettingNames.DefaultFromAddress, "admin@mydomain.com");
-            AddSettingIfNotExists(EmailSettingNames.DefaultFromDisplayName, "mydomain.com mailer");
+            AddSettingIfNotExists(EmailSettingNames.DefaultFromAddress, "wenqiang.li@xin-lai.com");
+            AddSettingIfNotExists(EmailSettingNames.DefaultFromDisplayName, "Test");
 
             //Languages
-            AddSettingIfNotExists(LocalizationSettingNames.DefaultLanguage, "en");
+            AddSettingIfNotExists(LocalizationSettingNames.DefaultLanguage, "zh-CN");
         }
 
         private void AddSettingIfNotExists(string name, string value, int? tenantId = null)

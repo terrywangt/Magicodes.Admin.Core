@@ -12,7 +12,7 @@
             'delete': abp.auth.hasPermission('Pages.Administration.Users.Delete')
         };
 
-        var _createOrEditModal = new app.ModalManager({
+        var _createOrEditModal = new top.app.ModalManager({
             viewUrl: abp.appPath + 'Admin/Users/CreateOrEditModal',
             scriptUrl: abp.appPath + 'view-resources/Areas/Admin/Views/Users/_CreateOrEditModal.js',
             modalClass: 'CreateOrEditUserModal'
@@ -240,7 +240,7 @@
             getUsers();
         });
 
-        abp.event.on('app.createOrEditUserModalSaved', function () {
+        top.abp.event.on('app.createOrEditUserModalSaved', function () {
             getUsers(true);
         });
 

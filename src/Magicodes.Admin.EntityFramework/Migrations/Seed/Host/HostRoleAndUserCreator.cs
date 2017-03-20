@@ -26,7 +26,7 @@ namespace Magicodes.Admin.Migrations.Seed.Host
 
         private void CreateHostRoleAndUsers()
         {
-            //Admin role for host
+            //初始化主机管理角色
 
             var adminRoleForHost = _context.Roles.FirstOrDefault(r => r.TenantId == null && r.Name == StaticRoleNames.Host.Admin);
             if (adminRoleForHost == null)
@@ -35,7 +35,7 @@ namespace Magicodes.Admin.Migrations.Seed.Host
                 _context.SaveChanges();
             }
 
-            //admin user for host
+            //初始化主机管理用户
 
             var adminUserForHost = _context.Users.FirstOrDefault(u => u.TenantId == null && u.UserName == User.AdminUserName);
             if (adminUserForHost == null)
@@ -47,11 +47,11 @@ namespace Magicodes.Admin.Migrations.Seed.Host
                         UserName = User.AdminUserName,
                         Name = "admin",
                         Surname = "admin",
-                        EmailAddress = "admin@aspnetzero.com",
+                        EmailAddress = "wenqiang.li@xin-lai.com",
                         IsEmailConfirmed = true,
                         ShouldChangePasswordOnNextLogin = true,
                         IsActive = true,
-                        Password = "AM4OLBpptxBYmM79lGOX9egzZk3vIQU3d/gFCJzaBjAPXzYIK3tQ2N7X4fcrHtElTw==" //123qwe
+                        Password = "AOEdQVs7aP4oMpOItKAValbRCfv4t0hwvYa/fP6k4wi0brAQ0cLcOGjpFxE/2sdIeA==" //123456abcD
                     });
                 _context.SaveChanges();
 

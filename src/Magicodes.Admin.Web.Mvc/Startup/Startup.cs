@@ -1,4 +1,24 @@
-﻿using System;
+﻿/*
+ *  ┏┓　　　┏┓ 
+ *┏┛┻━━━┛┻┓ 
+ *┃　　　　　　　┃ 　 
+ *┃　　　━　　　┃ 
+ *┃　┳┛　┗┳　┃ 
+ *┃　　　　　　　┃ 
+ *┃　　　┻　　　┃ 
+ *┃　　　　　　　┃ 
+ *┗━┓　　　┏━┛ 
+ *　　┃　　　┃神兽保佑 
+ *　　┃　　　┃代码无BUG！
+ *　　┃　　　┗━━━┓ 
+ *　　┃　　　　　　　┣┓ 
+ *　　┃　　　　　　　┏┛ 
+ *　　┗┓┓┏━┳┓┏┛ 
+ *　　　┃┫┫　┃┫┫ 
+ *　　　┗┻┛　┗┻┛  
+ *　　　 
+ */
+using System;
 using Abp.AspNetCore;
 using Abp.Castle.Logging.Log4Net;
 using Abp.Owin;
@@ -14,16 +34,20 @@ using Magicodes.Admin.Web.Owin;
 using Magicodes.Admin.Web.Resources;
 using Owin;
 using PaulMiami.AspNetCore.Mvc.Recaptcha;
+using System.IO;
+using Abp.PlugIns;
 
 namespace Magicodes.Admin.Web.Startup
 {
     public class Startup
     {
         private readonly IConfigurationRoot _appConfiguration;
+        private readonly IHostingEnvironment _hostingEnvironment;
 
         public Startup(IHostingEnvironment env)
         {
             _appConfiguration = env.GetAppConfiguration();
+            _hostingEnvironment = env;
         }
 
         public IServiceProvider ConfigureServices(IServiceCollection services)
@@ -46,13 +70,20 @@ namespace Magicodes.Admin.Web.Startup
 
             services.AddScoped<IWebResourceManager, WebResourceManager>();
 
-            //Configure Abp and Dependency Injection
+            //配置ABP模块以及相关依赖等
             return services.AddAbp<AdminWebMvcModule>(options =>
             {
-                //Configure Log4Net logging
+                //配置 Log4Net logging
                 options.IocManager.IocContainer.AddFacility<LoggingFacility>(
                     f => f.UseAbpLog4Net().WithConfig("log4net.config")
                 );
+
+                //设置插件目录
+                var plusPath = Path.Combine(_hostingEnvironment.WebRootPath, "PlugIns");
+                if (!Directory.Exists(plusPath))
+                    Directory.CreateDirectory(plusPath);
+
+                options.PlugInSources.AddFolder(plusPath);
             });
         }
 
@@ -73,7 +104,8 @@ namespace Magicodes.Admin.Web.Startup
             AuthConfigurer.Configure(app, _appConfiguration);
 
             app.UseStaticFiles();
-
+            //使用嵌入式资源
+            app.UseEmbeddedFiles();
             //Integrate to OWIN
             app.UseAppBuilder(ConfigureOwinServices);
 
