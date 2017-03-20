@@ -94,7 +94,7 @@ namespace Magicodes.Admin.Configuration.Host
             };
         }
 
-        private async Task<SiteSettingsEditDto> GetSiteAsync()
+        public async Task<SiteSettingsEditDto> GetSiteAsync()
         {
             return new SiteSettingsEditDto
             {
@@ -168,7 +168,7 @@ namespace Magicodes.Admin.Configuration.Host
             await UpdateSiteSettingsAsync(input.Site);
         }
 
-        private async Task UpdateSiteSettingsAsync(SiteSettingsEditDto settings)
+        public async Task UpdateSiteSettingsAsync(SiteSettingsEditDto settings)
         {
             await SettingManager.ChangeSettingForApplicationAsync(AppSettings.TenantManagement.DefaultUrl, settings.DefaultUrl);
         }

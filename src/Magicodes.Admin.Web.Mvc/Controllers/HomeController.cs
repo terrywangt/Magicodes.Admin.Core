@@ -7,7 +7,6 @@ namespace Magicodes.Admin.Web.Controllers
     {
         public ActionResult Index()
         {
-            //SettingManager.ChangeSettingForApplicationAsync(AppSettings.TenantManagement.DefaultUrl, "/web/");
             var defaultUrl = SettingManager.GetSettingValueAsync(AppSettings.TenantManagement.DefaultUrl).Result;
             if (!string.IsNullOrEmpty(defaultUrl))
             {

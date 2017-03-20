@@ -1,0 +1,143 @@
+﻿<!--=== Header ===-->
+<div class="header">
+    <div class="container">
+        <!-- Logo -->
+        <a class="logo" href="/">
+            <img src="@ContentRootUrl/unify/img/logo.png" alt="Logo">
+        </a>
+    </div><!--/end container-->
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse mega-menu navbar-responsive-collapse">
+        <div class="container">
+            <ul class="nav navbar-nav">
+                <!-- Home -->
+                <li>
+                    <a href="@Url.Action("Index","Home")">
+                        首页
+                    </a>
+                </li>
+                <li class="dropdown mega-menu-fullwidth">
+                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">
+                        官方产品
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <div class="mega-menu-content disable-icons">
+                                <div class="container">
+                                    <div class="row equal-height">
+                                        <div class="col-md-4 equal-height-in">
+                                            <ul class="list-unstyled equal-height-list">
+                                                <li>
+                                                    <h3><a href="@Url.Action("WeiChat","Product")">Magicodes.WeiChat</a></h3>
+                                                </li>
+                                                <li>
+                                                    <a href="@Url.Action("WeiChat","Product")"><i class="fa fa-file-pdf-o"></i>产品资料</a>
+                                                </li>
+                                                <li>
+                                                    <a href="https://item.taobao.com/item.htm?id=520205558575" target="_blank"><i class="fa fa-shopping-cart"></i> 产品购买</a>
+                                                </li>
+                                                <li>
+                                                    <a href="http://wechat.magicodes.net/" target="_blank"><i class="fa fa-laptop"></i> 在线演示</a>
+                                                </li>
+                                                <li>
+                                                    <table style="margin-left:30px">
+                                                        <tr><td>账号：</td><td>admin</td></tr>
+                                                        <tr><td>密码：</td><td>123456abcD</td></tr>
+                                                    </table>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-md-4 equal-height-in">
+                                            <ul class="list-unstyled equal-height-list">
+                                                <li>
+                                                    <h3><a href="@Url.Action("Shop","Product")">Magicodes.Shop</a></h3>
+                                                </li>
+                                                <li>
+                                                    <a href="@Url.Action("Shop","Product")"><i class="fa fa-file-pdf-o"></i>产品资料</a>
+                                                </li>
+                                                <li>
+                                                    <a href="https://item.taobao.com/item.htm?id=539695057814" target="_blank"><i class="fa fa-shopping-cart"></i> 产品购买</a>
+                                                </li>
+                                                <li>
+                                                    <a href="http://shop.xin-lai.com" target="_blank"><i class="fa fa-laptop"></i> 在线演示</a>
+                                                </li>
+                                                <li>
+                                                    <table style="margin-left:30px">
+                                                        <tr><td>账号：</td><td>admin</td></tr>
+                                                        <tr><td>密码：</td><td>123456abcD</td></tr>
+                                                    </table>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-md-4 equal-height-in">
+                                            <ul class="list-unstyled equal-height-list">
+                                                <li>
+                                                    <h3><a href="https://github.com/xin-lai" target="_blank">Magicodes.Components</a></h3>
+                                                </li>
+                                                <li>
+                                                    <a href="https://github.com/xin-lai" target="_blank"><i class="fa fa-github"></i>开源库地址</a>
+                                                </li>
+                                                <li>
+                                                    <a href="https://github.com/xin-lai/Magicodes.WeChat.SDK" target="_blank"><i class="fa fa-code"></i>Magicodes.WeChat.SDK</a>
+                                                </li>
+                                                <li>
+                                                    <a href="https://github.com/xin-lai/Magicodes.ECharts" target="_blank"><i class="fa fa-code"></i> Magicodes.ECharts</a>
+                                                </li>
+                                                <li>
+                                                    <a href="https://github.com/xin-lai/Magicodes.Storage" target="_blank"><i class="fa fa-code"></i> Magicodes.Storage</a>
+                                                </li>
+                                                <li>
+                                                    <a href="https://github.com/xin-lai/Magicodes.Sms" target="_blank"><i class="fa fa-code"></i> Magicodes.Sms</a>
+                                                </li>
+                                                <li>
+                                                    <a href="https://github.com/xin-lai/Magicodes.Logger" target="_blank"><i class="fa fa-code"></i> Magicodes.Logger</a>
+                                                </li>
+                                                <li>
+                                                    <a href="https://github.com/xin-lai/Magicodes.Data" target="_blank"><i class="fa fa-code"></i> Magicodes.Data</a>
+                                                </li>
+                                                <li>
+                                                    <a href="https://github.com/xin-lai/Magicodes.Mvc.Filter" target="_blank"><i class="fa fa-code"></i> Magicodes.Mvc.Filter</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="@Url.Action("AboutUs","Home")">
+                        联系我们
+                    </a>
+                </li>
+                <li>
+                    <a href="http://www.cnblogs.com/codelove/" target="_blank">
+                        官方博客
+                    </a>
+                </li>
+                <!-- Shortcodes -->
+                <li>
+                    <a href="@Url.Action("Customer","Home")">
+                        客户案例
+                    </a>
+                </li>
+                <!-- End Shortcodes -->
+                <!-- Search Block -->
+                <li>
+                    <i class="search fa fa-search search-btn"></i>
+                    <div class="search-open">
+                        <div class="input-group animated fadeInDown">
+                            <input type="text" class="form-control" placeholder="请输入关键字">
+                            <span class="input-group-btn">
+                                <button class="btn-u" type="button">Go</button>
+                            </span>
+                        </div>
+                    </div>
+                </li>
+                <!-- End Search Block -->
+            </ul>
+        </div><!--/end container-->
+    </div><!--/navbar-collapse-->
+</div>
+<!--=== End Header ===-->
