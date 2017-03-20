@@ -3,7 +3,7 @@
     var handleLogin = function () {
 
         var $loginForm = $('.login-form');
-
+        //设置验证规则
         $loginForm.validate({
             rules: {
                 username: {
@@ -14,7 +14,7 @@
                 }
             }
         });
-
+        //设置回车提交
         $loginForm.find('input').keypress(function (e) {
             if (e.which == 13) {
                 if ($('.login-form').valid()) {
@@ -23,7 +23,7 @@
                 return false;
             }
         });
-
+        //提交表单
         $loginForm.submit(function (e) {
             e.preventDefault();
 
@@ -40,7 +40,7 @@
                 })
             );
         });
-
+        //触发第三方登录程序
         $('a.social-login-icon').click(function() {
             var $a = $(this);
             var $form = $a.closest('form');
@@ -49,8 +49,10 @@
         });
 
         $loginForm.find('input[name=returnUrlHash]').val(location.hash);
-
+        //聚焦到用户名输入框
         $('input[type=text]').first().focus();
+        //设置每日一图
+        $('body').css('background-image', 'url("http://www.dujin.org/sys/bing/1920.php")');
     }
 
     return {

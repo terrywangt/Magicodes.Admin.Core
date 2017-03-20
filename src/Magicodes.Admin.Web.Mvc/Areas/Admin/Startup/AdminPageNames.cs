@@ -15,6 +15,7 @@ namespace Magicodes.Admin.Web.Areas.Admin.Startup
             public const string AuditLogs = "Administration.AuditLogs";
             public const string OrganizationUnits = "Administration.OrganizationUnits";
             public const string Languages = "Administration.Languages";
+            public const string Index = "Administration.Index";
         }
 
         public static class Host

@@ -9,7 +9,7 @@
 <div class="page-header-inner">
     <div class="page-logo">
         <a href="@Url.Action("Index", "Home", new {area = string.Empty})" target="_blank">
-            <img id="AppLogo" src="@string.IsNullOrWhiteSpace(Model.GetLogoUrl(ApplicationPath))?"/Common/Images/app-logo-on-light.png":Model.GetLogoUrl(ApplicationPath)" alt="logo" class="logo-default" style="max-height:33px;max-width:168px" />
+            <img id="AppLogo" src='@Model.GetLogoUrl(ApplicationPath)' alt="logo" class="logo-default" style="max-height:33px;max-width:168px" />
         </a>
         <div class="menu-toggler sidebar-toggler">
             <!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->

@@ -57,7 +57,7 @@
 <div class="header">
     <div class="container">
         <a class="site-logo" href="@Url.Action("Index", "Home")">
-            <img src="@string.IsNullOrWhiteSpace(Model.GetLogoUrl(ApplicationPath))?"/Common/Images/app-logo-on-light.png":Model.GetLogoUrl(ApplicationPath)" alt="" style="max-height:33px;max-width:168px" />
+            <img src='@Model.GetLogoUrl(ApplicationPath)' alt="" style="max-height:33px;max-width:168px" />
         </a>
         <a href="javascript:void(0);" class="mobi-toggler"><i class="fa fa-bars"></i></a>
         <div class="header-navigation pull-right font-transform-inherit">

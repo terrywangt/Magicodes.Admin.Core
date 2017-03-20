@@ -14,6 +14,15 @@
 
   <ItemGroup>
     <Content Include="wwwroot\Common\Images\app-logo-small.png" />
+    <Content Include="wwwroot\view-resources\Areas\Admin\Views\Home\index.css" />
+    <Content Include="wwwroot\view-resources\Areas\Admin\Views\Home\Index.es5.js" />
+    <Content Include="wwwroot\view-resources\Areas\Admin\Views\Home\Index.es5.min.js">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="wwwroot\view-resources\Areas\Admin\Views\Home\Index.js" />
+    <Content Include="wwwroot\view-resources\Areas\Admin\Views\Home\index.less" />
+    <Content Include="wwwroot\view-resources\Areas\Admin\Views\Home\index.min.css" />
+    <Content Include="wwwroot\view-resources\Areas\Admin\Views\Home\Index.min.js" />
   </ItemGroup>
 
   <ItemGroup>
