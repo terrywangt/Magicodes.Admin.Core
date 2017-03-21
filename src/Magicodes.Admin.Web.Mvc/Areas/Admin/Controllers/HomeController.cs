@@ -11,7 +11,7 @@ namespace Magicodes.Admin.Web.Areas.Admin.Controllers
     [AbpMvcAuthorize]
     public class HomeController : AdminControllerBase
     {
-        public async Task<ActionResult> Index()
+        public ActionResult Index()
         {
             if (AbpSession.MultiTenancySide == MultiTenancySides.Host)
             {

@@ -1,11 +1,6 @@
 ﻿@{
     ViewData["Title"] = "心莱科技";
+    Layout = null;
+    TmpData = ContentRootUrl + "/pdf/Magicodes.WeiChat产品宣传.pdf";
 }
-<div style="text-align:center;margin-top:20px">
-    <iframe src='https://onedrive.live.com/embed?cid=76D5018A317737FF&resid=76D5018A317737FF%2121126&authkey=AFclQ4r0Pp4fo5o&em=2&wdAr=1.2942708333333333' width='996px' height='793px' frameborder='0'>这是嵌入 <a target='_blank' href='https://office.com'>Microsoft Office</a> 演示文稿，由 <a target='_blank' href='https://office.com/webapps'>Office Online</a> 支持。</iframe>
-</div>
-
-<div class="container content">
-    <div class="margin-bottom-10"></div>
-    @Html.Partial(SharedViewPathUrl + "/_Price_WeiChat.cshtml")
-</div>
+@Html.Partial(SharedViewPathUrl + "/_ShowPdf.cshtml")

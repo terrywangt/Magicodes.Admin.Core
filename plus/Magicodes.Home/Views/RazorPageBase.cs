@@ -1,13 +1,15 @@
 ﻿using Abp.AspNetCore.Mvc.Views;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Abp.Runtime.Session;
+using Microsoft.AspNetCore.Mvc.Razor.Internal;
 
 namespace Magicodes.Home.Views
 {
     public abstract class RazorPageBase<TModel> : AbpRazorPage<TModel>
     {
+        [RazorInject]
+        public IAbpSession AbpSession { get; set; }
+        public string TmpData { get; set; }
+
         public string ContentRootUrl { get; private set; }
         public string SharedViewPathUrl { get; private set; }
         protected RazorPageBase()

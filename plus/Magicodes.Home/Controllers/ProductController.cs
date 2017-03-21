@@ -25,5 +25,11 @@ namespace Magicodes.Home.Controllers
         {
             return View();
         }
+
+        public IActionResult ShowDetail()
+        {
+            
+            return View();
+        }
     }
 }
