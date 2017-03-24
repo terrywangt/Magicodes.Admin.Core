@@ -27,11 +27,15 @@ namespace Magicodes.WeChat.Data
 
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<WeChatDbContext, Configuration>());
             //web.config (or app.config for non-web projects) file should contain a connection string named "Default".
-            Configuration.DefaultNameOrConnectionString = "Default";
+            //Configuration.DefaultNameOrConnectionString = "Default";
         }
         public override void Initialize()
         {
             IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
+            using (WeChatDbContext db = new WeChatDbContext())
+            {
+                db.User_WeChatUsers.ToList();
+            }
         }
     }
 

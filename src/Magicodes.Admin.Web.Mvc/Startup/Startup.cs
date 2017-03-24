@@ -36,6 +36,9 @@ using Owin;
 using PaulMiami.AspNetCore.Mvc.Recaptcha;
 using System.IO;
 using Abp.PlugIns;
+using Hangfire;
+using Abp.Hangfire;
+using Magicodes.Admin.Authorization;
 
 namespace Magicodes.Admin.Web.Startup
 {
@@ -59,7 +62,9 @@ namespace Magicodes.Admin.Web.Startup
             });
 
             //Swagger - Enable this line and the related lines in Configure method to enable swagger UI
-            //services.AddSwaggerGen();
+            services.AddSwaggerGen();
+
+            services.AddMvcCore().AddApiExplorer();
 
             //Recaptcha
             services.AddRecaptcha(new RecaptchaOptions
@@ -121,9 +126,9 @@ namespace Magicodes.Admin.Web.Startup
             });
 
             // Enable middleware to serve generated Swagger as a JSON endpoint
-            //app.UseSwagger();
+            app.UseSwagger();
             // Enable middleware to serve swagger-ui assets (HTML, JS, CSS etc.)
-            //app.UseSwaggerUi(); //URL: /swagger/ui
+            app.UseSwaggerUi(); //URL: /swagger/ui
         }
 
         private static void ConfigureOwinServices(IAppBuilder app)
@@ -135,10 +140,10 @@ namespace Magicodes.Admin.Web.Startup
             app.MapSignalR();
 
             //Enable it to use HangFire dashboard (uncomment only if it's enabled in AdminWebCoreModule)
-            //app.UseHangfireDashboard("/hangfire", new DashboardOptions
-            //{
-            //    Authorization = new[] { new AbpHangfireAuthorizationFilter(AppPermissions.Pages_Administration_HangfireDashboard) }
-            //});
+            app.UseHangfireDashboard("/hangfire", new DashboardOptions
+            {
+                Authorization = new[] { new AbpHangfireAuthorizationFilter(AppPermissions.Pages_Administration_HangfireDashboard) }
+            });
         }
     }
 }

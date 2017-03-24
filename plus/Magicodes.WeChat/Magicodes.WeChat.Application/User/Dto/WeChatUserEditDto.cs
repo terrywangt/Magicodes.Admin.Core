@@ -1,24 +1,17 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using Abp;
-using Abp.Domain.Entities;
-using Abp.Domain.Entities.Auditing;
-using Abp.Events.Bus;
-using Abp.Timing;
+﻿using Abp.Application.Services.Dto;
+using Abp.AutoMapper;
+using Magicodes.WeChat.Core.User;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Magicodes.WeChat.Core.User
+namespace Magicodes.WeChat.Application.User.Dto
 {
-    [Table("User_WeChatUser")]
-    public class User_WeChatUser: Entity<string>, IHasCreationTime, IMayHaveTenant
+    [AutoMapFrom(typeof(User_WeChatUser))]
+    public class WeChatUserEditDto : EntityDto<string>
     {
-        public const int MaxNickNameLength = 50;
-        public const int MaxLanguageLength = 10;
-
-        public User_WeChatUser()
-        {
-            CreationTime = Clock.Now;
-        }
         /// <summary>
         /// 用户是否订阅该公众号标识
         /// </summary>
@@ -27,8 +20,6 @@ namespace Magicodes.WeChat.Core.User
         /// <summary>
         /// 用户的昵称
         /// </summary>
-        [Required]
-        [MaxLength(MaxNickNameLength)]
         public string NickName { get; set; }
         /// <summary>
         /// 用户所在城市
@@ -46,7 +37,6 @@ namespace Magicodes.WeChat.Core.User
         /// <summary>
         /// 用户的语言，简体中文为zh_CN
         /// </summary>
-        [MaxLength(MaxLanguageLength)]
         public string Language { get; set; }
         /// <summary>
         /// 用户头像，最后一个数值代表正方形头像大小（有0、46、64、96、132数值可选，0代表640*640正方形头像），用户没有头像时该项为空。若用户更换头像，原有头像URL将失效。

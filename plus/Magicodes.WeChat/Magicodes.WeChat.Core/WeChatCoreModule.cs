@@ -1,6 +1,7 @@
 ﻿using Abp.AutoMapper;
 using Abp.Modules;
 using Abp.Zero;
+using Magicodes.WeChat.Core.Localization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,7 @@ namespace Magicodes.WeChat.Core
     {
         public override void PreInitialize()
         {
-
+            WeChatLocalizationConfigurer.Configure(Configuration.Localization);
         }
 
         public override void Initialize()

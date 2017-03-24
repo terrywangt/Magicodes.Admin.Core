@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magicodes.WeChat.Data", "pl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magicodes.WeChat.Core", "plus\Magicodes.WeChat\Magicodes.WeChat.Core\Magicodes.WeChat.Core.csproj", "{C8CDDA1B-E328-4DE6-9253-79C60E2C5513}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magicodes.WeChat.Application", "plus\Magicodes.WeChat\Magicodes.WeChat.Application\Magicodes.WeChat.Application.csproj", "{3880FEAD-DB1C-4237-B70B-FED45AB97AFB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,10 @@ Global
 		{C8CDDA1B-E328-4DE6-9253-79C60E2C5513}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C8CDDA1B-E328-4DE6-9253-79C60E2C5513}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C8CDDA1B-E328-4DE6-9253-79C60E2C5513}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3880FEAD-DB1C-4237-B70B-FED45AB97AFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3880FEAD-DB1C-4237-B70B-FED45AB97AFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3880FEAD-DB1C-4237-B70B-FED45AB97AFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3880FEAD-DB1C-4237-B70B-FED45AB97AFB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -100,5 +106,6 @@ Global
 		{BA028D75-9AC6-429B-AF52-3C7A01D9632F} = {73CAFE8A-5649-4449-8206-3ADBE6BE0B62}
 		{C375D6BF-C1DE-4A44-B0AD-14C13F0CE3FE} = {BA028D75-9AC6-429B-AF52-3C7A01D9632F}
 		{C8CDDA1B-E328-4DE6-9253-79C60E2C5513} = {BA028D75-9AC6-429B-AF52-3C7A01D9632F}
+		{3880FEAD-DB1C-4237-B70B-FED45AB97AFB} = {BA028D75-9AC6-429B-AF52-3C7A01D9632F}
 	EndGlobalSection
 EndGlobal

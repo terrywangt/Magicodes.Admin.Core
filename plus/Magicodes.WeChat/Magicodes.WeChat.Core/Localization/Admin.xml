@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<localizationDictionary culture="en">
+  <texts>
+    <text name="Pages" value="公众号管理" />
+    <text name="WeChatPermissions_Pages_Tenants_WeChatUsers" value="粉丝管理" />
+    <text name="Create" value="创建" />
+    <text name="Edit" value="编辑" />
+    <text name="Delete" value="删除" />
+  </texts>
+</localizationDictionary>

@@ -25,6 +25,9 @@ namespace Magicodes.Admin
         public override void Initialize()
         {
             IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
+
+
         }
+
     }
 }
