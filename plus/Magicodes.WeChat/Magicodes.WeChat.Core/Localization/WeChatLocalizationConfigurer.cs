@@ -14,7 +14,7 @@ namespace Magicodes.WeChat.Core.Localization
                     WeChatConsts.LocalizationSourceName,
                     new XmlEmbeddedFileLocalizationDictionaryProvider(
                         Assembly.GetExecutingAssembly(),
-                        "Magicodes.WeChat.Core.Localization"
+                        "Magicodes.WeChat.Core.Localization.Language"
                     )
                 )
             );

@@ -28,7 +28,7 @@ namespace Magicodes.WeChat.Core.Authorization
         {
             //权限定义
             //定义页面权限节点
-            var pagesPer = WeChatPermissions.CreatePermissions();
+            var pagesPer = WeChatPermissions.CreatePermissions().Pages();
             var pages = context.GetPermissionOrNull(pagesPer.ToString()) ?? context.CreatePermission(pagesPer.ToString(), L("Pages"), multiTenancySides: MultiTenancySides.Tenant);
 
             var tenantPer = pagesPer.Tenants();
