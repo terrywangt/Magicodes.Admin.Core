@@ -3,22 +3,13 @@
   <PropertyGroup>
     <VersionPrefix>1.0.0.0</VersionPrefix>
     <TargetFramework>net461</TargetFramework>
-    <PostBuildEvent>
-      call "$(SolutionDir)tools\tools\Magicodes.CmdTools.exe" copy -s "$(SolutionDir)plus\Magicodes.Home\bin\Debug\net461\Magicodes.Home.exe" -t "$(SolutionDir)src\Magicodes.Admin.Web.Mvc\wwwroot\PlugIns"
-      call "$(SolutionDir)tools\tools\Magicodes.CmdTools.exe" copy -i ".cs" -s "$(SolutionDir)plus\Magicodes.Home\Views" -t "$(SolutionDir)src\Magicodes.Admin.Web.Mvc\wwwroot\PlugIns\Magicodes.Home\Views"
-      call "$(SolutionDir)tools\tools\Magicodes.CmdTools.exe" copy -s "$(SolutionDir)plus\Magicodes.Home\wwwroot" -t "$(SolutionDir)src\Magicodes.Admin.Web.Mvc\wwwroot\PlugIns\Magicodes.Home\wwwroot"
-    </PostBuildEvent>
-    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Localization\*.xml" Exclude="bin\**;obj\**;**\*.xproj;packages\**;@(EmbeddedResource)" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="AspNet.Security.OpenIdConnect.Server" Version="1.0.0-beta6-final" />
+    <PackageReference Include="Abp" Version="1.5.0" />
     <PackageReference Include="Castle.LoggingFacility.MsLogging" Version="1.1.0" />
     <PackageReference Include="Abp.Castle.Log4Net" Version="1.5.0" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics" Version="1.1.1" />
@@ -39,8 +30,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Magicodes.Admin.Application\Magicodes.Admin.Application.csproj" />
-    <ProjectReference Include="..\..\src\Magicodes.Admin.Web.Core\Magicodes.Admin.Web.Core.csproj" />
-    <ProjectReference Include="..\..\src\Magicodes.Admin.Web.Mvc\Magicodes.Admin.Web.Mvc.csproj" />
+    <Folder Include="wwwroot\" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Magicodes.WeChat.Application\Magicodes.WeChat.Application.csproj" />
+    <ProjectReference Include="..\Magicodes.WeChat.Core\Magicodes.WeChat.Core.csproj" />
+  </ItemGroup>
+
 </Project>

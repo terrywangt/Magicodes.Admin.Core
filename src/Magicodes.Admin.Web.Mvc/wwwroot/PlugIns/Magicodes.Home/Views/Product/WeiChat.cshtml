@@ -1,6 +1,8 @@
 ﻿@{
     ViewData["Title"] = "心莱科技";
     Layout = null;
-    TmpData = ContentRootUrl + "/pdf/Magicodes.WeiChat产品宣传.pdf";
 }
 @Html.Partial(SharedViewPathUrl + "/_ShowPdf.cshtml")
+<script>
+      PDFJS.webViewerLoad('@Html.Raw(ContentRootUrl + "/pdf/Magicodes.WeiChat产品宣传.pdf")');
+</script>
