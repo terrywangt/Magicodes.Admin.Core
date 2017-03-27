@@ -19,7 +19,7 @@ namespace Magicodes.WeChat.Data
     [DbConfigurationType(typeof(AdminDbConfiguration))]
     public class WeChatDbContext : AbpDbContext
     {
-        public virtual IDbSet<User_WeChatUser> User_WeChatUsers { get; set; }
+        public virtual IDbSet<WeChatUser> User_WeChatUsers { get; set; }
 
         public WeChatDbContext() : base(GetConnectionString())
         {
@@ -42,12 +42,14 @@ namespace Magicodes.WeChat.Data
         {
 
         }
-
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Types().Configure(entity => entity.ToTable("MWC." + entity.ClrType.Name));
+        }
         private static string GetConnectionString()
         {
-            //Notice that; this logic only works on development time.
-            //It is used to get connection string from appsettings.json in the Web project.
-
+            //从配置中获取连接字符串
             var configuration = AppConfigurations.Get(
                 WebContentDirectoryFinder.CalculateContentRootFolder()
                 );

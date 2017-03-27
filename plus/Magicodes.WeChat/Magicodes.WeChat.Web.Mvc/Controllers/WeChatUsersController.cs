@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Magicodes.WeChat.Web.Mvc.Controllers
 {
-    public class HomeController : BaseController
+    public class WeChatUsersController : BaseController
     {
         public IActionResult Index()
         {

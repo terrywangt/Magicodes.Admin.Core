@@ -11,11 +11,11 @@ using System.Threading.Tasks;
 
 namespace Magicodes.WeChat.Core.User
 {
-    [Table("User_UserGroup")]
-    public class User_UserGroup: Entity<int>, IHasCreationTime, IMayHaveTenant
+    [Table("WeChatUserGroup")]
+    public class WeChatUserGroup : Entity<int>, IHasCreationTime, IMayHaveTenant
     {
         public const int MaxNameLength = 30;
-        public User_UserGroup()
+        public WeChatUserGroup()
         {
             CreationTime = Clock.Now;
         }

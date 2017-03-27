@@ -1,0 +1,70 @@
+﻿@using System.Threading.Tasks
+@using Abp.Application.Services.Dto
+@using Magicodes.Admin.Authorization
+@using Magicodes.WeChat.Core
+@{
+    ViewBag.CurrentPageName = AdminPageNames.Tenant.WeChatUsers;
+}
+@section Styles
+{
+    <environment names="Development">
+        <link rel="stylesheet" href="@ContentRootUrl/view-resources/Views/WeChatUsers/Index.css" asp-append-version="true" />
+    </environment>
+
+    <environment names="Staging,Production">
+        <link rel="stylesheet" href="@ContentRootUrl/view-resources/Views/WeChatUsers/Index.min.css" asp-append-version="true" />
+    </environment>
+}
+@section Scripts
+{
+    <environment names="Development">
+        <script src="@ContentRootUrl/view-resources/Views/WeChatUsers/_CreateOrEditModal.js" asp-append-version="true"></script>
+        <script src="@ContentRootUrl/view-resources/Views/WeChatUsers/Index.js" asp-append-version="true"></script>
+    </environment>
+
+    <environment names="Staging,Production">
+        <script src="@ContentRootUrl/view-resources/Views/WeChatUsers/_CreateOrEditModal.min.js" asp-append-version="true"></script>
+        <script src="@ContentRootUrl/view-resources/Views/WeChatUsers/Index.min.js" asp-append-version="true"></script>
+    </environment>
+}
+<div class="row margin-bottom-5">
+    <div class="col-xs-6">
+        <div class="page-head">
+            <div class="page-title">
+                <h1>
+                    <span>粉丝管理</span> <small>查看或管理当前公众号的所有粉丝</small>
+                </h1>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-6 text-right">
+        @*@if (IsGranted(WeChatPermissions.WeChatPermissions_Pages_Tenants_WeChatUsers_Create))
+        {
+            <button id="CreateNewRoleButton" class="btn btn-primary blue"><i class="fa fa-plus"></i> @L("CreateNewRole")</button>
+        }*@
+    </div>
+</div>
+
+<div class="portlet light margin-bottom-0">
+    <div class="portlet-title portlet-title-filter">
+        <div class="inputs inputs-full-width">
+            <div class="portlet-input">
+                <form>
+                    <div class="row">
+                        <div class="col-xs-6">
+                            
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <button id="RefreshRolesButton" class="btn btn-default" style="display: block; width: 100%"><i class="fa fa-refresh"></i> @L("Refresh")</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div id="WeChatUsersTable"></div>
+    </div>
+</div>

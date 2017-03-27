@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Magicodes.WeChat.Application.User.Dto
 {
-    [AutoMapFrom(typeof(User_WeChatUser))]
+    [AutoMapFrom(typeof(WeChatUser))]
     public class WeChatUserListDto : EntityDto<string>
     {
         /// <summary>
@@ -61,8 +61,5 @@ namespace Magicodes.WeChat.Application.User.Dto
         public DateTime CreationTime { get; set; }
         public int? TenantId { get; set; }
 
-        public User_UserGroup UserGroup { get; set; }
-
-        public int UserGroupId { get; set; }
     }
 }

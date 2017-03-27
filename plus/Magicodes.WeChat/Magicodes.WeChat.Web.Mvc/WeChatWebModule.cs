@@ -2,7 +2,6 @@
 using Abp.Modules;
 using Abp.Resources.Embedded;
 using Magicodes.Admin.Configuration;
-using Magicodes.Home.Localization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,11 +13,13 @@ using Abp.Modules;
 using Magicodes.Admin;
 using Magicodes.Admin.Authorization;
 using Abp.Authorization;
+using Magicodes.WeChat.Core;
 
 namespace Magicodes.WeChat.Web.Mvc
 {
     [DependsOn(
         typeof(AdminCoreModule),
+        typeof(WeChatCoreModule),
         typeof(AbpAutoMapperModule),
         typeof(AdminApplicationModule))]
     public class HomeModule : AbpModule
@@ -35,8 +36,8 @@ namespace Magicodes.WeChat.Web.Mvc
 
         public override void Initialize()
         {
-            ////添加导航
-            //Configuration.Navigation.Providers.Add<MetronicNavigationProvider>();
+            //添加导航
+            Configuration.Navigation.Providers.Add<WeChatNavigationProvider>();
 
             IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
         }

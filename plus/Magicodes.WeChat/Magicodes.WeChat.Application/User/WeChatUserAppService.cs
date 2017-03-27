@@ -27,8 +27,8 @@ namespace Magicodes.WeChat.Application.User
     [AbpAuthorize(WeChatPermissions.WeChatPermissions_Pages_Tenants_WeChatUsers)]
     public class WeChatUserAppService : AdminAppServiceBase, IWeChatUserAppService
     {
-        private readonly IRepository<User_WeChatUser, string> _wechatUserRepository;
-        public WeChatUserAppService(IRepository<User_WeChatUser, string> wechatUserRepository)
+        private readonly IRepository<WeChatUser, string> _wechatUserRepository;
+        public WeChatUserAppService(IRepository<WeChatUser, string> wechatUserRepository)
         {
             _wechatUserRepository = wechatUserRepository;
         }
@@ -50,7 +50,7 @@ namespace Magicodes.WeChat.Application.User
         [AbpAuthorize(WeChatPermissions.WeChatPermissions_Pages_Tenants_WeChatUsers_Create)]
         protected virtual async Task CreateWeChatUserAsync(CreateOrUpdateWeChatUserInput input)
         {
-            var weChatUser = input.WeChatUser.MapTo<User_WeChatUser>();
+            var weChatUser = input.WeChatUser.MapTo<WeChatUser>();
             await _wechatUserRepository.InsertAsync(weChatUser);
             await CurrentUnitOfWork.SaveChangesAsync();
         }
@@ -58,7 +58,7 @@ namespace Magicodes.WeChat.Application.User
         [AbpAuthorize(WeChatPermissions.WeChatPermissions_Pages_Tenants_WeChatUsers_Edit)]
         protected virtual async Task EditWeChatUserAsync(CreateOrUpdateWeChatUserInput input)
         {
-            var weChatUser = input.WeChatUser.MapTo<User_WeChatUser>();
+            var weChatUser = input.WeChatUser.MapTo<WeChatUser>();
             await _wechatUserRepository.UpdateAsync(weChatUser);
             await CurrentUnitOfWork.SaveChangesAsync();
         }
@@ -132,7 +132,7 @@ namespace Magicodes.WeChat.Application.User
 
 
 
-        private IQueryable<User_WeChatUser> CreateWeChatUsersQuery(GetWeChatUsersInput input)
+        private IQueryable<WeChatUser> CreateWeChatUsersQuery(GetWeChatUsersInput input)
         {
             var query = _wechatUserRepository.GetAll().WhereIf(
                 !input.Filter.IsNullOrEmpty(),

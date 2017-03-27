@@ -19,8 +19,7 @@ namespace Magicodes.Home.Controllers
 
         public override ViewResult View()
         {
-            var view = string.Format("{0}/{1}.cshtml", RouteData.Values["controller"], RouteData.Values["action"]);
-            return PluginView(view, "Magicodes.Home") as ViewResult;
+            return PluginView("Magicodes.Home") as ViewResult;
         }
     }
 }

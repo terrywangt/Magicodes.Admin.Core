@@ -9,13 +9,13 @@ using Abp.Timing;
 
 namespace Magicodes.WeChat.Core.User
 {
-    [Table("User_WeChatUser")]
-    public class User_WeChatUser: Entity<string>, IHasCreationTime, IMayHaveTenant
+    [Table("WeChatUser")]
+    public class WeChatUser: Entity<string>, IHasCreationTime, IMayHaveTenant
     {
         public const int MaxNickNameLength = 50;
         public const int MaxLanguageLength = 10;
 
-        public User_WeChatUser()
+        public WeChatUser()
         {
             CreationTime = Clock.Now;
         }
@@ -70,9 +70,5 @@ namespace Magicodes.WeChat.Core.User
         public int? GroupId { get; set; }
         public DateTime CreationTime { get; set; }
         public int? TenantId { get; set; }
-
-        public User_UserGroup UserGroup { get; set; }
-
-        public int UserGroupId { get; set; }
     }
 }
