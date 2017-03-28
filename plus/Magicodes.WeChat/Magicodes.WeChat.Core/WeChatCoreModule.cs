@@ -1,6 +1,8 @@
 ﻿using Abp.AutoMapper;
 using Abp.Modules;
 using Abp.Zero;
+using Magicodes.Admin.Configuration;
+using Magicodes.WeChat.Configuration;
 using Magicodes.WeChat.Core.Localization;
 using System;
 using System.Collections.Generic;
@@ -18,7 +20,10 @@ namespace Magicodes.WeChat.Core
     {
         public override void PreInitialize()
         {
+            //配置多语言
             WeChatLocalizationConfigurer.Configure(Configuration.Localization);
+            //配置公众号设置相关
+            Configuration.Settings.Providers.Add<WeChatSettingProvider>();
         }
 
         public override void Initialize()

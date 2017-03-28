@@ -63,21 +63,7 @@
                     title: "昵称",
                     width: '35%',
                     display: function (data) {
-                        var $span = $('<span></span>');
-
-                        $span.append(data.record.displayName + " &nbsp; ");
-
-                        if (data.record.isStatic) {
-                            $span.append('<span class="label label-info" data-toggle="tooltip" title="' + app.localize('StaticRole_Tooltip') + '" data-placement="top">' + app.localize('Static') + '</span>&nbsp;');
-                        }
-
-                        if (data.record.isDefault) {
-                            $span.append('<span class="label label-default" data-toggle="tooltip" title="' + app.localize('DefaultRole_Description') + '" data-placement="top">' + app.localize('Default') + '</span>&nbsp;');
-                        }
-
-                        $span.find('[data-toggle=tooltip]').tooltip();
-
-                        return $span;
+                        return data.record.nickName;
                     }
                 },
                 creationTime: {

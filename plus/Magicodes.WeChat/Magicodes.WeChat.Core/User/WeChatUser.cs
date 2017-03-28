@@ -65,6 +65,10 @@ namespace Magicodes.WeChat.Core.User
         /// </summary>
         public string Remark { get; set; }
         /// <summary>
+        /// 性别
+        /// </summary>
+        public int Sex { get; set; }
+        /// <summary>
         /// 用户所在的分组ID
         /// </summary>
         public int? GroupId { get; set; }

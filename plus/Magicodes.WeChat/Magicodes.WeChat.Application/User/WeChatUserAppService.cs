@@ -21,6 +21,9 @@ using System;
 using Magicodes.WeChat.Core.User;
 using Magicodes.WeChat.Core.Authorization;
 using System.Diagnostics;
+using Abp.BackgroundJobs;
+using Abp.Runtime.Session;
+using Magicodes.WeChat.Application.BackgroundJob;
 
 namespace Magicodes.WeChat.Application.User
 {
@@ -28,9 +31,12 @@ namespace Magicodes.WeChat.Application.User
     public class WeChatUserAppService : AdminAppServiceBase, IWeChatUserAppService
     {
         private readonly IRepository<WeChatUser, string> _wechatUserRepository;
-        public WeChatUserAppService(IRepository<WeChatUser, string> wechatUserRepository)
+        private readonly IBackgroundJobManager _backgroundJobManager;
+        public WeChatUserAppService(IRepository<WeChatUser, string> wechatUserRepository, IBackgroundJobManager backgroundJobManager)
         {
             _wechatUserRepository = wechatUserRepository;
+            _backgroundJobManager = backgroundJobManager;
+
         }
 
         public async Task<PagedResultDto<WeChatUserListDto>> GetWeChatUsers(GetWeChatUsersInput input)
@@ -45,6 +51,11 @@ namespace Magicodes.WeChat.Application.User
                 .ToListAsync();
 
             return new PagedResultDto<WeChatUserListDto>(resultCount, results.MapTo<List<WeChatUserListDto>>());
+        }
+
+        public async Task Sync()
+        {
+            await _backgroundJobManager.EnqueueAsync<SyncWeChatUsersJob, int>(AbpSession.TenantId.HasValue ? AbpSession.TenantId.Value : 1);
         }
 
         [AbpAuthorize(WeChatPermissions.WeChatPermissions_Pages_Tenants_WeChatUsers_Create)]

@@ -28,4 +28,8 @@
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.Extensions.SecretManager.Tools" Version="1.0.0" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\Magicodes.Admin.Core\Magicodes.Admin.Core.csproj" />
+  </ItemGroup>
 </Project>
