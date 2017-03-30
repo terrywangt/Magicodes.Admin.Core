@@ -15,6 +15,9 @@ using Abp.Runtime.Session;
 using Abp.Configuration;
 using Magicodes.WeChat.Configuration;
 using Newtonsoft.Json;
+using Magicodes.WeChat.SDK.Builder;
+using Magicodes.WeChat.Application.Configuration;
+using Magicodes.WeChat.Application.Configuration.Dto;
 
 namespace Magicodes.WeChat.Application
 {
@@ -59,22 +62,20 @@ namespace Magicodes.WeChat.Application
             IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
 
             #region 公众号SDK配置
-            //WeChatSDKBuilder.Create()
-            //    //设置Api日志记录器
-            //    .WithApiLogger(new NLogLogger("WeChatApiLogger"))
-            //    //设置支付日志记录器
-            //    .WithPayLogger(new NLogLogger("WeChatPayLogger"))
-            //    .Build();
-
-            //注册Key。不再需要各个控制注册
-            WeChatFrameworkFuncsManager.Current.Register(WeChatFrameworkFuncTypes.GetKey,
-                model =>
+            WeChatSDKBuilder.Create()
+                //设置日志记录
+                .WithLoggerAction((tag, message) =>
                 {
-                    return AbpSession.TenantId.HasValue ? AbpSession.TenantId.Value : 1;
-                });
-
-            //注册获取配置函数：根据Key获取微信配置（加载一次后续将缓存）
-            WeChatFrameworkFuncsManager.Current.Register(WeChatFrameworkFuncTypes.Config_GetWeChatConfigByKey,
+                    Logger.DebugFormat("Tag:{0}\tMessage:{1}", tag, message);
+                })
+                //注册Key。不再需要各个控制注册
+                .Register(WeChatFrameworkFuncTypes.GetKey, model =>
+                     {
+                         return AbpSession.TenantId.HasValue ? AbpSession.TenantId.Value : 1;
+                     }
+                )
+                //注册获取配置函数：根据Key获取微信配置（加载一次后续将缓存）
+                .Register(WeChatFrameworkFuncTypes.Config_GetWeChatConfigByKey,
                 model =>
                 {
                     var arg = model as WeChatApiCallbackFuncArgInfo;
@@ -85,11 +86,10 @@ namespace Magicodes.WeChat.Application
                     }
                     var tenantId = (int)arg.Data;
                     var settingValue = _settingManager.GetSettingValueForTenant(WeChatSettings.TenantManagement.WeChatApiSettings, tenantId);
-                    var appConfig = JsonConvert.DeserializeObject<WeChatApiSetting>(settingValue);
-                    if (appConfig == null)
-                        throw new Exception("您尚未配置公众号，请配置公众号信息！");
+                    var appConfig = JsonConvert.DeserializeObject<WeChatApiSettingEditDto>(settingValue);
                     return appConfig;
-                });
+                })
+                .Build();
             #endregion
         }
     }

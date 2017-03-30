@@ -53,6 +53,7 @@ namespace Magicodes.WeChat.Application.User
             return new PagedResultDto<WeChatUserListDto>(resultCount, results.MapTo<List<WeChatUserListDto>>());
         }
 
+        
         public async Task Sync()
         {
             await _backgroundJobManager.EnqueueAsync<SyncWeChatUsersJob, int>(AbpSession.TenantId.HasValue ? AbpSession.TenantId.Value : 1);

@@ -16,8 +16,8 @@ namespace Magicodes.WeChat.Configuration
         {
             var defaultWeChatApiSetting = new WeChatApiSetting
             {
-                AppId = "wxe753e9de3a7ebfc2",
-                AppSecret = "7cc4b4ef1daf99791d9a4f64b8f94648",
+                AppId = "wx9ff101863db7db9c",
+                AppSecret = "f97b922e9cf4c1aedb4843f63b7cf6d7",
                 Token = Guid.NewGuid().ToString("N"),
                 WeiXinAccount = "hnxinlai"
             };

@@ -23,12 +23,14 @@ namespace Magicodes.WeChat.Application.BackgroundJob
         }
         public override void Execute(int args)
         {
-            SyncWeChatUsers(args);
+            //TODO:等待ABP团队解决
+            //SyncWeChatUsers(args);
         }
 
         private void ReportProgress(int progress, string message)
         {
-            Logger.Debug("progress：" + progress + " \t\tmessage:" + message);
+            Logger.Debug("progress：" + progress + " \tmessage:" + message);
+            //TODO:progress
         }
 
         private void SyncWeChatUsers(int tenantId)
@@ -52,9 +54,8 @@ namespace Magicodes.WeChat.Application.BackgroundJob
                 }
                 while (opendIds.Count > 0)
                 {
-                    var taskCount = opendIds.Count > 10000 ? 100 : opendIds.Count / 100 + 1;
                     var successList = new List<string>();
-                    GetUserInfoList(userApi, opendIds, taskCount, successList, tenantId);
+                    GetUserInfoList(userApi, opendIds, successList, tenantId);
 
                     var hs = new HashSet<string>(opendIds);
                     var successhs = new HashSet<string>(successList);
@@ -83,95 +84,84 @@ namespace Magicodes.WeChat.Application.BackgroundJob
                 GetOpenIds(opendIds, userApi, result.NextOpenId);
         }
 
-        private void GetUserInfoList(UserApi userApi, List<string> opendIds, int count, List<string> successList, int tenantId)
+        private void GetUserInfoList(UserApi userApi, List<string> opendIds, List<string> successList, int tenantId)
         {
-            var taskList = new List<System.Threading.Tasks.Task>();
-            for (var i = 0; i < count; i++)
-                lock (opendIds)
+            {
+                var takeCount = opendIds.Count > 100 ? 100 : opendIds.Count;
+                var openIdsToGet = opendIds.Take(takeCount).ToArray();
+                if (openIdsToGet.Count() > 0)
                 {
-                    var takeCount = opendIds.Count > 100 ? 100 : opendIds.Count;
-                    var openIdsToGet = opendIds.Skip(i * 100).Take(takeCount).ToArray();
-                    if (openIdsToGet.Count() > 0)
+                    var debugStr = "";
+                    //该接口最多支持获取100个粉丝的信息
+                    try
                     {
-                        var task = new Task(() =>
+                        debugStr = "准备获取以下粉丝信息：" + string.Join(",", openIdsToGet) + "。" + Environment.NewLine;
+
+                        var batchResult = userApi.Get(openIdsToGet);
+                        if (batchResult.IsSuccess())
                         {
-                            var debugStr = "";
-                            //该接口最多支持获取100个粉丝的信息
-                            try
+                            debugStr += "已成功获取粉丝信息。";
+                            successList.AddRange(openIdsToGet);
+                            var users = _wechatUserRepository.GetAll().Where(p => p.TenantId == tenantId && openIdsToGet.Any(p1 => p1 == p.Id)).ToList();
+
+                            var userList = batchResult.UserInfoList.Select(userInfo => new WeChatUser
                             {
-                                debugStr = "准备获取以下粉丝信息：" + string.Join(",", openIdsToGet) + "。" + Environment.NewLine;
+                                City = userInfo.City,
+                                Country = userInfo.Country,
+                                GroupId = userInfo.GroupId,
+                                HeadImgUrl = userInfo.Headimgurl,
+                                Language = userInfo.Language,
+                                NickName = userInfo.NickName,
+                                Id = userInfo.OpenId,
+                                Province = userInfo.Province,
+                                Remark = userInfo.Remark,
+                                Sex = (int)userInfo.Sex,
+                                Subscribe = userInfo.Subscribe,
+                                SubscribeTime =
+                                    userInfo.SubscribeTime == default(DateTime)
+                                        ? DateTime.Parse("2011-05-10")
+                                        : userInfo.SubscribeTime,
+                                UnionId = userInfo.Unionid,
+                                TenantId = tenantId
+                            }).ToList();
 
-                                var batchResult = userApi.Get(openIdsToGet);
-                                if (batchResult.IsSuccess())
+                            foreach (var item in userList)
+                            {
+                                var weChatUser = users.FirstOrDefault(p => p.Id == item.Id);
+                                if (weChatUser != null)
                                 {
-                                    debugStr += "已成功获取粉丝信息。";
-                                    successList.AddRange(openIdsToGet);
-                                    var users = _wechatUserRepository.GetAll().Where(p => p.TenantId == tenantId && openIdsToGet.Any(p1 => p1 == p.Id)).ToList();
-
-                                    var userList = batchResult.UserInfoList.Select(userInfo => new WeChatUser
-                                    {
-                                        City = userInfo.City,
-                                        Country = userInfo.Country,
-                                        GroupId = userInfo.GroupId,
-                                        HeadImgUrl = userInfo.Headimgurl,
-                                        Language = userInfo.Language,
-                                        NickName = userInfo.NickName,
-                                        Id = userInfo.OpenId,
-                                        Province = userInfo.Province,
-                                        Remark = userInfo.Remark,
-                                        Sex = (int)userInfo.Sex,
-                                        Subscribe = userInfo.Subscribe,
-                                        SubscribeTime =
-                                            userInfo.SubscribeTime == default(DateTime)
-                                                ? DateTime.Parse("2011-05-10")
-                                                : userInfo.SubscribeTime,
-                                        UnionId = userInfo.Unionid,
-                                        TenantId = tenantId
-                                    }).ToList();
-
-                                    foreach (var item in userList)
-                                    {
-                                        var weChatUser = users.FirstOrDefault(p => p.Id == item.Id);
-                                        if (weChatUser != null)
-                                        {
-                                            weChatUser.City = item.City;
-                                            weChatUser.Country = item.Country;
-                                            weChatUser.GroupId = item.GroupId;
-                                            weChatUser.HeadImgUrl = item.HeadImgUrl;
-                                            weChatUser.Language = item.Language;
-                                            weChatUser.NickName = item.NickName;
-                                            weChatUser.Id = item.Id;
-                                            weChatUser.Province = item.Province;
-                                            weChatUser.Remark = item.Remark;
-                                            weChatUser.Sex = item.Sex;
-                                            weChatUser.Subscribe = item.Subscribe;
-                                            weChatUser.SubscribeTime = item.SubscribeTime;
-                                            weChatUser.UnionId = item.UnionId;
-                                        }
-                                        else
-                                            _wechatUserRepository.Insert(item);
-                                    }
+                                    weChatUser.City = item.City;
+                                    weChatUser.Country = item.Country;
+                                    weChatUser.GroupId = item.GroupId;
+                                    weChatUser.HeadImgUrl = item.HeadImgUrl;
+                                    weChatUser.Language = item.Language;
+                                    weChatUser.NickName = item.NickName;
+                                    weChatUser.Id = item.Id;
+                                    weChatUser.Province = item.Province;
+                                    weChatUser.Remark = item.Remark;
+                                    weChatUser.Sex = item.Sex;
+                                    weChatUser.Subscribe = item.Subscribe;
+                                    weChatUser.SubscribeTime = item.SubscribeTime;
+                                    weChatUser.UnionId = item.UnionId;
                                 }
                                 else
-                                {
-                                    debugStr += "粉丝信息获取失败：" + batchResult.DetailResult + "。";
-                                }
+                                    _wechatUserRepository.Insert(item);
                             }
-                            catch (Exception ex)
-                            {
-                                debugStr += "粉丝信息获取异常：" + ex + "。";
-                            }
-                            finally
-                            {
-                            }
-                        });
-                        task.Start();
-                        taskList.Add(task);
+                        }
+                        else
+                        {
+                            debugStr += "粉丝信息获取失败：" + batchResult.DetailResult + "。";
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        debugStr += "粉丝信息获取异常：" + ex + "。";
+                    }
+                    finally
+                    {
                     }
                 }
-            if (taskList.Count > 0)
-                Task.WaitAll(taskList.ToArray());
-            taskList.Clear();
+            }
         }
     }
 }

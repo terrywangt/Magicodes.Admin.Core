@@ -38,22 +38,35 @@ namespace Magicodes.WeChat.Core.Authorization
             CreateCRUDPermission(weChatUsersPer, pages);
             #endregion
 
-
+            #region 定义接口设置权限
+            var weChatApiSettingPer = tenantPer.Clone().WeChatApiSetting();
+            //创建基于租户的增删改查权限
+            CreateCRUDPermission(weChatApiSettingPer, pages, get: false);
+            #endregion
         }
 
-        private static void CreateCRUDPermission(WeChatPermissions PerString, Permission permissionper)
+        private static void CreateCRUDPermission(WeChatPermissions PerString, Permission permissionper, bool create = true, bool update = true, bool delete = true, bool get = true)
         {
-            var indexPermissionName = PerString.ToString();
-            permissionper = permissionper.CreateChildPermission(indexPermissionName, L(indexPermissionName.Replace('.', '_')), multiTenancySides: MultiTenancySides.Tenant);
-
-            var createPermissionName = PerString.Clone().Create().ToString();
-            permissionper.CreateChildPermission(createPermissionName, L("Create"), multiTenancySides: MultiTenancySides.Tenant);
-
-            var editPermissionName = PerString.Clone().Edit().ToString();
-            permissionper.CreateChildPermission(editPermissionName, L("Edit"), multiTenancySides: MultiTenancySides.Tenant);
-
-            var detelePermissionName = PerString.Clone().Delete().ToString();
-            permissionper.CreateChildPermission(detelePermissionName, L("Delete"), multiTenancySides: MultiTenancySides.Tenant);
+            if (get)
+            {
+                var indexPermissionName = PerString.ToString();
+                permissionper = permissionper.CreateChildPermission(indexPermissionName, L(indexPermissionName.Replace('.', '_')), multiTenancySides: MultiTenancySides.Tenant);
+            }
+            if (create)
+            {
+                var createPermissionName = PerString.Clone().Create().ToString();
+                permissionper.CreateChildPermission(createPermissionName, L("Create"), multiTenancySides: MultiTenancySides.Tenant);
+            }
+            if (update)
+            {
+                var editPermissionName = PerString.Clone().Edit().ToString();
+                permissionper.CreateChildPermission(editPermissionName, L("Edit"), multiTenancySides: MultiTenancySides.Tenant);
+            }
+            if (delete)
+            {
+                var detelePermissionName = PerString.Clone().Delete().ToString();
+                permissionper.CreateChildPermission(detelePermissionName, L("Delete"), multiTenancySides: MultiTenancySides.Tenant);
+            }
         }
 
         private static ILocalizableString L(string name)

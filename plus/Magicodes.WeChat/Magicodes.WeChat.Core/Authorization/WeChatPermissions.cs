@@ -20,6 +20,8 @@ namespace Magicodes.WeChat.Core.Authorization
 
         public const string WeChatPermissions_Pages_Tenants_WeChatUsers_Delete = "WeChatPermissions.Pages.Tenants.WeChatUsers.Delete";
 
+        public const string WeChatPermissions_Pages_Tenants_WeChatApiSetting = "WeChatPermissions.Pages.Tenants.WeChatApiSetting";
+
         string PermissionsStr { get; set; }
         #region 方法
         public WeChatPermissions()
@@ -58,6 +60,12 @@ namespace Magicodes.WeChat.Core.Authorization
         public WeChatPermissions WeChatUsers()
         {
             PermissionsStr += ".WeChatUsers";
+            return this;
+        }
+
+        public WeChatPermissions WeChatApiSetting()
+        {
+            PermissionsStr += ".WeChatApiSetting";
             return this;
         }
 
