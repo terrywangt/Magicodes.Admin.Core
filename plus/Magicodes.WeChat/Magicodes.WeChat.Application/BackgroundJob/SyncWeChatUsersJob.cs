@@ -1,6 +1,7 @@
 ﻿using Abp.BackgroundJobs;
 using Abp.Dependency;
 using Abp.Domain.Repositories;
+using Abp.Domain.Uow;
 using Abp.Notifications;
 using Magicodes.WeChat.Core.User;
 using Magicodes.WeChat.SDK.Apis.User;
@@ -14,17 +15,18 @@ namespace Magicodes.WeChat.Application.BackgroundJob
 {
     public class SyncWeChatUsersJob : BackgroundJob<int>, ITransientDependency
     {
+        private readonly IUnitOfWorkManager _unitOfWorkManager;
         private readonly INotificationPublisher _notiticationPublisher;
         private readonly IRepository<WeChatUser, string> _wechatUserRepository;
-        public SyncWeChatUsersJob(IRepository<WeChatUser, string> wechatUserRepository, INotificationPublisher notiticationPublisher)
+        public SyncWeChatUsersJob(IUnitOfWorkManager unitOfWorkManager, IRepository<WeChatUser, string> wechatUserRepository, INotificationPublisher notiticationPublisher)
         {
+            _unitOfWorkManager = unitOfWorkManager;
             _wechatUserRepository = wechatUserRepository;
             _notiticationPublisher = notiticationPublisher;
         }
         public override void Execute(int args)
         {
-            //TODO:等待ABP团队解决
-            //SyncWeChatUsers(args);
+            SyncWeChatUsers(args);
         }
 
         private void ReportProgress(int progress, string message)
@@ -54,15 +56,18 @@ namespace Magicodes.WeChat.Application.BackgroundJob
                 }
                 while (opendIds.Count > 0)
                 {
-                    var successList = new List<string>();
-                    GetUserInfoList(userApi, opendIds, successList, tenantId);
-
-                    var hs = new HashSet<string>(opendIds);
-                    var successhs = new HashSet<string>(successList);
-                    hs.RemoveWhere(p => successhs.Contains(p));
-                    opendIds = hs.ToList();
-
-                    ReportProgress(10, "已获取 " + successList.Count + " 个粉丝...");
+                    using (var unitOfWork = _unitOfWorkManager.Begin())
+                    {
+                        CurrentUnitOfWork.SetFilterParameter(AbpDataFilters.MayHaveTenant, AbpDataFilters.Parameters.TenantId, tenantId);
+                        var successList = new List<string>();
+                        GetUserInfoList(userApi, opendIds, successList, tenantId);
+                        var hs = new HashSet<string>(opendIds);
+                        var successhs = new HashSet<string>(successList);
+                        hs.RemoveWhere(p => successhs.Contains(p));
+                        opendIds = hs.ToList();
+                        ReportProgress(10, "已获取 " + successList.Count + " 个粉丝...");
+                        unitOfWork.Complete();
+                    }
                 }
                 ReportProgress(100, "同步成功！同步数量（" + opendIds.Count + "）。");
 
@@ -102,7 +107,7 @@ namespace Magicodes.WeChat.Application.BackgroundJob
                         {
                             debugStr += "已成功获取粉丝信息。";
                             successList.AddRange(openIdsToGet);
-                            var users = _wechatUserRepository.GetAll().Where(p => p.TenantId == tenantId && openIdsToGet.Any(p1 => p1 == p.Id)).ToList();
+                            var users = _wechatUserRepository.GetAll().Where(p => openIdsToGet.Any(p1 => p1 == p.Id)).ToList();
 
                             var userList = batchResult.UserInfoList.Select(userInfo => new WeChatUser
                             {
@@ -143,6 +148,7 @@ namespace Magicodes.WeChat.Application.BackgroundJob
                                     weChatUser.Subscribe = item.Subscribe;
                                     weChatUser.SubscribeTime = item.SubscribeTime;
                                     weChatUser.UnionId = item.UnionId;
+                                    _wechatUserRepository.Update(weChatUser);
                                 }
                                 else
                                     _wechatUserRepository.Insert(item);
