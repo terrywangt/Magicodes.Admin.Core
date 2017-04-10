@@ -12,13 +12,15 @@ namespace Magicodes.WeChat.Core.Authorization
 
         public const string WeChatPermissions_Pages_Tenants = "WeChatPermissions.Pages.Tenants";
 
+        #region 粉丝管理
         public const string WeChatPermissions_Pages_Tenants_WeChatUsers = "WeChatPermissions.Pages.Tenants.WeChatUsers";
 
         public const string WeChatPermissions_Pages_Tenants_WeChatUsers_Create = "WeChatPermissions.Pages.Tenants.WeChatUsers.Create";
 
         public const string WeChatPermissions_Pages_Tenants_WeChatUsers_Edit = "WeChatPermissions.Pages.Tenants.WeChatUsers.Edit";
 
-        public const string WeChatPermissions_Pages_Tenants_WeChatUsers_Delete = "WeChatPermissions.Pages.Tenants.WeChatUsers.Delete";
+        public const string WeChatPermissions_Pages_Tenants_WeChatUsers_Delete = "WeChatPermissions.Pages.Tenants.WeChatUsers.Delete"; 
+        #endregion
 
         public const string WeChatPermissions_Pages_Tenants_WeChatApiSetting = "WeChatPermissions.Pages.Tenants.WeChatApiSetting";
 
