@@ -28,6 +28,10 @@ namespace Magicodes.Admin.Web.Controllers
             {
                 viewPath = string.Format("{0}/{1}.cshtml", RouteData.Values["controller"], RouteData.Values["action"]);
             }
+            else if (viewPath.IndexOf("/") == -1)
+            {
+                viewPath = string.Format("{0}/{1}{2}", RouteData.Values["controller"], view, view.EndsWith(".cshtml") ? string.Empty : ".cshtml");
+            }
             if (!viewPath.StartsWith("~/wwwroot"))
             {
                 viewPath = "~/wwwroot/PlugIns/" + plusName + "/Views/" + viewPath.TrimStart('~').TrimStart('/');
@@ -49,6 +53,11 @@ namespace Magicodes.Admin.Web.Controllers
             {
                 viewPath = string.Format("{0}/{1}.cshtml", RouteData.Values["controller"], RouteData.Values["action"]);
             }
+            else if (viewPath.IndexOf("/") == -1)
+            {
+                viewPath = string.Format("{0}/{1}{2}", RouteData.Values["controller"], view, view.EndsWith(".cshtml") ? string.Empty : ".cshtml");
+            }
+
             if (!viewPath.StartsWith("~/wwwroot"))
             {
                 viewPath = "~/wwwroot/PlugIns/" + plusName + "/Views/" + viewPath.TrimStart('~').TrimStart('/');
