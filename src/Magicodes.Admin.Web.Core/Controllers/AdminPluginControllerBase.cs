@@ -14,72 +14,46 @@ namespace Magicodes.Admin.Web.Controllers
             LocalizationSourceName = localizationSourceName;
         }
 
-        #region 插件视图
-        public virtual IActionResult PluginView(string view, string plusName)
+        /// <summary>
+        /// 插件视图
+        /// </summary>
+        /// <param name="plusName">插件短名</param>
+        /// <param name="view">视图名称</param>
+        /// <param name="model">模型</param>
+        /// <returns></returns>
+        public virtual ViewResult PluginView(string plusName, string view = null, object model = null)
         {
-            if (view.StartsWith("~/wwwroot"))
+            var viewPath = view;
+            if (string.IsNullOrWhiteSpace(viewPath))
             {
-                return View(view);
+                viewPath = string.Format("{0}/{1}.cshtml", RouteData.Values["controller"], RouteData.Values["action"]);
             }
-            else
-                return View("~/wwwroot/PlugIns/" + plusName + "/Views/" + view.TrimStart('~').TrimStart('/'));
-        }
-
-        public virtual IActionResult PluginView(string view, string plusName, object model)
-        {
-            if (view.StartsWith("~/wwwroot"))
+            if (!viewPath.StartsWith("~/wwwroot"))
             {
-                return View(view, model);
+                viewPath = "~/wwwroot/PlugIns/" + plusName + "/Views/" + viewPath.TrimStart('~').TrimStart('/');
             }
-            else
-                return View("~/wwwroot/PlugIns/" + plusName + "/Views/" + view.TrimStart('~').TrimStart('/'), model);
+            return model == null ? View(viewPath) : View(viewPath, model);
         }
 
-        public virtual IActionResult PluginView(string plusName)
+        /// <summary>
+        /// 插件部分视图
+        /// </summary>
+        /// <param name="plusName">插件短名</param>
+        /// <param name="view">视图名称</param>
+        /// <param name="model">模型</param>
+        /// <returns></returns>
+        public virtual PartialViewResult PluginPartialView(string plusName, string view = null, object model = null)
         {
-            var view = string.Format("{0}/{1}.cshtml", RouteData.Values["controller"], RouteData.Values["action"]);
-            return PluginView(view, plusName);
-        }
-
-        public virtual IActionResult PluginView(string plusName, object model)
-        {
-            var view = string.Format("{0}/{1}.cshtml", RouteData.Values["controller"], RouteData.Values["action"]);
-            return PluginView(view, plusName, model);
-        }
-        #endregion
-
-        #region 插件部分视图
-        public virtual PartialViewResult PluginPartialView(string view, string plusName)
-        {
-            if (view.StartsWith("~/wwwroot"))
+            var viewPath = view;
+            if (string.IsNullOrWhiteSpace(viewPath))
             {
-                return PartialView(view);
+                viewPath = string.Format("{0}/{1}.cshtml", RouteData.Values["controller"], RouteData.Values["action"]);
             }
-            else
-                return PartialView("~/wwwroot/PlugIns/" + plusName + "/Views/" + view.TrimStart('~').TrimStart('/'));
-        }
-
-        public virtual PartialViewResult PluginPartialView(string view, string plusName, object model)
-        {
-            if (view.StartsWith("~/wwwroot"))
+            if (!viewPath.StartsWith("~/wwwroot"))
             {
-                return PartialView(view, model);
+                viewPath = "~/wwwroot/PlugIns/" + plusName + "/Views/" + viewPath.TrimStart('~').TrimStart('/');
             }
-            else
-                return PartialView("~/wwwroot/PlugIns/" + plusName + "/Views/" + view.TrimStart('~').TrimStart('/'), model);
+            return model == null ? PartialView(viewPath) : PartialView(viewPath, model);
         }
-
-        public virtual PartialViewResult PluginPartialView(string plusName)
-        {
-            var view = string.Format("{0}/{1}.cshtml", RouteData.Values["controller"], RouteData.Values["action"]);
-            return PluginPartialView(view, plusName);
-        }
-
-        public virtual PartialViewResult PluginPartialView(string plusName, object model)
-        {
-            var view = string.Format("{0}/{1}.cshtml", RouteData.Values["controller"], RouteData.Values["action"]);
-            return PluginPartialView(view, plusName, model);
-        }
-        #endregion
     }
 }
