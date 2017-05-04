@@ -41,3 +41,7 @@ src/Magicodes.Admin.Web.Mvc/wwwroot/view-resources/Areas/Admin/Views/Layout/_Lay
 src/Magicodes.Admin.Web.Mvc/wwwroot/view-resources/Areas/Admin/Views/Tenants/Index.js
 src/Magicodes.Admin.Web.Mvc/wwwroot/view-resources/Areas/Admin/Views/Users/Index.js
 src/Magicodes.Admin.Web.Mvc/wwwroot/view-resources/Views/Account/Login.js
+src/Magicodes.Admin.Web.Mvc/Areas/Admin/Views/Shared/Components/AdminSideBar
+src/Magicodes.Admin.Web.Mvc/Views/Shared/Components/AdminSideBar
+src/Magicodes.Admin.Web.Mvc/Views/Shared/Components/AdminFooter
+src/Magicodes.Admin.Web.Mvc/Views/Shared/Components/AdminHeader

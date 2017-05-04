@@ -9,9 +9,82 @@ namespace Magicodes.Admin.Web.Controllers
 {
     public class AdminPluginControllerBase : AbpController
     {
+        public string PlusName { get; protected set; }
+
         protected AdminPluginControllerBase(string localizationSourceName)
         {
             LocalizationSourceName = localizationSourceName;
+        }
+
+        /// <summary>
+        /// 返回插件视图
+        /// </summary>
+        /// <returns></returns>
+        public new ViewResult View()
+        {
+            return PluginView(PlusName, null, null);
+        }
+
+        /// <summary>
+        /// 返回插件视图
+        /// </summary>
+        /// <param name="viewName"></param>
+        /// <returns></returns>
+        public new ViewResult View(string viewName)
+        {
+            return PluginView(PlusName, viewName, null);
+        }
+
+        /// <summary>
+        /// 返回插件视图
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public new ViewResult View(object model)
+        {
+            return PluginView(PlusName, null, model);
+        }
+
+        /// <summary>
+        /// 返回插件视图
+        /// </summary>
+        /// <param name="viewName"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public new ViewResult View(string viewName, object model)
+        {
+            return PluginView(PlusName, viewName, model);
+        }
+
+        /// <summary>
+        /// 返回插件分布视图
+        /// </summary>
+        /// <param name="viewName"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
+
+        public new PartialViewResult PartialView(string viewName, object model)
+        {
+            return PluginPartialView(PlusName, viewName, model);
+        }
+
+        /// <summary>
+        /// 返回插件分布视图
+        /// </summary>
+        /// <param name="viewName"></param>
+        /// <returns></returns>
+        public new PartialViewResult PartialView(string viewName)
+        {
+            return PluginPartialView(PlusName, viewName, null);
+        }
+
+        /// <summary>
+        /// 返回插件分布视图
+        /// </summary>
+        /// <returns></returns>
+        public new PartialViewResult PartialView()
+        {
+            return PluginPartialView(PlusName, null, null);
         }
 
         /// <summary>
@@ -36,7 +109,7 @@ namespace Magicodes.Admin.Web.Controllers
             {
                 viewPath = "~/wwwroot/PlugIns/" + plusName + "/Views/" + viewPath.TrimStart('~').TrimStart('/');
             }
-            return model == null ? View(viewPath) : View(viewPath, model);
+            return model == null ? base.View(viewPath) : base.View(viewPath, model);
         }
 
         /// <summary>
@@ -62,7 +135,7 @@ namespace Magicodes.Admin.Web.Controllers
             {
                 viewPath = "~/wwwroot/PlugIns/" + plusName + "/Views/" + viewPath.TrimStart('~').TrimStart('/');
             }
-            return model == null ? PartialView(viewPath) : PartialView(viewPath, model);
+            return model == null ? base.PartialView(viewPath) : base.PartialView(viewPath, model);
         }
     }
 }
