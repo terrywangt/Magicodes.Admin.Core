@@ -13,13 +13,9 @@ namespace Magicodes.Home.Controllers
     {
         public PluginControllerBase() : base(HomeConsts.LocalizationSourceName)
         {
+            PlusName = "Magicodes.Home";
             ViewData["ContentRootUrl"] = "/PlugIns/Magicodes.Home/wwwroot";
             //ViewBag.ContentRootUrl = "/PlugIns/Magicodes.Home/wwwroot";
-        }
-
-        public override ViewResult View()
-        {
-            return PluginView("Magicodes.Home") as ViewResult;
         }
     }
 }

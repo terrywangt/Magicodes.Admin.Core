@@ -12,20 +12,9 @@ namespace Magicodes.WeChat.Web.Mvc.Controllers
     [Area(WeChatConsts.AdminAreaName)]
     public class BaseController : AdminPluginControllerBase
     {
-        const string PlusName = "Magicodes.WeChat.Web.Mvc";
         public BaseController() : base(WeChatConsts.LocalizationSourceName)
         {
-
-        }
-
-        public override ViewResult View()
-        {
-            return PluginView(PlusName) as ViewResult;
-        }
-
-        public override ViewResult View(object model)
-        {
-            return PluginView(PlusName, model) as ViewResult; ;
+            PlusName = "Magicodes.WeChat.Web.Mvc";
         }
     }
 }
