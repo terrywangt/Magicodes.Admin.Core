@@ -270,7 +270,7 @@ namespace Magicodes.Admin.Localization
             return famfamFlagName.Substring(
                 famfamFlagName.LastIndexOf(
                     " ",
-                    StringComparison.InvariantCultureIgnoreCase) + 1
+                    StringComparison.OrdinalIgnoreCase) + 1
                 );
         }
     }

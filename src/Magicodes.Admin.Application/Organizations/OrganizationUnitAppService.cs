@@ -1,16 +1,15 @@
-﻿using System.Data.Entity;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Abp.Application.Services.Dto;
 using Abp.Authorization;
 using Abp.Authorization.Users;
-using Abp.AutoMapper;
 using Abp.Domain.Repositories;
 using Abp.Linq.Extensions;
 using Abp.Organizations;
 using Magicodes.Admin.Authorization;
 using Magicodes.Admin.Organizations.Dto;
-using System.Linq.Dynamic;
+using System.Linq.Dynamic.Core;
+using Microsoft.EntityFrameworkCore;
 
 namespace Magicodes.Admin.Organizations
 {
@@ -43,7 +42,7 @@ namespace Magicodes.Admin.Organizations
             return new ListResultDto<OrganizationUnitDto>(
                 items.Select(item =>
                 {
-                    var dto = item.ou.MapTo<OrganizationUnitDto>();
+                    var dto = ObjectMapper.Map<OrganizationUnitDto>(item.ou);
                     dto.MemberCount = item.memberCount;
                     return dto;
                 }).ToList());
@@ -64,7 +63,7 @@ namespace Magicodes.Admin.Organizations
                 totalCount,
                 items.Select(item =>
                 {
-                    var dto = item.user.MapTo<OrganizationUnitUserListDto>();
+                    var dto = ObjectMapper.Map<OrganizationUnitUserListDto>(item.user);
                     dto.AddedTime = item.uou.CreationTime;
                     return dto;
                 }).ToList());
@@ -78,7 +77,7 @@ namespace Magicodes.Admin.Organizations
             await _organizationUnitManager.CreateAsync(organizationUnit);
             await CurrentUnitOfWork.SaveChangesAsync();
 
-            return organizationUnit.MapTo<OrganizationUnitDto>();
+            return ObjectMapper.Map<OrganizationUnitDto>(organizationUnit);
         }
 
         [AbpAuthorize(AppPermissions.Pages_Administration_OrganizationUnits_ManageOrganizationTree)]
@@ -129,7 +128,7 @@ namespace Magicodes.Admin.Organizations
 
         private async Task<OrganizationUnitDto> CreateOrganizationUnitDto(OrganizationUnit organizationUnit)
         {
-            var dto = organizationUnit.MapTo<OrganizationUnitDto>();
+            var dto = ObjectMapper.Map<OrganizationUnitDto>(organizationUnit);
             dto.MemberCount = await _userOrganizationUnitRepository.CountAsync(uou => uou.OrganizationUnitId == organizationUnit.Id);
             return dto;
         }

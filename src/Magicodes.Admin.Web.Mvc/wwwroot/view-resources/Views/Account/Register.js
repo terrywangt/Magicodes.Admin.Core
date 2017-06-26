@@ -34,11 +34,10 @@
                     $('.register-form').submit();
                 }
                 return false;
-            }
+            } 
         });
 
-        var $element = $('#RegisterPassword');
-        _passwordComplexityHelper.setPasswordComplexityRules($element, window.passwordComplexitySetting);
+        _passwordComplexityHelper.setPasswordComplexityRules($('input[name=Password], input[name=PasswordRepeat]'), window.passwordComplexitySetting);
     }
 
     return {

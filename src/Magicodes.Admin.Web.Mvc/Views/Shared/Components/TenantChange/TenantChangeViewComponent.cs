@@ -1,11 +1,10 @@
 ﻿using System.Threading.Tasks;
-using Abp.AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Magicodes.Admin.Web.Session;
 
 namespace Magicodes.Admin.Web.Views.Shared.Components.TenantChange
 {
-    public class TenantChangeViewComponent : ViewComponent
+    public class TenantChangeViewComponent : AdminViewComponent
     {
         private readonly IPerRequestSessionCache _sessionCache;
 
@@ -17,7 +16,7 @@ namespace Magicodes.Admin.Web.Views.Shared.Components.TenantChange
         public async Task<IViewComponentResult> InvokeAsync()
         {
             var loginInfo = await _sessionCache.GetCurrentLoginInformationsAsync();
-            var model = loginInfo.MapTo<TenantChangeViewModel>();
+            var model = ObjectMapper.Map<TenantChangeViewModel>(loginInfo);
             return View(model);
         }
     }

@@ -17,6 +17,6 @@ namespace Magicodes.Admin.Authorization.Users
 
         Task<string> GetAccountSwitchToken(long targetUserId, int? targetTenantId);
 
-        Task<UserAndIdentity> GetSwitchedUserAndIdentity(string switchAccountToken, string authenticationType);
+        Task<UserAndIdentity> GetSwitchedUserAndIdentity(string switchAccountToken);
     }
 }

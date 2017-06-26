@@ -35,6 +35,7 @@
 <form asp-action="Login" class="login-form" method="post">
     <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
     <input type="hidden" name="returnUrlHash" />
+    <input type="hidden" name="ss" value="@ViewBag.SingleSignIn" />
     <div class="form-group">
         <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
         <label class="control-label visible-ie8 visible-ie9">@L("UserNameOrEmail")</label>
@@ -83,6 +84,7 @@
             <form asp-action="ExternalLogin" method="post">
                 <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
                 <input type="hidden" name="provider" value="" />
+                <input type="hidden" name="ss" value="@ViewBag.SingleSignIn" />
 
                 @foreach (var p in loginProviders)
                 {
@@ -102,7 +104,12 @@
     <p>
         @if (Model.IsSelfRegistrationEnabled)
         {
-            <a href="@Url.Action("Register", "Account")" id="register-btn" class="uppercase">@L("CreateAnAccount")</a>
+            <a href="@Url.Action("Register", "Account", new { ss = ViewBag.SingleSignIn, returnUrl = ViewBag.ReturnUrl })" id="register-btn" class="uppercase">@L("CreateAnAccount")</a>
+            <span class="pipe-divider"> | </span>
+        }
+        @if (!AbpSession.TenantId.HasValue)
+        {
+            <a href="@Url.Action("SelectEdition", "TenantRegistration")" id="register-btn" class="uppercase">@L("NewTenant")</a>
             <span class="pipe-divider"> | </span>
         }
         <a href="@Url.Action("EmailActivation", "Account")" id="email-activation-btn" class="uppercase">@L("EmailActivation")</a>

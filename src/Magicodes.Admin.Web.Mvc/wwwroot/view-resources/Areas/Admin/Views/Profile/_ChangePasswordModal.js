@@ -23,8 +23,8 @@
                         }
                     }
                 });
-
-                _passwordComplexityHelper.setPasswordComplexityRules(_$form.find("input[name=NewPassword]"), result.setting);
+                
+                _passwordComplexityHelper.setPasswordComplexityRules(_$form.find("input[name=NewPassword],input[name=NewPasswordRepeat]"), result.setting);
             });
         };
 

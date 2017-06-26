@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Abp;
 using Abp.Domain.Services;
 
@@ -6,7 +7,7 @@ namespace Magicodes.Admin.Chat
 {
     public interface IChatMessageManager : IDomainService
     {
-        void SendMessage(UserIdentifier sender, UserIdentifier receiver, string message, string senderTenancyName, string senderUserName, Guid? senderProfilePictureId);
+        Task SendMessageAsync(UserIdentifier sender, UserIdentifier receiver, string message, string senderTenancyName, string senderUserName, Guid? senderProfilePictureId);
 
         long Save(ChatMessage message);
 

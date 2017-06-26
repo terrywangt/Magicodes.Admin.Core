@@ -216,99 +216,91 @@
                             </div>
                         </div>
                         <form id="PasswordComplexitySettingsForm" style="@(Model.Settings.Security.UseDefaultPasswordComplexitySettings ? "display:none;" : "")">
-                            <div class="form-group form-md-line-input form-md-floating-label no-hint">
-                                <input type="number" name="MinLength" class="form-control edited" value="@Model.Settings.Security.PasswordComplexity.MinLength">
-                                <label>@L("MinPasswordLength")</label>
-                            </div>
-                            <div class="form-group form-md-line-input form-md-floating-label no-hint">
-                                <input type="number" name="MaxLength" class="form-control edited" value="@Model.Settings.Security.PasswordComplexity.MaxLength">
-                                <label>@L("MaxPasswordLength")</label>
-                            </div>
                             <div class="md-checkbox-list">
                                 <div class="md-checkbox">
-                                    <input id="Setting_PasswordComplexity_UseNumbers" class="md-check" type="checkbox" name="UseNumbers" value="true" @Html.Raw(Model.Settings.Security.PasswordComplexity.UseNumbers ? "checked=\"checked\"" : "")>
-                                    <label for="Setting_PasswordComplexity_UseNumbers">
+                                    <input id="Setting_PasswordComplexity_RequireDigit" class="md-check" type="checkbox" name="RequireDigit" value="true" @(Model.Settings.Security.PasswordComplexity.RequireDigit ? "checked=\"checked\"" : "")>
+                                    <label for="Setting_PasswordComplexity_RequireDigit">
                                         <span class="inc"></span>
                                         <span class="check"></span>
                                         <span class="box"></span>
-                                        @L("UseNumbers")
+                                        @L("PasswordComplexity_RequireDigit")
                                     </label>
                                 </div>
                                 <div class="md-checkbox">
-                                    <input id="Setting_PasswordComplexity_UseUpperCaseLetters" class="md-check" type="checkbox" name="UseUpperCaseLetters" value="true" @Html.Raw(Model.Settings.Security.PasswordComplexity.UseUpperCaseLetters ? "checked=\"checked\"" : "")>
-                                    <label for="Setting_PasswordComplexity_UseUpperCaseLetters">
+                                    <input id="Setting_PasswordComplexity_RequireLowercase" class="md-check" type="checkbox" name="RequireLowercase" value="true" @(Model.Settings.Security.PasswordComplexity.RequireLowercase ? "checked=\"checked\"" : "")>
+                                    <label for="Setting_PasswordComplexity_RequireLowercase">
                                         <span class="inc"></span>
                                         <span class="check"></span>
                                         <span class="box"></span>
-                                        @L("UseUpperCaseLetters")
+                                        @L("PasswordComplexity_RequireLowercase")
+                                    </label>
+                                </div>                                
+                                <div class="md-checkbox">
+                                    <input id="Setting_PasswordComplexity_RequireNonAlphanumeric" class="md-check" type="checkbox" name="RequireNonAlphanumeric" value="true" @(Model.Settings.Security.PasswordComplexity.RequireNonAlphanumeric ? "checked=\"checked\"" : "")>
+                                    <label for="Setting_PasswordComplexity_RequireNonAlphanumeric">
+                                        <span class="inc"></span>
+                                        <span class="check"></span>
+                                        <span class="box"></span>
+                                        @L("PasswordComplexity_RequireNonAlphanumeric")
                                     </label>
                                 </div>
                                 <div class="md-checkbox">
-                                    <input id="Setting_PasswordComplexity_UseLowerCaseLetters" class="md-check" type="checkbox" name="UseLowerCaseLetters" value="true" @Html.Raw(Model.Settings.Security.PasswordComplexity.UseLowerCaseLetters ? "checked=\"checked\"" : "")>
-                                    <label for="Setting_PasswordComplexity_UseLowerCaseLetters">
+                                    <input id="Setting_PasswordComplexity_RequireUppercase" class="md-check" type="checkbox" name="RequireUppercase" value="true" @(Model.Settings.Security.PasswordComplexity.RequireUppercase ? "checked=\"checked\"" : "")>
+                                    <label for="Setting_PasswordComplexity_RequireUppercase">
                                         <span class="inc"></span>
                                         <span class="check"></span>
                                         <span class="box"></span>
-                                        @L("UseLowerCaseLetters")
+                                        @L("PasswordComplexity_RequireUppercase")
                                     </label>
                                 </div>
-                                <div class="md-checkbox">
-                                    <input id="Setting_PasswordComplexity_UsePunctuations" class="md-check" type="checkbox" name="UsePunctuations" value="true" @Html.Raw(Model.Settings.Security.PasswordComplexity.UsePunctuations ? "checked=\"checked\"" : "")>
-                                    <label for="Setting_PasswordComplexity_UsePunctuations">
-                                        <span class="inc"></span>
-                                        <span class="check"></span>
-                                        <span class="box"></span>
-                                        @L("UsePunctuations")
-                                    </label>
-                                </div>
+                            </div>
+                            <div class="form-group form-md-line-input form-md-floating-label no-hint">
+                                <input type="number" name="RequiredLength" class="form-control edited" value="@Model.Settings.Security.PasswordComplexity.RequiredLength">
+                                <label>@L("PasswordComplexity_RequiredLength")</label>
                             </div>
                         </form>
                         <form id="DefaultPasswordComplexitySettingsForm" style="@(!Model.Settings.Security.UseDefaultPasswordComplexitySettings ? "display:none;" : "")">
-                            <div class="form-group form-md-line-input form-md-floating-label no-hint">
-                                <input type="number" name="MinLength" class="form-control edited" value="@Model.Settings.Security.DefaultPasswordComplexity.MinLength" disabled>
-                                <label>@L("MinPasswordLength")</label>
-                            </div>
-                            <div class="form-group form-md-line-input form-md-floating-label no-hint">
-                                <input type="number" name="MaxLength" class="form-control edited" value="@Model.Settings.Security.DefaultPasswordComplexity.MaxLength" disabled>
-                                <label>@L("MaxPasswordLength")</label>
-                            </div>
                             <div class="md-checkbox-list">
                                 <div class="md-checkbox">
-                                    <input id="Setting_DefaultPasswordComplexity_UseNumbers" class="md-check" type="checkbox" name="UseNumbers" value="true" @Html.Raw(Model.Settings.Security.DefaultPasswordComplexity.UseNumbers ? "checked=\"checked\"" : "") disabled>
-                                    <label for="Setting_DefaultPasswordComplexity_UseNumbers">
+                                    <input id="Setting_DefaultPasswordComplexity_RequireDigit" class="md-check" type="checkbox" name="RequireDigit" value="true" @(Model.Settings.Security.DefaultPasswordComplexity.RequireDigit ? "checked=\"checked\"" : "") disabled>
+                                    <label for="Setting_DefaultPasswordComplexity_RequireDigit">
                                         <span class="inc"></span>
                                         <span class="check"></span>
                                         <span class="box"></span>
-                                        @L("UseNumbers")
+                                        @L("PasswordComplexity_RequireDigit")
                                     </label>
                                 </div>
                                 <div class="md-checkbox">
-                                    <input id="Setting_DefaultPasswordComplexity_UseUpperCaseLetters" class="md-check" type="checkbox" name="UseUpperCaseLetters" value="true" @Html.Raw(Model.Settings.Security.DefaultPasswordComplexity.UseUpperCaseLetters ? "checked=\"checked\"" : "") disabled>
-                                    <label for="Setting_DefaultPasswordComplexity_UseUpperCaseLetters">
+                                    <input id="Setting_DefaultPasswordComplexity_RequireLowercase" class="md-check" type="checkbox" name="RequireLowercase" value="true" @(Model.Settings.Security.DefaultPasswordComplexity.RequireLowercase ? "checked=\"checked\"" : "") disabled>
+                                    <label for="Setting_DefaultPasswordComplexity_RequireLowercase">
                                         <span class="inc"></span>
                                         <span class="check"></span>
                                         <span class="box"></span>
-                                        @L("UseUpperCaseLetters")
+                                        @L("PasswordComplexity_RequireLowercase")
                                     </label>
                                 </div>
                                 <div class="md-checkbox">
-                                    <input id="Setting_DefaultPasswordComplexity_UseLowerCaseLetters" class="md-check" type="checkbox" name="UseLowerCaseLetters" value="true" @Html.Raw(Model.Settings.Security.DefaultPasswordComplexity.UseLowerCaseLetters ? "checked=\"checked\"" : "") disabled>
-                                    <label for="Setting_DefaultPasswordComplexity_UseLowerCaseLetters">
+                                    <input id="Setting_DefaultPasswordComplexity_RequireNonAlphanumeric" class="md-check" type="checkbox" name="RequireNonAlphanumeric" value="true" @(Model.Settings.Security.DefaultPasswordComplexity.RequireNonAlphanumeric ? "checked=\"checked\"" : "") disabled>
+                                    <label for="Setting_DefaultPasswordComplexity_RequireNonAlphanumeric">
                                         <span class="inc"></span>
                                         <span class="check"></span>
                                         <span class="box"></span>
-                                        @L("UseLowerCaseLetters")
+                                        @L("PasswordComplexity_RequireNonAlphanumeric")
                                     </label>
                                 </div>
                                 <div class="md-checkbox">
-                                    <input id="Setting_DefaultPasswordComplexity_UsePunctuations" class="md-check" type="checkbox" name="UsePunctuations" value="true" @Html.Raw(Model.Settings.Security.DefaultPasswordComplexity.UsePunctuations ? "checked=\"checked\"" : "") disabled>
-                                    <label for="Setting_DefaultPasswordComplexity_UsePunctuations">
+                                    <input id="Setting_DefaultPasswordComplexity_RequireUppercase" class="md-check" type="checkbox" name="RequireUppercase" value="true" @(Model.Settings.Security.DefaultPasswordComplexity.RequireUppercase ? "checked=\"checked\"" : "") disabled>
+                                    <label for="Setting_DefaultPasswordComplexity_RequireUppercase">
                                         <span class="inc"></span>
                                         <span class="check"></span>
                                         <span class="box"></span>
-                                        @L("UsePunctuations")
+                                        @L("PasswordComplexity_RequireUppercase")
                                     </label>
                                 </div>
+                            </div>
+                            <div class="form-group form-md-line-input form-md-floating-label no-hint">
+                                <input type="number" name="RequiredLength" class="form-control edited" value="@Model.Settings.Security.DefaultPasswordComplexity.RequiredLength" disabled>
+                                <label>@L("PasswordComplexity_RequiredLength")</label>
                             </div>
                         </form>
                     </div>

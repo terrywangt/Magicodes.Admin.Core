@@ -10,10 +10,10 @@ namespace Magicodes.Admin.Friendships
 
         Task<FriendDto> CreateFriendshipRequestByUserName(CreateFriendshipRequestByUserNameInput input);
 
-        void BlockUser(BlockUserInput input);
+        Task BlockUser(BlockUserInput input);
 
-        void UnblockUser(UnblockUserInput input);
+        Task UnblockUser(UnblockUserInput input);
 
-        void AcceptFriendshipRequest(AcceptFriendshipRequestInput input);
+        Task AcceptFriendshipRequest(AcceptFriendshipRequestInput input);
     }
 }

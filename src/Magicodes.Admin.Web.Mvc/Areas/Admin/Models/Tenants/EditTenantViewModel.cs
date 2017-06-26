@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Abp.Application.Services.Dto;
+using Magicodes.Admin.Editions.Dto;
 using Magicodes.Admin.MultiTenancy.Dto;
 
 namespace Magicodes.Admin.Web.Areas.Admin.Models.Tenants
@@ -8,9 +8,9 @@ namespace Magicodes.Admin.Web.Areas.Admin.Models.Tenants
     {
         public TenantEditDto Tenant { get; set; }
 
-        public IReadOnlyList<ComboboxItemDto> EditionItems { get; set; }
+        public IReadOnlyList<SubscribableEditionComboboxItemDto> EditionItems { get; set; }
 
-        public EditTenantViewModel(TenantEditDto tenant, IReadOnlyList<ComboboxItemDto> editionItems)
+        public EditTenantViewModel(TenantEditDto tenant, IReadOnlyList<SubscribableEditionComboboxItemDto> editionItems)
         {
             Tenant = tenant;
             EditionItems = editionItems;

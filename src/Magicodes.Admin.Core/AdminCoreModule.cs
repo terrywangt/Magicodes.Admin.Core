@@ -4,10 +4,12 @@ using Abp.AutoMapper;
 using Abp.Dependency;
 using Abp.Modules;
 using Abp.Net.Mail;
+using Abp.Reflection.Extensions;
 using Abp.Timing;
+using Abp.Configuration.Startup;
+using Abp.MailKit;
 using Abp.Zero;
 using Abp.Zero.Configuration;
-using Abp.Zero.Ldap;
 using Magicodes.Admin.Authorization.Roles;
 using Magicodes.Admin.Authorization.Users;
 using Magicodes.Admin.Chat;
@@ -18,15 +20,23 @@ using Magicodes.Admin.Friendships;
 using Magicodes.Admin.Friendships.Cache;
 using Magicodes.Admin.Localization;
 using Magicodes.Admin.MultiTenancy;
+using Magicodes.Admin.MultiTenancy.Payments.Cache;
 using Magicodes.Admin.Notifications;
 using Magicodes.Admin.Timing;
+
+#if FEATURE_LDAP
+using Abp.Zero.Ldap;
+#endif
 
 namespace Magicodes.Admin
 {
     [DependsOn(
-        typeof(AbpZeroCoreModule), 
+        typeof(AbpZeroCoreModule),
+#if FEATURE_LDAP
         typeof(AbpZeroLdapModule), 
-        typeof(AbpAutoMapperModule))]
+#endif
+        typeof(AbpAutoMapperModule),
+        typeof(AbpMailKitModule))]
     public class AdminCoreModule : AbpModule
     {
         public override void PreInitialize()
@@ -50,7 +60,7 @@ namespace Magicodes.Admin
             Configuration.Notifications.Providers.Add<AppNotificationProvider>();
 
             //Enable this line to create a multi-tenant application.
-            Configuration.MultiTenancy.IsEnabled = true;
+            Configuration.MultiTenancy.IsEnabled = AdminConsts.MultiTenancyEnabled;
 
             //Enable LDAP authentication (It can be enabled only if MultiTenancy is disabled!)
             //Configuration.Modules.ZeroLdap().Enable(typeof(AppLdapAuthenticationSource));
@@ -61,18 +71,23 @@ namespace Magicodes.Admin
             if (DebugHelper.IsDebug)
             {
                 //Disabling email sending in debug mode
-                IocManager.Register<IEmailSender, NullEmailSender>(DependencyLifeStyle.Transient);
+                Configuration.ReplaceService<IEmailSender, NullEmailSender>(DependencyLifeStyle.Transient);
             }
 
             Configuration.Caching.Configure(FriendCacheItem.CacheName, cache =>
             {
                 cache.DefaultSlidingExpireTime = TimeSpan.FromMinutes(30);
             });
+
+            Configuration.Caching.Configure(PaymentCacheItem.CacheName, cache =>
+            {
+                cache.DefaultSlidingExpireTime = TimeSpan.FromMinutes(AdminConsts.PaymentCacheDurationInMinutes);
+            });
         }
 
         public override void Initialize()
         {
-            IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
+            IocManager.RegisterAssemblyByConvention(typeof(AdminCoreModule).GetAssembly());
         }
 
         public override void PostInitialize()

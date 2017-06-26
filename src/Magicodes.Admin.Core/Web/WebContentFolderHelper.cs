@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using Abp.Reflection.Extensions;
 
 namespace Magicodes.Admin.Web
 {
@@ -12,10 +13,10 @@ namespace Magicodes.Admin.Web
     {
         public static string CalculateContentRootFolder()
         {
-            var coreAssemblyDirectoryPath = Path.GetDirectoryName(typeof(AdminCoreModule).Assembly.Location);
+            var coreAssemblyDirectoryPath = Path.GetDirectoryName(typeof(AdminCoreModule).GetAssembly().Location);
             if (coreAssemblyDirectoryPath == null)
             {
-                throw new ApplicationException("Could not find location of Magicodes.Admin.Core assembly!");
+                throw new Exception("Could not find location of Magicodes.Admin.Core assembly!");
             }
 
             var directoryInfo = new DirectoryInfo(coreAssemblyDirectoryPath);
@@ -23,25 +24,25 @@ namespace Magicodes.Admin.Web
             {
                 if (directoryInfo.Parent == null)
                 {
-                    throw new ApplicationException("Could not find content root folder!");
+                    throw new Exception("Could not find content root folder!");
                 }
 
                 directoryInfo = directoryInfo.Parent;
             }
 
-            var webMvcFolder = Path.Combine(directoryInfo.FullName, @"src\Magicodes.Admin.Web.Mvc");
+            var webMvcFolder = Path.Combine(directoryInfo.FullName, $"src{Path.DirectorySeparatorChar}Magicodes.Admin.Web.Mvc");
             if (Directory.Exists(webMvcFolder))
             {
                 return webMvcFolder;
             }
 
-            var webHostFolder = Path.Combine(directoryInfo.FullName, @"src\Magicodes.Admin.Web.Host");
+            var webHostFolder = Path.Combine(directoryInfo.FullName, $"src{Path.DirectorySeparatorChar}Magicodes.Admin.Web.Host");
             if (Directory.Exists(webHostFolder))
             {
                 return webHostFolder;
             }
 
-            throw new ApplicationException("Could not find root folder of the web project!");
+            throw new Exception("Could not find root folder of the web project!");
         }
 
         private static bool DirectoryContains(string directory, string fileName)

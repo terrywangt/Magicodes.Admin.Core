@@ -1,12 +1,11 @@
-﻿using System.Data.Entity;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Abp.Application.Services.Dto;
+using Microsoft.EntityFrameworkCore;
 using Magicodes.Admin.Editions;
 using Magicodes.Admin.Editions.Dto;
 using Magicodes.Admin.Features;
 using Shouldly;
-using Xunit;
 
 namespace Magicodes.Admin.Tests.Editions
 {
@@ -50,7 +49,7 @@ namespace Magicodes.Admin.Tests.Editions
                     FeatureValues = output.FeatureValues
                 });
 
-            await UsingDbContext(async context =>
+            await UsingDbContextAsync(async context =>
             {
                 var premiumEditon = await context.Editions.FirstOrDefaultAsync(e => e.DisplayName == "Premium Edition");
                 premiumEditon.ShouldNotBeNull();

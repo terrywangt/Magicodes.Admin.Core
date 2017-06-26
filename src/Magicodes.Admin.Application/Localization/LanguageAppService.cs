@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
-using System.Linq.Dynamic;
+using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using Abp.Application.Services.Dto;
 using Abp.Authorization;
-using Abp.AutoMapper;
 using Abp.Domain.Repositories;
 using Abp.Extensions;
 using Abp.Localization;
@@ -40,8 +39,8 @@ namespace Magicodes.Admin.Localization
             var defaultLanguage = await _applicationLanguageManager.GetDefaultLanguageOrNullAsync(AbpSession.TenantId);
 
             return new GetLanguagesOutput(
-                languages.MapTo<List<ApplicationLanguageListDto>>(),
-                defaultLanguage == null ? null : defaultLanguage.Name
+                ObjectMapper.Map<List<ApplicationLanguageListDto>>(languages),
+                defaultLanguage?.Name
                 );
         }
 
@@ -58,21 +57,20 @@ namespace Magicodes.Admin.Localization
 
             //Language
             output.Language = language != null
-                ? language.MapTo<ApplicationLanguageEditDto>()
+                ? ObjectMapper.Map<ApplicationLanguageEditDto>(language)
                 : new ApplicationLanguageEditDto();
 
             //Language names
-            output.LanguageNames = CultureInfo
-                .GetCultures(CultureTypes.AllCultures)
-                .OrderBy(c => c.DisplayName)
-                .Select(c => new ComboboxItemDto(c.Name, c.DisplayName + " (" + c.Name + ")") { IsSelected = output.Language.Name == c.Name })
+            output.LanguageNames = CultureHelper
+                .AllCultures
+                .Select(c => new ComboboxItemDto(c.Key, c.Value + " (" + c.Key + ")") { IsSelected = output.Language.Name == c.Key })
                 .ToList();
 
             //Flags
             output.Flags = FamFamFamFlagsHelper
                 .FlagClassNames
                 .OrderBy(f => f)
-                .Select(f => new ComboboxItemDto(f, FamFamFamFlagsHelper.GetCountryCode(f)) { IsSelected = output.Language.Icon == f})
+                .Select(f => new ComboboxItemDto(f, FamFamFamFlagsHelper.GetCountryCode(f)) { IsSelected = output.Language.Icon == f })
                 .ToList();
 
             return output;
@@ -119,7 +117,7 @@ namespace Magicodes.Admin.Localization
                     defaultLanguage = (await _applicationLanguageManager.GetLanguagesAsync(AbpSession.TenantId)).FirstOrDefault();
                     if (defaultLanguage == null)
                     {
-                        throw new ApplicationException("No language found in the application!");
+                        throw new Exception("No language found in the application!");
                     }
                 }
 
@@ -127,8 +125,8 @@ namespace Magicodes.Admin.Localization
             }
 
             var source = LocalizationManager.GetSource(input.SourceName);
-            var baseCulture = CultureInfo.GetCultureInfo(input.BaseLanguageName);
-            var targetCulture = CultureInfo.GetCultureInfo(input.TargetLanguageName);
+            var baseCulture = CultureInfoHelper.Get(input.BaseLanguageName);
+            var targetCulture = CultureInfoHelper.Get(input.TargetLanguageName);
 
             var languageTexts = source
                 .GetAllStrings()
@@ -200,8 +198,11 @@ namespace Magicodes.Admin.Localization
                     culture.Name,
                     culture.DisplayName,
                     input.Language.Icon
-                    )
-                );
+                )
+                {
+                    IsDisabled = input.Language.IsDisabled
+                }
+            );
         }
 
         [AbpAuthorize(AppPermissions.Pages_Administration_Languages_Edit)]
@@ -218,6 +219,7 @@ namespace Magicodes.Admin.Localization
             language.Name = culture.Name;
             language.DisplayName = culture.DisplayName;
             language.Icon = input.Language.Icon;
+            language.IsDisabled = input.Language.IsDisabled;
 
             await _applicationLanguageManager.UpdateAsync(AbpSession.TenantId, language);
         }
@@ -226,7 +228,7 @@ namespace Magicodes.Admin.Localization
         {
             try
             {
-                return CultureInfo.GetCultureInfo(name);
+                return CultureInfoHelper.Get(name);
             }
             catch (CultureNotFoundException ex)
             {
@@ -234,7 +236,7 @@ namespace Magicodes.Admin.Localization
                 throw new UserFriendlyException(L("InvlalidLanguageCode"));
             }
         }
-        
+
         private async Task CheckLanguageIfAlreadyExists(string languageName, int? expectedId = null)
         {
             var existingLanguage = (await _applicationLanguageManager.GetLanguagesAsync(AbpSession.TenantId))

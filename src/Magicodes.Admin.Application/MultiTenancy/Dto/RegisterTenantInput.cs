@@ -2,7 +2,8 @@
 using Abp.Auditing;
 using Abp.Authorization.Users;
 using Abp.MultiTenancy;
-using Magicodes.Admin.Authorization.Users;
+using Magicodes.Admin.MultiTenancy.Payments;
+using Magicodes.Admin.MultiTenancy.Payments.Dto;
 
 namespace Magicodes.Admin.MultiTenancy.Dto
 {
@@ -13,7 +14,7 @@ namespace Magicodes.Admin.MultiTenancy.Dto
         public string TenancyName { get; set; }
 
         [Required]
-        [StringLength(User.MaxNameLength)]
+        [StringLength(AbpUserBase.MaxNameLength)]
         public string Name { get; set; }
 
         [Required]
@@ -21,10 +22,18 @@ namespace Magicodes.Admin.MultiTenancy.Dto
         [StringLength(AbpUserBase.MaxEmailAddressLength)]
         public string AdminEmailAddress { get; set; }
 
-        [StringLength(User.MaxPlainPasswordLength)]
+        [StringLength(AbpUserBase.MaxPlainPasswordLength)]
         public string AdminPassword { get; set; }
 
         [DisableAuditing]
         public string CaptchaResponse { get; set; }
+
+        public SubscriptionStartType SubscriptionStartType { get; set; }
+
+        public SubscriptionPaymentGatewayType? Gateway { get; set; }
+
+        public int EditionId { get; set; }
+
+        public string PaymentId { get; set; }
     }
 }

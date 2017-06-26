@@ -1,25 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data.Common;
-using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using Abp;
-using Abp.Configuration.Startup;
-using Abp.Domain.Uow;
-using Abp.EntityFramework.Extensions;
+using Abp.EntityFrameworkCore.Extensions;
 using Abp.Events.Bus;
 using Abp.Events.Bus.Entities;
 using Abp.Runtime.Session;
 using Abp.TestBase;
-using Castle.MicroKernel.Registration;
-using Effort;
-using EntityFramework.DynamicFilters;
+using Microsoft.EntityFrameworkCore;
 using Magicodes.Admin.Authorization.Roles;
 using Magicodes.Admin.Authorization.Users;
-using Magicodes.Admin.EntityFramework;
-using Magicodes.Admin.Migrations.Seed.Host;
-using Magicodes.Admin.Migrations.Seed.Tenants;
+using Magicodes.Admin.EntityFrameworkCore;
 using Magicodes.Admin.MultiTenancy;
 using Magicodes.Admin.Tests.TestDatas;
 
@@ -33,94 +24,29 @@ namespace Magicodes.Admin.Tests
     /// </summary>
     public abstract class AppTestBase : AbpIntegratedTestBase<AdminTestModule>
     {
-        private DbConnection _hostDb;
-        private Dictionary<int, DbConnection> _tenantDbs; //only used for db per tenant architecture
-
         protected AppTestBase()
         {
-            //Seed initial data for host
-            AbpSession.TenantId = null;
-            UsingDbContext(context =>
+            SeedTestData();
+            LoginAsDefaultTenantAdmin();
+        }
+
+        private void SeedTestData()
+        {
+            void NormalizeDbContext(AdminDbContext context)
             {
                 context.EntityChangeEventHelper = NullEntityChangeEventHelper.Instance;
                 context.EventBus = NullEventBus.Instance;
-
-                new InitialHostDbBuilder(context).Create();
-                new DefaultTenantBuilder(context).Create();
-            });
+                context.SuppressAutoSetTenantId = true;
+            }
 
             //Seed initial data for default tenant
             AbpSession.TenantId = 1;
             UsingDbContext(context =>
             {
-                context.EntityChangeEventHelper = NullEntityChangeEventHelper.Instance;
-                context.EventBus = NullEventBus.Instance;
-
-                new TenantRoleAndUserBuilder(context, 1).Create();
+                NormalizeDbContext(context);
                 new TestDataBuilder(context, 1).Create();
             });
-
-            LoginAsDefaultTenantAdmin();
         }
-
-        protected override void PreInitialize()
-        {
-            base.PreInitialize();
-
-            //UseSingleDatabase();
-            UseDatabasePerTenant();
-        }
-
-        /* Uses single database for host and all tenants.
-         */
-        private void UseSingleDatabase()
-        {
-            _hostDb = DbConnectionFactory.CreateTransient();
-
-            LocalIocManager.IocContainer.Register(
-                Component.For<DbConnection>()
-                    .UsingFactoryMethod(() => _hostDb)
-                    .LifestyleSingleton()
-                );
-        }
-
-        /* Uses single database for host and Default tenant,
-         * but dedicated databases for all other tenants.
-         */
-        private void UseDatabasePerTenant()
-        {
-            _hostDb = DbConnectionFactory.CreateTransient();
-            _tenantDbs = new Dictionary<int, DbConnection>();
-
-            LocalIocManager.IocContainer.Register(
-                Component.For<DbConnection>()
-                    .UsingFactoryMethod((kernel) =>
-                    {
-                        lock (_tenantDbs)
-                        {
-                            var currentUow = kernel.Resolve<ICurrentUnitOfWorkProvider>().Current;
-                            var abpSession = kernel.Resolve<IAbpSession>();
-
-                            var tenantId = currentUow != null ? currentUow.GetTenantId() : abpSession.TenantId;
-
-                            if (tenantId == null || tenantId == 1) //host and default tenant are stored in host db
-                            {
-                                return _hostDb;
-                            }
-
-                            if (!_tenantDbs.ContainsKey(tenantId.Value))
-                            {
-                                _tenantDbs[tenantId.Value] = DbConnectionFactory.CreateTransient();
-                            }
-
-                            return _tenantDbs[tenantId.Value];
-                        }
-                    }, true)
-                    .LifestyleTransient()
-                );
-        }
-
-        #region UsingDbContext
 
         protected IDisposable UsingTenantId(int? tenantId)
         {
@@ -155,7 +81,6 @@ namespace Magicodes.Admin.Tests
             {
                 using (var context = LocalIocManager.Resolve<AdminDbContext>())
                 {
-                    context.DisableAllFilters();
                     action(context);
                     context.SaveChanges();
                 }
@@ -168,7 +93,6 @@ namespace Magicodes.Admin.Tests
             {
                 using (var context = LocalIocManager.Resolve<AdminDbContext>())
                 {
-                    context.DisableAllFilters();
                     await action(context);
                     await context.SaveChangesAsync();
                 }
@@ -183,7 +107,6 @@ namespace Magicodes.Admin.Tests
             {
                 using (var context = LocalIocManager.Resolve<AdminDbContext>())
                 {
-                    context.DisableAllFilters();
                     result = func(context);
                     context.SaveChanges();
                 }
@@ -200,7 +123,6 @@ namespace Magicodes.Admin.Tests
             {
                 using (var context = LocalIocManager.Resolve<AdminDbContext>())
                 {
-                    context.DisableAllFilters();
                     result = await func(context);
                     await context.SaveChangesAsync();
                 }
@@ -208,8 +130,6 @@ namespace Magicodes.Admin.Tests
 
             return result;
         }
-
-        #endregion
 
         #region Login
 
@@ -352,7 +272,7 @@ namespace Magicodes.Admin.Tests
             var user = GetUserByUserNameOrNull(userName);
             if (user == null)
             {
-                throw new ApplicationException("Can not find a user with username: " + userName);
+                throw new Exception("Can not find a user with username: " + userName);
             }
 
             return user;
@@ -363,7 +283,7 @@ namespace Magicodes.Admin.Tests
             var user = await GetUserByUserNameOrNullAsync(userName);
             if (user == null)
             {
-                throw new ApplicationException("Can not find a user with username: " + userName);
+                throw new Exception("Can not find a user with username: " + userName);
             }
 
             return user;
@@ -380,7 +300,7 @@ namespace Magicodes.Admin.Tests
 
         protected async Task<User> GetUserByUserNameOrNullAsync(string userName, bool includeRoles = false)
         {
-            return await UsingDbContext(async context =>
+            return await UsingDbContextAsync(async context =>
                 await context.Users
                     .IncludeIf(includeRoles, u => u.Roles)
                     .FirstOrDefaultAsync(u =>
@@ -391,6 +311,4 @@ namespace Magicodes.Admin.Tests
 
         #endregion
     }
-
-
 }

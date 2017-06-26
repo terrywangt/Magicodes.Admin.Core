@@ -1,27 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using Abp;
 using Abp.AspNetCore.Mvc.Authorization;
+using Abp.Authorization;
 using Abp.Authorization.Users;
-using Abp.AutoMapper;
 using Abp.MultiTenancy;
 using Abp.Configuration;
 using Abp.Extensions;
+using Abp.Net.Mail;
 using Abp.Notifications;
 using Abp.Runtime.Caching;
 using Abp.Runtime.Security;
 using Abp.Runtime.Session;
 using Abp.Timing;
 using Abp.UI;
-using Abp.Zero.AspNetCore;
 using Abp.Zero.Configuration;
-using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -32,6 +32,7 @@ using Magicodes.Admin.Web.Authentication.JwtBearer;
 using Magicodes.Admin.Web.Authentication.TwoFactor;
 using Magicodes.Admin.Web.Models.TokenAuth;
 using Magicodes.Admin.Authorization.Impersonation;
+using Magicodes.Admin.Identity;
 using Magicodes.Admin.Notifications;
 using Magicodes.Admin.Web.Authentication.External;
 
@@ -55,6 +56,9 @@ namespace Magicodes.Admin.Web.Controllers
         private readonly IImpersonationManager _impersonationManager;
         private readonly IUserLinkManager _userLinkManager;
         private readonly IAppNotifier _appNotifier;
+        private readonly ISmsSender _smsSender;
+        private readonly IEmailSender _emailSender;
+        private readonly IdentityOptions _identityOptions;
 
         public TokenAuthController(
             LogInManager logInManager,
@@ -69,7 +73,10 @@ namespace Magicodes.Admin.Web.Controllers
             UserRegistrationManager userRegistrationManager,
             IImpersonationManager impersonationManager,
             IUserLinkManager userLinkManager,
-            IAppNotifier appNotifier)
+            IAppNotifier appNotifier,
+            ISmsSender smsSender,
+            IEmailSender emailSender,
+            IOptions<IdentityOptions> identityOptions)
         {
             _logInManager = logInManager;
             _tenantCache = tenantCache;
@@ -84,6 +91,9 @@ namespace Magicodes.Admin.Web.Controllers
             _impersonationManager = impersonationManager;
             _userLinkManager = userLinkManager;
             _appNotifier = appNotifier;
+            _smsSender = smsSender;
+            _emailSender = emailSender;
+            _identityOptions = identityOptions.Value;
         }
 
         [HttpPost]
@@ -95,6 +105,14 @@ namespace Magicodes.Admin.Web.Controllers
                 GetTenancyNameOrNull()
             );
 
+            var returnUrl = model.ReturnUrl;
+
+            if (model.SingleSignIn.HasValue && model.SingleSignIn.Value && loginResult.Result == AbpLoginResultType.Success)
+            {
+                loginResult.User.SetSignInToken();
+                returnUrl = AddSingleSignInParametersToReturnUrl(model.ReturnUrl, loginResult.User.SignInToken, loginResult.User.Id, loginResult.User.TenantId);
+            }
+
             //Password reset
             if (loginResult.User.ShouldChangePasswordOnNextLogin)
             {
@@ -103,12 +121,13 @@ namespace Magicodes.Admin.Web.Controllers
                 {
                     ShouldResetPassword = true,
                     PasswordResetCode = loginResult.User.PasswordResetCode,
-                    UserId = loginResult.User.Id
+                    UserId = loginResult.User.Id,
+                    ReturnUrl = returnUrl
                 };
             }
 
             //Two factor auth
-            _userManager.RegisterTwoFactorProviders(loginResult.Tenant?.Id);
+            await _userManager.InitializeOptionsAsync(loginResult.Tenant?.Id);
             string twoFactorRememberClientToken = null;
             if (await IsTwoFactorAuthRequiredAsync(loginResult, model))
             {
@@ -126,7 +145,8 @@ namespace Magicodes.Admin.Web.Controllers
                     {
                         RequiresTwoFactorVerification = true,
                         UserId = loginResult.User.Id,
-                        TwoFactorAuthProviders = await _userManager.GetValidTwoFactorProvidersAsync(loginResult.User.Id)
+                        TwoFactorAuthProviders = await _userManager.GetValidTwoFactorProvidersAsync(loginResult.User),
+                        ReturnUrl = returnUrl
                     };
                 }
 
@@ -140,7 +160,8 @@ namespace Magicodes.Admin.Web.Controllers
                 AccessToken = accessToken,
                 EncryptedAccessToken = GetEncrpyedAccessToken(accessToken),
                 ExpireInSeconds = (int)_configuration.Expiration.TotalSeconds,
-                TwoFactorRememberClientToken = twoFactorRememberClientToken
+                TwoFactorRememberClientToken = twoFactorRememberClientToken,
+                ReturnUrl = returnUrl
             };
         }
 
@@ -159,10 +180,19 @@ namespace Magicodes.Admin.Web.Controllers
                 throw new UserFriendlyException(L("SendSecurityCodeErrorMessage"));
             }
 
-            cacheItem.Code = await _userManager.GenerateTwoFactorTokenAsync(model.UserId, model.Provider);
-            if (await _userManager.NotifyTwoFactorTokenAsync(model.UserId, model.Provider, cacheItem.Code) != IdentityResult.Success)
+            var user = await _userManager.FindByIdAsync(model.UserId.ToString());
+
+            cacheItem.Code = await _userManager.GenerateTwoFactorTokenAsync(user, model.Provider);
+
+            var message = L("EmailSecurityCodeBody", cacheItem.Code);
+
+            if (model.Provider == "Email")
             {
-                throw new UserFriendlyException(L("SendSecurityCodeErrorMessage"));
+                await _emailSender.SendAsync(await _userManager.GetEmailAsync(user), L("EmailSecurityCodeSubject"), message);
+            }
+            else if (model.Provider == "Phone")
+            {
+                await _smsSender.SendAsync(await _userManager.GetPhoneNumberAsync(user), message);
             }
 
             _cacheManager
@@ -176,7 +206,7 @@ namespace Magicodes.Admin.Web.Controllers
         [HttpPost]
         public async Task<ImpersonatedAuthenticateResultModel> ImpersonatedAuthenticate(string impersonationToken)
         {
-            var result = await _impersonationManager.GetImpersonatedUserAndIdentity(impersonationToken, "JwtBearer"); //JwtBearer is not important here
+            var result = await _impersonationManager.GetImpersonatedUserAndIdentity(impersonationToken);
             var accessToken = CreateAccessToken(CreateJwtClaims(result.Identity));
 
             return new ImpersonatedAuthenticateResultModel
@@ -190,7 +220,7 @@ namespace Magicodes.Admin.Web.Controllers
         [HttpPost]
         public async Task<SwitchedAccountAuthenticateResultModel> LinkedAccountAuthenticate(string switchAccountToken)
         {
-            var result = await _userLinkManager.GetSwitchedUserAndIdentity(switchAccountToken, "JwtBearer"); //JwtBearer is not important here
+            var result = await _userLinkManager.GetSwitchedUserAndIdentity(switchAccountToken);
             var accessToken = CreateAccessToken(CreateJwtClaims(result.Identity));
 
             return new SwitchedAccountAuthenticateResultModel
@@ -204,7 +234,7 @@ namespace Magicodes.Admin.Web.Controllers
         [HttpGet]
         public List<ExternalLoginProviderInfoModel> GetExternalAuthenticationProviders()
         {
-            return _externalAuthConfiguration.Providers.MapTo<List<ExternalLoginProviderInfoModel>>();
+            return ObjectMapper.Map<List<ExternalLoginProviderInfoModel>>(_externalAuthConfiguration.Providers);
         }
 
         [HttpPost]
@@ -212,18 +242,28 @@ namespace Magicodes.Admin.Web.Controllers
         {
             var externalUser = await GetExternalUserInfo(model);
 
-            var loginResult = await _logInManager.LoginAsync(new UserLoginInfo(model.AuthProvider, model.ProviderKey), GetTenancyNameOrNull());
-
+            var loginResult = await _logInManager.LoginAsync(new UserLoginInfo(model.AuthProvider, model.ProviderKey, model.AuthProvider), GetTenancyNameOrNull());
+            
             switch (loginResult.Result)
             {
                 case AbpLoginResultType.Success:
                     {
                         var accessToken = CreateAccessToken(CreateJwtClaims(loginResult.Identity));
+
+                        var returnUrl = model.ReturnUrl;
+
+                        if (model.SingleSignIn.HasValue && model.SingleSignIn.Value && loginResult.Result == AbpLoginResultType.Success)
+                        {
+                            loginResult.User.SetSignInToken();
+                            returnUrl = AddSingleSignInParametersToReturnUrl(model.ReturnUrl, loginResult.User.SignInToken, loginResult.User.Id, loginResult.User.TenantId);
+                        }
+
                         return new ExternalAuthenticateResultModel
                         {
                             AccessToken = accessToken,
                             EncryptedAccessToken = GetEncrpyedAccessToken(accessToken),
-                            ExpireInSeconds = (int)_configuration.Expiration.TotalSeconds
+                            ExpireInSeconds = (int)_configuration.Expiration.TotalSeconds,
+                            ReturnUrl = returnUrl
                         };
                     }
                 case AbpLoginResultType.UnknownExternalLogin:
@@ -238,7 +278,7 @@ namespace Magicodes.Admin.Web.Controllers
                         }
 
                         //Try to login again with newly registered user!
-                        loginResult = await _logInManager.LoginAsync(new UserLoginInfo(model.AuthProvider, model.ProviderKey), GetTenancyNameOrNull());
+                        loginResult = await _logInManager.LoginAsync(new UserLoginInfo(model.AuthProvider, model.ProviderKey, model.AuthProvider), GetTenancyNameOrNull());
                         if (loginResult.Result != AbpLoginResultType.Success)
                         {
                             throw _abpLoginResultTypeHelper.CreateExceptionForFailedLoginAttempt(
@@ -281,7 +321,7 @@ namespace Magicodes.Admin.Web.Controllers
             await _appNotifier.SendMessageAsync(
                 AbpSession.ToUserIdentifier(),
                 message,
-                severity.ToPascalCase(CultureInfo.InvariantCulture).ToEnum<NotificationSeverity>()
+                severity.ToPascalCase().ToEnum<NotificationSeverity>()
                 );
 
             return Content("Sent notification: " + message);
@@ -289,13 +329,13 @@ namespace Magicodes.Admin.Web.Controllers
 
         #endregion
 
-        private async Task<User> RegisterExternalUserAsync(ExternalLoginUserInfo externalUser)
+        private async Task<User> RegisterExternalUserAsync(ExternalAuthUserInfo externalLoginInfo)
         {
             var user = await _userRegistrationManager.RegisterAsync(
-                externalUser.Name,
-                externalUser.Surname,
-                externalUser.EmailAddress,
-                externalUser.EmailAddress,
+                externalLoginInfo.Name,
+                externalLoginInfo.Surname,
+                externalLoginInfo.EmailAddress,
+                externalLoginInfo.EmailAddress,
                 Authorization.Users.User.CreateRandomPassword(),
                 true,
                 null
@@ -305,8 +345,8 @@ namespace Magicodes.Admin.Web.Controllers
             {
                 new UserLogin
                 {
-                    LoginProvider = externalUser.LoginInfo.LoginProvider,
-                    ProviderKey = externalUser.LoginInfo.ProviderKey,
+                    LoginProvider = externalLoginInfo.Provider,
+                    ProviderKey = externalLoginInfo.ProviderKey,
                     TenantId = user.TenantId
                 }
             };
@@ -316,10 +356,10 @@ namespace Magicodes.Admin.Web.Controllers
             return user;
         }
 
-        private async Task<ExternalLoginUserInfo> GetExternalUserInfo(ExternalAuthenticateModel model)
+        private async Task<ExternalAuthUserInfo> GetExternalUserInfo(ExternalAuthenticateModel model)
         {
             var userInfo = await _externalAuthManager.GetUserInfo(model.AuthProvider, model.ProviderAccessCode);
-            if (userInfo.LoginInfo.ProviderKey != model.ProviderKey)
+            if (userInfo.ProviderKey != model.ProviderKey)
             {
                 throw new UserFriendlyException(L("CouldNotValidateExternalUser"));
             }
@@ -339,7 +379,7 @@ namespace Magicodes.Admin.Web.Controllers
                 return false;
             }
 
-            if ((await _userManager.GetValidTwoFactorProvidersAsync(loginResult.User.Id)).Count <= 0)
+            if ((await _userManager.GetValidTwoFactorProvidersAsync(loginResult.User)).Count <= 0)
             {
                 return false;
             }
@@ -446,14 +486,6 @@ namespace Magicodes.Admin.Web.Controllers
             return _tenantCache.GetOrNull(AbpSession.TenantId.Value)?.TenancyName;
         }
 
-        private void CheckCurrentTenant(int? tenantId)
-        {
-            if (AbpSession.TenantId != tenantId)
-            {
-                throw new ApplicationException($"Current tenant is different than given tenant. AbpSession.TenantId: {AbpSession.TenantId}, given tenantId: {tenantId}");
-            }
-        }
-
         private async Task<AbpLoginResult<Tenant, User>> GetLoginResultAsync(string usernameOrEmailAddress, string password, string tenancyName)
         {
             var loginResult = await _logInManager.LoginAsync(usernameOrEmailAddress, password, tenancyName);
@@ -488,20 +520,36 @@ namespace Magicodes.Admin.Web.Controllers
             return SimpleStringCipher.Instance.Encrypt(accessToken, AppConsts.DefaultPassPhrase);
         }
 
-        private static List<Claim> CreateJwtClaims(ClaimsIdentity identity)
+        private List<Claim> CreateJwtClaims(ClaimsIdentity identity)
         {
             var claims = identity.Claims.ToList();
-            var nameIdClaim = claims.First(c => c.Type == ClaimTypes.NameIdentifier);
+            var nameIdClaim = claims.First(c => c.Type == _identityOptions.ClaimsIdentity.UserIdClaimType);
 
-            // Specifically add the jti (random nonce), iat (issued timestamp), and sub (subject/user) claims.
+            if (_identityOptions.ClaimsIdentity.UserIdClaimType != JwtRegisteredClaimNames.Sub)
+            {
+                claims.Add(new Claim(JwtRegisteredClaimNames.Sub, nameIdClaim.Value));
+            }
+
             claims.AddRange(new[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, nameIdClaim.Value),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.Now.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64)
             });
 
             return claims;
+        }
+
+        private string AddSingleSignInParametersToReturnUrl(string returnUrl, string signInToken, long userId, int? tenantId)
+        {
+            returnUrl += (returnUrl.Contains("?") ? "&" : "?") +
+                         "accessToken=" + signInToken +
+                         "&userId=" + Convert.ToBase64String(Encoding.UTF8.GetBytes(userId.ToString()));
+            if (tenantId.HasValue)
+            {
+                returnUrl += "&tenantId=" + Convert.ToBase64String(Encoding.UTF8.GetBytes(tenantId.Value.ToString()));
+            }
+
+            return returnUrl;
         }
     }
 }

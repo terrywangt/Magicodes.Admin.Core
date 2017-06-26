@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using System.Globalization;
 using System.IO;
 using System.Threading;
 using Abp.Dependency;
@@ -25,10 +26,10 @@ namespace Magicodes.Admin.Web.Resources
         {
             get
             {
-                return _scriptPaths.GetOrAdd("jquery-validation#" + Thread.CurrentThread.CurrentUICulture.Name, k =>
+                return _scriptPaths.GetOrAdd("jquery-validation#" + CultureInfo.CurrentUICulture.Name, k =>
                 {
-                    var path = GetLocalizationFileForjQueryValidationOrNull(Thread.CurrentThread.CurrentUICulture.Name.ToLower().Replace("-", "_"))
-                           ?? GetLocalizationFileForjQueryValidationOrNull(Thread.CurrentThread.CurrentUICulture.Name.Left(2).ToLower())
+                    var path = GetLocalizationFileForjQueryValidationOrNull(CultureInfo.CurrentUICulture.Name.ToLower().Replace("-", "_"))
+                           ?? GetLocalizationFileForjQueryValidationOrNull(CultureInfo.CurrentUICulture.Name.Left(2).ToLower())
                            ?? @"Common/Scripts/_empty.js";
 
                     return "~/" + path;
@@ -60,10 +61,10 @@ namespace Magicodes.Admin.Web.Resources
         {
             get
             {
-                return _scriptPaths.GetOrAdd("jtable#" + Thread.CurrentThread.CurrentUICulture.Name, k =>
+                return _scriptPaths.GetOrAdd("jtable#" + CultureInfo.CurrentUICulture.Name, k =>
                 {
-                    var path = GetLocalizationFileForJTableOrNull(Thread.CurrentThread.CurrentUICulture.Name.ToLower())
-                               ?? GetLocalizationFileForJTableOrNull(Thread.CurrentThread.CurrentUICulture.Name.Left(2).ToLower())
+                    var path = GetLocalizationFileForJTableOrNull(CultureInfo.CurrentUICulture.Name.ToLower())
+                               ?? GetLocalizationFileForJTableOrNull(CultureInfo.CurrentUICulture.Name.Left(2).ToLower())
                                ?? "Common/Scripts/_empty.js";
 
                     return "~/" + path;
@@ -130,10 +131,10 @@ namespace Magicodes.Admin.Web.Resources
         {
             get
             {
-                return _scriptPaths.GetOrAdd("bootstrap-select#" + Thread.CurrentThread.CurrentUICulture.Name, k =>
+                return _scriptPaths.GetOrAdd("bootstrap-select#" + CultureInfo.CurrentUICulture.Name, k =>
                 {
-                    var path = GetLocalizationFileForBootstrapSelect(Thread.CurrentThread.CurrentUICulture.Name.ToLower())
-                               ?? GetLocalizationFileForBootstrapSelect(Thread.CurrentThread.CurrentUICulture.Name.Left(2).ToLower())
+                    var path = GetLocalizationFileForBootstrapSelect(CultureInfo.CurrentUICulture.Name.ToLower())
+                               ?? GetLocalizationFileForBootstrapSelect(CultureInfo.CurrentUICulture.Name.Left(2).ToLower())
                                ?? "lib/bootstrap-select/js/i18n/defaults-en_US.js";
                     return "~/" + path;
                 });
@@ -166,10 +167,10 @@ namespace Magicodes.Admin.Web.Resources
         {
             get
             {
-                return _scriptPaths.GetOrAdd("jquery-timeago#" + Thread.CurrentThread.CurrentUICulture.Name, k =>
+                return _scriptPaths.GetOrAdd("jquery-timeago#" + CultureInfo.CurrentUICulture.Name, k =>
                 {
-                    var path = GetLocalizationFileForjQueryTimeagoOrNull(Thread.CurrentThread.CurrentUICulture.Name.ToLower().Replace("-", "_"))
-                       ?? GetLocalizationFileForjQueryTimeagoOrNull(Thread.CurrentThread.CurrentUICulture.Name.Left(2).ToLower())
+                    var path = GetLocalizationFileForjQueryTimeagoOrNull(CultureInfo.CurrentUICulture.Name.ToLower().Replace("-", "_"))
+                       ?? GetLocalizationFileForjQueryTimeagoOrNull(CultureInfo.CurrentUICulture.Name.Left(2).ToLower())
                        ?? "lib/jquery-timeago/locales/jquery.timeago.en.js";
                     return "~/" + path;
                 });

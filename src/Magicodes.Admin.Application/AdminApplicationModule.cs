@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using Abp.AutoMapper;
 using Abp.Modules;
+using Abp.Reflection.Extensions;
 using Magicodes.Admin.Authorization;
 
 namespace Magicodes.Admin
@@ -9,25 +10,22 @@ namespace Magicodes.Admin
     /// Application layer module of the application.
     /// </summary>
     [DependsOn(
-        typeof(AdminCoreModule), 
-        typeof(AbpAutoMapperModule))]
+        typeof(AdminCoreModule)
+        )]
     public class AdminApplicationModule : AbpModule
     {
         public override void PreInitialize()
         {
-            //添加权限程序
+            //Adding authorization providers
             Configuration.Authorization.Providers.Add<AppAuthorizationProvider>();
 
-            //添加自定义 AutoMapper 配置
+            //Adding custom AutoMapper configuration
             Configuration.Modules.AbpAutoMapper().Configurators.Add(CustomDtoMapper.CreateMappings);
         }
 
         public override void Initialize()
         {
-            IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
-
-
+            IocManager.RegisterAssemblyByConvention(typeof(AdminApplicationModule).GetAssembly());
         }
-
     }
 }

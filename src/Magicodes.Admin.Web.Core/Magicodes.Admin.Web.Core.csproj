@@ -1,8 +1,9 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\common.props">
+  </Import>
   <PropertyGroup>
-    <VersionPrefix>1.0.0.0</VersionPrefix>
     <TargetFramework>net461</TargetFramework>
+    <PackageTargetFallback>$(PackageTargetFallback);dotnet5.6;portable-net45+win8</PackageTargetFallback>
     <AssemblyName>Magicodes.Admin.Web.Core</AssemblyName>
     <PackageId>Magicodes.Admin.Web.Core</PackageId>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
@@ -10,32 +11,41 @@
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <RootNamespace>Magicodes.Admin.Web</RootNamespace>
   </PropertyGroup>
-
   <ItemGroup>
-    <ProjectReference Include="..\Magicodes.Admin.EntityFramework\Magicodes.Admin.EntityFramework.csproj" />
+    <Compile Remove="Editions\**" />
+    <EmbeddedResource Remove="Editions\**" />
+    <None Remove="Editions\**" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Magicodes.Admin.Application\Magicodes.Admin.Application.csproj" />
+    <ProjectReference Include="..\Magicodes.Admin.EntityFrameworkCore\Magicodes.Admin.EntityFrameworkCore.csproj" />
   </ItemGroup>
-
   <ItemGroup>
-    <PackageReference Include="Swashbuckle" Version="6.0.0-beta902" />
-    <PackageReference Include="Abp.AspNetCore" Version="1.5.0" />
-    <PackageReference Include="Abp.HangFire" Version="1.5.0" />
-    <PackageReference Include="Abp.Owin" Version="1.5.0" />
-    <PackageReference Include="Abp.RedisCache" Version="1.5.0" />
-    <PackageReference Include="Abp.Web.SignalR" Version="1.5.0" />
-    <PackageReference Include="Abp.Zero.AspNetCore" Version="1.5.0" />
-    <PackageReference Include="Hangfire.SqlServer" Version="1.6.9" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="1.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="1.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="1.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="1.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Owin" Version="1.1.1" />
+    <PackageReference Include="Abp.ZeroCore.IdentityServer4" Version="2.1.3" />
+    <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="1.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="1.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="1.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="1.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="1.1.2" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="1.0.0" />
+    <PackageReference Include="Hangfire.SqlServer" Version="1.6.13" />
     <PackageReference Include="PaulMiami.AspNetCore.Mvc.Recaptcha" Version="1.2.0" />
+    <PackageReference Include="System.ValueTuple" Version="4.3.1" />
+    <PackageReference Include="Abp.AspNetCore" Version="2.1.3" />
+    <PackageReference Include="Abp.HangFire.AspNetCore" Version="2.1.3" />
+    <PackageReference Include="Abp.RedisCache" Version="2.1.3" />
+    <PackageReference Include="System.Net.Http" Version="4.3.2" />
   </ItemGroup>
-
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
+    <PackageReference Include="Abp.Owin" Version="2.1.3" />
+    <PackageReference Include="Abp.Web.SignalR" Version="2.1.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Owin" Version="1.1.2" />
+  </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
     <Reference Include="System" />
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
-
+  <PropertyGroup Condition="'$(TargetFramework)'=='net461'">
+    <DefineConstants>NET461;FEATURE_LDAP;FEATURE_SIGNALR</DefineConstants>
+  </PropertyGroup>
 </Project>

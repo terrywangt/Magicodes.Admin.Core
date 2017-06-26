@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Abp.Application.Services.Dto;
 using Abp.Auditing;
 using Abp.Authorization;
-using Abp.AutoMapper;
 using Abp.Configuration;
 using Abp.Notifications;
 using Abp.Runtime.Session;
@@ -58,7 +57,7 @@ namespace Magicodes.Admin.Notifications
             var userNotification = await _userNotificationManager.GetUserNotificationAsync(AbpSession.TenantId, input.Id);
             if (userNotification.UserId != AbpSession.GetUserId())
             {
-                throw new ApplicationException(string.Format("Given user notification id ({0}) is not belong to the current user ({1})", input.Id, AbpSession.GetUserId()));
+                throw new Exception(string.Format("Given user notification id ({0}) is not belong to the current user ({1})", input.Id, AbpSession.GetUserId()));
             }
 
             await _userNotificationManager.UpdateUserNotificationStateAsync(AbpSession.TenantId, input.Id, UserNotificationState.Read);
@@ -70,10 +69,10 @@ namespace Magicodes.Admin.Notifications
 
             output.ReceiveNotifications = await SettingManager.GetSettingValueAsync<bool>(NotificationSettingNames.ReceiveNotifications);
 
-            output.Notifications = (await _notificationDefinitionManager
-                .GetAllAvailableAsync(AbpSession.ToUserIdentifier()))
-                .Where(nd => nd.EntityType == null) //Get general notifications, not entity related notifications.
-                .MapTo<List<NotificationSubscriptionWithDisplayNameDto>>();
+            //Get general notifications, not entity related notifications.
+            var notificationDefinitions = (await _notificationDefinitionManager.GetAllAvailableAsync(AbpSession.ToUserIdentifier())).Where(nd => nd.EntityType == null);
+
+            output.Notifications = ObjectMapper.Map<List<NotificationSubscriptionWithDisplayNameDto>>(notificationDefinitions);
 
             var subscribedNotifications = (await _notificationSubscriptionManager
                 .GetSubscribedNotificationsAsync(AbpSession.ToUserIdentifier()))

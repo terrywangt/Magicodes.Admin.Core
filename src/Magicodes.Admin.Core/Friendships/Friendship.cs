@@ -47,7 +47,7 @@ namespace Magicodes.Admin.Friendships
 
             if (!Enum.IsDefined(typeof(FriendshipState), state))
             {
-                throw new InvalidEnumArgumentException(nameof(state), (int)state, typeof(FriendshipState));
+                throw new Exception("Invalid FriendshipState value: " + state);
             }
 
             UserId = user.UserId;

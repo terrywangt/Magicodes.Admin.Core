@@ -1,5 +1,8 @@
 ﻿@using Abp.MultiTenancy
 @using Abp.Timing
+@using Magicodes.Admin.Authorization
+@using Magicodes.Admin.Chat.SignalR
+@using Magicodes.Admin.Editions
 @using Magicodes.Admin.Features
 @using Magicodes.Admin.Web.Areas.Admin.Models.Layout
 @model HeaderViewModel
@@ -9,7 +12,7 @@
 <div class="page-header-inner">
     <div class="page-logo">
         <a href="@Url.Action("Index", "Home", new {area = string.Empty})" target="_blank">
-            <img id="AppLogo" src='@Model.GetLogoUrl(ApplicationPath)' alt="logo" class="logo-default" style="max-height:33px;max-width:168px" />
+            <img id="AppLogo" src="@Model.GetLogoUrl(ApplicationPath)" alt="logo" class="logo-default" width="168" height="33" />
         </a>
         <div class="menu-toggler sidebar-toggler">
             <!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->
@@ -20,6 +23,7 @@
     <div class="page-top">
         <div class="top-menu">
             <ul class="nav navbar-nav pull-right">
+
                 @if (Model.Languages.Count > 1)
                 {
                     <li class="dropdown dropdown-language">
@@ -49,6 +53,7 @@
 
                 </li>
                 <!-- END NOTIFICATION DROPDOWN -->
+
                 <li class="separator hide"> </li>
 
                 <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
@@ -61,7 +66,7 @@
                             }
                             @Html.Raw(Model.GetShownLoginName())
                         </span>
-                        <img id="HeaderProfilePicture" alt="" class="img-circle" src="@Url.Action("GetProfilePicture", "Profile", new {area = string.Empty})?t=@Clock.Now.Ticks.ToString()"/>
+                        <img id="HeaderProfilePicture" alt="" class="img-circle" src="@Url.Action("GetProfilePicture", "Profile", new {area = string.Empty})?t=@Clock.Now.Ticks.ToString()" />
                     </a>
                     <ul class="dropdown-menu dropdown-menu-default">
                         @if (Model.IsImpersonatedLogin)
@@ -94,7 +99,7 @@
                     </ul>
                 </li>
 
-                @if (AbpSession.MultiTenancySide == MultiTenancySides.Host || IsFeatureEnabled(AppFeatures.ChatFeature))
+                @if (SignalRFeature.IsAvailable && (AbpSession.MultiTenancySide == MultiTenancySides.Host || IsFeatureEnabled(AppFeatures.ChatFeature)))
                 {
                     <!-- BEGIN QUICK SIDEBAR TOGGLER -->
                     <li class="dropdown dropdown-extended quick-sidebar-toggler">
@@ -107,7 +112,56 @@
             </ul>
         </div>
     </div>
+
+    @if (AbpSession.MultiTenancySide != MultiTenancySides.Host)
+    {
+        if (IsGranted(AppPermissions.Pages_Administration_Tenant_SubscriptionManagement) &&
+            (Model.LoginInformations.Tenant.IsInTrialPeriod || Model.LoginInformations.Tenant.SubscriptionIsExpiringSoon()))
+        {
+            <style>
+                .page-header-fixed .page-container {
+                    margin-top: 100px;
+                }
+
+                @@media (max-width: 991px) {
+                    .page-header-fixed .page-container {
+                        margin-top: 15px !important;
+                    }
+                }
+
+                @@media (max-width: 767px) {
+                    .page-header-fixed .page-container {
+                        margin-top: 15px !important;
+                    }
+                }
+            </style>
+            <div class="alert subscription-info">
+                @if (Model.LoginInformations.Tenant.IsInTrialPeriod && !Model.LoginInformations.Tenant.SubscriptionIsExpiringSoon())
+                {
+                    @Html.Raw(L("TrialSubscriptionNotification",
+                        "<strong>" + Model.LoginInformations.Tenant.Edition.DisplayName + "</strong>",
+                        "<a href='" + Url.Action("Buy", "Payment", new {area = "", editionId = Model.LoginInformations.Tenant.Edition.Id, editionPaymentType = EditionPaymentType.BuyNow}) + "'>" + L("ClickHere") + "</a>")
+                        )
+                }
+                @if (Model.LoginInformations.Tenant.SubscriptionIsExpiringSoon())
+                {
+                    <a href="@Url.Action("Index", "SubscriptionManagement", new {area = "Admin"})">
+                        @if (Model.LoginInformations.Tenant.IsInTrialPeriod)
+                        {
+                            <span><i class="fa fa-exclamation-circle"></i> @L("TrialExpireNotification", Model.LoginInformations.Tenant.GetSubscriptionExpiringDayCount())</span>
+                        }
+                        else
+                        {
+                            <span><i class="fa fa-exclamation-circle"></i> @L("SubscriptionExpireNotification", Model.LoginInformations.Tenant.GetSubscriptionExpiringDayCount())</span>
+                        }
+                    </a>
+                }
+            </div>
+        }
+    }
 </div>
+
+
 <script id="linkedAccountsSubMenuTemplate" type="x-tmpl-mustache">
     {{#items}}
     <li>

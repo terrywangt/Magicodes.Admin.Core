@@ -376,20 +376,8 @@
     <text name="Role" value="Rolle" />
     <text name="Security" value="Security" />
     <text name="PasswordComplexity" value="Password Komplexität" />
-    <text name="MinPasswordLength" value="Minimale Passwort Länge" />
-    <text name="MaxPasswordLength" value="Maximale Passwort Länge" />
-    <text name="UseNumbers" value="Im Passwort müssen Zahlen sein" />
-    <text name="UseUpperCaseLetters" value="Grossbuchstaben müssen im Passwort sein" />
-    <text name="UseLowerCaseLetters" value="Kleinbuchstaben müssen im Passwort sein" />
-    <text name="UsePunctuations" value="Sonderzeichen müssen im Passwort sein" />
     <text name="UseDefaultSettings" value="Standardeinstellugen" />
     <text name="PasswordComplexityNotSatisfied" value="Passwordanforderungen nicht erfüllt." />
-    <text name="PasswordComplexity_MinLength_Hint" value="Passwort muss mindestens {0} Zeichen haben" />
-    <text name="PasswordComplexity_MaxLength_Hint" value="Passwort darf maximal {0} Zeichen haben" />
-    <text name="PasswordComplexity_UseNumbers_Hint" value="Passwort muss mindestens eine Zahl enthalten" />
-    <text name="PasswordComplexity_UseUpperCaseLetters_Hint" value="Passwort muss mindestens einen Grossbuchstaben enthalten" />
-    <text name="PasswordComplexity_UseLowerCaseLetters_Hint" value="Passwort muss mindestens einen Kleinbuchstaben enthalten" />
-    <text name="PasswordComplexity_UsePunctuations_Hint" value="Passwort muss mindestens ein Sonderzeichen enthalten" />
     <text name="YouAlreadySentAFriendshipRequestToThisUser" value="Sie haben diesen benutzer bereits hinzugefügt." />
     <text name="YouCannotBeFriendWithYourself" value="Sie können nicht mit sich selbst befreundet sein." />
     <text name="NewChatMessageEmail_Title" value="Details der Nachricht" />

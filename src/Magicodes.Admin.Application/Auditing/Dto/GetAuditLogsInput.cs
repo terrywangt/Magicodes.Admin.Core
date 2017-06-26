@@ -33,7 +33,7 @@ namespace Magicodes.Admin.Auditing.Dto
                 Sorting = "ExecutionTime DESC";
             }
 
-            if (Sorting.IndexOf("UserName", StringComparison.InvariantCultureIgnoreCase) >= 0)
+            if (Sorting.IndexOf("UserName", StringComparison.OrdinalIgnoreCase) >= 0)
             {
                 Sorting = "User." + Sorting;
             }

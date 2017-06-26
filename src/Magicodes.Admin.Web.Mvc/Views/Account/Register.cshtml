@@ -32,6 +32,8 @@
 
     <input type="hidden" name="IsExternalLogin" value="@Model.IsExternalLogin.ToString()" />
     <input type="hidden" name="ExternalLoginAuthSchema" value="@Model.ExternalLoginAuthSchema" />
+    <input type="hidden" name="SingleSignOn" value="@Model.SingleSignIn" />
+    <input type="hidden" name="ReturnUrl" value="@Model.ReturnUrl" />
 
     <p class="hint">
         @L("PersonalInformations")

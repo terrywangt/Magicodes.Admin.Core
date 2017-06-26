@@ -2,6 +2,7 @@
 using Abp.Configuration.Startup;
 using Abp.Localization.Dictionaries;
 using Abp.Localization.Dictionaries.Xml;
+using Abp.Reflection.Extensions;
 
 namespace Magicodes.Admin.Localization
 {
@@ -13,7 +14,7 @@ namespace Magicodes.Admin.Localization
                 new DictionaryBasedLocalizationSource(
                     AdminConsts.LocalizationSourceName,
                     new XmlEmbeddedFileLocalizationDictionaryProvider(
-                        Assembly.GetExecutingAssembly(),
+                        typeof(AdminLocalizationConfigurer).GetAssembly(),
                         "Magicodes.Admin.Localization.Admin"
                     )
                 )

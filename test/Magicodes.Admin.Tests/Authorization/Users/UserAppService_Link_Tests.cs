@@ -1,14 +1,13 @@
 ﻿using System;
-using System.Data.Entity;
 using System.Threading.Tasks;
 using Abp.Authorization.Users;
 using Abp.Domain.Uow;
 using Abp.Runtime.Security;
+using Microsoft.EntityFrameworkCore;
 using Magicodes.Admin.Authorization.Users;
 using Magicodes.Admin.Authorization.Users.Dto;
 using Magicodes.Admin.MultiTenancy;
 using Shouldly;
-using Xunit;
 
 namespace Magicodes.Admin.Tests.Authorization.Users
 {

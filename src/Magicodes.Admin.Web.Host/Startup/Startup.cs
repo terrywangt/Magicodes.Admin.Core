@@ -2,13 +2,12 @@ using System;
 using System.Linq;
 using Abp.AspNetCore;
 using Abp.Castle.Logging.Log4Net;
+using Abp.Dependency;
 using Abp.Extensions;
 using Abp.Hangfire;
-using Abp.Owin;
 using Abp.Timing;
 using Castle.Facilities.Logging;
 using Hangfire;
-using Microsoft.AspNet.SignalR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -17,13 +16,26 @@ using Microsoft.AspNetCore.Mvc.Cors.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Owin.Cors;
 using Magicodes.Admin.Authorization;
-using Magicodes.Admin.Web.Configuration;
+using Magicodes.Admin.Authorization.Roles;
+using Magicodes.Admin.Authorization.Users;
+using Magicodes.Admin.Configuration;
+using Magicodes.Admin.Identity;
+using Magicodes.Admin.MultiTenancy;
+using PaulMiami.AspNetCore.Mvc.Recaptcha;
+using Swashbuckle.AspNetCore.Swagger;
+using Magicodes.Admin.Web.IdentityServer;
+
+#if FEATURE_SIGNALR
 using Magicodes.Admin.Web.Owin;
+using Abp.Owin;
+using Microsoft.AspNet.SignalR;
+using Microsoft.Owin.Cors;
 using Owin;
 using Owin.Security.AesDataProtectorProvider;
-using PaulMiami.AspNetCore.Mvc.Recaptcha;
+using Abp.Web.SignalR;
+using Microsoft.AspNet.SignalR.Hubs;
+#endif
 
 namespace Magicodes.Admin.Web.Startup
 {
@@ -59,8 +71,20 @@ namespace Magicodes.Admin.Web.Startup
                 });
             });
 
+            IdentityRegistrar.Register(services, "Host");
+
+            //Identity server
+            if (bool.Parse(_appConfiguration["IdentityServer:IsEnabled"]))
+            {
+                IdentityServerRegistrar.Register(services, _appConfiguration);
+            }
+
             //Swagger - Enable this line and the related lines in Configure method to enable swagger UI
-            services.AddSwaggerGen();
+            services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v1", new Info { Title = "Admin API", Version = "v1" });
+                options.DocInclusionPredicate((docName, description) => true);
+            });
 
             //Recaptcha
             services.AddRecaptcha(new RecaptchaOptions
@@ -68,6 +92,12 @@ namespace Magicodes.Admin.Web.Startup
                 SiteKey = _appConfiguration["Recaptcha:SiteKey"],
                 SecretKey = _appConfiguration["Recaptcha:SecretKey"]
             });
+
+            //Hangfire (Enable to use Hangfire instead of default job manager)
+            //services.AddHangfire(config =>
+            //{
+            //    config.UseSqlServerStorage(_appConfiguration.GetConnectionString("Default"));
+            //});
 
             //Configure Abp and Dependency Injection
             return services.AddAbp<AdminWebHostModule>(options =>
@@ -81,16 +111,31 @@ namespace Magicodes.Admin.Web.Startup
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            app.UseAbp(); //Initializes ABP framework.
-            
+            //Initializes ABP framework.
+            app.UseAbp(options =>
+            {
+                options.UseAbpRequestLocalization = false; //used below: UseAbpRequestLocalization
+            });
+
             app.UseCors(DefaultCorsPolicyName); //Enable CORS!
 
             AuthConfigurer.Configure(app, _appConfiguration);
 
             app.UseStaticFiles();
 
+            app.UseAbpRequestLocalization();
+
+#if FEATURE_SIGNALR
             //Integrate to OWIN
             app.UseAppBuilder(ConfigureOwinServices);
+#endif
+
+            //Hangfire dashboard & server (Enable to use Hangfire instead of default job manager)
+            //app.UseHangfireDashboard("/hangfire", new DashboardOptions
+            //{
+            //    Authorization = new[] { new AbpHangfireAuthorizationFilter(AppPermissions.Pages_Administration_HangfireDashboard)  }
+            //});
+            //app.UseHangfireServer();
 
             app.UseMvc(routes =>
             {
@@ -106,11 +151,16 @@ namespace Magicodes.Admin.Web.Startup
             // Enable middleware to serve generated Swagger as a JSON endpoint
             app.UseSwagger();
             // Enable middleware to serve swagger-ui assets (HTML, JS, CSS etc.)
-            app.UseSwaggerUi(); //URL: /swagger/ui
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Admin API V1");
+            }); //URL: /swagger
         }
 
+#if FEATURE_SIGNALR
         private static void ConfigureOwinServices(IAppBuilder app)
         {
+            GlobalHost.DependencyResolver.Register(typeof(IAssemblyLocator), () => new SignalRAssemblyLocator());
             app.Properties["host.AppName"] = "Admin";
 
             app.UseAbp();
@@ -119,18 +169,15 @@ namespace Magicodes.Admin.Web.Startup
             app.Map("/signalr", map =>
             {
                 map.UseCors(CorsOptions.AllowAll);
+
                 var hubConfiguration = new HubConfiguration
                 {
                     EnableJSONP = true
                 };
+
                 map.RunSignalR(hubConfiguration);
             });
-
-            //Enable it to use HangFire dashboard (use only if it's enabled in AdminWebCoreModule)
-            //app.UseHangfireDashboard("/hangfire", new DashboardOptions
-            //{
-            //    Authorization = new[] { new AbpHangfireAuthorizationFilter(AppPermissions.Pages_Administration_HangfireDashboard) }
-            //});
         }
+#endif
     }
 }

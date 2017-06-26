@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿#if FEATURE_SIGNALR
+using System.Collections.Generic;
 using Abp;
 using Abp.AutoMapper;
 using Abp.Dependency;
+using Abp.ObjectMapping;
 using Abp.RealTime;
 using Castle.Core.Logging;
 using Microsoft.AspNet.SignalR;
@@ -19,16 +21,13 @@ namespace Magicodes.Admin.Web.Chat.SignalR
         /// </summary>
         public ILogger Logger { get; set; }
 
-        private static IHubContext ChatHub
-        {
-            get
-            {
-                return GlobalHost.ConnectionManager.GetHubContext<ChatHub>();
-            }
-        }
+        private readonly IObjectMapper _objectMapper;
 
-        public SignalRChatCommunicator()
+        private static IHubContext ChatHub => GlobalHost.ConnectionManager.GetHubContext<ChatHub>();
+
+        public SignalRChatCommunicator(IObjectMapper objectMapper)
         {
+            _objectMapper = objectMapper;
             Logger = NullLogger.Instance;
         }
 
@@ -42,7 +41,7 @@ namespace Magicodes.Admin.Web.Chat.SignalR
                     return;
                 }
 
-                signalRClient.getChatMessage(message.MapTo<ChatMessageDto>());
+                signalRClient.getChatMessage(_objectMapper.Map<ChatMessageDto>(message));
             }
         }
 
@@ -56,7 +55,7 @@ namespace Magicodes.Admin.Web.Chat.SignalR
                     return;
                 }
 
-                var friendshipRequest = friendship.MapTo<FriendDto>();
+                var friendshipRequest = _objectMapper.Map<FriendDto>(friendship);
                 friendshipRequest.IsOnline = isFriendOnline;
 
                 signalRClient.getFriendshipRequest(friendshipRequest, isOwnRequest);
@@ -118,3 +117,4 @@ namespace Magicodes.Admin.Web.Chat.SignalR
         }
     }
 }
+#endif

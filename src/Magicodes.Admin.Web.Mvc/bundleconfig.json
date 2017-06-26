@@ -134,7 +134,7 @@
       "wwwroot/lib/bootstrap/dist/js/bootstrap.js",
       "wwwroot/lib/jquery-validation/dist/jquery.validate.js",
       "wwwroot/lib/blockUI/jquery.blockUI.js",
-      "wwwroot/lib/jquery-uniform/jquery.uniform.js",
+      "wwwroot/lib/uniform/jquery.uniform.js",
       "wwwroot/lib/js-cookie/src/js.cookie.js",
       "wwwroot/lib/toastr/toastr.js",
       "wwwroot/lib/spin.js/spin.js",
@@ -155,7 +155,7 @@
       "wwwroot/lib/font-awesome/css/font-awesome.css",
       "wwwroot/lib/famfamfam-flags/dist/sprite/famfamfam-flags.css",
       "wwwroot/lib/bootstrap/dist/css/bootstrap.css",
-      "wwwroot/lib/jquery-uniform/css/uniform.default.css",
+      "wwwroot/lib/uniform/css/uniform.default.css",
       "wwwroot/lib/toastr/toastr.css",
       "wwwroot/lib/sweetalert/dist/sweetalert.css",
       "wwwroot/metronic/assets/global/css/components-md.css",
@@ -171,7 +171,7 @@
       "wwwroot/lib/font-awesome/css/font-awesome.css",
       "wwwroot/lib/famfamfam-flags/dist/sprite/famfamfam-flags.css",
       "wwwroot/lib/bootstrap-rtl/bootstrap-rtl.css",
-      "wwwroot/lib/jquery-uniform/css/uniform.default.css",
+      "wwwroot/lib/uniform/css/uniform.default.css",
       "wwwroot/lib/toastr/toastr.css",
       "wwwroot/lib/sweetalert/dist/sweetalert.css",
       "wwwroot/metronic/assets/global/css/components-md-rtl.css",
@@ -184,17 +184,18 @@
     "outputFileName": "wwwroot/view-resources/Areas/Admin/Views/_Bundles/layout-libs.min.css",
     "inputFiles": [
       "wwwroot/lib/jquery-ui/themes/base/all.css",
-      "wwwroot/lib/jtable/lib/themes/lightcolor/blue/jtable.css",
+      "wwwroot/lib/jtable/lib/themes/metro/blue/jtable.css",
       "wwwroot/lib/simple-line-icons/css/simple-line-icons.css",
       "wwwroot/lib/font-awesome/css/font-awesome.css",
       "wwwroot/lib/famfamfam-flags/dist/sprite/famfamfam-flags.css",
       "wwwroot/lib/bootstrap/dist/css/bootstrap.css",
-      "wwwroot/lib/jquery-uniform/css/uniform.default.css",
+      "wwwroot/lib/uniform/css/uniform.default.css",
       "wwwroot/lib/jstree/dist/themes/default/style.css",
       "wwwroot/lib/morris.js/morris.css",
       "wwwroot/lib/toastr/toastr.css",
       "wwwroot/lib/sweetalert/dist/sweetalert.css",
       "wwwroot/lib/bootstrap-daterangepicker/daterangepicker.css",
+      "wwwroot/lib/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css",
       "wwwroot/lib/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.css",
       "wwwroot/lib/bootstrap-select/dist/css/bootstrap-select.css",
       "wwwroot/lib/Jcrop/css/Jcrop.css",
@@ -208,17 +209,18 @@
     "outputFileName": "wwwroot/view-resources/Areas/Admin/Views/_Bundles/layout-libs-rtl.min.css",
     "inputFiles": [
       "wwwroot/lib/jquery-ui/themes/base/all.css",
-      "wwwroot/lib/jtable/lib/themes/lightcolor/blue/jtable.css",
+      "wwwroot/lib/jtable/lib/themes/metro/blue/jtable.css",
       "wwwroot/lib/simple-line-icons/css/simple-line-icons.css",
       "wwwroot/lib/font-awesome/css/font-awesome.css",
       "wwwroot/lib/famfamfam-flags/dist/sprite/famfamfam-flags.css",
       "wwwroot/lib/bootstrap-rtl/bootstrap-rtl.css",
-      "wwwroot/lib/jquery-uniform/css/uniform.default.css",
+      "wwwroot/lib/uniform/css/uniform.default.css",
       "wwwroot/lib/jstree/dist/themes/default/style.css",
       "wwwroot/lib/morris.js/morris.css",
       "wwwroot/lib/toastr/toastr.css",
       "wwwroot/lib/sweetalert/dist/sweetalert.css",
       "wwwroot/lib/bootstrap-daterangepicker/daterangepicker.css",
+      "wwwroot/lib/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css",
       "wwwroot/lib/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.css",
       "wwwroot/lib/bootstrap-select/dist/css/bootstrap-select.css",
       "wwwroot/lib/Jcrop/css/Jcrop.css",
@@ -240,9 +242,10 @@
       "wwwroot/lib/jquery-slimscroll/jquery.slimscroll.js",
       "wwwroot/lib/blockUI/jquery.blockUI.js",
       "wwwroot/lib/js-cookie/src/js.cookie.js",
-      "wwwroot/lib/jquery-uniform/jquery.uniform.js",
+      "wwwroot/lib/uniform/jquery.uniform.js",
       "wwwroot/lib/jquery-form/jquery.form.js",
       "wwwroot/lib/jtable/lib/jquery.jtable.js",
+      "wwwroot/lib/jtable/lib/extensions/jquery.jtable.record-actions.js",
       "wwwroot/lib/Jcrop/js/jquery.color.js",
       "wwwroot/lib/Jcrop/js/Jcrop.js",
       "wwwroot/lib/jquery-timeago/jquery.timeago.js",
@@ -260,9 +263,11 @@
       "wwwroot/lib/moment/min/moment-with-locales.js",
       "wwwroot/lib/moment-timezone/builds/moment-timezone-with-data.js",
       "wwwroot/lib/bootstrap-daterangepicker/daterangepicker.js",
+      "wwwroot/lib/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js",
       "wwwroot/lib/bootstrap-select/dist/js/bootstrap-select.js",
       "wwwroot/lib/underscore/underscore.js",
       "wwwroot/lib/mustache.js/mustache.js",
+      "wwwroot/lib/tether/dist/js/tether.js",
       "wwwroot/lib/push.js/push.js",
       "wwwroot/lib/abp-web-resources/Abp/Framework/scripts/abp.js",
       "wwwroot/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.jquery.js",
@@ -589,9 +594,79 @@
     ]
   },
   {
-    "outputFileName": "wwwroot/view-resources/Areas/Admin/Views/Home/Index.min.js",
+    "outputFileName": "wwwroot/view-resources/Areas/Admin/Views/HostDashboard/Index.min.js",
     "inputFiles": [
-      "wwwroot/view-resources/Areas/Admin/Views/Home/Index.js"
+      "wwwroot/view-resources/Areas/Admin/Views/HostDashboard/Index.js"
     ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Areas/Admin/Views/_Bundles/host-dashboard-libs.js",
+    "inputFiles": [
+      "wwwroot/lib/morris.js/morris.js",
+      "wwwroot/lib/raphael/raphael.js",
+      "wwwroot/view-resources/Areas/Admin/Views/HostDashboard/Index.js",
+      "wwwroot/lib/Flot/jquery.flot.js",
+      "wwwroot/lib/Flot/jquery.flot.pie.js",
+      "wwwroot/lib/Flot/jquery.flot.resize.js",
+      "wwwroot/lib/Flot/jquery.flot.categories.js",
+      "wwwroot/lib/Flot/jquery.flot.time.js",
+      "wwwroot/lib/waypoints/lib/jquery.waypoints.js",
+      "wwwroot/lib/counter-up/jquery.counterup.js"
+    ],
+    "minify": { "enabled": false }
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Areas/Admin/Views/_Bundles/host-dashboard-libs.min.js",
+    "inputFiles": [
+      "wwwroot/lib/morris.js/morris.js",
+      "wwwroot/lib/raphael/raphael.js",
+      "wwwroot/view-resources/Areas/Admin/Views/HostDashboard/Index.js",
+      "wwwroot/lib/Flot/jquery.flot.js",
+      "wwwroot/lib/Flot/jquery.flot.pie.js",
+      "wwwroot/lib/Flot/jquery.flot.resize.js",
+      "wwwroot/lib/Flot/jquery.flot.categories.js",
+      "wwwroot/lib/Flot/jquery.flot.time.js",
+      "wwwroot/lib/waypoints/lib/jquery.waypoints.min.js",
+      "wwwroot/lib/counter-up/jquery.counterup.min.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Views/TenantRegistration/Payment.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Views/TenantRegistration/Payment.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Areas/Admin/Views/_Bundles/tenant-dashboard-libs.js",
+    "inputFiles": [
+      "wwwroot/lib/morris.js/morris.js",
+      "wwwroot/lib/raphael/raphael.js",
+      "wwwroot/lib/topojson/topojson.js",
+      "wwwroot/lib/d3/d3.js",
+      "wwwroot/lib/datamaps/dist/datamaps.world.js",
+      "wwwroot/lib/jquery.easy-pie-chart/dist/jquery.easypiechart.js",
+      "wwwroot/lib/jquery.sparkline/jquery.sparkline.js",
+      "wwwroot/lib/waypoints/lib/jquery.waypoints.js",
+      "wwwroot/lib/counter-up/jquery.counterup.js",
+      "wwwroot/view-resources/areas/appareaname/common/scripts/horizontal-timeline.js",
+      "wwwroot/view-resources/Areas/Admin/Views/Dashboard/Index.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Areas/Admin/Views/_Bundles/tenant-dashboard-libs.min.js",
+    "inputFiles": [
+      "wwwroot/lib/morris.js/morris.min.js",
+      "wwwroot/lib/raphael/raphael.min.js",
+      "wwwroot/lib/topojson/topojson.min.js",
+      "wwwroot/lib/d3/d3.min.js",
+      "wwwroot/lib/datamaps/dist/datamaps.world.min.js",
+      "wwwroot/lib/jquery.easy-pie-chart/dist/jquery.easypiechart.min.js",
+      "wwwroot/lib/jquery.sparkline/jquery.sparkline.min.js",
+      "wwwroot/lib/waypoints/lib/jquery.waypoints.js",
+      "wwwroot/lib/counter-up/jquery.counterup.min.js",
+      "wwwroot/view-resources/areas/appareaname/common/scripts/horizontal-timeline.js",
+      "wwwroot/view-resources/Areas/Admin/Views/Dashboard/Index.min.js"
+    ]     
   }
+
 ]

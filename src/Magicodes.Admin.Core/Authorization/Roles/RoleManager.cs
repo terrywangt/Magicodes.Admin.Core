@@ -1,8 +1,12 @@
-﻿using Abp.Authorization;
+﻿using System.Collections.Generic;
+using Abp.Authorization;
 using Abp.Authorization.Roles;
 using Abp.Domain.Uow;
 using Abp.Runtime.Caching;
 using Abp.Zero.Configuration;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 using Magicodes.Admin.Authorization.Users;
 
 namespace Magicodes.Admin.Authorization.Roles
@@ -15,16 +19,26 @@ namespace Magicodes.Admin.Authorization.Roles
     {
         public RoleManager(
             RoleStore store,
+            IEnumerable<IRoleValidator<Role>> roleValidators,
+            ILookupNormalizer keyNormalizer,
+            IdentityErrorDescriber errors,
+            ILogger<RoleManager> logger,
+            IHttpContextAccessor contextAccessor,
             IPermissionManager permissionManager,
             IRoleManagementConfig roleManagementConfig,
             ICacheManager cacheManager,
             IUnitOfWorkManager unitOfWorkManager)
             : base(
                 store,
+                roleValidators,
+                keyNormalizer,
+                errors,
+                logger,
+                contextAccessor,
                 permissionManager,
-                roleManagementConfig,
                 cacheManager,
-                unitOfWorkManager)
+                unitOfWorkManager,
+                roleManagementConfig)
         {
 
         }

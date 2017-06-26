@@ -1,0 +1,152 @@
+﻿@using System.Threading.Tasks
+@using Abp.Web.Security.AntiForgery
+@using Magicodes.Admin.Timing
+@using Magicodes.Admin.Web.Public.Views.Shared.Components.Header
+@using CultureHelper = Magicodes.Admin.Localization.CultureHelper
+@inject AppTimes AppTimes
+@inject IAbpAntiForgeryManager AbpAntiForgeryManager
+@{
+    Layout = null;
+    AbpAntiForgeryManager.SetCookie(Context);
+}
+<!DOCTYPE html>
+<html lang="en" @(CultureHelper.IsRtl ? "dir=\"rtl\"" : "")>
+<head>
+    <meta charset="utf-8">
+    <title>Admin</title>
+
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    @* Fill these meta tags upon your project specification *@
+    <meta content="Admin" name="description">
+    <meta content="Admin" name="keywords">
+    <meta content="Admin" name="author">
+
+    @* You can enable and fill these lines according to documentation on http://ogp.me/
+        <meta property="og:site_name" content="-CUSTOMER VALUE-">
+        <meta property="og:title" content="-CUSTOMER VALUE-">
+        <meta property="og:description" content="-CUSTOMER VALUE-">
+        <meta property="og:type" content="website">
+        <meta property="og:image" content="-CUSTOMER VALUE-">
+        <meta property="og:url" content="-CUSTOMER VALUE-">*@
+
+    <link rel="shortcut icon" href="~/favicon.ico">
+
+    <link rel="stylesheet" href="~/fonts/fonts-open-sans.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/fonts/fonts-ptsans-narrow.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/fonts/fonts-sourcesans-pro.css" asp-append-version="true" />
+
+    <environment names="Development">
+        @* Bundled: wwwroot/view-resources/Views/_Bundles/frontend-libs[-rtl].min.css *@
+        <link rel="stylesheet" href="~/lib/simple-line-icons/css/simple-line-icons.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/lib/font-awesome/css/font-awesome.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/lib/famfamfam-flags/dist/sprite/famfamfam-flags.css" asp-append-version="true" />
+        <link rel="stylesheet" href="@(CultureHelper.IsRtl ? "~/lib/bootstrap-rtl/bootstrap-rtl.css" : "~/lib/bootstrap/dist/css/bootstrap.css")" asp-append-version="true" />
+        <link rel="stylesheet" href="~/lib/sweetalert/dist/sweetalert.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/lib/toastr/toastr.css" asp-append-version="true" />
+
+        @* Bundled: wwwroot/view-resources/Views/_Bundles/frontend-metronic[-rtl].min.css *@
+        <link rel="stylesheet" href="~/metronic/assets/global/css/components@(CultureHelper.IsRtl ? "-rtl" : "").css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/metronic/assets/frontend/layout/css/style@(CultureHelper.IsRtl ? "-rtl" : "").css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/metronic/assets/frontend/pages/css/style-revolution-slider.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/metronic/assets/frontend/layout/css/style-responsive@(CultureHelper.IsRtl ? "-rtl" : "").css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/metronic/assets/frontend/layout/css/themes/red@(CultureHelper.IsRtl ? "-rtl" : "").css" asp-append-version="true" />
+
+    </environment>
+
+    <environment names="Staging,Production">
+        <link rel="stylesheet" href="~/view-resources/Views/_Bundles/frontend-libs@(CultureHelper.IsRtl ? "-rtl" : "").min.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/view-resources/Views/_Bundles/frontend-metronic@(CultureHelper.IsRtl ? "-rtl" : "").min.css" asp-append-version="true" />
+    </environment>
+
+    @RenderSection("Styles", false)
+
+    <environment names="Development">
+        <link rel="stylesheet" href="~/Common/_Bundles/common-styles.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/view-resources/Views/Layout/layout.css" asp-append-version="true" />
+    </environment>
+
+    <environment names="Staging,Production">
+        <link rel="stylesheet" href="~/Common/_Bundles/common-styles.min.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/view-resources/Views/Layout/layout.min.css" asp-append-version="true" />
+    </environment>
+
+    <script type="text/javascript">
+        @* This is used to get the application's root path from javascript.
+        It's useful if you're running application in a virtual directory under IIS. *@
+        var abp = abp || {}; abp.appPath = '@ApplicationPath';
+    </script>
+
+</head>
+<body class="corporate">
+
+    @await Component.InvokeAsync(typeof(HeaderViewComponent), new { currentPageName = ViewBag.CurrentPageName })
+
+    <div class="main">
+        <div class="container">
+            @RenderBody()
+        </div>
+    </div>
+
+    @Html.Partial("~/Views/Layout/_Footer.cshtml")
+
+
+    <environment names="Development">
+        @* Bundled: wwwroot/view-resources/Views/_Bundles/frontend-libs.min.js *@
+        <script src="~/lib/json2/json2.js" asp-append-version="true"></script>
+        <script src="~/lib/jquery/jquery.js" asp-append-version="true"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.js" asp-append-version="true"></script>
+        <script src="~/lib/bootstrap-hover-dropdown/bootstrap-hover-dropdown.js" asp-append-version="true"></script>
+        <script src="~/lib/jquery-slimscroll/jquery.slimscroll.js" asp-append-version="true"></script>
+        <script src="~/lib/blockUI/jquery.blockUI.js" asp-append-version="true"></script>
+        <script src="~/lib/js-cookie/src/js.cookie.js" asp-append-version="true"></script>
+        <script src="~/lib/spin.js/spin.js" asp-append-version="true"></script>
+        <script src="~/lib/spin.js/jquery.spin.js" asp-append-version="true"></script>
+        <script src="~/lib/sweetalert/dist/sweetalert-dev.js" asp-append-version="true"></script>
+        <script src="~/lib/toastr/toastr.js" asp-append-version="true"></script>
+        <script src="~/lib/moment/min/moment-with-locales.js" asp-append-version="true"></script>
+        <script src="~/lib/moment-timezone/builds/moment-timezone-with-data.js" asp-append-version="true"></script>
+        <script src="~/lib/abp-web-resources/Abp/Framework/scripts/abp.js" asp-append-version="true"></script>
+        <script src="~/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.jquery.js" asp-append-version="true"></script>
+        <script src="~/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.toastr.js" asp-append-version="true"></script>
+        <script src="~/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.blockUI.js" asp-append-version="true"></script>
+        <script src="~/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.spin.js" asp-append-version="true"></script>
+        <script src="~/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.sweet-alert.js" asp-append-version="true"></script>
+        <script src="~/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.moment.js" asp-append-version="true"></script>
+    </environment>
+
+    <environment names="Staging,Production">
+        <script src="~/view-resources/Views/_Bundles/frontend-libs.min.js" asp-append-version="true"></script>
+    </environment>
+
+    <script type="text/javascript">
+        abp.localization.defaultSourceName = '@LocalizationSourceName';
+    </script>
+
+    <!-- Dynamic scripts of ABP system (They are created on runtime and can not be bundled) -->
+    <script src="~/AbpScripts/GetScripts?_v=@AppTimes.StartupTime.Ticks" type="text/javascript"></script>
+
+    <environment names="Development">
+        @* Bundled: wwwroot/view-resources/Views/_Bundles/frontend-metronic.min.js *@
+        <script src="~/metronic/assets/frontend/layout/scripts/back-to-top.js" asp-append-version="true"></script>
+        <script src="~/metronic/assets/frontend/layout/scripts/layout.js" asp-append-version="true"></script>
+
+        
+    </environment>
+
+    <environment names="Staging,Production">
+        <script src="~/view-resources/Views/_Bundles/frontend-metronic.min.js" asp-append-version="true"></script>
+    </environment>
+
+    <script type="text/javascript">
+        $(function () {
+            Layout.init();
+        });
+    </script>
+
+    @RenderSection("Scripts", false)
+
+</body>
+
+</html>

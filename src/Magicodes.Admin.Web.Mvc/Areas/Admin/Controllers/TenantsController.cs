@@ -7,6 +7,7 @@ using Magicodes.Admin.Authorization;
 using Magicodes.Admin.Common;
 using Magicodes.Admin.Editions;
 using Magicodes.Admin.MultiTenancy;
+using Magicodes.Admin.Security;
 using Magicodes.Admin.Web.Areas.Admin.Models.Tenants;
 using Magicodes.Admin.Web.Controllers;
 
@@ -20,23 +21,36 @@ namespace Magicodes.Admin.Web.Areas.Admin.Controllers
         private readonly ICommonLookupAppService _commonLookupAppService;
         private readonly TenantManager _tenantManager;
         private readonly IEditionAppService _editionAppService;
+        private readonly IPasswordComplexitySettingStore _passwordComplexitySettingStore;
 
         public TenantsController(
-            ITenantAppService tenantAppService, 
-            TenantManager tenantManager, 
-            IEditionAppService editionAppService, 
-            ICommonLookupAppService commonLookupAppService)
+            ITenantAppService tenantAppService,
+            TenantManager tenantManager,
+            IEditionAppService editionAppService,
+            ICommonLookupAppService commonLookupAppService,
+            IPasswordComplexitySettingStore passwordComplexitySettingStore)
         {
             _tenantAppService = tenantAppService;
             _tenantManager = tenantManager;
             _editionAppService = editionAppService;
             _commonLookupAppService = commonLookupAppService;
+            _passwordComplexitySettingStore = passwordComplexitySettingStore;
         }
 
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
             ViewBag.FilterText = Request.Query["filterText"];
-            return View();
+            ViewBag.Sorting = Request.Query["sorting"];
+            ViewBag.SubscriptionEndDateStart = Request.Query["subscriptionEndDateStart"];
+            ViewBag.SubscriptionEndDateEnd = Request.Query["subscriptionEndDateEnd"];
+            ViewBag.CreationDateStart = Request.Query["creationDateStart"];
+            ViewBag.CreationDateEnd = Request.Query["creationDateEnd"];
+            ViewBag.EditionId = Request.Query["editionId"];
+
+            return View(new TenantIndexViewModel
+            {
+                EditionItems = await _editionAppService.GetEditionComboboxItems(null, true)
+            });
         }
 
         [AbpMvcAuthorize(AppPermissions.Pages_Tenants_Create)]
@@ -50,7 +64,10 @@ namespace Magicodes.Admin.Web.Areas.Admin.Controllers
                 defaultEditionItem.IsSelected = true;
             }
 
-            var viewModel = new CreateTenantViewModel(editionItems);
+            var viewModel = new CreateTenantViewModel(editionItems)
+            {
+                PasswordComplexitySetting = await _passwordComplexitySettingStore.GetSettingsAsync()
+            };
 
             return PartialView("_CreateModal", viewModel);
         }

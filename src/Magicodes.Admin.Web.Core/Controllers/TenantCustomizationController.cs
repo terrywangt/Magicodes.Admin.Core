@@ -1,4 +1,3 @@
-using System;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Net;
@@ -23,9 +22,8 @@ namespace Magicodes.Admin.Web.Controllers
     {
         private readonly TenantManager _tenantManager;
         private readonly IBinaryObjectManager _binaryObjectManager;
-
+        
         public TenantCustomizationController(
-            IAppFolders appFolders,
             TenantManager tenantManager,
             IBinaryObjectManager binaryObjectManager)
         {
@@ -122,16 +120,44 @@ namespace Magicodes.Admin.Web.Controllers
             var tenant = await _tenantManager.GetByIdAsync(AbpSession.GetTenantId());
             if (!tenant.HasLogo())
             {
-                return StatusCode((int) HttpStatusCode.NotFound);
+                return StatusCode((int)HttpStatusCode.NotFound);
             }
 
             var logoObject = await _binaryObjectManager.GetOrNullAsync(tenant.LogoId.Value);
             if (logoObject == null)
             {
-                return StatusCode((int) HttpStatusCode.NotFound);
+                return StatusCode((int)HttpStatusCode.NotFound);
             }
 
             return File(logoObject.Bytes, tenant.LogoFileType);
+        }
+
+        [AllowAnonymous]
+        public async Task<ActionResult> GetTenantLogo(int? tenantId)
+        {
+            var defaultLogo = "/Common/Images/logo.png";
+
+            if (!tenantId.HasValue)
+            {
+                return File(defaultLogo, MimeTypeNames.ImagePng);
+            }
+
+            var tenant = await _tenantManager.GetByIdAsync(AbpSession.GetTenantId());
+            if (!tenant.HasLogo())
+            {
+                return File(defaultLogo, MimeTypeNames.ImagePng);
+            }
+
+            using (CurrentUnitOfWork.SetTenantId(tenantId.Value))
+            {
+                var logoObject = await _binaryObjectManager.GetOrNullAsync(tenant.LogoId.Value);
+                if (logoObject == null)
+                {
+                    return File(defaultLogo, MimeTypeNames.ImagePng);
+                }
+
+                return File(logoObject.Bytes, tenant.LogoFileType);
+            }   
         }
 
         [AllowAnonymous]

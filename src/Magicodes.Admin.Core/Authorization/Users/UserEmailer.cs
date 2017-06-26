@@ -46,7 +46,7 @@ namespace Magicodes.Admin.Authorization.Users
         {
             if (user.EmailConfirmationCode.IsNullOrEmpty())
             {
-                throw new ApplicationException("EmailConfirmationCode should be set in order to send email activation link.");
+                throw new Exception("EmailConfirmationCode should be set in order to send email activation link.");
             }
 
             link = link.Replace("{userId}", user.Id.ToString());
@@ -59,7 +59,7 @@ namespace Magicodes.Admin.Authorization.Users
 
             var tenancyName = GetTenancyNameOrNull(user.TenantId);
 
-            var emailTemplate = new StringBuilder(_emailTemplateProvider.GetDefaultTemplate());
+            var emailTemplate = new StringBuilder(_emailTemplateProvider.GetDefaultTemplate(user.TenantId));
             emailTemplate.Replace("{EMAIL_TITLE}", L("EmailActivation_Title"));
             emailTemplate.Replace("{EMAIL_SUB_TITLE}", L("EmailActivation_SubTitle"));
 
@@ -97,12 +97,12 @@ namespace Magicodes.Admin.Authorization.Users
         {
             if (user.PasswordResetCode.IsNullOrEmpty())
             {
-                throw new ApplicationException("PasswordResetCode should be set in order to send password reset link.");
+                throw new Exception("PasswordResetCode should be set in order to send password reset link.");
             }
 
             var tenancyName = GetTenancyNameOrNull(user.TenantId);
 
-            var emailTemplate = new StringBuilder(_emailTemplateProvider.GetDefaultTemplate());
+            var emailTemplate = new StringBuilder(_emailTemplateProvider.GetDefaultTemplate(user.TenantId));
             emailTemplate.Replace("{EMAIL_TITLE}", L("PasswordResetEmail_Title"));
             emailTemplate.Replace("{EMAIL_SUB_TITLE}", L("PasswordResetEmail_SubTitle"));
 
@@ -142,7 +142,7 @@ namespace Magicodes.Admin.Authorization.Users
         {
             try
             {
-                var emailTemplate = new StringBuilder(_emailTemplateProvider.GetDefaultTemplate());
+                var emailTemplate = new StringBuilder(_emailTemplateProvider.GetDefaultTemplate(user.TenantId));
                 emailTemplate.Replace("{EMAIL_TITLE}", L("NewChatMessageEmail_Title"));
                 emailTemplate.Replace("{EMAIL_SUB_TITLE}", L("NewChatMessageEmail_SubTitle"));
 

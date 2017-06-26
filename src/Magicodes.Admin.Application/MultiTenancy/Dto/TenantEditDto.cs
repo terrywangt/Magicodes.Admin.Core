@@ -1,6 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using Abp.Application.Services.Dto;
 using Abp.AutoMapper;
+using Abp.MultiTenancy;
 
 namespace Magicodes.Admin.MultiTenancy.Dto
 {
@@ -8,7 +10,7 @@ namespace Magicodes.Admin.MultiTenancy.Dto
     public class TenantEditDto : EntityDto
     {
         [Required]
-        [StringLength(Tenant.MaxTenancyNameLength)]
+        [StringLength(AbpTenantBase.MaxTenancyNameLength)]
         public string TenancyName { get; set; }
 
         [Required]
@@ -20,5 +22,9 @@ namespace Magicodes.Admin.MultiTenancy.Dto
         public int? EditionId { get; set; }
 
         public bool IsActive { get; set; }
+
+        public DateTime? SubscriptionEndDateUtc { get; set; }
+
+        public bool IsInTrialPeriod { get; set; }
     }
 }

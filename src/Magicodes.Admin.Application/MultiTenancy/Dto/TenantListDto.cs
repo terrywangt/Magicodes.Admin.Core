@@ -20,5 +20,8 @@ namespace Magicodes.Admin.MultiTenancy.Dto
         public bool IsActive { get; set; }
 
         public DateTime CreationTime { get; set; }
+
+        public DateTime? SubscriptionEndDateUtc { get; set; }
+
     }
 }

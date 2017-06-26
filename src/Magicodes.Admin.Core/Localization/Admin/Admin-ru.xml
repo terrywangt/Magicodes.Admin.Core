@@ -384,20 +384,8 @@
     <text name="Role">Роль</text>
     <text name="Security">Безопасность</text>
     <text name="PasswordComplexity">Сложность пароля</text>
-    <text name="MinPasswordLength">Минимальная длина пароля</text>
-    <text name="MaxPasswordLength">Максимальная длина пароля</text>
-    <text name="UseNumbers">Использовать числа в пароле</text>
-    <text name="UseUpperCaseLetters">Использовать верхний регистр в пароле</text>
-    <text name="UseLowerCaseLetters">Использовать нижний регистр в пароле</text>
-    <text name="UsePunctuations">Использовать пунктацию в пароле</text>
     <text name="UseDefaultSettings">Использовать настройки по умолчанию</text>
     <text name="PasswordComplexityNotSatisfied">Неудовлетворительная сложность пароля.</text>
-    <text name="PasswordComplexity_MinLength_Hint">Пароль должен содержать минимум {0} знаков</text>
-    <text name="PasswordComplexity_MaxLength_Hint">Пароль должен содержать максимум {0} знаков</text>
-    <text name="PasswordComplexity_UseNumbers_Hint">Пароль должен содержать хотя бы 1 число</text>
-    <text name="PasswordComplexity_UseUpperCaseLetters_Hint">Пароль должен содержать хотя бы 1 букву верхнего регистра</text>
-    <text name="PasswordComplexity_UseLowerCaseLetters_Hint">Пароль должен содержать хотя бы 1 букву нижнего регистра</text>
-    <text name="PasswordComplexity_UsePunctuations_Hint">Пароль должен содержать хотя бы 1 специальный символ</text>
     <text name="YouAlreadySentAFriendshipRequestToThisUser">Вы же добавили данного пользователя</text>
     <text name="YouCannotBeFriendWithYourself">Вы не можете добавить себя в друзья.</text>
     <text name="NewChatMessageEmail_Title">Детали сообщения</text>
@@ -468,5 +456,58 @@
     <text name="IsEmailVerificationEnabled">Включить проверку по Email.</text>
     <text name="IsSmsVerificationEnabled">Включить проверку по SMS.</text>
     <text name="AllowToRememberBrowserForTwoFactorLogin">Разрешить запоминание браузера. Если выбрать эту опцию, пользователи смогут запомнить браузер, чтобы пропустить повторную двухфакторную аутентификацию для того же браузера.</text>
+
+    <text name="CurrentTenant">Текущий клиент</text>
+    <text name="NotSelected">Не выбрано</text>
+    <text name="Change">Изменить</text>
+    <text name="ChangeTenant">Изменить клиента</text>
+    <text name="UnknownTenantId{0}" value="Неизвестный клиент id: {0}" />
+    <text name="TenantIdIsNotActive{0}" value="Неактивный клиент id: {0}" />
+    <text name="TimeoutPleaseTryAgain">Время истекло! Попробуйте снова.</text>
+    <text name="RemainingTime">Оставшееся время</text>
+    <text name="SecondShort{0}">{0} сек</text>
+    <text name="ResetCode">Сбросить код</text>
+    <text name="IsTwoFactorEnabled">Двухфакторная аутентификация доступна?</text>
+    <text name="IsLockoutEnabled">Блокировка доступна</text>
+    <text name="IsLockoutEnabled_Hint">Пользователь блокируется после определенного количества неудачных попыток входа.</text>
+    <text name="TenantRegistrationLoginInfo">Кликните здесь для входа</text>
+    <text name="CouldNotValidateExternalUser">Не могу подтвердить логин внешнего пользователя</text>
+    <text name="LeaveEmptyToSwitchToHost">Оставьте пустым для подключения в качестве системного пользователя</text>
+    <text name="PleaseWaitToConfirmYourEmailMessage">Пожалуйста, подождите подтверждения вашего email...</text>
+    <text name="ChatIsConnecting">Подключение чата...</text>
+    <text name="Note_RefreshPageForPermissionChanges">Если Вы измените Ваши разрешения, возможно, потребуется обновить страницу (F5), чтобы изменения вступили в силу!</text>
+    <text name="ApplicationLogo">Лого приложения</text>
+    <text name="CustomCSS">Собственный CSS</text>
+    <text name="Upload">Upload</text>
+    <text name="Download">Download</text>
+    <text name="UploadLogo_Info">Выберите JPG/JPEG/PNG/GIF файл с максимальным размером 30KB и с разрешением 168x33 пикселей.</text>
+    <text name="UploadCSS_Info">Выберите .css файл с максимальным размером 1MB.</text>
+    <text name="Browse">Обзор</text>
+    <text name="Appearance">Внешний вид</text>
+    <text name="ClearedSuccessfully">Успешно очищено</text>
+    <text name="File_Empty_Error">Пожалуйста, выберите файл!</text>
+    <text name="File_SizeLimit_Error">Размер файла превышает допустимый!</text>
+    <text name="File_Invalid_Type_Error">Неправильный тип файла!</text>
+    <text name="MaximumUserCount">Максимальное количество пользователь (0 = не ограничено)</text>
+    <text name="MaximumUserCount_Error_Message">Достигнуто макимально допустимое количество пользователей!</text>
+    <text name="MaximumUserCount_Error_Detail">У этого клиента допускается макимально {0} пользователей.</text>
+    <text name="UnlockedTenandAdmin">Разблокировать администратора клиента {0}</text>
+    <text name="Email">Email</text>
+    <text name="EmailSecurityCodeSubject">Код безопасности</text>
+    <text name="EmailSecurityCodeBody">Ваш код безопасности: {0}</text>
+    <text name="Sms">SMS</text>
+    <text name="SmsSecurityCodeMessage">Ваш код безопасности: {0}</text>
+    
+    <text name="PasswordComplexity_RequireDigit_Hint">Пароль должен содержать хотя бы одну цифру ('0'-'9').</text>
+    <text name="PasswordComplexity_RequireLowercase_Hint">Пароль должен содержать хотя бы одну букву в нижнем регистре ('a'-'z').</text>
+    <text name="PasswordComplexity_RequireNonAlphanumeric_Hint">Пароль должен содержать хотя бы один символ, отличный от букв и цифр.</text>
+    <text name="PasswordComplexity_RequireUppercase_Hint">Пароль должен содержать хотя бы одну заглавную букву ('A'-'Z').</text>
+    <text name="PasswordComplexity_RequiredLength_Hint">Пароль должен быть длинной не менее {0} символов.</text>
+
+    <text name="PasswordComplexity_RequireDigit">Требуется цифра</text>
+    <text name="PasswordComplexity_RequireLowercase">Требуется буква в нижнем регистре</text>
+    <text name="PasswordComplexity_RequireNonAlphanumeric">Требуется символ, отличный от букв и цифр</text>
+    <text name="PasswordComplexity_RequireUppercase">Требуется заглавная буква</text>
+    <text name="PasswordComplexity_RequiredLength">Недостаточная длина</text>  
   </texts>
 </localizationDictionary>

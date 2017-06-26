@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Abp.Authorization;
 using Abp.Configuration;
 using Abp.Extensions;
-using Abp.Json;
 using Abp.Net.Mail;
 using Abp.Timing;
 using Abp.Zero.Configuration;
@@ -13,7 +12,6 @@ using Magicodes.Admin.Configuration.Host.Dto;
 using Magicodes.Admin.Editions;
 using Magicodes.Admin.Security;
 using Magicodes.Admin.Timing;
-using Newtonsoft.Json;
 
 namespace Magicodes.Admin.Configuration.Host
 {
@@ -45,8 +43,7 @@ namespace Magicodes.Admin.Configuration.Host
                 TenantManagement = await GetTenantManagementSettingsAsync(),
                 UserManagement = await GetUserManagementAsync(),
                 Email = await GetEmailSettingsAsync(),
-                Security = await GetSecuritySettingsAsync(),
-                Site = await GetSiteAsync()
+                Security = await GetSecuritySettingsAsync()
             };
         }
 
@@ -94,14 +91,6 @@ namespace Magicodes.Admin.Configuration.Host
             };
         }
 
-        public async Task<SiteSettingsEditDto> GetSiteAsync()
-        {
-            return new SiteSettingsEditDto
-            {
-                DefaultUrl = await SettingManager.GetSettingValueAsync(AppSettings.TenantManagement.DefaultUrl)
-            };
-        }
-
         private async Task<EmailSettingsEditDto> GetEmailSettingsAsync()
         {
             return new EmailSettingsEditDto
@@ -120,14 +109,29 @@ namespace Magicodes.Admin.Configuration.Host
 
         private async Task<SecuritySettingsEditDto> GetSecuritySettingsAsync()
         {
-            var passwordComplexitySetting = await SettingManager.GetSettingValueAsync(AppSettings.Security.PasswordComplexity);
-            var defaultPasswordComplexitySetting = _settingDefinitionManager.GetSettingDefinition(AppSettings.Security.PasswordComplexity).DefaultValue;
+            var passwordComplexitySetting = new PasswordComplexitySetting
+            {
+                RequireDigit = await SettingManager.GetSettingValueAsync<bool>(AbpZeroSettingNames.UserManagement.PasswordComplexity.RequireDigit),
+                RequireLowercase = await SettingManager.GetSettingValueAsync<bool>(AbpZeroSettingNames.UserManagement.PasswordComplexity.RequireLowercase),
+                RequireNonAlphanumeric = await SettingManager.GetSettingValueAsync<bool>(AbpZeroSettingNames.UserManagement.PasswordComplexity.RequireNonAlphanumeric),
+                RequireUppercase = await SettingManager.GetSettingValueAsync<bool>(AbpZeroSettingNames.UserManagement.PasswordComplexity.RequireUppercase),
+                RequiredLength = await SettingManager.GetSettingValueAsync<int>(AbpZeroSettingNames.UserManagement.PasswordComplexity.RequiredLength)
+            };
+
+            var defaultPasswordComplexitySetting = new PasswordComplexitySetting
+            {
+                RequireDigit = Convert.ToBoolean(_settingDefinitionManager.GetSettingDefinition(AbpZeroSettingNames.UserManagement.PasswordComplexity.RequireDigit).DefaultValue),
+                RequireLowercase = Convert.ToBoolean(_settingDefinitionManager.GetSettingDefinition(AbpZeroSettingNames.UserManagement.PasswordComplexity.RequireLowercase).DefaultValue),
+                RequireNonAlphanumeric = Convert.ToBoolean(_settingDefinitionManager.GetSettingDefinition(AbpZeroSettingNames.UserManagement.PasswordComplexity.RequireNonAlphanumeric).DefaultValue),
+                RequireUppercase = Convert.ToBoolean(_settingDefinitionManager.GetSettingDefinition(AbpZeroSettingNames.UserManagement.PasswordComplexity.RequireUppercase).DefaultValue),
+                RequiredLength = Convert.ToInt32(_settingDefinitionManager.GetSettingDefinition(AbpZeroSettingNames.UserManagement.PasswordComplexity.RequiredLength).DefaultValue)
+            };
 
             return new SecuritySettingsEditDto
             {
-                UseDefaultPasswordComplexitySettings = passwordComplexitySetting == defaultPasswordComplexitySetting,
-                PasswordComplexity = JsonConvert.DeserializeObject<PasswordComplexitySetting>(passwordComplexitySetting),
-                DefaultPasswordComplexity = JsonConvert.DeserializeObject<PasswordComplexitySetting>(defaultPasswordComplexitySetting),
+                UseDefaultPasswordComplexitySettings = passwordComplexitySetting.Equals(defaultPasswordComplexitySetting),
+                PasswordComplexity = passwordComplexitySetting,
+                DefaultPasswordComplexity = defaultPasswordComplexitySetting,
                 UserLockOut = await GetUserLockOutSettingsAsync(),
                 TwoFactorLogin = await GetTwoFactorLoginSettingsAsync()
             };
@@ -165,12 +169,6 @@ namespace Magicodes.Admin.Configuration.Host
             await UpdateUserManagementSettingsAsync(input.UserManagement);
             await UpdateSecuritySettingsAsync(input.Security);
             await UpdateEmailSettingsAsync(input.Email);
-            await UpdateSiteSettingsAsync(input.Site);
-        }
-
-        public async Task UpdateSiteSettingsAsync(SiteSettingsEditDto settings)
-        {
-            await SettingManager.ChangeSettingForApplicationAsync(AppSettings.TenantManagement.DefaultUrl, settings.DefaultUrl);
         }
 
         private async Task UpdateGeneralSettingsAsync(GeneralSettingsEditDto settings)
@@ -193,16 +191,16 @@ namespace Magicodes.Admin.Configuration.Host
         {
             await SettingManager.ChangeSettingForApplicationAsync(
                 AppSettings.TenantManagement.AllowSelfRegistration,
-                settings.AllowSelfRegistration.ToString(CultureInfo.InvariantCulture).ToLower(CultureInfo.InvariantCulture)
+                settings.AllowSelfRegistration.ToString().ToLowerInvariant()
             );
             await SettingManager.ChangeSettingForApplicationAsync(
                 AppSettings.TenantManagement.IsNewRegisteredTenantActiveByDefault,
-                settings.IsNewRegisteredTenantActiveByDefault.ToString(CultureInfo.InvariantCulture).ToLower(CultureInfo.InvariantCulture)
+                settings.IsNewRegisteredTenantActiveByDefault.ToString().ToLowerInvariant()
             );
 
             await SettingManager.ChangeSettingForApplicationAsync(
                 AppSettings.TenantManagement.UseCaptchaOnRegistration,
-                settings.UseCaptchaOnRegistration.ToString(CultureInfo.InvariantCulture).ToLower(CultureInfo.InvariantCulture)
+                settings.UseCaptchaOnRegistration.ToString().ToLowerInvariant()
             );
 
             await SettingManager.ChangeSettingForApplicationAsync(
@@ -215,7 +213,7 @@ namespace Magicodes.Admin.Configuration.Host
         {
             await SettingManager.ChangeSettingForApplicationAsync(
                 AbpZeroSettingNames.UserManagement.IsEmailConfirmationRequiredForLogin,
-                settings.IsEmailConfirmationRequiredForLogin.ToString(CultureInfo.InvariantCulture).ToLower(CultureInfo.InvariantCulture)
+                settings.IsEmailConfirmationRequiredForLogin.ToString().ToLowerInvariant()
             );
         }
 
@@ -223,36 +221,59 @@ namespace Magicodes.Admin.Configuration.Host
         {
             if (settings.UseDefaultPasswordComplexitySettings)
             {
-                await SettingManager.ChangeSettingForApplicationAsync(
-                    AppSettings.Security.PasswordComplexity,
-                    settings.DefaultPasswordComplexity.ToJsonString()
-                );
+                await UpdatePasswordComplexitySettingsAsync(settings.DefaultPasswordComplexity);
             }
             else
             {
-                await SettingManager.ChangeSettingForApplicationAsync(
-                    AppSettings.Security.PasswordComplexity,
-                    settings.PasswordComplexity.ToJsonString()
-                );
+                await UpdatePasswordComplexitySettingsAsync(settings.PasswordComplexity);
             }
 
             await UpdateUserLockOutSettingsAsync(settings.UserLockOut);
             await UpdateTwoFactorLoginSettingsAsync(settings.TwoFactorLogin);
         }
 
+        private async Task UpdatePasswordComplexitySettingsAsync(PasswordComplexitySetting settings)
+        {
+
+            await SettingManager.ChangeSettingForApplicationAsync(
+                AbpZeroSettingNames.UserManagement.PasswordComplexity.RequireDigit,
+                settings.RequireDigit.ToString()
+            );
+
+            await SettingManager.ChangeSettingForApplicationAsync(
+                AbpZeroSettingNames.UserManagement.PasswordComplexity.RequireLowercase,
+                settings.RequireLowercase.ToString()
+            );
+
+            await SettingManager.ChangeSettingForApplicationAsync(
+                AbpZeroSettingNames.UserManagement.PasswordComplexity.RequireNonAlphanumeric,
+                settings.RequireNonAlphanumeric.ToString()
+            );
+
+            await SettingManager.ChangeSettingForApplicationAsync(
+                AbpZeroSettingNames.UserManagement.PasswordComplexity.RequireUppercase,
+                settings.RequireUppercase.ToString()
+            );
+
+            await SettingManager.ChangeSettingForApplicationAsync(
+                AbpZeroSettingNames.UserManagement.PasswordComplexity.RequiredLength,
+                settings.RequiredLength.ToString()
+            );
+        }
+
         private async Task UpdateUserLockOutSettingsAsync(UserLockOutSettingsEditDto settings)
         {
-            await SettingManager.ChangeSettingForApplicationAsync(AbpZeroSettingNames.UserManagement.UserLockOut.IsEnabled, settings.IsEnabled.ToString(CultureInfo.InvariantCulture).ToLower());
+            await SettingManager.ChangeSettingForApplicationAsync(AbpZeroSettingNames.UserManagement.UserLockOut.IsEnabled, settings.IsEnabled.ToString().ToLowerInvariant());
             await SettingManager.ChangeSettingForApplicationAsync(AbpZeroSettingNames.UserManagement.UserLockOut.DefaultAccountLockoutSeconds, settings.DefaultAccountLockoutSeconds.ToString());
             await SettingManager.ChangeSettingForApplicationAsync(AbpZeroSettingNames.UserManagement.UserLockOut.MaxFailedAccessAttemptsBeforeLockout, settings.MaxFailedAccessAttemptsBeforeLockout.ToString());
         }
 
         private async Task UpdateTwoFactorLoginSettingsAsync(TwoFactorLoginSettingsEditDto settings)
         {
-            await SettingManager.ChangeSettingForApplicationAsync(AbpZeroSettingNames.UserManagement.TwoFactorLogin.IsEnabled, settings.IsEnabled.ToString(CultureInfo.InvariantCulture).ToLower());
-            await SettingManager.ChangeSettingForApplicationAsync(AbpZeroSettingNames.UserManagement.TwoFactorLogin.IsEmailProviderEnabled, settings.IsEmailProviderEnabled.ToString(CultureInfo.InvariantCulture).ToLower());
-            await SettingManager.ChangeSettingForApplicationAsync(AbpZeroSettingNames.UserManagement.TwoFactorLogin.IsSmsProviderEnabled, settings.IsSmsProviderEnabled.ToString(CultureInfo.InvariantCulture).ToLower());
-            await SettingManager.ChangeSettingForApplicationAsync(AbpZeroSettingNames.UserManagement.TwoFactorLogin.IsRememberBrowserEnabled, settings.IsRememberBrowserEnabled.ToString(CultureInfo.InvariantCulture).ToLower());
+            await SettingManager.ChangeSettingForApplicationAsync(AbpZeroSettingNames.UserManagement.TwoFactorLogin.IsEnabled, settings.IsEnabled.ToString().ToLowerInvariant());
+            await SettingManager.ChangeSettingForApplicationAsync(AbpZeroSettingNames.UserManagement.TwoFactorLogin.IsEmailProviderEnabled, settings.IsEmailProviderEnabled.ToString().ToLowerInvariant());
+            await SettingManager.ChangeSettingForApplicationAsync(AbpZeroSettingNames.UserManagement.TwoFactorLogin.IsSmsProviderEnabled, settings.IsSmsProviderEnabled.ToString().ToLowerInvariant());
+            await SettingManager.ChangeSettingForApplicationAsync(AbpZeroSettingNames.UserManagement.TwoFactorLogin.IsRememberBrowserEnabled, settings.IsRememberBrowserEnabled.ToString().ToLowerInvariant());
         }
 
         private async Task UpdateEmailSettingsAsync(EmailSettingsEditDto settings)
@@ -264,8 +285,8 @@ namespace Magicodes.Admin.Configuration.Host
             await SettingManager.ChangeSettingForApplicationAsync(EmailSettingNames.Smtp.UserName, settings.SmtpUserName);
             await SettingManager.ChangeSettingForApplicationAsync(EmailSettingNames.Smtp.Password, settings.SmtpPassword);
             await SettingManager.ChangeSettingForApplicationAsync(EmailSettingNames.Smtp.Domain, settings.SmtpDomain);
-            await SettingManager.ChangeSettingForApplicationAsync(EmailSettingNames.Smtp.EnableSsl, settings.SmtpEnableSsl.ToString(CultureInfo.InvariantCulture).ToLower(CultureInfo.InvariantCulture));
-            await SettingManager.ChangeSettingForApplicationAsync(EmailSettingNames.Smtp.UseDefaultCredentials, settings.SmtpUseDefaultCredentials.ToString(CultureInfo.InvariantCulture).ToLower(CultureInfo.InvariantCulture));
+            await SettingManager.ChangeSettingForApplicationAsync(EmailSettingNames.Smtp.EnableSsl, settings.SmtpEnableSsl.ToString().ToLowerInvariant());
+            await SettingManager.ChangeSettingForApplicationAsync(EmailSettingNames.Smtp.UseDefaultCredentials, settings.SmtpUseDefaultCredentials.ToString().ToLowerInvariant());
         }
 
         #endregion

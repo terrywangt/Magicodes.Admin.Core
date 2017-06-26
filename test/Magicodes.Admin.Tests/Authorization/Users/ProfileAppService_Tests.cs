@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
-using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Identity;
+using Magicodes.Admin.Authorization.Users;
 using Magicodes.Admin.Authorization.Users.Profile;
 using Magicodes.Admin.Authorization.Users.Profile.Dto;
 using Shouldly;
@@ -65,8 +66,10 @@ namespace Magicodes.Admin.Tests.Authorization.Users
 
             //Assert
             var currentUser = await GetCurrentUserAsync();
-            new PasswordHasher()
-                .VerifyHashedPassword(currentUser.Password, "2mF9d8Ac!5")
+
+            LocalIocManager
+                .Resolve<IPasswordHasher<User>>()
+                .VerifyHashedPassword(currentUser, currentUser.Password, "2mF9d8Ac!5")
                 .ShouldBe(PasswordVerificationResult.Success);
         } 
     }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using Abp.Authorization.Users;
@@ -9,7 +8,8 @@ using Abp.IdentityFramework;
 using Abp.Notifications;
 using Abp.Runtime.Session;
 using Abp.UI;
-using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Magicodes.Admin.Authorization.Roles;
 using Magicodes.Admin.Configuration;
 using Magicodes.Admin.Debugging;
@@ -29,6 +29,7 @@ namespace Magicodes.Admin.Authorization.Users
         private readonly INotificationSubscriptionManager _notificationSubscriptionManager;
         private readonly IAppNotifier _appNotifier;
         private readonly IUserPolicy _userPolicy;
+        private readonly IPasswordHasher<User> _passwordHasher;
 
         public UserRegistrationManager(
             TenantManager tenantManager, 
@@ -37,7 +38,8 @@ namespace Magicodes.Admin.Authorization.Users
             IUserEmailer userEmailer, 
             INotificationSubscriptionManager notificationSubscriptionManager, 
             IAppNotifier appNotifier, 
-            IUserPolicy userPolicy)
+            IUserPolicy userPolicy,
+            IPasswordHasher<User> passwordHasher)
         {
             _tenantManager = tenantManager;
             _userManager = userManager;
@@ -46,6 +48,7 @@ namespace Magicodes.Admin.Authorization.Users
             _notificationSubscriptionManager = notificationSubscriptionManager;
             _appNotifier = appNotifier;
             _userPolicy = userPolicy;
+            _passwordHasher = passwordHasher;
 
             AbpSession = NullAbpSession.Instance;
         }
@@ -68,10 +71,13 @@ namespace Magicodes.Admin.Authorization.Users
                 EmailAddress = emailAddress,
                 IsActive = isNewRegisteredUserActiveByDefault,
                 UserName = userName,
-                Password = _userManager.PasswordHasher.HashPassword(plainPassword),
                 IsEmailConfirmed = isEmailConfirmed,
                 Roles = new List<UserRole>()
             };
+
+            user.SetNormalizedNames();
+
+            user.Password = _passwordHasher.HashPassword(user, plainPassword);
 
             foreach (var defaultRole in await _roleManager.Roles.Where(r => r.IsDefault).ToListAsync())
             {

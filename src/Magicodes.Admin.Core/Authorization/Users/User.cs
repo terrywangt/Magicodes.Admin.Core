@@ -1,6 +1,7 @@
 ﻿using System;
 using Abp.Authorization.Users;
 using Abp.Extensions;
+using Abp.Timing;
 
 namespace Magicodes.Admin.Authorization.Users
 {
@@ -9,13 +10,15 @@ namespace Magicodes.Admin.Authorization.Users
     /// </summary>
     public class User : AbpUser<User>
     {
-        public const int MinPlainPasswordLength = 6;
-
         public const int MaxPhoneNumberLength = 24;
 
         public virtual Guid? ProfilePictureId { get; set; }
 
         public virtual bool ShouldChangePasswordOnNextLogin { get; set; }
+
+        public DateTime? SignInTokenExpireTimeUtc { get; set; }
+
+        public string SignInToken { get; set; }
 
         //Can add application specific user properties here
 
@@ -33,7 +36,7 @@ namespace Magicodes.Admin.Authorization.Users
         /// <returns>Created <see cref="User"/> object</returns>
         public static User CreateTenantAdminUser(int tenantId, string emailAddress)
         {
-            return new User
+            var user = new User
             {
                 TenantId = tenantId,
                 UserName = AdminUserName,
@@ -41,6 +44,10 @@ namespace Magicodes.Admin.Authorization.Users
                 Surname = AdminUserName,
                 EmailAddress = emailAddress
             };
+
+            user.SetNormalizedNames();
+
+            return user;
         }
 
         public static string CreateRandomPassword()
@@ -60,6 +67,12 @@ namespace Magicodes.Admin.Authorization.Users
         {
             AccessFailedCount = 0;
             LockoutEndDateUtc = null;
+        }
+
+        public void SetSignInToken()
+        {
+            SignInToken = Guid.NewGuid().ToString();
+            SignInTokenExpireTimeUtc = Clock.Now.AddMinutes(1).ToUniversalTime();
         }
     }
 }

@@ -10,12 +10,12 @@ namespace Magicodes.Admin.Editions
     {
         Task<ListResultDto<EditionListDto>> GetEditions();
 
-        Task<GetEditionForEditOutput> GetEditionForEdit(NullableIdDto input);
+        Task<GetEditionEditOutput> GetEditionForEdit(NullableIdDto input);
 
         Task CreateOrUpdateEdition(CreateOrUpdateEditionDto input);
 
         Task DeleteEdition(EntityDto input);
 
-        Task<List<ComboboxItemDto>> GetEditionComboboxItems(int? selectedEditionId = null);
+        Task<List<SubscribableEditionComboboxItemDto>> GetEditionComboboxItems(int? selectedEditionId = null, bool addAllItem = false, bool onlyFree = false);
     }
 }

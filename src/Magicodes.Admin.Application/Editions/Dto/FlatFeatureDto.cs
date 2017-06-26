@@ -1,6 +1,5 @@
 using Abp.Application.Features;
 using Abp.AutoMapper;
-using Abp.UI.Inputs;
 
 namespace Magicodes.Admin.Editions.Dto
 {
@@ -17,6 +16,6 @@ namespace Magicodes.Admin.Editions.Dto
 
         public string DefaultValue { get; set; }
 
-        public IInputType InputType { get; set; }
+        public FeatureInputTypeDto InputType { get; set; }
     }
 }

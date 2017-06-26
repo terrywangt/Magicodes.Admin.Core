@@ -1,5 +1,4 @@
 using System;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Abp.Application.Services.Dto;
@@ -109,26 +108,26 @@ namespace Magicodes.Admin.Web.Areas.Admin.Controllers
             var baselanguage = languages.FirstOrDefault(l => l.Name == baseLanguageName);
             if (baselanguage == null)
             {
-                throw new ApplicationException("Could not find language: " + baseLanguageName);
+                throw new Exception("Could not find language: " + baseLanguageName);
             }
 
             var targetLanguage = languages.FirstOrDefault(l => l.Name == languageName);
             if (targetLanguage == null)
             {
-                throw new ApplicationException("Could not find language: " + languageName);
+                throw new Exception("Could not find language: " + languageName);
             }
 
             var baseText = _applicationLanguageTextManager.GetStringOrNull(
                 AbpSession.TenantId,
                 sourceName,
-                CultureInfo.GetCultureInfo(baseLanguageName),
+                CultureInfoHelper.Get(baseLanguageName),
                 key
                 );
 
             var targetText = _applicationLanguageTextManager.GetStringOrNull(
                 AbpSession.TenantId,
                 sourceName,
-                CultureInfo.GetCultureInfo(languageName),
+                CultureInfoHelper.Get(languageName),
                 key,
                 false
                 );

@@ -1,7 +1,5 @@
-﻿using System.Linq;
-using Abp.Organizations;
-using Magicodes.Admin.EntityFramework;
-using Magicodes.Admin.MultiTenancy;
+﻿using Abp.Organizations;
+using Magicodes.Admin.EntityFrameworkCore;
 
 namespace Magicodes.Admin.Tests.TestDatas
 {
@@ -44,7 +42,7 @@ namespace Magicodes.Admin.Tests.TestDatas
 
         private OrganizationUnit CreateOU(string displayName, string code, long? parentId = null)
         {
-            var ou = _context.OrganizationUnits.Add(new OrganizationUnit(_tenantId, displayName, parentId) { Code = code });
+            var ou = _context.OrganizationUnits.Add(new OrganizationUnit(_tenantId, displayName, parentId) { Code = code }).Entity;
             _context.SaveChanges();
             return ou;
         }

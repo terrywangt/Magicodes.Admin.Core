@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Abp.Extensions;
 using Abp.Runtime.Security;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -26,6 +24,13 @@ namespace Magicodes.Admin.Web.Startup
         /// <param name="configuration">The configuration.</param>
         public static void Configure(IApplicationBuilder app, IConfiguration configuration)
         {
+            app.UseIdentity();
+
+            if (bool.Parse(configuration["IdentityServer:IsEnabled"]))
+            {
+                app.UseIdentityServer();
+            }
+
             if (bool.Parse(configuration["Authentication:JwtBearer:IsEnabled"]))
             {
                 app.UseJwtBearerAuthentication(CreateJwtBearerAuthenticationOptions(app));
@@ -68,6 +73,18 @@ namespace Magicodes.Admin.Web.Startup
                         typeof(MicrosoftAuthProviderApi)
                     )
                 );
+            }
+
+            if (bool.Parse(configuration["IdentityServer:IsEnabled"]))
+            {
+                app.UseIdentityServerAuthentication(
+                    new IdentityServerAuthenticationOptions
+                    {
+                        Authority = configuration["App:WebSiteRootAddress"],
+                        RequireHttpsMetadata = false,
+                        AutomaticAuthenticate = true,
+                        AutomaticChallenge = true
+                    });
             }
         }
 

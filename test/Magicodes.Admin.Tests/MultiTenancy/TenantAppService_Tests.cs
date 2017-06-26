@@ -1,16 +1,14 @@
-﻿using System;
-using System.Data.Entity;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Abp.Application.Services.Dto;
 using Abp.MultiTenancy;
 using Abp.Zero.Configuration;
+using Microsoft.EntityFrameworkCore;
 using Magicodes.Admin.Authorization.Users;
 using Magicodes.Admin.MultiTenancy;
 using Magicodes.Admin.MultiTenancy.Dto;
 using Magicodes.Admin.Notifications;
 using Shouldly;
-using Xunit;
 
 namespace Magicodes.Admin.Tests.MultiTenancy
 {
@@ -49,8 +47,7 @@ namespace Magicodes.Admin.Tests.MultiTenancy
                     Name = "Tenant for test purpose",
                     AdminEmailAddress = "admin@testtenant.com",
                     AdminPassword = "123qwe",
-                    IsActive = true,
-                    ConnectionString = "Server=localhost; Database=AdminTest_" + Guid.NewGuid().ToString("N") + "; Trusted_Connection=True;"
+                    IsActive = true
                 });
 
             //Assert
@@ -59,13 +56,13 @@ namespace Magicodes.Admin.Tests.MultiTenancy
             tenant.Name.ShouldBe("Tenant for test purpose");
             tenant.IsActive.ShouldBe(true);
 
-            await UsingDbContext(tenant.Id, async context =>
+            await UsingDbContextAsync(tenant.Id, async context =>
             {
                 //Check static roles
                 var staticRoleNames = Resolve<IRoleManagementConfig>().StaticRoles.Where(r => r.Side == MultiTenancySides.Tenant).Select(role => role.RoleName).ToList();
                 foreach (var staticRoleName in staticRoleNames)
                 {
-                    (await context.Roles.CountAsync(r => r.TenantId == tenant.Id &&  r.Name == staticRoleName)).ShouldBe(1);
+                    (await context.Roles.CountAsync(r => r.TenantId == tenant.Id && r.Name == staticRoleName)).ShouldBe(1);
                 }
 
                 //Check default admin user

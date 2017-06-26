@@ -1,10 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Abp.Localization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Magicodes.Admin.Web.Views.Shared.Components.AccountLanguages
 {
-    public class AccountLanguagesViewComponent : ViewComponent
+    public class AccountLanguagesViewComponent : AdminViewComponent
     {
         private readonly ILanguageManager _languageManager;
 
@@ -18,7 +19,7 @@ namespace Magicodes.Admin.Web.Views.Shared.Components.AccountLanguages
             var model = new LanguageSelectionViewModel
             {
                 CurrentLanguage = _languageManager.CurrentLanguage,
-                Languages = _languageManager.GetLanguages(),
+                Languages = _languageManager.GetLanguages().Where(l => !l.IsDisabled).ToList(),
                 CurrentUrl = Request.Path
             };
 

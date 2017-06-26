@@ -3,23 +3,23 @@ using System.Drawing;
 using System.IO;
 using System.Threading.Tasks;
 using Abp;
-using Abp.Application.Services.Dto;
 using Abp.Auditing;
 using Abp.Authorization;
 using Abp.AutoMapper;
 using Abp.Configuration;
 using Abp.Extensions;
 using Abp.IO;
+using Abp.Localization;
 using Abp.Runtime.Session;
 using Abp.Timing;
 using Abp.UI;
+using Abp.Zero.Configuration;
+using Magicodes.Admin.Authorization.Users.Dto;
 using Magicodes.Admin.Authorization.Users.Profile.Dto;
-using Magicodes.Admin.Configuration;
 using Magicodes.Admin.Friendships;
 using Magicodes.Admin.Security;
 using Magicodes.Admin.Storage;
 using Magicodes.Admin.Timing;
-using Newtonsoft.Json;
 
 namespace Magicodes.Admin.Authorization.Users.Profile
 {
@@ -34,7 +34,7 @@ namespace Magicodes.Admin.Authorization.Users.Profile
         public ProfileAppService(
             IAppFolders appFolders,
             IBinaryObjectManager binaryObjectManager,
-            ITimeZoneService timezoneService, 
+            ITimeZoneService timezoneService,
             IFriendshipManager friendshipManager)
         {
             _appFolders = appFolders;
@@ -47,7 +47,7 @@ namespace Magicodes.Admin.Authorization.Users.Profile
         public async Task<CurrentUserProfileEditDto> GetCurrentUserProfileForEdit()
         {
             var user = await GetCurrentUserAsync();
-            var userProfileEditDto = user.MapTo<CurrentUserProfileEditDto>();
+            var userProfileEditDto = ObjectMapper.Map<CurrentUserProfileEditDto>(user);
 
             if (Clock.SupportsMultipleTimezone)
             {
@@ -66,7 +66,7 @@ namespace Magicodes.Admin.Authorization.Users.Profile
         public async Task UpdateCurrentUserProfile(CurrentUserProfileEditDto input)
         {
             var user = await GetCurrentUserAsync();
-            input.MapTo(user);
+            ObjectMapper.Map(input, user);
             CheckErrors(await UserManager.UpdateAsync(user));
 
             if (Clock.SupportsMultipleTimezone)
@@ -85,10 +85,10 @@ namespace Magicodes.Admin.Authorization.Users.Profile
 
         public async Task ChangePassword(ChangePasswordInput input)
         {
-            await CheckPasswordComplexity(input.NewPassword);
+            await UserManager.InitializeOptionsAsync(AbpSession.TenantId);
 
             var user = await GetCurrentUserAsync();
-            CheckErrors(await UserManager.ChangePasswordAsync(user.Id, input.CurrentPassword, input.NewPassword));
+            CheckErrors(await UserManager.ChangePasswordAsync(user, input.CurrentPassword, input.NewPassword));
         }
 
         public async Task UpdateProfilePicture(UpdateProfilePictureInput input)
@@ -108,13 +108,12 @@ namespace Magicodes.Admin.Authorization.Users.Profile
                     using (var stream = new MemoryStream())
                     {
                         bmCrop.Save(stream, bmpImage.RawFormat);
-                        stream.Close();
                         byteArray = stream.ToArray();
                     }
                 }
             }
 
-            if (byteArray.LongLength > 102400) //100 KB
+            if (byteArray.Length > 102400) //100 KB
             {
                 throw new UserFriendlyException(L("ResizedProfilePicture_Warn_SizeLimit"));
             }
@@ -137,12 +136,18 @@ namespace Magicodes.Admin.Authorization.Users.Profile
         [AbpAllowAnonymous]
         public async Task<GetPasswordComplexitySettingOutput> GetPasswordComplexitySetting()
         {
-            var settingValue = await SettingManager.GetSettingValueAsync(AppSettings.Security.PasswordComplexity);
-            var setting = JsonConvert.DeserializeObject<PasswordComplexitySetting>(settingValue);
+            var passwordComplexitySetting = new PasswordComplexitySetting
+            {
+                RequireDigit = await SettingManager.GetSettingValueAsync<bool>(AbpZeroSettingNames.UserManagement.PasswordComplexity.RequireDigit),
+                RequireLowercase = await SettingManager.GetSettingValueAsync<bool>(AbpZeroSettingNames.UserManagement.PasswordComplexity.RequireLowercase),
+                RequireNonAlphanumeric = await SettingManager.GetSettingValueAsync<bool>(AbpZeroSettingNames.UserManagement.PasswordComplexity.RequireNonAlphanumeric),
+                RequireUppercase = await SettingManager.GetSettingValueAsync<bool>(AbpZeroSettingNames.UserManagement.PasswordComplexity.RequireUppercase),
+                RequiredLength = await SettingManager.GetSettingValueAsync<int>(AbpZeroSettingNames.UserManagement.PasswordComplexity.RequiredLength)
+            };
 
             return new GetPasswordComplexitySettingOutput
             {
-                Setting = setting
+                Setting = passwordComplexitySetting
             };
         }
 
@@ -160,7 +165,7 @@ namespace Magicodes.Admin.Authorization.Users.Profile
 
         public async Task<GetProfilePictureOutput> GetFriendProfilePictureById(GetFriendProfilePictureByIdInput input)
         {
-            if (!input.ProfilePictureId.HasValue || _friendshipManager.GetFriendshipOrNull(AbpSession.ToUserIdentifier(), new UserIdentifier(input.TenantId, input.UserId)) == null)
+            if (!input.ProfilePictureId.HasValue || await _friendshipManager.GetFriendshipOrNullAsync(AbpSession.ToUserIdentifier(), new UserIdentifier(input.TenantId, input.UserId)) == null)
             {
                 return new GetProfilePictureOutput(string.Empty);
             }
@@ -182,16 +187,13 @@ namespace Magicodes.Admin.Authorization.Users.Profile
             return await GetProfilePictureByIdInternal(profilePictureId);
         }
 
-        private async Task CheckPasswordComplexity(string password)
+        public async Task ChangeLanguage(ChangeUserLanguageDto input)
         {
-            var passwordComplexitySettingValue = await SettingManager.GetSettingValueAsync(AppSettings.Security.PasswordComplexity);
-            var passwordComplexitySetting = JsonConvert.DeserializeObject<PasswordComplexitySetting>(passwordComplexitySettingValue);
-            var passwordComplexityChecker = new PasswordComplexityChecker();
-            var passwordValid = passwordComplexityChecker.Check(passwordComplexitySetting, password);
-            if (!passwordValid)
-            {
-                throw new UserFriendlyException(L("PasswordComplexityNotSatisfied"));
-            }
+            await SettingManager.ChangeSettingForUserAsync(
+                AbpSession.ToUserIdentifier(),
+                LocalizationSettingNames.DefaultLanguage,
+                input.LanguageName
+            );
         }
 
         private async Task<byte[]> GetProfilePictureByIdOrNull(Guid profilePictureId)

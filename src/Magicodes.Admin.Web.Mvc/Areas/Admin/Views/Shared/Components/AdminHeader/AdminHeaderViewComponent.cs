@@ -1,14 +1,16 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Abp.Configuration.Startup;
 using Abp.Localization;
 using Abp.Runtime.Session;
 using Microsoft.AspNetCore.Mvc;
 using Magicodes.Admin.Web.Areas.Admin.Models.Layout;
 using Magicodes.Admin.Web.Session;
+using Magicodes.Admin.Web.Views;
 
 namespace Magicodes.Admin.Web.Areas.Admin.Views.Shared.Components.AdminHeader
 {
-    public class AdminHeaderViewComponent : ViewComponent
+    public class AdminHeaderViewComponent : AdminViewComponent
     {
         private readonly ILanguageManager _languageManager;
         private readonly IMultiTenancyConfig _multiTenancyConfig;
@@ -32,7 +34,7 @@ namespace Magicodes.Admin.Web.Areas.Admin.Views.Shared.Components.AdminHeader
             var headerModel = new HeaderViewModel
             {
                 LoginInformations = await _sessionCache.GetCurrentLoginInformationsAsync(),
-                Languages = _languageManager.GetLanguages(),
+                Languages = _languageManager.GetLanguages().Where(l => !l.IsDisabled).ToList(),
                 CurrentLanguage = _languageManager.CurrentLanguage,
                 IsMultiTenancyEnabled = _multiTenancyConfig.IsEnabled,
                 IsImpersonatedLogin = _abpSession.ImpersonatorUserId.HasValue

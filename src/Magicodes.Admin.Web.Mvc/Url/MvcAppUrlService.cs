@@ -1,4 +1,5 @@
 ﻿using Abp.MultiTenancy;
+using Magicodes.Admin.Url;
 
 namespace Magicodes.Admin.Web.Url
 {

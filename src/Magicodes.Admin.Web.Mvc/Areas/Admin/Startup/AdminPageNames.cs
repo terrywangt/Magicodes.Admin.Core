@@ -15,7 +15,6 @@ namespace Magicodes.Admin.Web.Areas.Admin.Startup
             public const string AuditLogs = "Administration.AuditLogs";
             public const string OrganizationUnits = "Administration.OrganizationUnits";
             public const string Languages = "Administration.Languages";
-            public const string Index = "Administration.Index";
         }
 
         public static class Host
@@ -24,12 +23,14 @@ namespace Magicodes.Admin.Web.Areas.Admin.Startup
             public const string Editions = "Editions";
             public const string Maintenance = "Administration.Maintenance";
             public const string Settings = "Administration.Settings.Host";
+            public const string Dashboard = "Dashboard";
         }
 
         public static class Tenant
         {
             public const string Dashboard = "Dashboard.Tenant";
             public const string Settings = "Administration.Settings.Tenant";
+            public const string SubscriptionManagement = "Administration.SubscriptionManagement.Tenant";
         }
     }
 }

@@ -4,7 +4,8 @@ using Abp.Application.Services;
 using Abp.IdentityFramework;
 using Abp.MultiTenancy;
 using Abp.Runtime.Session;
-using Microsoft.AspNet.Identity;
+using Abp.Threading;
+using Microsoft.AspNetCore.Identity;
 using Magicodes.Admin.Authorization.Users;
 using Magicodes.Admin.MultiTenancy;
 
@@ -26,10 +27,10 @@ namespace Magicodes.Admin
 
         protected virtual async Task<User> GetCurrentUserAsync()
         {
-            var user = await UserManager.FindByIdAsync(AbpSession.GetUserId());
+            var user = await UserManager.FindByIdAsync(AbpSession.GetUserId().ToString());
             if (user == null)
             {
-                throw new ApplicationException("There is no current user!");
+                throw new Exception("There is no current user!");
             }
 
             return user;
@@ -37,13 +38,7 @@ namespace Magicodes.Admin
 
         protected virtual User GetCurrentUser()
         {
-            var user = UserManager.FindById(AbpSession.GetUserId());
-            if (user == null)
-            {
-                throw new ApplicationException("There is no current user!");
-            }
-
-            return user;
+            return AsyncHelper.RunSync(GetCurrentUserAsync);
         }
 
         protected virtual Task<Tenant> GetCurrentTenantAsync()

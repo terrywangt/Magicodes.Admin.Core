@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using Abp.Authorization;
 using Abp.IO;
-using ICSharpCode.SharpZipLib.Core;
-using ICSharpCode.SharpZipLib.Zip;
 using Magicodes.Admin.Authorization;
 using Magicodes.Admin.Dto;
 using Magicodes.Admin.IO;
@@ -29,7 +28,7 @@ namespace Magicodes.Admin.Logging
             var directory = new DirectoryInfo(_appFolders.WebLogsFolder);
             if (!directory.Exists)
             {
-                return new GetLatestWebLogsOutput { LatesWebLogLines = new List<string>() };
+                return new GetLatestWebLogsOutput { LatestWebLogLines = new List<string>() };
             }
 
             var lastLogFile = directory.GetFiles("*.txt", SearchOption.AllDirectories)
@@ -66,7 +65,7 @@ namespace Magicodes.Admin.Logging
 
             return new GetLatestWebLogsOutput
             {
-                LatesWebLogLines = lines.Take(lineCount).Reverse().ToList()
+                LatestWebLogLines = lines.Take(lineCount).Reverse().ToList()
             };
         }
 
@@ -74,7 +73,7 @@ namespace Magicodes.Admin.Logging
         {
             //Create temporary copy of logs
             var tempLogDirectory = CopyAllLogFilesToTempDirectory();
-            var logFiles = new DirectoryInfo(tempLogDirectory).GetFiles("*.txt", SearchOption.TopDirectoryOnly).ToList();
+            var logFiles = new DirectoryInfo(tempLogDirectory).GetFiles("*.*", SearchOption.TopDirectoryOnly).ToList();
 
             //Create the zip file
             var zipFileDto = new FileDto("WebSiteLogs.zip", MimeTypeNames.ApplicationZip);
@@ -82,26 +81,19 @@ namespace Magicodes.Admin.Logging
 
             using (var outputZipFileStream = File.Create(outputZipFilePath))
             {
-                using (var zipStream = new ZipOutputStream(outputZipFileStream))
+                using (var zipStream = new ZipArchive(outputZipFileStream, ZipArchiveMode.Create))
                 {
-                    zipStream.IsStreamOwner = true; // Makes the Close also Close the underlying stream
-
                     foreach (var logFile in logFiles)
                     {
-                        var logZipEntry = new ZipEntry(logFile.Name)
+                        var entry = zipStream.CreateEntry(logFile.Name);
+                        using (var entryStream = entry.Open())
                         {
-                            DateTime = logFile.LastWriteTime,
-                            Size = logFile.Length
-                        };
-
-                        zipStream.PutNextEntry(logZipEntry);
-
-                        using (var fs = new FileStream(logFile.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 0x1000, FileOptions.SequentialScan))
-                        {
-                            StreamUtils.Copy(fs, zipStream, new byte[4096]);
+                            using (var fs = new FileStream(logFile.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 0x1000, FileOptions.SequentialScan))
+                            {
+                                fs.CopyTo(entryStream);
+                                entryStream.Flush();
+                            }
                         }
-
-                        zipStream.CloseEntry();
                     }
                 }
             }
@@ -129,7 +121,7 @@ namespace Magicodes.Admin.Logging
         private List<FileInfo> GetAllLogFiles()
         {
             var directory = new DirectoryInfo(_appFolders.WebLogsFolder);
-            return directory.GetFiles("*.txt", SearchOption.TopDirectoryOnly).ToList();
+            return directory.GetFiles("*.*", SearchOption.TopDirectoryOnly).ToList();
         }
     }
 }

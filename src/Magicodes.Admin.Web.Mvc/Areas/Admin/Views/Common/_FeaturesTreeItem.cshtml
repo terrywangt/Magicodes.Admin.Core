@@ -12,9 +12,9 @@
                 {
                     var featureValue = Model.EditModel.FeatureValues.FirstOrDefault(fv => fv.Name == feature.Name);
                     var value = featureValue == null ? feature.DefaultValue : featureValue.Value;
-                    var isSelected = string.Equals(value, "true", StringComparison.InvariantCultureIgnoreCase);
+                    var isSelected = string.Equals(value, "true", StringComparison.OrdinalIgnoreCase);
                 <li id="@feature.Name" class="jstree-open" data-jstree='{"selected": @isSelected.ToString().ToLower()}' data-feature='@feature.ToJsonString(true)' data-feature-value='@value.Replace("'","''")'>
-                    @feature.DisplayName
+                    @feature.DisplayName 
                     @Html.Partial("~/Areas/Admin/Views/Common/_FeaturesTreeItem.cshtml", new FeatureTreeItemModel(Model.EditModel, feature.Name))
                 </li>
             }

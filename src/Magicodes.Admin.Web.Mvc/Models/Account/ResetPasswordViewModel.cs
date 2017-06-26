@@ -14,5 +14,9 @@ namespace Magicodes.Admin.Web.Models.Account
         public string ResetCode { get; set; }
 
         public PasswordComplexitySetting PasswordComplexitySetting { get; set; }
+
+        public string ReturnUrl { get; set; }
+
+        public string SingleSignIn { get; set; }
     }
 }

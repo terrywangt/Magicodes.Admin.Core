@@ -33,6 +33,19 @@
                 }
             </select>
         </div>
+        
+        <div class="md-checkbox-list">
+            <div class="md-checkbox">
+                <input id="EditLanguage_IsDisabled" class="md-check" type="checkbox" name="IsDisabled" value="true" @(Model.Language.IsDisabled ? "checked=\"checked\"" : "") />
+                <label for="EditLanguage_IsDisabled">
+                    <span class="inc"></span>
+                    <span class="check"></span>
+                    <span class="box"></span>
+                    @L("IsDisabled")
+                </label>
+            </div>
+        </div>
+
     </form>
 </div>
 

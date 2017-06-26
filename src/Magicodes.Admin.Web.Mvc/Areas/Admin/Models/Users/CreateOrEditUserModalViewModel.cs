@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Abp.AutoMapper;
 using Magicodes.Admin.Authorization.Users.Dto;
+using Magicodes.Admin.Security;
 
 namespace Magicodes.Admin.Web.Areas.Admin.Models.Users
 {
@@ -21,6 +22,8 @@ namespace Magicodes.Admin.Web.Areas.Admin.Models.Users
         {
             get { return User.Id.HasValue; }
         }
+
+        public PasswordComplexitySetting PasswordComplexitySetting { get; set; }
 
         public CreateOrEditUserModalViewModel(GetUserForEditOutput output)
         {

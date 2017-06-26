@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Abp.Authorization.Users;
-using Magicodes.Admin.Authorization.Users;
 
 namespace Magicodes.Admin.Web.Models.TokenAuth
 {
@@ -11,7 +10,7 @@ namespace Magicodes.Admin.Web.Models.TokenAuth
         public string UserNameOrEmailAddress { get; set; }
 
         [Required]
-        [MaxLength(User.MaxPlainPasswordLength)]
+        [MaxLength(AbpUserBase.MaxPlainPasswordLength)]
         public string Password { get; set; }
 
         public string TwoFactorVerificationCode { get; set; }
@@ -19,5 +18,9 @@ namespace Magicodes.Admin.Web.Models.TokenAuth
         public bool RememberClient { get; set; }
 
         public string TwoFactorRememberClientToken { get; set; }
+
+        public bool? SingleSignIn { get; set; }
+
+        public string ReturnUrl { get; set; }
     }
 }

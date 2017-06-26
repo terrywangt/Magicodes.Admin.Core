@@ -2,11 +2,11 @@
 @using Abp.Configuration.Startup
 @using Abp.Timing
 @using Abp.Web.Security.AntiForgery
-@using Magicodes.Admin.Localization
 @using Magicodes.Admin.Timing
-@using Magicodes.Admin.Web
+@using Magicodes.Admin.Url
 @using Magicodes.Admin.Web.Resources
 @using Magicodes.Admin.Web.Url
+@using CultureHelper = Magicodes.Admin.Localization.CultureHelper
 @inject ScriptPaths ScriptPaths
 @inject AppTimes AppTimes
 @inject IAbpAntiForgeryManager AbpAntiForgeryManager
@@ -41,7 +41,7 @@
         <link rel="stylesheet" href="~/lib/font-awesome/css/font-awesome.css" asp-append-version="true" />
         <link rel="stylesheet" href="~/lib/famfamfam-flags/dist/sprite/famfamfam-flags.css" asp-append-version="true" />
         <link rel="stylesheet" href="@(CultureHelper.IsRtl ? "~/lib/bootstrap-rtl/bootstrap-rtl.css" : "~/lib/bootstrap/dist/css/bootstrap.css")" asp-append-version="true" />
-        <link rel="stylesheet" href="~/lib/jquery-uniform/css/uniform.default.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/lib/uniform/css/uniform.default.css" asp-append-version="true" />
         <link rel="stylesheet" href="~/lib/toastr/toastr.css" asp-append-version="true" />
         <link rel="stylesheet" href="~/lib/sweetalert/dist/sweetalert.css" asp-append-version="true" />
         <link rel="stylesheet" href="~/metronic/assets/global/css/components-md@(CultureHelper.IsRtl ? "-rtl" : "").css" asp-append-version="true" />
@@ -100,7 +100,7 @@
         <script src="~/lib/bootstrap/dist/js/bootstrap.js" asp-append-version="true"></script>
         <script src="~/lib/jquery-validation/dist/jquery.validate.js" asp-append-version="true"></script>
         <script src="~/lib/blockUI/jquery.blockUI.js" asp-append-version="true"></script>
-        <script src="~/lib/jquery-uniform/jquery.uniform.js" asp-append-version="true"></script>
+        <script src="~/lib/uniform/jquery.uniform.js" asp-append-version="true"></script>
         <script src="~/lib/js-cookie/src/js.cookie.js" asp-append-version="true"></script>
         <script src="~/lib/toastr/toastr.js" asp-append-version="true"></script>
         <script src="~/lib/spin.js/spin.js" asp-append-version="true"></script>
@@ -159,7 +159,7 @@
 
     <script>
         jQuery(document).ready(function () {
-            if (CurrentPage) {
+            if (window.CurrentPage) {
                 CurrentPage.init();
             }
         });

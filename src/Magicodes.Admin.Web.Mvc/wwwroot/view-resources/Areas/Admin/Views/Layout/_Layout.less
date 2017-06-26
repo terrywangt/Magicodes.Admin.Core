@@ -1,8 +1,4 @@
-﻿body {
-    font-family: 'Microsoft YaHei';
-}
-
-.page-header.navbar .page-logo .logo-default {
+﻿.page-header.navbar .page-logo .logo-default {
     margin: 19px 10px 0 10px;
 }
 
@@ -49,6 +45,14 @@
 #UserNotificationDropdown {
     max-width: 320px;
     width: 320px;
+
+    @media (max-width: 767px) {
+        margin-right: -60px;
+
+        &:before, &:after {
+            margin-right: 70px;
+        }
+    }
 
     a.user-notification-item {
         cursor: default;
@@ -134,4 +138,18 @@
 
 #loginAttemptsModalForm .control-label {
     font-weight: bold;
+}
+
+.subscription-info {
+    clear: both;
+    padding: 5px;
+    background-color: #fffced;
+    font-size: 0.9em;
+    color: #755d2d;
+}
+
+@media only screen and (max-device-width: 640px) {
+    .edition-info-text {
+        display: none;
+    }
 }

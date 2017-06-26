@@ -1,8 +1,12 @@
 ﻿using System.Reflection;
+using Abp.Configuration.Startup;
 using Abp.Modules;
+using Abp.Reflection.Extensions;
+using Abp.Threading.BackgroundWorkers;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Magicodes.Admin.Web.Configuration;
+using Magicodes.Admin.Configuration;
+using Magicodes.Admin.MultiTenancy;
 
 namespace Magicodes.Admin.Web.Startup
 {
@@ -19,9 +23,23 @@ namespace Magicodes.Admin.Web.Startup
             _appConfiguration = env.GetAppConfiguration();
         }
 
+        public override void PreInitialize()
+        {
+            Configuration.Modules.AbpWebCommon().MultiTenancy.DomainFormat = _appConfiguration["App:ServerRootAddress"] ?? "http://localhost:22742/";
+        }
+
         public override void Initialize()
         {
-            IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
+            IocManager.RegisterAssemblyByConvention(typeof(AdminWebHostModule).GetAssembly());
+        }
+
+        public override void PostInitialize()
+        {
+            if (IocManager.Resolve<IMultiTenancyConfig>().IsEnabled)
+            {
+                var workManager = IocManager.Resolve<IBackgroundWorkerManager>();
+                workManager.Add(IocManager.Resolve<SubscriptionExpirationCheckWorker>());
+            }
         }
     }
 }

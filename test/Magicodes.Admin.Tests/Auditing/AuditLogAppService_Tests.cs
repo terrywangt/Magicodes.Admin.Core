@@ -1,10 +1,6 @@
-﻿using System.Globalization;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Abp.Auditing;
-using Abp.Localization;
 using Abp.Timing;
-using Abp.Zero;
 using Magicodes.Admin.Auditing;
 using Magicodes.Admin.Auditing.Dto;
 using Magicodes.Admin.Authorization.Users;
@@ -20,21 +16,6 @@ namespace Magicodes.Admin.Tests.Auditing
         public AuditLogAppService_Tests()
         {
             _auditLogAppService = Resolve<IAuditLogAppService>();
-        }
-
-        [Theory]
-        [InlineData("en")]
-        [InlineData("en-US")]
-        [InlineData("en-GB")]
-        public void Test1(string cultureName)
-        {
-            Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(cultureName);
-
-            Resolve<ILanguageManager>().CurrentLanguage.Name.ShouldBe("en");
-
-            Resolve<ILocalizationManager>()
-                .GetString(AbpZeroConsts.LocalizationSourceName, "Identity.UserNotInRole")
-                .ShouldBe("User is not in role.");
         }
 
         [Fact]

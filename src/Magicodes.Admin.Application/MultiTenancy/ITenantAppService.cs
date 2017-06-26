@@ -17,10 +17,12 @@ namespace Magicodes.Admin.MultiTenancy
 
         Task DeleteTenant(EntityDto input);
 
-        Task<GetTenantFeaturesForEditOutput> GetTenantFeaturesForEdit(EntityDto input);
+        Task<GetTenantFeaturesEditOutput> GetTenantFeaturesForEdit(EntityDto input);
 
         Task UpdateTenantFeatures(UpdateTenantFeaturesInput input);
 
         Task ResetTenantSpecificFeatures(EntityDto input);
+
+        Task UnlockTenantAdmin(EntityDto input);
     }
 }

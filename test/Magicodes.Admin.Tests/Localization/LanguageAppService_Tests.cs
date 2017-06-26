@@ -118,10 +118,39 @@ namespace Magicodes.Admin.Tests.Localization
                 .GetString(
                     AdminConsts.LocalizationSourceName,
                     "Save",
-                    CultureInfo.GetCultureInfo("en")
+                    CultureInfoHelper.Get("en")
                 );
 
             newValue.ShouldBe("save-new-value");
+        }
+
+        [Fact]
+        public async Task SetLanguageIsDisabled()
+        {
+            //Arrange
+            var currentEnabledLanguages =
+                (await _languageManager.GetLanguagesAsync(AbpSession.TenantId)).Where(l => !l.IsDisabled);
+            var randomEnabledLanguage = RandomHelper.GetRandomOf(currentEnabledLanguages.ToArray());
+            
+            //Act
+            var output = await _languageAppService.GetLanguageForEdit(new NullableIdDto(null));
+
+            //Act
+            await _languageAppService.CreateOrUpdateLanguage(
+                new CreateOrUpdateLanguageInput
+                {
+                    Language = new ApplicationLanguageEditDto
+                    {
+                        Id = randomEnabledLanguage.Id,
+                        IsDisabled = true,
+                        Name = randomEnabledLanguage.Name,
+                        Icon = output.Flags[RandomHelper.GetRandom(output.Flags.Count)].Value
+                    }
+                });
+
+            //Assert
+            var currentLanguages = await _languageManager.GetLanguagesAsync(AbpSession.TenantId);
+            currentLanguages.FirstOrDefault(l => l.Name == randomEnabledLanguage.Name).IsDisabled.ShouldBeTrue();
         }
     }
 }

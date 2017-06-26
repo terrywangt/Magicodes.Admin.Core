@@ -26,8 +26,7 @@
             }
         });
 
-        var $element = $('#Password');
-        _passwordComplexityHelper.setPasswordComplexityRules($element, window.passwordComplexitySetting);
+        _passwordComplexityHelper.setPasswordComplexityRules($('input[name=Password],input[name=PasswordRepeat]'), window.passwordComplexitySetting);
     }
 
     return {

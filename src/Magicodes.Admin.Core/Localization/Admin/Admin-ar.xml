@@ -169,7 +169,12 @@
     <text name="OopsYouAreLost">عذرا! هل أنت ضال</text>
     <text name="WeCanNotFindThePage">لم نتمكن من العثور على الصفحة التي تبحث عنها.</text>
     <text name="DashboardDemo_Note_Title">مرحبا بكم في موقع البداية : أي أس بي نت - زيرو</text>
-    <text name="DashboardDemo_Note_Info">في هذا العرض يمكن استخدام القائمة لإختبار صفحات تعمل بالكامل.  صفحة لوحة القيادة هذه هي فقط لأغراض العرض والنصوص والتواريخ لا معنى لها. تقريبا جميع المعلومات هي معلومات ثابتة باستثناء الرسوم البيانية لنشاط الأعضاء.  عند الضغط على زر التحديث سيتم طلب المعلومات من الخادم الذي يولّد بيانات عشوائية للرسم البياني.</text>
+    <text name="DashboardDemo_Note_Info">
+      في هذا العرض يمكن استخدام القائمة لإختبار صفحات تعمل بالكامل. 
+    صفحة لوحة القيادة هذه هي فقط لأغراض العرض والنصوص والتواريخ لا معنى لها.
+    تقريبا جميع المعلومات هي معلومات ثابتة باستثناء الرسوم البيانية لنشاط الأعضاء. 
+    عند الضغط على زر التحديث سيتم طلب المعلومات من الخادم الذي يولّد بيانات عشوائية للرسم البياني.
+    </text>
     <text name="WelcomePage_Title">أهلا بك!</text>
     <text name="WelcomePage_Info">مرحبا بك بالنظام. يمكنك استخدام القائمة لبدء استخدام النظام. إذا كنت لا ترى أي عنصر بالقائمة ربما لم يكن لديك إذونات. يرجى مراجعة مشرف النظام للحصول على إذونات بالنظام.</text>
     <text name="RequestedFileDoesNotExists">لم نعثر على الملف المطلوب</text>
@@ -379,20 +384,8 @@
     <text name="Role">دور</text>
     <text name="Security">الأمن</text>
     <text name="PasswordComplexity">تركيبه كلمة المرور</text>
-    <text name="MinPasswordLength">الحد الأدنى لطول كلمة المرور</text>
-    <text name="MaxPasswordLength">الحد الأقصى لطول كلمة المرور</text>
-    <text name="UseNumbers">إستخدام الأرقام بكلمة المرور</text>
-    <text name="UseUpperCaseLetters">إستخدام الحروف الكبيرة في كلمة المرور</text>
-    <text name="UseLowerCaseLetters">إستخدام الحروف الصغيرة في كلمة المرور</text>
-    <text name="UsePunctuations">إستخدام علامات الترقيم في كلمة المرور</text>
     <text name="UseDefaultSettings">إستخدام الإعدادات الإفتراضية</text>
     <text name="PasswordComplexityNotSatisfied">تركيبه كلمة المرور غير صالحه.</text>
-    <text name="PasswordComplexity_MinLength_Hint">يجب أن تتكون كلمة المرور من {0} أحرف على الأقل</text>
-    <text name="PasswordComplexity_MaxLength_Hint">يجب أن لا تزيد كلمة المرور على {0} أحرف</text>
-    <text name="PasswordComplexity_UseNumbers_Hint">يجب أن تحتوي كلمة المرور على رقم</text>
-    <text name="PasswordComplexity_UseUpperCaseLetters_Hint">يجب أن تحتوي كلمة المرور على حرف كبير</text>
-    <text name="PasswordComplexity_UseLowerCaseLetters_Hint">يجب أن تحتوي كلمة المرور على حرف صغير</text>
-    <text name="PasswordComplexity_UsePunctuations_Hint">يجب أن تحتوي كلمة المرور على حرف خاص</text>
     <text name="YouAlreadySentAFriendshipRequestToThisUser">سبق وأن أضفت هذا المستخدم.</text>
     <text name="YouCannotBeFriendWithYourself">لا يمكنك مصادقة حسابك.</text>
     <text name="NewChatMessageEmail_Title">تفاصيل الرسالة</text>
@@ -413,8 +406,7 @@
     <text name="YouDontHaveAnyBlockedFriend">لا يوجد محظورين. للحظر, إختر المستخدم ثم قم بإختيار حظر من قائمة الإجراءات.</text>
     <text name="ChatUserSearch_Hint">
       <![CDATA[
-        للمستخدمين من نفس العميل ,إكتب إسم المتسخدم فقط
-   <br>
+        للمستخدمين من نفس العميل ,إكتب إسم المتسخدم فقط <br>
        <strong>[اسم العميل]\[اسم المستخدم]</strong> للمستخدمين من عملاء آخرين <br><br>
        مثال: <br>
        .\admin -> للمشرف العام المضيف <br>
@@ -441,6 +433,9 @@
     <text name="FilterByRole">تصفية حسب الدور</text>
     <text name="FilterOrAddUser">تصفية\إضافة مستخدم</text>
     <text name="HangfireDashboard" value="Hangfire dashboard" />
+    <text name="CouldNotCompleteLoginOperation">تعذر إكمال عملية تسجيل الدخول.</text>
+    <text name="UnAuthorizedOperation">عملية غير مصرح بها</text>
+    <text name="YouAreNotAuthorizedToPerformThisOperation">غير مصرح لك بتنفيذ هذه العملية.</text>
     <text name="TargetUserNotFoundProbablyDeleted">لم يتم العثور على المستخدم المطلوب. من المحتمل تم حذفه.</text>
     <text name="UserLockedOutMessage">تم قفل حساب المستخدم. الرجاء معاودة المحاولة في وقت لاحق.</text>
     <text name="SendSecurityCode">إرسال رمز الأمان.</text>
@@ -495,5 +490,122 @@
     <text name="File_Empty_Error">الرجاء إختيار ملف !</text>
     <text name="File_SizeLimit_Error">حجم الملف يتجاوز الحدود المسموح بها !</text>
     <text name="File_Invalid_Type_Error">نوع الملف غير صالح !</text>
+    <text name="MaximumUserCount">الحد الأقصى لعدد المستخدمين</text>
+    <text name="MaximumUserCount_Description">0 = غير محدود</text>
+    <text name="MaximumUserCount_Error_Message">وصلت إلى الحد الأقصى المسموح به للمستخدمين!</text>
+    <text name="MaximumUserCount_Error_Detail">يسمح لهذا العميل {0} مستخدم بحد أقصى.</text>
+    <text name="UnlockedTenandAdmin">تم إلغاء قفل المشرف {0}</text>
+    <text name="Email">البريد الإلكتروني</text>
+    <text name="EmailSecurityCodeSubject">رمز الحماية</text>
+    <text name="EmailSecurityCodeBody">رمز الحماية هو: {0}</text>
+    <text name="Sms">SMS - رسائل قصيرة</text>
+    <text name="SmsSecurityCodeMessage">رمز الحماية هو: {0}</text>
+    <text name="PasswordComplexity_RequireDigit_Hint">يجب أن تحتوي كلمات المرور على رقم واحد على الأقل ('0' - '9').</text>
+    <text name="PasswordComplexity_RequireLowercase_Hint">يجب أن تحتوي كلمات المرور على حرف صغير واحد على الأقل ('a' - 'z').</text>
+    <text name="PasswordComplexity_RequireNonAlphanumeric_Hint">يجب أن تحتوي كلمات المرور على حرف غير أبجدي وغير رقمي واحد على الأقل.</text>
+    <text name="PasswordComplexity_RequireUppercase_Hint">يجب أن تحتوي كلمات المرور على حرف واحد كبير على الأقل ('A' - 'Z').</text>
+    <text name="PasswordComplexity_RequiredLength_Hint">يجب أن تتكون كلمات المرور من {0} حرفا على الأقل.</text>
+    <text name="PasswordComplexity_RequireDigit">تتطلب أرقام</text>
+    <text name="PasswordComplexity_RequireLowercase">تتطلب أحرف صغيرة</text>
+    <text name="PasswordComplexity_RequireNonAlphanumeric">تتطلب أحرف غير أبجدية وغير رقمية</text>
+    <text name="PasswordComplexity_RequireUppercase">تتطلب أحرف كبيرة</text>
+    <text name="PasswordComplexity_RequiredLength">العدد المطلوب من الأحرف</text>
+    <text name="HostDashboardHeaderInfo">الإحصاءات العامة والأنشطة الأخيرة</text>
+    <text name="DashboardSampleStatistics">عينة من الإحصاءات</text>
+    <text name="DashboardSampleStatisticsHelpText">التقدم</text>
+    <text name="NewTenants">عملاء جدد</text>
+    <text name="NewSubscriptionAmount">مبلغ الاشتراك الجديد</text>
+    <text name="Income">دخل</text>
+    <text name="IncomeStatistics">إحصاءات الدخل</text>
+    <text name="ChangeDateRange">تغيير النطاق الزمني</text>
+    <text name="Daily">يومي</text>
+    <text name="Weekly">إسبوعي</text>
+    <text name="Monthly">شهري</text>
+    <text name="DateFormatShort">MM.dd.yyyy</text>
+    <text name="EditionStatistics">إحصاءات النسخة</text>
+    <text name="SubscriptionExpiringTenants">عملاء بإشتراكات تنتهي</text>
+    <text name="RemainingDay">الأيام المتبقية</text>
+    <text name="SeeAllRecords">الجميع</text>
+    <text name="RecentTenants">آخر العملاء</text>
+    <text name="RecentTenantsHelpText">آخر {1} من العملاء المسجلين في {0} يوما ...</text>
+    <text name="ExpiringTenantsHelpText">تنتهي صلاحية {1} من العملاء خلال {0} أيام ...</text>
+    <text name="NoData">لايوجد بيانات</text>
+    <text name="SubscriptionEndDate">تاريخ انتهاء الاشتراك</text>
+    <text name="TenantNameOrTenancyCode">إسم العميل \ كود العميل</text>
+    <text name="IncomeWithAmount">الدخل: {0}</text>
+    <text name="Subscription">الاشتراكات</text>
+    <text name="Extend">تمديد</text>
+    <text name="Upgrade">ترقية</text>
+    <text name="PaymentPeriodType">نوع فترة الدفع</text>
+    <text name="PaymentInfo">معلومات الدفع</text>
+    <text name="MonthlyPrice">السعر الشهري</text>
+    <text name="AnnualPrice">السعر السنوي</text>
+    <text name="StartUsingFree">بدء استخدام مجاني</text>
+    <text name="TryIt">تجربة</text>
+    <text name="Days">أيام</text>
+    <text name="PerMonth">كل شهر</text>
+    <text name="PerYear">كل سنة</text>
+    <text name="TestCheckFeature">اختبار ميزة الاختيار</text>
+    <text name="TestCheckFeature2">اختبار ميزة الاختيار 2</text>
+    <text name="Unlimited">غير محدود</text>
+    <text name="LatestPaymentAmount">أحدث مبلغ مدفوع</text>
+    <text name="Payment">دفعات</text>
+    <text name="Next">التالي</text>
+    <text name="Start">بدء</text>
+    <text name="FreeTrial">تجربة مجانية</text>
+    <text name="BuyNow">اشتري الآن</text>
+    <text name="WhatWillDoneAfterSubscriptionExpiry">ما الذي سيحدث بعد انتهاء صلاحية الاشتراك</text>
+    <text name="DeactiveTenant">تعطيل العميل</text>
+    <text name="AssignToAnotherEdition">تعيين إلى نسخة اخرى</text>
+    <text name="SubscriptionPrice">سعر الإشتراك</text>
+    <text name="Free">مجاني</text>
+    <text name="Paid">مدفوع</text>
+    <text name="IsTrialActive">يمكن التجربة</text>
+    <text name="TrialDayCount">عدد أيام التجربة</text>
+    <text name="WaitAfterSubscriptionExpireDate">انتظر بعد انتهاء صلاحية الاشتراك</text>
+    <text name="WaitingDayAfterExpire">أيام الانتظار بعد انتهاء الصلاحية</text>
+    <text name="DisplayOrder">DisplayOrder</text>
+    <text name="Annual">سنوي</text>
+    <text name="SubscriptionStartDate">تاريخ بدء الاشتراك</text>
+    <text name="Pricing">التسعير</text>
+    <text name="ClientIsRequestingYourPermission">{0} يطلب منك الإذن</text>
+    <text name="ApplicationAccess">الوصول إلى التطبيق</text>
+    <text name="RememberMyDecision">تذكر إختياري</text>
+    <text name="Allow">السماح</text>
+    <text name="DoNotAllow">لا تسمح</text>
+    <text name="Your user identifier">معرف المستخدم</text>
+    <text name="Required">مطلوب</text>
+    <text name="User profile">ملف المستخدم</text>
+    <text name="Your user profile information (first name, last name, etc.)">معلومات الملف الشخصي للمستخدم (الاسم الأول واسم العائلة وما إلى ذلك)</text>
+    <text name="Your email address">عنوان بريدك الإلكتروني</text>
+    <text name="Your phone number">رقم تليفونك</text>
+    <text name="Your postal address">عنوانك البريدي</text>
+    <text name="AllFunctionalityYouHaveInTheApplication">جميع الوظائف لديك في التطبيق</text>
+    <text name="Default (all) API">الافتراضي (الكل) API</text>
+    <text name="Offline Access">الوصول دون اتصال</text>
+    <text name="Access to your applications and resources, even when you are offline">الوصول إلى التطبيقات والموارد الخاصة بك، حتى عندما لاتكون متصلا</text>
+    <text name="Purchase">شراء</text>
+    <text name="Trial">تجربة</text>
+    <text name="IsDisabled">معطل</text>
+    <text name="ChartDateFormat">%m/%d/%Y</text>
+    <text name="ThereIsNoLoggedInUser">ليس هناك مستخدم مسجل.</text>
+    <text name="IsInTrialPeriod">حاليا في الفترة التجريبية؟</text>
+    <text name="FailedSubscriptionTerminations_Email_Subject">أخفاق في إنهاء الاشتراك</text>
+    <text name="FailedSubscriptionTerminations_Email_Body">فشل إنهاء الاشتراك للعملاء التاليين {0} في {1}. يمكنك العثور على رسائل الخطأ المفصلة في سجلات النظام.</text>
+    <text name="SubscriptionExpire_Email_Subject"> انتهت صلاحية اشتراك Admin</text>
+    <text name="SubscriptionExpire_Email_Body">انتهت صلاحية اشتراك Admin في {0}.</text>
+    <text name="UnlimitedTimeSubscription">اشتراك غير محدود</text>
+    <text name="SubscriptionEndDateUtc">تاريخ انتهاء الاشتراك (التوقيت العالمي)</text>
+    <text name="ExpiringEditionMustBeAFreeEdition">يجب أن تكون النسخة التي تنتهي صلاحيتها نسخة مجانية</text>
+    <text name="ThisEditionIsUsedAsAnExpiringEdition">يتم استخدام هذه النسخة كنسخة تنتهي صلاحيتها لنسخة أخرى. إذا كنت تريد جعل هذه النسخة مدفوعة، يجب عليك أولا إزالتها من النسخ الأخرى.</text>
+    <text name="UpgradedTo">تمت الترقية إلى النسخة {0}</text>
+    <text name="ExtendedEdition">تم تمديد النسخة {0}</text>
+    <text name="TrialSubscriptionNotification">أنت في الفترة التجريبية لنسخة {0}، {1} للشراء.</text>
+    <text name="SubscriptionExpireNotification">سينتهي اشتراكك خلال {0} أيام.</text>
+    <text name="TrialExpireNotification">ستنتهي الفترة التجريبية خلال {0} أيام.</text>
+    <text name="CanNotUpgradeSubscriptionSinceTenantHasNoEditionAssigned">لا يمكن ترقية الاشتراك لأن العميل لم يعين نسخة.</text>
+    <text name="PaymentCouldNotCompleted">تعذر إتمام الدفع</text>
+    <text name="TenantEditionIsNotAssigned">لم يتم تعيين نسخة العميل</text>
+    <text name="FreeEditionsCannotHaveTrialVersions">لا يمكن أن يكون للنسخ المجانية فترة تجريبية</text>
   </texts>
 </localizationDictionary>

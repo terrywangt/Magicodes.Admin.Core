@@ -27,7 +27,7 @@ namespace Magicodes.Admin.Web.Security.Recaptcha
             var httpContext = _httpContextAccessor.HttpContext;
             if (httpContext == null)
             {
-                throw new ApplicationException("RecaptchaValidator should be used in a valid HTTP context!");
+                throw new Exception("RecaptchaValidator should be used in a valid HTTP context!");
             }
 
             if (captchaResponse.IsNullOrEmpty())

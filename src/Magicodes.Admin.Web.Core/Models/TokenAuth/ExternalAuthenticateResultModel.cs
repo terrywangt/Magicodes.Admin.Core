@@ -9,5 +9,7 @@ namespace Magicodes.Admin.Web.Models.TokenAuth
         public int ExpireInSeconds { get; set; }
 
         public bool WaitingForActivation { get; set; }
+
+        public string ReturnUrl { get; set; }
     }
 }

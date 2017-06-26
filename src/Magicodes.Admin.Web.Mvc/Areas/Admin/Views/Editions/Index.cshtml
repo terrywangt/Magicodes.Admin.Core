@@ -1,7 +1,6 @@
 ﻿@using System.Threading.Tasks
 @using Magicodes.Admin.Authorization
 @using Magicodes.Admin.Web.Areas.Admin.Startup
-@using Magicodes.Admin.Web.Startup
 @{
     ViewBag.CurrentPageName = AdminPageNames.Host.Editions;
 }
@@ -21,12 +20,14 @@
 @section Scripts
 {
     <environment names="Development">
+        <script src="~/lib/inputmask/dist/jquery.inputmask.bundle.js" asp-append-version="true"></script>
         <script src="~/view-resources/Areas/Admin/Views/Common/_FeaturesTree.js" asp-append-version="true"></script>
         <script src="~/view-resources/Areas/Admin/Views/Editions/_CreateOrEditModal.js" asp-append-version="true"></script>
         <script src="~/view-resources/Areas/Admin/Views/Editions/Index.js" asp-append-version="true"></script>
     </environment>
 
     <environment names="Staging,Production">
+        <script src="~/lib/inputmask/dist/min/jquery.inputmask.bundle.min.js" asp-append-version="true"></script>
         <script src="~/view-resources/Areas/Admin/Views/Common/_FeaturesTree.min.js" asp-append-version="true"></script>
         <script src="~/view-resources/Areas/Admin/Views/Editions/_CreateOrEditModal.min.js" asp-append-version="true"></script>
         <script src="~/view-resources/Areas/Admin/Views/Editions/Index.min.js" asp-append-version="true"></script>

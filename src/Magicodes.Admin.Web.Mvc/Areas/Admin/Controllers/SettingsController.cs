@@ -47,7 +47,9 @@ namespace Magicodes.Admin.Web.Areas.Admin.Controllers
                 SelectedTimezoneId = await SettingManager.GetSettingValueForTenantAsync(TimingSettingNames.TimeZone, AbpSession.GetTenantId())
             });
 
-            ViewBag.CurrentUserEmail = await _userManager.GetEmailAsync(AbpSession.GetUserId());
+            var user = await _userManager.GetUserAsync(AbpSession.ToUserIdentifier());
+
+            ViewBag.CurrentUserEmail = user.EmailAddress;
 
             var model = new SettingsViewModel
             {

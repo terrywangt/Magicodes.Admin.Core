@@ -1,8 +1,8 @@
-﻿using System.Data.Entity;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Abp.Collections.Extensions;
 using Abp.UI;
+using Microsoft.EntityFrameworkCore;
 using Magicodes.Admin.Authorization.Roles;
 using Magicodes.Admin.Authorization.Users.Dto;
 using Magicodes.Admin.MultiTenancy;
@@ -69,16 +69,16 @@ namespace Magicodes.Admin.Tests.Authorization.Users
                         Name = name,
                         Surname = surname,
                         UserName = userName,
-                        Password = "123qwe"
+                        Password = "123qwE*"
                     },
                     AssignedRoleNames = roleNames
                 });
 
             //Assert
-            await UsingDbContext(async context =>
+            await UsingDbContextAsync(async context =>
             {
                 //Get created user
-                var createdUser = await context.Users.FirstOrDefaultAsync(u => u.UserName == userName);
+                var createdUser = await context.Users.Include(u => u.Roles).FirstOrDefaultAsync(u => u.UserName == userName);
                 createdUser.ShouldNotBe(null);
 
                 //Check some properties

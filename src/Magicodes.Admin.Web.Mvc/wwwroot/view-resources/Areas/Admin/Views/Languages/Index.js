@@ -36,43 +36,43 @@
                 actions: {
                     title: app.localize('Actions'),
                     width: '30%',
-                    display: function (data) {
-                        var $span = $('<span></span>');
-
-                        if (_permissions.edit && data.record.tenantId == abp.session.tenantId) {
-                            $('<button class="btn btn-default btn-xs" title="' + app.localize('Edit') + '"><i class="fa fa-edit"></i></button>')
-                                .appendTo($span)
-                                .click(function () {
-                                    _createOrEditModal.open({ id: data.record.id });
-                                });
+                    sorting: false,
+                    type: 'record-actions',
+                    cssClass: 'btn btn-xs btn-primary blue',
+                    text: '<i class="fa fa-cog"></i> ' + app.localize('Actions') + ' <span class="caret"></span>',
+                    items: [{
+                        text: app.localize('Edit'),
+                        visible: function (data) {
+                            return _permissions.edit && data.record.tenantId === abp.session.tenantId;
+                        },
+                        action: function (data) {
+                            _createOrEditModal.open({ id: data.record.id });
                         }
-
-                        if (_permissions.changeTexts) {
-                            $('<a href="' + abp.appPath + "Admin/Languages/Texts?languageName=" + data.record.name + '" class="btn btn-default btn-xs" title="' + app.localize('ChangeTexts') + '"><i class="fa fa-bars"></i></a>')
-                                .appendTo($span)
-                                .click(function () {
-                                    changeTexts(data.record);
-                                });
+                    }, {
+                        text: app.localize('ChangeTexts'),
+                        visible: function () {
+                            return _permissions.changeTexts;
+                        },
+                        action: function (data) {
+                            document.location.href = abp.appPath + "Admin/Languages/Texts?languageName=" + data.record.name;
                         }
-
-                        if (_permissions.edit) {
-                            $('<button class="btn btn-default btn-xs" title="' + app.localize('SetAsDefaultLanguage') + '"><i class="fa fa-check"></i></button>')
-                                .appendTo($span)
-                                .click(function () {
-                                    setAsDefaultLanguage(data.record);
-                                });
+                    }, {
+                        text: app.localize('SetAsDefaultLanguage'),
+                        visible: function () {
+                            return _permissions.edit;
+                        },
+                        action: function (data) {
+                            setAsDefaultLanguage(data.record);
                         }
-
-                        if (_permissions.delete && data.record.tenantId == abp.session.tenantId) {
-                            $('<button class="btn btn-default btn-xs" title="' + app.localize('Delete') + '"><i class="fa fa-trash-o"></i></button>')
-                                .appendTo($span)
-                                .click(function () {
-                                    deleteLanguage(data.record);
-                                });
+                    }, {
+                        text: app.localize('Delete'),
+                        visible: function (data) {
+                            return _permissions.delete && data.record.tenantId === abp.session.tenantId;
+                        },
+                        action: function (data) {
+                            deleteLanguage(data.record);
                         }
-
-                        return $span;
-                    }
+                    }]
                 },
                 displayName: {
                     title: app.localize('Name'),
@@ -113,10 +113,21 @@
                     display: function (data) {
                         return moment(data.record.creationTime).format('L');
                     }
+                },
+                isDisabled: {
+                    title: app.localize('IsDisabled'),
+                    width: '8%',
+                    display: function (data) {
+                        if (data.record.isDisabled) {
+                            return '<span class="label label-default">' + app.localize('Yes') + '</span>';
+                        } else {
+                            return '<span class="label label-success">' + app.localize('No') + '</span>';
+                        }
+                    }
                 }
             },
 
-            recordsLoaded: function(event, data) {
+            recordsLoaded: function (event, data) {
                 _defaultLanguageName = data.serverResponse.originalResult.defaultLanguageName;
                 _$languagesTable
                     .find('[data-language-name=' + _defaultLanguageName + ']')

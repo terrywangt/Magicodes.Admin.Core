@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Abp.Application.Services.Dto;
-using Abp.Authorization.Users;
+using Abp.Authorization;
 using Magicodes.Admin.Authorization;
 using Magicodes.Admin.Authorization.Users;
 using Magicodes.Admin.MultiTenancy;
@@ -27,10 +27,11 @@ namespace Magicodes.Admin.Tests.Authorization.Users
         {
             //Arrange
 
+            await _userManager.InitializeOptionsAsync(AbpSession.TenantId);
             var user = await GetUserByUserNameAsync("jnash");
 
             //Pre conditions
-            (await _userManager.IsLockedOutAsync(user.Id)).ShouldBeFalse();
+            (await _userManager.IsLockedOutAsync(user)).ShouldBeFalse();
             user.IsLockoutEnabled.ShouldBeTrue();
 
             //Try wrong password until lockout
@@ -40,7 +41,7 @@ namespace Magicodes.Admin.Tests.Authorization.Users
                 loginResultType = (await _loginManager.LoginAsync(user.UserName, "wrong-password", Tenant.DefaultTenantName)).Result;
             } while (loginResultType != AbpLoginResultType.LockedOut);
 
-            (await _userManager.IsLockedOutAsync(user.Id)).ShouldBeTrue();
+            (await _userManager.IsLockedOutAsync(await GetUserByUserNameAsync("jnash"))).ShouldBeTrue();
 
             //Act
 

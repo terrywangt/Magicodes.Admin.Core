@@ -383,12 +383,6 @@
     <text name="Role">角色</text>
     <text name="Security">安全</text>
     <text name="PasswordComplexity">密码复杂性</text>
-    <text name="MinPasswordLength">最小密码长度</text>
-    <text name="MaxPasswordLength">最大密码长度</text>
-    <text name="UseNumbers">在密码中使用数字</text>
-    <text name="UseUpperCaseLetters">在密码中使用大写字母</text>
-    <text name="UseLowerCaseLetters">在密码中使用小写字母</text>
-    <text name="UsePunctuations">在密码中使用特殊字符</text>
     <text name="UseDefaultSettings">使用默认设置</text>
     <text name="PasswordComplexityNotSatisfied">过于简单的密码。</text>
     <text name="PasswordComplexity_MinLength_Hint">密码必须包含 {0} 个字符</text>

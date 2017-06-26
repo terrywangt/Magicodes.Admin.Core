@@ -1,82 +1,91 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using Abp.Authorization;
 using Abp.Authorization.Users;
-using Abp.AutoMapper;
 using Abp.Configuration;
 using Abp.Configuration.Startup;
 using Abp.Domain.Uow;
 using Abp.Extensions;
 using Abp.UI;
-using Abp.Zero.Configuration;
-using Magicodes.Admin.Configuration;
-using Magicodes.Admin.Debugging;
-using Magicodes.Admin.Web.Models.TenantRegistration;
 using Microsoft.AspNetCore.Mvc;
 using Magicodes.Admin.Authorization;
 using Magicodes.Admin.Authorization.Users;
-using Magicodes.Admin.Editions;
+using Magicodes.Admin.Configuration;
+using Magicodes.Admin.Debugging;
+using Magicodes.Admin.Identity;
 using Magicodes.Admin.MultiTenancy;
 using Magicodes.Admin.MultiTenancy.Dto;
-using Magicodes.Admin.Notifications;
-using Magicodes.Admin.Security.Recaptcha;
+using Magicodes.Admin.MultiTenancy.Payments;
+using Magicodes.Admin.Security;
 using Magicodes.Admin.Url;
-using Magicodes.Admin.Web.Identity;
 using Magicodes.Admin.Web.Security.Recaptcha;
-using Magicodes.Admin.Web.Url;
+using System.Threading.Tasks;
+using Magicodes.Admin.Editions;
+using Magicodes.Admin.MultiTenancy.Payments.Dto;
+using Magicodes.Admin.Web.Models.TenantRegistration;
 
 namespace Magicodes.Admin.Web.Controllers
 {
     public class TenantRegistrationController : AdminControllerBase
     {
         private readonly IMultiTenancyConfig _multiTenancyConfig;
-        private readonly TenantManager _tenantManager;
         private readonly UserManager _userManager;
-        private readonly EditionManager _editionManager;
-        private readonly IAppNotifier _appNotifier;
         private readonly AbpLoginResultTypeHelper _abpLoginResultTypeHelper;
         private readonly LogInManager _logInManager;
         private readonly SignInManager _signInManager;
-        private readonly IRecaptchaValidator _recaptchaValidator;
-        private readonly IAppUrlService _appUrlService;
         private readonly IWebUrlService _webUrlService;
         private readonly ITenantRegistrationAppService _tenantRegistrationAppService;
+        private readonly IPasswordComplexitySettingStore _passwordComplexitySettingStore;
+        private readonly EditionManager _editionManager;
 
         public TenantRegistrationController(
             IMultiTenancyConfig multiTenancyConfig,
-            TenantManager tenantManager,
-            EditionManager editionManager,
-            IAppNotifier appNotifier,
             UserManager userManager,
             AbpLoginResultTypeHelper abpLoginResultTypeHelper,
             LogInManager logInManager,
             SignInManager signInManager,
-            IRecaptchaValidator recaptchaValidator,
-            IAppUrlService appUrlService,
-            IWebUrlService webUrlService, 
-            ITenantRegistrationAppService tenantRegistrationAppService)
+            IWebUrlService webUrlService,
+            ITenantRegistrationAppService tenantRegistrationAppService,
+            IPasswordComplexitySettingStore passwordComplexitySettingStore, 
+            EditionManager editionManager)
         {
             _multiTenancyConfig = multiTenancyConfig;
-            _tenantManager = tenantManager;
-            _editionManager = editionManager;
-            _appNotifier = appNotifier;
             _userManager = userManager;
             _abpLoginResultTypeHelper = abpLoginResultTypeHelper;
             _logInManager = logInManager;
             _signInManager = signInManager;
-            _recaptchaValidator = recaptchaValidator;
-            _appUrlService = appUrlService;
             _webUrlService = webUrlService;
             _tenantRegistrationAppService = tenantRegistrationAppService;
+            _passwordComplexitySettingStore = passwordComplexitySettingStore;
+            _editionManager = editionManager;
         }
 
-        public ActionResult Index()
+        public async Task<ActionResult> SelectEdition()
+        {
+            var output = await _tenantRegistrationAppService.GetEditionsForSelect();
+            var model = new EditionsSelectViewModel(output);
+
+            return View(model);
+        }
+
+        public async Task<ActionResult> Register(int editionId, SubscriptionStartType subscriptionStartType, SubscriptionPaymentGatewayType? gateway = null, string paymentId = "")
         {
             CheckTenantRegistrationIsEnabled();
 
-            ViewBag.UseCaptcha = UseCaptchaOnRegistration();
-            ViewBag.PasswordComplexitySetting = SettingManager.GetSettingValue(AppSettings.Security.PasswordComplexity).Replace("\"", "");
+            var edition = await _tenantRegistrationAppService.GetEdition(editionId);
 
-            return View();
+            var model = new TenantRegisterViewModel
+            {
+                PasswordComplexitySetting = await _passwordComplexitySettingStore.GetSettingsAsync(),
+                EditionId = editionId,
+                SubscriptionStartType = subscriptionStartType,
+                Edition = edition,
+                EditionPaymentType = EditionPaymentType.NewRegistration,
+                Gateway = gateway,
+                PaymentId = paymentId
+            };
+
+            ViewBag.UseCaptcha = UseCaptchaOnRegistration();
+
+            return View(model);
         }
 
         [HttpPost]
@@ -91,10 +100,10 @@ namespace Magicodes.Admin.Web.Controllers
                 }
 
                 var result = await _tenantRegistrationAppService.RegisterTenant(model);
-                
+
                 CurrentUnitOfWork.SetTenantId(result.TenantId);
 
-                var user = await _userManager.FindByNameAsync(Authorization.Users.User.AdminUserName);
+                var user = await _userManager.FindByNameAsync(AbpUserBase.AdminUserName);
 
                 //Directly login if possible
                 if (result.IsTenantActive && result.IsActive && !result.IsEmailConfirmationRequired &&
@@ -104,7 +113,10 @@ namespace Magicodes.Admin.Web.Controllers
 
                     if (loginResult.Result == AbpLoginResultType.Success)
                     {
-                        await _signInManager.SignOutAllAndSignInAsync(loginResult.Identity);
+                        await _signInManager.SignOutAsync();
+                        await _signInManager.SignInAsync(loginResult.Identity, false);
+
+                        SetTenantIdCookie(result.TenantId);
 
                         return Redirect(Url.Action("Index", "Home", new { area = "Admin" }));
                     }
@@ -113,7 +125,7 @@ namespace Magicodes.Admin.Web.Controllers
                 }
 
                 //Show result page
-                var resultModel = result.MapTo<TenantRegisterResultViewModel>();
+                var resultModel = ObjectMapper.Map<TenantRegisterResultViewModel>(result);
 
                 resultModel.TenantLoginAddress = _webUrlService.SupportsTenancyNameInUrl
                     ? _webUrlService.GetSiteRootAddress(model.TenancyName).EnsureEndsWith('/') + "Account/Login"
@@ -126,7 +138,19 @@ namespace Magicodes.Admin.Web.Controllers
                 ViewBag.UseCaptcha = UseCaptchaOnRegistration();
                 ViewBag.ErrorMessage = ex.Message;
 
-                return View("Index", model);
+                var edition = await _tenantRegistrationAppService.GetEdition(model.EditionId);
+                var viewModel = new TenantRegisterViewModel
+                {
+                    PasswordComplexitySetting = await _passwordComplexitySettingStore.GetSettingsAsync(),
+                    EditionId = model.EditionId,
+                    SubscriptionStartType = model.SubscriptionStartType,
+                    Edition = edition,
+                    EditionPaymentType = EditionPaymentType.NewRegistration,
+                    Gateway = model.Gateway,
+                    PaymentId = model.PaymentId
+                };
+
+                return View("Register", viewModel);
             }
         }
 

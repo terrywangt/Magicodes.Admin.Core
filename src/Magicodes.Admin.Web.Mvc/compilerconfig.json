@@ -56,11 +56,7 @@
     "inputFile": "wwwroot/Common/Styles/core.less"
   },
   {
-    "outputFile": "wwwroot/view-resources/Areas/Admin/Views/Home/Index.es5.js",
-    "inputFile": "wwwroot/view-resources/Areas/Admin/Views/Home/Index.js"
-  },
-  {
-    "outputFile": "wwwroot/view-resources/Areas/Admin/Views/Home/index.css",
-    "inputFile": "wwwroot/view-resources/Areas/Admin/Views/Home/index.less"
+    "outputFile": "wwwroot/view-resources/Areas/Admin/Views/HostDashboard/Index.css",
+    "inputFile": "wwwroot/view-resources/Areas/Admin/Views/HostDashboard/Index.less"
   }
 ]

@@ -4,19 +4,19 @@ using Abp.Authorization;
 using Abp.Configuration;
 using Abp.Configuration.Startup;
 using Abp.Extensions;
-using Abp.Json;
 using Abp.Net.Mail;
 using Abp.Runtime.Session;
 using Abp.Timing;
 using Abp.Zero.Configuration;
-using Abp.Zero.Ldap.Configuration;
 using Magicodes.Admin.Authorization;
 using Magicodes.Admin.Configuration.Host.Dto;
 using Magicodes.Admin.Configuration.Tenants.Dto;
 using Magicodes.Admin.Security;
 using Magicodes.Admin.Storage;
 using Magicodes.Admin.Timing;
-using Newtonsoft.Json;
+#if FEATURE_LDAP
+using Abp.Zero.Ldap.Configuration;
+#endif
 
 namespace Magicodes.Admin.Configuration.Tenants
 {
@@ -24,24 +24,31 @@ namespace Magicodes.Admin.Configuration.Tenants
     public class TenantSettingsAppService : SettingsAppServiceBase, ITenantSettingsAppService
     {
         private readonly IMultiTenancyConfig _multiTenancyConfig;
-        private readonly IAbpZeroLdapModuleConfig _ldapModuleConfig;
         private readonly ITimeZoneService _timeZoneService;
         private readonly IBinaryObjectManager _binaryObjectManager;
-        
+
+#if FEATURE_LDAP
+        private readonly IAbpZeroLdapModuleConfig _ldapModuleConfig;
+#endif
+
         public TenantSettingsAppService(
-            IMultiTenancyConfig multiTenancyConfig,
+#if FEATURE_LDAP
             IAbpZeroLdapModuleConfig ldapModuleConfig,
+#endif
+            IMultiTenancyConfig multiTenancyConfig,
             ITimeZoneService timeZoneService,
             IEmailSender emailSender, 
             IBinaryObjectManager binaryObjectManager) : base(emailSender)
         {
             _multiTenancyConfig = multiTenancyConfig;
+#if FEATURE_LDAP
             _ldapModuleConfig = ldapModuleConfig;
+#endif
             _timeZoneService = timeZoneService;
             _binaryObjectManager = binaryObjectManager;
         }
 
-        #region Get Settings
+#region Get Settings
 
         public async Task<TenantSettingsEditDto> GetAllSettings()
         {
@@ -60,6 +67,7 @@ namespace Magicodes.Admin.Configuration.Tenants
             {
                 settings.Email = await GetEmailSettingsAsync();
 
+#if FEATURE_LDAP
                 if (_ldapModuleConfig.IsEnabled)
                 {
                     settings.Ldap = await GetLdapSettingsAsync();
@@ -68,11 +76,15 @@ namespace Magicodes.Admin.Configuration.Tenants
                 {
                     settings.Ldap = new LdapSettingsEditDto { IsModuleEnabled = false };
                 }
+#else
+                settings.Ldap = new LdapSettingsEditDto { IsModuleEnabled = false };
+#endif
             }
 
             return settings;
         }
 
+#if FEATURE_LDAP
         private async Task<LdapSettingsEditDto> GetLdapSettingsAsync()
         {
             return new LdapSettingsEditDto
@@ -84,6 +96,7 @@ namespace Magicodes.Admin.Configuration.Tenants
                 Password = await SettingManager.GetSettingValueAsync(LdapSettingNames.Password),
             };
         }
+#endif
 
         private async Task<EmailSettingsEditDto> GetEmailSettingsAsync()
         {
@@ -136,20 +149,32 @@ namespace Magicodes.Admin.Configuration.Tenants
 
         private async Task<SecuritySettingsEditDto> GetSecuritySettingsAsync()
         {
-            var passwordComplexitySetting = await SettingManager.GetSettingValueAsync(AppSettings.Security.PasswordComplexity);
-            var defaultPasswordComplexitySetting = await SettingManager.GetSettingValueForApplicationAsync(AppSettings.Security.PasswordComplexity);
-
-            var settings = new SecuritySettingsEditDto
+            var passwordComplexitySetting = new PasswordComplexitySetting
             {
-                UseDefaultPasswordComplexitySettings = passwordComplexitySetting == defaultPasswordComplexitySetting,
-                PasswordComplexity = JsonConvert.DeserializeObject<PasswordComplexitySetting>(passwordComplexitySetting),
-                DefaultPasswordComplexity = JsonConvert.DeserializeObject<PasswordComplexitySetting>(defaultPasswordComplexitySetting),
-                UserLockOut = await GetUserLockOutSettingsAsync()
+                RequireDigit = await SettingManager.GetSettingValueAsync<bool>(AbpZeroSettingNames.UserManagement.PasswordComplexity.RequireDigit),
+                RequireLowercase = await SettingManager.GetSettingValueAsync<bool>(AbpZeroSettingNames.UserManagement.PasswordComplexity.RequireLowercase),
+                RequireNonAlphanumeric = await SettingManager.GetSettingValueAsync<bool>(AbpZeroSettingNames.UserManagement.PasswordComplexity.RequireNonAlphanumeric),
+                RequireUppercase = await SettingManager.GetSettingValueAsync<bool>(AbpZeroSettingNames.UserManagement.PasswordComplexity.RequireUppercase),
+                RequiredLength = await SettingManager.GetSettingValueAsync<int>(AbpZeroSettingNames.UserManagement.PasswordComplexity.RequiredLength)
             };
 
-            settings.TwoFactorLogin = await GetTwoFactorLoginSettingsAsync();
+            var defaultPasswordComplexitySetting = new PasswordComplexitySetting
+            {
+                RequireDigit = await SettingManager.GetSettingValueForApplicationAsync<bool>(AbpZeroSettingNames.UserManagement.PasswordComplexity.RequireDigit),
+                RequireLowercase = await SettingManager.GetSettingValueForApplicationAsync<bool>(AbpZeroSettingNames.UserManagement.PasswordComplexity.RequireLowercase),
+                RequireNonAlphanumeric = await SettingManager.GetSettingValueForApplicationAsync<bool>(AbpZeroSettingNames.UserManagement.PasswordComplexity.RequireNonAlphanumeric),
+                RequireUppercase = await SettingManager.GetSettingValueForApplicationAsync<bool>(AbpZeroSettingNames.UserManagement.PasswordComplexity.RequireUppercase),
+                RequiredLength = await SettingManager.GetSettingValueForApplicationAsync<int>(AbpZeroSettingNames.UserManagement.PasswordComplexity.RequiredLength)
+            };
 
-            return settings;
+            return new SecuritySettingsEditDto
+            {
+                UseDefaultPasswordComplexitySettings = passwordComplexitySetting.Equals(defaultPasswordComplexitySetting),
+                PasswordComplexity = passwordComplexitySetting,
+                DefaultPasswordComplexity = defaultPasswordComplexitySetting,
+                UserLockOut = await GetUserLockOutSettingsAsync(),
+                TwoFactorLogin = await GetTwoFactorLoginSettingsAsync()
+            };
         }
 
         private async Task<UserLockOutSettingsEditDto> GetUserLockOutSettingsAsync()
@@ -191,9 +216,9 @@ namespace Magicodes.Admin.Configuration.Tenants
             return settings;
         }
 
-        #endregion
+#endregion
 
-        #region Update Settings
+#region Update Settings
 
         public async Task UpdateAllSettings(TenantSettingsEditDto input)
         {
@@ -220,20 +245,24 @@ namespace Magicodes.Admin.Configuration.Tenants
 
                 await UpdateEmailSettingsAsync(input.Email);
 
+#if FEATURE_LDAP
                 if (_ldapModuleConfig.IsEnabled)
                 {
                     await UpdateLdapSettingsAsync(input.Ldap);
                 }
+#endif
             }
         }
 
+#if FEATURE_LDAP
         private async Task UpdateLdapSettingsAsync(LdapSettingsEditDto input)
         {
-            await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), LdapSettingNames.IsEnabled, input.IsEnabled.ToString(CultureInfo.InvariantCulture).ToLower(CultureInfo.InvariantCulture));
+            await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), LdapSettingNames.IsEnabled, input.IsEnabled.ToString().ToLowerInvariant());
             await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), LdapSettingNames.Domain, input.Domain.IsNullOrWhiteSpace() ? null : input.Domain);
             await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), LdapSettingNames.UserName, input.UserName.IsNullOrWhiteSpace() ? null : input.UserName);
             await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), LdapSettingNames.Password, input.Password.IsNullOrWhiteSpace() ? null : input.Password);
         }
+#endif
 
         private async Task UpdateEmailSettingsAsync(EmailSettingsEditDto input)
         {
@@ -244,8 +273,8 @@ namespace Magicodes.Admin.Configuration.Tenants
             await SettingManager.ChangeSettingForApplicationAsync(EmailSettingNames.Smtp.UserName, input.SmtpUserName);
             await SettingManager.ChangeSettingForApplicationAsync(EmailSettingNames.Smtp.Password, input.SmtpPassword);
             await SettingManager.ChangeSettingForApplicationAsync(EmailSettingNames.Smtp.Domain, input.SmtpDomain);
-            await SettingManager.ChangeSettingForApplicationAsync(EmailSettingNames.Smtp.EnableSsl, input.SmtpEnableSsl.ToString(CultureInfo.InvariantCulture).ToLower(CultureInfo.InvariantCulture));
-            await SettingManager.ChangeSettingForApplicationAsync(EmailSettingNames.Smtp.UseDefaultCredentials, input.SmtpUseDefaultCredentials.ToString(CultureInfo.InvariantCulture).ToLower(CultureInfo.InvariantCulture));
+            await SettingManager.ChangeSettingForApplicationAsync(EmailSettingNames.Smtp.EnableSsl, input.SmtpEnableSsl.ToString().ToLowerInvariant());
+            await SettingManager.ChangeSettingForApplicationAsync(EmailSettingNames.Smtp.UseDefaultCredentials, input.SmtpUseDefaultCredentials.ToString().ToLowerInvariant());
         }
 
         private async Task UpdateUserManagementSettingsAsync(TenantUserManagementSettingsEditDto settings)
@@ -253,23 +282,23 @@ namespace Magicodes.Admin.Configuration.Tenants
             await SettingManager.ChangeSettingForTenantAsync(
                 AbpSession.GetTenantId(),
                 AppSettings.UserManagement.AllowSelfRegistration,
-                settings.AllowSelfRegistration.ToString(CultureInfo.InvariantCulture).ToLower(CultureInfo.InvariantCulture)
+                settings.AllowSelfRegistration.ToString().ToLowerInvariant()
             );
             await SettingManager.ChangeSettingForTenantAsync(
                 AbpSession.GetTenantId(),
                 AppSettings.UserManagement.IsNewRegisteredUserActiveByDefault,
-                settings.IsNewRegisteredUserActiveByDefault.ToString(CultureInfo.InvariantCulture).ToLower(CultureInfo.InvariantCulture)
+                settings.IsNewRegisteredUserActiveByDefault.ToString().ToLowerInvariant()
             );
 
             await SettingManager.ChangeSettingForTenantAsync(
                 AbpSession.GetTenantId(),
                 AbpZeroSettingNames.UserManagement.IsEmailConfirmationRequiredForLogin,
-                settings.IsEmailConfirmationRequiredForLogin.ToString(CultureInfo.InvariantCulture).ToLower(CultureInfo.InvariantCulture)
+                settings.IsEmailConfirmationRequiredForLogin.ToString().ToLowerInvariant()
             );
             await SettingManager.ChangeSettingForTenantAsync(
                 AbpSession.GetTenantId(),
                 AppSettings.UserManagement.UseCaptchaOnRegistration,
-                settings.UseCaptchaOnRegistration.ToString(CultureInfo.InvariantCulture).ToLower(CultureInfo.InvariantCulture)
+                settings.UseCaptchaOnRegistration.ToString().ToLowerInvariant()
             );
         }
 
@@ -277,28 +306,53 @@ namespace Magicodes.Admin.Configuration.Tenants
         {
             if (settings.UseDefaultPasswordComplexitySettings)
             {
-                await SettingManager.ChangeSettingForTenantAsync(
-                    AbpSession.GetTenantId(),
-                    AppSettings.Security.PasswordComplexity,
-                    settings.DefaultPasswordComplexity.ToJsonString()
-                );
+                await UpdatePasswordComplexitySettingsAsync(settings.DefaultPasswordComplexity);
             }
             else
             {
-                await SettingManager.ChangeSettingForTenantAsync(
-                    AbpSession.GetTenantId(),
-                    AppSettings.Security.PasswordComplexity,
-                    settings.PasswordComplexity.ToJsonString()
-                );
+                await UpdatePasswordComplexitySettingsAsync(settings.PasswordComplexity);
             }
 
             await UpdateUserLockOutSettingsAsync(settings.UserLockOut);
             await UpdateTwoFactorLoginSettingsAsync(settings.TwoFactorLogin);
         }
 
+        private async Task UpdatePasswordComplexitySettingsAsync(PasswordComplexitySetting settings)
+        {
+            await SettingManager.ChangeSettingForTenantAsync(
+                AbpSession.GetTenantId(),
+                AbpZeroSettingNames.UserManagement.PasswordComplexity.RequireDigit,
+                settings.RequireDigit.ToString()
+            );
+
+            await SettingManager.ChangeSettingForTenantAsync(
+                AbpSession.GetTenantId(),
+                AbpZeroSettingNames.UserManagement.PasswordComplexity.RequireLowercase,
+                settings.RequireLowercase.ToString()
+            );
+
+            await SettingManager.ChangeSettingForTenantAsync(
+                AbpSession.GetTenantId(),
+                AbpZeroSettingNames.UserManagement.PasswordComplexity.RequireNonAlphanumeric,
+                settings.RequireNonAlphanumeric.ToString()
+            );
+
+            await SettingManager.ChangeSettingForTenantAsync(
+                AbpSession.GetTenantId(),
+                AbpZeroSettingNames.UserManagement.PasswordComplexity.RequireUppercase,
+                settings.RequireUppercase.ToString()
+            );
+
+            await SettingManager.ChangeSettingForTenantAsync(
+                AbpSession.GetTenantId(),
+                AbpZeroSettingNames.UserManagement.PasswordComplexity.RequiredLength,
+                settings.RequiredLength.ToString()
+            );
+        }
+
         private async Task UpdateUserLockOutSettingsAsync(UserLockOutSettingsEditDto settings)
         {
-            await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), AbpZeroSettingNames.UserManagement.UserLockOut.IsEnabled, settings.IsEnabled.ToString(CultureInfo.InvariantCulture).ToLower());
+            await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), AbpZeroSettingNames.UserManagement.UserLockOut.IsEnabled, settings.IsEnabled.ToString().ToLowerInvariant());
             await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), AbpZeroSettingNames.UserManagement.UserLockOut.DefaultAccountLockoutSeconds, settings.DefaultAccountLockoutSeconds.ToString());
             await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), AbpZeroSettingNames.UserManagement.UserLockOut.MaxFailedAccessAttemptsBeforeLockout, settings.MaxFailedAccessAttemptsBeforeLockout.ToString());
         }
@@ -311,20 +365,20 @@ namespace Magicodes.Admin.Configuration.Tenants
                 return;
             }
 
-            await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), AbpZeroSettingNames.UserManagement.TwoFactorLogin.IsEnabled, settings.IsEnabled.ToString(CultureInfo.InvariantCulture).ToLower());
-            await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), AbpZeroSettingNames.UserManagement.TwoFactorLogin.IsRememberBrowserEnabled, settings.IsRememberBrowserEnabled.ToString(CultureInfo.InvariantCulture).ToLower());
+            await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), AbpZeroSettingNames.UserManagement.TwoFactorLogin.IsEnabled, settings.IsEnabled.ToString().ToLowerInvariant());
+            await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), AbpZeroSettingNames.UserManagement.TwoFactorLogin.IsRememberBrowserEnabled, settings.IsRememberBrowserEnabled.ToString().ToLowerInvariant());
 
             if (!_multiTenancyConfig.IsEnabled)
             {
                 //These settings can only be changed by host, in a multitenant application.
-                await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), AbpZeroSettingNames.UserManagement.TwoFactorLogin.IsEmailProviderEnabled, settings.IsEmailProviderEnabled.ToString(CultureInfo.InvariantCulture).ToLower());
-                await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), AbpZeroSettingNames.UserManagement.TwoFactorLogin.IsSmsProviderEnabled, settings.IsSmsProviderEnabled.ToString(CultureInfo.InvariantCulture).ToLower());
+                await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), AbpZeroSettingNames.UserManagement.TwoFactorLogin.IsEmailProviderEnabled, settings.IsEmailProviderEnabled.ToString().ToLowerInvariant());
+                await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), AbpZeroSettingNames.UserManagement.TwoFactorLogin.IsSmsProviderEnabled, settings.IsSmsProviderEnabled.ToString().ToLowerInvariant());
             }
         }
 
-        #endregion
+#endregion
 
-        #region Others
+#region Others
 
         public async Task ClearLogo()
         {
@@ -362,6 +416,6 @@ namespace Magicodes.Admin.Configuration.Tenants
             tenant.CustomCssId = null;
         }
 
-        #endregion
+#endregion
     }
 }

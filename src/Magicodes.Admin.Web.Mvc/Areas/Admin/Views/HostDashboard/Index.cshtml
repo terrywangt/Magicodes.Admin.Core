@@ -1,0 +1,247 @@
+﻿@using System.Threading.Tasks
+@using Abp.Timing
+@using Magicodes.Admin.Web.Areas.Admin.Startup
+@using Magicodes.Admin.Web.Areas.Admin.Models.HostDashboard
+@model HostDashboardViewModel
+@{
+    ViewBag.CurrentPageName = AdminPageNames.Host.Dashboard;
+}
+
+@section Styles
+{
+    <environment names="Development">
+        <link rel="stylesheet" href="~/view-resources/Areas/Admin/Views/HostDashboard/Index.css" asp-append-version="true" />
+    </environment>
+
+    <environment names="Staging,Production">
+        <link rel="stylesheet" href="~/view-resources/Areas/Admin/Views/HostDashboard/Index.min.css" asp-append-version="true" />
+    </environment>
+}
+
+@section Scripts
+{
+    <environment names="Development">
+        <script src="~/view-resources/Areas/Admin/Views/_Bundles/host-dashboard-libs.js" asp-append-version="true"></script>
+    </environment>
+
+    <environment names="Staging,Production">
+        <script src="~/view-resources/Areas/Admin/Views/_Bundles/host-dashboard-libs.min.js" asp-append-version="true"></script>
+    </environment>
+}
+<div id="HostDashboard">
+    <div class="row margin-bottom-5">
+        <div class="col-xs-6">
+            <div class="page-head">
+                <div class="page-title">
+                    <h1>
+                        <span>@L("Dashboard")</span> <small>@L("HostDashboardHeaderInfo")</small>
+                    </h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-6 text-right">
+            <button name="RefreshButton" class="btn blue"><i class="fa fa-refresh"></i> @L("Refresh")</button>
+            <div class="dashboard-report-range pull-right tooltips btn btn-fit-height green-sharp"
+                 data-placement="top"
+                 data-original-title="@L("ChangeDateRange")">
+                <i class="icon-calendar"></i>&nbsp;
+                <span class="selected-date-text thin uppercase hidden-xs" data-initial-report-day-count="@(Model.ReportOnLoadDayCount)">
+                    @(Clock.Now.AddDays(-Model.ReportOnLoadDayCount).ToString("LL")) - @(Clock.Now.ToString("LL"))
+                </span>&nbsp;<i class="fa fa-angle-down"></i>
+            </div>
+        </div>
+</div><div>
+    <div class="row">
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <div class="dashboard-stat2 new-subscription-statistics">
+                <div class="display">
+                    <div class="number">
+                        <h3 class="font-purple-soft">
+                            <span class="new-subscription-amount counterup">...</span>
+                            <small class="font-purple-soft">$</small>
+                        </h3>
+
+                        <small>@L("NewSubscriptionAmount")</small>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-money"></i>
+                    </div>
+                </div>
+                <div class="progress-info">
+                    <div class="progress">
+                        <span style="width: 100%;" class="progress-bar progress-bar-success purple-soft">
+                        </span>
+                    </div>
+                    <div class="status">
+                        <div class="status-title"></div>
+                        <div class="status-number"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <div class="dashboard-stat2 new-tenants-statistics">
+                <div class="display">
+                    <div class="number">
+                        <h3 class="new-tenants-count counterup font-red-haze">...</h3>
+                        <small>@L("NewTenants")</small>
+                    </div>
+                    <div class="icon">
+                        <i class="icon-user-following"></i>
+                    </div>
+                </div>
+                <div class="progress-info">
+                    <div class="progress">
+                        <span style="width: 100%;" class="progress-bar progress-bar-success red-haze">
+                            <span class="sr-only"></span>
+                        </span>
+                    </div>
+                    <div class="status">
+                        <div class="status-title"></div>
+                        <div class="status-number"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <div class="dashboard-stat2 dashboard-statistics1">
+                <div class="display">
+                    <div class="number">
+                        <h3 class="dashboard-placeholder1 counterup font-blue-sharp">...</h3>
+                        <small>@L("DashboardSampleStatistics") 1</small>
+                    </div>
+                    <div class="icon">
+                        <i class="icon-pie-chart"></i>
+                    </div>
+                </div>
+                <div class="progress-info">
+                    <div class="progress">
+                        <span style="width: 45%;" class="progress-bar progress-bar-success blue-sharp">
+                            <span class="sr-only">45% @L("DashboardSampleStatisticsHelpText")</span>
+                        </span>
+                    </div>
+                    <div class="status">
+                        <div class="status-title"> @L("DashboardSampleStatisticsHelpText") </div>
+                        <div class="status-number"> 45% </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <div class="dashboard-stat2 dashboard-statistics2">
+                <div class="display">
+                    <div class="number">
+                        <h3 class="dashboard-placeholder2 counterup font-green-sharp">...</h3>
+                        <small>@L("DashboardSampleStatistics") 2</small>
+                    </div>
+                    <div class="icon">
+                        <i class="icon-like"></i>
+                    </div>
+                </div>
+                <div class="progress-info">
+                    <div class="progress">
+                        <span style="width: 65%;" class="progress-bar progress-bar-success green-sharp">
+                            <span class="sr-only">65% @L("DashboardSampleStatisticsHelpText")</span>
+                        </span>
+                    </div>
+                    <div class="status">
+                        <div class="status-title"> @L("DashboardSampleStatisticsHelpText") </div>
+                        <div class="status-number"> 65% </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-sm-12">
+            <div class="portlet light portlet-fit bordered income-statistics">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="icon-graph font-blue"></i>
+                        <span class="caption-subject font-blue bold uppercase">@L("IncomeStatistics")</span>
+                        <span class="caption-helper"></span>
+                    </div>
+                    <div class="actions">
+                        <div class="btn-group btn-group-devided" data-toggle="buttons">
+                            <label class="btn blue btn-outline btn-circle btn-sm active">
+                                <input type="radio" name="IncomeStatisticsDatePeriod" class="toggle" value="1" checked>@L("Daily")
+                            </label>
+                            <label class="btn blue btn-outline btn-circle btn-sm">
+                                <input type="radio" name="IncomeStatisticsDatePeriod" class="toggle" value="2">@L("Weekly")
+                            </label>
+                            <label class="btn blue btn-outline btn-circle btn-sm">
+                                <input type="radio" name="IncomeStatisticsDatePeriod" class="toggle" value="3">@L("Monthly")
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <div class="chart income-statistics-chart">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+            <div class="portlet light portlet-fit bordered edition-statistics">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="icon-pie-chart font-green-seagreen"></i>
+                        <span class="caption-subject font-green-seagreen bold uppercase">@L("EditionStatistics")</span>
+                        <span class="caption-helper"></span>
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <div id="EditionStatisticsChart" class="chart edition-statistics-chart"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6 col-xs-12 col-sm-12">
+            <div class="portlet light portlet-fit bordered expiring-tenants">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="icon-graduation font-red-pink"></i>
+                        <span class="caption-subject font-red-pink bold uppercase">@L("SubscriptionExpiringTenants")</span>
+                        <div class="caption-helper"></div>
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <div class="scroller chart" data-always-visible="1" data-rail-visible="0">
+                        <div class="expiring-tenants-table"></div>
+                    </div>
+                    <div class="scroller-footer">
+                        <div class="btn-arrow-link pull-right">
+                            <a href="javascript:;" class="see-all-expiring-tenants">@L("SeeAllRecords")</a>
+                            <i class="icon-arrow-right"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-xs-12 col-sm-12">
+            <div class="portlet light portlet-fit bordered recent-tenants">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="icon-user-follow font-purple-soft"></i>
+                        <span class="caption-subject font-purple-soft bold uppercase">@L("RecentTenants")</span>
+                        <div class="caption-helper"></div>
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <div class="scroller chart" data-always-visible="1" data-rail-visible="0">
+                        <div class="recent-tenants-table"></div>
+                    </div>
+                    <div class="scroller-footer">
+                        <div class="btn-arrow-link pull-right">
+                            <a href="javascript:;" class="see-all-recent-tenants">@L("SeeAllRecords")</a>
+                            <i class="icon-arrow-right"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

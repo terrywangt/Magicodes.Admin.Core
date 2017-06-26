@@ -12,6 +12,7 @@ using Abp.Runtime.Security;
 using Abp.Runtime.Session;
 using Abp.Timing;
 using Abp.UI;
+using Microsoft.AspNetCore.Identity;
 using Magicodes.Admin.Authorization.Impersonation;
 
 namespace Magicodes.Admin.Authorization.Users
@@ -21,17 +22,20 @@ namespace Magicodes.Admin.Authorization.Users
         private readonly IRepository<UserAccount, long> _userAccountRepository;
         private readonly ICacheManager _cacheManager;
         private readonly UserManager _userManager;
+        private readonly UserClaimsPrincipalFactory _principalFactory;
 
         public IAbpSession AbpSession { get; set; }
 
         public UserLinkManager(
             IRepository<UserAccount, long> userAccountRepository,
             ICacheManager cacheManager, 
-            UserManager userManager)
+            UserManager userManager,
+            UserClaimsPrincipalFactory principalFactory)
         {
             _userAccountRepository = userAccountRepository;
             _cacheManager = cacheManager;
             _userManager = userManager;
+            _principalFactory = principalFactory;
 
             AbpSession = NullAbpSession.Instance;
         }
@@ -106,9 +110,8 @@ namespace Magicodes.Admin.Authorization.Users
             return token;
         }
 
-        public async Task<UserAndIdentity> GetSwitchedUserAndIdentity(string switchAccountToken, string authenticationType)
+        public async Task<UserAndIdentity> GetSwitchedUserAndIdentity(string switchAccountToken)
         {
-
             var cacheItem = await _cacheManager.GetSwitchToLinkedAccountCache().GetOrDefaultAsync(switchAccountToken);
             if (cacheItem == null)
             {
@@ -116,10 +119,10 @@ namespace Magicodes.Admin.Authorization.Users
             }
 
             //Get the user from tenant
-            var user = await _userManager.FindByIdAsync(cacheItem.TargetUserId);
+            var user = await _userManager.FindByIdAsync(cacheItem.TargetUserId.ToString());
 
             //Create identity
-            var identity = await _userManager.CreateIdentityAsync(user, authenticationType);
+            var identity = (ClaimsIdentity)(await _principalFactory.CreateAsync(user)).Identity;
 
             //Add claims for audit logging
             if (cacheItem.ImpersonatorTenantId.HasValue)

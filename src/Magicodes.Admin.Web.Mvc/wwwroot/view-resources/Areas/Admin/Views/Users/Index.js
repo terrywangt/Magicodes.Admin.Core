@@ -12,7 +12,7 @@
             'delete': abp.auth.hasPermission('Pages.Administration.Users.Delete')
         };
 
-        var _createOrEditModal = new top.app.ModalManager({
+        var _createOrEditModal = new app.ModalManager({
             viewUrl: abp.appPath + 'Admin/Users/CreateOrEditModal',
             scriptUrl: abp.appPath + 'view-resources/Areas/Admin/Views/Users/_CreateOrEditModal.js',
             modalClass: 'CreateOrEditUserModal'
@@ -46,59 +46,60 @@
                     title: app.localize('Actions'),
                     width: '15%',
                     sorting: false,
-                    display: function (data) {
-                        var $span = $('<span></span>');
-
-                        if (_permissions.impersonation && data.record.id != abp.session.userId) {
-                            $('<button class="btn btn-default btn-xs" title="' + app.localize('LoginAsThisUser') + '"><i class="fa fa-sign-in"></i></button>')
-                                .appendTo($span)
-                                .click(function () {
-                                    abp.ajax({
-                                        url: abp.appPath + 'Account/Impersonate',
-                                        data: JSON.stringify({
-                                            tenantId: abp.session.tenantId,
-                                            userId: data.record.id
-                                        })
-                                    });
-                                });
-                        }
-
-                        if (_permissions.edit) {
-                            $('<button class="btn btn-default btn-xs" title="' + app.localize('Edit') + '"><i class="fa fa-edit"></i></button>')
-                                .appendTo($span)
-                                .click(function () {
-                                    _createOrEditModal.open({ id: data.record.id });
-                                });
-                        }
-
-                        if (_permissions.changePermissions) {
-                            $('<button class="btn btn-default btn-xs" title="' + app.localize('Permissions') + '"><i class="fa fa-list"></i></button>')
-                                .appendTo($span)
-                                .click(function () {
-                                    _userPermissionsModal.open({ id: data.record.id });
-                                });
-                        }
-
-                        $('<button class="btn btn-default btn-xs" title="' + app.localize('Unlock') + '"><i class="fa fa-unlock"></i></button>')
-                            .appendTo($span)
-                            .click(function () {
-                                _userService.unlockUser({
-                                    id: data.record.id
-                                }).done(function () {
-                                    abp.notify.success(app.localize('UnlockedTheUser', data.record.userName));
-                                });
+                    type: 'record-actions',
+                    cssClass: 'btn btn-xs btn-primary blue',
+                    text: '<i class="fa fa-cog"></i> ' + app.localize('Actions') + ' <span class="caret"></span>',
+                    items: [{
+                        text: app.localize('LoginAsThisUser'),
+                        visible: function (data) {
+                            return _permissions.impersonation && data.record.id !== abp.session.userId;
+                        },
+                        action: function (data) {
+                            abp.ajax({
+                                url: abp.appPath + 'Account/Impersonate',
+                                data: JSON.stringify({
+                                    tenantId: abp.session.tenantId,
+                                    userId: data.record.id
+                                })
                             });
-
-                        if (_permissions.delete) {
-                            $('<button class="btn btn-default btn-xs" title="' + app.localize('Delete') + '"><i class="fa fa-trash-o"></i></button>')
-                                .appendTo($span)
-                                .click(function () {
-                                    deleteUser(data.record);
-                                });
                         }
-
-                        return $span;
-                    }
+                    }, {
+                        text: app.localize('Edit'),
+                        visible: function () {
+                            return _permissions.edit;
+                        },
+                        action: function (data) {
+                            _createOrEditModal.open({ id: data.record.id });
+                        }
+                    }, {
+                        text: app.localize('Permissions'),
+                        visible: function () {
+                            return _permissions.changePermissions;
+                        },
+                        action: function (data) {
+                            _userPermissionsModal.open({ id: data.record.id });
+                        }
+                    }, {
+                        text: app.localize('Unlock'),
+                        visible: function () {
+                            return _permissions.changePermissions;
+                        },
+                        action: function (data) {
+                            _userService.unlockUser({
+                                id: data.record.id
+                            }).done(function () {
+                                abp.notify.success(app.localize('UnlockedTheUser', data.record.userName));
+                            });
+                        }
+                    }, {
+                        text: app.localize('Delete'),
+                        visible: function () {
+                            return _permissions.delete;
+                        },
+                        action: function (data) {
+                            deleteUser(data.record);
+                        }
+                    }]
                 },
                 userName: {
                     title: app.localize('UserName'),
@@ -240,7 +241,7 @@
             getUsers();
         });
 
-        top.abp.event.on('app.createOrEditUserModalSaved', function () {
+        abp.event.on('app.createOrEditUserModalSaved', function () {
             getUsers(true);
         });
 

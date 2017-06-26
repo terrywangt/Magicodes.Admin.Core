@@ -29,7 +29,10 @@ namespace Magicodes.Admin.Web.Areas.Admin.Controllers
         public async Task<PartialViewResult> CreateOrEditModal(int? id)
         {
             var output = await _editionAppService.GetEditionForEdit(new NullableIdDto { Id = id });
-            var viewModel = new CreateOrEditEditionModalViewModel(output);
+            var editionItems = await _editionAppService.GetEditionComboboxItems();
+            var freeEditionItems = await _editionAppService.GetEditionComboboxItems(output.Edition.ExpiringEditionId, false, true);
+
+            var viewModel = new CreateOrEditEditionModalViewModel(output, editionItems, freeEditionItems);
 
             return PartialView("_CreateOrEditModal", viewModel);
         }

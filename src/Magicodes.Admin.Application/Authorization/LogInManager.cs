@@ -6,6 +6,7 @@ using Abp.Dependency;
 using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
 using Abp.Zero.Configuration;
+using Microsoft.AspNetCore.Identity;
 using Magicodes.Admin.Authorization.Roles;
 using Magicodes.Admin.Authorization.Users;
 using Magicodes.Admin.MultiTenancy;
@@ -23,7 +24,9 @@ namespace Magicodes.Admin.Authorization
             IRepository<UserLoginAttempt, long> userLoginAttemptRepository, 
             IUserManagementConfig userManagementConfig, 
             IIocResolver iocResolver, 
-            RoleManager roleManager)
+            RoleManager roleManager,
+            IPasswordHasher<User> passwordHasher,
+            UserClaimsPrincipalFactory claimsPrincipalFactory)
             : base(
                   userManager, 
                   multiTenancyConfig, 
@@ -33,7 +36,9 @@ namespace Magicodes.Admin.Authorization
                   userLoginAttemptRepository, 
                   userManagementConfig, 
                   iocResolver, 
-                  roleManager)
+                  passwordHasher,
+                  roleManager,
+                  claimsPrincipalFactory)
         {
 
         }

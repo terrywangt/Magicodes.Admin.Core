@@ -1,6 +1,7 @@
 ﻿using Abp.Authorization.Users;
 using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
+using Abp.Linq;
 using Magicodes.Admin.Authorization.Roles;
 
 namespace Magicodes.Admin.Authorization.Users
@@ -15,18 +16,19 @@ namespace Magicodes.Admin.Authorization.Users
             IRepository<UserLogin, long> userLoginRepository,
             IRepository<UserRole, long> userRoleRepository,
             IRepository<Role> roleRepository,
-            IRepository<UserPermissionSetting, long> userPermissionSettingRepository,
+            IAsyncQueryableExecuter asyncQueryableExecuter, 
             IUnitOfWorkManager unitOfWorkManager,
-            IRepository<UserClaim, long> userCliamRepository
-            )
+            IRepository<UserClaim, long> userCliamRepository,
+            IRepository<UserPermissionSetting, long> userPermissionSettingRepository)
             : base(
-                userRepository,
-                userLoginRepository,
-                userRoleRepository,
-                roleRepository,
-                userPermissionSettingRepository,
                 unitOfWorkManager,
-                userCliamRepository)
+                userRepository,
+                roleRepository,
+                asyncQueryableExecuter,
+                userRoleRepository,
+                userLoginRepository,
+                userCliamRepository,
+                userPermissionSettingRepository)
         {
         }
     }

@@ -10,7 +10,12 @@
         location.href = abp.appPath + 'File/DownloadTempFile?fileType=' + file.fileType + '&fileToken=' + file.fileToken + '&fileName=' + file.fileName;
     };
 
-    app.createDateRangePickerOptions = function () {
+    app.createDateRangePickerOptions = function (extraOptions) {
+        extraOptions = extraOptions ||
+        {
+            allowFutureDate: false
+        };
+
         var options = {
             locale: {
                 format: 'L',
@@ -20,10 +25,13 @@
             },
             min: moment('2015-05-01'),
             minDate: moment('2015-05-01'),
-            max: moment(),
-            maxDate: moment(),
             ranges: {}
         };
+
+        if (!extraOptions.allowFutureDate) {
+            options.max = moment();
+            options.maxDate = moment();
+        }
 
         options.ranges[app.localize('Today')] = [moment().startOf('day'), moment().endOf('day')];
         options.ranges[app.localize('Yesterday')] = [moment().subtract(1, 'days').startOf('day'), moment().subtract(1, 'days').endOf('day')];

@@ -14,5 +14,9 @@ namespace Magicodes.Admin.Authorization.Accounts.Dto
         [Required]
         [DisableAuditing]
         public string Password { get; set; }
+
+        public string ReturnUrl { get; set; }
+
+        public string SingleSignIn { get; set; }
     }
 }

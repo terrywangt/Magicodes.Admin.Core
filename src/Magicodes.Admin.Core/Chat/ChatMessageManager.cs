@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Abp;
 using Abp.Authorization;
 using Abp.Domain.Repositories;
@@ -48,21 +49,21 @@ namespace Magicodes.Admin.Chat
             _chatFeatureChecker = chatFeatureChecker;
         }
 
-        public void SendMessage(UserIdentifier sender, UserIdentifier receiver, string message, string senderTenancyName, string senderUserName, Guid? senderProfilePictureId)
+        public async Task SendMessageAsync(UserIdentifier sender, UserIdentifier receiver, string message, string senderTenancyName, string senderUserName, Guid? senderProfilePictureId)
         {
             CheckReceiverExists(receiver);
 
             _chatFeatureChecker.CheckChatFeatures(sender.TenantId, receiver.TenantId);
 
-            var friendshipState = _friendshipManager.GetFriendshipOrNull(sender, receiver)?.State;
+            var friendshipState = (await _friendshipManager.GetFriendshipOrNullAsync(sender, receiver))?.State;
             if (friendshipState == FriendshipState.Blocked)
             {
                 throw new UserFriendlyException(L("UserIsBlocked"));
             }
 
-            HandleSenderToReceiver(sender, receiver, message);
-            HandleReceiverToSender(sender, receiver, message);
-            HandleSenderUserInfoChange(sender, receiver, senderTenancyName, senderUserName, senderProfilePictureId);
+            await HandleSenderToReceiverAsync(sender, receiver, message);
+            await HandleReceiverToSenderAsync(sender, receiver, message);
+            await HandleSenderUserInfoChangeAsync(sender, receiver, senderTenancyName, senderUserName, senderProfilePictureId);
         }
 
         private void CheckReceiverExists(UserIdentifier receiver)
@@ -92,9 +93,9 @@ namespace Magicodes.Admin.Chat
             }
         }
 
-        private void HandleSenderToReceiver(UserIdentifier senderIdentifier, UserIdentifier receiverIdentifier, string message)
+        private async Task HandleSenderToReceiverAsync(UserIdentifier senderIdentifier, UserIdentifier receiverIdentifier, string message)
         {
-            var friendshipState = _friendshipManager.GetFriendshipOrNull(senderIdentifier, receiverIdentifier)?.State;
+            var friendshipState = (await  _friendshipManager.GetFriendshipOrNullAsync(senderIdentifier, receiverIdentifier))?.State;
             if (friendshipState == null)
             {
                 friendshipState = FriendshipState.Accepted;
@@ -104,7 +105,7 @@ namespace Magicodes.Admin.Chat
                     : null;
 
                 var receiverUser = _userManager.GetUser(receiverIdentifier);
-                _friendshipManager.CreateFriendship(
+                await _friendshipManager.CreateFriendshipAsync(
                     new Friendship(
                         senderIdentifier,
                         receiverIdentifier,
@@ -137,9 +138,9 @@ namespace Magicodes.Admin.Chat
                 );
         }
 
-        private void HandleReceiverToSender(UserIdentifier senderIdentifier, UserIdentifier receiverIdentifier, string message)
+        private async Task HandleReceiverToSenderAsync(UserIdentifier senderIdentifier, UserIdentifier receiverIdentifier, string message)
         {
-            var friendshipState = _friendshipManager.GetFriendshipOrNull(receiverIdentifier, senderIdentifier)?.State;
+            var friendshipState = (await _friendshipManager.GetFriendshipOrNullAsync(receiverIdentifier, senderIdentifier))?.State;
 
             if (friendshipState == null)
             {
@@ -148,7 +149,7 @@ namespace Magicodes.Admin.Chat
                     null;
 
                 var senderUser = _userManager.GetUser(senderIdentifier);
-                _friendshipManager.CreateFriendship(
+                await _friendshipManager.CreateFriendshipAsync(
                     new Friendship(
                         receiverIdentifier,
                         senderIdentifier,
@@ -195,15 +196,11 @@ namespace Magicodes.Admin.Chat
             }
         }
 
-        private void HandleSenderUserInfoChange(UserIdentifier sender, UserIdentifier receiver, string senderTenancyName, string senderUserName, Guid? senderProfilePictureId)
+        private async Task HandleSenderUserInfoChangeAsync(UserIdentifier sender, UserIdentifier receiver, string senderTenancyName, string senderUserName, Guid? senderProfilePictureId)
         {
             var receiverCacheItem = _userFriendsCache.GetCacheItemOrNull(receiver);
-            if (receiverCacheItem == null)
-            {
-                return;
-            }
 
-            var senderAsFriend = receiverCacheItem.Friends.FirstOrDefault(f => f.FriendTenantId == sender.TenantId && f.FriendUserId == sender.UserId);
+            var senderAsFriend = receiverCacheItem?.Friends.FirstOrDefault(f => f.FriendTenantId == sender.TenantId && f.FriendUserId == sender.UserId);
             if (senderAsFriend == null)
             {
                 return;
@@ -216,7 +213,7 @@ namespace Magicodes.Admin.Chat
                 return;
             }
 
-            var friendship = _friendshipManager.GetFriendshipOrNull(receiver, sender);
+            var friendship = (await _friendshipManager.GetFriendshipOrNullAsync(receiver, sender));
             if (friendship == null)
             {
                 return;
@@ -226,7 +223,7 @@ namespace Magicodes.Admin.Chat
             friendship.FriendUserName = senderUserName;
             friendship.FriendProfilePictureId = senderProfilePictureId;
 
-            _friendshipManager.UpdateFriendship(friendship);
+            await _friendshipManager.UpdateFriendshipAsync(friendship);
         }
     }
 }

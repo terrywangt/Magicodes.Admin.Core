@@ -1,8 +1,7 @@
-using System.Linq.Dynamic;
+using System.Linq;
 using System.Threading.Tasks;
 using Abp;
 using Abp.Authorization;
-using Abp.AutoMapper;
 using Abp.MultiTenancy;
 using Abp.RealTime;
 using Abp.Runtime.Session;
@@ -43,26 +42,26 @@ namespace Magicodes.Admin.Friendships
 
             _chatFeatureChecker.CheckChatFeatures(userIdentifier.TenantId, probableFriend.TenantId);
 
-            if (_friendshipManager.GetFriendshipOrNull(userIdentifier, probableFriend) != null)
+            if (await _friendshipManager.GetFriendshipOrNullAsync(userIdentifier, probableFriend) != null)
             {
                 throw new UserFriendlyException(L("YouAlreadySentAFriendshipRequestToThisUser"));
             }
 
-            var user = await UserManager.FindByIdAsync(AbpSession.GetUserId());
+            var user = await UserManager.FindByIdAsync(AbpSession.GetUserId().ToString());
 
             User probableFriendUser;
             using (CurrentUnitOfWork.SetTenantId(input.TenantId))
             {
-                probableFriendUser = (await UserManager.FindByIdAsync(input.UserId));
+                probableFriendUser = await UserManager.FindByIdAsync(input.UserId.ToString());
             }
 
             var friendTenancyName = probableFriend.TenantId.HasValue ? _tenantCache.Get(probableFriend.TenantId.Value).TenancyName : null;
             var sourceFriendship = new Friendship(userIdentifier, probableFriend, friendTenancyName, probableFriendUser.UserName, probableFriendUser.ProfilePictureId, FriendshipState.Accepted);
-            _friendshipManager.CreateFriendship(sourceFriendship);
+            await _friendshipManager.CreateFriendshipAsync(sourceFriendship);
 
             var userTenancyName = user.TenantId.HasValue ? _tenantCache.Get(user.TenantId.Value).TenancyName : null;
             var targetFriendship = new Friendship(probableFriend, userIdentifier, userTenancyName, user.UserName, user.ProfilePictureId, FriendshipState.Accepted);
-            _friendshipManager.CreateFriendship(targetFriendship);
+            await _friendshipManager.CreateFriendshipAsync(targetFriendship);
 
             var clients = _onlineClientManager.GetAllByUserId(probableFriend);
             if (clients.Any())
@@ -78,7 +77,7 @@ namespace Magicodes.Admin.Friendships
                 _chatCommunicator.SendFriendshipRequestToClient(senderClients, sourceFriendship, true, isFriendOnline);
             }
 
-            var sourceFriendshipRequest = sourceFriendship.MapTo<FriendDto>();
+            var sourceFriendshipRequest = ObjectMapper.Map<FriendDto>(sourceFriendship);
             sourceFriendshipRequest.IsOnline = _onlineClientManager.GetAllByUserId(probableFriend).Any();
 
             return sourceFriendshipRequest;
@@ -94,11 +93,11 @@ namespace Magicodes.Admin.Friendships
             });
         }
 
-        public void BlockUser(BlockUserInput input)
+        public async Task BlockUser(BlockUserInput input)
         {
             var userIdentifier = AbpSession.ToUserIdentifier();
             var friendIdentifier = new UserIdentifier(input.TenantId, input.UserId);
-            _friendshipManager.BanFriend(userIdentifier, friendIdentifier);
+            await _friendshipManager.BanFriendAsync(userIdentifier, friendIdentifier);
 
             var clients = _onlineClientManager.GetAllByUserId(userIdentifier);
             if (clients.Any())
@@ -107,11 +106,11 @@ namespace Magicodes.Admin.Friendships
             }
         }
 
-        public void UnblockUser(UnblockUserInput input)
+        public async Task UnblockUser(UnblockUserInput input)
         {
             var userIdentifier = AbpSession.ToUserIdentifier();
             var friendIdentifier = new UserIdentifier(input.TenantId, input.UserId);
-            _friendshipManager.AcceptFriendshipRequest(userIdentifier, friendIdentifier);
+            await _friendshipManager.AcceptFriendshipRequestAsync(userIdentifier, friendIdentifier);
 
             var clients = _onlineClientManager.GetAllByUserId(userIdentifier);
             if (clients.Any())
@@ -120,11 +119,11 @@ namespace Magicodes.Admin.Friendships
             }
         }
 
-        public void AcceptFriendshipRequest(AcceptFriendshipRequestInput input)
+        public async Task AcceptFriendshipRequest(AcceptFriendshipRequestInput input)
         {
             var userIdentifier = AbpSession.ToUserIdentifier();
             var friendIdentifier = new UserIdentifier(input.TenantId, input.UserId);
-            _friendshipManager.AcceptFriendshipRequest(userIdentifier, friendIdentifier);
+            await _friendshipManager.AcceptFriendshipRequestAsync(userIdentifier, friendIdentifier);
 
             var clients = _onlineClientManager.GetAllByUserId(userIdentifier);
             if (clients.Any())

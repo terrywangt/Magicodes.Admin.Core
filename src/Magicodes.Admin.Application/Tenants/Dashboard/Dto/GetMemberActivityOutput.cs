@@ -4,8 +4,13 @@ namespace Magicodes.Admin.Tenants.Dashboard.Dto
 {
     public class GetMemberActivityOutput
     {
-        public List<int> TotalMembers { get; set; }
+        public GetMemberActivityOutput(List<MemberActivity> memberActivities)
+        {
+            MemberActivities = memberActivities;
+        }
 
-        public List<int> NewMembers { get; set; }
+        public List<MemberActivity> MemberActivities { get; set; }
+
+
     }
 }

@@ -1,5 +1,4 @@
-﻿using EntityFramework.DynamicFilters;
-using Magicodes.Admin.EntityFramework;
+﻿using Magicodes.Admin.EntityFrameworkCore;
 
 namespace Magicodes.Admin.Tests.TestDatas
 {
@@ -16,8 +15,6 @@ namespace Magicodes.Admin.Tests.TestDatas
 
         public void Create()
         {
-            _context.DisableAllFilters();
-
             new TestOrganizationUnitsBuilder(_context, _tenantId).Create();
 
             _context.SaveChanges();

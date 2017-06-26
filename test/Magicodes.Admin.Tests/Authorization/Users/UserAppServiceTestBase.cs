@@ -26,7 +26,7 @@ namespace Magicodes.Admin.Tests.Authorization.Users
 
         protected User CreateUserEntity(string userName, string name, string surname, string emailAddress)
         {
-            return new User
+            var user = new User
                    {
                        EmailAddress = emailAddress,
                        IsEmailConfirmed = true,
@@ -36,6 +36,12 @@ namespace Magicodes.Admin.Tests.Authorization.Users
                        Password = "AM4OLBpptxBYmM79lGOX9egzZk3vIQU3d/gFCJzaBjAPXzYIK3tQ2N7X4fcrHtElTw==", //123qwe
                        TenantId = AbpSession.TenantId
                    };
+
+            //user.SetNormalizedNames(); //TODO: use this after Abp.ZeroCore v2.1 upgrade!
+            user.NormalizedUserName = user.UserName.ToUpperInvariant();
+            user.NormalizedEmailAddress = user.EmailAddress.ToUpperInvariant();
+
+            return user;
         }
     }
 }

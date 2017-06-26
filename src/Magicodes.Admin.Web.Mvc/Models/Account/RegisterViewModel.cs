@@ -35,6 +35,10 @@ namespace Magicodes.Admin.Web.Models.Account
 
         public string ExternalLoginAuthSchema { get; set; }
 
+        public string ReturnUrl { get; set; }
+
+        public string SingleSignIn { get; set; }
+
         public PasswordComplexitySetting PasswordComplexitySetting { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

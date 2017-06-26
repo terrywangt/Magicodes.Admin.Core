@@ -1,12 +1,15 @@
-﻿using System.Data.Entity;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Abp.Application.Services.Dto;
 using Abp.Authorization;
+using Abp.Collections.Extensions;
 using Abp.Extensions;
 using Abp.Linq.Extensions;
+using Microsoft.EntityFrameworkCore;
 using Magicodes.Admin.Common.Dto;
 using Magicodes.Admin.Editions;
+using Magicodes.Admin.Editions.Dto;
 
 namespace Magicodes.Admin.Common
 {
@@ -20,12 +23,16 @@ namespace Magicodes.Admin.Common
             _editionManager = editionManager;
         }
 
-        public async Task<ListResultDto<ComboboxItemDto>> GetEditionsForCombobox()
+        public async Task<ListResultDto<SubscribableEditionComboboxItemDto>> GetEditionsForCombobox(bool onlyFreeItems = false)
         {
             var editions = await _editionManager.Editions.ToListAsync();
-            return new ListResultDto<ComboboxItemDto>(
-                editions.Select(e => new ComboboxItemDto(e.Id.ToString(), e.DisplayName)).ToList()
-                );
+            var subscribableEditions = ObjectMapper.Map<List<SubscribableEdition>>(editions)
+                .WhereIf(onlyFreeItems, e => e.IsFree)
+                .OrderBy(e => e.MonthlyPrice);
+
+            return new ListResultDto<SubscribableEditionComboboxItemDto>(
+                subscribableEditions.Select(e => new SubscribableEditionComboboxItemDto(e.Id.ToString(), e.DisplayName, e.IsFree)).ToList()
+            );
         }
 
         public async Task<PagedResultDto<NameValueDto>> FindUsers(FindUsersInput input)

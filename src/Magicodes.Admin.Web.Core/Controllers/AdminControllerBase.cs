@@ -1,6 +1,8 @@
+using System;
 using Abp.AspNetCore.Mvc.Controllers;
 using Abp.IdentityFramework;
-using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 
 namespace Magicodes.Admin.Web.Controllers
 {
@@ -14,6 +16,19 @@ namespace Magicodes.Admin.Web.Controllers
         protected void CheckErrors(IdentityResult identityResult)
         {
             identityResult.CheckErrors(LocalizationManager);
+        }
+
+        protected void SetTenantIdCookie(int? tenantId)
+        {
+            Response.Cookies.Append(
+                "Abp.TenantId",
+                tenantId?.ToString(),
+                new CookieOptions
+                {
+                    Expires = DateTimeOffset.Now.AddYears(5),
+                    Path = "/"
+                }
+            );
         }
     }
 }

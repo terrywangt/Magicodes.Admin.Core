@@ -3,6 +3,7 @@ using Abp.AutoMapper;
 using Abp.Dependency;
 using Abp.Events.Bus.Entities;
 using Abp.Events.Bus.Handlers;
+using Abp.ObjectMapping;
 using Magicodes.Admin.Chat;
 
 namespace Magicodes.Admin.Friendships.Cache
@@ -15,18 +16,21 @@ namespace Magicodes.Admin.Friendships.Cache
         ITransientDependency
     {
         private readonly IUserFriendsCache _userFriendsCache;
+        private readonly IObjectMapper _objectMapper;
 
         public UserFriendCacheSyncronizer(
-            IUserFriendsCache userFriendsCache)
+            IUserFriendsCache userFriendsCache,
+            IObjectMapper objectMapper)
         {
             _userFriendsCache = userFriendsCache;
+            _objectMapper = objectMapper;
         }
 
         public void HandleEvent(EntityCreatedEventData<Friendship> eventData)
         {
             _userFriendsCache.AddFriend(
                 eventData.Entity.ToUserIdentifier(),
-                eventData.Entity.MapTo<FriendCacheItem>()
+                _objectMapper.Map<FriendCacheItem>(eventData.Entity)
                 );
         }
 
@@ -34,13 +38,13 @@ namespace Magicodes.Admin.Friendships.Cache
         {
             _userFriendsCache.RemoveFriend(
                 eventData.Entity.ToUserIdentifier(),
-                eventData.Entity.MapTo<FriendCacheItem>()
+                _objectMapper.Map<FriendCacheItem>(eventData.Entity)
             );
         }
 
         public void HandleEvent(EntityUpdatedEventData<Friendship> eventData)
         {
-            var friendCacheItem = eventData.Entity.MapTo<FriendCacheItem>();
+            var friendCacheItem = _objectMapper.Map<FriendCacheItem>(eventData.Entity);
             _userFriendsCache.UpdateFriend(eventData.Entity.ToUserIdentifier(), friendCacheItem);
         }
 

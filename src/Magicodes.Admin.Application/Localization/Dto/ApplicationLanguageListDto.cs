@@ -14,5 +14,7 @@ namespace Magicodes.Admin.Localization.Dto
         public virtual string DisplayName { get; set; }
 
         public virtual string Icon { get; set; }
+
+        public bool IsDisabled { get; set; }
     }
 }

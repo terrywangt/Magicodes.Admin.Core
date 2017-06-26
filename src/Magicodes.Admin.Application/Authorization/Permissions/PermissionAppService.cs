@@ -2,7 +2,6 @@
 using System.Linq;
 using Abp.Application.Services.Dto;
 using Abp.Authorization;
-using Abp.AutoMapper;
 using Magicodes.Admin.Authorization.Permissions.Dto;
 
 namespace Magicodes.Admin.Authorization.Permissions
@@ -30,7 +29,7 @@ namespace Magicodes.Admin.Authorization.Permissions
 
         private void AddPermission(Permission permission, IReadOnlyList<Permission> allPermissions, List<FlatPermissionWithLevelDto> result, int level)
         {
-            var flatPermission = permission.MapTo<FlatPermissionWithLevelDto>();
+            var flatPermission = ObjectMapper.Map<FlatPermissionWithLevelDto>(permission);
             flatPermission.Level = level;
             result.Add(flatPermission);
 

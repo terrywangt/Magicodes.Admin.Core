@@ -19,6 +19,5 @@ namespace Magicodes.Admin.Configuration.Host.Dto
         [Required]
         public SecuritySettingsEditDto Security { get; set; }
 
-        public SiteSettingsEditDto Site { get; set; }
     }
 }

@@ -1,10 +1,12 @@
-﻿using System.Reflection;
+﻿using Abp.Configuration.Startup;
 using Abp.Modules;
+using Abp.Reflection.Extensions;
+using Abp.Threading.BackgroundWorkers;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Magicodes.Admin.Configuration;
+using Magicodes.Admin.MultiTenancy;
 using Magicodes.Admin.Web.Areas.Admin.Startup;
-using Magicodes.Admin.Web.Configuration;
-using Abp.Zero.AspNetCore;
 
 namespace Magicodes.Admin.Web.Startup
 {
@@ -24,16 +26,23 @@ namespace Magicodes.Admin.Web.Startup
 
         public override void PreInitialize()
         {
-            Configuration.Get<IAbpZeroAspNetCoreConfiguration>().AuthenticationScheme = AuthConfigurer.AuthenticationScheme;
+            Configuration.Modules.AbpWebCommon().MultiTenancy.DomainFormat = _appConfiguration["App:WebSiteRootAddress"] ?? "http://localhost:62114/";
 
-            Configuration.Navigation.Providers.Add<FrontEndNavigationProvider>();
-            //后台导航提供程序
             Configuration.Navigation.Providers.Add<AdminNavigationProvider>();
         }
 
         public override void Initialize()
         {
-            IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
+            IocManager.RegisterAssemblyByConvention(typeof(AdminWebMvcModule).GetAssembly());
+        }
+
+        public override void PostInitialize()
+        {
+            if (IocManager.Resolve<IMultiTenancyConfig>().IsEnabled)
+            {
+                var workManager = IocManager.Resolve<IBackgroundWorkerManager>();
+                workManager.Add(IocManager.Resolve<SubscriptionExpirationCheckWorker>());
+            }
         }
     }
 }

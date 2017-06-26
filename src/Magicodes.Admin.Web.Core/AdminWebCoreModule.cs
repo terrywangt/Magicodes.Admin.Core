@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Reflection;
 using System.Text;
 using Abp.AspNetCore;
 using Abp.AspNetCore.Configuration;
@@ -11,29 +10,30 @@ using Abp.IO;
 using Abp.Modules;
 using Abp.Reflection.Extensions;
 using Abp.Runtime.Caching.Redis;
-using Abp.Web.SignalR;
-using Abp.Zero.AspNetCore;
 using Abp.Zero.Configuration;
-using Hangfire;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using Magicodes.Admin.EntityFramework;
+using Magicodes.Admin.Configuration;
+using Magicodes.Admin.EntityFrameworkCore;
 using Magicodes.Admin.Web.Authentication.JwtBearer;
 using Magicodes.Admin.Web.Authentication.TwoFactor;
 using Magicodes.Admin.Web.Configuration;
-using Magicodes.Admin.Web.Controllers;
+#if FEATURE_SIGNALR
+using Abp.Web.SignalR;
+#endif
 
 namespace Magicodes.Admin.Web
 {
     [DependsOn(
         typeof(AdminApplicationModule),
-        typeof(AdminEntityFrameworkModule),
+        typeof(AdminEntityFrameworkCoreModule),
         typeof(AbpAspNetCoreModule),
-        typeof(AbpZeroAspNetCoreModule),
+#if FEATURE_SIGNALR
         typeof(AbpWebSignalRModule),
-        typeof(AbpRedisCacheModule), //AbpRedisCacheModule dependency can be removed if not using Redis cache
-        typeof(AbpHangfireModule) //AbpHangfireModule dependency can be removed if not using Hangfire
+#endif
+        typeof(AbpRedisCacheModule), //AbpRedisCacheModule dependency (and Abp.RedisCache nuget package) can be removed if not using Redis cache
+        typeof(AbpHangfireAspNetCoreModule) //AbpHangfireModule dependency (and Abp.Hangfire.AspNetCore nuget package) can be removed if not using Hangfire
     )] 
     public class AdminWebCoreModule : AbpModule
     {
@@ -48,6 +48,7 @@ namespace Magicodes.Admin.Web
         
         public override void PreInitialize()
         {
+            //Set default connection string
             Configuration.DefaultNameOrConnectionString = _appConfiguration.GetConnectionString(
                 AdminConsts.ConnectionStringName
             );
@@ -57,17 +58,23 @@ namespace Magicodes.Admin.Web
 
             Configuration.Modules.AbpAspNetCore()
                 .CreateControllersForAppServices(
-                    typeof(AdminApplicationModule).Assembly
+                    typeof(AdminApplicationModule).GetAssembly()
                 );
-
-            Configuration.Modules.AbpWebCommon().MultiTenancy.DomainFormat = _appConfiguration["App:WebSiteRootAddress"] ?? "http://localhost:62114/";
 
             Configuration.Caching.Configure(TwoFactorCodeCacheItem.CacheName, cache =>
             {
                 cache.DefaultAbsoluteExpireTime = TimeSpan.FromMinutes(2);
             });
 
-            ConfigureTokenAuth();
+            if (_appConfiguration["Authentication:JwtBearer:IsEnabled"] != null && bool.Parse(_appConfiguration["Authentication:JwtBearer:IsEnabled"]))
+            {
+                ConfigureTokenAuth();
+            }
+            
+            Configuration.ReplaceService<IAppConfigurationAccessor, AppConfigurationAccessor>();
+
+            //Uncomment this line to use Hangfire instead of default background job manager (remember also to uncomment related lines in Startup.cs file(s)).
+            //Configuration.BackgroundJobs.UseHangfire();
 
             //Uncomment this line to use Redis cache instead of in-memory cache.
             //See app.config for Redis configuration and connection string
@@ -76,12 +83,6 @@ namespace Magicodes.Admin.Web
             //    options.ConnectionString = _appConfiguration["Abp:RedisCache:ConnectionString"];
             //    options.DatabaseId = _appConfiguration.GetValue<int>("Abp:RedisCache:DatabaseId");
             //});
-
-            //使用Hangfire来替换ABP中默认实现的后台作业管理
-            Configuration.BackgroundJobs.UseHangfire(configuration =>
-            {
-                configuration.GlobalConfiguration.UseSqlServerStorage(Configuration.DefaultNameOrConnectionString);
-            });
         }
 
         private void ConfigureTokenAuth()
@@ -98,7 +99,7 @@ namespace Magicodes.Admin.Web
 
         public override void Initialize()
         {
-            IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
+            IocManager.RegisterAssemblyByConvention(typeof(AdminWebCoreModule).GetAssembly());
         }
 
         public override void PostInitialize()
@@ -114,14 +115,16 @@ namespace Magicodes.Admin.Web
             appFolders.TempFileDownloadFolder = Path.Combine(_env.WebRootPath, @"Temp\Downloads");
             appFolders.WebLogsFolder = Path.Combine(_env.ContentRootPath, @"App_Data\Logs");
 
+#if NET461
             if (_env.IsDevelopment())
             {
-                var currentAssemblyDirectoryPath = Assembly.GetExecutingAssembly().GetDirectoryPathOrNull();
+                var currentAssemblyDirectoryPath = typeof(AdminWebCoreModule).GetAssembly().GetDirectoryPathOrNull();
                 if (currentAssemblyDirectoryPath != null)
                 {
                     appFolders.WebLogsFolder = Path.Combine(currentAssemblyDirectoryPath, @"App_Data\Logs");
                 }
             }
+#endif
 
             try
             {

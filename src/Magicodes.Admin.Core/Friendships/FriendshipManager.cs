@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Abp;
 using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
@@ -16,7 +17,7 @@ namespace Magicodes.Admin.Friendships
         }
 
         [UnitOfWork]
-        public void CreateFriendship(Friendship friendship)
+        public async Task CreateFriendshipAsync(Friendship friendship)
         {
             if (friendship.TenantId == friendship.FriendTenantId &&
                 friendship.UserId == friendship.FriendUserId)
@@ -27,26 +28,26 @@ namespace Magicodes.Admin.Friendships
             using (CurrentUnitOfWork.SetTenantId(friendship.TenantId))
             {
                 _friendshipRepository.Insert(friendship);
-                CurrentUnitOfWork.SaveChanges();
+               await CurrentUnitOfWork.SaveChangesAsync();
             }
         }
 
         [UnitOfWork]
-        public void UpdateFriendship(Friendship friendship)
+        public async Task UpdateFriendshipAsync(Friendship friendship)
         {
             using (CurrentUnitOfWork.SetTenantId(friendship.TenantId))
             {
                 _friendshipRepository.Update(friendship);
-                CurrentUnitOfWork.SaveChanges();
+                await CurrentUnitOfWork.SaveChangesAsync();
             }
         }
 
         [UnitOfWork]
-        public Friendship GetFriendshipOrNull(UserIdentifier user, UserIdentifier probableFriend)
+        public async Task<Friendship> GetFriendshipOrNullAsync(UserIdentifier user, UserIdentifier probableFriend)
         {
             using (CurrentUnitOfWork.SetTenantId(user.TenantId))
             {
-                return _friendshipRepository.FirstOrDefault(friendship =>
+                return await _friendshipRepository.FirstOrDefaultAsync(friendship =>
                                     friendship.UserId == user.UserId &&
                                     friendship.TenantId == user.TenantId &&
                                     friendship.FriendUserId == probableFriend.UserId &&
@@ -55,29 +56,29 @@ namespace Magicodes.Admin.Friendships
         }
 
         [UnitOfWork]
-        public void BanFriend(UserIdentifier userIdentifier, UserIdentifier probableFriend)
+        public async Task BanFriendAsync(UserIdentifier userIdentifier, UserIdentifier probableFriend)
         {
-            var friendship = GetFriendshipOrNull(userIdentifier, probableFriend);
+            var friendship = (await GetFriendshipOrNullAsync(userIdentifier, probableFriend));
             if (friendship == null)
             {
-                throw new ApplicationException("Friendship does not exist between " + userIdentifier + " and " + probableFriend);
+                throw new Exception("Friendship does not exist between " + userIdentifier + " and " + probableFriend);
             }
 
             friendship.State = FriendshipState.Blocked;
-            UpdateFriendship(friendship);
+            await UpdateFriendshipAsync(friendship);
         }
 
         [UnitOfWork]
-        public void AcceptFriendshipRequest(UserIdentifier userIdentifier, UserIdentifier probableFriend)
+        public async Task AcceptFriendshipRequestAsync(UserIdentifier userIdentifier, UserIdentifier probableFriend)
         {
-            var friendship = GetFriendshipOrNull(userIdentifier, probableFriend);
+            var friendship = (await GetFriendshipOrNullAsync(userIdentifier, probableFriend));
             if (friendship == null)
             {
-                throw new ApplicationException("Friendship does not exist between " + userIdentifier + " and " + probableFriend);
+                throw new Exception("Friendship does not exist between " + userIdentifier + " and " + probableFriend);
             }
 
             friendship.State = FriendshipState.Accepted;
-            UpdateFriendship(friendship);
+            await UpdateFriendshipAsync(friendship);
         }
     }
 }

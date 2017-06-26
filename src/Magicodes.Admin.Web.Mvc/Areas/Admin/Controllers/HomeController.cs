@@ -11,19 +11,26 @@ namespace Magicodes.Admin.Web.Areas.Admin.Controllers
     [AbpMvcAuthorize]
     public class HomeController : AdminControllerBase
     {
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
             if (AbpSession.MultiTenancySide == MultiTenancySides.Host)
             {
-                return View();
+                if (await IsGrantedAsync(AppPermissions.Pages_Administration_Host_Dashboard))
+                {
+                    return RedirectToAction("Index", "HostDashboard");
+                }
+
+                if (await IsGrantedAsync(AppPermissions.Pages_Tenants))
+                {
+                    return RedirectToAction("Index", "Tenants");
+                }
             }
             else
             {
-                return View();
-                //if (await IsGrantedAsync(AppPermissions.Pages_Tenant_Dashboard))
-                //{
-                //    return RedirectToAction("Index", "Dashboard");
-                //}
+                if (await IsGrantedAsync(AppPermissions.Pages_Tenant_Dashboard))
+                {
+                    return RedirectToAction("Index", "Dashboard");
+                }
             }
 
             //Default page if no permission to the pages above

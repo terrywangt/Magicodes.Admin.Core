@@ -1,16 +1,16 @@
 ﻿using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
-using System.Linq.Dynamic;
+using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using Abp;
 using Abp.Application.Services.Dto;
 using Abp.Authorization;
-using Abp.AutoMapper;
+using Abp.Authorization.Users;
 using Abp.Domain.Uow;
 using Abp.Extensions;
 using Abp.Linq.Extensions;
 using Abp.Runtime.Security;
+using Microsoft.EntityFrameworkCore;
 using Magicodes.Admin.Authorization;
 using Magicodes.Admin.Editions.Dto;
 using Magicodes.Admin.MultiTenancy.Dto;
@@ -22,7 +22,7 @@ namespace Magicodes.Admin.MultiTenancy
     public class TenantAppService : AdminAppServiceBase, ITenantAppService
     {
         public IAppUrlService AppUrlService { get; set; }
-        
+
         public TenantAppService()
         {
             AppUrlService = NullAppUrlService.Instance;
@@ -32,19 +32,19 @@ namespace Magicodes.Admin.MultiTenancy
         {
             var query = TenantManager.Tenants
                 .Include(t => t.Edition)
-                .WhereIf(
-                    !input.Filter.IsNullOrWhiteSpace(),
-                    t =>
-                        t.Name.Contains(input.Filter) ||
-                        t.TenancyName.Contains(input.Filter)
-                );
+                .WhereIf(!input.Filter.IsNullOrWhiteSpace(), t => t.Name.Contains(input.Filter) || t.TenancyName.Contains(input.Filter))
+                .WhereIf(input.CreationDateStart.HasValue, t => t.CreationTime >= input.CreationDateStart.Value)
+                .WhereIf(input.CreationDateEnd.HasValue, t => t.CreationTime <= input.CreationDateEnd.Value)
+                .WhereIf(input.SubscriptionEndDateStart.HasValue, t => t.SubscriptionEndDateUtc >= input.SubscriptionEndDateStart.Value.ToUniversalTime())
+                .WhereIf(input.SubscriptionEndDateEnd.HasValue, t => t.SubscriptionEndDateUtc <= input.SubscriptionEndDateEnd.Value.ToUniversalTime())
+                .WhereIf(input.EditionIdSpecified, t=> t.EditionId == input.EditionId);
 
             var tenantCount = await query.CountAsync();
             var tenants = await query.OrderBy(input.Sorting).PageBy(input).ToListAsync();
 
             return new PagedResultDto<TenantListDto>(
                 tenantCount,
-                tenants.MapTo<List<TenantListDto>>()
+                ObjectMapper.Map<List<TenantListDto>>(tenants)
                 );
         }
 
@@ -61,6 +61,8 @@ namespace Magicodes.Admin.MultiTenancy
                 input.EditionId,
                 input.ShouldChangePasswordOnNextLogin,
                 input.SendActivationEmail,
+                input.SubscriptionEndDateUtc?.ToUniversalTime(),
+                input.IsInTrialPeriod,
                 AppUrlService.CreateEmailActivationUrlFormat(input.TenancyName)
             );
         }
@@ -68,7 +70,7 @@ namespace Magicodes.Admin.MultiTenancy
         [AbpAuthorize(AppPermissions.Pages_Tenants_Edit)]
         public async Task<TenantEditDto> GetTenantForEdit(EntityDto input)
         {
-            var tenantEditDto = (await TenantManager.GetByIdAsync(input.Id)).MapTo<TenantEditDto>();
+            var tenantEditDto = ObjectMapper.Map<TenantEditDto>(await TenantManager.GetByIdAsync(input.Id));
             tenantEditDto.ConnectionString = SimpleStringCipher.Instance.Decrypt(tenantEditDto.ConnectionString);
             return tenantEditDto;
         }
@@ -76,28 +78,32 @@ namespace Magicodes.Admin.MultiTenancy
         [AbpAuthorize(AppPermissions.Pages_Tenants_Edit)]
         public async Task UpdateTenant(TenantEditDto input)
         {
+            await TenantManager.CheckEditionAsync(input.EditionId, input.IsInTrialPeriod);
+
             input.ConnectionString = SimpleStringCipher.Instance.Encrypt(input.ConnectionString);
             var tenant = await TenantManager.GetByIdAsync(input.Id);
-            input.MapTo(tenant);
-            CheckErrors(await TenantManager.UpdateAsync(tenant));
+            ObjectMapper.Map(input, tenant);
+            tenant.SubscriptionEndDateUtc = tenant.SubscriptionEndDateUtc?.ToUniversalTime();
+
+            await TenantManager.UpdateAsync(tenant);
         }
 
         [AbpAuthorize(AppPermissions.Pages_Tenants_Delete)]
         public async Task DeleteTenant(EntityDto input)
         {
             var tenant = await TenantManager.GetByIdAsync(input.Id);
-            CheckErrors(await TenantManager.DeleteAsync(tenant));
+            await TenantManager.DeleteAsync(tenant);
         }
 
         [AbpAuthorize(AppPermissions.Pages_Tenants_ChangeFeatures)]
-        public async Task<GetTenantFeaturesForEditOutput> GetTenantFeaturesForEdit(EntityDto input)
+        public async Task<GetTenantFeaturesEditOutput> GetTenantFeaturesForEdit(EntityDto input)
         {
             var features = FeatureManager.GetAll();
             var featureValues = await TenantManager.GetFeatureValuesAsync(input.Id);
 
-            return new GetTenantFeaturesForEditOutput
+            return new GetTenantFeaturesEditOutput
             {
-                Features = features.MapTo<List<FlatFeatureDto>>().OrderBy(f => f.DisplayName).ToList(),
+                Features = ObjectMapper.Map<List<FlatFeatureDto>>(features).OrderBy(f => f.DisplayName).ToList(),
                 FeatureValues = featureValues.Select(fv => new NameValueDto(fv)).ToList()
             };
         }
@@ -112,6 +118,18 @@ namespace Magicodes.Admin.MultiTenancy
         public async Task ResetTenantSpecificFeatures(EntityDto input)
         {
             await TenantManager.ResetAllFeaturesAsync(input.Id);
+        }
+
+        public async Task UnlockTenantAdmin(EntityDto input)
+        {
+            using (CurrentUnitOfWork.SetTenantId(input.Id))
+            {
+                var tenantAdmin = await UserManager.FindByNameAsync(AbpUserBase.AdminUserName);
+                if (tenantAdmin != null)
+                {
+                    tenantAdmin.Unlock();
+                }
+            }
         }
     }
 }

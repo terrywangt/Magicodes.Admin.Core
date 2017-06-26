@@ -36,7 +36,8 @@ namespace Magicodes.Admin.Web.Areas.Admin.Models.Layout
             {
                 return appPath + "Common/Images/app-logo-on-light.png";
             }
-            
+
+            //id parameter is used to prevent caching only.
             return appPath + "TenantCustomization/GetLogo?id=" + LoginInformations.Tenant.LogoId;
         }
     }

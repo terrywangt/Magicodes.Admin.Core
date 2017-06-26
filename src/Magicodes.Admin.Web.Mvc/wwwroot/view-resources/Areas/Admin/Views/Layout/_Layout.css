@@ -33,6 +33,15 @@
   max-width: 320px;
   width: 320px;
 }
+@media (max-width: 767px) {
+  #UserNotificationDropdown {
+    margin-right: -60px;
+  }
+  #UserNotificationDropdown:before,
+  #UserNotificationDropdown:after {
+    margin-right: 70px;
+  }
+}
 #UserNotificationDropdown a.user-notification-item {
   cursor: default;
   color: #ccc;
@@ -98,4 +107,16 @@
 }
 #loginAttemptsModalForm .control-label {
   font-weight: bold;
+}
+.subscription-info {
+  clear: both;
+  padding: 5px;
+  background-color: #fffced;
+  font-size: 0.9em;
+  color: #755d2d;
+}
+@media only screen and (max-device-width: 640px) {
+  .edition-info-text {
+    display: none;
+  }
 }

@@ -33,7 +33,7 @@
         //Web Logs
         function getWebLogs() {
             _webLogService.getLatestWebLogs({}).done(function (result) {
-                var logs = getFormattedLogs(result.latesWebLogLines);
+                var logs = getFormattedLogs(result.latestWebLogLines);
                 $('#WebSiteLogsContent').html(logs);
                 fixWebLogsPanelHeight();
             });

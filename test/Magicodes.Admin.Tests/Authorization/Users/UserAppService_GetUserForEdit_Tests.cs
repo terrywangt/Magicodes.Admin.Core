@@ -58,7 +58,7 @@ namespace Magicodes.Admin.Tests.Authorization.Users
 
         protected Role CreateRole(string roleName)
         {
-            return UsingDbContext(context => context.Roles.Add(new Role(AbpSession.TenantId, roleName, roleName)));
+            return UsingDbContext(context => context.Roles.Add(new Role(AbpSession.TenantId, roleName, roleName)).Entity);
         }
     }
 }

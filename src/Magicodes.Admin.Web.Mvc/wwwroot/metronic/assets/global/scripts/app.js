@@ -434,7 +434,7 @@ var App = function() {
     // Handle textarea autosize 
     var handleTextareaAutosize = function() {
         if (typeof(autosize) == "function") {
-            autosize(document.querySelector('textarea.autosizeme'));
+            autosize(document.querySelectorAll('textarea.autosizeme'));
         }
     }
 

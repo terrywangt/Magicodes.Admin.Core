@@ -152,7 +152,12 @@ var app = app || {};
         location.href = abp.appPath + 'File/DownloadTempFile?fileType=' + file.fileType + '&fileToken=' + file.fileToken + '&fileName=' + file.fileName;
     };
 
-    app.createDateRangePickerOptions = function () {
+    app.createDateRangePickerOptions = function (extraOptions) {
+        extraOptions = extraOptions ||
+        {
+            allowFutureDate: false
+        };
+
         var options = {
             locale: {
                 format: 'L',
@@ -162,10 +167,13 @@ var app = app || {};
             },
             min: moment('2015-05-01'),
             minDate: moment('2015-05-01'),
-            max: moment(),
-            maxDate: moment(),
             ranges: {}
         };
+
+        if (!extraOptions.allowFutureDate) {
+            options.max = moment();
+            options.maxDate = moment();
+        }
 
         options.ranges[app.localize('Today')] = [moment().startOf('day'), moment().endOf('day')];
         options.ranges[app.localize('Yesterday')] = [moment().subtract(1, 'days').startOf('day'), moment().subtract(1, 'days').endOf('day')];
@@ -443,9 +451,14 @@ var app = app || {};
                 });
 
                 _$modal.find('.modal-body').keydown(function (e) {
-                    if (e.which == 13) {
-                        e.preventDefault();
-                        _saveModal();
+                    if (e.which === 13) {
+                        if (e.target.tagName.toLocaleLowerCase() === "textarea") {
+                            e.stopPropagation();
+                        } else {
+                            e.preventDefault();
+                            _saveModal();
+                        }
+
                     }
                 });
 
@@ -547,72 +560,78 @@ var app = app || {};
         };
 
         var _buildPasswordComplexityErrorMessage = function (setting) {
-            var message = "<ul>";
+            var message = "<ul style='display: inline-block;'>";
 
-            if (setting.minLength) {
-                message += "<li>" + abp.utils.formatString(app.localize("PasswordComplexity_MinLength_Hint"), setting.minLength) + "</li>";
+            if (setting.requireDigit) {
+                message += "<li>" + app.localize("PasswordComplexity_RequireDigit_Hint") + "</li>";
             }
 
-            if (setting.maxLength) {
-                message += "<li>" + abp.utils.formatString(app.localize("PasswordComplexity_MaxLength_Hint"), setting.maxLength) + "</li>";
+            if (setting.requireLowercase) {
+                message += "<li>" + app.localize("PasswordComplexity_RequireLowercase_Hint") + "</li>";
             }
 
-            if (setting.useUpperCaseLetters) {
-                message += "<li>" + app.localize("PasswordComplexity_UseUpperCaseLetters_Hint") + "</li>";
+            if (setting.requireNonAlphanumeric) {
+                message += "<li>" + app.localize("PasswordComplexity_RequireNonAlphanumeric_Hint") + "</li>";
             }
 
             if (setting.useLowerCaseLetters) {
                 message += "<li>" + app.localize("PasswordComplexity_UseLowerCaseLetters_Hint") + "</li>";
             }
 
-            if (setting.useNumbers) {
-                message += "<li>" + app.localize("PasswordComplexity_UseNumbers_Hint") + "</li>";
+            if (setting.requireUppercase) {
+                message += "<li>" + app.localize("PasswordComplexity_RequireUppercase_Hint") + "</li>";
             }
 
-            if (setting.usePunctuations) {
-                message += "<li>" + app.localize("PasswordComplexity_UsePunctuations_Hint") + "</li>";
+            if (setting.requiredLength > 0) {
+                message += "<li>" + abp.utils.formatString(app.localize("PasswordComplexity_RequiredLength_Hint"), setting.requiredLength) + "</li>";
             }
 
             return message + "</ul>";
         }
 
-        var _setPasswordComplexityRules = function ($element, setting) {
-            
+        var _setPasswordComplexityRules = function ($elements, setting) {
+            if (!$elements) {
+                return;
+            }
+
             setting = JSON.parse(JSON.stringify(setting), reviver);
 
             if (setting) {
                 var message = _buildPasswordComplexityErrorMessage(setting);
-                
+
                 jQuery.validator.addMethod("passwordComplexity", function (value, element) {
+                    if (!element.hasAttribute("required") && value === "") {
+                        return true;
+                    }
 
-                    if (setting.minLength && value.length < setting.minLength) {
+                    if (setting.requireDigit && !/[0-9]/.test(value)) {
                         return false;
                     }
 
-                    if (setting.maxLength && value.length > setting.maxLength) {
+                    if (setting.requireLowercase && !/[a-z]/.test(value)) {
                         return false;
                     }
 
-                    if (setting.useUpperCaseLetters && !/[A-Z]/.test(value)) {
+                    if (setting.requireUppercase && !/[A-Z]/.test(value)) {
                         return false;
                     }
 
-                    if (setting.useLowerCaseLetters && !/[a-z]/.test(value)) {
+                    if (setting.requiredLength && value.length < setting.requiredLength) {
                         return false;
                     }
 
-                    if (setting.useNumbers && !/[0-9]/.test(value)) {
-                        return false;
-                    }
-
-                    if (setting.usePunctuations && !/[!@#\$%\^\&*'"\/{}\[\]?,;|)\(+=._-]+/.test(value)) {
+                    if (setting.requireNonAlphanumeric && /[0-9a-zA-Z]+$/.test(value)) {
                         return false;
                     }
 
                     return true;
                 }, message);
 
-                $element.rules("add", "passwordComplexity");
+                for (var i = 0; i < $elements.length; i++) {
+                    var $element = $($elements[i]);
+                    $element.rules("add", "passwordComplexity");
+                }
+
             }
         };
 
@@ -713,17 +732,51 @@ var app = app || {};
 
     app.utils = app.utils || {};
 
-    app.utils.truncateString = function(str, maxLength, postfix) {
-        if (!str || !maxLength || str.length <= maxLength) {
-            return str;
-        }
+    app.utils.string = {
+        truncate: function (str, maxLength, postfix) {
+            if (!str || !maxLength || str.length <= maxLength) {
+                return str;
+            }
 
-        if (postfix === false) {
-            return str.substr(0, maxLength);
-        }
+            if (postfix === false) {
+                return str.substr(0, maxLength);
+            }
 
-        return str.substr(0, maxLength - 1) + '&#133;';
+            return str.substr(0, maxLength - 1) + '&#133;';
+        }
     }
+
+    app.utils.date = {
+        containsTime: function (date) {
+            if (!date) {
+                return false;
+            }
+
+            return date.indexOf(":") !== -1;
+        },
+
+        getEndOfDay: function (date) {
+            if (!date || !moment) {
+                return null;
+            }
+
+            return moment(date).endOf('day');
+        },
+
+        getEndOfDayIfTimeNotExists: function (date) {
+            if (this.containsTime(date)) {
+                return date;
+            }
+
+            return this.getEndOfDay(date);
+        },
+
+        formatAsLongDateTime: function (date) {
+            return moment(date).format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
+
+        }
+    }
+
 
 })();
 /* An empty javascript file.

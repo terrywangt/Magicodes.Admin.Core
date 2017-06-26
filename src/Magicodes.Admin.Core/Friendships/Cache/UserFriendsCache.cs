@@ -6,7 +6,7 @@ using System.Linq;
 using Abp.Dependency;
 using Abp.Domain.Uow;
 using Abp.MultiTenancy;
-using Microsoft.AspNet.Identity;
+using Abp.Threading;
 using Magicodes.Admin.Authorization.Users;
 
 namespace Magicodes.Admin.Friendships.Cache
@@ -185,7 +185,7 @@ namespace Magicodes.Admin.Friendships.Cache
                          UnreadMessageCount = chatMessageJoined.Count(cm => cm.ReadState == ChatMessageReadState.Unread)
                      }).ToList();
 
-                var user = _userManager.FindById(userIdentifier.UserId);
+                var user = AsyncHelper.RunSync(() => _userManager.FindByIdAsync(userIdentifier.UserId.ToString()));
 
                 return new UserWithFriendsCacheItem
                 {

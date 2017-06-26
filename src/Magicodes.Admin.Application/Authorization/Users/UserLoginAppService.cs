@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using Abp.Application.Services.Dto;
 using Abp.Auditing;
 using Abp.Authorization;
 using Abp.Authorization.Users;
-using Abp.AutoMapper;
 using Abp.Domain.Repositories;
 using Abp.Runtime.Session;
+using Microsoft.EntityFrameworkCore;
 using Magicodes.Admin.Authorization.Users.Dto;
 
 namespace Magicodes.Admin.Authorization.Users
@@ -34,7 +33,7 @@ namespace Magicodes.Admin.Authorization.Users
                 .Take(10)
                 .ToListAsync();
 
-            return new ListResultDto<UserLoginAttemptDto>(loginAttempts.MapTo<List<UserLoginAttemptDto>>());
+            return new ListResultDto<UserLoginAttemptDto>(ObjectMapper.Map<List<UserLoginAttemptDto>>(loginAttempts));
         }
     }
 }

@@ -61,7 +61,7 @@ namespace Magicodes.Admin.Web.Controllers
         public virtual async Task<FileResult> GetFriendProfilePictureById(long userId, int? tenantId, string id = "")
         {
             if (id.IsNullOrEmpty() ||
-                _friendshipManager.GetFriendshipOrNull(AbpSession.ToUserIdentifier(), new UserIdentifier(tenantId, userId)) == null)
+                await _friendshipManager.GetFriendshipOrNullAsync(AbpSession.ToUserIdentifier(), new UserIdentifier(tenantId, userId)) == null)
             {
                 return GetDefaultProfilePicture();
             }

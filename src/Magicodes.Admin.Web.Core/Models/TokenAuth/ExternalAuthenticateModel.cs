@@ -15,5 +15,9 @@ namespace Magicodes.Admin.Web.Models.TokenAuth
 
         [Required]
         public string ProviderAccessCode { get; set; }
+
+        public string ReturnUrl { get; set; }
+
+        public bool? SingleSignIn { get; set; }
     }
 }

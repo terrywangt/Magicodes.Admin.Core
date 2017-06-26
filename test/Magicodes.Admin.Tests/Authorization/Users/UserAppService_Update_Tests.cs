@@ -1,8 +1,8 @@
-﻿using System.Data.Entity;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Abp.UI;
-using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Magicodes.Admin.Authorization.Roles;
 using Magicodes.Admin.Authorization.Users;
 using Magicodes.Admin.Authorization.Users.Dto;
@@ -30,7 +30,7 @@ namespace Magicodes.Admin.Tests.Authorization.Users
                         EmailAddress = "admin1@abp.com",
                         Name = "System1",
                         Surname = "Admin2",
-                        Password = "123qwe",
+                        Password = "123qwE*",
                         UserName = adminUser.UserName
                     },
                     AssignedRoleNames = new[] { "Manager" }
@@ -48,8 +48,9 @@ namespace Magicodes.Admin.Tests.Authorization.Users
                 updatedAdminUser.EmailAddress.ShouldBe("admin1@abp.com");
                 updatedAdminUser.TenantId.ShouldBe(AbpSession.TenantId);
 
-                new PasswordHasher()
-                    .VerifyHashedPassword(updatedAdminUser.Password, "123qwe")
+                LocalIocManager
+                    .Resolve<IPasswordHasher<User>>()
+                    .VerifyHashedPassword(updatedAdminUser, updatedAdminUser.Password, "123qwE*")
                     .ShouldBe(PasswordVerificationResult.Success);
 
                 //Check roles
@@ -68,7 +69,7 @@ namespace Magicodes.Admin.Tests.Authorization.Users
 
             //Act
 
-            //Try to update with existing name
+            //Try to update with existing username
             var exception = await Assert.ThrowsAsync<UserFriendlyException>(async () =>
                 await UserAppService.CreateOrUpdateUser(
                     new CreateOrUpdateUserInput
@@ -80,7 +81,7 @@ namespace Magicodes.Admin.Tests.Authorization.Users
                                    Name = "John",
                                    Surname = "Nash",
                                    UserName = "adams_d", //Changed user name to an existing user
-                                   Password = "123qwe"
+                                   Password = "123qwE*"
                                },
                         AssignedRoleNames = new string[0]
                     }));
@@ -99,7 +100,7 @@ namespace Magicodes.Admin.Tests.Authorization.Users
                                    Name = "John",
                                    Surname = "Nash",
                                    UserName = "jnash",
-                                   Password = "123qwe"
+                                   Password = "123qwE*"
                                },
                         AssignedRoleNames = new string[0]
                     }));
@@ -146,7 +147,7 @@ namespace Magicodes.Admin.Tests.Authorization.Users
 
         protected Role CreateRole(string roleName)
         {
-            return UsingDbContext(context => context.Roles.Add(new Role(AbpSession.TenantId, roleName, roleName)));
+            return UsingDbContext(context => context.Roles.Add(new Role(AbpSession.TenantId, roleName, roleName)).Entity);
         }
     }
 }

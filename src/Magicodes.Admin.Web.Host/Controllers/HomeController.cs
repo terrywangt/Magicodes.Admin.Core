@@ -5,9 +5,10 @@ namespace Magicodes.Admin.Web.Controllers
 {
     public class HomeController : AdminControllerBase
     {
+        [DisableAuditing]
         public IActionResult Index()
         {
-            return Redirect("/swagger/ui");
+            return Redirect("/swagger");
         }
     }
 }

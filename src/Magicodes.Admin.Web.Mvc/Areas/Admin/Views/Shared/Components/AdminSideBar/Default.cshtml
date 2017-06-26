@@ -1,8 +1,5 @@
-﻿@using Abp.Application.Navigation
-@using Abp.Collections.Extensions
-@using Magicodes.Admin.Web.Areas.Admin.Models.Layout
+﻿@using Magicodes.Admin.Web.Areas.Admin.Models.Layout
 @using Magicodes.Admin.Web.Areas.Admin.Views.Shared.Components.AdminSideBar
-@using Magicodes.Admin.Web.Views
 @model SidebarViewModel
 @{
 
@@ -14,7 +11,7 @@
     <!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->
     <!-- DOC: Set data-keep-expand="true" to keep the submenues expanded -->
     <!-- DOC: Set data-auto-speed="200" to adjust the sub menu slide up/down speed -->
-    <ul id="siteMenu" class="page-sidebar-menu" data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
+    <ul class="page-sidebar-menu" data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
         @for (var i = 0; i < Model.Menu.Items.Count; i++)
         {
             var menuItem = Model.Menu.Items[i];

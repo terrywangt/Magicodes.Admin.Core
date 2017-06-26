@@ -1,16 +1,30 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Abp.Application.Features;
+using Abp.Application.Services.Dto;
+using Abp.Authorization.Users;
 using Abp.Configuration;
 using Abp.Configuration.Startup;
+using Abp.Localization;
+using Abp.Runtime.Session;
+using Abp.Timing;
 using Abp.UI;
 using Abp.Zero.Configuration;
 using Magicodes.Admin.Configuration;
 using Magicodes.Admin.Debugging;
 using Magicodes.Admin.Editions;
+using Magicodes.Admin.Editions.Dto;
+using Magicodes.Admin.Features;
 using Magicodes.Admin.MultiTenancy.Dto;
+using Magicodes.Admin.MultiTenancy.Payments;
+using Magicodes.Admin.MultiTenancy.Payments.Cache;
 using Magicodes.Admin.Notifications;
 using Magicodes.Admin.Security.Recaptcha;
 using Magicodes.Admin.Url;
+using Abp.Extensions;
+using Magicodes.Admin.MultiTenancy.Payments.Dto;
 
 namespace Magicodes.Admin.MultiTenancy
 {
@@ -22,23 +36,40 @@ namespace Magicodes.Admin.MultiTenancy
         private readonly IRecaptchaValidator _recaptchaValidator;
         private readonly EditionManager _editionManager;
         private readonly IAppNotifier _appNotifier;
+        private readonly ILocalizationContext _localizationContext;
+        private readonly TenantManager _tenantManager;
+        private readonly ISubscriptionPaymentRepository _subscriptionPaymentRepository;
+        private readonly IPaymentGatewayManagerFactory _paymentGatewayManagerFactory;
+        private readonly IPaymentCache _paymentCache;
 
         public TenantRegistrationAppService(
-            IMultiTenancyConfig multiTenancyConfig, 
-            IRecaptchaValidator recaptchaValidator, 
-            EditionManager editionManager, 
-            IAppNotifier appNotifier)
+            IMultiTenancyConfig multiTenancyConfig,
+            IRecaptchaValidator recaptchaValidator,
+            EditionManager editionManager,
+            IAppNotifier appNotifier,
+            ILocalizationContext localizationContext,
+            TenantManager tenantManager,
+            ISubscriptionPaymentRepository subscriptionPaymentRepository,
+            IPaymentGatewayManagerFactory paymentGatewayManagerFactory,
+            IPaymentCache paymentCache)
         {
             _multiTenancyConfig = multiTenancyConfig;
             _recaptchaValidator = recaptchaValidator;
             _editionManager = editionManager;
             _appNotifier = appNotifier;
+            _localizationContext = localizationContext;
+            _tenantManager = tenantManager;
+            _subscriptionPaymentRepository = subscriptionPaymentRepository;
+            _paymentGatewayManagerFactory = paymentGatewayManagerFactory;
+            _paymentCache = paymentCache;
 
             AppUrlService = NullAppUrlService.Instance;
         }
 
         public async Task<RegisterTenantOutput> RegisterTenant(RegisterTenantInput input)
         {
+            await CheckEditionSubscriptionAsync(input.EditionId, input.SubscriptionStartType, input.Gateway, input.PaymentId);
+
             using (CurrentUnitOfWork.SetTenantId(null))
             {
                 CheckTenantRegistrationIsEnabled();
@@ -51,42 +82,143 @@ namespace Magicodes.Admin.MultiTenancy
                 //Getting host-specific settings
                 var isNewRegisteredTenantActiveByDefault = await SettingManager.GetSettingValueForApplicationAsync<bool>(AppSettings.TenantManagement.IsNewRegisteredTenantActiveByDefault);
                 var isEmailConfirmationRequiredForLogin = await SettingManager.GetSettingValueForApplicationAsync<bool>(AbpZeroSettingNames.UserManagement.IsEmailConfirmationRequiredForLogin);
-                var defaultEditionIdValue = await SettingManager.GetSettingValueForApplicationAsync(AppSettings.TenantManagement.DefaultEdition);
-                int? defaultEditionId = null;
 
-                if (!string.IsNullOrEmpty(defaultEditionIdValue) && (await _editionManager.FindByIdAsync(Convert.ToInt32(defaultEditionIdValue)) != null))
+                DateTime? subscriptionEndDate = null;
+                var isInTrialPeriod = input.SubscriptionStartType == SubscriptionStartType.Trial;
+
+                if (isInTrialPeriod)
                 {
-                    defaultEditionId = Convert.ToInt32(defaultEditionIdValue);
+                    var edition = (SubscribableEdition)await _editionManager.GetByIdAsync(input.EditionId);
+
+                    subscriptionEndDate = Clock.Now.AddDays(edition.TrialDayCount ?? 0);
                 }
 
-                var tenantId = await TenantManager.CreateWithAdminUserAsync(
+                var tenantId = await _tenantManager.CreateWithAdminUserAsync(
                     input.TenancyName,
                     input.Name,
                     input.AdminPassword,
                     input.AdminEmailAddress,
                     null,
                     isNewRegisteredTenantActiveByDefault,
-                    defaultEditionId,
+                    input.EditionId,
                     false,
                     true,
+                    subscriptionEndDate,
+                    isInTrialPeriod,
                     AppUrlService.CreateEmailActivationUrlFormat(input.TenancyName)
                 );
 
-                var tenant = await TenantManager.GetByIdAsync(tenantId);
+                Tenant tenant;
+
+                if (input.SubscriptionStartType == SubscriptionStartType.Paid)
+                {
+                    if (!input.Gateway.HasValue)
+                    {
+                        throw new Exception("Gateway is missing!");
+                    }
+
+                    var payment = await _subscriptionPaymentRepository.GetByGatewayAndPaymentIdAsync(
+                        input.Gateway.Value,
+                        input.PaymentId
+                    );
+
+                    tenant = await _tenantManager.UpdateTenantAsync(
+                        tenantId,
+                        true,
+                        false,
+                        payment.PaymentPeriodType,
+                        payment.EditionId,
+                        EditionPaymentType.NewRegistration);
+                }
+                else
+                {
+                    tenant = await TenantManager.GetByIdAsync(tenantId);
+                }
+
                 await _appNotifier.NewTenantRegisteredAsync(tenant);
 
                 return new RegisterTenantOutput
                 {
-                    TenantId = tenantId,
+                    TenantId = tenant.Id,
                     TenancyName = input.TenancyName,
                     Name = input.Name,
-                    UserName = Authorization.Users.User.AdminUserName,
+                    UserName = AbpUserBase.AdminUserName,
                     EmailAddress = input.AdminEmailAddress,
-                    IsActive = isNewRegisteredTenantActiveByDefault,
+                    IsActive = tenant.IsActive,
                     IsEmailConfirmationRequired = isEmailConfirmationRequiredForLogin,
                     IsTenantActive = tenant.IsActive
                 };
             }
+        }
+
+        public async Task<EditionsSelectOutput> GetEditionsForSelect()
+        {
+            var features = FeatureManager
+                .GetAll()
+                .Where(feature => (feature[FeatureMetadata.CustomFeatureKey] as FeatureMetadata)?.IsVisibleOnPricingTable ?? false);
+
+            var flatFeatures = ObjectMapper
+                .Map<List<FlatFeatureSelectDto>>(features)
+                .OrderBy(f => f.DisplayName)
+                .ToList();
+
+            var editions = (await _editionManager.GetAllAsync())
+                .Cast<SubscribableEdition>()
+                .OrderBy(e => e.MonthlyPrice)
+                .ToList();
+
+            var featureDictionary = features.ToDictionary(feature => feature.Name, f => f);
+
+            var editionWithFeatures = new List<EditionWithFeaturesDto>();
+            foreach (var edition in editions)
+            {
+                editionWithFeatures.Add(await CreateEditionWithFeaturesDto(edition, featureDictionary));
+            }
+
+            int? tenantEditionId = null;
+            if (AbpSession.UserId.HasValue)
+            {
+                tenantEditionId = (await _tenantManager.GetByIdAsync(AbpSession.GetTenantId()))
+                    .EditionId;
+            }
+
+            return new EditionsSelectOutput
+            {
+                AllFeatures = flatFeatures,
+                EditionsWithFeatures = editionWithFeatures,
+                TenantEditionId = tenantEditionId
+            };
+        }
+
+        public async Task<EditionSelectDto> GetEdition(int editionId)
+        {
+            var edition = await _editionManager.GetByIdAsync(editionId);
+            var editionDto = ObjectMapper.Map<EditionSelectDto>(edition);
+            foreach (var paymentGateway in Enum.GetValues(typeof(SubscriptionPaymentGatewayType)).Cast<SubscriptionPaymentGatewayType>())
+            {
+                using (var paymentGatewayManager = _paymentGatewayManagerFactory.Create(paymentGateway))
+                {
+                    var additionalData = await paymentGatewayManager.Object.GetAdditionalPaymentData(ObjectMapper.Map<SubscribableEdition>(edition));
+                    editionDto.AdditionalData.Add(paymentGateway, additionalData);
+                }
+            }
+
+            return editionDto;
+        }
+
+        private async Task<EditionWithFeaturesDto> CreateEditionWithFeaturesDto(SubscribableEdition edition, Dictionary<string, Feature> featureDictionary)
+        {
+            return new EditionWithFeaturesDto
+            {
+                Edition = ObjectMapper.Map<EditionSelectDto>(edition),
+                FeatureValues = (await _editionManager.GetFeatureValuesAsync(edition.Id))
+                    .Where(featureValue => featureDictionary.ContainsKey(featureValue.Name))
+                    .Select(fv => new NameValueDto(
+                        fv.Name,
+                        featureDictionary[fv.Name].GetValueText(fv.Value, _localizationContext))
+                    )
+                    .ToList()
+            };
         }
 
         private void CheckTenantRegistrationIsEnabled()
@@ -115,6 +247,64 @@ namespace Magicodes.Admin.MultiTenancy
             }
 
             return SettingManager.GetSettingValueForApplication<bool>(AppSettings.TenantManagement.UseCaptchaOnRegistration);
+        }
+
+        private async Task CheckEditionSubscriptionAsync(int editionId, SubscriptionStartType subscriptionStartType, SubscriptionPaymentGatewayType? gateway, string paymentId)
+        {
+            var edition = await _editionManager.GetByIdAsync(editionId);
+            var subscribableEdition = ObjectMapper.Map<SubscribableEdition>(edition);
+
+            CheckSubscriptionStart(subscribableEdition, subscriptionStartType);
+            CheckPaymentCache(subscribableEdition, subscriptionStartType, gateway, paymentId);
+        }
+
+        private void CheckPaymentCache(SubscribableEdition edition, SubscriptionStartType subscriptionStartType, SubscriptionPaymentGatewayType? gateway, string paymentId)
+        {
+            if (edition.IsFree || subscriptionStartType != SubscriptionStartType.Paid)
+            {
+                return;
+            }
+
+            if (!gateway.HasValue)
+            {
+                throw new Exception("Gateway cannot be empty !");
+            }
+
+            if (paymentId.IsNullOrEmpty())
+            {
+                throw new Exception("PaymentId cannot be empty !");
+            }
+
+            var paymentCacheItem = _paymentCache.GetCacheItemOrNull(gateway.Value, paymentId);
+            if (paymentCacheItem == null)
+            {
+                throw new UserFriendlyException(L("PaymentMightBeExpiredWarning"));
+            }
+        }
+
+        private static void CheckSubscriptionStart(SubscribableEdition edition, SubscriptionStartType subscriptionStartType)
+        {
+            switch (subscriptionStartType)
+            {
+                case SubscriptionStartType.Free:
+                    if (!edition.IsFree)
+                    {
+                        throw new Exception("This is not a free edition !");
+                    }
+                    break;
+                case SubscriptionStartType.Trial:
+                    if (!edition.HasTrial())
+                    {
+                        throw new Exception("Trial is not available for this edition !");
+                    }
+                    break;
+                case SubscriptionStartType.Paid:
+                    if (edition.IsFree)
+                    {
+                        throw new Exception("This is a free edition and cannot be subscribed as paid !");
+                    }
+                    break;
+            }
         }
     }
 }

@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
-using System.Linq.Dynamic;
+using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using Abp.Application.Services.Dto;
 using Abp.Auditing;
@@ -11,6 +10,7 @@ using Abp.Authorization.Users;
 using Abp.Domain.Repositories;
 using Abp.Runtime.Session;
 using Abp.UI;
+using Microsoft.EntityFrameworkCore;
 using Magicodes.Admin.Authorization.Users.Dto;
 using Magicodes.Admin.MultiTenancy;
 
@@ -103,7 +103,7 @@ namespace Magicodes.Admin.Authorization.Users
 
             if (!currentUserAccount.UserLinkId.HasValue)
             {
-                throw new ApplicationException(L("You are not linked to any account"));
+                throw new Exception(L("You are not linked to any account"));
             }
 
             if (!await _userLinkManager.AreUsersLinked(AbpSession.ToUserIdentifier(), input.ToUserIdentifier()))

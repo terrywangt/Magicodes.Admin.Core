@@ -1,7 +1,9 @@
 ﻿using System;
 using Abp.Application.Services.Dto;
 using Abp.AutoMapper;
+using Abp.Timing;
 using Magicodes.Admin.MultiTenancy;
+using Magicodes.Admin.MultiTenancy.Payments;
 
 namespace Magicodes.Admin.Sessions.Dto
 {
@@ -12,12 +14,49 @@ namespace Magicodes.Admin.Sessions.Dto
 
         public string Name { get; set; }
 
-        public string EditionDisplayName { get; set; }
-
         public Guid? LogoId { get; set; }
 
         public string LogoFileType { get; set; }
 
         public Guid? CustomCssId { get; set; }
+
+        public DateTime? SubscriptionEndDateUtc { get; set; }
+
+        public bool IsInTrialPeriod { get; set; }
+
+        public EditionInfoDto Edition { get; set; }
+
+        public DateTime CreationTime { get; set; }
+
+        public PaymentPeriodType PaymentPeriodType { get; set; }
+
+        public string SubscriptionDateString { get; set; }
+
+        public string CreationTimeString { get; set; }
+
+        public bool IsInTrial()
+        {
+            return IsInTrialPeriod;
+        }
+
+        public bool SubscriptionIsExpiringSoon()
+        {
+            if (SubscriptionEndDateUtc.HasValue)
+            {
+                return Clock.Now.ToUniversalTime().AddDays(AppConsts.SubscriptionExpireNootifyDayCount) >= SubscriptionEndDateUtc.Value;
+            }
+
+            return false;
+        }
+
+        public int GetSubscriptionExpiringDayCount()
+        {
+            if (!SubscriptionEndDateUtc.HasValue)
+            {
+                return 0;
+            }
+
+            return Convert.ToInt32(SubscriptionEndDateUtc.Value.Subtract(Clock.Now.ToUniversalTime()).TotalDays);
+        }
     }
 }

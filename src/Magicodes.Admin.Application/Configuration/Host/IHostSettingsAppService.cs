@@ -11,9 +11,5 @@ namespace Magicodes.Admin.Configuration.Host
         Task UpdateAllSettings(HostSettingsEditDto input);
 
         Task SendTestEmail(SendTestEmailInput input);
-
-        Task<SiteSettingsEditDto> GetSiteAsync();
-
-        Task UpdateSiteSettingsAsync(SiteSettingsEditDto settings);
     }
 }

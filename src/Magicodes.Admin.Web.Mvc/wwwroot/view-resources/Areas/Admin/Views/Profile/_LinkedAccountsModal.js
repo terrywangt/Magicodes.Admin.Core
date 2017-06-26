@@ -85,7 +85,12 @@
                 data: JSON.stringify({
                     targetUserId: linkedUser.id,
                     targetTenantId: linkedUser.tenantId
-                })
+                }),
+                success: function () {
+                    if (!app.supportsTenancyNameInUrl) {
+                        abp.multiTenancy.setTenantIdCookie(linkedUser.tenantId);
+                    }
+                }
             });
         }
 

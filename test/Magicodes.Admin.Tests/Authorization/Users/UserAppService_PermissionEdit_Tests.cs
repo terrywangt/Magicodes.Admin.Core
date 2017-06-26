@@ -1,9 +1,9 @@
-using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using Abp.Application.Services.Dto;
 using Abp.Authorization;
 using Abp.Authorization.Users;
+using Microsoft.EntityFrameworkCore;
 using Magicodes.Admin.Authorization;
 using Magicodes.Admin.Authorization.Users;
 using Magicodes.Admin.Authorization.Users.Dto;

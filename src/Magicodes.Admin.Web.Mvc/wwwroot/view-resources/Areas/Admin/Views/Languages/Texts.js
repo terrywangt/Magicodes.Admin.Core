@@ -30,21 +30,21 @@
                     title: app.localize('Key'),
                     width: '30%',
                     display: function (data) {
-                        return '<span title="' + data.record.key + '">' + app.utils.truncateString(data.record.key, 32) + '</span>';
+                        return '<span title="' + data.record.key + '">' + app.utils.string.truncate(data.record.key, 32) + '</span>';
                     }
                 },
                 baseValue: {
                     title: app.localize('BaseValue'),
                     width: '30%',
                     display: function (data) {
-                        return '<span title="' + (data.record.baseValue || '') + '">' + (app.utils.truncateString(data.record.baseValue, 32) || '') + '</span>';
+                        return '<span title="' + (data.record.baseValue || '') + '">' + (app.utils.string.truncate(data.record.baseValue, 32) || '') + '</span>';
                     }
                 },
                 targetValue: {
                     title: app.localize('TargetValue'),
                     width: '30%',
                     display: function (data) {
-                        return '<span title="' + (data.record.targetValue || '') + '">' + (app.utils.truncateString(data.record.targetValue, 32) || '') + '</span>';
+                        return '<span title="' + (data.record.targetValue || '') + '">' + (app.utils.string.truncate(data.record.targetValue, 32) || '') + '</span>';
                     }
                 },
                 actions: {

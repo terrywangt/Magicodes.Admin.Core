@@ -16,16 +16,21 @@ namespace Magicodes.Admin.Authorization.Impersonation
 
         private readonly ICacheManager _cacheManager;
         private readonly UserManager _userManager;
+        private readonly UserClaimsPrincipalFactory _principalFactory;
 
-        public ImpersonationManager(ICacheManager cacheManager, UserManager userManager)
+        public ImpersonationManager(
+            ICacheManager cacheManager,
+            UserManager userManager,
+            UserClaimsPrincipalFactory principalFactory)
         {
             _cacheManager = cacheManager;
             _userManager = userManager;
+            _principalFactory = principalFactory;
 
             AbpSession = NullAbpSession.Instance;
         }
 
-        public async Task<UserAndIdentity> GetImpersonatedUserAndIdentity(string impersonationToken, string authenticationType)
+        public async Task<UserAndIdentity> GetImpersonatedUserAndIdentity(string impersonationToken)
         {
             var cacheItem = await _cacheManager.GetImpersonationCache().GetOrDefaultAsync(impersonationToken);
             if (cacheItem == null)
@@ -36,10 +41,11 @@ namespace Magicodes.Admin.Authorization.Impersonation
             CheckCurrentTenant(cacheItem.TargetTenantId);
 
             //Get the user from tenant
-            var user = await _userManager.FindByIdAsync(cacheItem.TargetUserId);
+            var user = await _userManager.FindByIdAsync(cacheItem.TargetUserId.ToString());
 
             //Create identity
-            var identity = await _userManager.CreateIdentityAsync(user, authenticationType);
+
+            var identity = (ClaimsIdentity)(await _principalFactory.CreateAsync(user)).Identity;
 
             if (!cacheItem.IsBackToImpersonator)
             {
@@ -95,7 +101,7 @@ namespace Magicodes.Admin.Authorization.Impersonation
         {
             if (AbpSession.TenantId != tenantId)
             {
-                throw new ApplicationException($"Current tenant is different than given tenant. AbpSession.TenantId: {AbpSession.TenantId}, given tenantId: {tenantId}");
+                throw new Exception($"Current tenant is different than given tenant. AbpSession.TenantId: {AbpSession.TenantId}, given tenantId: {tenantId}");
             }
         }
 

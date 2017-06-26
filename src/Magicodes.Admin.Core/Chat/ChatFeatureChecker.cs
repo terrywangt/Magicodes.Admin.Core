@@ -1,3 +1,4 @@
+#if FEATURE_SIGNALR
 using Abp.Application.Features;
 using Abp.UI;
 using Magicodes.Admin.Features;
@@ -64,3 +65,4 @@ namespace Magicodes.Admin.Chat
         }
     }
 }
+#endif

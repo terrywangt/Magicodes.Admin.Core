@@ -1,11 +1,15 @@
 ﻿@using Abp.Authorization.Users
 @using Abp.Configuration
 @using Abp.Extensions
+@using Abp.Json
 @using Abp.Zero.Configuration
 @using Magicodes.Admin.Web.Areas.Admin.Models.Common.Modals
 @using Magicodes.Admin.Web.Areas.Admin.Models.Users
 @model CreateOrEditUserModalViewModel
 
+<script>
+    window.passwordComplexitySetting = @Html.Raw(Model.PasswordComplexitySetting.ToJsonString(indented: true));
+</script>
 @Html.Partial("~/Areas/Admin/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(Model.IsEditMode ? (L("EditUser") + ": " + Model.User.UserName) : L("CreateNewUser")))
 
 <div class="modal-body">
@@ -88,13 +92,13 @@
                         </div>
                     </div>
 
-                    <div class="form-group form-md-line-input form-md-floating-label no-hint" style="@(Model.IsEditMode ? "display:block" : "display:none")">
-                        <input id="EditUser_Password" type="password" name="Password" class="form-control" maxlength="@Magicodes.Admin.Authorization.Users.User.MaxPlainPasswordLength" minlength="@Magicodes.Admin.Authorization.Users.User.MinPlainPasswordLength">
+                    <div class="form-group form-md-line-input form-md-floating-label no-hint user-password" style="@(Model.IsEditMode ? "display:block" : "display:none")">
+                        <input id="EditUser_Password" type="password" name="Password" class="form-control" maxlength="@Magicodes.Admin.Authorization.Users.User.MaxPlainPasswordLength">
                         <label>@L("Password")</label>
                     </div>
 
-                    <div class="form-group form-md-line-input form-md-floating-label no-hint" style="@(Model.IsEditMode ? "display:block" : "display:none")">
-                        <input type="password" name="PasswordRepeat" class="form-control" maxlength="@Magicodes.Admin.Authorization.Users.User.MaxPlainPasswordLength" minlength="@Magicodes.Admin.Authorization.Users.User.MinPlainPasswordLength" equalto="#EditUser_Password">
+                    <div class="form-group form-md-line-input form-md-floating-label no-hint user-password" style="@(Model.IsEditMode ? "display:block" : "display:none")">
+                        <input type="password" name="PasswordRepeat" class="form-control" maxlength="@Magicodes.Admin.Authorization.Users.User.MaxPlainPasswordLength" equalto="#EditUser_Password">
                         <label>@L("PasswordRepeat")</label>
                     </div>
 

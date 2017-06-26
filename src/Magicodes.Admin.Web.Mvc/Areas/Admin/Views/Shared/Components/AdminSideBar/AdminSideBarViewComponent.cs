@@ -4,10 +4,11 @@ using Abp.Runtime.Session;
 using Microsoft.AspNetCore.Mvc;
 using Magicodes.Admin.Web.Areas.Admin.Models.Layout;
 using Magicodes.Admin.Web.Areas.Admin.Startup;
+using Magicodes.Admin.Web.Views;
 
 namespace Magicodes.Admin.Web.Areas.Admin.Views.Shared.Components.AdminSideBar
 {
-    public class AdminSideBarViewComponent : ViewComponent
+    public class AdminSideBarViewComponent : AdminViewComponent
     {
         private readonly IUserNavigationManager _userNavigationManager;
         private readonly IAbpSession _abpSession;

@@ -32,10 +32,10 @@
                         location.reload();
                         return;
                     case 2: //InActive
-                        abp.message.warn(app.localize('TenantIsNotActive', this.tenancyName));
+                        abp.message.warn(app.localize('TenantIsNotActive', tenancyName));
                         break;
                     case 3: //NotFound
-                        abp.message.warn(app.localize('ThereIsNoTenantDefinedWithName{0}', this.tenancyName));
+                        abp.message.warn(app.localize('ThereIsNoTenantDefinedWithName{0}', tenancyName));
                         break;
                 }
             }).always(function () {

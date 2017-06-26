@@ -2,8 +2,6 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using Abp.Zero.AspNetCore;
-using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Authentication.MicrosoftAccount;
 using Newtonsoft.Json.Linq;
 
@@ -13,7 +11,7 @@ namespace Magicodes.Admin.Web.Authentication.External.Microsoft
     {
         public const string Name = "Microsoft";
         
-        public override async Task<ExternalLoginUserInfo> GetUserInfo(string accessCode)
+        public override async Task<ExternalAuthUserInfo> GetUserInfo(string accessCode)
         {
             /* TODO: Microsoft login could not be tested because of a problem on Angular2 application.
              * see login.service.ts in Angular2 application.
@@ -36,12 +34,13 @@ namespace Magicodes.Admin.Web.Authentication.External.Microsoft
 
                 var payload = JObject.Parse(await response.Content.ReadAsStringAsync());
 
-                return new ExternalLoginUserInfo
+                return new ExternalAuthUserInfo
                 {
                     Name = MicrosoftAccountHelper.GetDisplayName(payload),
                     EmailAddress = MicrosoftAccountHelper.GetEmail(payload),
                     Surname = MicrosoftAccountHelper.GetSurname(payload),
-                    LoginInfo = new UserLoginInfo(Name, MicrosoftAccountHelper.GetId(payload))
+                    Provider = Name,
+                    ProviderKey = MicrosoftAccountHelper.GetId(payload)
                 };
             }
         }

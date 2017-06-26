@@ -34,27 +34,27 @@
                 actions: {
                     title: app.localize('Actions'),
                     width: '30%',
-                    display: function (data) {
-                        var $span = $('<span></span>');
-
-                        if (_permissions.edit) {
-                            $('<button class="btn btn-default btn-xs" title="' + app.localize('Edit') + '"><i class="fa fa-edit"></i></button>')
-                                .appendTo($span)
-                                .click(function () {
-                                    _createOrEditModal.open({ id: data.record.id });
-                                });
+                    sorting: false,
+                    type: 'record-actions',
+                    cssClass: 'btn btn-xs btn-primary blue',
+                    text: '<i class="fa fa-cog"></i> ' + app.localize('Actions') + ' <span class="caret"></span>',
+                    items: [{
+                        text: app.localize('Edit'),
+                        visible: function () {
+                            return _permissions.edit;
+                        },
+                        action: function (data) {
+                            _createOrEditModal.open({ id: data.record.id });
                         }
-
-                        if (!data.record.isStatic && _permissions.delete) {
-                            $('<button class="btn btn-default btn-xs" title="' + app.localize('Delete') + '"><i class="fa fa-trash-o"></i></button>')
-                                .appendTo($span)
-                                .click(function () {
-                                    deleteRole(data.record);
-                                });
+                    }, {
+                        text: app.localize('Delete'),
+                        visible: function (data) {
+                            return !data.record.isStatic && _permissions.delete;
+                        },
+                        action: function (data) {
+                            deleteRole(data.record);
                         }
-
-                        return $span;
-                    }
+                    }]
                 },
                 displayName: {
                     title: app.localize('RoleName'),

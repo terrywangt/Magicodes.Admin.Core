@@ -21,7 +21,7 @@
     "jquery-slimscroll": "^1.3.8",
     "fancyBox": "^2.1.5",
     "OwlCarousel": "^1.3.2",
-    "jtable": "^2.4.0",
+    "jtable": "v2.5.0",
     "jstree": "^3.3.1",
     "morris.js": "morrisjs#^0.5.1",
     "bootstrap-daterangepicker": "^2.1.24",
@@ -31,11 +31,25 @@
     "jquery-form": "^3.46.0",
     "jquery-timeago": "^1.5.3",
     "signalr": "^2.2.1",
-    "jquery.sparkline": "^2.1.2",
     "mustache.js": "^2.2.1",
     "jquery-ui": "^1.12.0",
-    "abp-web-resources": "^1.1.2",
+    "abp-web-resources": "^2.1.2",
     "js-cookie": "^2.1.3",
-    "pdf.js-viewer": "v1.6.210"
+    "tether": "v1.4.0",
+    "bootstrap-datepicker": "v1.7.0-RC3",
+    "purl": "v2.3.1",
+    "counter-up": "1.0.0",
+    "Flot": "flot#^0.8.3",
+    "push.js": "0.0.12",
+    "waypoints": "4.0.1",
+    "datamaps": "v0.5.8",
+    "eonasdan-bootstrap-datetimepicker": "v4.17.45",
+    "jquery.sparkline": "https://github.com/imsky/jquery.sparkline.git#^2.4.0",
+    "jquery.easy-pie-chart": "^2.1.6",
+    "uniform": "jquery-uniform#^1.0.0",
+    "inputmask": "^3.3.7"
+  },
+  "resolutions": {
+    "jquery": ">= 2.1.0"
   }
 }

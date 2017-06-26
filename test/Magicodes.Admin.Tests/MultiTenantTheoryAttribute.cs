@@ -1,7 +1,4 @@
-﻿using System;
-using Magicodes.Admin.Configuration;
-using Xunit;
-using Abp.Reflection.Extensions;
+﻿using Xunit;
 
 namespace Magicodes.Admin.Tests
 {
@@ -9,12 +6,7 @@ namespace Magicodes.Admin.Tests
     {
         public MultiTenantTheoryAttribute()
         {
-            var config = AppConfigurations.Get(
-                 typeof(AdminTestModule).Assembly.GetDirectoryPathOrNull()
-             );
-
-            var multiTenancyConfig = config["MultiTenancyEnabled"];
-            if (multiTenancyConfig != null && multiTenancyConfig.Equals("false", StringComparison.OrdinalIgnoreCase))
+            if (!AdminConsts.MultiTenancyEnabled)
             {
                 Skip = "MultiTenancy is disabled.";
             }

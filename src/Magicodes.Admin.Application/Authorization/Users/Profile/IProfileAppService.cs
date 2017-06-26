@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Abp.Application.Services;
+using Magicodes.Admin.Authorization.Users.Dto;
 using Magicodes.Admin.Authorization.Users.Profile.Dto;
 
 namespace Magicodes.Admin.Authorization.Users.Profile
@@ -22,5 +23,7 @@ namespace Magicodes.Admin.Authorization.Users.Profile
         Task<GetProfilePictureOutput> GetProfilePictureById(Guid profilePictureId);
 
         Task<GetProfilePictureOutput> GetFriendProfilePictureById(GetFriendProfilePictureByIdInput input);
+
+        Task ChangeLanguage(ChangeUserLanguageDto input);
     }
 }

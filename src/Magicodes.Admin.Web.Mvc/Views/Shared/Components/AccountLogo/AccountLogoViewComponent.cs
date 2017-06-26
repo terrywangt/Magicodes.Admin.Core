@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Abp.Configuration.Startup;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Magicodes.Admin.Web.Session;
 
 namespace Magicodes.Admin.Web.Views.Shared.Components.AccountLogo
 {
-    public class AccountLogoViewComponent : ViewComponent
+    public class AccountLogoViewComponent : AdminViewComponent
     {
         private readonly IPerRequestSessionCache _sessionCache;
 

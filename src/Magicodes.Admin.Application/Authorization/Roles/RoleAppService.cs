@@ -1,13 +1,12 @@
 ﻿using System.Collections.Generic;
-using System.Data.Entity;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Abp.Application.Services.Dto;
 using Abp.Authorization;
-using Abp.AutoMapper;
 using Abp.Linq.Extensions;
 using Abp.Extensions;
+using Microsoft.EntityFrameworkCore;
 using Magicodes.Admin.Authorization.Permissions;
 using Magicodes.Admin.Authorization.Permissions.Dto;
 using Magicodes.Admin.Authorization.Roles.Dto;
@@ -37,7 +36,7 @@ namespace Magicodes.Admin.Authorization.Roles
                 )
                 .ToListAsync();
 
-            return new ListResultDto<RoleListDto>(roles.MapTo<List<RoleListDto>>());
+            return new ListResultDto<RoleListDto>(ObjectMapper.Map<List<RoleListDto>>(roles));
         }
 
         [AbpAuthorize(AppPermissions.Pages_Administration_Roles_Create, AppPermissions.Pages_Administration_Roles_Edit)]
@@ -51,7 +50,7 @@ namespace Magicodes.Admin.Authorization.Roles
             {
                 var role = await _roleManager.GetRoleByIdAsync(input.Id.Value);
                 grantedPermissions = (await _roleManager.GetGrantedPermissionsAsync(role)).ToArray();
-                roleEditDto = role.MapTo<RoleEditDto>();
+                roleEditDto = ObjectMapper.Map<RoleEditDto>(role);
             }
             else
             {
@@ -61,7 +60,7 @@ namespace Magicodes.Admin.Authorization.Roles
             return new GetRoleForEditOutput
             {
                 Role = roleEditDto,
-                Permissions = permissions.MapTo<List<FlatPermissionDto>>().OrderBy(p => p.DisplayName).ToList(),
+                Permissions = ObjectMapper.Map<List<FlatPermissionDto>>(permissions).OrderBy(p => p.DisplayName).ToList(),
                 GrantedPermissionNames = grantedPermissions.Select(p => p.Name).ToList()
             };
         }

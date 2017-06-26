@@ -1,18 +1,19 @@
-﻿using Abp;
+﻿using System.Threading.Tasks;
+using Abp;
 using Abp.Domain.Services;
 
 namespace Magicodes.Admin.Friendships
 {
     public interface IFriendshipManager : IDomainService
     {
-        void CreateFriendship(Friendship friendship);
+        Task CreateFriendshipAsync(Friendship friendship);
 
-        void UpdateFriendship(Friendship friendship);
+        Task UpdateFriendshipAsync(Friendship friendship);
 
-        Friendship GetFriendshipOrNull(UserIdentifier user, UserIdentifier probableFriend);
+        Task<Friendship> GetFriendshipOrNullAsync(UserIdentifier user, UserIdentifier probableFriend);
 
-        void BanFriend(UserIdentifier userIdentifier, UserIdentifier probableFriend);
-        
-        void AcceptFriendshipRequest(UserIdentifier userIdentifier, UserIdentifier probableFriend);
+        Task BanFriendAsync(UserIdentifier userIdentifier, UserIdentifier probableFriend);
+
+        Task AcceptFriendshipRequestAsync(UserIdentifier userIdentifier, UserIdentifier probableFriend);
     }
 }

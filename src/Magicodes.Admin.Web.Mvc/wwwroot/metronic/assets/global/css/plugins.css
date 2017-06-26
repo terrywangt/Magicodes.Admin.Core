@@ -191,6 +191,13 @@ Bootstrap  Datetimepicker
 .modal-open .datetimepicker {
   z-index: 10055; }
 
+.bs-datetime .input-group-addon {
+  background: none;
+  padding: 0;
+  border-left: 0; }
+  .bs-datetime .input-group-addon .btn {
+    border: 0; }
+
 /***
 Bootstrap Editable
 ***/
@@ -643,14 +650,36 @@ Bootstrap GtreeTable
 /***
 Modify bootstrap-tagsinput plugin's css
 ***/
-.bootstrap-tagsinput .tag [data-role="remove"] {
+.bootstrap-tagsinput {
+  display: block;
+  padding: 4px 4px 6px 4px;
+  font-size: 14px;
+  font-weight: normal;
+  min-height: 34px;
+  color: #555555;
+  background-color: #fff;
+  border: 1px solid #c2cad8;
+  -webkit-box-shadow: none;
   box-shadow: none;
-  font-family: arial; }
-  .bootstrap-tagsinput .tag [data-role="remove"]:after {
+  -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+  transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s; }
+  .bootstrap-tagsinput .tag [data-role="remove"] {
+    box-shadow: none;
     font-family: arial; }
-  .bootstrap-tagsinput .tag [data-role="remove"]:hover {
-    text-decoration: none;
-    box-shadow: none; }
+    .bootstrap-tagsinput .tag [data-role="remove"]:after {
+      font-family: arial; }
+    .bootstrap-tagsinput .tag [data-role="remove"]:hover {
+      text-decoration: none;
+      box-shadow: none; }
+  .bootstrap-tagsinput .tag {
+    display: inline-block;
+    margin-top: 2px;
+    padding: 4px 6px 4px 6px; }
+    .bootstrap-tagsinput .tag input {
+      width: 5em !important; }
+
+.bootstrap-tagsinput-width-auto .bootstrap-tagsinput {
+  display: inline-block; }
 
 .mt-bootstrap-tables .mt-btm-transform .bars {
   height: auto; }
@@ -671,6 +700,13 @@ Bootbox
 ***/
 .bootbox .bootbox-close-button {
   margin-top: 0px !important; }
+
+.tt-suggestion.tt-cursor {
+  color: #999;
+  background-color: #eee; }
+
+.multiselect-container > li > a > label {
+  padding: 3px 5px 3px 15px; }
 
 /*--------------------------------------------------
     [CSS Animation Amchart]

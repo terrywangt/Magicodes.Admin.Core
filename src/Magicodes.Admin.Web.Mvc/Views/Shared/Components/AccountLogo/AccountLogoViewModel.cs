@@ -15,7 +15,7 @@ namespace Magicodes.Admin.Web.Views.Shared.Components.AccountLogo
         {
             if (LoginInformations.Tenant?.LogoId == null)
             {
-                return appPath + "Common/Images/app-logo-on-light.png";
+                return appPath + "Common/Images/app-logo-on-dark.png";
             }
 
             return appPath + "TenantCustomization/GetLogo?id=" + LoginInformations.Tenant.LogoId;

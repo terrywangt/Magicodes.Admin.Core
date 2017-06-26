@@ -1,4 +1,7 @@
-﻿var CurrentPage = function () {
+﻿// TODO: Remove this file that's content is moved to register.js
+
+
+var CurrentPage = function () {
 
     var _passwordComplexityHelper = new app.PasswordComplexityHelper();
 
@@ -66,7 +69,7 @@
             }
         });
 
-        _passwordComplexityHelper.setPasswordComplexityRules($("input[name=AdminPassword]"), window.passwordComplexitySetting);
+        _passwordComplexityHelper.setPasswordComplexityRules($("input[name=AdminPassword],input[name=AdminPasswordRepeat]"), window.passwordComplexitySetting);
     }
 
     return {

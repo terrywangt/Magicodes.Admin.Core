@@ -9,6 +9,7 @@ using Magicodes.Admin.Authorization.Permissions;
 using Magicodes.Admin.Authorization.Roles;
 using Magicodes.Admin.Authorization.Roles.Dto;
 using Magicodes.Admin.Authorization.Users;
+using Magicodes.Admin.Security;
 using Magicodes.Admin.Web.Areas.Admin.Models.Users;
 using Magicodes.Admin.Web.Controllers;
 
@@ -23,19 +24,22 @@ namespace Magicodes.Admin.Web.Areas.Admin.Controllers
         private readonly IUserLoginAppService _userLoginAppService;
         private readonly IRoleAppService _roleAppService;
         private readonly IPermissionAppService _permissionAppService;
+        private readonly IPasswordComplexitySettingStore _passwordComplexitySettingStore;
 
         public UsersController(
             IUserAppService userAppService,
             UserManager userManager,
             IUserLoginAppService userLoginAppService,
             IRoleAppService roleAppService,
-            IPermissionAppService permissionAppService)
+            IPermissionAppService permissionAppService,
+            IPasswordComplexitySettingStore passwordComplexitySettingStore)
         {
             _userAppService = userAppService;
             _userManager = userManager;
             _userLoginAppService = userLoginAppService;
             _roleAppService = roleAppService;
             _permissionAppService = permissionAppService;
+            _passwordComplexitySettingStore = passwordComplexitySettingStore;
         }
 
         public async Task<ActionResult> Index()
@@ -69,7 +73,10 @@ namespace Magicodes.Admin.Web.Areas.Admin.Controllers
         public async Task<PartialViewResult> CreateOrEditModal(long? id)
         {
             var output = await _userAppService.GetUserForEdit(new NullableIdDto<long> { Id = id });
-            var viewModel = new CreateOrEditUserModalViewModel(output);
+            var viewModel = new CreateOrEditUserModalViewModel(output)
+            {
+                PasswordComplexitySetting = await _passwordComplexitySettingStore.GetSettingsAsync()
+            };
 
             return PartialView("_CreateOrEditModal", viewModel);
         }

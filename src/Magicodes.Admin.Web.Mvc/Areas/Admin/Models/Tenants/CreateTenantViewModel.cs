@@ -1,13 +1,16 @@
 ﻿using System.Collections.Generic;
-using Abp.Application.Services.Dto;
+using Magicodes.Admin.Editions.Dto;
+using Magicodes.Admin.Security;
 
 namespace Magicodes.Admin.Web.Areas.Admin.Models.Tenants
 {
     public class CreateTenantViewModel
     {
-        public IReadOnlyList<ComboboxItemDto> EditionItems { get; set; }
+        public IReadOnlyList<SubscribableEditionComboboxItemDto> EditionItems { get; set; }
 
-        public CreateTenantViewModel(IReadOnlyList<ComboboxItemDto> editionItems)
+        public PasswordComplexitySetting PasswordComplexitySetting { get; set; }
+
+        public CreateTenantViewModel(IReadOnlyList<SubscribableEditionComboboxItemDto> editionItems)
         {
             EditionItems = editionItems;
         }

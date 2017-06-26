@@ -1,17 +1,16 @@
 using System.Collections.Generic;
-using System.Globalization;
 using Abp;
 using Abp.Dependency;
-using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Identity;
 using Magicodes.Admin.Authorization.Users;
 
 namespace Magicodes.Admin.MultiTenancy.Demo
 {
     public class RandomUserGenerator : ITransientDependency
     {
-        private readonly UserManager _userManager;
+        private readonly IPasswordHasher<User> _passwordHasher;
 
-        public static string[] Names = new[]
+        public static string[] Names =
         {
             "Agatha Christie",
             "Albert Einstein",
@@ -75,7 +74,7 @@ namespace Magicodes.Admin.MultiTenancy.Demo
             "William Faulkner"
         };
 
-        public static string[] EmailProviders = new[]
+        public static string[] EmailProviders =
         {
             "yahoo.com",
             "gmail.com",
@@ -87,9 +86,9 @@ namespace Magicodes.Admin.MultiTenancy.Demo
             "aspnetboilerplate.com"
         };
 
-        public RandomUserGenerator(UserManager userManager)
+        public RandomUserGenerator(IPasswordHasher<User> passwordHasher)
         {
-            _userManager = userManager;
+            _passwordHasher = passwordHasher;
         }
 
         public List<User> GetRandomUsers(int userCount, int tenantId)
@@ -107,23 +106,27 @@ namespace Magicodes.Admin.MultiTenancy.Demo
 
         private User CreateUser(int? tenantId, string nameSurname)
         {
-            return new User
+            var user =  new User
             {
                 TenantId = tenantId,
                 UserName = GenerateUsername(nameSurname),
                 EmailAddress = GenerateEmail(nameSurname),
-                Password = _userManager.PasswordHasher.HashPassword("123456"),
                 Name = nameSurname.Split(' ')[0],
                 Surname = nameSurname.Split(' ')[1],
                 ShouldChangePasswordOnNextLogin = false,
                 IsActive = (RandomHelper.GetRandom(0, 100) < 80), //A user will be active by 80% probability
                 IsEmailConfirmed = true
             };
+
+            user.SetNormalizedNames();
+            user.Password = _passwordHasher.HashPassword(user, "123456");
+
+            return user;
         }
 
         private static string GenerateUsername(string nameSurname)
         {
-            return nameSurname.Replace(" ", ".").ToLower(CultureInfo.InvariantCulture);
+            return nameSurname.Replace(" ", ".").ToLowerInvariant();
         }
 
         private static string GenerateEmail(string nameSurname)

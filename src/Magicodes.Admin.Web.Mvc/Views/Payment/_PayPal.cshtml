@@ -1,0 +1,13 @@
+﻿@using Magicodes.Admin.MultiTenancy.Payments
+@using Magicodes.Admin.Web.Resources
+@model Magicodes.Admin.Web.Models.Payment.PaymentViewModel
+@inject IWebResourceManager WebResourceManager
+@{
+    WebResourceManager.AddScript("https://www.paypalobjects.com/api/checkout.js");
+    WebResourceManager.AddScript(ApplicationPath + "view-resources/Views/Payment/_PayPal.js");
+}
+
+<input type="hidden" id="paypal-environment" value="@Model.GetAdditionalData(SubscriptionPaymentGatewayType.Paypal, "Environment")" />
+<input type="hidden" name="PaymentId" value="" />
+<input type="hidden" name="PayerId" value="" />
+<div id="paypal-button"></div>

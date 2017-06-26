@@ -5,6 +5,7 @@
 
         var _modalManager;
         var _$userInformationForm = null;
+        var _passwordComplexityHelper = new app.PasswordComplexityHelper();
 
         function _findAssignedRoleNames() {
             var assignedRoleNames = [];
@@ -28,6 +29,8 @@
 
             var passwordInputs = _modalManager.getModal().find('input[name=Password],input[name=PasswordRepeat]');
             var passwordInputGroups = passwordInputs.closest('.form-group');
+
+            _passwordComplexityHelper.setPasswordComplexityRules(passwordInputs, window.passwordComplexitySetting);
 
             $('#EditUser_SetRandomPassword').change(function () {
                 if ($(this).is(':checked')) {

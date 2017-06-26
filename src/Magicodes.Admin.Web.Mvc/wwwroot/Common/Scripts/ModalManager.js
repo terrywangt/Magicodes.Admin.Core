@@ -89,9 +89,14 @@
                 });
 
                 _$modal.find('.modal-body').keydown(function (e) {
-                    if (e.which == 13) {
-                        e.preventDefault();
-                        _saveModal();
+                    if (e.which === 13) {
+                        if (e.target.tagName.toLocaleLowerCase() === "textarea") {
+                            e.stopPropagation();
+                        } else {
+                            e.preventDefault();
+                            _saveModal();
+                        }
+
                     }
                 });
 

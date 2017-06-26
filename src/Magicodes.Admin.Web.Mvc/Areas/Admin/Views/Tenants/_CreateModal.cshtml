@@ -1,9 +1,11 @@
-﻿@using Abp.Application.Services.Dto
+﻿@using Abp.Json
 @using Magicodes.Admin.MultiTenancy
 @using Magicodes.Admin.Web.Areas.Admin.Models.Common.Modals
 @using Magicodes.Admin.Web.Areas.Admin.Models.Tenants
 @model CreateTenantViewModel
-
+<script>
+    window.passwordComplexitySetting = @Html.Raw(Model.PasswordComplexitySetting.ToJsonString(indented: true));
+</script>
 @Html.Partial("~/Areas/Admin/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(L("CreateNewTenant")))
 
 <div class="modal-body">
@@ -54,19 +56,53 @@
             </div>
         </div>
 
-        <div class="form-group form-md-line-input form-md-floating-label no-hint" style="display:none">
-            <input id="CreateTenant_AdminPassword" type="password" name="AdminPassword" class="form-control" maxlength="@Magicodes.Admin.Authorization.Users.User.MaxPlainPasswordLength" minlength="@Magicodes.Admin.Authorization.Users.User.MinPlainPasswordLength">
+        <div class="form-group form-md-line-input form-md-floating-label no-hint tenant-admin-password" style="display:none">
+            <input id="CreateTenant_AdminPassword" type="password" name="AdminPassword" class="form-control" maxlength="@Magicodes.Admin.Authorization.Users.User.MaxPlainPasswordLength">
             <label>@L("Password")</label>
         </div>
 
-        <div class="form-group form-md-line-input form-md-floating-label" style="display:none">
-            <input type="password" name="AdminPasswordRepeat" class="form-control" maxlength="@Magicodes.Admin.Authorization.Users.User.MaxPlainPasswordLength" minlength="@Magicodes.Admin.Authorization.Users.User.MinPlainPasswordLength" equalto="#CreateTenant_AdminPassword">
+        <div class="form-group form-md-line-input form-md-floating-label tenant-admin-password" style="display:none">
+            <input type="password" name="AdminPasswordRepeat" class="form-control" maxlength="@Magicodes.Admin.Authorization.Users.User.MaxPlainPasswordLength" equalto="#CreateTenant_AdminPassword">
             <label>@L("PasswordRepeat")</label>
         </div>
 
         <div class="form-group form-md-line-input form-md-floating-label no-hint">
-            @Html.DropDownList("EditionId", Model.EditionItems.Select(i => i.ToSelectListItem()), new { @class = "form-control edited" })
+            <select class="form-control edited" id="EditionId" name="EditionId">
+                @foreach (var edition in Model.EditionItems)
+                {
+                    <option value="@edition.Value" data-isfree="@edition.IsFree">@edition.DisplayText</option>
+                }
+            </select>
             <label for="EditionId">@L("Edition")</label>
+        </div>
+
+        <div class="md-checkbox-list subscription-component">
+            <div class="md-checkbox">
+                <input id="CreateTenant_IsUnlimited" class="md-check" type="checkbox" name="IsUnlimited" />
+                <label for="CreateTenant_IsUnlimited">
+                    <span class="inc"></span>
+                    <span class="check"></span>
+                    <span class="box"></span>
+                    @L("UnlimitedTimeSubscription")
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group form-md-line-input form-md-floating-label subscription-component">
+            <input type="datetime" name="SubscriptionEndDateUtc" class="form-control date-time-picker" required>
+            <label>@L("SubscriptionEndDateUtc")</label>
+        </div>
+
+        <div class="md-checkbox-list subscription-component">
+            <div class="md-checkbox">
+                <input id="CreateTenant_IsInTrialPeriod" class="md-check" type="checkbox" name="IsInTrialPeriod" value="true" />
+                <label for="CreateTenant_IsInTrialPeriod">
+                    <span class="inc"></span>
+                    <span class="check"></span>
+                    <span class="box"></span>
+                    @L("IsInTrialPeriod")
+                </label>
+            </div>
         </div>
 
         <div class="md-checkbox-list">

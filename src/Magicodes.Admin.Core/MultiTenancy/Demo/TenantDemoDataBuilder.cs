@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Abp;
+using Abp.Authorization.Users;
 using Abp.Dependency;
 using Abp.Domain.Repositories;
 using Abp.Organizations;
-using Microsoft.AspNet.Identity;
+using Microsoft.Extensions.Configuration;
 using Magicodes.Admin.Authorization.Roles;
 using Magicodes.Admin.Authorization.Users;
 using Magicodes.Admin.Chat;
+using Magicodes.Admin.Configuration;
 using Magicodes.Admin.Friendships;
 using Magicodes.Admin.Storage;
 
@@ -28,7 +29,7 @@ namespace Magicodes.Admin.MultiTenancy.Demo
         {
             get
             {
-                return string.Equals(ConfigurationManager.AppSettings["App.DemoMode"], "true", StringComparison.InvariantCultureIgnoreCase);
+                return string.Equals(_appConfiguration["App:DemoMode"], "true", StringComparison.OrdinalIgnoreCase);
             }
         }
 
@@ -39,6 +40,7 @@ namespace Magicodes.Admin.MultiTenancy.Demo
         private readonly IAppFolders _appFolders;
         private readonly IFriendshipManager _friendshipManager;
         private readonly IRepository<ChatMessage, long> _chatMessageRepository;
+        private readonly IConfigurationRoot _appConfiguration;
 
         public TenantDemoDataBuilder(
             OrganizationUnitManager organizationUnitManager,
@@ -47,8 +49,8 @@ namespace Magicodes.Admin.MultiTenancy.Demo
             IBinaryObjectManager binaryObjectManager,
             IAppFolders appFolders,
             IFriendshipManager friendshipManager,
-            IChatMessageManager chatMessageManager,
-            IRepository<ChatMessage, long> chatMessageRepository)
+            IRepository<ChatMessage, long> chatMessageRepository,
+            IAppConfigurationAccessor configurationAccessor)
         {
             _organizationUnitManager = organizationUnitManager;
             _userManager = userManager;
@@ -57,6 +59,8 @@ namespace Magicodes.Admin.MultiTenancy.Demo
             _appFolders = appFolders;
             _friendshipManager = friendshipManager;
             _chatMessageRepository = chatMessageRepository;
+
+            _appConfiguration = configurationAccessor.Configuration;
         }
 
         public async Task BuildForAsync(Tenant tenant)
@@ -111,7 +115,7 @@ namespace Magicodes.Admin.MultiTenancy.Demo
                 await CurrentUnitOfWork.SaveChangesAsync();
 
                 //Add to roles
-                _userManager.AddToRole(user.Id, StaticRoleNames.Tenants.User);
+                await _userManager.AddToRoleAsync(user, StaticRoleNames.Tenants.User);
 
                 //Add to OUs
                 var randomOus = RandomHelper.GenerateRandomizedList(organizationUnits).Take(RandomHelper.GetRandom(0, 3));
@@ -128,14 +132,14 @@ namespace Magicodes.Admin.MultiTenancy.Demo
             }
 
             //Set a picture to admin!
-            var admin = _userManager.FindByName(User.AdminUserName);
+            var admin = await _userManager.FindByNameAsync(AbpUserBase.AdminUserName);
             await SetRandomProfilePictureAsync(admin);
 
             //Create Friendships
             var friends = RandomHelper.GenerateRandomizedList(users).Take(3).ToList();
             foreach (var friend in friends)
             {
-                _friendshipManager.CreateFriendship(
+                await _friendshipManager.CreateFriendshipAsync(
                     new Friendship(
                         admin.ToUserIdentifier(),
                         friend.ToUserIdentifier(),
@@ -145,7 +149,7 @@ namespace Magicodes.Admin.MultiTenancy.Demo
                         FriendshipState.Accepted)
                 );
 
-                _friendshipManager.CreateFriendship(
+                await _friendshipManager.CreateFriendshipAsync(
                     new Friendship(
                         friend.ToUserIdentifier(),
                         admin.ToUserIdentifier(),
@@ -153,7 +157,7 @@ namespace Magicodes.Admin.MultiTenancy.Demo
                         admin.UserName,
                         admin.ProfilePictureId,
                         FriendshipState.Accepted)
-                    );
+                );
             }
 
             //Create chat message
@@ -217,7 +221,7 @@ namespace Magicodes.Admin.MultiTenancy.Demo
 
             if (!File.Exists(fullPath))
             {
-                throw new ApplicationException("Could not find sample profile picture on " + fullPath);
+                throw new Exception("Could not find sample profile picture on " + fullPath);
             }
 
             return File.ReadAllBytes(fullPath);

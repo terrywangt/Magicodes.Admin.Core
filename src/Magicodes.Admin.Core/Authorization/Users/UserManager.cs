@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Abp;
 using Abp.Authorization;
@@ -6,13 +7,16 @@ using Abp.Authorization.Users;
 using Abp.Configuration;
 using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
-using Abp.IdentityFramework;
-using Abp.Localization;
+using Abp.EntityFrameworkCore;
+using Abp.EntityFrameworkCore.Uow;
 using Abp.Organizations;
 using Abp.Runtime.Caching;
 using Abp.Threading;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Magicodes.Admin.Authorization.Roles;
-using Magicodes.Admin.Identity;
 
 namespace Magicodes.Admin.Authorization.Users
 {
@@ -27,6 +31,14 @@ namespace Magicodes.Admin.Authorization.Users
 
         public UserManager(
             UserStore userStore,
+            IOptions<IdentityOptions> optionsAccessor,
+            IPasswordHasher<User> passwordHasher,
+            IEnumerable<IUserValidator<User>> userValidators,
+            IEnumerable<IPasswordValidator<User>> passwordValidators,
+            ILookupNormalizer keyNormalizer, 
+            IdentityErrorDescriber errors,
+            IServiceProvider services,
+            ILogger<UserManager> logger,
             RoleManager roleManager,
             IPermissionManager permissionManager,
             IUnitOfWorkManager unitOfWorkManager,
@@ -34,38 +46,35 @@ namespace Magicodes.Admin.Authorization.Users
             IRepository<OrganizationUnit, long> organizationUnitRepository,
             IRepository<UserOrganizationUnit, long> userOrganizationUnitRepository,
             IOrganizationUnitSettings organizationUnitSettings,
-            IdentityEmailMessageService emailService,
-            ILocalizationManager localizationManager,
-            ISettingManager settingManager,
-            IdentitySmsMessageService smsService,
-            IUserTokenProviderAccessor userTokenProviderAccessor)
+            ISettingManager settingManager)
             : base(
-                  userStore,
                   roleManager,
+                  userStore,
+                  optionsAccessor,
+                  passwordHasher,
+                  userValidators,
+                  passwordValidators,
+                  keyNormalizer,
+                  errors,
+                  services,
+                  logger,
                   permissionManager,
                   unitOfWorkManager,
                   cacheManager,
                   organizationUnitRepository,
                   userOrganizationUnitRepository,
                   organizationUnitSettings,
-                  localizationManager,
-                  emailService,
-                  settingManager,
-                  userTokenProviderAccessor)
+                  settingManager)
         {
             _unitOfWorkManager = unitOfWorkManager;
-
-            SmsService = smsService;
         }
 
-        public async Task<User> GetUserOrNullAsync(UserIdentifier userIdentifier)
+        [UnitOfWork]
+        public virtual async Task<User> GetUserOrNullAsync(UserIdentifier userIdentifier)
         {
-            using (_unitOfWorkManager.Begin())
+            using (_unitOfWorkManager.Current.SetTenantId(userIdentifier.TenantId))
             {
-                using (_unitOfWorkManager.Current.SetTenantId(userIdentifier.TenantId))
-                {
-                    return await FindByIdAsync(userIdentifier.UserId);
-                }
+                return await FindByIdAsync(userIdentifier.UserId.ToString());
             }
         }
 
@@ -79,7 +88,7 @@ namespace Magicodes.Admin.Authorization.Users
             var user = await GetUserOrNullAsync(userIdentifier);
             if (user == null)
             {
-                throw new ApplicationException("There is no user: " + userIdentifier);
+                throw new Exception("There is no user: " + userIdentifier);
             }
 
             return user;

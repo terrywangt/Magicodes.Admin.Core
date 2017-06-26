@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Configuration;
 using Abp.Configuration;
-using Abp.Json;
 using Abp.Zero.Configuration;
-using Magicodes.Admin.Security;
+using Microsoft.Extensions.Configuration;
 
 namespace Magicodes.Admin.Configuration
 {
@@ -13,37 +11,36 @@ namespace Magicodes.Admin.Configuration
     /// </summary>
     public class AppSettingProvider : SettingProvider
     {
+        private readonly IConfigurationRoot _appConfiguration;
+
+        public AppSettingProvider(IAppConfigurationAccessor configurationAccessor)
+        {
+            _appConfiguration = configurationAccessor.Configuration;
+        }
+
         public override IEnumerable<SettingDefinition> GetSettingDefinitions(SettingDefinitionProviderContext context)
         {
             //Disable TwoFactorLogin by default (can be enabled by UI)
             context.Manager.GetSettingDefinition(AbpZeroSettingNames.UserManagement.TwoFactorLogin.IsEnabled).DefaultValue = false.ToString().ToLowerInvariant();
 
-            var defaultPasswordComplexitySetting = new PasswordComplexitySetting
-            {
-                MinLength = 6,
-                MaxLength = 10,
-                UseNumbers = true,
-                UseUpperCaseLetters = false,
-                UseLowerCaseLetters = true,
-                UsePunctuations = false,
-            };
-
             return new[]
                    {
                        //Host settings
-                        new SettingDefinition(AppSettings.TenantManagement.AllowSelfRegistration,ConfigurationManager.AppSettings[AppSettings.TenantManagement.UseCaptchaOnRegistration] ?? "true"),
-                        new SettingDefinition(AppSettings.TenantManagement.IsNewRegisteredTenantActiveByDefault,ConfigurationManager.AppSettings[AppSettings.TenantManagement.IsNewRegisteredTenantActiveByDefault] ??"false"),
-                        new SettingDefinition(AppSettings.TenantManagement.UseCaptchaOnRegistration,ConfigurationManager.AppSettings[AppSettings.TenantManagement.UseCaptchaOnRegistration] ?? "true"),
-                        new SettingDefinition(AppSettings.TenantManagement.DefaultEdition,ConfigurationManager.AppSettings[AppSettings.TenantManagement.DefaultEdition] ?? ""),
-                        new SettingDefinition(AppSettings.Security.PasswordComplexity, defaultPasswordComplexitySetting.ToJsonString(),scopes: SettingScopes.Application | SettingScopes.Tenant, isVisibleToClients: true),
-                        //默认页
-                        new SettingDefinition(AppSettings.TenantManagement.DefaultUrl, ""),
+                        new SettingDefinition(AppSettings.TenantManagement.AllowSelfRegistration, GetFromAppSettings(AppSettings.TenantManagement.AllowSelfRegistration, "true")),
+                        new SettingDefinition(AppSettings.TenantManagement.IsNewRegisteredTenantActiveByDefault, GetFromAppSettings(AppSettings.TenantManagement.IsNewRegisteredTenantActiveByDefault, "false")),
+                        new SettingDefinition(AppSettings.TenantManagement.UseCaptchaOnRegistration, GetFromAppSettings(AppSettings.TenantManagement.UseCaptchaOnRegistration, "true")),
+                        new SettingDefinition(AppSettings.TenantManagement.DefaultEdition, GetFromAppSettings(AppSettings.TenantManagement.DefaultEdition, "")),
 
                         //Tenant settings
-                        new SettingDefinition(AppSettings.UserManagement.AllowSelfRegistration, ConfigurationManager.AppSettings[AppSettings.UserManagement.UseCaptchaOnRegistration] ?? "true", scopes: SettingScopes.Tenant, isVisibleToClients: true),
-                        new SettingDefinition(AppSettings.UserManagement.IsNewRegisteredUserActiveByDefault, ConfigurationManager.AppSettings[AppSettings.UserManagement.IsNewRegisteredUserActiveByDefault] ?? "false", scopes: SettingScopes.Tenant),
-                        new SettingDefinition(AppSettings.UserManagement.UseCaptchaOnRegistration, ConfigurationManager.AppSettings[AppSettings.UserManagement.UseCaptchaOnRegistration] ?? "true", scopes: SettingScopes.Tenant, isVisibleToClients: true)
+                        new SettingDefinition(AppSettings.UserManagement.AllowSelfRegistration, GetFromAppSettings(AppSettings.UserManagement.AllowSelfRegistration, "true"), scopes: SettingScopes.Tenant, isVisibleToClients: true),
+                        new SettingDefinition(AppSettings.UserManagement.IsNewRegisteredUserActiveByDefault, GetFromAppSettings(AppSettings.UserManagement.IsNewRegisteredUserActiveByDefault, "false"), scopes: SettingScopes.Tenant),
+                        new SettingDefinition(AppSettings.UserManagement.UseCaptchaOnRegistration, GetFromAppSettings(AppSettings.UserManagement.UseCaptchaOnRegistration, "true"), scopes: SettingScopes.Tenant, isVisibleToClients: true)
                    };
+        }
+
+        private string GetFromAppSettings(string name, string defaultValue = null)
+        {
+            return _appConfiguration["App:" + name] ?? defaultValue;
         }
     }
 }

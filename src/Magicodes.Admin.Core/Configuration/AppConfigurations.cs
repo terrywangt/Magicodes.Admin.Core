@@ -1,6 +1,6 @@
 ﻿using System.Collections.Concurrent;
-using System.Reflection;
 using Abp.Extensions;
+using Abp.Reflection.Extensions;
 using Microsoft.Extensions.Configuration;
 
 namespace Magicodes.Admin.Configuration
@@ -38,7 +38,7 @@ namespace Magicodes.Admin.Configuration
 
             if (addUserSecrets)
             {
-                builder.AddUserSecrets(Assembly.GetExecutingAssembly());
+                builder.AddUserSecrets(typeof(AppConfigurations).GetAssembly());
             }
 
             return builder.Build();

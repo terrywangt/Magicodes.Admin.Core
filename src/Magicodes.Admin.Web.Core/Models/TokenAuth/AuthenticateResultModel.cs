@@ -21,5 +21,7 @@ namespace Magicodes.Admin.Web.Models.TokenAuth
         public IList<string> TwoFactorAuthProviders { get; set; }
 
         public string TwoFactorRememberClientToken { get; set; }
+
+        public string ReturnUrl { get; set; }
     }
 }

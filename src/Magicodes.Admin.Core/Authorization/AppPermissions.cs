@@ -43,7 +43,9 @@
         public const string Pages_Tenant_Dashboard = "Pages.Tenant.Dashboard";
 
         public const string Pages_Administration_Tenant_Settings = "Pages.Administration.Tenant.Settings";
-        
+
+        public const string Pages_Administration_Tenant_SubscriptionManagement = "Pages.Administration.Tenant.SubscriptionManagement";
+
         //HOST-SPECIFIC PERMISSIONS
 
         public const string Pages_Editions = "Pages.Editions";
@@ -60,5 +62,7 @@
 
         public const string Pages_Administration_Host_Maintenance = "Pages.Administration.Host.Maintenance";
         public const string Pages_Administration_Host_Settings = "Pages.Administration.Host.Settings";
+        public const string Pages_Administration_Host_Dashboard = "Pages.Administration.Host.Dashboard";
+
     }
 }

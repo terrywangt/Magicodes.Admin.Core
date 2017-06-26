@@ -472,7 +472,7 @@
 
             user: {
                 loadingPreviousUserMessages: false,
-                userNameFilter: '',//todo@ismail -> should we use this here ?
+                userNameFilter: '',
 
                 getShownUserName: function (tenanycName, userName) {
                     return (tenanycName ? tenanycName : '.') + '\\' + userName;

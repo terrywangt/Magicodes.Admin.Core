@@ -1,31 +1,30 @@
-using System.Data.Entity;
-using System.Reflection;
 using Abp.Events.Bus;
 using Abp.Modules;
 using Abp.Reflection.Extensions;
 using Castle.MicroKernel.Registration;
 using Microsoft.Extensions.Configuration;
 using Magicodes.Admin.Configuration;
-using Magicodes.Admin.EntityFramework;
+using Magicodes.Admin.EntityFrameworkCore;
+using Magicodes.Admin.Migrator.DependencyInjection;
 
 namespace Magicodes.Admin.Migrator
 {
-    [DependsOn(typeof(AdminEntityFrameworkModule))]
+    [DependsOn(typeof(AdminEntityFrameworkCoreModule))]
     public class AdminMigratorModule : AbpModule
     {
         private readonly IConfigurationRoot _appConfiguration;
 
-        public AdminMigratorModule()
+        public AdminMigratorModule(AdminEntityFrameworkCoreModule abpZeroTemplateEntityFrameworkCoreModule)
         {
+            abpZeroTemplateEntityFrameworkCoreModule.SkipDbSeed = true;
+
             _appConfiguration = AppConfigurations.Get(
-                typeof(AdminMigratorModule).Assembly.GetDirectoryPathOrNull()
+                typeof(AdminMigratorModule).GetAssembly().GetDirectoryPathOrNull()
             );
         }
 
         public override void PreInitialize()
         {
-            Database.SetInitializer<AdminDbContext>(null);
-
             Configuration.DefaultNameOrConnectionString = _appConfiguration.GetConnectionString(
                 AdminConsts.ConnectionStringName
                 );
@@ -41,7 +40,8 @@ namespace Magicodes.Admin.Migrator
 
         public override void Initialize()
         {
-            IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
+            IocManager.RegisterAssemblyByConvention(typeof(AdminMigratorModule).GetAssembly());
+            ServiceCollectionRegistrar.Register(IocManager);
         }
     }
 }

@@ -1,21 +1,16 @@
 ﻿using System;
-using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
-using Microsoft.IdentityModel.Tokens;
-using Magicodes.Admin.Web.Authentication.JwtBearer;
 using Abp.Extensions;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
+using Magicodes.Admin.Web.Authentication.JwtBearer;
 
 namespace Magicodes.Admin.Web.Startup
 {
     public static class AuthConfigurer
     {
-        public const string AuthenticationScheme = "AdminAuthSchema";
-        public const string ExternalAuthenticationScheme = AuthenticationScheme + "." + DefaultAuthenticationTypes.ExternalCookie;
-
         /// <summary>
         /// Configures the specified application.
         /// </summary>
@@ -23,36 +18,12 @@ namespace Magicodes.Admin.Web.Startup
         /// <param name="configuration">The configuration.</param>
         public static void Configure(IApplicationBuilder app, IConfiguration configuration)
         {
-            app.UseCookieAuthentication(new CookieAuthenticationOptions
-            {
-                AutomaticAuthenticate = false,
-                AuthenticationScheme = ExternalAuthenticationScheme,
-                CookieName = ExternalAuthenticationScheme
-            });
+            app.UseIdentity();
 
-            app.UseCookieAuthentication(new CookieAuthenticationOptions
+            if (bool.Parse(configuration["IdentityServer:IsEnabled"]))
             {
-                AuthenticationScheme = AuthenticationScheme,
-                LoginPath = new PathString("/Account/Login/"),
-                AccessDeniedPath = new PathString("/Error/E403"),
-                AutomaticAuthenticate = true,
-                AutomaticChallenge = true
-            });
-
-            app.UseCookieAuthentication(new CookieAuthenticationOptions
-            {
-                AutomaticAuthenticate = false,
-                AuthenticationScheme = DefaultAuthenticationTypes.TwoFactorCookie,
-                ExpireTimeSpan = TimeSpan.FromMinutes(5),
-                CookieName = DefaultAuthenticationTypes.TwoFactorCookie
-            });
-
-            app.UseCookieAuthentication(new CookieAuthenticationOptions
-            {
-                AutomaticAuthenticate = false,
-                AuthenticationScheme = DefaultAuthenticationTypes.TwoFactorRememberBrowserCookie,
-                CookieName = DefaultAuthenticationTypes.TwoFactorRememberBrowserCookie
-            });
+                app.UseIdentityServer();
+            }
 
             if (bool.Parse(configuration["Authentication:OpenId:IsEnabled"]))
             {
@@ -83,6 +54,18 @@ namespace Magicodes.Admin.Web.Startup
             {
                 app.UseJwtBearerAuthentication(CreateJwtBearerAuthenticationOptions(app));
             }
+
+            if (bool.Parse(configuration["IdentityServer:IsEnabled"]))
+            {
+                app.UseIdentityServerAuthentication(
+                    new IdentityServerAuthenticationOptions
+                    {
+                        Authority = configuration["App:WebSiteRootAddress"],
+                        RequireHttpsMetadata = false,
+                        AutomaticAuthenticate = true,
+                        AutomaticChallenge = true
+                    });
+            }
         }
 
         private static OpenIdConnectOptions CreateOpenIdConnectAuthOptions(IConfiguration configuration)
@@ -92,8 +75,7 @@ namespace Magicodes.Admin.Web.Startup
                 ClientId = configuration["Authentication:OpenId:ClientId"],
                 Authority = configuration["Authentication:OpenId:Authority"],
                 PostLogoutRedirectUri = configuration["App:WebSiteRootAddress"] + "Account/Logout",
-                ResponseType = OpenIdConnectResponseType.IdToken,
-                SignInScheme = ExternalAuthenticationScheme
+                ResponseType = OpenIdConnectResponseType.IdToken
             };
 
             var clientSecret = configuration["Authentication:OpenId:ClientSecret"];
@@ -109,7 +91,6 @@ namespace Magicodes.Admin.Web.Startup
         {
             return new MicrosoftAccountOptions
             {
-                SignInScheme = ExternalAuthenticationScheme,
                 ClientId = configuration["Authentication:Microsoft:ConsumerKey"],
                 ClientSecret = configuration["Authentication:Microsoft:ConsumerSecret"]
             };
@@ -119,7 +100,6 @@ namespace Magicodes.Admin.Web.Startup
         {
             return new GoogleOptions
             {
-                SignInScheme = ExternalAuthenticationScheme,
                 ClientId = configuration["Authentication:Google:ClientId"],
                 ClientSecret = configuration["Authentication:Google:ClientSecret"]
             };
@@ -129,7 +109,6 @@ namespace Magicodes.Admin.Web.Startup
         {
             return new TwitterOptions
             {
-                SignInScheme = ExternalAuthenticationScheme,
                 ConsumerKey = configuration["Authentication:Twitter:ConsumerKey"],
                 ConsumerSecret = configuration["Authentication:Twitter:ConsumerSecret"],
                 RetrieveUserDetails = true
@@ -141,8 +120,7 @@ namespace Magicodes.Admin.Web.Startup
             var options = new FacebookOptions
             {
                 AppId = configuration["Authentication:Facebook:AppId"],
-                AppSecret = configuration["Authentication:Facebook:AppSecret"],
-                SignInScheme = ExternalAuthenticationScheme
+                AppSecret = configuration["Authentication:Facebook:AppSecret"]
             };
 
             options.Scope.Add("email");

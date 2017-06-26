@@ -1,18 +1,19 @@
-﻿using Magicodes.Admin.Configuration;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Magicodes.Admin.Web.Controllers
 {
     public class HomeController : AdminControllerBase
     {
-        public ActionResult Index()
+        public IActionResult Index(string redirect = "")
         {
-            var defaultUrl = SettingManager.GetSettingValueAsync(AppSettings.TenantManagement.DefaultUrl).Result;
-            if (!string.IsNullOrEmpty(defaultUrl))
+            if (redirect == "TenantRegistration")
             {
-                return Redirect(defaultUrl);
+                return RedirectToAction("SelectEdition", "TenantRegistration");
             }
-            return View();
+
+            return AbpSession.UserId.HasValue ? 
+                RedirectToAction("Index", "Home", new { area = "Admin" }) : 
+                RedirectToAction("Login", "Account");
         }
     }
 }

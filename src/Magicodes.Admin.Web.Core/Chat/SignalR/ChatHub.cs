@@ -1,4 +1,6 @@
-﻿using System;
+﻿#if FEATURE_SIGNALR
+using System;
+using System.Threading.Tasks;
 using Abp;
 using Abp.Dependency;
 using Abp.Localization;
@@ -39,14 +41,14 @@ namespace Magicodes.Admin.Web.Chat.SignalR
             AbpSession = NullAbpSession.Instance;
         }
 
-        public string SendMessage(SendChatMessageInput input)
+        public async Task<string> SendMessage(SendChatMessageInput input)
         {
             var sender = AbpSession.ToUserIdentifier();
             var receiver = new UserIdentifier(input.TenantId, input.UserId);
 
             try
             {
-                _chatMessageManager.SendMessage(sender, receiver, input.Message, input.TenancyName, input.UserName, input.ProfilePictureId);
+                await _chatMessageManager.SendMessageAsync(sender, receiver, input.Message, input.TenancyName, input.UserName, input.ProfilePictureId);
                 return string.Empty;
             }
             catch (UserFriendlyException ex)
@@ -64,3 +66,4 @@ namespace Magicodes.Admin.Web.Chat.SignalR
         }
     }
 }
+#endif

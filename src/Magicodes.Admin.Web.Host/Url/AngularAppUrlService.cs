@@ -1,12 +1,13 @@
 ﻿using Abp.MultiTenancy;
+using Magicodes.Admin.Url;
 
 namespace Magicodes.Admin.Web.Url
 {
     public class AngularAppUrlService : AppUrlServiceBase
     {
-        public override string EmailActivationRoute => "confirm-email";
+        public override string EmailActivationRoute => "account/confirm-email";
 
-        public override string PasswordResetRoute => "reset-password";
+        public override string PasswordResetRoute => "account/reset-password";
 
         public AngularAppUrlService(
                 IWebUrlService webUrlService,

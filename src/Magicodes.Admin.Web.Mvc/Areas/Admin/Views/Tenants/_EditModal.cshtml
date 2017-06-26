@@ -1,5 +1,4 @@
-﻿@using Abp.Application.Services.Dto
-@using Abp.Extensions
+﻿@using Abp.Extensions
 @using Magicodes.Admin.MultiTenancy
 @using Magicodes.Admin.Web.Areas.Admin.Models.Common.Modals
 @using Magicodes.Admin.Web.Areas.Admin.Models.Tenants
@@ -32,8 +31,42 @@
         }
 
         <div class="form-group form-md-line-input form-md-floating-label no-hint">
-            @Html.DropDownList("EditionId", Model.EditionItems.Select(i => i.ToSelectListItem()), new {@class = "form-control edited"})
+            <select class="form-control edited" id="EditionId" name="EditionId">
+                @foreach (var edition in Model.EditionItems)
+                {
+                    <option value="@edition.Value" data-isfree="@edition.IsFree" selected="@edition.IsSelected">@edition.DisplayText</option>
+                }
+            </select>
             <label for="EditionId">@L("Edition")</label>
+        </div>
+        
+        <div class="md-checkbox-list subscription-component">
+            <div class="md-checkbox">
+                <input id="CreateTenant_IsUnlimited" class="md-check" type="checkbox" name="IsUnlimited" value="true" @(!Model.Tenant.SubscriptionEndDateUtc.HasValue ? "checked=\"checked\"" : "") />
+                <label for="CreateTenant_IsUnlimited">
+                    <span class="inc"></span>
+                    <span class="check"></span>
+                    <span class="box"></span>
+                    @L("UnlimitedTimeSubscription")
+                </label>
+            </div>
+        </div>
+        
+        <div class="form-group form-md-line-input form-md-floating-label subscription-component">
+            <input type="datetime" name="SubscriptionEndDateUtc" value="@Model.Tenant.SubscriptionEndDateUtc" class="form-control edited date-time-picker" @(!Model.Tenant.SubscriptionEndDateUtc.HasValue ? "required" : "")>
+            <label>@L("SubscriptionEndDateUtc")</label>
+        </div>
+        
+        <div class="md-checkbox-list subscription-component">
+            <div class="md-checkbox">
+                <input id="EditTenant_IsInTrialPeriod" class="md-check" type="checkbox" name="IsInTrialPeriod" value="true" @(Model.Tenant.IsInTrialPeriod ? "checked=\"checked\"" : "")/>
+                <label for="EditTenant_IsInTrialPeriod">
+                    <span class="inc"></span>
+                    <span class="check"></span>
+                    <span class="box"></span>
+                    @L("IsInTrialPeriod")
+                </label>
+            </div>
         </div>
 
         <div class="md-checkbox-list">

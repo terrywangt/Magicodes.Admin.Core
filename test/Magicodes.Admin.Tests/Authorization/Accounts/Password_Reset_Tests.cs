@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
-using Abp.Runtime.Security;
 using Castle.MicroKernel.Registration;
-using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Identity;
 using Magicodes.Admin.Authorization.Accounts;
 using Magicodes.Admin.Authorization.Accounts.Dto;
 using Magicodes.Admin.Authorization.Users;
@@ -57,9 +56,8 @@ namespace Magicodes.Admin.Tests.Authorization.Accounts
 
             user = await GetCurrentUserAsync();
             LocalIocManager
-                .Resolve<UserManager>()
-                .PasswordHasher
-                .VerifyHashedPassword(user.Password, "newpass")
+                .Resolve<IPasswordHasher<User>>()
+                .VerifyHashedPassword(user, user.Password, "newpass")
                 .ShouldBe(PasswordVerificationResult.Success);
         }
     }

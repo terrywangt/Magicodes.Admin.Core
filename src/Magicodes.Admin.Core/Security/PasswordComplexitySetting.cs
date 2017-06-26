@@ -2,34 +2,29 @@
 {
     public class PasswordComplexitySetting
     {
-        /// <summary>
-        /// Minimum lenght of password
-        /// </summary>
-        public int MinLength { get; set; }
+        public bool Equals(PasswordComplexitySetting other)
+        {
+            if (other == null)
+            {
+                return false;
+            }
 
-        /// <summary>
-        /// Maximum lenght of password
-        /// </summary>
-        public int MaxLength { get; set; }
+            return
+                RequireDigit == other.RequireDigit &&
+                RequireLowercase == other.RequireLowercase &&
+                RequireNonAlphanumeric == other.RequireNonAlphanumeric &&
+                RequireUppercase == other.RequireUppercase &&
+                RequiredLength == other.RequiredLength;
+        }
 
-        /// <summary>
-        /// Force using numbers in password
-        /// </summary>
-        public bool UseNumbers { get; set; }
+        public bool RequireDigit { get; set; }
 
-        /// <summary>
-        /// Force using upper-case letters in password
-        /// </summary>
-        public bool UseUpperCaseLetters { get; set; }
+        public bool RequireLowercase { get; set; }
 
-        /// <summary>
-        /// Force using lower case letters in password
-        /// </summary>
-        public bool UseLowerCaseLetters { get; set; }
+        public bool RequireNonAlphanumeric { get; set; }
 
-        /// <summary>
-        /// Force using punctuations in password
-        /// </summary>
-        public bool UsePunctuations { get; set; }
+        public bool RequireUppercase { get; set; }
+
+        public int RequiredLength { get; set; }
     }
 }

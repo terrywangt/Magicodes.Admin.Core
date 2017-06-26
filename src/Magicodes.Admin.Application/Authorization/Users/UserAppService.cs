@@ -1,24 +1,23 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Data.Entity;
 using System.Diagnostics;
 using System.Linq;
-using System.Linq.Dynamic;
+using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using Abp.Application.Services.Dto;
 using Abp.Configuration;
 using Abp.Authorization;
 using Abp.Authorization.Roles;
 using Abp.Authorization.Users;
-using Abp.AutoMapper;
 using Abp.Domain.Repositories;
 using Abp.Extensions;
 using Abp.Linq.Extensions;
-using Abp.Localization;
 using Abp.Notifications;
 using Abp.Runtime.Session;
 using Abp.UI;
 using Abp.Zero.Configuration;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Magicodes.Admin.Authorization.Permissions;
 using Magicodes.Admin.Authorization.Permissions.Dto;
 using Magicodes.Admin.Authorization.Roles;
@@ -27,6 +26,9 @@ using Magicodes.Admin.Authorization.Users.Exporting;
 using Magicodes.Admin.Dto;
 using Magicodes.Admin.Notifications;
 using Magicodes.Admin.Url;
+using System;
+using System.Text;
+using Magicodes.Admin.Sessions.Dto;
 
 namespace Magicodes.Admin.Authorization.Users
 {
@@ -44,6 +46,8 @@ namespace Magicodes.Admin.Authorization.Users
         private readonly IRepository<UserPermissionSetting, long> _userPermissionRepository;
         private readonly IRepository<UserRole, long> _userRoleRepository;
         private readonly IUserPolicy _userPolicy;
+        private readonly IEnumerable<IPasswordValidator<User>> _passwordValidators;
+        private readonly IPasswordHasher<User> _passwordHasher;
 
         public UserAppService(
             RoleManager roleManager,
@@ -54,7 +58,9 @@ namespace Magicodes.Admin.Authorization.Users
             IRepository<RolePermissionSetting, long> rolePermissionRepository,
             IRepository<UserPermissionSetting, long> userPermissionRepository,
             IRepository<UserRole, long> userRoleRepository,
-            IUserPolicy userPolicy)
+            IUserPolicy userPolicy,
+            IEnumerable<IPasswordValidator<User>> passwordValidators,
+            IPasswordHasher<User> passwordHasher)
         {
             _roleManager = roleManager;
             _userEmailer = userEmailer;
@@ -65,6 +71,8 @@ namespace Magicodes.Admin.Authorization.Users
             _userPermissionRepository = userPermissionRepository;
             _userRoleRepository = userRoleRepository;
             _userPolicy = userPolicy;
+            _passwordValidators = passwordValidators;
+            _passwordHasher = passwordHasher;
 
             AppUrlService = NullAppUrlService.Instance;
         }
@@ -103,7 +111,7 @@ namespace Magicodes.Admin.Authorization.Users
                 .PageBy(input)
                 .ToListAsync();
 
-            var userListDtos = users.MapTo<List<UserListDto>>();
+            var userListDtos = ObjectMapper.Map<List<UserListDto>>(users);
             await FillRoleNames(userListDtos);
 
             return new PagedResultDto<UserListDto>(
@@ -115,7 +123,7 @@ namespace Magicodes.Admin.Authorization.Users
         public async Task<FileDto> GetUsersToExcel()
         {
             var users = await UserManager.Users.Include(u => u.Roles).ToListAsync();
-            var userListDtos = users.MapTo<List<UserListDto>>();
+            var userListDtos = ObjectMapper.Map<List<UserListDto>>(users);
             await FillRoleNames(userListDtos);
 
             return _userListExcelExporter.ExportToFile(userListDtos);
@@ -165,12 +173,12 @@ namespace Magicodes.Admin.Authorization.Users
                 //Editing an existing user
                 var user = await UserManager.GetUserByIdAsync(input.Id.Value);
 
-                output.User = user.MapTo<UserEditDto>();
+                output.User = ObjectMapper.Map<UserEditDto>(user);
                 output.ProfilePictureId = user.ProfilePictureId;
 
                 foreach (var userRoleDto in userRoleDtos)
                 {
-                    userRoleDto.IsAssigned = await UserManager.IsInRoleAsync(input.Id.Value, userRoleDto.RoleName);
+                    userRoleDto.IsAssigned = await UserManager.IsInRoleAsync(user, userRoleDto.RoleName);
                 }
             }
 
@@ -186,7 +194,7 @@ namespace Magicodes.Admin.Authorization.Users
 
             return new GetUserPermissionsForEditOutput
             {
-                Permissions = permissions.MapTo<List<FlatPermissionDto>>().OrderBy(p => p.DisplayName).ToList(),
+                Permissions = ObjectMapper.Map<List<FlatPermissionDto>>(permissions).OrderBy(p => p.DisplayName).ToList(),
                 GrantedPermissionNames = grantedPermissions.Select(p => p.Name).ToList()
             };
         }
@@ -236,24 +244,15 @@ namespace Magicodes.Admin.Authorization.Users
             user.Unlock();
         }
 
-        public async Task ChangeLanguage(ChangeUserLanguageDto input)
-        {
-            await SettingManager.ChangeSettingForUserAsync(
-                    AbpSession.ToUserIdentifier(),
-                    LocalizationSettingNames.DefaultLanguage,
-                    input.LanguageName
-                );
-        }
-
         [AbpAuthorize(AppPermissions.Pages_Administration_Users_Edit)]
         protected virtual async Task UpdateUserAsync(CreateOrUpdateUserInput input)
         {
             Debug.Assert(input.User.Id != null, "input.User.Id should be set.");
 
-            var user = await UserManager.FindByIdAsync(input.User.Id.Value);
+            var user = await UserManager.FindByIdAsync(input.User.Id.Value.ToString());
 
             //Update user properties
-            input.User.MapTo(user); //Passwords is not mapped (see mapping configuration)
+            ObjectMapper.Map(input.User, user); //Passwords is not mapped (see mapping configuration)
 
             if (input.SetRandomPassword)
             {
@@ -262,6 +261,7 @@ namespace Magicodes.Admin.Authorization.Users
 
             if (!input.User.Password.IsNullOrEmpty())
             {
+                await UserManager.InitializeOptionsAsync(AbpSession.TenantId);
                 CheckErrors(await UserManager.ChangePasswordAsync(user, input.User.Password));
             }
 
@@ -289,20 +289,24 @@ namespace Magicodes.Admin.Authorization.Users
                 await _userPolicy.CheckMaxUserCountAsync(AbpSession.GetTenantId());
             }
 
-            var user = input.User.MapTo<User>(); //Passwords is not mapped (see mapping configuration)
+            var user = ObjectMapper.Map<User>(input.User); //Passwords is not mapped (see mapping configuration)
             user.TenantId = AbpSession.TenantId;
 
             //Set password
             if (!input.User.Password.IsNullOrEmpty())
             {
-                CheckErrors(await UserManager.PasswordValidator.ValidateAsync(input.User.Password));
+                await UserManager.InitializeOptionsAsync(AbpSession.TenantId);
+                foreach (var validator in _passwordValidators)
+                {
+                    CheckErrors(await validator.ValidateAsync(UserManager, user, input.User.Password));
+                }
             }
             else
             {
                 input.User.Password = User.CreateRandomPassword();
             }
 
-            user.Password = UserManager.PasswordHasher.HashPassword(input.User.Password);
+            user.Password = _passwordHasher.HashPassword(user, input.User.Password);
             user.ShouldChangePasswordOnNextLogin = input.User.ShouldChangePasswordOnNextLogin;
 
             //Assign roles

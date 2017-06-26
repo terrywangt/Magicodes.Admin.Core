@@ -1,19 +1,25 @@
 ﻿@using System.Threading.Tasks
+@using Magicodes.Admin.Tenants.Dashboard.Dto
 @using Magicodes.Admin.Web.Areas.Admin.Startup
 @{
     ViewBag.CurrentPageName = AdminPageNames.Tenant.Dashboard;
-    //Layout = "~/Areas/Admin/Views/Layout/_IframeLayout.cshtml";
 }
+@section Styles
+{
+    <link rel="stylesheet" href="~/lib/morris.js/morris.css" asp-append-version="true" />
+}
+
 @section Scripts
 {
     <environment names="Development">
-        <script src="~/view-resources/Areas/Admin/Views/Dashboard/Index.js" asp-append-version="true"></script>
+        <script src="~/view-resources/Areas/Admin/Views/_Bundles/tenant-dashboard-libs.js" asp-append-version="true"></script>
     </environment>
 
     <environment names="Staging,Production">
-        <script src="~/view-resources/Areas/Admin/Views/Dashboard/Index.min.js" asp-append-version="true"></script>
+        <script src="~/view-resources/Areas/Admin/Views/_Bundles/tenant-dashboard-libs.min.js" asp-append-version="true"></script>
     </environment>
 }
+
 <div class="row margin-bottom-5">
     <div class="col-xs-6">
         <div class="page-head">
@@ -24,16 +30,6 @@
             </div>
         </div>
     </div>
-    <div class="col-xs-6 text-right">
-
-    </div>
-</div>
-
-<div class="note note-info note-bordered">
-    <h3>@L("DashboardDemo_Note_Title")<span class="close" data-close="note"></span></h3>
-    <p>
-        @L("DashboardDemo_Note_Info")
-    </p>
 </div>
 
 <div class="row margin-top-10">
@@ -42,7 +38,8 @@
             <div class="display">
                 <div class="number">
                     <h3 class="font-green-sharp">
-                        7800<small class="font-green-sharp">$</small>
+                        <span class="counterup" id="totalProfit">...</span>
+                        <small class="font-green-sharp">$</small>
                     </h3>
                     <small>TOTAL PROFIT</small>
                 </div>
@@ -61,7 +58,7 @@
                         progress
                     </div>
                     <div class="status-number">
-                        76%
+                        <span class="counterup">76</span>%
                     </div>
                 </div>
             </div>
@@ -71,7 +68,7 @@
         <div class="dashboard-stat2">
             <div class="display">
                 <div class="number">
-                    <h3 class="font-red-haze">1349</h3>
+                    <h3 class="font-red-haze counterup" id="newFeedbacks">...</h3>
                     <small>NEW FEEDBACKS</small>
                 </div>
                 <div class="icon">
@@ -89,7 +86,7 @@
                         change
                     </div>
                     <div class="status-number">
-                        85%
+                        <span class="counterup">85</span>%
                     </div>
                 </div>
             </div>
@@ -99,7 +96,7 @@
         <div class="dashboard-stat2">
             <div class="display">
                 <div class="number">
-                    <h3 class="font-blue-sharp">567</h3>
+                    <h3 class="font-blue-sharp counterup" id="newOrders">...</h3>
                     <small>NEW ORDERS</small>
                 </div>
                 <div class="icon">
@@ -117,7 +114,7 @@
                         grow
                     </div>
                     <div class="status-number">
-                        45%
+                        <span class="counterup">45</span>%
                     </div>
                 </div>
             </div>
@@ -127,7 +124,7 @@
         <div class="dashboard-stat2">
             <div class="display">
                 <div class="number">
-                    <h3 class="font-purple-soft">276</h3>
+                    <h3 class="font-purple-soft counterup" id="newUsers">...</h3>
                     <small>NEW USERS</small>
                 </div>
                 <div class="icon">
@@ -145,7 +142,7 @@
                         change
                     </div>
                     <div class="status-number">
-                        57%
+                        <span class="counterup">57</span>%
                     </div>
                 </div>
             </div>
@@ -154,7 +151,7 @@
 </div>
 
 <div class="row">
-    <div class="col-md-6 col-sm-12">
+    <div class="col-lg-6 col-xs-12 col-sm-12">
         <!-- BEGIN PORTLET-->
         <div class="portlet light ">
             <div class="portlet-title">
@@ -166,13 +163,13 @@
                 <div class="actions">
                     <div class="btn-group btn-group-devided" data-toggle="buttons">
                         <label class="btn btn-transparent grey-salsa btn-circle btn-sm active">
-                            <input type="radio" name="options" class="toggle" id="option1">Today
+                            <input type="radio" name="SalesSummaryDateInterval" class="toggle" value="@((int)SalesSummaryDatePeriod.Daily)">Daily
                         </label>
                         <label class="btn btn-transparent grey-salsa btn-circle btn-sm">
-                            <input type="radio" name="options" class="toggle" id="option2">Week
+                            <input type="radio" name="SalesSummaryDateInterval" class="toggle" value="@((int)SalesSummaryDatePeriod.Weekly)">Weekly
                         </label>
                         <label class="btn btn-transparent grey-salsa btn-circle btn-sm">
-                            <input type="radio" name="options" class="toggle" id="option2">Month
+                            <input type="radio" name="SalesSummaryDateInterval" class="toggle" value="@((int)SalesSummaryDatePeriod.Monthly)">Monthly
                         </label>
                     </div>
                 </div>
@@ -184,7 +181,7 @@
                             Total Sales
                         </div>
                         <div class="uppercase font-hg font-red-flamingo">
-                            13,760 <span class="font-lg font-grey-mint">$</span>
+                            <span id="totalSales" class="counterup">...</span> <span class="font-lg font-red-flamingo">$</span>
                         </div>
                     </div>
                     <div class="col-md-3 col-sm-3 col-xs-6">
@@ -192,7 +189,7 @@
                             Revenue
                         </div>
                         <div class="uppercase font-hg font-green-haze">
-                            4,760 <span class="font-lg font-grey-mint">$</span>
+                            <span id="revenue" class="counterup">...</span> <span class="font-lg font-green-haze">$</span>
                         </div>
                     </div>
                     <div class="col-md-3 col-sm-3 col-xs-6">
@@ -200,7 +197,7 @@
                             Expenses
                         </div>
                         <div class="uppercase font-hg font-purple">
-                            11,760 <span class="font-lg font-grey-mint">$</span>
+                            <span id="expenses" class="counterup">...</span> <span class="font-lg font-purple">$</span>
                         </div>
                     </div>
                     <div class="col-md-3 col-sm-3 col-xs-6">
@@ -208,60 +205,237 @@
                             Growth
                         </div>
                         <div class="uppercase font-hg font-blue-sharp">
-                            9,760 <span class="font-lg font-grey-mint">$</span>
+                            <span id="growth" class="counterup">...</span> <span class="font-lg font-blue-sharp">$</span>
                         </div>
                     </div>
                 </div>
-                <ul class="list-separated list-inline-xs hide">
-                    <li>
-                        <div class="font-grey-mint font-sm">
-                            Total Sales
-                        </div>
-                        <div class="uppercase font-hg font-red-flamingo">
-                            13,760 <span class="font-lg font-grey-mint">$</span>
-                        </div>
-                    </li>
-                    <li>
-                    </li>
-                    <li class="border">
-                        <div class="font-grey-mint font-sm">
-                            Revenue
-                        </div>
-                        <div class="uppercase font-hg font-green-haze">
-                            4,760 <span class="font-lg font-grey-mint">$</span>
-                        </div>
-                    </li>
-                    <li class="divider">
-                    </li>
-                    <li>
-                        <div class="font-grey-mint font-sm">
-                            Expenses
-                        </div>
-                        <div class="uppercase font-hg font-purple">
-                            11,760 <span class="font-lg font-grey-mint">$</span>
-                        </div>
-                    </li>
-                    <li class="divider">
-                    </li>
-                    <li>
-                        <div class="font-grey-mint font-sm">
-                            Growth
-                        </div>
-                        <div class="uppercase font-hg font-blue-sharp">
-                            9,760 <span class="font-lg font-grey-mint">$</span>
-                        </div>
-                    </li>
-                </ul>
-                <div id="sales_statistics" class="portlet-body-morris-fit morris-chart" style="height: 260px">
+
+                <div id="salesStatisticsLoading" style="text-align: center; height: 240px;">
+                    <img src="/metronic/assets/global/img/loading.gif" alt="loading" />
+                </div>
+
+                <div id="salesStatistics" class="portlet-body-morris-fit morris-chart" style="height: 260px; display: none">
                 </div>
             </div>
         </div>
         <!-- END PORTLET-->
     </div>
 
-    <div class="col-md-6 col-sm-12">
+    <div class="col-lg-6 col-xs-12 col-sm-12">
+        <!-- BEGIN REGIONAL STATS PORTLET-->
+        <div class="portlet light bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="icon-share font-dark hide"></i>
+                    <span class="caption-subject  font-green-haze bold uppercase">Regional Stats</span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div id="region_statistics_content">
+                    <div id="worldmap" style="height: 320px"> </div>
+                </div>
+            </div>
+        </div>
+        <!-- END REGIONAL STATS PORTLET-->
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6 col-xs-12 col-sm-12">
+        <div class="portlet light bordered" style="min-height:212px">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="icon-cursor font-dark hide"></i>
+                    <span class="caption-subject  font-green-haze bold uppercase">General Stats</span>
+                </div>
+                <div class="actions">
+                    <a href="javascript:;" class="btn btn-sm btn-circle red" id="generalStatsReload">
+                        <i class="fa fa-repeat"></i> Reload
+                    </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="easy-pie-chart-loading" style="text-align: center;">
+                            <img src="/metronic/assets/global/img/loading.gif" alt="loading" />
+                        </div>
+                        <div class="easy-pie-chart">
+                            <div class="number transactions" id="transactionPercent" data-percent="0">
+                                +<span id="transactionPercent">...</span>%
+                            </div>
+                            <a class="title" href="javascript:;">
+                                Transactions
+                                <i class="icon-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="margin-bottom-10 visible-sm"> </div>
+                    <div class="col-md-4">
+                        <div class="easy-pie-chart-loading" style="text-align: center;">
+                            <img src="/metronic/assets/global/img/loading.gif" alt="loading" />
+                        </div>
+                        <div class="easy-pie-chart">
+                            <div class="number visits" id="newVisitPercent" data-percent="0">
+                                +<span>...</span>%
+                            </div>
+                            <a class="title" href="javascript:;">
+                                New Visits
+                                <i class="icon-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="margin-bottom-10 visible-sm"> </div>
+                    <div class="col-md-4">
+                        <div class="easy-pie-chart-loading" style="text-align: center;">
+                            <img src="/metronic/assets/global/img/loading.gif" alt="loading" />
+                        </div>
+                        <div class="easy-pie-chart">
+                            <div class="number bounce" id="bouncePercent" data-percent="0">
+                                -<span>...</span>%
+                            </div>
+                            <a class="title" href="javascript:;">
+                                Bounce
+                                <i class="icon-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6 col-xs-12 col-sm-12">
+        <div class="portlet light bordered" style="min-height:212px">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="icon-equalizer font-dark hide"></i>
+                    <span class="caption-subject font-green-haze bold uppercase">Server Stats</span>
+                    <span class="caption-helper">monthly stats...</span>
+                </div>
+                <div class="tools">
+                    <a href="" class="collapse"> </a>
+                    <a href="#portlet-config" data-toggle="modal" class="config"> </a>
+                    <a href="" class="reload" id="serverStatsReload"> </a>
+                    <a href="" class="remove"> </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="sparkline-chart-loading" style="text-align: center; margin-bottom: 80px;">
+                            <img src="/metronic/assets/global/img/loading.gif" alt="loading" />
+                        </div>
+                        <div class="sparkline-chart">
+                            <div class="number" id="network"></div>
+                            <a class="title" href="javascript:;">
+                                Network
+                                <i class="icon-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="margin-bottom-10 visible-sm"> </div>
+                    <div class="col-md-4">
+                        <div class="sparkline-chart-loading" style="text-align: center; margin-bottom: 80px;">
+                            <img src="/metronic/assets/global/img/loading.gif" alt="loading" />
+                        </div>
+                        <div class="sparkline-chart">
+                            <div class="number" id="cpu-load"></div>
+                            <a class="title" href="javascript:;">
+                                CPU Load
+                                <i class="icon-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="margin-bottom-10 visible-sm"> </div>
+                    <div class="col-md-4">
+                        <div class="sparkline-chart-loading" style="text-align: center; margin-bottom: 80px;">
+                            <img src="/metronic/assets/global/img/loading.gif" alt="loading" />
+                        </div>
+                        <div class="sparkline-chart">
+                            <div class="number" id="load-rate"></div>
+                            <a class="title" href="javascript:;">
+                                Load Rate
+                                <i class="icon-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6 col-xs-12 col-sm-12">
         <!-- BEGIN PORTLET-->
-        <div class="portlet light ">
+        <div class="portlet light portlet-fit bordered" style="height: 360px">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="icon-directions font-green hide"></i>
+                    <span class="caption-subject bold font-green-haze uppercase"> Activities</span>
+                    <span class="caption-helper">Horizontal Timeline</span>
+                </div>
+                <div class="actions">
+                    <div class="btn-group">
+                        <a class="btn blue btn-outline btn-circle btn-sm" href="javascript:;" data-toggle="dropdown" data-close-others="true">
+                            Actions
+                            <i class="fa fa-angle-down"></i>
+                        </a>
+                        <ul class="dropdown-menu pull-right">
+                            <li>
+                                <a href="javascript:;"> Action 1</a>
+                            </li>
+                            <li class="divider"> </li>
+                            <li>
+                                <a href="javascript:;">Action 2</a>
+                            </li>
+                            <li>
+                                <a href="javascript:;">Action 3</a>
+                            </li>
+                            <li>
+                                <a href="javascript:;">Action 4</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div id="horizontalTimelineLoading" style="text-align: center">
+                    <img src="/metronic/assets/global/img/loading.gif" alt="loading" />
+                </div>
+
+                <div id="horizontalTimelineContainer" data-spacing="60" style="display:none">
+                    <div class="timeline">
+                        <div class="events-wrapper">
+                            <div class="events">
+                                <ol id="timelineDateList"></ol>
+                                <span class="filling-line bg-red" aria-hidden="true"></span>
+                            </div>
+                        </div>
+                        <ul class="cd-timeline-navigation mt-ht-nav-icon">
+                            <li>
+                                <a href="#0" class="prev inactive btn btn-outline red md-skip">
+                                    <i class="fa fa-chevron-left"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#0" class="next btn btn-outline red md-skip">
+                                    <i class="fa fa-chevron-right"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="events-content">
+                        <ol id="timelineDetails"></ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END PORTLET-->
+    </div>
+    <div class="col-lg-6 col-xs-12 col-sm-12">
+        <!-- BEGIN PORTLET-->
+        <div class="portlet light " style="height: 360px">
             <div class="portlet-title">
                 <div class="caption caption-md">
                     <i class="icon-bar-chart font-green-haze hide"></i>
@@ -269,46 +443,12 @@
                     <span class="caption-helper hide">weekly stats...</span>
                 </div>
                 <div class="actions">
-                    <button id="RefreshMemberActivityButton" class="btn btn-success btn-rounded"><i class="fa fa-refresh"></i> Refresh</button>
+                    <button id="refreshMemberActivityButton" class="btn btn-success btn-rounded"><i class="fa fa-refresh"></i> Refresh</button>
                 </div>
             </div>
             <div class="portlet-body">
-                <div class="row number-stats margin-bottom-30">
-                    <div class="col-md-6 col-sm-6 col-xs-6">
-                        <div class="stat-left">
-                            <div class="stat-chart">
-                                <!-- do not line break "sparkline_bar" div. sparkline chart has an issue when the container div has line break -->
-                                <div id="totalMembersChart"></div>
-                            </div>
-                            <div class="stat-number">
-                                <div class="title">
-                                    Total
-                                </div>
-                                <div class="number">
-                                    2460
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-sm-6 col-xs-6">
-                        <div class="stat-right">
-                            <div class="stat-chart">
-                                <!-- do not line break "sparkline_bar" div. sparkline chart has an issue when the container div has line break -->
-                                <div id="newMembersChart"></div>
-                            </div>
-                            <div class="stat-number">
-                                <div class="title">
-                                    New
-                                </div>
-                                <div class="number">
-                                    719
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <div class="table-scrollable table-scrollable-borderless">
-                    <table class="table table-hover table-light">
+                    <table class="table table-hover table-light" id="memberActivityTable">
                         <thead>
                             <tr class="uppercase">
                                 <th colspan="2">
@@ -332,80 +472,72 @@
                             <td class="fit">
                                 <img class="user-pic" src="~/metronic/assets/admin/layout4/img/avatar4.jpg">
                             </td>
+                            <td></td>
                             <td>
-                                <a href="javascript:;" class="primary-link">Brain</a>
+                                ...
                             </td>
                             <td>
-                                $345
+                                ...
                             </td>
                             <td>
-                                45
+                                ...
                             </td>
                             <td>
-                                124
-                            </td>
-                            <td>
-                                <span class="bold font-green-haze">80%</span>
+                                <span class="bold font-green-haze">...</span>
                             </td>
                         </tr>
                         <tr>
                             <td class="fit">
                                 <img class="user-pic" src="~/metronic/assets/admin/layout4/img/avatar5.jpg">
                             </td>
+                            <td></td>
                             <td>
-                                <a href="javascript:;" class="primary-link">Nick</a>
+                                ...
                             </td>
                             <td>
-                                $560
+                                ...
                             </td>
                             <td>
-                                12
+                                ...
                             </td>
                             <td>
-                                24
-                            </td>
-                            <td>
-                                <span class="bold font-green-haze">67%</span>
+                                <span class="bold font-green-haze">...</span>
                             </td>
                         </tr>
                         <tr>
                             <td class="fit">
                                 <img class="user-pic" src="~/metronic/assets/admin/layout4/img/avatar6.jpg">
                             </td>
+                            <td></td>
                             <td>
-                                <a href="javascript:;" class="primary-link">Tim</a>
+                                ...
                             </td>
                             <td>
-                                $1,345
+                                ...
                             </td>
                             <td>
-                                450
+                                ...
                             </td>
                             <td>
-                                46
-                            </td>
-                            <td>
-                                <span class="bold font-green-haze">98%</span>
+                                <span class="bold font-green-haze">...</span>
                             </td>
                         </tr>
                         <tr>
                             <td class="fit">
                                 <img class="user-pic" src="~/metronic/assets/admin/layout4/img/avatar7.jpg">
                             </td>
+                            <td></td>
                             <td>
-                                <a href="javascript:;" class="primary-link">Tom</a>
+                                ...
                             </td>
                             <td>
-                                $645
+                                ...
                             </td>
                             <td>
-                                50
+                                ...
                             </td>
                             <td>
-                                89
-                            </td>
-                            <td>
-                                <span class="bold font-green-haze">58%</span>
+                                <span class="bold font-green-haze">...</span>
                             </td>
                         </tr>
                     </table>
@@ -415,3 +547,4 @@
         <!-- END PORTLET-->
     </div>
 </div>
+

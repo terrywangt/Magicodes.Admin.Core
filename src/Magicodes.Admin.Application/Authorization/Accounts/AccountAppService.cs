@@ -6,6 +6,7 @@ using Abp.Extensions;
 using Abp.Runtime.Session;
 using Abp.UI;
 using Abp.Zero.Configuration;
+using Microsoft.AspNetCore.Identity;
 using Magicodes.Admin.Authorization.Accounts.Dto;
 using Magicodes.Admin.Authorization.Impersonation;
 using Magicodes.Admin.Authorization.Users;
@@ -27,17 +28,20 @@ namespace Magicodes.Admin.Authorization.Accounts
         private readonly UserRegistrationManager _userRegistrationManager;
         private readonly IImpersonationManager _impersonationManager;
         private readonly IUserLinkManager _userLinkManager;
+        private readonly IPasswordHasher<User> _passwordHasher;
 
         public AccountAppService(
             IUserEmailer userEmailer, 
             UserRegistrationManager userRegistrationManager, 
             IImpersonationManager impersonationManager, 
-            IUserLinkManager userLinkManager)
+            IUserLinkManager userLinkManager,
+            IPasswordHasher<User> passwordHasher)
         {
             _userEmailer = userEmailer;
             _userRegistrationManager = userRegistrationManager;
             _impersonationManager = impersonationManager;
             _userLinkManager = userLinkManager;
+            _passwordHasher = passwordHasher;
 
             AppUrlService = NullAppUrlService.Instance;
             RecaptchaValidator = NullRecaptchaValidator.Instance;
@@ -102,7 +106,7 @@ namespace Magicodes.Admin.Authorization.Accounts
                 throw new UserFriendlyException(L("InvalidPasswordResetCode"), L("InvalidPasswordResetCode_Detail"));
             }
 
-            user.Password = UserManager.PasswordHasher.HashPassword(input.Password);
+            user.Password = _passwordHasher.HashPassword(user, input.Password);
             user.PasswordResetCode = null;
             user.IsEmailConfirmed = true;
             user.ShouldChangePasswordOnNextLogin = false;
@@ -163,7 +167,7 @@ namespace Magicodes.Admin.Authorization.Accounts
         {
             if (!await _userLinkManager.AreUsersLinked(AbpSession.ToUserIdentifier(), input.ToUserIdentifier()))
             {
-                throw new ApplicationException(L("This account is not linked to your account"));
+                throw new Exception(L("This account is not linked to your account"));
             }
 
             return new SwitchToLinkedAccountOutput

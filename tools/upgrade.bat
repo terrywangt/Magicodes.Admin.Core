@@ -1,1 +1,0 @@
-call "tools/Magicodes.CmdTools.exe" copy -s "../../Magicodes.Admin" -t "../" -c "upgrade.config.txt"

@@ -69,8 +69,8 @@
                         var formattedRecord = _appUserNotificationHelper.format(data.record, false);
                         var rowClass = getRowClass(formattedRecord);
 
-                        if (formattedRecord.url) {
-                            return $('<a href="' + formattedRecord.url + '" class="' + rowClass + '">' + abp.utils.truncateStringWithPostfix(formattedRecord.text, 120) + '</a>');
+                        if (formattedRecord.url && formattedRecord.url !== '#') {
+                            return $('<a title="' + formattedRecord.text + '" href="' + formattedRecord.url + '" class="' + rowClass + '">' + abp.utils.truncateStringWithPostfix(formattedRecord.text, 120) + '</a>');
                         } else {
                             return $('<span title="' + formattedRecord.text + '" class="' + rowClass + '">' + abp.utils.truncateStringWithPostfix(formattedRecord.text, 120) + '</span>');
                         }

@@ -62,7 +62,7 @@
     <text name="TenantsHeaderInfo" value="Müşterilerinizi yönetin." />
     <text name="CreateNewTenant" value="Yeni müşteri oluştur" />
     <text name="TenancyCodeName" value="Müşteri kod adı" />
-    <text name="TenantName" value="Müşteri kod adı" />
+    <text name="TenantName" value="Müşteri adı" />
     <text name="TenantDeleteWarningMessage" value="{0} müşterisi silinecektir." />
     <text name="AdminEmailAddress" value="admin e-posta" />
     <text name="AdminPassword" value="admin şifresi" />
@@ -384,20 +384,8 @@
     <text name="Role">Rol</text>
     <text name="Security">Güvenlik</text>
     <text name="PasswordComplexity">Şifre karmaşıklığı</text>
-    <text name="MinPasswordLength">En az şifre uzunluğu</text>
-    <text name="MaxPasswordLength">En çok şifre uzunluğu</text>
-    <text name="UseNumbers">Şifrede rakam kullan</text>
-    <text name="UseUpperCaseLetters">Şifrede büyük harfleri kullan</text>
-    <text name="UseLowerCaseLetters">Şifrede küçük harfleri kullan</text>
-    <text name="UsePunctuations">Şifrede noktalama işaretlerini kullan</text>
     <text name="UseDefaultSettings">varsayılan ayarları kullan</text>
     <text name="PasswordComplexityNotSatisfied">Şifre karmaşıklığı yeterli değil.</text>
-    <text name="PasswordComplexity_MinLength_Hint">Şifre en az {0} karakter olmalı</text>
-    <text name="PasswordComplexity_MaxLength_Hint">Şifre en çok {0} karakter olmalı</text>
-    <text name="PasswordComplexity_UseNumbers_Hint">Şifre en az bir rakam içermeli</text>
-    <text name="PasswordComplexity_UseUpperCaseLetters_Hint">Şifre en az 1 büyük harf içermeli</text>
-    <text name="PasswordComplexity_UseLowerCaseLetters_Hint">Şifre en az 1 küçük harf içermeli</text>
-    <text name="PasswordComplexity_UsePunctuations_Hint">Şifre en az bir özel karakter içermeli</text>
     <text name="YouAlreadyAddedThisUser">Bu kullanıcıyı zaten eklediniz.</text>
     <text name="YouCannotBeFriendWithYourself">Kendinle arkadaş olamazsın.</text>
     <text name="NewChatMessageEmail_Title">Mesaj Detayları</text>
@@ -505,5 +493,116 @@
     <text name="MaximumUserCount">Kullanıcı sayısı limiti (0 = limitsiz)</text>
     <text name="MaximumUserCount_Error_Message">İzin verilen kullanıcı sayısına ulaşıldı!</text>
     <text name="MaximumUserCount_Error_Detail">Bu müşteri için en fazla {0} kullanıcı oluşturulabilir.</text>
+    <text name="UnlockedTenandAdmin">{0} isimli müşterinin admin kullanıcısının giriş kilidi kaldırıldı.</text>
+    <text name="Email">E-posta</text>
+    <text name="EmailSecurityCodeSubject">Güvenlik Kodu</text>
+    <text name="EmailSecurityCodeBody">Güvenlik kodunuz: {0}</text>
+    <text name="Sms">Sms</text>
+    <text name="SmsSecurityCodeMessage">Güvenlik kodunuz: {0}</text>
+    <text name="PasswordComplexity_RequireDigit_Hint">Şifre en az bir rakam içermeli ('0'-'9').</text>
+    <text name="PasswordComplexity_RequireLowercase_Hint">Şifre en az bir küçük harf içermeli ('a'-'z').</text>
+    <text name="PasswordComplexity_RequireNonAlphanumeric_Hint">Şifre en az bir alfanumerik olmayan karaketer içermeli.</text>
+    <text name="PasswordComplexity_RequireUppercase_Hint">Şifre en az bir büyük harf içermeli ('A'-'Z').</text>
+    <text name="PasswordComplexity_RequiredLength_Hint">Şifre en az {0} karakter olmalı.</text>
+    <text name="HostDashboardHeaderInfo">Genel istatislikler ve son işlemler</text>
+    <text name="DashboardSampleStatistics">Örnek istatistik</text>
+    <text name="DashboardSampleStatisticsHelpText">İlerleme</text>
+    <text name="NewTenants">Yeni müşteriler</text>
+    <text name="NewSubscriptionAmount">Yeni gelir</text>
+    <text name="Income">Gelir</text>
+    <text name="IncomeStatistics">Gelir istatistiği</text>
+    <text name="ChangeDateRange">Tarih aralığını değiştir</text>
+    <text name="Daily">Günlük</text>
+    <text name="Weekly">Haftalık</text>
+    <text name="Monthly">Aylık</text>
+    <text name="DateFormatShort">dd.MM.yyyy</text>
+    <text name="EditionStatistics">Paket istatistiği</text>
+    <text name="SubscriptionExpiringTenants">Aboneliği sonlanacak müşteriler</text>
+    <text name="RemainingDay">Kalan gün</text>
+    <text name="SeeAllRecords">Tümünü gör</text>
+    <text name="RecentTenants">Son kaydolan müşteriler</text>
+    <text name="RecentTenantsHelpText">{0} gün içinde kaydolan son {1} müşteri...</text>
+    <text name="ExpiringTenantsHelpText">{0} gün içinde aboneliği sonlanacak ilk {1} müşteri...</text>
+    <text name="NoData">Veri bulunamadı</text>
+    <text name="SubscriptionEndDate">Abonelik bitiş tarihi</text>
+    <text name="TenantNameOrTenancyCode">Müşteri adı / kodu</text>
+    <text name="IncomeWithAmount">Gelir: {0}</text>
+    <text name="Subscription">Abonelik</text>
+    <text name="Extend">Uzat</text>
+    <text name="Upgrade">Yükselt</text>
+    <text name="PaymentPeriodType">Ödeme pediyodu</text>
+    <text name="PaymentInfo">Ödeme bilgisi</text>
+    <text name="MonthlyPrice">Aylık ücret</text>
+    <text name="AnnualPrice">Yıllık ücret</text>
+    <text name="StartUsingFree">Ücretsiz kullanın</text>
+    <text name="TryIt">Deneyin</text>
+    <text name="Days">Gün</text>
+    <text name="PerMonth">Aylık</text>
+    <text name="PerYear">Yıllık</text>
+    <text name="TestCheckFeature">Test check feature</text>
+    <text name="TestCheckFeature2">Test check feature 2</text>
+    <text name="Unlimited">Limitsiz</text>
+    <text name="LatestPaymentAmount">Son ödenen ücret</text>
+    <text name="Payment">Ödeme</text>
+    <text name="Next">Sonraki</text>
+    <text name="Start">Başla</text>
+    <text name="FreeTrial">Ücretsiz deneme</text>
+    <text name="BuyNow">Satın al</text>
+    <text name="WhatWillDoneAfterSubscriptionExpiry">Abonelik bitince ne yapılacak</text>
+    <text name="DeactiveTenant">Müşteriyi pasif yap</text>
+    <text name="AssignToAnotherEdition">Başka bir pakete ata</text>
+    <text name="SubscriptionPrice">Abonelik ücreti</text>
+    <text name="Free">Ücretsiz</text>
+    <text name="Paid">Ücretli</text>
+    <text name="IsTrialActive">Deneme aktif mi?</text>
+    <text name="TrialDayCount">Deneme gün sayısı</text>
+    <text name="WaitAfterSubscriptionExpireDate">Abonelik bittikten sonra bekle</text>
+    <text name="WaitingDayAfterExpire">Abonelik bittikten sonra bekleme gün sayısı</text>
+    <text name="DisplayOrder">Sıralama</text>
+    <text name="Annual">Yıllık</text>
+    <text name="SubscriptionStartDate">Abonelik başlangıç tarihi</text>
+    <text name="EditionPricingTable">Paket ücret tablosu</text>
+    <text name="ClientIsRequestingYourPermission">{0} izninizi istiyor</text>
+    <text name="ApplicationAccess">Uygulama Erişimi</text>
+    <text name="RememberMyDecision">Kararımı hatırla</text>
+    <text name="Allow">İzin ver</text>
+    <text name="DoNotAllow">İzin verme</text>
+    <text name="Your user identifier">Kullanıcı tanımlayıcınız</text>
+    <text name="Required">Zorunlu</text>
+    <text name="User profile">Profil bilgileriniz</text>
+    <text name="Your user profile information (first name, last name, etc.)">Kayıtlı profil bilgileriniz: ad, soyad v.s.</text>
+    <text name="Your email address">E-posta adresiniz</text>
+    <text name="Your phone number">Telefon numaranız</text>
+    <text name="Your postal address">Adresiniz</text>
+    <text name="AllFunctionalityYouHaveInTheApplication">Sizin adınıza tüm işlemleri yapma</text>
+    <text name="Default (all) API">Varsayılan (tüm) API</text>
+    <text name="Offline Access">Çevrimdışı erişim</text>
+    <text name="Access to your applications and resources, even when you are offline">Siz çevrimdışı olsanız dahi sizin yerinize uygulama ve kaynaklara erişim.</text>
+    <text name="Purchase">Satın al</text>
+    <text name="Trial">Deneme</text>
+    <text name="IsDisabled">Devre dışı</text>
+    <text name="ChartDateFormat">%d/%m/%Y</text>
+    <text name="ThereIsNoLoggedInUser">Kullanıcı girişi yapılmamış.</text>
+    <text name="IsInTrialPeriod">Deneme sürümü kullanıyor?</text>
+    <text name="FailedSubscriptionTerminations_Subject">Hatalı üyelik sonlandırmaları</text>
+    <text name="FailedSubscriptionTerminations_Body">Üyelik sonlandırma işlemi {0} müşterileri için {1} tarihinde tamamlanamadı. Detaylı hata mesajlarını sistem loglarında bulabilirsiniz.</text>
+    <text name="UnlimitedTimeSubscription">Sınırsız süreli abonelik</text>
+    <text name="SubscriptionEndDateUtc">Abonelik bitiş tarihi (Utc)</text>
+    <text name="ExpiringEditionMustBeAFreeEdition">Atanacak paket ücretsiz bir paket olmalı.</text>
+    <text name="ThisEditionIsUsedAsAnExpiringEdition">Bu paket başka paketlerin bitiş paketi olarak ayarlanmış. Bu paketi ücretli yapmak istiyorsanız, önce diğer paketlerden kaldırmalısınız.</text>
+    <text name="UpgradedTo">{0} paketine yükseltildi</text>
+    <text name="ExtendedEdition">{0} paketi uzatıldı</text>
+    <text name="CanNotUpgradeSubscriptionSinceTenantHasNoEditionAssigned">Müşteriye paket atanmadığı için abonelik yükseltilmesi yapılamaz.</text>
+    <text name="TrialSubscriptionNotification">{0} paketinin deneme sürümünü kullanıyorsunuz, satın almak için {1}.</text>
+    <text name="SubscriptionExpireNotification">Aboneliğiniz {0} gün içerisinde bitecek.</text>
+    <text name="TrialExpireNotification">Deneme süreniz {0} gün içerisinde bitecek.</text>
+    <text name="FreeEditionsCannotHaveTrialVersions">Ücretsiz paketlerin deneme sürümü olamaz.</text>
+    <text name="PaymentCouldNotCompleted">Ödeme tamamlanamadı</text>
+    <text name="TenantEditionIsNotAssigned">Müşterinin paketi atanmamış</text>
+    <text name="Total">Toplam</text>
+    <text name="Extend_Edition_Description">{0} Paketini Uzatın</text>
+    <text name="Upgrade_Edition_Description">{0} Paketine Yükseltin</text>
+    <text name="PaymentMightBeExpiredWarning">İşleminiz zaman aşımına uğramış olabilir, eğer ödemeyi yaptıysanız lütfen bizimle iletişime geçin.</text>
+    <text name="GoToSubscriptionManagement">Aboneliğe gidin</text>
   </texts>
 </localizationDictionary>

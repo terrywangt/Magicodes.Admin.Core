@@ -2,6 +2,9 @@
 @using Abp.Extensions
 @model Abp.Web.Mvc.Models.ErrorViewModel
 @{
+    Layout = "~/Views/Account/_Layout.cshtml";
+    ViewBag.DisableTenantChange = true;
+
     var errorMessage = Model.ErrorInfo.Message;
     var errorDetails = Model.ErrorInfo.Details;
     if (errorDetails.IsNullOrEmpty())

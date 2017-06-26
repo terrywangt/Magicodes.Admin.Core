@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Data.Entity;
 using Abp.Domain.Repositories;
 using Magicodes.Admin.Chat.Dto;
 using System.Linq;
@@ -7,11 +6,11 @@ using System.Threading.Tasks;
 using Abp;
 using Abp.Application.Services.Dto;
 using Abp.Auditing;
-using Abp.AutoMapper;
 using Abp.Linq.Extensions;
 using Abp.RealTime;
 using Abp.Runtime.Session;
 using Abp.Timing;
+using Microsoft.EntityFrameworkCore;
 using Magicodes.Admin.Friendships.Cache;
 using Magicodes.Admin.Friendships.Dto;
 
@@ -40,7 +39,7 @@ namespace Magicodes.Admin.Chat
         {
             var cacheItem = _userFriendsCache.GetCacheItem(AbpSession.ToUserIdentifier());
 
-            var friends = cacheItem.Friends.MapTo<List<FriendDto>>();
+            var friends = ObjectMapper.Map<List<FriendDto>>(cacheItem.Friends);
 
             foreach (var friend in friends)
             {
@@ -69,7 +68,7 @@ namespace Magicodes.Admin.Chat
 
             messages.Reverse();
 
-            return new ListResultDto<ChatMessageDto>(messages.MapTo<List<ChatMessageDto>>());
+            return new ListResultDto<ChatMessageDto>(ObjectMapper.Map<List<ChatMessageDto>>(messages));
         }
 
         public async Task MarkAllUnreadMessagesOfUserAsRead(MarkAllUnreadMessagesOfUserAsReadInput input)

@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
-using System.Data.Entity;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Abp;
 using Abp.Application.Editions;
 using Abp.Application.Services.Dto;
 using Abp.Authorization;
-using Abp.AutoMapper;
+using Abp.Collections.Extensions;
+using Abp.Domain.Repositories;
+using Abp.UI;
+using Microsoft.EntityFrameworkCore;
 using Magicodes.Admin.Authorization;
 using Magicodes.Admin.Editions.Dto;
 
@@ -17,22 +18,27 @@ namespace Magicodes.Admin.Editions
     public class EditionAppService : AdminAppServiceBase, IEditionAppService
     {
         private readonly EditionManager _editionManager;
+        private readonly IRepository<SubscribableEdition> _subscribableEditionRepository;
 
-        public EditionAppService(EditionManager editionManager)
+        public EditionAppService(
+            EditionManager editionManager,
+            IRepository<SubscribableEdition> subscribableEditionRepository)
         {
             _editionManager = editionManager;
+            _subscribableEditionRepository = subscribableEditionRepository;
         }
 
         public async Task<ListResultDto<EditionListDto>> GetEditions()
         {
-            var editions = await _editionManager.Editions.ToListAsync();
+            var editions = ObjectMapper.Map<List<SubscribableEdition>>(await _editionManager.Editions.ToListAsync())
+                .OrderBy(e => e.MonthlyPrice);
             return new ListResultDto<EditionListDto>(
-                editions.MapTo<List<EditionListDto>>()
+                ObjectMapper.Map<List<EditionListDto>>(editions)
                 );
         }
 
         [AbpAuthorize(AppPermissions.Pages_Editions_Create, AppPermissions.Pages_Editions_Edit)]
-        public async Task<GetEditionForEditOutput> GetEditionForEdit(NullableIdDto input)
+        public async Task<GetEditionEditOutput> GetEditionForEdit(NullableIdDto input)
         {
             var features = FeatureManager.GetAll();
 
@@ -43,7 +49,7 @@ namespace Magicodes.Admin.Editions
             {
                 var edition = await _editionManager.FindByIdAsync(input.Id.Value);
                 featureValues = (await _editionManager.GetFeatureValuesAsync(input.Id.Value)).ToList();
-                editionEditDto = edition.MapTo<EditionEditDto>();
+                editionEditDto = ObjectMapper.Map<EditionEditDto>(edition);
             }
             else
             {
@@ -51,10 +57,12 @@ namespace Magicodes.Admin.Editions
                 featureValues = features.Select(f => new NameValue(f.Name, f.DefaultValue)).ToList();
             }
 
-            return new GetEditionForEditOutput
+            var featureDtos = ObjectMapper.Map<List<FlatFeatureDto>>(features).OrderBy(f => f.DisplayName).ToList();
+
+            return new GetEditionEditOutput
             {
                 Edition = editionEditDto,
-                Features = features.MapTo<List<FlatFeatureDto>>().OrderBy(f => f.DisplayName).ToList(),
+                Features = featureDtos,
                 FeatureValues = featureValues.Select(fv => new NameValueDto(fv)).ToList()
             };
         }
@@ -79,13 +87,24 @@ namespace Magicodes.Admin.Editions
             await _editionManager.DeleteAsync(edition);
         }
 
-        public async Task<List<ComboboxItemDto>> GetEditionComboboxItems(int? selectedEditionId = null)
+        public async Task<List<SubscribableEditionComboboxItemDto>> GetEditionComboboxItems(int? selectedEditionId = null, bool addAllItem = false, bool onlyFreeItems = false)
         {
             var editions = await _editionManager.Editions.ToListAsync();
-            var editionItems = new ListResultDto<ComboboxItemDto>(editions.Select(e => new ComboboxItemDto(e.Id.ToString(), e.DisplayName)).ToList()).Items.ToList();
+            var subscribableEditions = ObjectMapper.Map<List<SubscribableEdition>>(editions)
+                .WhereIf(onlyFreeItems, e => e.IsFree)
+                .OrderBy(e => e.MonthlyPrice);
 
-            var defaultItem = new ComboboxItemDto("", L("NotAssigned"));
+            var editionItems =
+                new ListResultDto<SubscribableEditionComboboxItemDto>(subscribableEditions
+                    .Select(e => new SubscribableEditionComboboxItemDto(e.Id.ToString(), e.DisplayName, e.IsFree)).ToList()).Items.ToList();
+
+            var defaultItem = new SubscribableEditionComboboxItemDto("", L("NotAssigned"), null);
             editionItems.Insert(0, defaultItem);
+
+            if (addAllItem)
+            {
+                editionItems.Insert(0, new SubscribableEditionComboboxItemDto("-1", "- " + L("All") + " -", null));
+            }
 
             if (selectedEditionId.HasValue)
             {
@@ -97,7 +116,7 @@ namespace Magicodes.Admin.Editions
             }
             else
             {
-                defaultItem.IsSelected = true;
+                editionItems[0].IsSelected = true;
             }
 
             return editionItems;
@@ -106,7 +125,16 @@ namespace Magicodes.Admin.Editions
         [AbpAuthorize(AppPermissions.Pages_Editions_Create)]
         protected virtual async Task CreateEditionAsync(CreateOrUpdateEditionDto input)
         {
-            var edition = new Edition(input.Edition.DisplayName);
+            var edition = ObjectMapper.Map<SubscribableEdition>(input.Edition);
+
+            if (edition.ExpiringEditionId.HasValue)
+            {
+                var expiringEdition = ObjectMapper.Map<SubscribableEdition>(await _editionManager.GetByIdAsync(edition.ExpiringEditionId.Value));
+                if (!expiringEdition.IsFree)
+                {
+                    throw new UserFriendlyException(L("ExpiringEditionMustBeAFreeEdition"));
+                }
+            }
 
             await _editionManager.CreateAsync(edition);
             await CurrentUnitOfWork.SaveChangesAsync(); //It's done to get Id of the edition.
@@ -117,17 +145,29 @@ namespace Magicodes.Admin.Editions
         [AbpAuthorize(AppPermissions.Pages_Editions_Edit)]
         protected virtual async Task UpdateEditionAsync(CreateOrUpdateEditionDto input)
         {
-            Debug.Assert(input.Edition.Id != null, "input.Edition.Id should be set.");
+            if (input.Edition.Id != null)
+            {
+                var edition = await _editionManager.GetByIdAsync(input.Edition.Id.Value);
 
-            var edition = await _editionManager.GetByIdAsync(input.Edition.Id.Value);
-            edition.DisplayName = input.Edition.DisplayName;
+                var existingSubscribableEdition = ObjectMapper.Map<SubscribableEdition>(edition);
+                var updatingSubscribableEdition = ObjectMapper.Map<SubscribableEdition>(input.Edition);
+                if (existingSubscribableEdition.IsFree &&
+                    !updatingSubscribableEdition.IsFree &&
+                    await _subscribableEditionRepository.CountAsync(e => e.ExpiringEditionId == existingSubscribableEdition.Id) > 0)
+                {
+                    throw new UserFriendlyException(L("ThisEditionIsUsedAsAnExpiringEdition"));
+                }
 
-            await SetFeatureValues(edition, input.FeatureValues);
+                ObjectMapper.Map(input.Edition, edition);
+
+                await SetFeatureValues(edition, input.FeatureValues);
+            }
         }
 
         private Task SetFeatureValues(Edition edition, List<NameValueDto> featureValues)
         {
-            return _editionManager.SetFeatureValuesAsync(edition.Id, featureValues.Select(fv => new NameValue(fv.Name, fv.Value)).ToArray());
+            return _editionManager.SetFeatureValuesAsync(edition.Id,
+                featureValues.Select(fv => new NameValue(fv.Name, fv.Value)).ToArray());
         }
     }
 }

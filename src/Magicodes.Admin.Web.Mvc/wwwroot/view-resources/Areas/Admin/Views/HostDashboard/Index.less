@@ -1,0 +1,76 @@
+﻿#HostDashboard {
+    div.chart {
+        height: 260px;
+    }
+
+    .jtableTheme(@backgroundColor, @loadingGifUrl) {
+
+        .jtable-main-container {
+            border: 0 !important;
+            box-shadow: 0px 2px 3px 2px rgba(0, 0, 0, 0.03);
+
+            .jtable-busy-message {
+                background: url(@loadingGifUrl) no-repeat;
+                background-color: @backgroundColor !important;
+            }
+
+            .jtable {
+                border: 1px solid #e7ecf1 !important;
+
+                thead {
+                    background-color: @backgroundColor !important;
+                }
+
+                .jtable-data-row > td {
+                    border: 0 !important;
+                }
+
+                .jtable-column-header {
+                    border: 1px solid #e7ecf1 !important;
+                    box-shadow: 0px 2px 3px 2px rgba(0, 0, 0, 0.03) !important;
+                }
+            }
+        }
+    }
+
+    .expiring-tenants-table {
+        .jtableTheme(#E08283, '/lib/jtable/lib/themes/metro/red/loading.gif');
+    }
+
+    .recent-tenants-table {
+        .jtableTheme(#8877a9, '/lib/jtable/lib/themes/metro/purple/loading.gif');
+    }
+
+    div.pie-chart-label {
+        border: 1px solid grey;
+        font-size: 8pt;
+        text-align: center;
+        padding: 5px;
+        color: white;
+    }
+
+    div.portlet {
+        div.portlet-title {
+            div.caption {
+                div.caption-helper {
+                    margin-top: 5px;
+                }
+            }
+
+            div.actions {
+                padding: 0;
+            }
+        }
+    }
+
+    div.flot-x-axis > div {
+        white-space: nowrap;
+        transform: translate(0px, 0) rotate(-25deg);
+        text-indent: -6%;
+        transform-origin: bottom;
+    }
+
+    .portlet > .portlet-title > .caption > .caption-helper {
+        font-size: 11px;
+    }
+}

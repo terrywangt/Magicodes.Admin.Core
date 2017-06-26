@@ -36,7 +36,7 @@ namespace Magicodes.Admin.Web.Areas.Admin.Controllers
         public async Task<PartialViewResult> EditModal(long id)
         {
             var organizationUnit = await _organizationUnitRepository.GetAsync(id);
-            var model = organizationUnit.MapTo<EditOrganizationUnitModalViewModel>();
+            var model = ObjectMapper.Map<EditOrganizationUnitModalViewModel>(organizationUnit);
 
             return PartialView("_EditModal", model);
         }

@@ -49,7 +49,7 @@ namespace Magicodes.Admin.Web.Controllers
 
                 if (!ImageFormatHelper.GetRawImageFormat(fileBytes).IsIn(ImageFormat.Jpeg, ImageFormat.Png, ImageFormat.Gif))
                 {
-                    throw new ApplicationException("Uploaded file is not an accepted image file !");
+                    throw new Exception("Uploaded file is not an accepted image file !");
                 }
 
                 //Delete old temp profile pictures

@@ -7,6 +7,8 @@ using Abp.Domain.Uow;
 using Abp.Extensions;
 using Abp.MultiTenancy;
 using Abp.Runtime.Security;
+using Magicodes.Admin.EntityFrameworkCore;
+using Magicodes.Admin.Migrations.Seed;
 using Magicodes.Admin.MultiTenancy;
 
 namespace Magicodes.Admin.Migrator
@@ -15,12 +17,12 @@ namespace Magicodes.Admin.Migrator
     {
         public Log Log { get; private set; }
 
-        private readonly IAbpZeroDbMigrator _migrator;
+        private readonly AbpZeroDbMigrator _migrator;
         private readonly IRepository<Tenant> _tenantRepository;
         private readonly IDbPerTenantConnectionStringResolver _connectionStringResolver;
 
         public MultiTenantMigrateExecuter(
-            IAbpZeroDbMigrator migrator, 
+            AbpZeroDbMigrator migrator, 
             IRepository<Tenant> tenantRepository,
             Log log,
             IDbPerTenantConnectionStringResolver connectionStringResolver)
@@ -57,7 +59,7 @@ namespace Magicodes.Admin.Migrator
 
             try
             {
-                _migrator.CreateOrMigrateForHost();
+                _migrator.CreateOrMigrateForHost(SeedHelper.SeedHostDb);
             }
             catch (Exception ex)
             {

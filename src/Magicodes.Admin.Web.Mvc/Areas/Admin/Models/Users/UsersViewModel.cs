@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Abp.Application.Services.Dto;
+using Magicodes.Admin.Security;
 
 namespace Magicodes.Admin.Web.Areas.Admin.Models.Users
 {

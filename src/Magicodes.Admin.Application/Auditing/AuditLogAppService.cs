@@ -1,15 +1,14 @@
 ﻿using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
-using System.Linq.Dynamic;
+using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using Abp.Application.Services.Dto;
 using Abp.Auditing;
 using Abp.Authorization;
-using Abp.AutoMapper;
 using Abp.Domain.Repositories;
 using Abp.Extensions;
 using Abp.Linq.Extensions;
+using Microsoft.EntityFrameworkCore;
 using Magicodes.Admin.Auditing.Dto;
 using Magicodes.Admin.Auditing.Exporting;
 using Magicodes.Admin.Authorization;
@@ -72,8 +71,8 @@ namespace Magicodes.Admin.Auditing
             return results.Select(
                 result =>
                 {
-                    var auditLogListDto = result.AuditLog.MapTo<AuditLogListDto>();
-                    auditLogListDto.UserName = result.User == null ? null : result.User.UserName;
+                    var auditLogListDto = ObjectMapper.Map<AuditLogListDto>(result.AuditLog);
+                    auditLogListDto.UserName = result.User?.UserName;
                     auditLogListDto.ServiceName = _namespaceStripper.StripNameSpace(auditLogListDto.ServiceName);
                     return auditLogListDto;
                 }).ToList();
