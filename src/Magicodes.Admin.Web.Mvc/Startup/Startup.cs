@@ -1,8 +1,30 @@
-﻿using System;
+﻿/*
+ *  ┏┓　　　┏┓ 
+ *┏┛┻━━━┛┻┓ 
+ *┃　　　　　　　┃ 　 
+ *┃　　　━　　　┃ 
+ *┃　┳┛　┗┳　┃ 
+ *┃　　　　　　　┃ 
+ *┃　　　┻　　　┃ 
+ *┃　　　　　　　┃ 
+ *┗━┓　　　┏━┛ 
+ *　　┃　　　┃神兽保佑 
+ *　　┃　　　┃代码无BUG！
+ *　　┃　　　┗━━━┓ 
+ *　　┃　　　　　　　┣┓ 
+ *　　┃　　　　　　　┏┛ 
+ *　　┗┓┓┏━┳┓┏┛ 
+ *　　　┃┫┫　┃┫┫ 
+ *　　　┗┻┛　┗┻┛  
+ *　　　 
+ */
+using System;
+using System.IO;
 using Abp.AspNetCore;
 using Abp.Castle.Logging.Log4Net;
 using Abp.Dependency;
 using Abp.Hangfire;
+using Abp.PlugIns;
 using Abp.Runtime.Security;
 using Castle.Facilities.Logging;
 using Hangfire;
@@ -38,10 +60,12 @@ namespace Magicodes.Admin.Web.Startup
     public class Startup
     {
         private readonly IConfigurationRoot _appConfiguration;
+        private readonly IHostingEnvironment _hostingEnvironment;
 
         public Startup(IHostingEnvironment env)
         {
             _appConfiguration = env.GetAppConfiguration();
+            _hostingEnvironment = env;
         }
 
         public IServiceProvider ConfigureServices(IServiceCollection services)

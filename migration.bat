@@ -1,3 +1,3 @@
-cd src\Magicodes.Admin.EntityFramework
+cd src\Magicodes.Admin.EntityFrameworkCore
 dotnet ef database update
 pause
