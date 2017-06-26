@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace Magicodes.Admin.Web.Controllers
 {
@@ -11,8 +11,8 @@ namespace Magicodes.Admin.Web.Controllers
                 return RedirectToAction("SelectEdition", "TenantRegistration");
             }
 
-            return AbpSession.UserId.HasValue ? 
-                RedirectToAction("Index", "Home", new { area = "Admin" }) : 
+            return AbpSession.UserId.HasValue ?
+                RedirectToAction("Index", "Home", new { area = "Admin" }) :
                 RedirectToAction("Login", "Account");
         }
     }

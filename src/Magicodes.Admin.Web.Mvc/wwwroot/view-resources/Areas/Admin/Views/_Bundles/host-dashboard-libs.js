@@ -1891,14 +1891,14 @@ Licensed under the BSD-2-Clause License.
 
 }).call(this);
 
-// ??????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????? \\
-// ??? Rapha??l 2.2.0 - JavaScript Vector Library                                                             ??? \\
-// ??????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????? \\
-// ??? Copyright ?? 2008-2016 Dmitry Baranovskiy (http://raphaeljs.com)                                       ??? \\
-// ??? Copyright ?? 2008-2016 Sencha Labs (http://sencha.com)                                                 ??? \\
-// ??????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????? \\
-// ??? Licensed under the MIT (https://github.com/DmitryBaranovskiy/raphael/blob/master/license.txt) license.??? \\
-// ??????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????? \\
+// ┌───────────────────────────────────────────────────────────────────────────────────────────────────────┐ \\
+// │ Raphaël 2.2.0 - JavaScript Vector Library                                                             │ \\
+// ├───────────────────────────────────────────────────────────────────────────────────────────────────────┤ \\
+// │ Copyright © 2008-2016 Dmitry Baranovskiy (http://raphaeljs.com)                                       │ \\
+// │ Copyright © 2008-2016 Sencha Labs (http://sencha.com)                                                 │ \\
+// ├───────────────────────────────────────────────────────────────────────────────────────────────────────┤ \\
+// │ Licensed under the MIT (https://github.com/DmitryBaranovskiy/raphael/blob/master/license.txt) license.│ \\
+// └───────────────────────────────────────────────────────────────────────────────────────────────────────┘ \\
 
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
@@ -1991,12 +1991,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	     - all (array) (first 3 or 4 elements in the array are equal to [containerID, width, height] or [x, y, width, height]. The rest are element descriptions in format {type: type, <attributes>}). See @Paper.add.
 	     - callback (function) #optional callback function which is going to be executed in the context of newly created paper
 	     * or
-	     - onReadyCallback (function) function that is going to be called on DOM ready event. You can also subscribe to this event via Eve???s ???DOMLoad??? event. In this case method returns `undefined`.
+	     - onReadyCallback (function) function that is going to be called on DOM ready event. You can also subscribe to this event via Eve’s “DOMLoad” event. In this case method returns `undefined`.
 	     = (object) @Paper
 	     > Usage
 	     | // Each of the following examples create a canvas
 	     | // that is 320px wide by 200px high.
-	     | // Canvas is created at the viewport???s 10,50 coordinate.
+	     | // Canvas is created at the viewport’s 10,50 coordinate.
 	     | var paper = Raphael(10, 50, 320, 200);
 	     | // Canvas is created at the top left corner of the #notepad element
 	     | // (or its top right corner in dir="rtl" elements)
@@ -2069,7 +2069,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	             |     num = num % 1;
 	             |     return {fill: "hsb(" + num + ", 0.75, 1)"};
 	             | };
-	             | // Custom attribute ???hue??? will change fill
+	             | // Custom attribute “hue” will change fill
 	             | // to be given hue with fixed saturation and brightness.
 	             | // Now you can use it like this:
 	             | var c = paper.circle(10, 10, 10).attr({hue: .45});
@@ -2281,7 +2281,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Raphael.type
 	     [ property (string) ]
 	     **
-	     * Can be ???SVG???, ???VML??? or empty, depending on browser support.
+	     * Can be “SVG”, “VML” or empty, depending on browser support.
 	    \*/
 	    R.type = (g.win.SVGAngle || g.doc.implementation.hasFeature("http://www.w3.org/TR/SVG11/feature#BasicStructure", "1.1") ? "SVG" : "VML");
 	    if (R.type == "VML") {
@@ -2314,9 +2314,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	     [ property (object) ]
 	     **
 	     * You can add your own method to the canvas. For example if you want to draw a pie chart,
-	     * you can create your own pie chart function and ship it as a Rapha??l plugin. To do this
+	     * you can create your own pie chart function and ship it as a Raphaël plugin. To do this
 	     * you need to extend the `Raphael.fn` object. You should modify the `fn` object before a
-	     * Rapha??l instance is created, otherwise it will take no effect. Please note that the
+	     * Raphaël instance is created, otherwise it will take no effect. Please note that the
 	     * ability for namespaced plugins was removed in Raphael 2.0. It is up to the plugin to
 	     * ensure any namespacing ensures proper context.
 	     > Usage
@@ -2325,9 +2325,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	     | };
 	     | // or create namespace
 	     | Raphael.fn.mystuff = {
-	     |     arrow: function () {???},
-	     |     star: function () {???},
-	     |     // etc???
+	     |     arrow: function () {…},
+	     |     star: function () {…},
+	     |     // etc…
 	     | };
 	     | var paper = Raphael(10, 10, 630, 480);
 	     | // then use it
@@ -2343,8 +2343,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	     **
 	     * Handful of replacements for `typeof` operator.
 	     > Parameters
-	     - o (???) any object or primitive
-	     - type (string) name of the type, i.e. ???string???, ???function???, ???number???, etc.
+	     - o (…) any object or primitive
+	     - type (string) name of the type, i.e. “string”, “function”, “number”, etc.
 	     = (boolean) is given value is of given type
 	    \*/
 	    R.is = function (o, type) {
@@ -2578,8 +2578,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	     o     r (number) red,
 	     o     g (number) green,
 	     o     b (number) blue,
-	     o     hex (string) color in HTML/CSS format: #??????????????????,
-	     o     error (boolean) `true` if string can???t be parsed,
+	     o     hex (string) color in HTML/CSS format: #••••••,
+	     o     error (boolean) `true` if string can’t be parsed,
 	     o     h (number) hue,
 	     o     s (number) saturation,
 	     o     v (number) value (brightness),
@@ -2633,7 +2633,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     o     r (number) red,
 	     o     g (number) green,
 	     o     b (number) blue,
-	     o     hex (string) color in HTML/CSS format: #??????????????????
+	     o     hex (string) color in HTML/CSS format: #••••••
 	     o }
 	    \*/
 	    R.hsb2rgb = function (h, s, v, o) {
@@ -2670,7 +2670,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     o     r (number) red,
 	     o     g (number) green,
 	     o     b (number) blue,
-	     o     hex (string) color in HTML/CSS format: #??????????????????
+	     o     hex (string) color in HTML/CSS format: #••••••
 	     o }
 	    \*/
 	    R.hsl2rgb = function (h, s, l, o) {
@@ -2821,23 +2821,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	     > Parameters
 	     - colour (string) colour string in one of formats:
 	     # <ul>
-	     #     <li>Colour name (???<code>red</code>???, ???<code>green</code>???, ???<code>cornflowerblue</code>???, etc)</li>
-	     #     <li>#????????? ??? shortened HTML colour: (???<code>#000</code>???, ???<code>#fc0</code>???, etc)</li>
-	     #     <li>#?????????????????? ??? full length HTML colour: (???<code>#000000</code>???, ???<code>#bd2300</code>???)</li>
-	     #     <li>rgb(?????????, ?????????, ?????????) ??? red, green and blue channels??? values: (???<code>rgb(200,&nbsp;100,&nbsp;0)</code>???)</li>
-	     #     <li>rgb(?????????%, ?????????%, ?????????%) ??? same as above, but in %: (???<code>rgb(100%,&nbsp;175%,&nbsp;0%)</code>???)</li>
-	     #     <li>hsb(?????????, ?????????, ?????????) ??? hue, saturation and brightness values: (???<code>hsb(0.5,&nbsp;0.25,&nbsp;1)</code>???)</li>
-	     #     <li>hsb(?????????%, ?????????%, ?????????%) ??? same as above, but in %</li>
-	     #     <li>hsl(?????????, ?????????, ?????????) ??? same as hsb</li>
-	     #     <li>hsl(?????????%, ?????????%, ?????????%) ??? same as hsb</li>
+	     #     <li>Colour name (“<code>red</code>”, “<code>green</code>”, “<code>cornflowerblue</code>”, etc)</li>
+	     #     <li>#••• — shortened HTML colour: (“<code>#000</code>”, “<code>#fc0</code>”, etc)</li>
+	     #     <li>#•••••• — full length HTML colour: (“<code>#000000</code>”, “<code>#bd2300</code>”)</li>
+	     #     <li>rgb(•••, •••, •••) — red, green and blue channels’ values: (“<code>rgb(200,&nbsp;100,&nbsp;0)</code>”)</li>
+	     #     <li>rgb(•••%, •••%, •••%) — same as above, but in %: (“<code>rgb(100%,&nbsp;175%,&nbsp;0%)</code>”)</li>
+	     #     <li>hsb(•••, •••, •••) — hue, saturation and brightness values: (“<code>hsb(0.5,&nbsp;0.25,&nbsp;1)</code>”)</li>
+	     #     <li>hsb(•••%, •••%, •••%) — same as above, but in %</li>
+	     #     <li>hsl(•••, •••, •••) — same as hsb</li>
+	     #     <li>hsl(•••%, •••%, •••%) — same as hsb</li>
 	     # </ul>
 	     = (object) RGB object in format:
 	     o {
 	     o     r (number) red,
 	     o     g (number) green,
 	     o     b (number) blue
-	     o     hex (string) color in HTML/CSS format: #??????????????????,
-	     o     error (boolean) true if string can???t be parsed
+	     o     hex (string) color in HTML/CSS format: #••••••,
+	     o     error (boolean) true if string can’t be parsed
 	     o }
 	    \*/
 	    R.getRGB = cacher(function (colour) {
@@ -3432,8 +3432,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	     o         t2: (number) t value for segment of path2
 	     o         segment1: (number) order number for segment of path1
 	     o         segment2: (number) order number for segment of path2
-	     o         bez1: (array) eight coordinates representing bezi??r curve for the segment of path1
-	     o         bez2: (array) eight coordinates representing bezi??r curve for the segment of path2
+	     o         bez1: (array) eight coordinates representing beziér curve for the segment of path1
+	     o         bez2: (array) eight coordinates representing beziér curve for the segment of path2
 	     o     }
 	     o ]
 	    \*/
@@ -4791,7 +4791,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     **
 	     * You can add your own method to elements. This is useful when you want to hack default functionality or
 	     * want to wrap some common transformation or attributes in one method. In difference to canvas methods,
-	     * you can redefine element method at any time. Expending element methods wouldn???t affect set.
+	     * you can redefine element method at any time. Expending element methods wouldn’t affect set.
 	     > Usage
 	     | Raphael.el.red = function () {
 	     |     this.attr({fill: "#f00"});
@@ -5235,7 +5235,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     - x (number) x coordinate of the centre
 	     - y (number) y coordinate of the centre
 	     - r (number) radius
-	     = (object) Rapha??l element object with type ???circle???
+	     = (object) Raphaël element object with type “circle”
 	     **
 	     > Usage
 	     | var c = paper.circle(50, 50, 40);
@@ -5258,7 +5258,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     - width (number) width
 	     - height (number) height
 	     - r (number) #optional radius for rounded corners, default is 0
-	     = (object) Rapha??l element object with type ???rect???
+	     = (object) Raphaël element object with type “rect”
 	     **
 	     > Usage
 	     | // regular rectangle
@@ -5283,7 +5283,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     - y (number) y coordinate of the centre
 	     - rx (number) horizontal radius
 	     - ry (number) vertical radius
-	     = (object) Rapha??l element object with type ???ellipse???
+	     = (object) Raphaël element object with type “ellipse”
 	     **
 	     > Usage
 	     | var c = paper.ellipse(50, 50, 40, 20);
@@ -5302,7 +5302,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     - pathString (string) #optional path string in SVG format.
 	     * Path string consists of one-letter commands, followed by comma seprarated arguments in numercal form. Example:
 	     | "M10,20L30,40"
-	     * Here we can see two commands: ???M???, with arguments `(10, 20)` and ???L??? with arguments `(30, 40)`. Upper case letter mean command is absolute, lower case???relative.
+	     * Here we can see two commands: “M”, with arguments `(10, 20)` and “L” with arguments `(30, 40)`. Upper case letter mean command is absolute, lower case—relative.
 	     *
 	     # <p>Here is short list of commands available, for more details see <a href="http://www.w3.org/TR/SVG/paths.html#PathData" title="Details of a path's data attribute's format are described in the SVG specification.">SVG path string format</a>.</p>
 	     # <table><thead><tr><th>Command</th><th>Name</th><th>Parameters</th></tr></thead><tbody>
@@ -5313,12 +5313,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	     # <tr><td>V</td><td>vertical lineto</td><td>y+</td></tr>
 	     # <tr><td>C</td><td>curveto</td><td>(x1 y1 x2 y2 x y)+</td></tr>
 	     # <tr><td>S</td><td>smooth curveto</td><td>(x2 y2 x y)+</td></tr>
-	     # <tr><td>Q</td><td>quadratic B??zier curveto</td><td>(x1 y1 x y)+</td></tr>
-	     # <tr><td>T</td><td>smooth quadratic B??zier curveto</td><td>(x y)+</td></tr>
+	     # <tr><td>Q</td><td>quadratic Bézier curveto</td><td>(x1 y1 x y)+</td></tr>
+	     # <tr><td>T</td><td>smooth quadratic Bézier curveto</td><td>(x y)+</td></tr>
 	     # <tr><td>A</td><td>elliptical arc</td><td>(rx ry x-axis-rotation large-arc-flag sweep-flag x y)+</td></tr>
-	     # <tr><td>R</td><td><a href="http://en.wikipedia.org/wiki/Catmull???Rom_spline#Catmull.E2.80.93Rom_spline">Catmull-Rom curveto</a>*</td><td>x1 y1 (x y)+</td></tr></tbody></table>
-	     * * ???Catmull-Rom curveto??? is a not standard SVG command and added in 2.0 to make life easier.
-	     * Note: there is a special case when path consist of just three commands: ???M10,10R???z???. In this case path will smoothly connects to its beginning.
+	     # <tr><td>R</td><td><a href="http://en.wikipedia.org/wiki/Catmull–Rom_spline#Catmull.E2.80.93Rom_spline">Catmull-Rom curveto</a>*</td><td>x1 y1 (x y)+</td></tr></tbody></table>
+	     * * “Catmull-Rom curveto” is a not standard SVG command and added in 2.0 to make life easier.
+	     * Note: there is a special case when path consist of just three commands: “M10,10R…z”. In this case path will smoothly connects to its beginning.
 	     > Usage
 	     | var c = paper.path("M10 10L90 90");
 	     | // draw a diagonal line:
@@ -5344,7 +5344,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     - y (number) y coordinate position
 	     - width (number) width of the image
 	     - height (number) height of the image
-	     = (object) Rapha??l element object with type ???image???
+	     = (object) Raphaël element object with type “image”
 	     **
 	     > Usage
 	     | var c = paper.image("apple.png", 10, 10, 80, 80);
@@ -5358,17 +5358,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Paper.text
 	     [ method ]
 	     **
-	     * Draws a text string. If you need line breaks, put ???\n??? in the string.
+	     * Draws a text string. If you need line breaks, put “\n” in the string.
 	     **
 	     > Parameters
 	     **
 	     - x (number) x coordinate position
 	     - y (number) y coordinate position
 	     - text (string) The text string to draw
-	     = (object) Rapha??l element object with type ???text???
+	     = (object) Raphaël element object with type “text”
 	     **
 	     > Usage
-	     | var t = paper.text(50, 50, "Rapha??l\nkicks\nbutt!");
+	     | var t = paper.text(50, 50, "Raphaël\nkicks\nbutt!");
 	    \*/
 	    paperproto.text = function (x, y, text) {
 	        var out = R._engine.text(this, x || 0, y || 0, Str(text));
@@ -5380,8 +5380,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	     [ method ]
 	     **
 	     * Creates array-like object to keep and operate several elements at once.
-	     * Warning: it doesn???t create any elements for itself in the page, it just groups existing elements.
-	     * Sets act as pseudo elements ??? all methods available to an element can be used on a set.
+	     * Warning: it doesn’t create any elements for itself in the page, it just groups existing elements.
+	     * Sets act as pseudo elements — all methods available to an element can be used on a set.
 	     = (object) array-like object that represents set of elements
 	     **
 	     > Usage
@@ -5516,7 +5516,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     **
 	     * Returns you topmost element under given point.
 	     **
-	     = (object) Rapha??l element object
+	     = (object) Raphaël element object
 	     > Parameters
 	     **
 	     - x (number) x coordinate from the top left corner of the window
@@ -5580,7 +5580,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     > Parameters
 	     **
 	     - id (number) id
-	     = (object) Rapha??l element object
+	     = (object) Raphaël element object
 	    \*/
 	    paperproto.getById = function (id) {
 	        var bot = this.bottom;
@@ -5651,7 +5651,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Element.isPointInside
 	     [ method ]
 	     **
-	     * Determine if given point is inside this element???s shape
+	     * Determine if given point is inside this element’s shape
 	     **
 	     > Parameters
 	     **
@@ -5731,7 +5731,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     **
 	     * Return set of elements that create glow-like effect around given element. See @Paper.set.
 	     *
-	     * Note: Glow is not connected to the element. If you change element attributes it won???t adjust itself.
+	     * Note: Glow is not connected to the element. If you change element attributes it won’t adjust itself.
 	     **
 	     > Parameters
 	     **
@@ -5885,7 +5885,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Element.getTotalLength
 	     [ method ]
 	     **
-	     * Returns length of the path in pixels. Only works for element of ???path??? type.
+	     * Returns length of the path in pixels. Only works for element of “path” type.
 	     = (number) length.
 	    \*/
 	    elproto.getTotalLength = function () {
@@ -5904,7 +5904,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Element.getPointAtLength
 	     [ method ]
 	     **
-	     * Return coordinates of the point located at the given length on the given path. Only works for element of ???path??? type.
+	     * Return coordinates of the point located at the given length on the given path. Only works for element of “path” type.
 	     **
 	     > Parameters
 	     **
@@ -5929,7 +5929,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Element.getPath
 	     [ method ]
 	     **
-	     * Returns path of the element. Only works for elements of ???path??? type and simple elements like circle.
+	     * Returns path of the element. Only works for elements of “path” type and simple elements like circle.
 	     = (object) path
 	     **
 	    \*/
@@ -5951,7 +5951,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Element.getSubpath
 	     [ method ]
 	     **
-	     * Return subpath of a given element from given length to given length. Only works for element of ???path??? type.
+	     * Return subpath of a given element from given length to given length. Only works for element of “path” type.
 	     **
 	     > Parameters
 	     **
@@ -5974,14 +5974,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	     **
 	     * Object that contains easing formulas for animation. You could extend it with your own. By default it has following list of easing:
 	     # <ul>
-	     #     <li>???linear???</li>
-	     #     <li>???&lt;??? or ???easeIn??? or ???ease-in???</li>
-	     #     <li>???>??? or ???easeOut??? or ???ease-out???</li>
-	     #     <li>???&lt;>??? or ???easeInOut??? or ???ease-in-out???</li>
-	     #     <li>???backIn??? or ???back-in???</li>
-	     #     <li>???backOut??? or ???back-out???</li>
-	     #     <li>???elastic???</li>
-	     #     <li>???bounce???</li>
+	     #     <li>“linear”</li>
+	     #     <li>“&lt;” or “easeIn” or “ease-in”</li>
+	     #     <li>“>” or “easeOut” or “ease-out”</li>
+	     #     <li>“&lt;>” or “easeInOut” or “ease-in-out”</li>
+	     #     <li>“backIn” or “back-in”</li>
+	     #     <li>“backOut” or “back-out”</li>
+	     #     <li>“elastic”</li>
+	     #     <li>“bounce”</li>
 	     # </ul>
 	     # <p>See also <a href="http://raphaeljs.com/easing.html">Easing demo</a>.</p>
 	    \*/
@@ -6657,7 +6657,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     > Parameters
 	     **
 	     - anim (object) #optional animation object
-	     - value (number) #optional 0 ??? 1. If specified, method works like a setter and sets the status of a given animation to the value. This will cause animation to jump to the given position.
+	     - value (number) #optional 0 – 1. If specified, method works like a setter and sets the status of a given animation to the value. This will cause animation to jump to the given position.
 	     **
 	     = (number) status
 	     * or
@@ -6881,7 +6881,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     **
 	     - index (number) position of the deletion
 	     - count (number) number of element to remove
-	     - insertion??? (object) #optional elements to insert
+	     - insertion… (object) #optional elements to insert
 	     = (object) set elements that were deleted
 	    \*/
 	    setproto.splice = function (index, count, insertion) {
@@ -7010,7 +7010,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Set.isPointInside
 	     [ method ]
 	     **
-	     * Determine if given point is inside this set???s elements
+	     * Determine if given point is inside this set’s elements
 	     **
 	     > Parameters
 	     **
@@ -7033,16 +7033,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Raphael.registerFont
 	     [ method ]
 	     **
-	     * Adds given font to the registered set of fonts for Rapha??l. Should be used as an internal call from within Cuf??n???s font file.
+	     * Adds given font to the registered set of fonts for Raphaël. Should be used as an internal call from within Cufón’s font file.
 	     * Returns original parameter, so it could be used with chaining.
-	     # <a href="http://wiki.github.com/sorccu/cufon/about">More about Cuf??n and how to convert your font form TTF, OTF, etc to JavaScript file.</a>
+	     # <a href="http://wiki.github.com/sorccu/cufon/about">More about Cufón and how to convert your font form TTF, OTF, etc to JavaScript file.</a>
 	     **
 	     > Parameters
 	     **
 	     - font (object) the font to register
 	     = (object) the font you passed in
 	     > Usage
-	     | Cufon.registerFont(Raphael.registerFont({???}));
+	     | Cufon.registerFont(Raphael.registerFont({…}));
 	    \*/
 	    R.registerFont = function (font) {
 	        if (!font.face) {
@@ -7087,7 +7087,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Paper.getFont
 	     [ method ]
 	     **
-	     * Finds font object in the registered fonts by given parameters. You could specify only one word from the font name, like ???Myriad??? for ???Myriad Pro???.
+	     * Finds font object in the registered fonts by given parameters. You could specify only one word from the font name, like “Myriad” for “Myriad Pro”.
 	     **
 	     > Parameters
 	     **
@@ -7234,12 +7234,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Raphael.format
 	     [ method ]
 	     **
-	     * Simple format function. Replaces construction of type ???`{<number>}`??? to the corresponding argument.
+	     * Simple format function. Replaces construction of type “`{<number>}`” to the corresponding argument.
 	     **
 	     > Parameters
 	     **
 	     - token (string) string to format
-	     - ??? (string) rest of arguments will be treated as parameters for replacement
+	     - … (string) rest of arguments will be treated as parameters for replacement
 	     = (string) formated string
 	     > Usage
 	     | var x = 10,
@@ -7260,7 +7260,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Raphael.fullfill
 	     [ method ]
 	     **
-	     * A little bit more advanced format function than @Raphael.format. Replaces construction of type ???`{<name>}`??? to the corresponding argument.
+	     * A little bit more advanced format function than @Raphael.format. Replaces construction of type “`{<name>}`” to the corresponding argument.
 	     **
 	     > Parameters
 	     **
@@ -7306,14 +7306,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Raphael.ninja
 	     [ method ]
 	     **
-	     * If you want to leave no trace of Rapha??l (Well, Rapha??l creates only one global variable `Raphael`, but anyway.) You can use `ninja` method.
+	     * If you want to leave no trace of Raphaël (Well, Raphaël creates only one global variable `Raphael`, but anyway.) You can use `ninja` method.
 	     * Beware, that in this case plugins could stop working, because they are depending on global variable existence.
 	     **
 	     = (object) Raphael object
 	     > Usage
 	     | (function (local_raphael) {
 	     |     var paper = local_raphael(10, 10, 320, 200);
-	     |     ???
+	     |     …
 	     | })(Raphael.ninja());
 	    \*/
 	    R.ninja = function () {
@@ -7390,11 +7390,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 	// See the License for the specific language governing permissions and
 	// limitations under the License.
-	// ?????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????? \\
-	// ??? Eve 0.5.0 - JavaScript Events Library                      ??? \\
-	// ?????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????? \\
-	// ??? Author Dmitry Baranovskiy (http://dmitry.baranovskiy.com/) ??? \\
-	// ?????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????? \\
+	// ┌────────────────────────────────────────────────────────────┐ \\
+	// │ Eve 0.5.0 - JavaScript Events Library                      │ \\
+	// ├────────────────────────────────────────────────────────────┤ \\
+	// │ Author Dmitry Baranovskiy (http://dmitry.baranovskiy.com/) │ \\
+	// └────────────────────────────────────────────────────────────┘ \\
 
 	(function (glob) {
 	    var version = "0.5.0",
@@ -7554,7 +7554,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * eve.separator
 	     [ method ]
 
-	     * If for some reasons you don???t like default separators (`.` or `/`) you can specify yours
+	     * If for some reasons you don’t like default separators (`.` or `/`) you can specify yours
 	     * here. Be aware that if you pass a string longer than one character it will be treated as
 	     * a list of characters.
 
@@ -7573,7 +7573,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * eve.on
 	     [ method ]
 	     **
-	     * Binds given event handler with a given name. You can use wildcards ???`*`??? for the names:
+	     * Binds given event handler with a given name. You can use wildcards “`*`” for the names:
 	     | eve.on("*.under.*", f);
 	     | eve("mouse.under.floor"); // triggers f
 	     * Use @eve to trigger the listener.
@@ -7581,7 +7581,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     - name (string) name of the event, dot (`.`) or slash (`/`) separated, with optional wildcards
 	     - f (function) event handler function
 	     **
-	     - name (array) if you don???t want to use separators, you can use array of strings
+	     - name (array) if you don’t want to use separators, you can use array of strings
 	     - f (function) event handler function
 	     **
 	     = (function) returned function accepts a single numeric parameter that represents z-index of the handler. It is an optional feature and only used when you need to ensure that some subset of handlers will be invoked in a given order, despite of the order of assignment. 
@@ -7592,7 +7592,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * This will ensure that `catchIt` function will be called before `eatIt`.
 	     *
 	     * If you want to put your handler before non-indexed handlers, specify a negative value.
-	     * Note: I assume most of the time you don???t need to worry about z-index, but it???s nice to have this feature ???just in case???.
+	     * Note: I assume most of the time you don’t need to worry about z-index, but it’s nice to have this feature “just in case”.
 	    \*/
 	    eve.on = function (name, f) {
 	        if (typeof f != "function") {
@@ -7635,7 +7635,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     | });
 	     > Arguments
 	     - event (string) event name
-	     - varargs (???) and any other arguments
+	     - varargs (…) and any other arguments
 	     = (function) possible event handler function
 	    \*/
 	    eve.f = function (event) {
@@ -7665,7 +7665,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     **
 	     = (string) name of the event, if `subname` is not specified
 	     * or
-	     = (boolean) `true`, if current event???s name contains `subname`
+	     = (boolean) `true`, if current event’s name contains `subname`
 	    \*/
 	    eve.nt = function (subname) {
 	        var cur = isArray(current_event) ? current_event.join(".") : current_event;
@@ -8440,7 +8440,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	         **
 	         * Gives you a reference to the DOM object, so you can assign event handlers or just mess around.
 	         **
-	         * Note: Don???t mess with it.
+	         * Note: Don’t mess with it.
 	         > Usage
 	         | // draw a circle at coordinate 10,10 with radius of 10
 	         | var c = paper.circle(10, 10, 10);
@@ -8486,7 +8486,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * Element.paper
 	         [ property (object) ]
 	         **
-	         * Internal reference to ???paper??? where object drawn. Mainly for use in plugins and element extensions.
+	         * Internal reference to “paper” where object drawn. Mainly for use in plugins and element extensions.
 	         > Usage
 	         | Raphael.el.cross = function () {
 	         |     this.attr({fill: "red"});
@@ -8551,7 +8551,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     - deg (number) angle in degrees
 	     - cx (number) #optional x coordinate of the centre of rotation
 	     - cy (number) #optional y coordinate of the centre of rotation
-	     * If cx & cy aren???t specified centre of the shape is used as a point of rotation.
+	     * If cx & cy aren’t specified centre of the shape is used as a point of rotation.
 	     = (object) @Element
 	    \*/
 	    elproto.rotate = function (deg, cx, cy) {
@@ -8585,7 +8585,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     - sy (number) vertical scale amount
 	     - cx (number) #optional x coordinate of the centre of scale
 	     - cy (number) #optional y coordinate of the centre of scale
-	     * If cx & cy aren???t specified centre of the shape is used instead.
+	     * If cx & cy aren’t specified centre of the shape is used instead.
 	     = (object) @Element
 	    \*/
 	    elproto.scale = function (sx, sy, cx, cy) {
@@ -8638,21 +8638,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	     [ method ]
 	     **
 	     * Adds transformation to the element which is separate to other attributes,
-	     * i.e. translation doesn???t change `x` or `y` of the rectange. The format
+	     * i.e. translation doesn’t change `x` or `y` of the rectange. The format
 	     * of transformation string is similar to the path string syntax:
 	     | "t100,100r30,100,100s2,2,100,100r45s1.5"
 	     * Each letter is a command. There are four commands: `t` is for translate, `r` is for rotate, `s` is for
 	     * scale and `m` is for matrix.
 	     *
-	     * There are also alternative ???absolute??? translation, rotation and scale: `T`, `R` and `S`. They will not take previous transformation into account. For example, `...T100,0` will always move element 100 px horisontally, while `...t100,0` could move it vertically if there is `r90` before. Just compare results of `r90t100,0` and `r90T100,0`.
+	     * There are also alternative “absolute” translation, rotation and scale: `T`, `R` and `S`. They will not take previous transformation into account. For example, `...T100,0` will always move element 100 px horisontally, while `...t100,0` could move it vertically if there is `r90` before. Just compare results of `r90t100,0` and `r90T100,0`.
 	     *
-	     * So, the example line above could be read like ???translate by 100, 100; rotate 30?? around 100, 100; scale twice around 100, 100;
-	     * rotate 45?? around centre; scale 1.5 times relative to centre???. As you can see rotate and scale commands have origin
+	     * So, the example line above could be read like “translate by 100, 100; rotate 30° around 100, 100; scale twice around 100, 100;
+	     * rotate 45° around centre; scale 1.5 times relative to centre”. As you can see rotate and scale commands have origin
 	     * coordinates as optional parameters, the default is the centre point of the element.
 	     * Matrix accepts six parameters.
 	     > Usage
 	     | var el = paper.rect(10, 20, 300, 200);
-	     | // translate 100, 100, rotate 45??, translate -100, 0
+	     | // translate 100, 100, rotate 45°, translate -100, 0
 	     | el.transform("t100,100r45t-100,0");
 	     | // if you want you can append or prepend transformations
 	     | el.transform("...t50,50");
@@ -8665,7 +8665,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     | console.log(el.transform());
 	     > Parameters
 	     - tstr (string) #optional transformation string
-	     * If tstr isn???t specified
+	     * If tstr isn’t specified
 	     = (string) current transformation string
 	     * else
 	     = (object) @Element
@@ -8783,12 +8783,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	     **
 	     * Sets the attributes of the element.
 	     > Parameters
-	     - attrName (string) attribute???s name
+	     - attrName (string) attribute’s name
 	     - value (string) value
 	     * or
 	     - params (object) object of name/value pairs
 	     * or
-	     - attrName (string) attribute???s name
+	     - attrName (string) attribute’s name
 	     * or
 	     - attrNames (array) in this case method returns array of current values for given attribute names
 	     = (object) @Element if attrsName & value or params are passed in.
@@ -8817,45 +8817,45 @@ return /******/ (function(modules) { // webpackBootstrap
 	     o ry (number) vertical radius of the ellipse
 	     o src (string) image URL, only works for @Element.image element
 	     o stroke (string) stroke colour
-	     o stroke-dasharray (string) [??????, ???none???, ???`-`???, ???`.`???, ???`-.`???, ???`-..`???, ???`. `???, ???`- `???, ???`--`???, ???`- .`???, ???`--.`???, ???`--..`???]
-	     o stroke-linecap (string) [???`butt`???, ???`square`???, ???`round`???]
-	     o stroke-linejoin (string) [???`bevel`???, ???`round`???, ???`miter`???]
+	     o stroke-dasharray (string) [“”, “none”, “`-`”, “`.`”, “`-.`”, “`-..`”, “`. `”, “`- `”, “`--`”, “`- .`”, “`--.`”, “`--..`”]
+	     o stroke-linecap (string) [“`butt`”, “`square`”, “`round`”]
+	     o stroke-linejoin (string) [“`bevel`”, “`round`”, “`miter`”]
 	     o stroke-miterlimit (number)
 	     o stroke-opacity (number)
 	     o stroke-width (number) stroke width in pixels, default is '1'
 	     o target (string) used with href
 	     o text (string) contents of the text element. Use `\n` for multiline text
-	     o text-anchor (string) [???`start`???, ???`middle`???, ???`end`???], default is ???`middle`???
+	     o text-anchor (string) [“`start`”, “`middle`”, “`end`”], default is “`middle`”
 	     o title (string) will create tooltip with a given text
 	     o transform (string) see @Element.transform
 	     o width (number)
 	     o x (number)
 	     o y (number)
 	     > Gradients
-	     * Linear gradient format: ???`???angle???-???colour???[-???colour???[:???offset???]]*-???colour???`???, example: ???`90-#fff-#000`??? ??? 90??
-	     * gradient from white to black or ???`0-#fff-#f00:20-#000`??? ??? 0?? gradient from white via red (at 20%) to black.
+	     * Linear gradient format: “`‹angle›-‹colour›[-‹colour›[:‹offset›]]*-‹colour›`”, example: “`90-#fff-#000`” – 90°
+	     * gradient from white to black or “`0-#fff-#f00:20-#000`” – 0° gradient from white via red (at 20%) to black.
 	     *
-	     * radial gradient: ???`r[(???fx???, ???fy???)]???colour???[-???colour???[:???offset???]]*-???colour???`???, example: ???`r#fff-#000`??? ???
-	     * gradient from white to black or ???`r(0.25, 0.75)#fff-#000`??? ??? gradient from white to black with focus point
+	     * radial gradient: “`r[(‹fx›, ‹fy›)]‹colour›[-‹colour›[:‹offset›]]*-‹colour›`”, example: “`r#fff-#000`” –
+	     * gradient from white to black or “`r(0.25, 0.75)#fff-#000`” – gradient from white to black with focus point
 	     * at 0.25, 0.75. Focus point coordinates are in 0..1 range. Radial gradients can only be applied to circles and ellipses.
 	     > Path String
-	     # <p>Please refer to <a href="http://www.w3.org/TR/SVG/paths.html#PathData" title="Details of a path???s data attribute???s format are described in the SVG specification.">SVG documentation regarding path string</a>. Rapha??l fully supports it.</p>
+	     # <p>Please refer to <a href="http://www.w3.org/TR/SVG/paths.html#PathData" title="Details of a path’s data attribute’s format are described in the SVG specification.">SVG documentation regarding path string</a>. Raphaël fully supports it.</p>
 	     > Colour Parsing
 	     # <ul>
-	     #     <li>Colour name (???<code>red</code>???, ???<code>green</code>???, ???<code>cornflowerblue</code>???, etc)</li>
-	     #     <li>#????????? ??? shortened HTML colour: (???<code>#000</code>???, ???<code>#fc0</code>???, etc)</li>
-	     #     <li>#?????????????????? ??? full length HTML colour: (???<code>#000000</code>???, ???<code>#bd2300</code>???)</li>
-	     #     <li>rgb(?????????, ?????????, ?????????) ??? red, green and blue channels??? values: (???<code>rgb(200,&nbsp;100,&nbsp;0)</code>???)</li>
-	     #     <li>rgb(?????????%, ?????????%, ?????????%) ??? same as above, but in %: (???<code>rgb(100%,&nbsp;175%,&nbsp;0%)</code>???)</li>
-	     #     <li>rgba(?????????, ?????????, ?????????, ?????????) ??? red, green and blue channels??? values: (???<code>rgba(200,&nbsp;100,&nbsp;0, .5)</code>???)</li>
-	     #     <li>rgba(?????????%, ?????????%, ?????????%, ?????????%) ??? same as above, but in %: (???<code>rgba(100%,&nbsp;175%,&nbsp;0%, 50%)</code>???)</li>
-	     #     <li>hsb(?????????, ?????????, ?????????) ??? hue, saturation and brightness values: (???<code>hsb(0.5,&nbsp;0.25,&nbsp;1)</code>???)</li>
-	     #     <li>hsb(?????????%, ?????????%, ?????????%) ??? same as above, but in %</li>
-	     #     <li>hsba(?????????, ?????????, ?????????, ?????????) ??? same as above, but with opacity</li>
-	     #     <li>hsl(?????????, ?????????, ?????????) ??? almost the same as hsb, see <a href="http://en.wikipedia.org/wiki/HSL_and_HSV" title="HSL and HSV - Wikipedia, the free encyclopedia">Wikipedia page</a></li>
-	     #     <li>hsl(?????????%, ?????????%, ?????????%) ??? same as above, but in %</li>
-	     #     <li>hsla(?????????, ?????????, ?????????, ?????????) ??? same as above, but with opacity</li>
-	     #     <li>Optionally for hsb and hsl you could specify hue as a degree: ???<code>hsl(240deg,&nbsp;1,&nbsp;.5)</code>??? or, if you want to go fancy, ???<code>hsl(240??,&nbsp;1,&nbsp;.5)</code>???</li>
+	     #     <li>Colour name (“<code>red</code>”, “<code>green</code>”, “<code>cornflowerblue</code>”, etc)</li>
+	     #     <li>#••• — shortened HTML colour: (“<code>#000</code>”, “<code>#fc0</code>”, etc)</li>
+	     #     <li>#•••••• — full length HTML colour: (“<code>#000000</code>”, “<code>#bd2300</code>”)</li>
+	     #     <li>rgb(•••, •••, •••) — red, green and blue channels’ values: (“<code>rgb(200,&nbsp;100,&nbsp;0)</code>”)</li>
+	     #     <li>rgb(•••%, •••%, •••%) — same as above, but in %: (“<code>rgb(100%,&nbsp;175%,&nbsp;0%)</code>”)</li>
+	     #     <li>rgba(•••, •••, •••, •••) — red, green and blue channels’ values: (“<code>rgba(200,&nbsp;100,&nbsp;0, .5)</code>”)</li>
+	     #     <li>rgba(•••%, •••%, •••%, •••%) — same as above, but in %: (“<code>rgba(100%,&nbsp;175%,&nbsp;0%, 50%)</code>”)</li>
+	     #     <li>hsb(•••, •••, •••) — hue, saturation and brightness values: (“<code>hsb(0.5,&nbsp;0.25,&nbsp;1)</code>”)</li>
+	     #     <li>hsb(•••%, •••%, •••%) — same as above, but in %</li>
+	     #     <li>hsba(•••, •••, •••, •••) — same as above, but with opacity</li>
+	     #     <li>hsl(•••, •••, •••) — almost the same as hsb, see <a href="http://en.wikipedia.org/wiki/HSL_and_HSV" title="HSL and HSV - Wikipedia, the free encyclopedia">Wikipedia page</a></li>
+	     #     <li>hsl(•••%, •••%, •••%) — same as above, but in %</li>
+	     #     <li>hsla(•••, •••, •••, •••) — same as above, but with opacity</li>
+	     #     <li>Optionally for hsb and hsl you could specify hue as a degree: “<code>hsl(240deg,&nbsp;1,&nbsp;.5)</code>” or, if you want to go fancy, “<code>hsl(240°,&nbsp;1,&nbsp;.5)</code>”</li>
 	     # </ul>
 	    \*/
 	    elproto.attr = function (name, value) {
@@ -8922,7 +8922,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Element.toFront
 	     [ method ]
 	     **
-	     * Moves the element so it is the closest to the viewer???s eyes, on top of other elements.
+	     * Moves the element so it is the closest to the viewer’s eyes, on top of other elements.
 	     = (object) @Element
 	    \*/
 	    elproto.toFront = function () {
@@ -8939,7 +8939,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Element.toBack
 	     [ method ]
 	     **
-	     * Moves the element so it is the furthest from the viewer???s eyes, behind other elements.
+	     * Moves the element so it is the furthest from the viewer’s eyes, behind other elements.
 	     = (object) @Element
 	    \*/
 	    elproto.toBack = function () {
@@ -15385,7 +15385,7 @@ API.txt for details.
 
 /*!
 Waypoints - 4.0.0
-Copyright ?? 2011-2015 Caleb Troughton
+Copyright © 2011-2015 Caleb Troughton
 Licensed under the MIT license.
 https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
 */

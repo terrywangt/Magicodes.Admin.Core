@@ -22,7 +22,6 @@ using Magicodes.Admin.Web.Configuration;
 #if FEATURE_SIGNALR
 using Abp.Web.SignalR;
 #endif
-
 namespace Magicodes.Admin.Web
 {
     [DependsOn(
@@ -34,7 +33,7 @@ namespace Magicodes.Admin.Web
 #endif
         typeof(AbpRedisCacheModule), //AbpRedisCacheModule dependency (and Abp.RedisCache nuget package) can be removed if not using Redis cache
         typeof(AbpHangfireAspNetCoreModule) //AbpHangfireModule dependency (and Abp.Hangfire.AspNetCore nuget package) can be removed if not using Hangfire
-    )] 
+    )]
     public class AdminWebCoreModule : AbpModule
     {
         private readonly IHostingEnvironment _env;
@@ -48,7 +47,7 @@ namespace Magicodes.Admin.Web
         
         public override void PreInitialize()
         {
-            //Set default connection string
+            //设置默认的连接字符串
             Configuration.DefaultNameOrConnectionString = _appConfiguration.GetConnectionString(
                 AdminConsts.ConnectionStringName
             );
@@ -61,6 +60,8 @@ namespace Magicodes.Admin.Web
                     typeof(AdminApplicationModule).GetAssembly()
                 );
 
+            //Configuration.Modules.AbpWebCommon().MultiTenancy.DomainFormat = _appConfiguration["App:WebSiteRootAddress"] ?? "http://localhost:62114/";
+
             Configuration.Caching.Configure(TwoFactorCodeCacheItem.CacheName, cache =>
             {
                 cache.DefaultAbsoluteExpireTime = TimeSpan.FromMinutes(2);
@@ -70,18 +71,22 @@ namespace Magicodes.Admin.Web
             {
                 ConfigureTokenAuth();
             }
-            
+
             Configuration.ReplaceService<IAppConfigurationAccessor, AppConfigurationAccessor>();
 
-            //Uncomment this line to use Hangfire instead of default background job manager (remember also to uncomment related lines in Startup.cs file(s)).
-            //Configuration.BackgroundJobs.UseHangfire();
-
+            Configuration.BackgroundJobs.UseHangfire();
             //Uncomment this line to use Redis cache instead of in-memory cache.
             //See app.config for Redis configuration and connection string
             //Configuration.Caching.UseRedis(options =>
             //{
             //    options.ConnectionString = _appConfiguration["Abp:RedisCache:ConnectionString"];
             //    options.DatabaseId = _appConfiguration.GetValue<int>("Abp:RedisCache:DatabaseId");
+            //});
+
+            ////使用Hangfire来替换ABP中默认实现的后台作业管理
+            //Configuration.BackgroundJobs.UseHangfire(configuration =>
+            //{
+            //    configuration.GlobalConfiguration.UseSqlServerStorage(Configuration.DefaultNameOrConnectionString);
             //});
         }
 

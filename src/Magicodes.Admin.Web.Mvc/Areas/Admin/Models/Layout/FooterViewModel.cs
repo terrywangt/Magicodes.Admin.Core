@@ -8,7 +8,7 @@ namespace Magicodes.Admin.Web.Areas.Admin.Models.Layout
 
         public string GetProductNameWithEdition()
         {
-            var productName = "Admin";
+            var productName = "Magicodes.Admin";
 
             if (LoginInformations.Tenant?.Edition.DisplayName != null)
             {

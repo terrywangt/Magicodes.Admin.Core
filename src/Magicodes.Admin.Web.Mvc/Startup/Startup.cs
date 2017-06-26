@@ -61,11 +61,11 @@ namespace Magicodes.Admin.Web.Startup
             }
 
             //Swagger - Enable this line and the related lines in Configure method to enable swagger UI
-            //services.AddSwaggerGen(options =>
-            //{
-            //    options.SwaggerDoc("v1", new Info { Title = "Admin API", Version = "v1" });
-            //    options.DocInclusionPredicate((docName, description) => true);
-            //});
+            services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v1", new Info { Title = "Admin API", Version = "v1" });
+                options.DocInclusionPredicate((docName, description) => true);
+            });
 
             //Recaptcha
             services.AddRecaptcha(new RecaptchaOptions
@@ -75,10 +75,10 @@ namespace Magicodes.Admin.Web.Startup
             });
 
             //Hangfire (Enable to use Hangfire instead of default job manager)
-            //services.AddHangfire(config =>
-            //{
-            //    config.UseSqlServerStorage(_appConfiguration.GetConnectionString("Default"));
-            //});
+            services.AddHangfire(config =>
+            {
+                config.UseSqlServerStorage(_appConfiguration.GetConnectionString("Default"));
+            });
 
             services.AddScoped<IWebResourceManager, WebResourceManager>();
 
@@ -89,6 +89,13 @@ namespace Magicodes.Admin.Web.Startup
                 options.IocManager.IocContainer.AddFacility<LoggingFacility>(
                     f => f.UseAbpLog4Net().WithConfig("log4net.config")
                 );
+
+                //设置插件目录
+                var plusPath = Path.Combine(_hostingEnvironment.WebRootPath, "PlugIns");
+                if (!Directory.Exists(plusPath))
+                    Directory.CreateDirectory(plusPath);
+
+                options.PlugInSources.AddFolder(plusPath);
             });
         }
 
@@ -122,11 +129,11 @@ namespace Magicodes.Admin.Web.Startup
 #endif
 
             //Hangfire dashboard & server (Enable to use Hangfire instead of default job manager)
-            //app.UseHangfireDashboard("/hangfire", new DashboardOptions
-            //{
-            //    Authorization = new[] { new AbpHangfireAuthorizationFilter(AppPermissions.Pages_Administration_HangfireDashboard)  }
-            //});
-            //app.UseHangfireServer();
+            app.UseHangfireDashboard("/hangfire", new DashboardOptions
+            {
+                Authorization = new[] { new AbpHangfireAuthorizationFilter(AppPermissions.Pages_Administration_HangfireDashboard) }
+            });
+            app.UseHangfireServer();
 
             app.UseMvc(routes =>
             {
@@ -142,10 +149,10 @@ namespace Magicodes.Admin.Web.Startup
             // Enable middleware to serve generated Swagger as a JSON endpoint
             //app.UseSwagger();
             // Enable middleware to serve swagger-ui assets (HTML, JS, CSS etc.)
-            //app.UseSwaggerUI(options =>
-            //{
-            //    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Admin API V1");
-            //}); //URL: /swagger
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Admin API V1");
+            }); //URL: /swagger
         }
 
 #if FEATURE_SIGNALR
@@ -158,10 +165,10 @@ namespace Magicodes.Admin.Web.Startup
             app.MapSignalR();
 
             //Enable it to use HangFire dashboard (uncomment only if it's enabled in AdminWebCoreModule)
-            //app.UseHangfireDashboard("/hangfire", new DashboardOptions
-            //{
-            //    Authorization = new[] { new AbpHangfireAuthorizationFilter(AppPermissions.Pages_Administration_HangfireDashboard) }
-            //});
+            app.UseHangfireDashboard("/hangfire", new DashboardOptions
+            {
+                Authorization = new[] { new AbpHangfireAuthorizationFilter(AppPermissions.Pages_Administration_HangfireDashboard) }
+            });
         }
 #endif
     }

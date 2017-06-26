@@ -4,7 +4,7 @@
 
 <li class="@(Model.MenuItemIndex == 0 && Model.RootLevel ? "start" : "") @(Model.MenuItem.IsMenuActive(Model.CurrentPageName) ? "active" : "")">
     @if (Model.MenuItem.Items.IsNullOrEmpty())
-            {
+    {
         <a href="@Model.MenuItem.CalculateUrl(ApplicationPath)">
             <i class="@Model.MenuItem.Icon"></i>
             <span class="title">@Model.MenuItem.DisplayName</span>
@@ -18,9 +18,10 @@
             <span class="arrow"></span>
         </a>
         <ul class="sub-menu">
-            @for (var i = 0; i < Model.MenuItem.Items.Count; i++)
+            @{var items = Model.MenuItem.Items.OrderBy(p => p.Order).ToList();}
+            @for (var i = 0; i < items.Count; i++)
             {
-                var childMenuItem = Model.MenuItem.Items[i];
+                var childMenuItem = items[i];
                 @Html.Partial("Components/AdminSideBar/_UserMenuItem", new UserMenuItemViewModel
                 {
                     MenuItem = childMenuItem,
