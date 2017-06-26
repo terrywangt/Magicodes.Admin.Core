@@ -28,3 +28,5 @@ src/Magicodes.Admin.Web.Mvc/wwwroot/lib/fullcalendar
 src/Magicodes.Admin.Web.Mvc/wwwroot/metronic/assets/admin/layout4/scripts/layout.js
 src/Magicodes.Admin.Web.Mvc/wwwroot/view-resources/Areas/Admin/Views/Layout/_Layout.less
 src/Magicodes.Admin.Web.Mvc/wwwroot/view-resources/Views/Account/Login.js
+src/Magicodes.Admin.EntityFramework/Migrations/Seed/Host/DefaultSettingsCreator.cs
+src/Magicodes.Admin.EntityFramework/Migrations/Seed/Host/HostRoleAndUserCreator.cs

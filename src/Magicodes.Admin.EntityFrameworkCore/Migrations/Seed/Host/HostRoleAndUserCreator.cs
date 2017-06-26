@@ -49,11 +49,11 @@ namespace Magicodes.Admin.Migrations.Seed.Host
                     UserName = AbpUserBase.AdminUserName,
                     Name = "admin",
                     Surname = "admin",
-                    EmailAddress = "admin@aspnetzero.com",
+                    EmailAddress = "wenqiang.li@xin-lai.com",
                     IsEmailConfirmed = true,
                     ShouldChangePasswordOnNextLogin = true,
                     IsActive = true,
-                    Password = "AM4OLBpptxBYmM79lGOX9egzZk3vIQU3d/gFCJzaBjAPXzYIK3tQ2N7X4fcrHtElTw==" //123qwe
+                    Password = "AOEdQVs7aP4oMpOItKAValbRCfv4t0hwvYa/fP6k4wi0brAQ0cLcOGjpFxE/2sdIeA==" //123456abcD
                 };
 
                 user.SetNormalizedNames();
