@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26403.7
+VisualStudioVersion = 15.0.26430.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{AFAA0841-BD93-466F-B8F4-FB4EEC86F1FC}"
 EndProject
@@ -28,9 +28,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		common.props = common.props
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magicodes.Admin.ConsoleApiClient", "test\Magicodes.Admin.ConsoleApiClient\Magicodes.Admin.ConsoleApiClient.csproj", "{25CD4D8C-D3DB-48A0-A4D0-639B6D0BDC7C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Magicodes.Admin.ConsoleApiClient", "test\Magicodes.Admin.ConsoleApiClient\Magicodes.Admin.ConsoleApiClient.csproj", "{25CD4D8C-D3DB-48A0-A4D0-639B6D0BDC7C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magicodes.Admin.Web.Public", "src\Magicodes.Admin.Web.Public\Magicodes.Admin.Web.Public.csproj", "{2A88C289-A06A-4D69-8C71-E632E0F6B96D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Magicodes.Admin.Web.Public", "src\Magicodes.Admin.Web.Public\Magicodes.Admin.Web.Public.csproj", "{2A88C289-A06A-4D69-8C71-E632E0F6B96D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "plus", "plus", "{86E9E0FF-E3C9-422E-B79A-0C961E041344}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Unity", "Unity", "{97A02A82-CBB0-4FB8-97E5-4EDF96EBF5C6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Magicodes.AppSession", "plus\Unity\Magicodes.AppSession\Magicodes.AppSession.csproj", "{14D82822-BC9E-418B-8F3D-0F664D1D1102}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Magicodes.Api.ClientApi", "plus\Unity\Magicodes.Api.ClientApi\Magicodes.Api.ClientApi.csproj", "{4EC1832A-B524-4099-824E-CA2BD2032056}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -78,6 +86,14 @@ Global
 		{2A88C289-A06A-4D69-8C71-E632E0F6B96D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2A88C289-A06A-4D69-8C71-E632E0F6B96D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2A88C289-A06A-4D69-8C71-E632E0F6B96D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14D82822-BC9E-418B-8F3D-0F664D1D1102}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14D82822-BC9E-418B-8F3D-0F664D1D1102}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14D82822-BC9E-418B-8F3D-0F664D1D1102}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14D82822-BC9E-418B-8F3D-0F664D1D1102}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4EC1832A-B524-4099-824E-CA2BD2032056}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EC1832A-B524-4099-824E-CA2BD2032056}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EC1832A-B524-4099-824E-CA2BD2032056}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EC1832A-B524-4099-824E-CA2BD2032056}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -93,5 +109,8 @@ Global
 		{A229F7D5-EE83-462E-8642-E9A2D5EA90FE} = {AFAA0841-BD93-466F-B8F4-FB4EEC86F1FC}
 		{25CD4D8C-D3DB-48A0-A4D0-639B6D0BDC7C} = {F10AA149-2626-486E-85BB-9CD5365F3016}
 		{2A88C289-A06A-4D69-8C71-E632E0F6B96D} = {AFAA0841-BD93-466F-B8F4-FB4EEC86F1FC}
+		{97A02A82-CBB0-4FB8-97E5-4EDF96EBF5C6} = {86E9E0FF-E3C9-422E-B79A-0C961E041344}
+		{14D82822-BC9E-418B-8F3D-0F664D1D1102} = {97A02A82-CBB0-4FB8-97E5-4EDF96EBF5C6}
+		{4EC1832A-B524-4099-824E-CA2BD2032056} = {97A02A82-CBB0-4FB8-97E5-4EDF96EBF5C6}
 	EndGlobalSection
 EndGlobal
