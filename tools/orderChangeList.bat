@@ -1,0 +1,1 @@
+call "tools/Magicodes.CmdTools.exe" order -s "changeList.txt"

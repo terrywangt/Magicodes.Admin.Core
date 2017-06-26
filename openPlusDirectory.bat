@@ -1,0 +1,1 @@
+start "" "%~dp0src\Magicodes.Admin.Web.Mvc\wwwroot\PlugIns"
