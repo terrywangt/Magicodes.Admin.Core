@@ -1,0 +1,9 @@
+bin
+obj
+packages
+logs
+TestResults
+^*.ldf$
+^*.mdf$
+Magicodes_log.ldf
+Magicodes.WeiChat.mdf

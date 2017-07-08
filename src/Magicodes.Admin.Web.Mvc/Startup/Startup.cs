@@ -87,7 +87,7 @@ namespace Magicodes.Admin.Web.Startup
             //Swagger - Enable this line and the related lines in Configure method to enable swagger UI
             services.AddSwaggerGen(options =>
             {
-                options.SwaggerDoc("v1", new Info { Title = "Admin API", Version = "v1" });
+                options.SwaggerDoc("v1", new Info { Title = "API文档", Version = "v1" });
                 options.DocInclusionPredicate((docName, description) => true);
             });
 
@@ -171,7 +171,7 @@ namespace Magicodes.Admin.Web.Startup
             });
 
             // Enable middleware to serve generated Swagger as a JSON endpoint
-            //app.UseSwagger();
+            app.UseSwagger();
             // Enable middleware to serve swagger-ui assets (HTML, JS, CSS etc.)
             app.UseSwaggerUI(options =>
             {
