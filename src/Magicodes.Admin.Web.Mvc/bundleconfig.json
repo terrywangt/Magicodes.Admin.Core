@@ -244,6 +244,7 @@
       "wwwroot/lib/js-cookie/src/js.cookie.js",
       "wwwroot/lib/uniform/jquery.uniform.js",
       "wwwroot/lib/jquery-form/jquery.form.js",
+      "wwwroot/lib/purl/purl.js",
       "wwwroot/lib/jtable/lib/jquery.jtable.js",
       "wwwroot/lib/jtable/lib/extensions/jquery.jtable.record-actions.js",
       "wwwroot/lib/Jcrop/js/jquery.color.js",
