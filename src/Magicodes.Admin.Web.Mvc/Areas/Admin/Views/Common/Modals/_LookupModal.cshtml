@@ -1,8 +1,7 @@
 ﻿@using Magicodes.Admin.Web.Areas.Admin.Models.Common.Modals
-@model LookupModalViewModel
-
+@using Magicodes.Plus.Core.ViewModels.Common.Modals
+@model ILookupModalViewModel
 @Html.Partial("~/Areas/Admin/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(Model.Title ?? L("SelectAnItem")))
-
 <div class="modal-body">
     <form ng-if="vm.options.showFilter">
         <div class="input-group margin-bottom-10">
@@ -14,7 +13,6 @@
     </form>
     <div class="lookup-modal-table"></div>
 </div>
-
 <div class="modal-footer">
     <button type="button" class="btn default close-button" data-dismiss="modal">@L("Cancel")</button>
 </div>
