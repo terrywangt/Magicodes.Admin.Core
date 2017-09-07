@@ -48,6 +48,7 @@ using Magicodes.Admin.Web.Resources;
 using PaulMiami.AspNetCore.Mvc.Recaptcha;
 using Swashbuckle.AspNetCore.Swagger;
 using Magicodes.Admin.Web.IdentityServer;
+using System.Collections.Generic;
 
 #if FEATURE_SIGNALR
 using Owin;
@@ -84,11 +85,40 @@ namespace Magicodes.Admin.Web.Startup
                 IdentityServerRegistrar.Register(services, _appConfiguration);
             }
 
-            //Swagger - Enable this line and the related lines in Configure method to enable swagger UI
+            //设置API文档生成
             services.AddSwaggerGen(options =>
             {
-                options.SwaggerDoc("v1", new Info { Title = "API文档", Version = "v1" });
+                options.DescribeAllEnumsAsStrings();
+                options.SwaggerDoc("v1", new Info
+                {
+                    Title = "API",
+                    Version = "v1",
+                    Description = "",
+                    Contact = new Contact
+                    {
+                        Name = "心莱科技",
+                        Email = "xinlai@xin-lai.com"
+                    }
+                });
+
+                //遍历所有xml并加载
+                var paths = new List<string>();
+                var xmlFiles = new DirectoryInfo(Path.Combine(_hostingEnvironment.WebRootPath, "PlugIns")).GetFiles("*.Application.xml");
+                foreach (var item in xmlFiles)
+                {
+                    paths.Add(item.FullName);
+                }
+                var binXmlFiles = new DirectoryInfo(_hostingEnvironment.ContentRootPath).GetFiles("*.Application.xml");
+                foreach (var item in binXmlFiles)
+                {
+                    paths.Add(item.FullName);
+                }
+                foreach (var filePath in paths)
+                {
+                    options.IncludeXmlComments(filePath);
+                }
                 options.DocInclusionPredicate((docName, description) => true);
+                options.DocumentFilter<HiddenApiFilter>();
             });
 
             //Recaptcha
