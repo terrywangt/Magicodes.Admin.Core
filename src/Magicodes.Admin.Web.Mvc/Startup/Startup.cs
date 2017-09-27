@@ -58,7 +58,7 @@ using Magicodes.Admin.Web.Owin;
 
 namespace Magicodes.Admin.Web.Startup
 {
-    public class Startup
+    public partial class Startup
     {
         private readonly IConfigurationRoot _appConfiguration;
         private readonly IHostingEnvironment _hostingEnvironment;
@@ -85,41 +85,8 @@ namespace Magicodes.Admin.Web.Startup
                 IdentityServerRegistrar.Register(services, _appConfiguration);
             }
 
-            //设置API文档生成
-            services.AddSwaggerGen(options =>
-            {
-                options.DescribeAllEnumsAsStrings();
-                options.SwaggerDoc("v1", new Info
-                {
-                    Title = "API",
-                    Version = "v1",
-                    Description = "",
-                    Contact = new Contact
-                    {
-                        Name = "心莱科技",
-                        Email = "xinlai@xin-lai.com"
-                    }
-                });
-
-                //遍历所有xml并加载
-                var paths = new List<string>();
-                var xmlFiles = new DirectoryInfo(Path.Combine(_hostingEnvironment.WebRootPath, "PlugIns")).GetFiles("*.Application.xml");
-                foreach (var item in xmlFiles)
-                {
-                    paths.Add(item.FullName);
-                }
-                var binXmlFiles = new DirectoryInfo(_hostingEnvironment.ContentRootPath).GetFiles("*.Application.xml");
-                foreach (var item in binXmlFiles)
-                {
-                    paths.Add(item.FullName);
-                }
-                foreach (var filePath in paths)
-                {
-                    options.IncludeXmlComments(filePath);
-                }
-                options.DocInclusionPredicate((docName, description) => true);
-                options.DocumentFilter<HiddenApiFilter>();
-            });
+            //设置自定义服务配置
+            ConfigureCustomServices(services);
 
             //Recaptcha
             services.AddRecaptcha(new RecaptchaOptions
@@ -144,12 +111,8 @@ namespace Magicodes.Admin.Web.Startup
                     f => f.UseAbpLog4Net().WithConfig("log4net.config")
                 );
 
-                //设置插件目录
-                var plusPath = Path.Combine(_hostingEnvironment.WebRootPath, "PlugIns");
-                if (!Directory.Exists(plusPath))
-                    Directory.CreateDirectory(plusPath);
-
-                options.PlugInSources.AddFolder(plusPath);
+                //启用插件
+                UsePlugInSources(options);
             });
         }
 
