@@ -183,8 +183,7 @@
   {
     "outputFileName": "wwwroot/view-resources/Areas/Admin/Views/_Bundles/layout-libs.min.css",
     "inputFiles": [
-      "wwwroot/lib/jquery-ui/themes/base/all.css",
-      "wwwroot/lib/jtable/lib/themes/lightcolor/blue/jtable.css",
+      "wwwroot/lib/jquery-ui/themes/base/jquery-ui.css",
       "wwwroot/lib/simple-line-icons/css/simple-line-icons.css",
       "wwwroot/lib/font-awesome/css/font-awesome.css",
       "wwwroot/lib/famfamfam-flags/dist/sprite/famfamfam-flags.css",
@@ -199,17 +198,21 @@
       "wwwroot/lib/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.css",
       "wwwroot/lib/bootstrap-select/dist/css/bootstrap-select.css",
       "wwwroot/lib/Jcrop/css/Jcrop.css",
+      "wwwroot/metronic/assets/global/plugins/datatables/datatables.min.css",
+      "wwwroot/metronic/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css",
       "wwwroot/metronic/assets/global/css/components-md.css",
       "wwwroot/metronic/assets/global/css/plugins-md.css",
       "wwwroot/metronic/assets/admin/layout4/css/layout.css",
-      "wwwroot/metronic/assets/admin/layout4/css/themes/light.css"
+      "wwwroot/metronic/assets/admin/layout4/css/themes/light.css",
+      "wwwroot/Common/Scripts/Datatables/datatables.css",
+      "wwwroot/lib/select2/dist/css/select2.css",
+      "wwwroot/lib/select2-bootstrap-theme/dist/select2-bootstrap.css"
     ]
   },
   {
     "outputFileName": "wwwroot/view-resources/Areas/Admin/Views/_Bundles/layout-libs-rtl.min.css",
     "inputFiles": [
-      "wwwroot/lib/jquery-ui/themes/base/all.css",
-      "wwwroot/lib/jtable/lib/themes/lightcolor/blue/jtable.css",
+      "wwwroot/lib/jquery-ui/themes/base/jquery-ui.css",
       "wwwroot/lib/simple-line-icons/css/simple-line-icons.css",
       "wwwroot/lib/font-awesome/css/font-awesome.css",
       "wwwroot/lib/famfamfam-flags/dist/sprite/famfamfam-flags.css",
@@ -224,6 +227,8 @@
       "wwwroot/lib/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.css",
       "wwwroot/lib/bootstrap-select/dist/css/bootstrap-select.css",
       "wwwroot/lib/Jcrop/css/Jcrop.css",
+      "wwwroot/metronic/assets/global/plugins/datatables/datatables.min.css",
+      "wwwroot/metronic/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css",
       "wwwroot/metronic/assets/global/css/components-md-rtl.css",
       "wwwroot/metronic/assets/global/css/plugins-md-rtl.css",
       "wwwroot/metronic/assets/admin/layout4/css/layout-rtl.css",
@@ -244,9 +249,6 @@
       "wwwroot/lib/js-cookie/src/js.cookie.js",
       "wwwroot/lib/uniform/jquery.uniform.js",
       "wwwroot/lib/jquery-form/jquery.form.js",
-      "wwwroot/lib/purl/purl.js",
-      "wwwroot/lib/jtable/lib/jquery.jtable.js",
-      "wwwroot/lib/jtable/lib/extensions/jquery.jtable.record-actions.js",
       "wwwroot/lib/Jcrop/js/jquery.color.js",
       "wwwroot/lib/Jcrop/js/Jcrop.js",
       "wwwroot/lib/jquery-timeago/jquery.timeago.js",
@@ -270,6 +272,7 @@
       "wwwroot/lib/mustache.js/mustache.js",
       "wwwroot/lib/tether/dist/js/tether.js",
       "wwwroot/lib/push.js/push.js",
+      "wwwroot/lib/purl/purl.js",
       "wwwroot/lib/abp-web-resources/Abp/Framework/scripts/abp.js",
       "wwwroot/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.jquery.js",
       "wwwroot/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.toastr.js",
@@ -277,7 +280,10 @@
       "wwwroot/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.spin.js",
       "wwwroot/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.sweet-alert.js",
       "wwwroot/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.moment.js",
-      "wwwroot/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.jtable.js"
+      "wwwroot/metronic/assets/global/scripts/datatable.min.js",
+      "wwwroot/metronic/assets/global/plugins/datatables/datatables.all.min.js",
+      "wwwroot/metronic/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js",
+      "wwwroot/lib/select2/dist/js/select2.js"
     ]
   },
   {
@@ -668,6 +674,52 @@
       "wwwroot/view-resources/areas/appareaname/common/scripts/horizontal-timeline.js",
       "wwwroot/view-resources/Areas/Admin/Views/Dashboard/Index.min.js"
     ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Areas/Admin/Views/_Bundles/tenant-index-libs.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Areas/Admin/Views/Common/_FeaturesTree.js",
+      "wwwroot/view-resources/Areas/Admin/Views/Tenants/_CreateModal.js",
+      "wwwroot/view-resources/Areas/Admin/Views/Tenants/_EditModal.js",
+      "wwwroot/view-resources/Areas/Admin/Views/Tenants/_FeaturesModal.js",
+      "wwwroot/view-resources/Areas/Admin/Views/Tenants/Index.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Areas/Admin/Views/_Bundles/tenant-index-libs.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Areas/Admin/Views/Common/_FeaturesTree.min.js",
+      "wwwroot/view-resources/Areas/Admin/Views/Tenants/_CreateModal.min.js",
+      "wwwroot/view-resources/Areas/Admin/Views/Tenants/_EditModal.min.js",
+      "wwwroot/view-resources/Areas/Admin/Views/Tenants/_FeaturesModal.min.js",
+      "wwwroot/view-resources/Areas/Admin/Views/Tenants/Index.min.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Areas/Admin/Views/_Bundles/demo-ui-components.min.css",
+    "inputFiles": [
+      "wwwroot/view-resources/Areas/Admin/Views/DemoUiComponents/DateAndTimePickers/DemoDateAndTimePickers.css",
+      "wwwroot/view-resources/Areas/Admin/Views/DemoUiComponents/FileUpload/FileUpload.css",
+      "wwwroot/view-resources/Areas/Admin/Views/DemoUiComponents/Selections/Selections.css",
+      "wwwroot/view-resources/Areas/Admin/Views/DemoUiComponents/InputMask/InputMask.css",
+      "wwwroot/view-resources/Areas/Admin/Views/DemoUiComponents/Editor/Editor.css",
+      "wwwroot/lib/blueimp-file-upload/css/jquery.fileupload.css",
+      "wwwroot/lib/summernote/dist/summernote.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/view-resources/Areas/Admin/Views/_Bundles/demo-ui-components.min.js",
+    "inputFiles": [
+      "wwwroot/view-resources/Areas/Admin/Views/DemoUiComponents/DateAndTimePickers/DemoDateAndTimePickers.js",
+      "wwwroot/view-resources/Areas/Admin/Views/DemoUiComponents/FileUpload/FileUpload.js",
+      "wwwroot/view-resources/Areas/Admin/Views/DemoUiComponents/Selections/Selections.js",
+      "wwwroot/view-resources/Areas/Admin/Views/DemoUiComponents/InputMask/InputMask.js",
+      "wwwroot/view-resources/Areas/Admin/Views/DemoUiComponents/Editor/Editor.js",
+      "wwwroot/lib/inputmask/dist/jquery.inputmask.bundle.js",
+      "wwwroot/lib/blueimp-file-upload/js/vendor/jquery.ui.widget.js",
+      "wwwroot/lib/blueimp-file-upload/js/jquery.iframe-transport.js",
+      "wwwroot/lib/blueimp-file-upload/js/jquery.fileupload.js",
+      "wwwroot/lib/summernote/dist/summernote.js"
+    ]
   }
-
 ]

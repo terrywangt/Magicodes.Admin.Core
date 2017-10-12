@@ -18,5 +18,16 @@ namespace Magicodes.Admin.Sessions.Dto
         public bool IsHighestEdition { get; set; }
 
         public bool IsFree { get; set; }
+
+
+        public void SetEditionIsHighest(SubscribableEdition topEdition)
+        {
+            if (topEdition == null)
+            {
+                return;
+            }
+
+            IsHighestEdition = Id == topEdition.Id;
+        }
     }
 }

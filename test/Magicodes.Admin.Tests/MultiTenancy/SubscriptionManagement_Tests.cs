@@ -6,6 +6,7 @@ using Magicodes.Admin.Editions;
 using Magicodes.Admin.MultiTenancy;
 using Magicodes.Admin.MultiTenancy.Dto;
 using Magicodes.Admin.MultiTenancy.Payments;
+using Magicodes.Admin.MultiTenancy.Payments.Dto;
 using Shouldly;
 using Xunit;
 
@@ -16,13 +17,15 @@ namespace Magicodes.Admin.Tests.MultiTenancy
         private readonly TenantManager _tenantManager;
         private readonly ITenantAppService _tenantAppService;
         private readonly EditionManager _editionManager;
+        private readonly IPaymentAppService _paymentAppService;
 
-        public SubscriptionManagement_Tests()
+     public SubscriptionManagement_Tests()
         {
             LoginAsHostAdmin();
             _tenantAppService = Resolve<ITenantAppService>();
             _tenantManager = Resolve<TenantManager>();
             _editionManager = Resolve<EditionManager>();
+            _paymentAppService = Resolve<IPaymentAppService>();
         }
 
         [Theory]
@@ -377,6 +380,17 @@ namespace Magicodes.Admin.Tests.MultiTenancy
                 updatedTenant.ShouldNotBe(null);
                 updatedTenant.IsActive.ShouldBe(false);
             });
+        }
+
+        [Fact]
+        public async Task GetPaymentHistory_Test()
+        {
+            LoginAsDefaultTenantAdmin();
+
+            var result = await _paymentAppService.GetPaymentHistory(new GetPaymentHistoryInput());
+            result.Items.Count.ShouldBe(2);
+            result.Items[0].DayCount.ShouldBe(2);
+            result.Items[1].DayCount.ShouldBe(29);
         }
 
         private async Task CreateUpdateTenant(PaymentPeriodType paymentPeriodType, EditionPaymentType editionPaymentType, DateTime? subscriptionEndDate, DateTime updatedSubscriptionEndDate)

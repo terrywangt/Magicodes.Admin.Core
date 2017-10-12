@@ -1,6 +1,5 @@
 ﻿@using System.Threading.Tasks
 @using Magicodes.Admin.Web.Areas.Admin.Startup
-@using Magicodes.Admin.Web.Startup
 @{
     ViewBag.CurrentPageName = AdminPageNames.Common.AuditLogs;
 }
@@ -126,15 +125,28 @@
                         <span id="HideAdvancedFiltersSpan" class="clickable-item text-muted" style="display: none"><i class="fa fa-angle-up"></i> @L("HideAdvancedFilters")</span>
                     </div>
                     <div class="col-sm-6 text-right">
-                        <button id="ExportAuditLogsToExcelButton" class="btn btn-default"><i class="fa fa-file-excel-o"></i> @L("ExportToExcel")</button>
+                        <button id="ExportAuditLogsToExcelButton" class="btn green-haze"><i class="fa fa-file-excel-o"></i> @L("ExportToExcel")</button>
                         <button id="RefreshAuditLogsButton" class="btn blue"><i class=" fa fa-refresh"></i> @L("Refresh")</button>
                     </div>
                 </div>
             </form>
         </div>
-
-        <div id="AuditLogsTable"></div>
-
+        <table id="AuditLogsTable" class="display table table-striped table-bordered table-hover dt-responsive nowrap">
+            <thead>
+            <tr>
+                <th></th>
+                <th></th>
+                <th>@L("Time")</th>
+                <th>@L("UserName")</th>
+                <th>@L("Service")</th>
+                <th>@L("Action")</th>
+                <th>@L("Duration")</th>
+                <th>@L("IpAddress")</th>
+                <th>@L("Client")</th>
+                <th>@L("Browser")</th>
+            </tr>
+            </thead>
+        </table>
     </div>
 </div>
 

@@ -39,12 +39,11 @@
         <link rel="stylesheet" href="~/fonts/fonts-open-sans.css" asp-append-version="true" />
 
         @* Bundled: view-resources/Areas/Admin/Views/_Bundles/layout-libs[-rtl].min.css *@
-        <link rel="stylesheet" href="~/lib/jquery-ui/themes/base/all.css" asp-append-version="true" />
-        <link href="~/lib/jtable/lib/themes/lightcolor/blue/jtable.css" asp-append-version="true" rel="stylesheet" />
+        <link rel="stylesheet" href="~/lib/jquery-ui/themes/base/jquery-ui.css" asp-append-version="true" />
         <link rel="stylesheet" href="~/lib/simple-line-icons/css/simple-line-icons.css" asp-append-version="true" />
         <link rel="stylesheet" href="~/lib/font-awesome/css/font-awesome.css" asp-append-version="true" />
         <link rel="stylesheet" href="~/lib/famfamfam-flags/dist/sprite/famfamfam-flags.css" asp-append-version="true" />
-        <link rel="stylesheet" href="@(CultureHelper.IsRtl ? "~/lib/bootstrap-rtl/bootstrap-rtl.css" : "~/lib/bootstrap/dist/css/bootstrap.css")" asp-append-version="true" />
+        <link rel="stylesheet" href="@(CultureHelper.IsRtl ? "~/metronic/assets/global/plugins/bootstrap/css/bootstrap-rtl.css" : "~/lib/bootstrap/dist/css/bootstrap.css")" asp-append-version="true" />
         <link rel="stylesheet" href="~/lib/uniform/css/uniform.default.css" asp-append-version="true" />
         <link rel="stylesheet" href="~/lib/jstree/dist/themes/default/style.css" asp-append-version="true" />
         <link rel="stylesheet" href="~/lib/toastr/toastr.css" asp-append-version="true" />
@@ -54,12 +53,19 @@
         <link rel="stylesheet" href="~/lib/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.css" asp-append-version="true" />
         <link rel="stylesheet" href="~/lib/bootstrap-select/dist/css/bootstrap-select.css" asp-append-version="true" />
         <link rel="stylesheet" href="~/lib/Jcrop/css/Jcrop.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/metronic/assets/global/plugins/datatables/datatables.min.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/metronic/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/metronic/assets/global/css/components@(CultureHelper.IsRtl ? "-rtl" : "").css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/metronic/assets/global/css/plugins@(CultureHelper.IsRtl ? "-rtl" : "").css" asp-append-version="true" />
         <link rel="stylesheet" href="~/metronic/assets/global/css/components-md@(CultureHelper.IsRtl ? "-rtl" : "").css" asp-append-version="true" />
         <link rel="stylesheet" href="~/metronic/assets/global/css/plugins-md@(CultureHelper.IsRtl ? "-rtl" : "").css" asp-append-version="true" />
         <link rel="stylesheet" href="~/metronic/assets/admin/layout4/css/layout@(CultureHelper.IsRtl ? "-rtl" : "").css" asp-append-version="true" />
         <link rel="stylesheet" href="~/metronic/assets/admin/layout4/css/themes/light@(CultureHelper.IsRtl ? "-rtl" : "").css" asp-append-version="true" />
-
         <link rel="stylesheet" href="~/Common/_Bundles/common-styles.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/Common/Scripts/Datatables/datatables.css" asp-append-version="true" />
+        
+        <link rel="stylesheet" href="~/lib/select2/dist/css/select2.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/lib/select2-bootstrap-theme/dist/select2-bootstrap.css" asp-append-version="true" />
 
         @if (isChatEnabled)
         {
@@ -111,144 +117,146 @@
 <!-- DOC: Apply "page-full-width" class to the body element to have full width page without the sidebar menu -->
 <body class="page-md page-header-fixed page-sidebar-closed-hide-logo">
 
-<div class="page-header navbar navbar-fixed-top md-shadow-zero-light">
-    @await Component.InvokeAsync(typeof(AdminHeaderViewComponent))
-</div>
-
-<div class="clearfix">
-</div>
-
-<div class="page-container">
-    <div class="page-sidebar-wrapper">
-        @await Component.InvokeAsync(typeof(AdminSideBarViewComponent), new { currentPageName = ViewBag.CurrentPageName })
+    <div class="page-header navbar navbar-fixed-top md-shadow-zero-light">
+        @await Component.InvokeAsync(typeof(AdminHeaderViewComponent))
     </div>
-    <div class="page-content-wrapper">
-        <div class="page-content">
-            @RenderBody()
+
+    <div class="clearfix">
+    </div>
+
+    <div class="page-container">
+        <div class="page-sidebar-wrapper">
+            @await Component.InvokeAsync(typeof(AdminSideBarViewComponent), new { currentPageName = ViewBag.CurrentPageName })
         </div>
+        <div class="page-content-wrapper">
+            <div class="page-content">
+                @RenderBody()
+            </div>
+        </div>
+        @if (isChatEnabled)
+        {
+            @Html.Partial("~/Areas/Admin/Views/Layout/_ChatBar.cshtml")
+        }
     </div>
-    @if (isChatEnabled)
+
+    <div class="page-footer">
+        @await Component.InvokeAsync(typeof(AdminFooterViewComponent))
+    </div>
+
+    <environment names="Development">
+        @* Bundled: view-resources/Areas/Admin/Views/_Bundles/layout-libs.min.js *@
+        <script src="~/lib/json2/json2.js" asp-append-version="true"></script>
+        <script src="~/lib/jquery/dist/jquery.js" asp-append-version="true"></script>
+        <script src="~/lib/jquery-ui/jquery-ui.js" asp-append-version="true"></script>
+        <script src="~/lib/jquery-validation/dist/jquery.validate.js" asp-append-version="true"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.js" asp-append-version="true"></script>
+        <script src="~/lib/bootstrap-hover-dropdown/bootstrap-hover-dropdown.js" asp-append-version="true"></script>
+        <script src="~/lib/jquery-slimscroll/jquery.slimscroll.js" asp-append-version="true"></script>
+        <script src="~/lib/blockUI/jquery.blockUI.js" asp-append-version="true"></script>
+        <script src="~/lib/js-cookie/src/js.cookie.js" asp-append-version="true"></script>
+        <script src="~/lib/uniform/jquery.uniform.js" asp-append-version="true"></script>
+        <script src="~/lib/jquery-form/jquery.form.js" asp-append-version="true"></script>
+        <script src="~/lib/purl/purl.js" asp-append-version="true"></script>
+        <script src="~/lib/Jcrop/js/jquery.color.js" asp-append-version="true"></script>
+        <script src="~/lib/Jcrop/js/Jcrop.js" asp-append-version="true"></script>
+        <script src="~/lib/jquery-timeago/jquery.timeago.js" asp-append-version="true"></script>
+        <script src="~/lib/signalr/jquery.signalR.js" asp-append-version="true"></script>
+        <script src="~/lib/localforage/dist/localforage.js" asp-append-version="true"></script>
+        <script src="~/lib/jstree/dist/jstree.js" asp-append-version="true"></script>
+        <script src="~/lib/bootstrap-switch/dist/js/bootstrap-switch.js" asp-append-version="true"></script>
+        <script src="~/lib/spin.js/spin.js" asp-append-version="true"></script>
+        <script src="~/lib/spin.js/jquery.spin.js" asp-append-version="true"></script>
+        <script src="~/lib/sweetalert/dist/sweetalert-dev.js" asp-append-version="true"></script>
+        <script src="~/lib/toastr/toastr.js" asp-append-version="true"></script>
+        <script src="~/lib/moment/min/moment-with-locales.js" asp-append-version="true"></script>
+        <script src="~/lib/moment-timezone/builds/moment-timezone-with-data.js" asp-append-version="true"></script>
+        <script src="~/lib/bootstrap-daterangepicker/daterangepicker.js" asp-append-version="true"></script>
+        <script src="~/lib/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js" asp-append-version="true"></script>
+        <script src="~/lib/bootstrap-select/dist/js/bootstrap-select.js" asp-append-version="true"></script>
+        <script src="~/lib/underscore/underscore.js" asp-append-version="true"></script>
+        <script src="~/lib/mustache.js/mustache.js" asp-append-version="true"></script>
+        <script src="~/lib/tether/dist/js/tether.js" asp-append-version="true"></script>
+        <script src="~/lib/push.js/push.js" asp-append-version="true"></script>
+        <script src="~/lib/abp-web-resources/Abp/Framework/scripts/abp.js" asp-append-version="true"></script>
+        <script src="~/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.jquery.js" asp-append-version="true"></script>
+        <script src="~/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.toastr.js" asp-append-version="true"></script>
+        <script src="~/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.blockUI.js" asp-append-version="true"></script>
+        <script src="~/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.spin.js" asp-append-version="true"></script>
+        <script src="~/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.sweet-alert.js" asp-append-version="true"></script>
+        <script src="~/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.moment.js" asp-append-version="true"></script>
+        <script src="~/metronic/assets/global/scripts/datatable.js" asp-append-version="true"></script>
+        <script src="~/metronic/assets/global/plugins/datatables/datatables.all.min.js" asp-append-version="true"></script>
+        <script src="~/metronic/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" asp-append-version="true"></script>
+        <script src="~/lib/select2/dist/js/select2.js" asp-append-version="true"></script>
+    </environment>
+
+    <environment names="Staging,Production">
+        <script src="~/view-resources/Areas/Admin/Views/_Bundles/layout-libs.min.js" asp-append-version="true"></script>
+    </environment>
+
+    <script src="@ScriptPaths.JQuery_Validation_Localization" asp-append-version="true"></script>
+    <script src="@ScriptPaths.Bootstrap_Select_Localization" asp-append-version="true"></script>
+    <script src="@ScriptPaths.JQuery_Timeago_Localization" asp-append-version="true"></script>
+    <script src="@ScriptPaths.Select2_Localization" asp-append-version="true"></script>
+
+    <script>
+        abp.localization.defaultSourceName = '@LocalizationSourceName';
+        moment.locale('@CultureInfo.CurrentUICulture.Name'); //Localizing moment.js
+    </script>
+
+    <!-- Dynamic scripts of ABP system (They are created on runtime and can not be bundled) -->
+    <script src="~/AbpServiceProxies/GetAll?v=@(AppTimes.StartupTime.Ticks)" type="text/javascript"></script>
+    <script src="~/AbpScripts/GetScripts?v=@(AppTimes.StartupTime.Ticks)" type="text/javascript"></script>
+
+    @if (SignalRFeature.IsAvailable)
     {
-        @Html.Partial("~/Areas/Admin/Views/Layout/_ChatBar.cshtml")
+        <!-- SignalR scripts -->
+        <script src="~/signalr/hubs"></script>
+        <script src="~/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.signalr.js" asp-append-version="true"></script>
     }
-</div>
 
-<div class="page-footer">
-    @await Component.InvokeAsync(typeof(AdminFooterViewComponent))
-</div>
+    <environment names="Development">
+        @* Bundled: view-resources/Areas/Admin/Views/_Bundles/layout-metronic.min.js *@
+        <script src="~/metronic/assets/global/scripts/app.js" asp-append-version="true"></script>
+        <script src="~/metronic/assets/admin/layout4/scripts/layout.js" asp-append-version="true"></script>
+        <script src="~/metronic/assets/layouts/global/scripts/quick-sidebar.js" asp-append-version="true"></script>
+    </environment>
 
-<environment names="Development">
-    @* Bundled: view-resources/Areas/Admin/Views/_Bundles/layout-libs.min.js *@
-    <script src="~/lib/json2/json2.js" asp-append-version="true"></script>
-    <script src="~/lib/jquery/dist/jquery.js" asp-append-version="true"></script>
-    <script src="~/lib/jquery-ui/jquery-ui.js" asp-append-version="true"></script>
-    <script src="~/lib/jquery-validation/dist/jquery.validate.js" asp-append-version="true"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.js" asp-append-version="true"></script>
-    <script src="~/lib/bootstrap-hover-dropdown/bootstrap-hover-dropdown.js" asp-append-version="true"></script>
-    <script src="~/lib/jquery-slimscroll/jquery.slimscroll.js" asp-append-version="true"></script>
-    <script src="~/lib/blockUI/jquery.blockUI.js" asp-append-version="true"></script>
-    <script src="~/lib/js-cookie/src/js.cookie.js" asp-append-version="true"></script>
-    <script src="~/lib/uniform/jquery.uniform.js" asp-append-version="true"></script>
-    <script src="~/lib/jquery-form/jquery.form.js" asp-append-version="true"></script>
-    <script src="~/lib/purl/purl.js" asp-append-version="true"></script>
-    <script src="~/lib/jtable/lib/jquery.jtable.js" asp-append-version="true"></script>
-    <script src="~/lib/jtable/lib/extensions/jquery.jtable.record-actions.js" asp-append-version="true"></script>
-    <script src="~/lib/Jcrop/js/jquery.color.js" asp-append-version="true"></script>
-    <script src="~/lib/Jcrop/js/Jcrop.js" asp-append-version="true"></script>
-    <script src="~/lib/jquery-timeago/jquery.timeago.js" asp-append-version="true"></script>
-    <script src="~/lib/signalr/jquery.signalR.js" asp-append-version="true"></script>
-    <script src="~/lib/localforage/dist/localforage.js" asp-append-version="true"></script>
-    <script src="~/lib/jstree/dist/jstree.js" asp-append-version="true"></script>
-    <script src="~/lib/bootstrap-switch/dist/js/bootstrap-switch.js" asp-append-version="true"></script>
-    <script src="~/lib/spin.js/spin.js" asp-append-version="true"></script>
-    <script src="~/lib/spin.js/jquery.spin.js" asp-append-version="true"></script>
-    <script src="~/lib/sweetalert/dist/sweetalert-dev.js" asp-append-version="true"></script>
-    <script src="~/lib/toastr/toastr.js" asp-append-version="true"></script>
-    <script src="~/lib/moment/min/moment-with-locales.js" asp-append-version="true"></script>
-    <script src="~/lib/moment-timezone/builds/moment-timezone-with-data.js" asp-append-version="true"></script>
-    <script src="~/lib/bootstrap-daterangepicker/daterangepicker.js" asp-append-version="true"></script>
-    <script src="~/lib/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js" asp-append-version="true"></script>
-    <script src="~/lib/bootstrap-select/dist/js/bootstrap-select.js" asp-append-version="true"></script>
-    <script src="~/lib/underscore/underscore.js" asp-append-version="true"></script>
-    <script src="~/lib/mustache.js/mustache.js" asp-append-version="true"></script>
-    <script src="~/lib/tether/dist/js/tether.js" asp-append-version="true"></script>
-    <script src="~/lib/push.js/push.js" asp-append-version="true"></script>
-    <script src="~/lib/abp-web-resources/Abp/Framework/scripts/abp.js" asp-append-version="true"></script>
-    <script src="~/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.jquery.js" asp-append-version="true"></script>
-    <script src="~/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.toastr.js" asp-append-version="true"></script>
-    <script src="~/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.blockUI.js" asp-append-version="true"></script>
-    <script src="~/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.spin.js" asp-append-version="true"></script>
-    <script src="~/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.sweet-alert.js" asp-append-version="true"></script>
-    <script src="~/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.moment.js" asp-append-version="true"></script>
-    <script src="~/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.jtable.js" asp-append-version="true"></script>
-</environment>
+    <environment names="Staging,Production">
+        <script src="~/view-resources/Areas/Admin/Views/_Bundles/layout-metronic.min.js" asp-append-version="true"></script>
+    </environment>
 
-<environment names="Staging,Production">
-    <script src="~/view-resources/Areas/Admin/Views/_Bundles/layout-libs.min.js" asp-append-version="true"></script>
-</environment>
+    <script type="text/javascript">
+        App.setAssetsPath(abp.appPath + 'metronic/assets/');
+        abp.localization.currentCulture = $.extend({}, abp.localization.currentCulture, { displayNameEnglish: '@CultureInfo.CurrentUICulture.EnglishName'});
+    </script>
 
-<script src="@ScriptPaths.JQuery_Validation_Localization" asp-append-version="true"></script>
-<script src="@ScriptPaths.JQuery_JTable_Localization" asp-append-version="true"></script>
-<script src="@ScriptPaths.Bootstrap_Select_Localization" asp-append-version="true"></script>
-<script src="@ScriptPaths.JQuery_Timeago_Localization" asp-append-version="true"></script>
+    <environment names="Development">
+        @* Bundled (not minified) for all scripts in Common/Scripts folder. Minified: wwwroot/Common/_Bundles/common-scripts.min.js *@
+        <script src="~/Common/_Bundles/common-scripts.js" asp-append-version="true"></script>
+        @* Bundled (not minified) for all scripts in view-resources/Areas/Admin/Common/Scripts folder. Minified: view-resources/Areas/Admin/Common/_Bundles/common-scripts.js *@
+        <script src="~/view-resources/Areas/Admin/Common/_Bundles/common-scripts.js" asp-append-version="true"></script>
+        <script src="~/view-resources/Areas/Admin/Views/Layout/_Header.js" asp-append-version="true"></script>
+        @if (isChatEnabled)
+        {
+            <script src="~/view-resources/Areas/Admin/Views/Layout/_ChatBar.js" asp-append-version="true"></script>
+        }
+    </environment>
 
-<script>
-    abp.localization.defaultSourceName = '@LocalizationSourceName';
-    moment.locale('@CultureInfo.CurrentUICulture.Name'); //Localizing moment.js
-</script>
+    <environment names="Staging,Production">
+        <script src="~/Common/_Bundles/common-scripts.min.js" asp-append-version="true"></script>
+        <script src="~/view-resources/Areas/Admin/Common/_Bundles/common-scripts.min.js" asp-append-version="true"></script>
+        <script src="~/view-resources/Areas/Admin/Views/Layout/_Header.min.js" asp-append-version="true"></script>
+        @if (isChatEnabled)
+        {
+            <script src="~/view-resources/Areas/Admin/Views/Layout/_ChatBar.min.js" asp-append-version="true"></script>
+        }
+    </environment>
 
-<!-- Dynamic scripts of ABP system (They are created on runtime and can not be bundled) -->
-<script src="~/AbpServiceProxies/GetAll?v=@(AppTimes.StartupTime.Ticks)" type="text/javascript"></script>
-<script src="~/AbpScripts/GetScripts?v=@(AppTimes.StartupTime.Ticks)" type="text/javascript"></script>
+    <script type="text/javascript">
+        app.supportsTenancyNameInUrl = @(WebUrlService.SupportsTenancyNameInUrl.ToString().ToLowerInvariant());
+    </script>
 
-@if (SignalRFeature.IsAvailable)
-{
-    <!-- SignalR scripts -->
-    <script src="~/signalr/hubs"></script>
-    <script src="~/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.signalr.js" asp-append-version="true"></script>
-}
-
-<environment names="Development">
-    @* Bundled: view-resources/Areas/Admin/Views/_Bundles/layout-metronic.min.js *@
-    <script src="~/metronic/assets/global/scripts/app.js" asp-append-version="true"></script>
-    <script src="~/metronic/assets/admin/layout4/scripts/layout.js" asp-append-version="true"></script>
-    <script src="~/metronic/assets/layouts/global/scripts/quick-sidebar.js" asp-append-version="true"></script>
-</environment>
-
-<environment names="Staging,Production">
-    <script src="~/view-resources/Areas/Admin/Views/_Bundles/layout-metronic.min.js" asp-append-version="true"></script>
-</environment>
-
-<script type="text/javascript">
-    App.setAssetsPath(abp.appPath + 'metronic/assets/');
-</script>
-
-<environment names="Development">
-    @* Bundled (not minified) for all scripts in Common/Scripts folder. Minified: wwwroot/Common/_Bundles/common-scripts.min.js *@
-    <script src="~/Common/_Bundles/common-scripts.js" asp-append-version="true"></script>
-    @* Bundled (not minified) for all scripts in view-resources/Areas/Admin/Common/Scripts folder. Minified: view-resources/Areas/Admin/Common/_Bundles/common-scripts.js *@
-    <script src="~/view-resources/Areas/Admin/Common/_Bundles/common-scripts.js" asp-append-version="true"></script>
-    <script src="~/view-resources/Areas/Admin/Views/Layout/_Header.js" asp-append-version="true"></script>
-    @if (isChatEnabled)
-    {
-        <script src="~/view-resources/Areas/Admin/Views/Layout/_ChatBar.js" asp-append-version="true"></script>
-    }
-</environment>
-
-<environment names="Staging,Production">
-    <script src="~/Common/_Bundles/common-scripts.min.js" asp-append-version="true"></script>
-    <script src="~/view-resources/Areas/Admin/Common/_Bundles/common-scripts.min.js" asp-append-version="true"></script>
-    <script src="~/view-resources/Areas/Admin/Views/Layout/_Header.min.js" asp-append-version="true"></script>
-    @if (isChatEnabled)
-    {
-        <script src="~/view-resources/Areas/Admin/Views/Layout/_ChatBar.min.js" asp-append-version="true"></script>
-    }
-</environment>
-
-<script type="text/javascript">
-    app.supportsTenancyNameInUrl = @(WebUrlService.SupportsTenancyNameInUrl.ToString().ToLowerInvariant());
-</script>
-
-@RenderSection("Scripts", false)
+    @RenderSection("Scripts", false)
 </body>
 </html>

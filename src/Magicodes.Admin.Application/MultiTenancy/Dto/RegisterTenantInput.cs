@@ -32,7 +32,7 @@ namespace Magicodes.Admin.MultiTenancy.Dto
 
         public SubscriptionPaymentGatewayType? Gateway { get; set; }
 
-        public int EditionId { get; set; }
+        public int? EditionId { get; set; }
 
         public string PaymentId { get; set; }
     }

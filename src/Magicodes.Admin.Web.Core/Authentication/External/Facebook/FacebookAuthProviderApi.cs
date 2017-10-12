@@ -5,7 +5,6 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Abp.Extensions;
-using Microsoft.AspNetCore.Authentication.Facebook;
 using Microsoft.AspNetCore.WebUtilities;
 using Newtonsoft.Json.Linq;
 

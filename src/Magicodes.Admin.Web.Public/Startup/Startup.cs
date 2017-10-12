@@ -36,7 +36,7 @@ namespace Magicodes.Admin.Web.Public.Startup
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             });
 
-            IdentityRegistrar.Register(services, "Public");
+            IdentityRegistrar.Register(services);
 
             //Configure Abp and Dependency Injection
             return services.AddAbp<AdminWebFrontEndModule>(options =>

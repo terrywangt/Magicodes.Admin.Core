@@ -11,7 +11,7 @@ namespace Magicodes.Admin.Migrator.DependencyInjection
         {
             var services = new ServiceCollection();
 
-            IdentityRegistrar.Register(services, "Migrator");
+            IdentityRegistrar.Register(services);
 
             WindsorRegistrationHelper.CreateServiceProvider(iocManager.IocContainer, services);
         }

@@ -75,6 +75,8 @@ namespace Magicodes.Admin.MultiTenancy.Demo
                 await BuildForInternalAsync(tenant);
                 await CurrentUnitOfWork.SaveChangesAsync();
             }
+
+            await EnableIsNewRegisteredUserActiveByDefaultAsync(tenant);
         }
 
         private async Task BuildForInternalAsync(Tenant tenant)
@@ -181,7 +183,11 @@ namespace Magicodes.Admin.MultiTenancy.Demo
                     ChatMessageReadState.Unread
                 )
             );
+        }
 
+        private async Task EnableIsNewRegisteredUserActiveByDefaultAsync(Tenant tenant)
+        {
+            await SettingManager.ChangeSettingForTenantAsync(tenant.Id, AppSettings.UserManagement.IsNewRegisteredUserActiveByDefault, "true");
         }
 
         private async Task<OrganizationUnit> CreateAndSaveOrganizationUnit(List<OrganizationUnit> organizationUnits, Tenant tenant, string displayName, OrganizationUnit parent = null)

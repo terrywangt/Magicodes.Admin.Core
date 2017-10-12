@@ -39,17 +39,17 @@
 
         _$subscriptionEndDateRange.daterangepicker(
             $.extend(true, app.createDateRangePickerOptions({
-                allowFutureDate: true 
+                allowFutureDate: true
             }), _selectedSubscriptionEndDateRange),
             function (start, end, label) {
-                _selectedSubscriptionEndDateRange.startDate = start; 
-                _selectedSubscriptionEndDateRange.endDate = end; 
+                _selectedSubscriptionEndDateRange.startDate = start;
+                _selectedSubscriptionEndDateRange.endDate = end;
             });
 
         _$creationDateRange.daterangepicker(
             $.extend(true, app.createDateRangePickerOptions(), _selectedCreationDateRange),
             function (start, end, label) {
-                _selectedCreationDateRange.startDate = start; 
+                _selectedCreationDateRange.startDate = start;
                 _selectedCreationDateRange.endDate = end;
             });
 
@@ -76,149 +76,6 @@
             serviceMethod: abp.services.app.commonLookup.findUsers
         });
 
-        _$tenantsTable.jtable({
-            title: app.localize('Tenants'),
-            paging: true,
-            sorting: true,
-            multiSorting: true,
-            actions: {
-                listAction: {
-                    method: _tenantService.getTenants
-                }
-            },
-            fields: {
-                id: {
-                    key: true,
-                    list: false
-                },
-                actions: {
-                    title: app.localize('Actions'),
-                    width: '14%',
-                    sorting: false,
-                    type: 'record-actions',
-                    cssClass: 'btn btn-xs btn-primary blue',
-                    text: '<i class="fa fa-cog"></i> ' + app.localize('Actions') + ' <span class="caret"></span>',
-                    list: _permissions.edit || _permissions.delete,
-
-                    items: [
-                        {
-                            text: app.localize('LoginAsThisTenant'),
-                            visible: function () {
-                                return _permissions.impersonation;
-                            },
-                            action: function (data) {
-                                _userLookupModal.open({
-                                    extraFilters: {
-                                        tenantId: data.record.id
-                                    },
-                                    title: app.localize('SelectAUser')
-                                },
-                                    function (selectedItem) {
-                                        abp.ajax({
-                                            url: abp.appPath + 'Account/Impersonate',
-                                            data: JSON.stringify({
-                                                tenantId: data.record.id,
-                                                userId: parseInt(selectedItem.value)
-                                            }),
-                                            success: function () {
-                                                if (!app.supportsTenancyNameInUrl) {
-                                                    abp.multiTenancy.setTenantIdCookie(data.record.id);
-                                                }
-                                            }
-                                        });
-                                    });
-                            }
-                        }, {
-                            text: app.localize('Edit'),
-                            visible: function () {
-                                return _permissions.edit;
-                            },
-                            action: function (data) {
-                                _editModal.open({ id: data.record.id });
-                            }
-                        }, {
-                            text: app.localize('Features'),
-                            visible: function () {
-                                return _permissions.changeFeatures;
-                            },
-                            action: function (data) {
-                                _featuresModal.open({ id: data.record.id });
-                            }
-                        }, {
-                            text: app.localize('Delete'),
-                            visible: function () {
-                                return _permissions.delete;
-                            },
-                            action: function (data) {
-                                deleteTenant(data.record);
-                            }
-                        }, {
-                            text: app.localize('Unlock'),
-                            action: function (data) {
-                                _tenantService.unlockTenantAdmin({
-                                    id: data.record.id
-                                }).done(function () {
-                                    abp.notify.success(app.localize('UnlockedTenandAdmin', data.record.name));
-                                });
-                            }
-                        }
-                    ]
-                },
-                tenancyName: {
-                    title: app.localize('TenancyCodeName'),
-                    display: function (data) {
-                        var $div = $('<div> ' + data.record.tenancyName + '</div>');
-                        if (data.record.connectionString) {
-                            $div.prepend($("<i class='fa fa-database' title=\"" +
-                                app.localize('HasOwnDatabase') +
-                                "\"></i>"));
-                        }
-
-                        return $div;
-                    },
-                    width: '16%'
-                },
-                name: {
-                    title: app.localize('Name'),
-                    width: '20%'
-                },
-                editionDisplayName: {
-                    title: app.localize('Edition'),
-                    width: '18%'
-                },
-                subscriptionEndDateUtc: {
-                    title: app.localize('SubscriptionEndDateUtc'),
-                    width: '15%',
-                    display: function (data) {
-                        if (data.record.subscriptionEndDateUtc) {
-                            return moment(data.record.subscriptionEndDateUtc).format('L');
-                        }
-
-                        return "";
-                    }
-                },
-                isActive: {
-                    title: app.localize('Active'),
-                    width: '8%',
-                    display: function (data) {
-                        if (data.record.isActive) {
-                            return '<span class="label label-success">' + app.localize('Yes') + '</span>';
-                        } else {
-                            return '<span class="label label-default">' + app.localize('No') + '</span>';
-                        }
-                    }
-                },
-                creationTime: {
-                    title: app.localize('CreationTime'),
-                    width: '20%',
-                    display: function (data) {
-                        return moment(data.record.creationTime).format('L');
-                    }
-                }
-            }
-
-        });
-
         var getFilter = function () {
             var editionId = _$editionDropdown.find(":selected").val();
 
@@ -241,12 +98,141 @@
             return filter;
         };
 
-        function getTenants(reload) {
-            if (reload) {
-                _$tenantsTable.jtable("reload");
-            } else {
-                _$tenantsTable.jtable("load", getFilter());
-            }
+        var dataTable = _$tenantsTable.DataTable({
+            paging: true,
+            serverSide: true,
+            processing: true,
+            listAction: {
+                ajaxFunction: _tenantService.getTenants,
+                inputFilter: function () {
+                    return getFilter();
+                }
+            },
+            columnDefs: [
+                {
+                    targets: 0,
+                    data: null,
+                    orderable: false,
+                    autoWidth: false,
+                    defaultContent: '',
+                    rowAction: {
+                        cssClass: 'btn btn-xs btn-primary blue',
+                        text: '<i class="fa fa-cog"></i> ' + app.localize('Actions') + ' <span class="caret"></span>',
+                        items: [
+                            {
+                                text: app.localize('LoginAsThisTenant'),
+                                visible: function () {
+                                    return _permissions.impersonation;
+                                },
+                                action: function (data) {
+                                    _userLookupModal.open({
+                                        extraFilters: {
+                                            tenantId: data.record.id
+                                        },
+                                        title: app.localize('SelectAUser')
+                                    },
+                                        function (selectedItem) {
+                                            abp.ajax({
+                                                url: abp.appPath + 'Account/Impersonate',
+                                                data: JSON.stringify({
+                                                    tenantId: data.record.id,
+                                                    userId: parseInt(selectedItem.value)
+                                                }),
+                                                success: function () {
+                                                    if (!app.supportsTenancyNameInUrl) {
+                                                        abp.multiTenancy.setTenantIdCookie(data.record.id);
+                                                    }
+                                                }
+                                            });
+                                        });
+                                }
+                            },
+                            {
+                                text: app.localize('Edit'),
+                                visible: function () {
+                                    return _permissions.edit;
+                                },
+                                action: function (data) {
+                                    _editModal.open({ id: data.record.id });
+                                }
+                            },
+                            {
+                                text: app.localize('Features'),
+                                visible: function () {
+                                    return _permissions.changeFeatures;
+                                },
+                                action: function (data) {
+                                    _featuresModal.open({ id: data.record.id });
+                                }
+                            },
+                            {
+                                text: app.localize('Delete'),
+                                visible: function () {
+                                    return _permissions.delete;
+                                },
+                                action: function (data) {
+                                    deleteTenant(data.record);
+                                }
+                            },
+                            {
+                                text: app.localize('Unlock'),
+                                action: function (data) {
+                                    _tenantService.unlockTenantAdmin({
+                                        id: data.record.id
+                                    }).done(function () {
+                                        abp.notify.success(app.localize('UnlockedTenandAdmin', data.record.name));
+                                    });
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    targets: 1,
+                    data: "tenancyName"
+                },
+                {
+                    targets: 2,
+                    data: "name"
+                },
+                {
+                    targets: 3,
+                    data: "editionDisplayName"
+                },
+                {
+                    targets: 4,
+                    data: "subscriptionEndDateUtc",
+                    render: function (subscriptionEndDateUtc) {
+                        if (subscriptionEndDateUtc) {
+                            return moment(subscriptionEndDateUtc).format('L');
+                        }
+
+                        return "";
+                    }
+                },
+                {
+                    targets: 5,
+                    data: "isActive",
+                    render: function (isActive) {
+                        if (isActive) {
+                            return '<span class="label label-success">' + app.localize('Yes') + '</span>';
+                        } else {
+                            return '<span class="label label-default">' + app.localize('No') + '</span>';
+                        }
+                    }
+                },
+                {
+                    targets: 6,
+                    data: "creationTime",
+                    render: function (creationTime) {
+                        return moment(creationTime).format('L');
+                    }
+                }
+            ]
+        });
+
+        function getTenants() {
+            dataTable.ajax.reload();
         }
 
         function deleteTenant(tenant) {
@@ -310,6 +296,5 @@
         });
 
         _$tenantsTableFilter.focus();
-        getTenants();
     });
 })();

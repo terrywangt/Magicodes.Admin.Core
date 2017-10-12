@@ -17,6 +17,10 @@ namespace Magicodes.Admin.MultiTenancy.Payments.Paypal
 
         public string ClientSecret => _appConfiguration["Payment:PayPal:ClientSecret"];
 
+        public string DemoUsername => _appConfiguration["Payment:PayPal:DemoUsername"];
+
+        public string DemoPassword => _appConfiguration["Payment:PayPal:DemoPassword"];
+
         public PayPalConfiguration(IAppConfigurationAccessor configurationAccessor)
         {
             _appConfiguration = configurationAccessor.Configuration;

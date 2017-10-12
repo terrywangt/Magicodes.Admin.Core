@@ -11,5 +11,7 @@
         public bool IsSmsProviderEnabled { get; set; }
 
         public bool IsRememberBrowserEnabled { get; set; }
+
+        public bool IsGoogleAuthenticatorEnabled { get; set; }
     }
 }

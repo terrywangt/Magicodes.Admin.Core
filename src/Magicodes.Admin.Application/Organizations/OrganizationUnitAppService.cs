@@ -9,6 +9,7 @@ using Abp.Organizations;
 using Magicodes.Admin.Authorization;
 using Magicodes.Admin.Organizations.Dto;
 using System.Linq.Dynamic.Core;
+using Abp.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Magicodes.Admin.Organizations
@@ -108,11 +109,6 @@ namespace Magicodes.Admin.Organizations
             await _organizationUnitManager.DeleteAsync(input.Id);
         }
 
-        [AbpAuthorize(AppPermissions.Pages_Administration_OrganizationUnits_ManageMembers)]
-        public async Task AddUserToOrganizationUnit(UserToOrganizationUnitInput input)
-        {
-            await UserManager.AddToOrganizationUnitAsync(input.UserId, input.OrganizationUnitId);
-        }
 
         [AbpAuthorize(AppPermissions.Pages_Administration_OrganizationUnits_ManageMembers)]
         public async Task RemoveUserFromOrganizationUnit(UserToOrganizationUnitInput input)
@@ -121,9 +117,48 @@ namespace Magicodes.Admin.Organizations
         }
 
         [AbpAuthorize(AppPermissions.Pages_Administration_OrganizationUnits_ManageMembers)]
-        public async Task<bool> IsInOrganizationUnit(UserToOrganizationUnitInput input)
+        public async Task AddUsersToOrganizationUnit(UsersToOrganizationUnitInput input)
         {
-            return await UserManager.IsInOrganizationUnitAsync(input.UserId, input.OrganizationUnitId);
+            foreach (var userId in input.UserIds)
+            {
+                await UserManager.AddToOrganizationUnitAsync(userId, input.OrganizationUnitId);
+            }
+        }
+
+        [AbpAuthorize(AppPermissions.Pages_Administration_OrganizationUnits_ManageMembers)]
+        public async Task<PagedResultDto<NameValueDto>> FindUsers(FindOrganizationUnitUsersInput input)
+        {
+            var userIdsInOrganizationUnit = _userOrganizationUnitRepository.GetAll()
+                .Where(uou => uou.OrganizationUnitId == input.OrganizationUnitId)
+                .Select(uou => uou.UserId);
+
+            var query = UserManager.Users
+                .Where(u => !userIdsInOrganizationUnit.Contains(u.Id))
+                .WhereIf(
+                    !input.Filter.IsNullOrWhiteSpace(),
+                    u =>
+                        u.Name.Contains(input.Filter) ||
+                        u.Surname.Contains(input.Filter) ||
+                        u.UserName.Contains(input.Filter) ||
+                        u.EmailAddress.Contains(input.Filter)
+                );
+
+            var userCount = await query.CountAsync();
+            var users = await query
+                .OrderBy(u => u.Name)
+                .ThenBy(u => u.Surname)
+                .PageBy(input)
+                .ToListAsync();
+
+            return new PagedResultDto<NameValueDto>(
+                userCount,
+                users.Select(u =>
+                    new NameValueDto(
+                        u.FullName + " (" + u.EmailAddress + ")",
+                        u.Id.ToString()
+                    )
+                ).ToList()
+            );
         }
 
         private async Task<OrganizationUnitDto> CreateOrganizationUnitDto(OrganizationUnit organizationUnit)

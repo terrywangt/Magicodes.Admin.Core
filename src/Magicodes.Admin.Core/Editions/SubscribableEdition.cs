@@ -56,5 +56,11 @@ namespace Magicodes.Admin.Editions
                     throw new Exception("Edition does not support payment type: " + paymentPeriodType);
             }
         }
+
+        public bool HasSamePrice(SubscribableEdition edition)
+        {
+            return !IsFree &&
+                   MonthlyPrice == edition.MonthlyPrice && AnnualPrice == edition.AnnualPrice;
+        }
     }
 }

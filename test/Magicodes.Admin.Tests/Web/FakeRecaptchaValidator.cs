@@ -5,9 +5,9 @@ namespace Magicodes.Admin.Tests.Web
 {
     public class FakeRecaptchaValidator : IRecaptchaValidator
     {
-        public async Task ValidateAsync(string captchaResponse)
+        public Task ValidateAsync(string captchaResponse)
         {
-            
+            return Task.CompletedTask;
         }
     }
 }

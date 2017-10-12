@@ -124,25 +124,25 @@ namespace Magicodes.Admin.Tests.Organizations
         }
 
         [Fact]
-        public async Task Test_AddUserToOrganizationUnit()
+        public async Task Test_AddUsersToOrganizationUnit()
         {
             //Arrange
             var ou12 = GetOU("OU12");
-            var admin = GetUserByUserName(User.AdminUserName);
+            var admin = GetUserByUserName(AbpUserBase.AdminUserName);
 
             //Act
-            await _organizationUnitAppService.AddUserToOrganizationUnit(
-                new UserToOrganizationUnitInput
+            await _organizationUnitAppService.AddUsersToOrganizationUnit(
+                new UsersToOrganizationUnitInput
                 {
-                    UserId = admin.Id,
+                    UserIds = new[] { admin.Id },
                     OrganizationUnitId = ou12.Id
                 });
 
             //Assert
-            
+
             //check from database
             UsingDbContext(context => context.UserOrganizationUnits.FirstOrDefault(uou => uou.OrganizationUnitId == ou12.Id && uou.UserId == admin.Id)).ShouldNotBeNull();
-            
+
             //Check also from app service
             var output = await _organizationUnitAppService.GetOrganizationUnitUsers(new GetOrganizationUnitUsersInput { Id = ou12.Id });
             output.Items.FirstOrDefault(u => u.Id == admin.Id).ShouldNotBeNull();
@@ -153,7 +153,7 @@ namespace Magicodes.Admin.Tests.Organizations
         {
             //Arrange
             var ou12 = GetOU("OU12");
-            var admin = GetUserByUserName(User.AdminUserName);
+            var admin = GetUserByUserName(AbpUserBase.AdminUserName);
 
             UsingDbContext(context => context.UserOrganizationUnits.Add(new UserOrganizationUnit(AbpSession.TenantId, admin.Id, ou12.Id)));
 
@@ -166,7 +166,11 @@ namespace Magicodes.Admin.Tests.Organizations
                 });
 
             //check from database
-            UsingDbContext(context => context.UserOrganizationUnits.FirstOrDefault(uou => uou.OrganizationUnitId == ou12.Id && uou.UserId == admin.Id)).ShouldBeNull();
+            UsingDbContext(context =>
+            {
+                var userOu = context.UserOrganizationUnits.FirstOrDefault(uou => uou.OrganizationUnitId == ou12.Id && uou.UserId == admin.Id);
+                userOu.IsDeleted.ShouldBeTrue();
+            });
         }
 
         private OrganizationUnit GetOU(string diplayName)

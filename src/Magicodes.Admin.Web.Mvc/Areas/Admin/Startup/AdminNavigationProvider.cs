@@ -7,7 +7,7 @@ namespace Magicodes.Admin.Web.Areas.Admin.Startup
     public class AdminNavigationProvider : NavigationProvider
     {
         public const string MenuName = "AdminMenus";
-        
+
         public override void SetNavigation(INavigationProviderContext context)
         {
             var menu = context.Manager.Menus[MenuName] = new MenuDefinition(MenuName, new FixedLocalizableString("Main Menu"));
@@ -21,11 +21,11 @@ namespace Magicodes.Admin.Web.Areas.Admin.Startup
                         requiredPermissionName: AppPermissions.Pages_Administration_Host_Dashboard
                     )
                 ).AddItem(new MenuItemDefinition(
-                        AdminPageNames.Host.Tenants,
-                        L("Tenants"),
-                        url: "Admin/Tenants",
-                        icon: "icon-globe",
-                        requiredPermissionName: AppPermissions.Pages_Tenants
+                    AdminPageNames.Host.Tenants,
+                    L("Tenants"),
+                    url: "Admin/Tenants",
+                    icon: "icon-globe",
+                    requiredPermissionName: AppPermissions.Pages_Tenants
                     )
                 ).AddItem(new MenuItemDefinition(
                         AdminPageNames.Host.Editions,
@@ -110,6 +110,13 @@ namespace Magicodes.Admin.Web.Areas.Admin.Startup
                             icon: "icon-settings",
                             requiredPermissionName: AppPermissions.Pages_Administration_Tenant_Settings
                         )
+                    )
+                ).AddItem(new MenuItemDefinition(
+                        AdminPageNames.Common.DemoUiComponents,
+                        L("DemoUiComponents"),
+                        url: "Admin/DemoUiComponents",
+                        icon: "icon-puzzle",
+                        requiredPermissionName: AppPermissions.Pages_DemoUiComponents
                     )
                 );
         }

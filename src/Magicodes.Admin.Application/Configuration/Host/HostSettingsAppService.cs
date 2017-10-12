@@ -5,6 +5,7 @@ using Abp.Authorization;
 using Abp.Configuration;
 using Abp.Extensions;
 using Abp.Net.Mail;
+using Abp.Runtime.Security;
 using Abp.Timing;
 using Abp.Zero.Configuration;
 using Magicodes.Admin.Authorization;
@@ -87,12 +88,15 @@ namespace Magicodes.Admin.Configuration.Host
         {
             return new HostUserManagementSettingsEditDto
             {
-                IsEmailConfirmationRequiredForLogin = await SettingManager.GetSettingValueAsync<bool>(AbpZeroSettingNames.UserManagement.IsEmailConfirmationRequiredForLogin)
+                IsEmailConfirmationRequiredForLogin = await SettingManager.GetSettingValueAsync<bool>(AbpZeroSettingNames.UserManagement.IsEmailConfirmationRequiredForLogin),
+                SmsVerificationEnabled = await SettingManager.GetSettingValueAsync<bool>(AppSettings.UserManagement.SmsVerificationEnabled)
             };
         }
 
         private async Task<EmailSettingsEditDto> GetEmailSettingsAsync()
         {
+            var smtpPassword = await SettingManager.GetSettingValueAsync(EmailSettingNames.Smtp.Password);
+            
             return new EmailSettingsEditDto
             {
                 DefaultFromAddress = await SettingManager.GetSettingValueAsync(EmailSettingNames.DefaultFromAddress),
@@ -100,7 +104,7 @@ namespace Magicodes.Admin.Configuration.Host
                 SmtpHost = await SettingManager.GetSettingValueAsync(EmailSettingNames.Smtp.Host),
                 SmtpPort = await SettingManager.GetSettingValueAsync<int>(EmailSettingNames.Smtp.Port),
                 SmtpUserName = await SettingManager.GetSettingValueAsync(EmailSettingNames.Smtp.UserName),
-                SmtpPassword = await SettingManager.GetSettingValueAsync(EmailSettingNames.Smtp.Password),
+                SmtpPassword = SimpleStringCipher.Instance.Decrypt(smtpPassword),
                 SmtpDomain = await SettingManager.GetSettingValueAsync(EmailSettingNames.Smtp.Domain),
                 SmtpEnableSsl = await SettingManager.GetSettingValueAsync<bool>(EmailSettingNames.Smtp.EnableSsl),
                 SmtpUseDefaultCredentials = await SettingManager.GetSettingValueAsync<bool>(EmailSettingNames.Smtp.UseDefaultCredentials)
@@ -149,13 +153,15 @@ namespace Magicodes.Admin.Configuration.Host
 
         private async Task<TwoFactorLoginSettingsEditDto> GetTwoFactorLoginSettingsAsync()
         {
-            return new TwoFactorLoginSettingsEditDto
+            var twoFactorLoginSettingsEditDto = new TwoFactorLoginSettingsEditDto
             {
                 IsEnabled = await SettingManager.GetSettingValueAsync<bool>(AbpZeroSettingNames.UserManagement.TwoFactorLogin.IsEnabled),
                 IsEmailProviderEnabled = await SettingManager.GetSettingValueAsync<bool>(AbpZeroSettingNames.UserManagement.TwoFactorLogin.IsEmailProviderEnabled),
                 IsSmsProviderEnabled = await SettingManager.GetSettingValueAsync<bool>(AbpZeroSettingNames.UserManagement.TwoFactorLogin.IsSmsProviderEnabled),
                 IsRememberBrowserEnabled = await SettingManager.GetSettingValueAsync<bool>(AbpZeroSettingNames.UserManagement.TwoFactorLogin.IsRememberBrowserEnabled),
+                IsGoogleAuthenticatorEnabled = await SettingManager.GetSettingValueAsync<bool>(AppSettings.UserManagement.TwoFactorLogin.IsGoogleAuthenticatorEnabled)
             };
+            return twoFactorLoginSettingsEditDto;
         }
 
         #endregion
@@ -215,6 +221,10 @@ namespace Magicodes.Admin.Configuration.Host
                 AbpZeroSettingNames.UserManagement.IsEmailConfirmationRequiredForLogin,
                 settings.IsEmailConfirmationRequiredForLogin.ToString().ToLowerInvariant()
             );
+            await SettingManager.ChangeSettingForApplicationAsync(
+                AppSettings.UserManagement.SmsVerificationEnabled,
+                settings.SmsVerificationEnabled.ToString().ToLowerInvariant()
+            );
         }
 
         private async Task UpdateSecuritySettingsAsync(SecuritySettingsEditDto settings)
@@ -273,6 +283,7 @@ namespace Magicodes.Admin.Configuration.Host
             await SettingManager.ChangeSettingForApplicationAsync(AbpZeroSettingNames.UserManagement.TwoFactorLogin.IsEnabled, settings.IsEnabled.ToString().ToLowerInvariant());
             await SettingManager.ChangeSettingForApplicationAsync(AbpZeroSettingNames.UserManagement.TwoFactorLogin.IsEmailProviderEnabled, settings.IsEmailProviderEnabled.ToString().ToLowerInvariant());
             await SettingManager.ChangeSettingForApplicationAsync(AbpZeroSettingNames.UserManagement.TwoFactorLogin.IsSmsProviderEnabled, settings.IsSmsProviderEnabled.ToString().ToLowerInvariant());
+            await SettingManager.ChangeSettingForApplicationAsync(AppSettings.UserManagement.TwoFactorLogin.IsGoogleAuthenticatorEnabled, settings.IsGoogleAuthenticatorEnabled.ToString().ToLowerInvariant());
             await SettingManager.ChangeSettingForApplicationAsync(AbpZeroSettingNames.UserManagement.TwoFactorLogin.IsRememberBrowserEnabled, settings.IsRememberBrowserEnabled.ToString().ToLowerInvariant());
         }
 
@@ -283,7 +294,7 @@ namespace Magicodes.Admin.Configuration.Host
             await SettingManager.ChangeSettingForApplicationAsync(EmailSettingNames.Smtp.Host, settings.SmtpHost);
             await SettingManager.ChangeSettingForApplicationAsync(EmailSettingNames.Smtp.Port, settings.SmtpPort.ToString(CultureInfo.InvariantCulture));
             await SettingManager.ChangeSettingForApplicationAsync(EmailSettingNames.Smtp.UserName, settings.SmtpUserName);
-            await SettingManager.ChangeSettingForApplicationAsync(EmailSettingNames.Smtp.Password, settings.SmtpPassword);
+            await SettingManager.ChangeSettingForApplicationAsync(EmailSettingNames.Smtp.Password, SimpleStringCipher.Instance.Encrypt(settings.SmtpPassword));
             await SettingManager.ChangeSettingForApplicationAsync(EmailSettingNames.Smtp.Domain, settings.SmtpDomain);
             await SettingManager.ChangeSettingForApplicationAsync(EmailSettingNames.Smtp.EnableSsl, settings.SmtpEnableSsl.ToString().ToLowerInvariant());
             await SettingManager.ChangeSettingForApplicationAsync(EmailSettingNames.Smtp.UseDefaultCredentials, settings.SmtpUseDefaultCredentials.ToString().ToLowerInvariant());

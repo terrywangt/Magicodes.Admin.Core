@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Abp.Auditing;
+using Abp.MultiTenancy;
 using Abp.Runtime.Session;
 using Microsoft.EntityFrameworkCore;
 using Magicodes.Admin.Chat.SignalR;
@@ -32,14 +33,11 @@ namespace Magicodes.Admin.Sessions
 
             if (AbpSession.TenantId.HasValue)
             {
-                var tenant = await TenantManager.Tenants.Include(t => t.Edition)
-                    .FirstAsync(t => t.Id == AbpSession.GetTenantId());
-
-                var highestEdition = ObjectMapper.Map<List<SubscribableEdition>>(TenantManager.EditionManager.Editions)
-                    .OrderByDescending(e => e.MonthlyPrice).FirstOrDefault();
-
-                output.Tenant = ObjectMapper.Map<TenantLoginInfoDto>(tenant);
-                output.Tenant.Edition.IsHighestEdition = highestEdition != null && output.Tenant.Edition.Id == highestEdition.Id;
+                output.Tenant = ObjectMapper
+                                    .Map<TenantLoginInfoDto>(await TenantManager
+                                        .Tenants
+                                        .Include(t => t.Edition)
+                                        .FirstAsync(t => t.Id == AbpSession.GetTenantId()));
             }
 
             if (AbpSession.UserId.HasValue)
@@ -52,10 +50,25 @@ namespace Magicodes.Admin.Sessions
                 return output;
             }
 
+            output.Tenant.Edition?.SetEditionIsHighest(GetTopEditionOrNullByMonthlyPrice());
             output.Tenant.SubscriptionDateString = GetTenantSubscriptionDateString(output);
             output.Tenant.CreationTimeString = output.Tenant.CreationTime.ToString("d");
 
             return output;
+        }
+
+        private SubscribableEdition GetTopEditionOrNullByMonthlyPrice()
+        {
+            var editions = TenantManager.EditionManager.Editions;
+            if (editions == null || !editions.Any())
+            {
+                return null;
+            }
+
+            return ObjectMapper
+                  .Map<IEnumerable<SubscribableEdition>>(editions)
+                  .OrderByDescending(e => e.MonthlyPrice)
+                  .FirstOrDefault();
         }
 
         private string GetTenantSubscriptionDateString(GetCurrentLoginInformationsOutput output)

@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Abp.Auditing;
 
 namespace Magicodes.Admin.Authorization.Users.Dto
 {
@@ -10,6 +11,7 @@ namespace Magicodes.Admin.Authorization.Users.Dto
         public string UsernameOrEmailAddress { get; set; }
 
         [Required]
+        [DisableAuditing]
         public string Password { get; set; }
     }
 }

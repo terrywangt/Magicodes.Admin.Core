@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Magicodes.Admin.Authorization.Users;
 using Magicodes.Admin.Authorization.Users.Profile;
@@ -15,6 +16,23 @@ namespace Magicodes.Admin.Tests.Authorization.Users
         public ProfileAppService_Tests()
         {
             _profileAppService = Resolve<IProfileAppService>();
+        }
+
+        [Fact]
+        public async Task UpdateGoogleAuthenticatorKey_Test()
+        {
+            var currentUser = await GetCurrentUserAsync();
+
+            //Assert
+            currentUser.GoogleAuthenticatorKey.ShouldBeNull();
+
+            //Act
+            await _profileAppService.UpdateGoogleAuthenticatorKey();
+
+            currentUser = await GetCurrentUserAsync();
+
+            //Assert
+            currentUser.GoogleAuthenticatorKey.ShouldNotBeNull();
         }
 
         [Fact]

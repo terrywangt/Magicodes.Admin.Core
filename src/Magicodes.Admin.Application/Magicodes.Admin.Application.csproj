@@ -3,7 +3,7 @@
   </Import>
   <PropertyGroup>
     <TargetFramework>net461</TargetFramework>
-    <PackageTargetFallback>$(PackageTargetFallback);dotnet5.6;portable-net45+win8</PackageTargetFallback>
+    <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
     <AssemblyName>Magicodes.Admin.Application</AssemblyName>
     <PackageId>Magicodes.Admin.Application</PackageId>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
@@ -14,7 +14,7 @@
     <RootNamespace>Magicodes.Admin</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="EPPlus.Core" Version="1.3.2" />
+    <PackageReference Include="EPPlus.Core" Version="1.5.2" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
     <Reference Include="System.Drawing" />

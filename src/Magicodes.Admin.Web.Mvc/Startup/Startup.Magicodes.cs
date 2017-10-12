@@ -1,10 +1,15 @@
 ﻿using Abp.AspNetCore;
 using Abp.PlugIns;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -18,41 +23,85 @@ namespace Magicodes.Admin.Web.Startup
         /// <param name="services"></param>
         private void ConfigureCustomServices(IServiceCollection services)
         {
-            //设置API文档生成
-            services.AddSwaggerGen(options =>
+            if (bool.Parse(_appConfiguration["App:Gzip:IsEnabled"]))
             {
-                options.DescribeAllEnumsAsStrings();
-                options.SwaggerDoc("v1", new Info
+                //启用GZIP压缩
+                services.AddResponseCompression(options =>
                 {
-                    Title = "API",
-                    Version = "v1",
-                    Description = "",
-                    Contact = new Contact
+                    options.Providers.Add<GzipCompressionProvider>();
+                    var mimeTypes = _appConfiguration["App:Gzip:MimeTypes"];
+                    if (!string.IsNullOrWhiteSpace(mimeTypes))
                     {
-                        Name = "心莱科技",
-                        Email = "xinlai@xin-lai.com"
+                        options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(mimeTypes.Split(','));
                     }
                 });
 
-                //遍历所有xml并加载
-                var paths = new List<string>();
-                var xmlFiles = new DirectoryInfo(Path.Combine(_hostingEnvironment.WebRootPath, "PlugIns")).GetFiles("*.Application.xml");
-                foreach (var item in xmlFiles)
+                services.Configure<GzipCompressionProviderOptions>(options =>
                 {
-                    paths.Add(item.FullName);
-                }
-                var binXmlFiles = new DirectoryInfo(_hostingEnvironment.ContentRootPath).GetFiles("*.Application.xml");
-                foreach (var item in binXmlFiles)
+                    options.Level = CompressionLevel.Fastest;
+                });
+            }
+
+            if (bool.Parse(_appConfiguration["SwaggerDoc:IsEnabled"]))
+            {
+                //设置API文档生成
+                services.AddSwaggerGen(options =>
                 {
-                    paths.Add(item.FullName);
-                }
-                foreach (var filePath in paths)
+                    options.DescribeAllEnumsAsStrings();
+                    options.SwaggerDoc("v1", new Info
+                    {
+                        Title = _appConfiguration["SwaggerDoc:Title"],
+                        Version = _appConfiguration["SwaggerDoc:Version"],
+                        Description = _appConfiguration["SwaggerDoc:Description"],
+                        Contact = new Contact
+                        {
+                            Name = _appConfiguration["SwaggerDoc:Contact:Name"],
+                            Email = _appConfiguration["SwaggerDoc:Contact:Email"]
+                        }
+                    });
+
+                    //遍历所有xml并加载
+                    var paths = new List<string>();
+                    var xmlFiles = new DirectoryInfo(Path.Combine(_hostingEnvironment.WebRootPath, "PlugIns")).GetFiles("*.Application.xml");
+                    foreach (var item in xmlFiles)
+                    {
+                        paths.Add(item.FullName);
+                    }
+                    var binXmlFiles = new DirectoryInfo(_hostingEnvironment.ContentRootPath).GetFiles("*.Application.xml");
+                    foreach (var item in binXmlFiles)
+                    {
+                        paths.Add(item.FullName);
+                    }
+                    foreach (var filePath in paths)
+                    {
+                        options.IncludeXmlComments(filePath);
+                    }
+                    options.DocInclusionPredicate((docName, description) => true);
+                    options.DocumentFilter<HiddenApiFilter>();
+                });
+            }
+
+            
+        }
+
+        private void ConfigureCustom(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        {
+            if (bool.Parse(_appConfiguration["App:Gzip:IsEnabled"]))
+            {
+                //使用GZIP压缩
+                app.UseResponseCompression();
+            }
+
+            if (bool.Parse(_appConfiguration["SwaggerDoc:IsEnabled"]))
+            {
+                // Enable middleware to serve generated Swagger as a JSON endpoint
+                app.UseSwagger();
+                // Enable middleware to serve swagger-ui assets (HTML, JS, CSS etc.)
+                app.UseSwaggerUI(options =>
                 {
-                    options.IncludeXmlComments(filePath);
-                }
-                options.DocInclusionPredicate((docName, description) => true);
-                options.DocumentFilter<HiddenApiFilter>();
-            });
+                    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Admin API V1");
+                }); //URL: /swagger
+            }
         }
 
         private void UsePlugInSources(AbpServiceOptions options)

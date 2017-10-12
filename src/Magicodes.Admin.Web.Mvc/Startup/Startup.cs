@@ -1,4 +1,5 @@
-﻿/*
+﻿
+/*
  *  ┏┓　　　┏┓ 
  *┏┛┻━━━┛┻┓ 
  *┃　　　　　　　┃ 　 
@@ -19,18 +20,19 @@
  *　　　 
  */
 using System;
-using System.IO;
 using Abp.AspNetCore;
+using Abp.Authorization;
 using Abp.Castle.Logging.Log4Net;
 using Abp.Dependency;
 using Abp.Hangfire;
-using Abp.PlugIns;
+using Abp.IdentityServer4;
 using Abp.Runtime.Security;
 using Castle.Facilities.Logging;
 using Hangfire;
 using IdentityModel;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewComponents;
@@ -44,11 +46,11 @@ using Magicodes.Admin.Authorization.Users;
 using Magicodes.Admin.Configuration;
 using Magicodes.Admin.Identity;
 using Magicodes.Admin.MultiTenancy;
+using Magicodes.Admin.Web.Authentication.JwtBearer;
 using Magicodes.Admin.Web.Resources;
 using PaulMiami.AspNetCore.Mvc.Recaptcha;
 using Swashbuckle.AspNetCore.Swagger;
 using Magicodes.Admin.Web.IdentityServer;
-using System.Collections.Generic;
 
 #if FEATURE_SIGNALR
 using Owin;
@@ -71,22 +73,26 @@ namespace Magicodes.Admin.Web.Startup
 
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            //设置自定义服务配置
+            ConfigureCustomServices(services);
+
             //MVC
             services.AddMvc(options =>
             {
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             });
 
-            IdentityRegistrar.Register(services, "Application");
+            var identityBuilder = IdentityRegistrar.Register(services);
 
             //Identity server
             if (bool.Parse(_appConfiguration["IdentityServer:IsEnabled"]))
             {
+                identityBuilder.AddAbpIdentityServer();
                 IdentityServerRegistrar.Register(services, _appConfiguration);
             }
 
-            //设置自定义服务配置
-            ConfigureCustomServices(services);
+
+            AuthConfigurer.Configure(services, _appConfiguration);
 
             //Recaptcha
             services.AddRecaptcha(new RecaptchaOptions
@@ -118,6 +124,8 @@ namespace Magicodes.Admin.Web.Startup
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            ConfigureCustom(app, env, loggerFactory);
+
             //Initializes ABP framework.
             app.UseAbp(options =>
             {
@@ -134,10 +142,28 @@ namespace Magicodes.Admin.Web.Startup
                 app.UseExceptionHandler("/Error");
             }
 
-            AuthConfigurer.Configure(app, _appConfiguration);
+            app.UseAuthentication();
+            app.UseJwtTokenMiddleware();
+
+            if (bool.Parse(_appConfiguration["IdentityServer:IsEnabled"]))
+            {
+                app.UseIdentityServer();
+
+                /* We can not use app.UseIdentityServerAuthentication because IdentityServer4.AccessTokenValidation
+                 * is not ported to asp.net core 2.0 yet. See issue: https://github.com/IdentityServer/IdentityServer4/issues/1055
+                 * Once it's ported, add IdentityServer4.AccessTokenValidation to Web.Core project and enable following lines:
+                 */
+
+                //app.UseIdentityServerAuthentication(
+                //    new IdentityServerAuthenticationOptions
+                //    {
+                //        Authority = _appConfiguration["App:WebSiteRootAddress"],
+                //        RequireHttpsMetadata = false
+                //    }
+                //);
+            }
 
             app.UseStaticFiles();
-
             app.UseAbpRequestLocalization();
 
 #if FEATURE_SIGNALR
@@ -163,13 +189,7 @@ namespace Magicodes.Admin.Web.Startup
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
 
-            // Enable middleware to serve generated Swagger as a JSON endpoint
-            app.UseSwagger();
-            // Enable middleware to serve swagger-ui assets (HTML, JS, CSS etc.)
-            app.UseSwaggerUI(options =>
-            {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Admin API V1");
-            }); //URL: /swagger
+            
         }
 
 #if FEATURE_SIGNALR

@@ -16,6 +16,9 @@ namespace Magicodes.Admin.Localization.Dto
         [StringLength(ApplicationLanguage.MaxIconLength)]
         public virtual string Icon { get; set; }
 
-        public bool IsDisabled { get; set; }
+        /// <summary>
+        /// Mapped from Language.IsDisabled with using manual mapping in CustomDtoMapper.cs
+        /// </summary>
+        public bool IsEnabled { get; set; }
     }
 }

@@ -22,6 +22,7 @@
 {
     <environment names="Development">
         <script src="~/view-resources/Areas/Admin/Views/Common/_PermissionTree.js" asp-append-version="true"></script>
+        <script src="~/view-resources/Areas/Admin/Views/Common/_OrganizationTree.js" asp-append-version="true"></script>
         <script src="~/view-resources/Areas/Admin/Views/Users/_CreateOrEditModal.js" asp-append-version="true"></script>
         <script src="~/view-resources/Areas/Admin/Views/Users/_PermissionsModal.js" asp-append-version="true"></script>
         <script src="~/view-resources/Areas/Admin/Views/Users/Index.js" asp-append-version="true"></script>
@@ -29,6 +30,7 @@
 
     <environment names="Staging,Production">
         <script src="~/view-resources/Areas/Admin/Views/Common/_PermissionTree.min.js" asp-append-version="true"></script>
+        <script src="~/view-resources/Areas/Admin/Views/Common/_OrganizationTree.js" asp-append-version="true"></script>
         <script src="~/view-resources/Areas/Admin/Views/Users/_CreateOrEditModal.min.js" asp-append-version="true"></script>
         <script src="~/view-resources/Areas/Admin/Views/Users/_PermissionsModal.min.js" asp-append-version="true"></script>
         <script src="~/view-resources/Areas/Admin/Views/Users/Index.min.js" asp-append-version="true"></script>
@@ -45,7 +47,7 @@
         </div>
     </div>
     <div class="col-xs-6 text-right">
-        <button id="ExportUsersToExcelButton" class="btn btn-default"><i class="fa fa-file-excel-o"></i> @L("ExportToExcel")</button>
+        <button id="ExportUsersToExcelButton" class="btn green-haze"><i class="fa fa-file-excel-o"></i> @L("ExportToExcel")</button>
         @if (IsGranted(AppPermissions.Pages_Administration_Users_Create))
         {
             <button id="CreateNewUserButton" class="btn btn-primary blue"><i class="fa fa-plus"></i> @L("CreateNewUser")</button>
@@ -94,14 +96,14 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         @Html.DropDownList(
-                                        "RoleSelectionCombobox", Model.Roles.Select(i => i.ToSelectListItem()),
-                                        new
-                                        {
-                                            @class = "form-control selectpicker",
-                                            data_live_search = "true",
-                                            data_none_selected_text = L("FilterByRole"),
-                                            id = "RoleSelectionCombo"
-                                        })
+                                            "RoleSelectionCombobox", Model.Roles.Select(i => i.ToSelectListItem()),
+                                            new
+                                            {
+                                                @class = "form-control selectpicker",
+                                                data_live_search = "true",
+                                                data_none_selected_text = L("FilterByRole"),
+                                                id = "RoleSelectionCombo"
+                                            })
                                     </div>
                                 </div>
                             }
@@ -121,6 +123,21 @@
                 </div>
             </form>
         </div>
-        <div id="UsersTable"></div>
+        <table id="UsersTable" class="display table table-striped table-bordered table-hover dt-responsive nowrap">
+            <thead>
+            <tr>
+                <th>@L("Actions")</th>
+                <th>@L("UserName")</th>
+                <th>@L("Name")</th>
+                <th>@L("Surname")</th>
+                <th>@L("Roles")</th>
+                <th>@L("EmailAddress")</th>
+                <th>@L("EmailConfirm")</th>
+                <th>@L("Active")</th>
+                <th>@L("LastLoginTime")</th>
+                <th>@L("CreationTime")</th>
+            </tr>
+            </thead>
+        </table>
     </div>
 </div>

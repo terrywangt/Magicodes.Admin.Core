@@ -309,6 +309,9 @@ jQuery(document).ready(function ($) {
     app.modals.LookupModal = function () {
 
         var _modalManager;
+        var _dataTable;
+        var _$table;
+        var _$filterInput;
 
         var _options = {
             serviceMethod: null, //Required
@@ -325,15 +328,8 @@ jQuery(document).ready(function ($) {
             }
         };
 
-        var _$table;
-        var _$filterInput;
-
         function refreshTable() {
-            var prms = $.extend({
-                filter: _$filterInput.val()
-            }, _modalManager.getArgs().extraFilters);
-
-            _$table.jtable('load', prms);
+            _dataTable.ajax.reload();
         };
 
         function selectItem(item) {
@@ -360,38 +356,44 @@ jQuery(document).ready(function ($) {
         this.init = function (modalManager) {
             _modalManager = modalManager;
             _options = $.extend(_options, _modalManager.getOptions().lookupOptions);
-
             _$table = _modalManager.getModal().find('.lookup-modal-table');
-            _$table.jtable({
-                title: _options.title,
-                paging: true,
-                pageSize: _options.pageSize,
 
-                actions: {
-                    listAction: {
-                        method: _options.serviceMethod
+            _dataTable = _$table.DataTable({
+                paging: true,
+                serverSide: true,
+                processing: true,
+                lengthChange: false,
+                pageLength: _options.pageSize,
+                deferLoading: _options.loadOnStartup ? null : 0,
+                listAction: {
+                    ajaxFunction: _options.serviceMethod,
+                    inputFilter: function () {
+                        return $.extend({
+                            filter: _$filterInput.val()
+                        }, _modalManager.getArgs().extraFilters);
                     }
                 },
-
-                fields: {
-                    select: {
-                        title: app.localize('Select'),
-                        width: '10%',
-                        display: function (data) {
-                            var $span = $('<span></span>');
-                            $('<button class="btn btn-default btn-xs" title="' + app.localize('Select') + '"><i class="fa fa-check"></i></button>')
-                                .appendTo($span)
-                                .click(function () {
-                                    selectItem(data.record);
-                                });
-                            return $span;
+                columnDefs: [
+                    {
+                        targets: 0,
+                        data: null,
+                        orderable: false,
+                        defaultContent: '',
+                        rowAction: {
+                            element: $("<button/>")
+                                .addClass("btn btn-default btn-xs")
+                                .attr("title", app.localize('Select'))
+                                .append($("<i/>").addClass("fa fa-chevron-circle-right")).click(function () {
+                                    var record = $(this).data();
+                                    selectItem(record);
+                                })
                         }
                     },
-                    name: {
-                        title: app.localize('Name'),
-                        width: '90%'
+                    {
+                        targets: 1,
+                        data: "name"
                     }
-                }
+                ]
             });
 
             _modalManager.getModal()
@@ -404,7 +406,7 @@ jQuery(document).ready(function ($) {
             _modalManager.getModal()
                 .find('.modal-body')
                 .keydown(function (e) {
-                    if (e.which == 13) {
+                    if (e.which === 13) {
                         e.preventDefault();
                         refreshTable();
                     }
@@ -412,10 +414,6 @@ jQuery(document).ready(function ($) {
 
             _$filterInput = _modalManager.getModal().find('.lookup-filter-text');
             _$filterInput.val(_options.filterText);
-
-            if (_options.loadOnStartup) {
-                refreshTable();
-            }
         };
     };
 

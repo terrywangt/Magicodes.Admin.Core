@@ -30,19 +30,6 @@
 .form-group.form-md-line-input.has-error .help-block-info {
   display: none;
 }
-/* jTable */
-.jtable-main-container {
-  overflow-x: auto;
-}
-.jtable-main-container .jtable .jtable-column-header {
-  height: 32px;
-}
-.jtable-main-container .jtable .jtable-data-row td {
-  height: 32px;
-}
-.jtable-main-container .jtable-bottom-panel select {
-  color: black;
-}
 /* DateRangePicker */
 .daterangepicker_input .input-mini {
   width: 120px !important;

@@ -1,13 +1,4 @@
-﻿#TenantsTable .jtable-main-container .jtable-title {
-  min-width: 600px;
-}
-#TenantsTable .jtable-main-container .jtable {
-  min-width: 600px;
-}
-#TenantsTable .jtable-main-container .jtable-bottom-panel {
-  min-width: 600px;
-}
-div.tenant-admin-password.has-error span.help-block {
+﻿div.tenant-admin-password.has-error span.help-block {
   position: relative !important;
   -ms-opacity: 1 !important;
   opacity: 1 !important;

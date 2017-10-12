@@ -26,6 +26,11 @@
                     @L("Roles") <b class="badge badge-primary"><span id="assigned-role-count">@Model.AssignedRoleCount</span></b>
                 </a>
             </li>
+            <li class="">
+                <a href="#OrganizationUnitsTab" data-toggle="tab" aria-expanded="false">
+                    @L("OrganizationUnits")
+                </a>
+            </li>
         </ul>
         <div class="tab-content">
             <div class="tab-pane active" id="UserInformationsTab">
@@ -174,6 +179,13 @@
                             </label>
                         </div>
                     }
+                </div>
+
+            </div>
+            <div class="tab-pane" id="OrganizationUnitsTab">
+
+                <div class="list-group">
+                    @Html.Partial("~/Areas/Admin/Views/Common/_OrganizationTree.cshtml", Model)
                 </div>
 
             </div>

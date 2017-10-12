@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Abp;
-using JetBrains.Annotations;
+using Abp.Runtime.Session;
 using Microsoft.AspNetCore.Mvc;
 using Magicodes.Admin.Editions;
 using Magicodes.Admin.MultiTenancy;
@@ -19,14 +19,24 @@ namespace Magicodes.Admin.Web.Controllers
         private readonly IPaymentAppService _paymentAppService;
         private readonly ITenantRegistrationAppService _tenantRegistrationAppService;
         private readonly IPaymentCache _paymentCache;
+        private readonly TenantManager _tenantManager;
+        private readonly EditionManager _editionManager;
+        private readonly ISubscriptionAppService _subscriptionAppService;
 
-        public PaymentController(IPaymentAppService paymentAppService,
+        public PaymentController(
+            IPaymentAppService paymentAppService,
             ITenantRegistrationAppService tenantRegistrationAppService,
-            IPaymentCache paymentCache)
+            IPaymentCache paymentCache,
+            TenantManager tenantManager,
+            EditionManager editionManager, 
+            ISubscriptionAppService subscriptionAppService)
         {
             _paymentAppService = paymentAppService;
             _tenantRegistrationAppService = tenantRegistrationAppService;
             _paymentCache = paymentCache;
+            _tenantManager = tenantManager;
+            _editionManager = editionManager;
+            _subscriptionAppService = subscriptionAppService;
         }
 
         public async Task<IActionResult> Buy(int editionId, EditionPaymentType editionPaymentType, int? subscriptionStartType) //subscriptionStartType is used as int instead of SubscriptionStartType because MVC can not bind nullable enums
@@ -81,7 +91,7 @@ namespace Magicodes.Admin.Web.Controllers
             {
                 throw new Exception("Can not execute payment for free editions!");
             }
-            
+
             var paymentId = await ExecutePaymentAsync(editionId, paymentPeriodType, gateway.Value);
             return RedirectToAction("Register", "TenantRegistration", new
             {
@@ -115,6 +125,12 @@ namespace Magicodes.Admin.Web.Controllers
             var paymentInfo = await _paymentAppService.GetPaymentInfo(new PaymentInfoInput { UpgradeEditionId = upgradeEditionId });
             var edition = await _tenantRegistrationAppService.GetEdition(upgradeEditionId);
 
+            if (editionPaymentType == EditionPaymentType.Upgrade && await UpgradeIsFree(upgradeEditionId))
+            {
+                await _subscriptionAppService.UpgradeTenantToEquivalentEdition(upgradeEditionId);
+                return RedirectToAction("Index", "SubscriptionManagement", new { area = "Admin" });
+            }
+
             var model = new PaymentViewModel
             {
                 Edition = edition,
@@ -123,6 +139,22 @@ namespace Magicodes.Admin.Web.Controllers
             };
 
             return View("Index", model);
+        }
+
+        private async Task<bool> UpgradeIsFree(int upgradeEditionId)
+        {
+            var tenant = await _tenantManager.GetByIdAsync(AbpSession.GetTenantId());
+
+            if (!tenant.EditionId.HasValue)
+            {
+                throw new Exception("Tenant must be assigned to an Edition in order to upgrade !");
+            }
+
+            var currentEdition = (SubscribableEdition)await _editionManager.GetByIdAsync(tenant.EditionId.Value);
+            var targetEdition = (SubscribableEdition)await _editionManager.GetByIdAsync(upgradeEditionId);
+            var bothEditionsAreFree = targetEdition.IsFree && currentEdition.IsFree;
+            var bothEditionsHasSamePrice = currentEdition.HasSamePrice(targetEdition);
+            return bothEditionsAreFree || bothEditionsHasSamePrice;
         }
     }
 }

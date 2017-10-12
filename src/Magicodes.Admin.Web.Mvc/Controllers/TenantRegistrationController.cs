@@ -18,6 +18,7 @@ using Magicodes.Admin.Security;
 using Magicodes.Admin.Url;
 using Magicodes.Admin.Web.Security.Recaptcha;
 using System.Threading.Tasks;
+using Abp.Collections.Extensions;
 using Magicodes.Admin.Editions;
 using Magicodes.Admin.MultiTenancy.Payments.Dto;
 using Magicodes.Admin.Web.Models.TenantRegistration;
@@ -34,7 +35,6 @@ namespace Magicodes.Admin.Web.Controllers
         private readonly IWebUrlService _webUrlService;
         private readonly ITenantRegistrationAppService _tenantRegistrationAppService;
         private readonly IPasswordComplexitySettingStore _passwordComplexitySettingStore;
-        private readonly EditionManager _editionManager;
 
         public TenantRegistrationController(
             IMultiTenancyConfig multiTenancyConfig,
@@ -44,8 +44,7 @@ namespace Magicodes.Admin.Web.Controllers
             SignInManager signInManager,
             IWebUrlService webUrlService,
             ITenantRegistrationAppService tenantRegistrationAppService,
-            IPasswordComplexitySettingStore passwordComplexitySettingStore, 
-            EditionManager editionManager)
+            IPasswordComplexitySettingStore passwordComplexitySettingStore)
         {
             _multiTenancyConfig = multiTenancyConfig;
             _userManager = userManager;
@@ -55,33 +54,39 @@ namespace Magicodes.Admin.Web.Controllers
             _webUrlService = webUrlService;
             _tenantRegistrationAppService = tenantRegistrationAppService;
             _passwordComplexitySettingStore = passwordComplexitySettingStore;
-            _editionManager = editionManager;
         }
 
         public async Task<ActionResult> SelectEdition()
         {
             var output = await _tenantRegistrationAppService.GetEditionsForSelect();
+            if (output.EditionsWithFeatures.IsNullOrEmpty())
+            {
+                return RedirectToAction("Register", "TenantRegistration");
+            }
+
             var model = new EditionsSelectViewModel(output);
 
             return View(model);
         }
 
-        public async Task<ActionResult> Register(int editionId, SubscriptionStartType subscriptionStartType, SubscriptionPaymentGatewayType? gateway = null, string paymentId = "")
+        public async Task<ActionResult> Register(int? editionId, SubscriptionStartType? subscriptionStartType = null, SubscriptionPaymentGatewayType? gateway = null, string paymentId = "")
         {
             CheckTenantRegistrationIsEnabled();
-
-            var edition = await _tenantRegistrationAppService.GetEdition(editionId);
 
             var model = new TenantRegisterViewModel
             {
                 PasswordComplexitySetting = await _passwordComplexitySettingStore.GetSettingsAsync(),
-                EditionId = editionId,
                 SubscriptionStartType = subscriptionStartType,
-                Edition = edition,
                 EditionPaymentType = EditionPaymentType.NewRegistration,
                 Gateway = gateway,
                 PaymentId = paymentId
             };
+
+            if (editionId.HasValue)
+            {
+                model.EditionId = editionId.Value;
+                model.Edition = await _tenantRegistrationAppService.GetEdition(editionId.Value);
+            }
 
             ViewBag.UseCaptcha = UseCaptchaOnRegistration();
 
@@ -138,17 +143,21 @@ namespace Magicodes.Admin.Web.Controllers
                 ViewBag.UseCaptcha = UseCaptchaOnRegistration();
                 ViewBag.ErrorMessage = ex.Message;
 
-                var edition = await _tenantRegistrationAppService.GetEdition(model.EditionId);
                 var viewModel = new TenantRegisterViewModel
                 {
                     PasswordComplexitySetting = await _passwordComplexitySettingStore.GetSettingsAsync(),
                     EditionId = model.EditionId,
                     SubscriptionStartType = model.SubscriptionStartType,
-                    Edition = edition,
                     EditionPaymentType = EditionPaymentType.NewRegistration,
                     Gateway = model.Gateway,
                     PaymentId = model.PaymentId
                 };
+
+                if (model.EditionId.HasValue)
+                {
+                    viewModel.Edition = await _tenantRegistrationAppService.GetEdition(model.EditionId.Value);
+                    viewModel.EditionId = model.EditionId.Value;
+                }
 
                 return View("Register", viewModel);
             }

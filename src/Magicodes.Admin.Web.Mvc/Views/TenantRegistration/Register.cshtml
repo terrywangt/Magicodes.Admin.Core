@@ -27,13 +27,19 @@
 
 <form class="register-form" asp-action="Register" method="post" id="formTenantRegister">
     <input type="hidden" Name="EditionId" value="@Model.EditionId" />
-    <input type="hidden" Name="SubscriptionStartType" value="@Model.SubscriptionStartType" />
-    <input type="hidden" name="EditionPaymentType" value="@Model.EditionPaymentType" />
-    <input type="hidden" name="Gateway" value="@Model.Gateway" />
-    <input type="hidden" name="PaymentId" value="@Model.PaymentId" />
+    @if (Model.EditionId.HasValue)
+    {
+        <input type="hidden" Name="SubscriptionStartType" value="@Model.SubscriptionStartType" />
+        <input type="hidden" name="EditionPaymentType" value="@Model.EditionPaymentType" />
+        <input type="hidden" name="Gateway" value="@Model.Gateway" />
+        <input type="hidden" name="PaymentId" value="@Model.PaymentId" />
+    }
 
     <h3>@L("TenantSignUp")</h3>
-    <div class="hint text-center">(@L("Edition"): @Model.Edition.DisplayName)</div>
+    @if (Model.EditionId.HasValue)
+    {
+        <div class="hint text-center">(@L("Edition"): @Model.Edition.DisplayName)</div>
+    }
 
     @if (@ViewBag.ErrorMessage != null)
     {

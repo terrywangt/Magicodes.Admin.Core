@@ -1,4 +1,5 @@
-﻿using Abp.AutoMapper;
+﻿using Abp.Application.Editions;
+using Abp.AutoMapper;
 
 namespace Magicodes.Admin.MultiTenancy.Payments.Dto
 {

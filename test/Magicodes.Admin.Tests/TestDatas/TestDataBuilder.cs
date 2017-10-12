@@ -16,6 +16,7 @@ namespace Magicodes.Admin.Tests.TestDatas
         public void Create()
         {
             new TestOrganizationUnitsBuilder(_context, _tenantId).Create();
+            new TestSubscriptionPaymentBuilder(_context, _tenantId).Create();
 
             _context.SaveChanges();
         }

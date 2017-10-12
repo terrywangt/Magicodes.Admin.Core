@@ -19,10 +19,10 @@ namespace Magicodes.Admin.Organizations
 
         Task DeleteOrganizationUnit(EntityDto<long> input);
 
-        Task AddUserToOrganizationUnit(UserToOrganizationUnitInput input);
-        
         Task RemoveUserFromOrganizationUnit(UserToOrganizationUnitInput input);
 
-        Task<bool> IsInOrganizationUnit(UserToOrganizationUnitInput input);
+        Task AddUsersToOrganizationUnit(UsersToOrganizationUnitInput input);
+
+        Task<PagedResultDto<NameValueDto>> FindUsers(FindOrganizationUnitUsersInput input);
     }
 }

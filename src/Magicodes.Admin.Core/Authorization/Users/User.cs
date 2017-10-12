@@ -20,6 +20,8 @@ namespace Magicodes.Admin.Authorization.Users
 
         public string SignInToken { get; set; }
 
+        public string GoogleAuthenticatorKey { get; set; }
+
         //Can add application specific user properties here
 
         public User()

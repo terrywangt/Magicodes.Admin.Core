@@ -50,7 +50,7 @@
         var populateExpiringTenantsTable = function (expiringTenants, subscriptionEndAlertDayCount, maxExpiringTenantsShownCount, subscriptionEndDateStart, subscriptionEndDateEnd) {
             _$expiringTenantsCaptionHelper.text(app.localize("ExpiringTenantsHelpText", subscriptionEndAlertDayCount, maxExpiringTenantsShownCount));
             _expiringTenantsData = expiringTenants;
-            _$expiringTenantsTable.jtable("load", {});
+            _expiringTenantsDataTable.ajax.reload();
 
             _$seeAllExpiringTenantsButton
                 .data("subscriptionEndDateStart", subscriptionEndDateStart)
@@ -65,8 +65,8 @@
         var populateRecentTenantsTable = function (recentTenants, recentTenantsDayCount, maxRecentTenantsShownCount, creationDateStart) {
             _$recentTenantsCaptionHelper.text(app.localize("RecentTenantsHelpText", recentTenantsDayCount, maxRecentTenantsShownCount));
             _recentTenantsData = recentTenants;
-            _$recentTenantsTable.jtable("load", {});
-
+            _recentTenantsDataTable.ajax.reload();
+            
             _$seeAllRecentTenantsButton
                 .data("creationDateStart", creationDateStart)
                 .click(function () {
@@ -383,62 +383,67 @@
             });
         };
 
+
+        var _expiringTenantsDataTable = null;
         var initExpiringTenantsTable = function () {
-            _$expiringTenantsTable.jtable({
+            _expiringTenantsDataTable = _$expiringTenantsTable.DataTable({
                 paging: false,
-                sorting: false,
-                multiSorting: false,
-                actions: {
-                    listAction: {
-                        method: function () {
-                            return $.Deferred(function ($dfd) {
-                                $dfd.resolve({
-                                    "items": _expiringTenantsData,
-                                    "totalCount": _expiringTenantsData.length
-                                });
+                serverSide: false,
+                processing: false,
+                info: false,
+                listAction: {
+                    ajaxFunction: function () {
+                        return $.Deferred(function ($dfd) {
+                            $dfd.resolve({
+                                "items": _expiringTenantsData,
+                                "totalCount": _expiringTenantsData.length
                             });
-                        }
+                        });
                     }
                 },
-                fields: {
-                    tenantName: {
-                        title: app.localize("TenantName")
+                columnDefs: [
+                    {
+                        targets: 0,
+                        data: "tenantName"
                     },
-                    remainingDayCount: {
-                        title: app.localize("RemainingDay")
+                    {
+                        targets: 1,
+                        data: "remainingDayCount"
                     }
-                }
+                ]
             });
         };
 
+        var _recentTenantsDataTable = null;
         var initRecentTenantsTable = function () {
-            _$recentTenantsTable.jtable({
+            _recentTenantsDataTable = _$recentTenantsTable.DataTable({
                 paging: false,
-                sorting: false,
-                multiSorting: false,
-                actions: {
-                    listAction: {
-                        method: function () {
-                            return $.Deferred(function ($dfd) {
-                                $dfd.resolve({
-                                    "items": _recentTenantsData,
-                                    "totalCount": _recentTenantsData.length
-                                });
+                serverSide: false,
+                processing: false,
+                info: false,
+                listAction: {
+                    ajaxFunction: function () {
+                        return $.Deferred(function ($dfd) {
+                            $dfd.resolve({
+                                "items": _recentTenantsData,
+                                "totalCount": _recentTenantsData.length
                             });
-                        }
+                        });
                     }
                 },
-                fields: {
-                    name: {
-                        title: app.localize("TenantName")
+                columnDefs: [
+                    {
+                        targets: 0,
+                        data: "name"
                     },
-                    creationTime: {
-                        title: app.localize("CreationTime"),
-                        display: function (data) {
-                            return moment(data.record.creationTime).format("L LT");
+                    {
+                        targets: 1,
+                        data: "creationTime",
+                        render: function (creationTime) {
+                            return moment(creationTime).format("L LT");
                         }
                     }
-                }
+                ]
             });
         };
 
@@ -456,7 +461,7 @@
                 refreshAllData();
             });
 
-        _$refreshButton.click(function() {
+        _$refreshButton.click(function () {
             refreshAllData();
         });
 

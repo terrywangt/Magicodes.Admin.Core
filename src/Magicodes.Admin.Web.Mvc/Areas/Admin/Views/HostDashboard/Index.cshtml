@@ -209,7 +209,14 @@
                 </div>
                 <div class="portlet-body">
                     <div class="scroller chart" data-always-visible="1" data-rail-visible="0">
-                        <div class="expiring-tenants-table"></div>
+                        <table class="expiring-tenants-table display table table-striped table-bordered table-hover dt-responsive nowrap">
+                            <thead>
+                            <tr>
+                                <th>@L("TenantName")</th>
+                                <th>@L("RemainingDay")</th>
+                            </tr>
+                            </thead>
+                        </table>
                     </div>
                     <div class="scroller-footer">
                         <div class="btn-arrow-link pull-right">
@@ -231,7 +238,14 @@
                 </div>
                 <div class="portlet-body">
                     <div class="scroller chart" data-always-visible="1" data-rail-visible="0">
-                        <div class="recent-tenants-table"></div>
+                        <table class="recent-tenants-table display table table-striped table-bordered table-hover dt-responsive nowrap">
+                            <thead>
+                                <tr>
+                                    <th>@L("TenantName")</th>
+                                    <th>@L("CreationTime")</th>
+                                </tr>
+                            </thead>
+                        </table>
                     </div>
                     <div class="scroller-footer">
                         <div class="btn-arrow-link pull-right">

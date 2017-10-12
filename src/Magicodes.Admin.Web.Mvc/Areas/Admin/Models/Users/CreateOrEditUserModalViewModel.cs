@@ -1,12 +1,14 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Abp.AutoMapper;
 using Magicodes.Admin.Authorization.Users.Dto;
 using Magicodes.Admin.Security;
+using Magicodes.Admin.Web.Areas.Admin.Models.Common;
 
 namespace Magicodes.Admin.Web.Areas.Admin.Models.Users
 {
-    [AutoMapFrom(typeof (GetUserForEditOutput))]
-    public class CreateOrEditUserModalViewModel : GetUserForEditOutput
+    [AutoMapFrom(typeof(GetUserForEditOutput))]
+    public class CreateOrEditUserModalViewModel : GetUserForEditOutput, IOrganizationUnitsEditViewModel
     {
         public bool CanChangeUserName
         {

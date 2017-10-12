@@ -22,6 +22,7 @@ using Magicodes.Admin.Authorization.Users;
 using Magicodes.Admin.Configuration;
 using Magicodes.Admin.Identity;
 using Magicodes.Admin.MultiTenancy;
+using Magicodes.Admin.Web.Authentication.JwtBearer;
 using PaulMiami.AspNetCore.Mvc.Recaptcha;
 using Swashbuckle.AspNetCore.Swagger;
 using Magicodes.Admin.Web.IdentityServer;
@@ -65,14 +66,16 @@ namespace Magicodes.Admin.Web.Startup
                 {
                     //App:CorsOrigins in appsettings.json can contain more than one address with splitted by comma.
                     builder
-                        .WithOrigins(_appConfiguration["App:CorsOrigins"].Split(",", StringSplitOptions.RemoveEmptyEntries).Select(o => o.RemovePostFix("/")).ToArray())
+                        //.WithOrigins(_appConfiguration["App:CorsOrigins"].Split(",", StringSplitOptions.RemoveEmptyEntries).Select(o => o.RemovePostFix("/")).ToArray())
+                        .AllowAnyOrigin() //TODO: Will be replaced by above when Microsoft releases microsoft.aspnetcore.cors 2.0 - https://github.com/aspnet/CORS/pull/94
                         .AllowAnyHeader()
                         .AllowAnyMethod();
                 });
             });
 
-            IdentityRegistrar.Register(services, "Host");
-
+            IdentityRegistrar.Register(services);
+            AuthConfigurer.Configure(services, _appConfiguration);
+            
             //Identity server
             if (bool.Parse(_appConfiguration["IdentityServer:IsEnabled"]))
             {
@@ -119,7 +122,25 @@ namespace Magicodes.Admin.Web.Startup
 
             app.UseCors(DefaultCorsPolicyName); //Enable CORS!
 
-            AuthConfigurer.Configure(app, _appConfiguration);
+            app.UseAuthentication();
+            app.UseJwtTokenMiddleware();
+            
+            if (bool.Parse(_appConfiguration["IdentityServer:IsEnabled"]))
+            {
+                app.UseIdentityServer();
+
+                /* We can not use app.UseIdentityServerAuthentication because IdentityServer4.AccessTokenValidation
+                 * is not ported to asp.net core 2.0 yet. See issue: https://github.com/IdentityServer/IdentityServer4/issues/1055
+                 * Once it's ported, add IdentityServer4.AccessTokenValidation to Web.Core project and enable following lines:
+                 */
+
+                //app.UseIdentityServerAuthentication(
+                //    new IdentityServerAuthenticationOptions
+                //    {
+                //        Authority = _appConfiguration["App:ServerRootAddress"],
+                //        RequireHttpsMetadata = false
+                //    });
+            }
 
             app.UseStaticFiles();
 

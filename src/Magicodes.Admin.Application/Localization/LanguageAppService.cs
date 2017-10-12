@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
@@ -98,7 +97,7 @@ namespace Magicodes.Admin.Localization
         {
             await _applicationLanguageManager.SetDefaultLanguageAsync(
                 AbpSession.TenantId,
-                GetCultureInfoByChecking(input.Name).Name
+               CultureHelper.GetCultureInfoByChecking(input.Name).Name
                 );
         }
 
@@ -180,7 +179,7 @@ namespace Magicodes.Admin.Localization
 
         public async Task UpdateLanguageText(UpdateLanguageTextInput input)
         {
-            var culture = GetCultureInfoByChecking(input.LanguageName);
+            var culture = CultureHelper.GetCultureInfoByChecking(input.LanguageName);
             var source = LocalizationManager.GetSource(input.SourceName);
             await _applicationLanguageTextManager.UpdateStringAsync(AbpSession.TenantId, source.Name, culture, input.Key, input.Value);
         }
@@ -188,7 +187,7 @@ namespace Magicodes.Admin.Localization
         [AbpAuthorize(AppPermissions.Pages_Administration_Languages_Create)]
         protected virtual async Task CreateLanguageAsync(CreateOrUpdateLanguageInput input)
         {
-            var culture = GetCultureInfoByChecking(input.Language.Name);
+            var culture = CultureHelper.GetCultureInfoByChecking(input.Language.Name);
 
             await CheckLanguageIfAlreadyExists(culture.Name);
 
@@ -200,7 +199,7 @@ namespace Magicodes.Admin.Localization
                     input.Language.Icon
                 )
                 {
-                    IsDisabled = input.Language.IsDisabled
+                    IsDisabled = !input.Language.IsEnabled
                 }
             );
         }
@@ -210,7 +209,7 @@ namespace Magicodes.Admin.Localization
         {
             Debug.Assert(input.Language.Id != null, "input.Language.Id != null");
 
-            var culture = GetCultureInfoByChecking(input.Language.Name);
+            var culture = CultureHelper.GetCultureInfoByChecking(input.Language.Name);
 
             await CheckLanguageIfAlreadyExists(culture.Name, input.Language.Id.Value);
 
@@ -219,22 +218,9 @@ namespace Magicodes.Admin.Localization
             language.Name = culture.Name;
             language.DisplayName = culture.DisplayName;
             language.Icon = input.Language.Icon;
-            language.IsDisabled = input.Language.IsDisabled;
+            language.IsDisabled = !input.Language.IsEnabled;
 
             await _applicationLanguageManager.UpdateAsync(AbpSession.TenantId, language);
-        }
-
-        private CultureInfo GetCultureInfoByChecking(string name)
-        {
-            try
-            {
-                return CultureInfoHelper.Get(name);
-            }
-            catch (CultureNotFoundException ex)
-            {
-                Logger.Warn(ex.ToString(), ex);
-                throw new UserFriendlyException(L("InvlalidLanguageCode"));
-            }
         }
 
         private async Task CheckLanguageIfAlreadyExists(string languageName, int? expectedId = null)

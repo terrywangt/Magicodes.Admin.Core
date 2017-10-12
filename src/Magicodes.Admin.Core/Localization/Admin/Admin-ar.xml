@@ -281,7 +281,6 @@
     <text name="LookingForMpaVersion"> البحث عن موقع متعدد الصفحات</text>
     <text name="LookingForSpaVersion"> البحث عن موقع ذو صفحة واحدة</text>
     <text name="ThisLanguageAlreadyExists" value="هذه اللغة موجودة مسبقا" />
-    <text name="OrganizationUnits" value="الوحدات التنظيمية" />
     <text name="OrganizationUnitsHeaderInfo" value="استخدم الوحدات التنظيمية لتجميع المستخدمين و الكيانات" />
     <text name="OrganizationTree" value="الهيكل التنظيمي" />
     <text name="Members" value="الأعضاء" />
@@ -607,5 +606,74 @@
     <text name="PaymentCouldNotCompleted">تعذر إتمام الدفع</text>
     <text name="TenantEditionIsNotAssigned">لم يتم تعيين نسخة العميل</text>
     <text name="FreeEditionsCannotHaveTrialVersions">لا يمكن أن يكون للنسخ المجانية فترة تجريبية</text>
+    <text name="Total">المجموع</text>
+    <text name="Extend_Edition_Description">تمديد النسخة {0}</text>
+    <text name="Upgrade_Edition_Description">ترقية الى النسخة {0}</text>
+    <text name="PaymentMightBeExpiredWarning">من المحتمل ان وقت إتمام العملية قد نفذ, الرجاء الإتصال بنا إذا قمت بعملية الدفع.</text>
+    <text name="GoToSubscriptionManagement">انتقل إلى الاشتراك</text>
+    <text name="DemoPayPalAccount">حساب بايبال التجريبي</text>
+    <text name="IsEnabled">مفعّل</text>
+    <text name="IsGoogleAuthenticatorEnabled">تمكين أداة مصادقة غوغل</text>
+    <text name="GoogleAuthenticatorReferrerLink">ألست متأكدا مما تعنيه هذه الشاشة؟ قد تحتاج إلى التحقق من ذلك </text>
+    <text name="ScanQrCodeWithYourMobileApp">مسح رمز الاستجابة السريعة هذا مع تطبيق المحمول</text>
+    <text name="Profile">الملف الشخصي</text>
+    <text name="Enable">تفعيل</text>
+    <text name="GoogleAuthenticatorIsNotEnabled">لم يتم تمكين أداة مصادقة غوغل لحسابك. يجب عليك أولا تمكينه في إعداداتك.</text>
+    <text name="SubscriptionExpiringSoon_Email_Subject">إشعار انتهاء صلاحية اشتراك أبزيرتمبلات الخاص بك</text>
+    <text name="SubscriptionExpiringSoon_Email_Body">سوف تنتهي صلاحية اشتراك أبزيروتيمبلات في {0}.</text>
+    <text name="SubscriptionExpire_Title">تنتهي صلاحية اشتراك أبزيروتيمبلات</text>
+    <text name="SubscriptionExpire_SubTitle">يتم إرسال هذا البريد الإلكتروني إليك لإعلامك بانتهاء صلاحية الاشتراك</text>
+    <text name="SubscriptionAssignedToAnother_Email_Body">انتهت صلاحية اشتراك أبزيروتيمبلات في {1}. تم تعيين النسخة الحالية إلى {0}.</text>
+    <text name="FailedSubscriptionTerminations_Title">فشل إنهاء الاشتراك</text>
+    <text name="FailedSubscriptionTerminations_SubTitle">فشل إنهاء الاشتراك لبعض العملاء</text>
+    <text name="SubscriptionExpiringSoon_Title">أبزيروتيمبلات إشعار انتهاء صلاحية الاشتراك</text>
+    <text name="SubscriptionExpiringSoon_SubTitle">يتم إرسال هذا البريد الإلكتروني إليك لإعلامك بانتهاء صلاحية الاشتراك.</text>
+    <text name="AdminRoleCannotRemoveFromAdminUser">لا يمكن إزالة دور المشرف من مستخدم المشرف</text>
+    <text name="YouCannotRemoveUserRolePermissionsFromAdminRole">لا يمكنك إزالة إذن التعديل للمستخدم / للدور من دور المشرف</text>
+    <text name="YouCannotRemoveUserRolePermissionsFromAdminUser">لا يمكنك إزالة إذن التعديل للمستخدم / للدور من مستخدم مشرف</text>
+    <text name="Notification">إشعار</text>
+    <text name="TotalRecordsCount">المجموع: {0}</text>
+    <text name="SubscriptionInformation">معلومات الاشتراك</text>
+    <text name="PaymentHistory">سجل الدفعات</text>
+    <text name="Gateway">بوابة</text>
+    <text name="Amount">قيمة</text>
+    <text name="Status">حالة</text>
+    <text name="Period">فترة</text>
+    <text name="DayCount">عدد الأيام</text>
+    <text name="LastModificationTime">آخر وقت التعديل</text>
+    <text name="PaymentId">معرف الدفع</text>
+    <text name="SubscriptionPaymentGatewayType_Paypal">باي بال</text>
+    <text name="SubscriptionPaymentStatus_Completed">منجز</text>
+    <text name="SubscriptionPaymentStatus_Processing">معالجة</text>
+    <text name="SubscriptionPaymentStatus_Failed">فشل</text>
+    <text name="PaymentPeriodType_Annual">سنوي</text>
+    <text name="PaymentPeriodType_Monthly">شهري</text>
+    <text name="ProcessTime">وقت المعالجة</text>
+    <text name="SmsVerificationEnabled">تم تمكين التحقق من رقم الهاتف (عبر الرسائل القصيرة )</text>
+    <text name="SmsVerificationMessage">رمز التحقق: {0}</text>
+    <text name="Verify">التحقق</text>
+    <text name="YourCode">رمزك</text>
+    <text name="VerifyYourCode">تحقق من الرمز</text>
+    <text name="YourPhoneNumberIsVerified">تم التحقق من رقم هاتفك</text>
+    <text name="YourPhoneNumberIsNotVerified">لم يتم التحقق من رقم هاتفك</text>
+    <text name="WrongSmsVerificationCode">رمز التحقق غير صحيح!</text>
+    <text name="SelectUsers">حدد المستخدمين</text>
+    <text name="OrganizationUnits" value="الوحدات التنظيمية" />
+    <text name="YouCanManageUsersOrganizationUnitsFromOrganizationUnitsPage">يمكنك إدارة وحدات التنظيم من صفحة الوحدات التنظيمية.</text>
+    <text name="DemoUiComponents">مكونات واجهة المستخدم التجريبية</text>
+    <text name="DateAndTimePickers">إختيار التاريخ و الوقت</text>
+    <text name="FileUpload">تحميل الملف</text>
+    <text name="PostedValue">القيمة المنشورة</text>
+    <text name="SelectDate">حدد تاريخ</text>
+    <text name="SelectFile">حدد الملف</text>
+    <text name="UploadedFile">الملف المحمَل</text>
+    <text name="PostedData">البيانات المنشورة</text>
+    <text name="Remove">إزالة</text>
+    <text name="OrganizationUnitNotFoundForThisUser">لا توجد وحدة تنظيمية لهذا المستخدم.</text>
+    <text name="DemoUiComponents_Info">
+      This page shows a few useful UI components those can be used in your application.
+      Components in this page are implemented as full stack (includes the server side).
+    </text>
+    <text name="DemoUiComponents_Info_Metronic_Link_Text">Check Metronic theme for more UI components</text>
   </texts>
 </localizationDictionary>

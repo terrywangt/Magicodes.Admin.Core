@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.16
+VisualStudioVersion = 15.0.26403.7
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{AFAA0841-BD93-466F-B8F4-FB4EEC86F1FC}"
 EndProject
@@ -28,9 +28,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		common.props = common.props
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Magicodes.Admin.ConsoleApiClient", "test\Magicodes.Admin.ConsoleApiClient\Magicodes.Admin.ConsoleApiClient.csproj", "{25CD4D8C-D3DB-48A0-A4D0-639B6D0BDC7C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magicodes.Admin.ConsoleApiClient", "test\Magicodes.Admin.ConsoleApiClient\Magicodes.Admin.ConsoleApiClient.csproj", "{25CD4D8C-D3DB-48A0-A4D0-639B6D0BDC7C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Magicodes.Admin.Web.Public", "src\Magicodes.Admin.Web.Public\Magicodes.Admin.Web.Public.csproj", "{2A88C289-A06A-4D69-8C71-E632E0F6B96D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magicodes.Admin.Web.Public", "src\Magicodes.Admin.Web.Public\Magicodes.Admin.Web.Public.csproj", "{2A88C289-A06A-4D69-8C71-E632E0F6B96D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,7 +1,7 @@
 ﻿using Abp.Authorization;
 using Abp.Configuration;
 using Abp.Domain.Uow;
-using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
@@ -21,7 +21,8 @@ namespace Magicodes.Admin.Identity
             IOptions<IdentityOptions> optionsAccessor, 
             ILogger<SignInManager<User>> logger,
             IUnitOfWorkManager unitOfWorkManager,
-            ISettingManager settingManager
+            ISettingManager settingManager,
+            IAuthenticationSchemeProvider schemes
             ) : base(
                 userManager, 
                 contextAccessor, 
@@ -29,7 +30,8 @@ namespace Magicodes.Admin.Identity
                 optionsAccessor, 
                 logger,
                 unitOfWorkManager,
-                settingManager)
+                settingManager,
+                schemes)
         {
         }
     }

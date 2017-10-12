@@ -1,13 +1,4 @@
-﻿#AuditLogsTable .jtable-main-container .jtable-title {
-  min-width: 1200px;
-}
-#AuditLogsTable .jtable-main-container .jtable {
-  min-width: 1200px;
-}
-#AuditLogsTable .jtable-main-container .jtable-bottom-panel {
-  min-width: 1200px;
-}
-.audit-log-detail-view h3.form-section {
+﻿.audit-log-detail-view h3.form-section {
   margin-top: 5px;
 }
 .audit-log-detail-view .form-group {

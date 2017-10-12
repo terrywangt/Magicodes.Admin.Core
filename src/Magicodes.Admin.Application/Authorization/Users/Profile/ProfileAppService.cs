@@ -5,18 +5,21 @@ using System.Threading.Tasks;
 using Abp;
 using Abp.Auditing;
 using Abp.Authorization;
-using Abp.AutoMapper;
 using Abp.Configuration;
 using Abp.Extensions;
 using Abp.IO;
 using Abp.Localization;
+using Abp.Runtime.Caching;
 using Abp.Runtime.Session;
 using Abp.Timing;
 using Abp.UI;
 using Abp.Zero.Configuration;
+using Magicodes.Admin.Authentication.TwoFactor.Google;
 using Magicodes.Admin.Authorization.Users.Dto;
+using Magicodes.Admin.Authorization.Users.Profile.Cache;
 using Magicodes.Admin.Authorization.Users.Profile.Dto;
 using Magicodes.Admin.Friendships;
+using Magicodes.Admin.Identity;
 using Magicodes.Admin.Security;
 using Magicodes.Admin.Storage;
 using Magicodes.Admin.Timing;
@@ -30,17 +33,26 @@ namespace Magicodes.Admin.Authorization.Users.Profile
         private readonly IBinaryObjectManager _binaryObjectManager;
         private readonly ITimeZoneService _timeZoneService;
         private readonly IFriendshipManager _friendshipManager;
+        private readonly GoogleTwoFactorAuthenticateService _googleTwoFactorAuthenticateService;
+        private readonly ISmsSender _smsSender;
+        private readonly ICacheManager _cacheManager;
 
         public ProfileAppService(
             IAppFolders appFolders,
             IBinaryObjectManager binaryObjectManager,
             ITimeZoneService timezoneService,
-            IFriendshipManager friendshipManager)
+            IFriendshipManager friendshipManager,
+            GoogleTwoFactorAuthenticateService googleTwoFactorAuthenticateService,
+            ISmsSender smsSender,
+            ICacheManager cacheManager)
         {
             _appFolders = appFolders;
             _binaryObjectManager = binaryObjectManager;
             _timeZoneService = timezoneService;
             _friendshipManager = friendshipManager;
+            _googleTwoFactorAuthenticateService = googleTwoFactorAuthenticateService;
+            _smsSender = smsSender;
+            _cacheManager = cacheManager;
         }
 
         [DisableAuditing]
@@ -48,6 +60,12 @@ namespace Magicodes.Admin.Authorization.Users.Profile
         {
             var user = await GetCurrentUserAsync();
             var userProfileEditDto = ObjectMapper.Map<CurrentUserProfileEditDto>(user);
+
+            userProfileEditDto.QrCodeSetupImageUrl = user.GoogleAuthenticatorKey != null
+                ? _googleTwoFactorAuthenticateService.GenerateSetupCode("Magicodes.Admin",
+                    user.EmailAddress, user.GoogleAuthenticatorKey, 300, 300).QrCodeSetupImageUrl
+                : "";
+            userProfileEditDto.IsGoogleAuthenticatorEnabled = user.GoogleAuthenticatorKey != null;
 
             if (Clock.SupportsMultipleTimezone)
             {
@@ -63,9 +81,67 @@ namespace Magicodes.Admin.Authorization.Users.Profile
             return userProfileEditDto;
         }
 
+        public async Task<UpdateGoogleAuthenticatorKeyOutput> UpdateGoogleAuthenticatorKey()
+        {
+            var user = await GetCurrentUserAsync();
+            user.GoogleAuthenticatorKey = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 10);
+            CheckErrors(await UserManager.UpdateAsync(user));
+
+            return new UpdateGoogleAuthenticatorKeyOutput
+            {
+                QrCodeSetupImageUrl = _googleTwoFactorAuthenticateService.GenerateSetupCode("Magicodes.Admin",
+                    user.EmailAddress, user.GoogleAuthenticatorKey, 300, 300).QrCodeSetupImageUrl
+            };
+        }
+
+        public async Task SendVerificationSms()
+        {
+            var user = await GetCurrentUserAsync();
+            var code = RandomHelper.GetRandom(100000, 999999).ToString();
+            var cacheKey = AbpSession.ToUserIdentifier().ToString();
+            var cacheItem = new SmsVerificationCodeCacheItem { Code = code };
+
+            _cacheManager.GetSmsVerificationCodeCache().Set(
+                cacheKey,
+                cacheItem
+            );
+
+            await _smsSender.SendAsync(user.PhoneNumber, L("SmsVerificationMessage", code));
+        }
+
+        public async Task VerifySmsCode(VerifySmsCodeInputDto input)
+        {
+            var cacheKey = AbpSession.ToUserIdentifier().ToString();
+            var cash = await _cacheManager.GetSmsVerificationCodeCache().GetOrDefaultAsync(cacheKey);
+
+            if (cash == null)
+            {
+                throw new Exception("Phone numer confirmation code is not found in cache !");
+            }
+
+            if (input.Code != cash.Code)
+            {
+                throw new UserFriendlyException(L("WrongSmsVerificationCode"));
+            }
+
+            var user = await UserManager.GetUserAsync(AbpSession.ToUserIdentifier());
+            user.IsPhoneNumberConfirmed = true;
+            await UserManager.UpdateAsync(user);
+        }
+        
         public async Task UpdateCurrentUserProfile(CurrentUserProfileEditDto input)
         {
             var user = await GetCurrentUserAsync();
+
+            if (user.PhoneNumber != input.PhoneNumber)
+            {
+                input.IsPhoneNumberConfirmed = false;
+            }
+            else if (user.IsPhoneNumberConfirmed)
+            {
+                input.IsPhoneNumberConfirmed = true;
+            }
+
             ObjectMapper.Map(input, user);
             CheckErrors(await UserManager.UpdateAsync(user));
 

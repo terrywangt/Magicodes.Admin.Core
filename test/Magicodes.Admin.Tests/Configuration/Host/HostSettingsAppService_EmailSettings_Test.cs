@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
 using Abp.Configuration;
 using Abp.Net.Mail;
+using Abp.Runtime.Security;
 using Magicodes.Admin.Configuration.Host;
 using Shouldly;
-using Xunit;
 
 namespace Magicodes.Admin.Tests.Configuration.Host
 {
@@ -27,7 +27,7 @@ namespace Magicodes.Admin.Tests.Configuration.Host
             _settingManager.ChangeSettingForApplication(EmailSettingNames.DefaultFromDisplayName, "");
             _settingManager.ChangeSettingForApplication(EmailSettingNames.Smtp.Host, "100.101.102.103");
             _settingManager.ChangeSettingForApplication(EmailSettingNames.Smtp.UserName, "myuser");
-            _settingManager.ChangeSettingForApplication(EmailSettingNames.Smtp.Password, "123456");
+            _settingManager.ChangeSettingForApplication(EmailSettingNames.Smtp.Password, SimpleStringCipher.Instance.Encrypt("123456"));
             _settingManager.ChangeSettingForApplication(EmailSettingNames.Smtp.Domain, "mydomain");
             _settingManager.ChangeSettingForApplication(EmailSettingNames.Smtp.EnableSsl, "true");
             _settingManager.ChangeSettingForApplication(EmailSettingNames.Smtp.UseDefaultCredentials, "false");
@@ -72,7 +72,10 @@ namespace Magicodes.Admin.Tests.Configuration.Host
             _settingManager.GetSettingValue(EmailSettingNames.Smtp.Host).ShouldBe("100.101.102.104");
             _settingManager.GetSettingValue<int>(EmailSettingNames.Smtp.Port).ShouldBe(42);
             _settingManager.GetSettingValue(EmailSettingNames.Smtp.UserName).ShouldBe("changeduser");
-            _settingManager.GetSettingValue(EmailSettingNames.Smtp.Password).ShouldBe("654321");
+
+            var smtpPassword = _settingManager.GetSettingValue(EmailSettingNames.Smtp.Password);
+            SimpleStringCipher.Instance.Decrypt(smtpPassword).ShouldBe("654321");
+
             _settingManager.GetSettingValue(EmailSettingNames.Smtp.Domain).ShouldBe("changeddomain");
             _settingManager.GetSettingValue<bool>(EmailSettingNames.Smtp.EnableSsl).ShouldBe(false);
             _settingManager.GetSettingValue<bool>(EmailSettingNames.Smtp.UseDefaultCredentials).ShouldBe(false); //not changed

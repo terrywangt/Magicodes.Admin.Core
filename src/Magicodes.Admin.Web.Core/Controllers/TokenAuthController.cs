@@ -20,11 +20,12 @@ using Abp.Runtime.Session;
 using Abp.Timing;
 using Abp.UI;
 using Abp.Zero.Configuration;
-using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Magicodes.Admin.Authentication.TwoFactor.Google;
 using Magicodes.Admin.Authorization;
 using Magicodes.Admin.Authorization.Users;
 using Magicodes.Admin.MultiTenancy;
@@ -59,6 +60,7 @@ namespace Magicodes.Admin.Web.Controllers
         private readonly ISmsSender _smsSender;
         private readonly IEmailSender _emailSender;
         private readonly IdentityOptions _identityOptions;
+        private readonly GoogleAuthenticatorProvider _googleAuthenticatorProvider;
 
         public TokenAuthController(
             LogInManager logInManager,
@@ -76,7 +78,8 @@ namespace Magicodes.Admin.Web.Controllers
             IAppNotifier appNotifier,
             ISmsSender smsSender,
             IEmailSender emailSender,
-            IOptions<IdentityOptions> identityOptions)
+            IOptions<IdentityOptions> identityOptions,
+            GoogleAuthenticatorProvider googleAuthenticatorProvider)
         {
             _logInManager = logInManager;
             _tenantCache = tenantCache;
@@ -93,6 +96,7 @@ namespace Magicodes.Admin.Web.Controllers
             _appNotifier = appNotifier;
             _smsSender = smsSender;
             _emailSender = emailSender;
+            _googleAuthenticatorProvider = googleAuthenticatorProvider;
             _identityOptions = identityOptions.Value;
         }
 
@@ -182,25 +186,30 @@ namespace Magicodes.Admin.Web.Controllers
 
             var user = await _userManager.FindByIdAsync(model.UserId.ToString());
 
-            cacheItem.Code = await _userManager.GenerateTwoFactorTokenAsync(user, model.Provider);
-
-            var message = L("EmailSecurityCodeBody", cacheItem.Code);
-
-            if (model.Provider == "Email")
+            if (model.Provider != GoogleAuthenticatorProvider.Name)
             {
-                await _emailSender.SendAsync(await _userManager.GetEmailAsync(user), L("EmailSecurityCodeSubject"), message);
-            }
-            else if (model.Provider == "Phone")
-            {
-                await _smsSender.SendAsync(await _userManager.GetPhoneNumberAsync(user), message);
+                cacheItem.Code = await _userManager.GenerateTwoFactorTokenAsync(user, model.Provider);
+                var message = L("EmailSecurityCodeBody", cacheItem.Code);
+
+                if (model.Provider == "Email")
+                {
+                    await _emailSender.SendAsync(await _userManager.GetEmailAsync(user), L("EmailSecurityCodeSubject"),
+                        message);
+                }
+                else if (model.Provider == "Phone")
+                {
+                    await _smsSender.SendAsync(await _userManager.GetPhoneNumberAsync(user), message);
+                }
             }
 
-            _cacheManager
-                .GetTwoFactorCodeCache()
-                .Set(
+            _cacheManager.GetTwoFactorCodeCache().Set(
                     cacheKey,
                     cacheItem
                 );
+            _cacheManager.GetCache("ProviderCache").Set(
+                "Provider",
+                model.Provider
+            );
         }
 
         [HttpPost]
@@ -243,7 +252,7 @@ namespace Magicodes.Admin.Web.Controllers
             var externalUser = await GetExternalUserInfo(model);
 
             var loginResult = await _logInManager.LoginAsync(new UserLoginInfo(model.AuthProvider, model.ProviderKey, model.AuthProvider), GetTenancyNameOrNull());
-            
+
             switch (loginResult.Result)
             {
                 case AbpLoginResultType.Success:
@@ -449,10 +458,14 @@ namespace Magicodes.Admin.Web.Controllers
         {
             var twoFactorCodeCache = _cacheManager.GetTwoFactorCodeCache();
             var userIdentifier = user.ToUserIdentifier().ToString();
-
             var cachedCode = await twoFactorCodeCache.GetOrDefaultAsync(userIdentifier);
+            var provider = _cacheManager.GetCache("ProviderCache").Get("Provider", cache => cache).ToString();
 
-            if (cachedCode?.Code == null || cachedCode.Code != authenticateModel.TwoFactorVerificationCode)
+            if (provider == GoogleAuthenticatorProvider.Name)
+            {
+                await _googleAuthenticatorProvider.ValidateAsync("TwoFactor", authenticateModel.TwoFactorVerificationCode, _userManager, user);
+            }
+            else if (cachedCode?.Code == null || cachedCode.Code != authenticateModel.TwoFactorVerificationCode)
             {
                 throw new UserFriendlyException(L("InvalidSecurityCode"));
             }

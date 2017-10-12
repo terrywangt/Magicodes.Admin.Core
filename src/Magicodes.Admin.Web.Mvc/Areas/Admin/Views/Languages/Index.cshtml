@@ -47,7 +47,18 @@
 
 <div class="portlet light margin-bottom-0">
     <div class="portlet-body">
-        <div id="LanguagesTable"></div>
+        <table id="LanguagesTable" class="display table table-striped table-bordered table-hover dt-responsive nowrap">
+            <thead>
+            <tr>
+                <th>@L("Actions")</th>
+                <th>@L("Name")</th>
+                <th>@L("Code")</th>
+                <th>@L("Default")</th>
+                <th>@L("CreationTime")</th>
+                <th>@L("IsEnabled")</th>
+            </tr>
+            </thead>
+        </table>
         @if (Model.IsTenantView)
         {
             <p class="margin-top-20">

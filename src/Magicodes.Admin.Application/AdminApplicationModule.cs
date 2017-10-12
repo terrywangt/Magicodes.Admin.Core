@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using Abp.AutoMapper;
 using Abp.Modules;
+using Abp.Reflection.Extensions;
 using Magicodes.Admin.Authorization;
 
 namespace Magicodes.Admin
@@ -9,8 +10,8 @@ namespace Magicodes.Admin
     /// Application layer module of the application.
     /// </summary>
     [DependsOn(
-        typeof(AdminCoreModule), 
-        typeof(AbpAutoMapperModule))]
+        typeof(AdminCoreModule)
+        )]
     public class AdminApplicationModule : AbpModule
     {
         public override void PreInitialize()
@@ -24,10 +25,7 @@ namespace Magicodes.Admin
 
         public override void Initialize()
         {
-            IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
-
-
+            IocManager.RegisterAssemblyByConvention(typeof(AdminApplicationModule).GetAssembly());
         }
-
     }
 }

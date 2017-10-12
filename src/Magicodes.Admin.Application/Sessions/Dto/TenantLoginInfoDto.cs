@@ -39,11 +39,11 @@ namespace Magicodes.Admin.Sessions.Dto
             return IsInTrialPeriod;
         }
 
-        public bool SubscriptionIsExpiringSoon()
+        public bool SubscriptionIsExpiringSoon(int subscriptionExpireNootifyDayCount)
         {
             if (SubscriptionEndDateUtc.HasValue)
             {
-                return Clock.Now.ToUniversalTime().AddDays(AppConsts.SubscriptionExpireNootifyDayCount) >= SubscriptionEndDateUtc.Value;
+                return Clock.Now.ToUniversalTime().AddDays(subscriptionExpireNootifyDayCount) >= SubscriptionEndDateUtc.Value;
             }
 
             return false;

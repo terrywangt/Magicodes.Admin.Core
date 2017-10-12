@@ -10,66 +10,65 @@
             modalClass: 'EditLanguageTextModal'
         });
 
-        _$textsTable.jtable({
+        var getFilter = function () {
+            return {
+                targetLanguageName: $('#TextTargetLanguageSelectionCombobox').val(),
+                sourceName: $('#TextSourceSelectionCombobox').val(),
+                baseLanguageName: $('#TextBaseLanguageSelectionCombobox').val(),
+                targetValueFilter: $('#TargetValueFilterSelectionCombobox').val(),
+                filterText: $('#TextFilter').val()
+            };
+        }
 
-            title: app.localize('LanguageTexts'),
-
+        var dataTable = _$textsTable.DataTable({
             paging: true,
-            sorting: true,
-
-            actions: {
-                listAction: {
-                    method: _languageService.getLanguageTexts
-                }
+            serverSide: true,
+            processing: true,
+            listAction: {
+                ajaxFunction: _languageService.getLanguageTexts,
+                inputFilter: getFilter
             },
-
-            fields: {
-                key: {
-                    key: true,
-                    list: true,
-                    title: app.localize('Key'),
-                    width: '30%',
-                    display: function (data) {
-                        return '<span title="' + data.record.key + '">' + app.utils.string.truncate(data.record.key, 32) + '</span>';
+            columnDefs: [
+                {
+                    targets: 0,
+                    data: "key",
+                    render: function (key) {
+                        return '<span title="' + key + '">' + app.utils.string.truncate(key, 32) + '</span>';
                     }
                 },
-                baseValue: {
-                    title: app.localize('BaseValue'),
-                    width: '30%',
-                    display: function (data) {
-                        return '<span title="' + (data.record.baseValue || '') + '">' + (app.utils.string.truncate(data.record.baseValue, 32) || '') + '</span>';
+                {
+                    targets: 1,
+                    data: "baseValue",
+                    render: function (baseValue) {
+                        return $("<span/>").attr("title", (baseValue || '')).html((app.utils.string.truncate(baseValue, 32) || ''))[0].outerHTML;
                     }
                 },
-                targetValue: {
-                    title: app.localize('TargetValue'),
-                    width: '30%',
-                    display: function (data) {
-                        return '<span title="' + (data.record.targetValue || '') + '">' + (app.utils.string.truncate(data.record.targetValue, 32) || '') + '</span>';
+                {
+                    targets: 2,
+                    data: "targetValue",
+                    render: function (targetValue) {
+                        return $("<span/>").attr("title", (targetValue || '')).html((app.utils.string.truncate(targetValue, 32) || ''))[0].outerHTML;
                     }
                 },
-                actions: {
-                    title: '',
-                    width: '10%',
-                    sorting: false,
-                    display: function (data) {
-                        var $span = $('<span></span>');
-
-                        $('<button class="btn btn-default btn-xs" title="' + app.localize('Edit') + '"><i class="fa fa-edit"></i></button>')
-                            .appendTo($span)
+                {
+                    targets: 3,
+                    data: null,
+                    orderable: false,
+                    defaultContent: '',
+                    rowAction: {
+                        element: $('<button class="btn btn-default btn-xs" title="' + app.localize('Edit') + '"><i class="fa fa-edit"></i></button>')
                             .click(function () {
+                                var data = $(this).data();
                                 _editTextModal.open({
                                     sourceName: $('#TextSourceSelectionCombobox').val(),
                                     baseLanguageName: $('#TextBaseLanguageSelectionCombobox').val(),
                                     languageName: $('#TextTargetLanguageSelectionCombobox').val(),
-                                    key: data.record.key
+                                    key: data.key
                                 });
-                            });
-
-                        return $span;
+                            })
                     }
                 }
-            }
-
+            ]
         });
 
         $('#TextBaseLanguageSelectionCombobox,#TextTargetLanguageSelectionCombobox')
@@ -84,35 +83,24 @@
                 tickIcon: "fa fa-check"
             });
 
-        $('#RefreshTextsButton').click(function(e) {
+        $('#RefreshTextsButton').click(function (e) {
             e.preventDefault();
             loadTable();
         });
 
-        $('#TextsFilterForm select').change(function() {
+        $('#TextsFilterForm select').change(function () {
             loadTable();
         });
 
         $('#TextFilter').focus();
 
-        function loadTable() {
-            _$textsTable.jtable('load', {
-                targetLanguageName: $('#TextTargetLanguageSelectionCombobox').val(),
-                sourceName: $('#TextSourceSelectionCombobox').val(),
-                baseLanguageName: $('#TextBaseLanguageSelectionCombobox').val(),
-                targetValueFilter: $('#TargetValueFilterSelectionCombobox').val(),
-                filterText: $('#TextFilter').val()
-            });
+        var loadTable = function () {
+            dataTable.ajax.reload();
         }
 
-        function reloadTable() {
-            _$textsTable.jtable('reload');
-        }
-
-        abp.event.on('app.editLanguageTextModalSaved', function() {
-            reloadTable();
+        abp.event.on('app.editLanguageTextModalSaved', function () {
+            dataTable.ajax.reloadPage();
         });
 
-        loadTable();
     });
 })();

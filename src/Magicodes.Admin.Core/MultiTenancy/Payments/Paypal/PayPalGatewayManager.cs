@@ -43,7 +43,9 @@ namespace Magicodes.Admin.MultiTenancy.Payments.Paypal
         {
             Dictionary<string, string> additionalData = new Dictionary<string, string>()
             {
-                {"Environment", _configuration.Environment}
+                {"Environment", _configuration.Environment},
+                {"DemoUsername", _configuration.DemoUsername},
+                {"DemoPassword", _configuration.DemoPassword}
             };
 
             return Task.FromResult(additionalData);

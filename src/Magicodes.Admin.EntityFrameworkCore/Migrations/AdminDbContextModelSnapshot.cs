@@ -339,6 +339,8 @@ namespace Magicodes.Admin.Migrations
 
                     b.Property<long?>("CreatorUserId");
 
+                    b.Property<bool>("IsDeleted");
+
                     b.Property<long>("OrganizationUnitId");
 
                     b.Property<int?>("TenantId");
@@ -841,6 +843,8 @@ namespace Magicodes.Admin.Migrations
                     b.Property<string>("EmailConfirmationCode")
                         .HasMaxLength(328);
 
+                    b.Property<string>("GoogleAuthenticatorKey");
+
                     b.Property<bool>("IsActive");
 
                     b.Property<bool>("IsDeleted");
@@ -1027,6 +1031,8 @@ namespace Magicodes.Admin.Migrations
                     b.Property<int>("TenantId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EditionId");
 
                     b.HasIndex("PaymentId", "Gateway");
 
@@ -1269,6 +1275,14 @@ namespace Magicodes.Admin.Migrations
                     b.HasOne("Magicodes.Admin.Authorization.Users.User", "LastModifierUser")
                         .WithMany()
                         .HasForeignKey("LastModifierUserId");
+                });
+
+            modelBuilder.Entity("Magicodes.Admin.MultiTenancy.Payments.SubscriptionPayment", b =>
+                {
+                    b.HasOne("Abp.Application.Editions.Edition", "Edition")
+                        .WithMany()
+                        .HasForeignKey("EditionId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Magicodes.Admin.MultiTenancy.Tenant", b =>

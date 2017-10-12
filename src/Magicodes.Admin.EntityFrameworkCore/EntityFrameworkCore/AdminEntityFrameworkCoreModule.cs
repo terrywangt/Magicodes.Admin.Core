@@ -7,12 +7,9 @@ using Magicodes.Admin.Migrations.Seed;
 
 namespace Magicodes.Admin.EntityFrameworkCore
 {
-    /// <summary>
-    /// Entity framework Core module of the application.
-    /// </summary>
     [DependsOn(
-        typeof(AbpZeroCoreEntityFrameworkCoreModule), 
-        typeof(AdminCoreModule), 
+        typeof(AbpZeroCoreEntityFrameworkCoreModule),
+        typeof(AdminCoreModule),
         typeof(AbpZeroCoreIdentityServerEntityFrameworkCoreModule)
         )]
     public class AdminEntityFrameworkCoreModule : AbpModule
@@ -26,9 +23,16 @@ namespace Magicodes.Admin.EntityFrameworkCore
         {
             if (!SkipDbContextRegistration)
             {
-                Configuration.Modules.AbpEfCore().AddDbContext<AdminDbContext>(configuration =>
+                Configuration.Modules.AbpEfCore().AddDbContext<AdminDbContext>(options =>
                 {
-                    AdminDbContextConfigurer.Configure(configuration.DbContextOptions, configuration.ConnectionString);
+                    if (options.ExistingConnection != null)
+                    {
+                        AdminDbContextConfigurer.Configure(options.DbContextOptions, options.ExistingConnection);
+                    }
+                    else
+                    {
+                        AdminDbContextConfigurer.Configure(options.DbContextOptions, options.ConnectionString);
+                    }
                 });
             }
         }

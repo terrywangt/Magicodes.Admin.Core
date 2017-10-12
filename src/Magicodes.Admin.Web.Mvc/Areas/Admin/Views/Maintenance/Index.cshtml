@@ -62,7 +62,7 @@
                             <p>@L("CachesHeaderInfo")</p>
                         </div>
                         <div class="col-xs-6 text-right">
-                            <button id="ClearAllCachesButton" class="btn blue"><i class="fa fa-refresh"></i> @L("ClearAll")</button>
+                            <button id="ClearAllCachesButton" class="btn blue"><i class="fa fa-recycle"></i> @L("ClearAll")</button>
                         </div>
                     </div>
                     <div class="row">
@@ -75,12 +75,11 @@
                                             <td>
                                                 <span>@cache.Name</span>
                                                 <button class="btn btn-xs blue pull-right btn-clear-cache" data-cache-name="@cache.Name">
-                                                    @L("Clear")
+                                                    <i class="fa fa-recycle"></i> @L("Clear")
                                                 </button>
                                             </td>
                                         </tr>
                                     }
-
                                 </tbody>
                             </table>
                         </div>

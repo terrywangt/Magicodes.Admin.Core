@@ -30,7 +30,7 @@
             </div>
         </div>
         <div class="col-xs-6 text-right">
-            <button class="btn btn-default" id="btnOpenNotificationSettingsModal"><i class="fa fa-cog"></i> @L("NotificationSettings")</button>
+            <button class="btn green" id="btnOpenNotificationSettingsModal"><i class="fa fa-cog"></i> @L("NotificationSettings")</button>
             <button class="btn btn-primary blue" id="btnSetAllNotificationsAsRead"><i class="fa fa-check"></i> @L("SetAllAsRead")</button>
         </div>
     </div>
@@ -42,12 +42,7 @@
                         <div class="row">
                             <div class="col-xs-6">
                                 <div class="form-group">
-                                    <select id="TargetValueFilterSelectionCombobox"
-                                            class="form-control bs-select"
-                                            ng-model="vm.readStateFilter"
-                                            ui-jq="selectpicker"
-                                            ng-change="vm.getNotifications()"
-                                            ui-options='{ iconBase: "fa", tickIcon: "fa fa-check" }'>
+                                    <select id="TargetValueFilterSelectionCombobox" class="form-control bs-select">
                                         <option value="">@L("All")</option>
                                         <option value="UNREAD">@L("Unread")</option>
                                     </select>
@@ -55,7 +50,7 @@
                             </div>
                             <div class="col-xs-6">
                                 <div class="form-group">
-                                    <button id="RefreshNotificationTableButton" class="btn btn-default" style="display: block; width: 100%" ng-click="vm.getNotifications()"><i class="fa fa-refresh"></i> @L("Refresh")</button>
+                                    <button id="RefreshNotificationTableButton" class="btn btn-primary blue"><i class="fa fa-refresh"></i> @L("Refresh")</button>
                                 </div>
                             </div>
                         </div>
@@ -64,7 +59,15 @@
             </div>
         </div>
         <div class="portlet-body">
-            <div id="NotificationsTable"></div>
+            <table id="NotificationsTable" class="display table table-striped table-bordered table-hover dt-responsive nowrap">
+                <thead>
+                    <tr>
+                        <th>@L("Actions")</th>
+                        <th>@L("Notification")</th>
+                        <th>@L("CreationTime")</th>
+                    </tr>
+                </thead>
+            </table>
         </div>
     </div>
 </div>

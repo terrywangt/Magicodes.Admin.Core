@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Abp.Localization;
+using Microsoft.EntityFrameworkCore;
 using Magicodes.Admin.EntityFrameworkCore;
 
 namespace Magicodes.Admin.Migrations.Seed.Host
@@ -13,18 +14,20 @@ namespace Magicodes.Admin.Migrations.Seed.Host
 
         private static List<ApplicationLanguage> GetInitialLanguages()
         {
+            var tenantId = AdminConsts.MultiTenancyEnabled ? null : (int?)1;
             return new List<ApplicationLanguage>
             {
-                new ApplicationLanguage(null, "en", "English", "famfamfam-flags gb"),
-                new ApplicationLanguage(null, "ar", "العربية", "famfamfam-flags sa"),
-                new ApplicationLanguage(null, "de", "German", "famfamfam-flags de"),
-                new ApplicationLanguage(null, "it", "Italiano", "famfamfam-flags it"),
-                new ApplicationLanguage(null, "fr", "Français", "famfamfam-flags fr"),
-                new ApplicationLanguage(null, "pt-BR", "Portuguese", "famfamfam-flags br"),
-                new ApplicationLanguage(null, "tr", "Türkçe", "famfamfam-flags tr"),
-                new ApplicationLanguage(null, "ru", "Русский", "famfamfam-flags ru"),
-                new ApplicationLanguage(null, "zh-CN", "简体中文", "famfamfam-flags cn"),
-                new ApplicationLanguage(null, "es-MX", "Español México", "famfamfam-flags mx")
+                new ApplicationLanguage(tenantId, "en", "English", "famfamfam-flags gb"),
+                new ApplicationLanguage(tenantId, "ar", "العربية", "famfamfam-flags sa"),
+                new ApplicationLanguage(tenantId, "de", "Deutsch", "famfamfam-flags de"),
+                new ApplicationLanguage(tenantId, "it", "Italiano", "famfamfam-flags it"),
+                new ApplicationLanguage(tenantId, "fr", "Français", "famfamfam-flags fr"),
+                new ApplicationLanguage(tenantId, "pt-BR", "Português (Brasil)", "famfamfam-flags br"),
+                new ApplicationLanguage(tenantId, "tr", "Türkçe", "famfamfam-flags tr"),
+                new ApplicationLanguage(tenantId, "ru", "Pусский", "famfamfam-flags ru"),
+                new ApplicationLanguage(tenantId, "zh-CN", "简体中文", "famfamfam-flags cn"),
+                new ApplicationLanguage(tenantId, "es-MX", "Español (México)", "famfamfam-flags mx"),
+                new ApplicationLanguage(tenantId, "es", "Español (Spanish)", "famfamfam-flags es")
             };
         }
 
@@ -48,7 +51,7 @@ namespace Magicodes.Admin.Migrations.Seed.Host
 
         private void AddLanguageIfNotExists(ApplicationLanguage language)
         {
-            if (_context.Languages.Any(l => l.TenantId == language.TenantId && l.Name == language.Name))
+            if (_context.Languages.IgnoreQueryFilters().Any(l => l.TenantId == language.TenantId && l.Name == language.Name))
             {
                 return;
             }

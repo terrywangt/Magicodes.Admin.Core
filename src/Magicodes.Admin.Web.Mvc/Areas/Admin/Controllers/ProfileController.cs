@@ -4,6 +4,7 @@ using Abp.Configuration;
 using Abp.MultiTenancy;
 using Microsoft.AspNetCore.Mvc;
 using Magicodes.Admin.Authorization.Users.Profile;
+using Magicodes.Admin.Configuration;
 using Magicodes.Admin.Timing;
 using Magicodes.Admin.Timing.Dto;
 using Magicodes.Admin.Web.Areas.Admin.Models.Profile;
@@ -18,10 +19,11 @@ namespace Magicodes.Admin.Web.Areas.Admin.Controllers
         private readonly IProfileAppService _profileAppService;
         private readonly ITimingAppService _timingAppService;
         private readonly ITenantCache _tenantCache;
-        
+
         public ProfileController(
-            IProfileAppService profileAppService, 
-            ITimingAppService timingAppService, ITenantCache tenantCache)
+            IProfileAppService profileAppService,
+            ITimingAppService timingAppService, 
+            ITenantCache tenantCache)
         {
             _profileAppService = profileAppService;
             _timingAppService = timingAppService;
@@ -36,10 +38,12 @@ namespace Magicodes.Admin.Web.Areas.Admin.Controllers
                 DefaultTimezoneScope = SettingScopes.User,
                 SelectedTimezoneId = output.Timezone
             });
+           
 
             var viewModel = new MySettingsViewModel(output)
             {
-                TimezoneItems = timezoneItems
+                TimezoneItems = timezoneItems,
+                SmsVerificationEnabled = await SettingManager.GetSettingValueAsync<bool>(AppSettings.UserManagement.SmsVerificationEnabled)
             };
 
             return PartialView("_MySettingsModal", viewModel);
@@ -54,6 +58,14 @@ namespace Magicodes.Admin.Web.Areas.Admin.Controllers
         {
             return PartialView("_ChangePasswordModal");
         }
+
+        
+
+        public PartialViewResult SmsVerificationModal()
+        {
+            return PartialView("_SmsVerificationModal");
+        }
+
 
         public PartialViewResult LinkedAccountsModal()
         {

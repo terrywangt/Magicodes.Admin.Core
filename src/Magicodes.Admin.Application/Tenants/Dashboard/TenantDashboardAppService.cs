@@ -1,9 +1,11 @@
-﻿using Abp.Authorization;
+﻿using Abp.Auditing;
+using Abp.Authorization;
 using Magicodes.Admin.Authorization;
 using Magicodes.Admin.Tenants.Dashboard.Dto;
 
 namespace Magicodes.Admin.Tenants.Dashboard
 {
+    [DisableAuditing]
     [AbpAuthorize(AppPermissions.Pages_Tenant_Dashboard)]
     public class TenantDashboardAppService : AdminAppServiceBase, ITenantDashboardAppService
     {

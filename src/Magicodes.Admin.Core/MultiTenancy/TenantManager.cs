@@ -93,7 +93,7 @@ namespace Magicodes.Admin.MultiTenancy
         {
             int newTenantId;
             long newAdminId;
-            
+
             await CheckEditionAsync(editionId, isInTrialPeriod);
 
             using (var uow = _unitOfWorkManager.Begin(TransactionScopeOption.RequiresNew))
@@ -286,18 +286,18 @@ namespace Magicodes.Admin.MultiTenancy
 
         private static decimal GetMonthlyCalculatedPrice(SubscribableEdition currentEdition, SubscribableEdition upgradeEdition, int remainingDaysCount)
         {
-            if (!currentEdition.MonthlyPrice.HasValue)
+            decimal currentUnusedPrice = 0;
+            decimal upgradeUnusedPrice = 0;
+
+            if (currentEdition.MonthlyPrice.HasValue)
             {
-                throw new Exception("MonthlyPrice is null for edition: " + currentEdition.DisplayName);
+                currentUnusedPrice = (currentEdition.MonthlyPrice.Value / (int)PaymentPeriodType.Monthly) * remainingDaysCount;
             }
 
-            if (!upgradeEdition.MonthlyPrice.HasValue)
+            if (upgradeEdition.MonthlyPrice.HasValue)
             {
-                throw new Exception("MonthlyPrice is null for edition: " + upgradeEdition.DisplayName);
+                upgradeUnusedPrice = (upgradeEdition.MonthlyPrice.Value / (int)PaymentPeriodType.Monthly) * remainingDaysCount;
             }
-
-            var currentUnusedPrice = (currentEdition.MonthlyPrice.Value / (int)PaymentPeriodType.Monthly) * remainingDaysCount;
-            var upgradeUnusedPrice = (upgradeEdition.MonthlyPrice.Value / (int)PaymentPeriodType.Monthly) * remainingDaysCount;
 
             var additionalPrice = upgradeUnusedPrice - currentUnusedPrice;
             return additionalPrice;
@@ -305,18 +305,8 @@ namespace Magicodes.Admin.MultiTenancy
 
         private static decimal GetAnnualCalculatedPrice(SubscribableEdition currentEdition, SubscribableEdition upgradeEdition, int remainingYearsCount)
         {
-            if (!currentEdition.AnnualPrice.HasValue)
-            {
-                throw new Exception("AnnualPrice is null for edition: " + currentEdition.DisplayName);
-            }
-
-            if (!upgradeEdition.AnnualPrice.HasValue)
-            {
-                throw new Exception("AnnualPrice is null for edition: " + upgradeEdition.DisplayName);
-            }
-
-            var currentUnusedPrice = currentEdition.AnnualPrice.Value * remainingYearsCount;
-            var upgradeUnusedPrice = upgradeEdition.AnnualPrice.Value * remainingYearsCount;
+            var currentUnusedPrice = (currentEdition.AnnualPrice ?? 0) * remainingYearsCount;
+            var upgradeUnusedPrice = (upgradeEdition.AnnualPrice ?? 0) * remainingYearsCount;
 
             var additionalPrice = upgradeUnusedPrice - currentUnusedPrice;
             return additionalPrice;

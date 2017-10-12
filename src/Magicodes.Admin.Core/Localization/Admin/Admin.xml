@@ -281,7 +281,6 @@
     <text name="LookingForMpaVersion" value="Looking for Multi-Page Application Version?" />
     <text name="LookingForSpaVersion" value="Looking for Single-Page Application Version?" />
     <text name="ThisLanguageAlreadyExists" value="This language already exists!" />
-    <text name="OrganizationUnits" value="Organization units" />
     <text name="OrganizationUnitsHeaderInfo" value="Use organization units to organize users and entities" />
     <text name="OrganizationTree" value="Organization tree" />
     <text name="Members" value="Members" />
@@ -612,5 +611,69 @@
     <text name="Upgrade_Edition_Description">Upgrade to {0} Edition</text>
     <text name="PaymentMightBeExpiredWarning">Your operation might be timed out, please contact with us if you already made the payment.</text>
     <text name="GoToSubscriptionManagement">Go to subscription</text>
+    <text name="DemoPayPalAccount">Demo PayPal Account</text>
+    <text name="IsEnabled">Is enabled</text>
+    <text name="IsGoogleAuthenticatorEnabled">Enable Google Authenticator</text>
+    <text name="GoogleAuthenticatorReferrerLink">Not sure what this screen means? You may need to check this </text>
+    <text name="ScanQrCodeWithYourMobileApp">Scan this QR code with your mobile app</text>
+    <text name="Profile">Profile</text>
+    <text name="Enable">Enable</text>
+    <text name="GoogleAuthenticatorIsNotEnabled">Google Authenticator is not enabled for your account. You must first enable it in your settings.</text>
+    <text name="SubscriptionExpiringSoon_Email_Subject">Your Admin subscription expiration notice</text>
+    <text name="SubscriptionExpiringSoon_Email_Body">Your Admin subscription will expire at {0}.</text>
+    <text name="SubscriptionExpire_Title">Admin subscription expire</text>
+    <text name="SubscriptionExpire_SubTitle">This email is sent you to notify about your subscription expiration</text>
+    <text name="SubscriptionAssignedToAnother_Email_Body">Your Admin subscription is expired at {1}. Your current edition assigned to {0}.</text>
+    <text name="FailedSubscriptionTerminations_Title">Failed subscription terminations</text>
+    <text name="FailedSubscriptionTerminations_SubTitle">Subscription termination is failed for some tenants</text>
+    <text name="SubscriptionExpiringSoon_Title">Admin subscription expiration notice</text>
+    <text name="SubscriptionExpiringSoon_SubTitle">This email is sent you to notify about your subscription expiration.</text>
+    <text name="AdminRoleCannotRemoveFromAdminUser">Admin role can not remove from admin user</text>
+    <text name="YouCannotRemoveUserRolePermissionsFromAdminRole">You can not remove User/Role permission editing from the admin role</text>
+    <text name="YouCannotRemoveUserRolePermissionsFromAdminUser">You can not remove User/Role permission editing from the admin user</text>
+    <text name="Notification">Notification</text>
+    <text name="TotalRecordsCount">Total: {0}</text>
+    <text name="SubscriptionInformation">Subscription information</text>
+    <text name="PaymentHistory">Payment history</text>
+    <text name="Gateway">Gateway</text>
+    <text name="Amount">Amount</text>
+    <text name="Status">Status</text>
+    <text name="Period">Period</text>
+    <text name="DayCount">Day count</text>
+    <text name="LastModificationTime">Last modification time</text>
+    <text name="PaymentId">Payment id</text>
+    <text name="SubscriptionPaymentGatewayType_Paypal">Paypal</text>
+    <text name="SubscriptionPaymentStatus_Completed">Completed</text>
+    <text name="SubscriptionPaymentStatus_Processing">Processing</text>
+    <text name="SubscriptionPaymentStatus_Failed">Failed</text>
+    <text name="PaymentPeriodType_Annual">Annual</text>
+    <text name="PaymentPeriodType_Monthly">Monthly</text>
+    <text name="ProcessTime">Process time</text>
+    <text name="SmsVerificationEnabled">Phone number verification enabled (via SMS)</text>
+    <text name="SmsVerificationMessage">Your verification code: {0}</text>
+    <text name="Verify">Verify</text>
+    <text name="YourCode">Your Code</text>
+    <text name="VerifyYourCode">Verify Your Code</text>
+    <text name="YourPhoneNumberIsVerified">Your phone number is verified</text>
+    <text name="YourPhoneNumberIsNotVerified">Your phone number is not verified</text>
+    <text name="WrongSmsVerificationCode">Wrong verification code !</text>
+    <text name="SelectUsers">Select users</text>
+    <text name="OrganizationUnits">Organization Units</text>
+    <text name="YouCanManageUsersOrganizationUnitsFromOrganizationUnitsPage">You can manage User's organization units From Organization Units page.</text>
+    <text name="DemoUiComponents">Demo UI Components</text>
+    <text name="DateAndTimePickers">Date and Time Pickers</text>
+    <text name="FileUpload">File Upload</text>
+    <text name="PostedValue">Posted value</text>
+    <text name="SelectDate">Select date</text>
+    <text name="SelectFile">Select file</text>
+    <text name="UploadedFile">Uploaded file</text>
+    <text name="PostedData">Posted data</text>
+    <text name="Remove">Remove</text>
+    <text name="OrganizationUnitNotFoundForThisUser">There is no Organization Unit For this user.</text>
+    <text name="DemoUiComponents_Info">
+      This page shows a few useful UI components those can be used in your application.
+      Components in this page are implemented as full stack (includes the server side).
+    </text>
+    <text name="DemoUiComponents_Info_Metronic_Link_Text">Check Metronic theme for more UI components</text>
   </texts>
 </localizationDictionary>

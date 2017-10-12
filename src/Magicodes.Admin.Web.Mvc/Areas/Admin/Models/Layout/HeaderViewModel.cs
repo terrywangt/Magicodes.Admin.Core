@@ -16,6 +16,8 @@ namespace Magicodes.Admin.Web.Areas.Admin.Models.Layout
 
         public bool IsImpersonatedLogin { get; set; }
 
+        public int SubscriptionExpireNootifyDayCount { get; set; }
+
         public string GetShownLoginName()
         {
             var userName = "<span id=\"HeaderCurrentUserName\">" + LoginInformations.User.UserName + "</span>";

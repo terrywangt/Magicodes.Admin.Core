@@ -13,9 +13,11 @@ using Abp.Domain.Repositories;
 using Abp.Extensions;
 using Abp.Linq.Extensions;
 using Abp.Notifications;
+using Abp.Organizations;
 using Abp.Runtime.Session;
 using Abp.UI;
 using Abp.Zero.Configuration;
+using Castle.Components.DictionaryAdapter;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Magicodes.Admin.Authorization.Permissions;
@@ -26,9 +28,7 @@ using Magicodes.Admin.Authorization.Users.Exporting;
 using Magicodes.Admin.Dto;
 using Magicodes.Admin.Notifications;
 using Magicodes.Admin.Url;
-using System;
-using System.Text;
-using Magicodes.Admin.Sessions.Dto;
+using Magicodes.Admin.Organizations.Dto;
 
 namespace Magicodes.Admin.Authorization.Users
 {
@@ -48,6 +48,7 @@ namespace Magicodes.Admin.Authorization.Users
         private readonly IUserPolicy _userPolicy;
         private readonly IEnumerable<IPasswordValidator<User>> _passwordValidators;
         private readonly IPasswordHasher<User> _passwordHasher;
+        private readonly IRepository<OrganizationUnit, long> _organizationUnitRepository;
 
         public UserAppService(
             RoleManager roleManager,
@@ -60,7 +61,8 @@ namespace Magicodes.Admin.Authorization.Users
             IRepository<UserRole, long> userRoleRepository,
             IUserPolicy userPolicy,
             IEnumerable<IPasswordValidator<User>> passwordValidators,
-            IPasswordHasher<User> passwordHasher)
+            IPasswordHasher<User> passwordHasher,
+            IRepository<OrganizationUnit, long> organizationUnitRepository)
         {
             _roleManager = roleManager;
             _userEmailer = userEmailer;
@@ -73,6 +75,7 @@ namespace Magicodes.Admin.Authorization.Users
             _userPolicy = userPolicy;
             _passwordValidators = passwordValidators;
             _passwordHasher = passwordHasher;
+            _organizationUnitRepository = organizationUnitRepository;
 
             AppUrlService = NullAppUrlService.Instance;
         }
@@ -80,7 +83,6 @@ namespace Magicodes.Admin.Authorization.Users
         public async Task<PagedResultDto<UserListDto>> GetUsers(GetUsersInput input)
         {
             var query = UserManager.Users
-                .Include(u => u.Roles)
                 .WhereIf(input.Role.HasValue, u => u.Roles.Any(r => r.RoleId == input.Role.Value))
                 .WhereIf(
                     !input.Filter.IsNullOrWhiteSpace(),
@@ -106,6 +108,7 @@ namespace Magicodes.Admin.Authorization.Users
             }
 
             var userCount = await query.CountAsync();
+
             var users = await query
                 .OrderBy(input.Sorting)
                 .PageBy(input)
@@ -122,7 +125,7 @@ namespace Magicodes.Admin.Authorization.Users
 
         public async Task<FileDto> GetUsersToExcel()
         {
-            var users = await UserManager.Users.Include(u => u.Roles).ToListAsync();
+            var users = await UserManager.Users.ToListAsync();
             var userListDtos = ObjectMapper.Map<List<UserListDto>>(users);
             await FillRoleNames(userListDtos);
 
@@ -133,7 +136,7 @@ namespace Magicodes.Admin.Authorization.Users
         public async Task<GetUserForEditOutput> GetUserForEdit(NullableIdDto<long> input)
         {
             //Getting all available roles
-            var userRoleDtos = (await _roleManager.Roles
+            var userRoleDtos = await _roleManager.Roles
                 .OrderBy(r => r.DisplayName)
                 .Select(r => new UserRoleDto
                 {
@@ -141,11 +144,15 @@ namespace Magicodes.Admin.Authorization.Users
                     RoleName = r.Name,
                     RoleDisplayName = r.DisplayName
                 })
-                .ToArrayAsync());
+                .ToArrayAsync();
+
+            var allOrganizationUnits = await _organizationUnitRepository.GetAllListAsync();
 
             var output = new GetUserForEditOutput
             {
-                Roles = userRoleDtos
+                Roles = userRoleDtos,
+                AllOrganizationUnits = ObjectMapper.Map<List<OrganizationUnitDto>>(allOrganizationUnits),
+                MemberedOrganizationUnits = new List<string>()
             };
 
             if (!input.Id.HasValue)
@@ -180,6 +187,9 @@ namespace Magicodes.Admin.Authorization.Users
                 {
                     userRoleDto.IsAssigned = await UserManager.IsInRoleAsync(user, userRoleDto.RoleName);
                 }
+
+                var organizationUnits = await UserManager.GetOrganizationUnitsAsync(user);
+                output.MemberedOrganizationUnits = organizationUnits.Select(ou => ou.Code).ToList();
             }
 
             return output;
@@ -270,6 +280,9 @@ namespace Magicodes.Admin.Authorization.Users
             //Update roles
             CheckErrors(await UserManager.SetRoles(user, input.AssignedRoleNames));
 
+            //update organization units
+            await UserManager.SetOrganizationUnitsAsync(user, input.OrganizationUnits.ToArray());
+
             if (input.SendActivationEmail)
             {
                 user.SetNewEmailConfirmationCode();
@@ -324,6 +337,9 @@ namespace Magicodes.Admin.Authorization.Users
             await _notificationSubscriptionManager.SubscribeToAllAvailableNotificationsAsync(user.ToUserIdentifier());
             await _appNotifier.WelcomeToTheApplicationAsync(user);
 
+            //Organization Units
+            await UserManager.SetOrganizationUnitsAsync(user, input.OrganizationUnits.ToArray());
+
             //Send activation email
             if (input.SendActivationEmail)
             {
@@ -340,11 +356,17 @@ namespace Magicodes.Admin.Authorization.Users
         {
             /* This method is optimized to fill role names to given list. */
 
-            var distinctRoleIds = (
-                from userListDto in userListDtos
-                from userListRoleDto in userListDto.Roles
-                select userListRoleDto.RoleId
-                ).Distinct();
+            var userRoles = await _userRoleRepository.GetAll()
+                .Where(userRole => userListDtos.Any(user => user.Id == userRole.UserId))
+                .Select(userRole => userRole).ToListAsync();
+
+            var distinctRoleIds = userRoles.Select(userRole => userRole.RoleId).Distinct();
+
+            foreach (var user in userListDtos)
+            {
+                var rolesOfUser = userRoles.Where(userRole => userRole.UserId == user.Id).ToList();
+                user.Roles = ObjectMapper.Map<List<UserListDto.UserListRoleDto>>(rolesOfUser);
+            }
 
             var roleNames = new Dictionary<int, string>();
             foreach (var roleId in distinctRoleIds)

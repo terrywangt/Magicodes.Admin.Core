@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
+using Abp.Localization;
 
 namespace Magicodes.Admin.Localization
 {
@@ -220,9 +221,18 @@ namespace Magicodes.Admin.Localization
             {"zh-TW", "Chinese - Taiwan"}
         };
 
-        public static bool IsRtl
+        public static bool IsRtl => CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft;
+
+        public static CultureInfo GetCultureInfoByChecking(string name)
         {
-            get { return CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft; }
+            try
+            {
+                return CultureInfoHelper.Get(name);
+            }
+            catch (CultureNotFoundException)
+            {
+                return CultureInfo.CurrentCulture;
+            }
         }
     }
 }

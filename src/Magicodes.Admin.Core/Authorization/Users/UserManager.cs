@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Abp;
 using Abp.Authorization;
@@ -7,11 +8,11 @@ using Abp.Authorization.Users;
 using Abp.Configuration;
 using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
-using Abp.EntityFrameworkCore;
-using Abp.EntityFrameworkCore.Uow;
+using Abp.Localization;
 using Abp.Organizations;
 using Abp.Runtime.Caching;
 using Abp.Threading;
+using Abp.UI;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
@@ -28,6 +29,7 @@ namespace Magicodes.Admin.Authorization.Users
     public class UserManager : AbpUserManager<Role, User>
     {
         private readonly IUnitOfWorkManager _unitOfWorkManager;
+        private readonly ILocalizationManager _localizationManager;
 
         public UserManager(
             UserStore userStore,
@@ -35,7 +37,7 @@ namespace Magicodes.Admin.Authorization.Users
             IPasswordHasher<User> passwordHasher,
             IEnumerable<IUserValidator<User>> userValidators,
             IEnumerable<IPasswordValidator<User>> passwordValidators,
-            ILookupNormalizer keyNormalizer, 
+            ILookupNormalizer keyNormalizer,
             IdentityErrorDescriber errors,
             IServiceProvider services,
             ILogger<UserManager> logger,
@@ -46,7 +48,8 @@ namespace Magicodes.Admin.Authorization.Users
             IRepository<OrganizationUnit, long> organizationUnitRepository,
             IRepository<UserOrganizationUnit, long> userOrganizationUnitRepository,
             IOrganizationUnitSettings organizationUnitSettings,
-            ISettingManager settingManager)
+            ISettingManager settingManager, 
+            ILocalizationManager localizationManager)
             : base(
                   roleManager,
                   userStore,
@@ -67,6 +70,7 @@ namespace Magicodes.Admin.Authorization.Users
                   settingManager)
         {
             _unitOfWorkManager = unitOfWorkManager;
+            _localizationManager = localizationManager;
         }
 
         [UnitOfWork]
@@ -97,6 +101,38 @@ namespace Magicodes.Admin.Authorization.Users
         public User GetUser(UserIdentifier userIdentifier)
         {
             return AsyncHelper.RunSync(() => GetUserAsync(userIdentifier));
+        }
+
+        public override Task<IdentityResult> SetRoles(User user, string[] roleNames)
+        {
+            if (user.Name == "admin" && !roleNames.Contains(StaticRoleNames.Host.Admin))
+            {
+                throw new UserFriendlyException(L("AdminRoleCannotRemoveFromAdminUser"));
+            }
+
+            return base.SetRoles(user, roleNames);
+        }
+
+        public override async Task SetGrantedPermissionsAsync(User user, IEnumerable<Permission> permissions)
+        {
+            CheckPermissionsToUpdate(user, permissions);
+
+            await base.SetGrantedPermissionsAsync(user, permissions);
+        }
+
+        private void CheckPermissionsToUpdate(User user, IEnumerable<Permission> permissions)
+        {
+            if (user.Name == AbpUserBase.AdminUserName &&
+                (!permissions.Any(p => p.Name == AppPermissions.Pages_Administration_Roles_Edit) ||
+                !permissions.Any(p => p.Name == AppPermissions.Pages_Administration_Users_ChangePermissions)))
+            {
+                throw new UserFriendlyException(L("YouCannotRemoveUserRolePermissionsFromAdminUser"));
+            }
+        }
+
+        private string L(string name)
+        {
+            return _localizationManager.GetString(AdminConsts.LocalizationSourceName, name);
         }
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,6 +12,12 @@ using Magicodes.Admin.Editions.Dto;
 using Magicodes.Admin.MultiTenancy.Dto;
 using Magicodes.Admin.MultiTenancy.Payments.Cache;
 using Magicodes.Admin.MultiTenancy.Payments.Dto;
+using Abp.Application.Services.Dto;
+using Abp.Runtime.Validation;
+using Microsoft.EntityFrameworkCore;
+using Magicodes.Admin.Dto;
+using System.Linq.Dynamic.Core;
+using Abp.Linq.Extensions;
 
 namespace Magicodes.Admin.MultiTenancy.Payments
 {
@@ -141,6 +148,19 @@ namespace Magicodes.Admin.MultiTenancy.Payments
 
                 return executePaymentResponse;
             }
+        }
+
+        public async Task<PagedResultDto<SubscriptionPaymentListDto>> GetPaymentHistory(GetPaymentHistoryInput input)
+        {
+            var query = _subscriptionPaymentRepository.GetAll()
+                .Include(sp => sp.Edition)
+                .Where(sp => sp.TenantId == AbpSession.GetTenantId())
+                .OrderBy(input.Sorting);
+
+            var payments = await query.OrderBy(input.Sorting).PageBy(input).ToListAsync();
+            var paymentsCount = query.Count();
+            
+            return new PagedResultDto<SubscriptionPaymentListDto>(paymentsCount, ObjectMapper.Map<List<SubscriptionPaymentListDto>>(payments));
         }
 
         private async Task<decimal> CalculateAmountForPaymentAsync(SubscribableEdition targetEdition, PaymentPeriodType? periodType, EditionPaymentType editionPaymentType, Tenant tenant)

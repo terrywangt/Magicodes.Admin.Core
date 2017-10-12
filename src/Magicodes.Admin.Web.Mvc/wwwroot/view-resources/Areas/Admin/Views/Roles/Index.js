@@ -16,76 +16,90 @@
             modalClass: 'CreateOrEditRoleModal'
         });
 
-        _$rolesTable.jtable({
-
-            title: app.localize('Roles'),
-
-            actions: {
-                listAction: {
-                    method: _roleService.getRoles
+        var dataTable = _$rolesTable.DataTable({
+            paging: false,
+            serverSide: false,
+            processing: false,
+            listAction: {
+                ajaxFunction: _roleService.getRoles,
+                inputFilter: function () {
+                    return {
+                        permission: $('#PermissionSelectionCombo').val()
+                    };
                 }
             },
-
-            fields: {
-                id: {
-                    key: true,
-                    list: false
+            columnDefs: [
+                {
+                    targets: 0,
+                    data: null,
+                    orderable: false,
+                    autoWidth: false,
+                    defaultContent: '',
+                    rowAction: {
+                        cssClass: 'btn btn-xs btn-primary blue',
+                        text: '<i class="fa fa-cog"></i> ' + app.localize('Actions') + ' <span class="caret"></span>',
+                        items: [{
+                            text: app.localize('Edit'),
+                            visible: function () {
+                                return _permissions.edit;
+                            },
+                            action: function (data) {
+                                _createOrEditModal.open({ id: data.record.id });
+                            }
+                        }, {
+                            text: app.localize('Delete'),
+                            visible: function (data) {
+                                return !data.record.isStatic && _permissions.delete;
+                            },
+                            action: function (data) {
+                                deleteRole(data.record);
+                            }
+                        }]
+                    }
                 },
-                actions: {
-                    title: app.localize('Actions'),
-                    width: '30%',
-                    sorting: false,
-                    type: 'record-actions',
-                    cssClass: 'btn btn-xs btn-primary blue',
-                    text: '<i class="fa fa-cog"></i> ' + app.localize('Actions') + ' <span class="caret"></span>',
-                    items: [{
-                        text: app.localize('Edit'),
-                        visible: function () {
-                            return _permissions.edit;
-                        },
-                        action: function (data) {
-                            _createOrEditModal.open({ id: data.record.id });
-                        }
-                    }, {
-                        text: app.localize('Delete'),
-                        visible: function (data) {
-                            return !data.record.isStatic && _permissions.delete;
-                        },
-                        action: function (data) {
-                            deleteRole(data.record);
-                        }
-                    }]
-                },
-                displayName: {
-                    title: app.localize('RoleName'),
-                    width: '35%',
-                    display: function (data) {
-                        var $span = $('<span></span>');
+                {
+                    targets: 1,
+                    data: "displayName",
+                    render: function (displayName, type, row, meta) {
+                        var $span = $('<span/>');
+                        $span.append(displayName + " &nbsp;");
 
-                        $span.append(data.record.displayName + " &nbsp; ");
-
-                        if (data.record.isStatic) {
-                            $span.append('<span class="label label-info" data-toggle="tooltip" title="' + app.localize('StaticRole_Tooltip') + '" data-placement="top">' + app.localize('Static') + '</span>&nbsp;');
+                        if (row.isStatic) {
+                            $span.append(
+                                $("<span/>")
+                                    .addClass("label label-info")
+                                    .attr("data-toggle", "tooltip")
+                                    .attr("title", app.localize('StaticRole_Tooltip'))
+                                    .attr("data-placement", "top")
+                                    .text(app.localize('Static'))
+                                    .css("margin-right", "5px")
+                            );
                         }
 
-                        if (data.record.isDefault) {
-                            $span.append('<span class="label label-default" data-toggle="tooltip" title="' + app.localize('DefaultRole_Description') + '" data-placement="top">' + app.localize('Default') + '</span>&nbsp;');
+                        if (row.isDefault) {
+                            $span.append(
+                                $("<span/>")
+                                    .addClass("label label-default")
+                                    .attr("data-toggle", "tooltip")
+                                    .attr("title", app.localize('DefaultRole_Description'))
+                                    .attr("data-placement", "top")
+                                    .text(app.localize('Default'))
+                                    .css("margin-right", "5px")
+                            );
                         }
 
                         $span.find('[data-toggle=tooltip]').tooltip();
-
-                        return $span;
+                        return $span[0].outerHTML;
                     }
                 },
-                creationTime: {
-                    title: app.localize('CreationTime'),
-                    width: '35%',
-                    display: function (data) {
-                        return moment(data.record.creationTime).format('L');
+                {
+                    targets: 2,
+                    data: "creationTime",
+                    render: function (creationTime) {
+                        return moment(creationTime).format('L');
                     }
                 }
-            }
-
+            ]
         });
 
         function deleteRole(role) {
@@ -114,13 +128,12 @@
         });
 
         function getRoles() {
-            _$rolesTable.jtable('load', { permission: $('#PermissionSelectionCombo').val() });
+            dataTable.ajax.reload();
         }
 
         abp.event.on('app.createOrEditRoleModalSaved', function () {
             getRoles();
         });
 
-        getRoles();
     });
 })();

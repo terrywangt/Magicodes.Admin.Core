@@ -1,7 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Globalization;
 using System.IO;
-using System.Threading;
 using Abp.Dependency;
 using Abp.Extensions;
 using Microsoft.AspNetCore.Hosting;
@@ -42,41 +41,6 @@ namespace Magicodes.Admin.Web.Resources
             try
             {
                 var relativeFilePath = @"lib/jquery-validation/src/localization/messages_" + cultureCode + ".js";
-                var physicalFilePath = GetPhysicalPath(relativeFilePath);
-                if (File.Exists(physicalFilePath))
-                {
-                    return relativeFilePath;
-                }
-            }
-            catch { }
-
-            return null;
-        }
-
-        #endregion
-
-        #region jQuery jTable
-
-        public string JQuery_JTable_Localization
-        {
-            get
-            {
-                return _scriptPaths.GetOrAdd("jtable#" + CultureInfo.CurrentUICulture.Name, k =>
-                {
-                    var path = GetLocalizationFileForJTableOrNull(CultureInfo.CurrentUICulture.Name.ToLower())
-                               ?? GetLocalizationFileForJTableOrNull(CultureInfo.CurrentUICulture.Name.Left(2).ToLower())
-                               ?? "Common/Scripts/_empty.js";
-
-                    return "~/" + path;
-                });
-            }
-        }
-
-        private string GetLocalizationFileForJTableOrNull(string cultureCode)
-        {
-            try
-            {
-                var relativeFilePath = "lib/jtable/lib/localization/jquery.jtable." + cultureCode + ".js";
                 var physicalFilePath = GetPhysicalPath(relativeFilePath);
                 if (File.Exists(physicalFilePath))
                 {
@@ -192,6 +156,92 @@ namespace Magicodes.Admin.Web.Resources
 
             return null;
         }
+
+        #endregion
+
+        #region Select2
+
+        public string Select2_Localization
+        {
+            get
+            {
+                return _scriptPaths.GetOrAdd("select2#" + CultureInfo.CurrentUICulture.Name, k =>
+                {
+                    var path = GetLocalizationFileForSelect2(CultureInfo.CurrentUICulture.Name.ToLower())
+                               ?? GetLocalizationFileForSelect2(CultureInfo.CurrentUICulture.Name.Left(2).ToLower())
+                               ?? "lib/select2/dist/js/i18n/en.js";
+                    return "~/" + path;
+                });
+            }
+        }
+
+        private static string GetLocalizationFileForSelect2(string cultureCode)
+        {
+            try
+            {
+                foreach (var localizationFile in Select2LocalizationFileCultureCodeList)
+                {
+                    if (localizationFile.StartsWith(cultureCode))
+                    {
+                        return "lib/select2/dist/js/i18n/" + localizationFile + ".js";
+                    }
+                }
+            }
+            catch { }
+
+            return null;
+        }
+
+        private static readonly string[] Select2LocalizationFileCultureCodeList =
+        {
+            "ar",
+            "az",
+            "bg",
+            "ca",
+            "cs",
+            "da",
+            "de",
+            "el",
+            "en",
+            "es",
+            "et",
+            "eu",
+            "fa",
+            "fi",
+            "fr",
+            "gl",
+            "he",
+            "hi",
+            "hr",
+            "hu",
+            "id",
+            "is",
+            "it",
+            "ja",
+            "km",
+            "ko",
+            "lt",
+            "lv",
+            "mk",
+            "ms",
+            "nb",
+            "nl",
+            "pl",
+            "pt",
+            "pt-BR",
+            "ro",
+            "ru",
+            "sk",
+            "sr",
+            "sr-Cyrl",
+            "sv",
+            "th",
+            "tr",
+            "uk",
+            "vi",
+            "zh-CN",
+            "zh-TW"
+        };
 
         #endregion
 

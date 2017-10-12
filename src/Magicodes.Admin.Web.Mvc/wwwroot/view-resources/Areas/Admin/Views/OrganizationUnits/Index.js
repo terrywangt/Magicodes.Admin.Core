@@ -20,29 +20,13 @@
             modalClass: 'EditOrganizationUnitModal'
         });
 
-        var _userLookupModal = app.modals.LookupModal.create({
-            title: app.localize('SelectAUser'),
-            serviceMethod: abp.services.app.commonLookup.findUsers,
-            canSelect: function (item) {
-                var ouId = organizationTree.selectedOu.id;
-                if (!ouId) {
-                    return false;
-                }
-
-                return $.Deferred(function ($dfd) {
-                    _organizationUnitService.isInOrganizationUnit({
-                        userId: item.value,
-                        organizationUnitId: ouId
-                    }).done(function (result) {
-                        if (result) {
-                            abp.message.warn(app.localize('UserIsAlreadyInTheOrganizationUnit'));
-                        }
-
-                        $dfd.resolve(!result);
-                    }).fail(function () {
-                        $dfd.reject();
-                    });
-                });
+        var _addUserModal = new app.ModalManager({
+            viewUrl: abp.appPath + 'Admin/OrganizationUnits/AddMemberModal',
+            scriptUrl: abp.appPath + 'view-resources/Areas/Admin/Views/OrganizationUnits/_AddMemberModal.js',
+            modalClass: 'AddMemberModal',
+            addMemberOptions: {
+                title: app.localize('SelectAUser'),
+                serviceMethod: abp.services.app.organizationUnit.findUsers
             }
         });
 
@@ -321,6 +305,7 @@
             $emptyInfo: $('#OuMembersEmptyInfo'),
             $addUserToOuButton: $('#AddUserToOuButton'),
             $selectedOuRightTitle: $('#SelectedOuRightTitle'),
+            dataTable: null,
 
             showTable: function () {
                 members.$emptyInfo.hide();
@@ -343,24 +328,22 @@
                 }
 
                 members.showTable();
-
-                members.$table.jtable('load', {
-                    id: organizationTree.selectedOu.id
-                });
+                this.dataTable.ajax.reload();
             },
 
-            add: function (userId) {
+            add: function (users) {
                 var ouId = organizationTree.selectedOu.id;
                 if (!ouId) {
                     return;
                 }
 
-                _organizationUnitService.addUserToOrganizationUnit({
+                var userIds = _.pluck(users, "value");
+                _organizationUnitService.addUsersToOrganizationUnit({
                     organizationUnitId: ouId,
-                    userId: userId
+                    userIds: userIds
                 }).done(function () {
                     abp.notify.success(app.localize('SuccessfullyAdded'));
-                    organizationTree.incrementMemberCount(ouId, 1);
+                    organizationTree.incrementMemberCount(ouId, userIds.length);
                     members.load();
                 });
             },
@@ -393,60 +376,64 @@
                 if (!ouId) {
                     return;
                 }
-
-                _userLookupModal.open({
-                    title: app.localize('SelectAUser')
-                }, function (selectedItem) {
-                    members.add(selectedItem.value);
+                
+                _addUserModal.open({
+                    title: app.localize('SelectAUser'),
+                    organizationUnitId: ouId
+                }, function (selectedItems) {
+                    members.add(selectedItems);
                 });
             },
 
             init: function () {
-                members.$table.jtable({
-                    title: app.localize('Users'),
+                this.dataTable = members.$table.find(".organization-members-table").DataTable({
                     paging: true,
-                    sorting: true,
-                    actions: {
-                        listAction: {
-                            method: _organizationUnitService.getOrganizationUnitUsers
+                    serverSide: true,
+                    processing: true,
+                    deferLoading: 0, //prevents table for ajax request on initialize
+                    listAction: {
+                        ajaxFunction: _organizationUnitService.getOrganizationUnitUsers,
+                        inputFilter: function () {
+                            return { id: organizationTree.selectedOu.id }
                         }
                     },
-
-                    fields: {
-                        actions: {
-                            title: app.localize('Actions'),
-                            sorting: false,
-                            width: '10%',
-                            list: _permissions.manageMembers,
-                            display: function (data) {
-                                var $span = $('<span></span>');
-
-                                if (_permissions.manageMembers) {
-                                    $('<button class="btn btn-default btn-xs" title="' + app.localize('Delete') + '"><i class="fa fa-trash-o"></i></button>')
-                                        .appendTo($span)
-                                        .click(function () {
-                                            members.remove(data.record);
-                                        });
+                    columnDefs: [
+                        {
+                            targets: 0,
+                            data: null,
+                            orderable: false,
+                            defaultContent: '',
+                            rowAction: {
+                                targets: 0,
+                                data: null,
+                                orderable: false,
+                                defaultContent: '',
+                                element: $("<button/>")
+                                    .addClass("btn btn-default btn-xs")
+                                    .attr("title", app.localize('Delete'))
+                                    .append($("<i/>").addClass("fa fa-times")).click(function () {
+                                        var record = $(this).data();
+                                        members.remove(record);
+                                    }),
+                                visible: function () {
+                                    return _permissions.manageMembers;
                                 }
-
-                                return $span;
                             }
-
                         },
-                        userName: {
-                            title: app.localize('UserName'),
-                            width: '60%'
+                        {
+                            targets: 1,
+                            data: "userName"
                         },
-
-                        addedTime: {
-                            title: app.localize('AddedTime'),
-                            width: '30%',
-                            display: function (data) {
-                                return moment(data.record.addedTime).format('L');
+                        {
+                            targets: 2,
+                            data: "addedTime",
+                            render: function (addedTime) {
+                                return moment(addedTime).format('L');
                             }
                         }
-                    }
+                    ]
                 });
+
 
                 $('#AddUserToOuButton').click(function (e) {
                     e.preventDefault();

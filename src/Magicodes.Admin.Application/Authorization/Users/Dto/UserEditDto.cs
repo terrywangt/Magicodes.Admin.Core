@@ -45,5 +45,6 @@ namespace Magicodes.Admin.Authorization.Users.Dto
         public virtual bool IsTwoFactorEnabled { get; set; }
 
         public virtual bool IsLockoutEnabled { get; set; }
+
     }
 }

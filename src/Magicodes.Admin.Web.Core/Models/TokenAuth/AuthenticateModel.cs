@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Abp.Auditing;
 using Abp.Authorization.Users;
 
 namespace Magicodes.Admin.Web.Models.TokenAuth
@@ -11,6 +12,7 @@ namespace Magicodes.Admin.Web.Models.TokenAuth
 
         [Required]
         [MaxLength(AbpUserBase.MaxPlainPasswordLength)]
+        [DisableAuditing]
         public string Password { get; set; }
 
         public string TwoFactorVerificationCode { get; set; }

@@ -10,9 +10,7 @@ using Abp.Domain.Uow;
 using Abp.Runtime.Caching;
 using Abp.Runtime.Security;
 using Abp.Runtime.Session;
-using Abp.Timing;
 using Abp.UI;
-using Microsoft.AspNetCore.Identity;
 using Magicodes.Admin.Authorization.Impersonation;
 
 namespace Magicodes.Admin.Authorization.Users

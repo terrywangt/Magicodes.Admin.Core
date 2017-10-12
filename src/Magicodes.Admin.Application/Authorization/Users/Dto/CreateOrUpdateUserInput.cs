@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Magicodes.Admin.Authorization.Users.Dto
 {
@@ -13,5 +14,12 @@ namespace Magicodes.Admin.Authorization.Users.Dto
         public bool SendActivationEmail { get; set; }
 
         public bool SetRandomPassword { get; set; }
+
+        public List<long> OrganizationUnits { get; set; }
+
+        public CreateOrUpdateUserInput()
+        {
+            OrganizationUnits = new List<long>();
+        }
     }
 }

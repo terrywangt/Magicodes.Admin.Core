@@ -586,6 +586,8 @@
     <text name="IsInTrialPeriod">Deneme sürümü kullanıyor?</text>
     <text name="FailedSubscriptionTerminations_Subject">Hatalı üyelik sonlandırmaları</text>
     <text name="FailedSubscriptionTerminations_Body">Üyelik sonlandırma işlemi {0} müşterileri için {1} tarihinde tamamlanamadı. Detaylı hata mesajlarını sistem loglarında bulabilirsiniz.</text>
+    <text name="SubscriptionExpire_Email_Subject">Admin üyeliğiniz sonlandı</text>
+    <text name="SubscriptionExpire_Email_Body">Admin üyeliğiniz {0} tarihinde sonlandı!</text>
     <text name="UnlimitedTimeSubscription">Sınırsız süreli abonelik</text>
     <text name="SubscriptionEndDateUtc">Abonelik bitiş tarihi (Utc)</text>
     <text name="ExpiringEditionMustBeAFreeEdition">Atanacak paket ücretsiz bir paket olmalı.</text>
@@ -604,5 +606,68 @@
     <text name="Upgrade_Edition_Description">{0} Paketine Yükseltin</text>
     <text name="PaymentMightBeExpiredWarning">İşleminiz zaman aşımına uğramış olabilir, eğer ödemeyi yaptıysanız lütfen bizimle iletişime geçin.</text>
     <text name="GoToSubscriptionManagement">Aboneliğe gidin</text>
+    <text name="DemoPayPalAccount">Demo PayPal Hesabı</text>
+    <text name="IsEnabled">Etkin</text>
+    <text name="IsGoogleAuthenticatorEnabled">Google Authenticator'ı etkinleştir.</text>
+    <text name="GoogleAuthenticatorReferrerLink">Bu ekranın ne anlama geldiğinden emin değil misiniz? Şu linke bir göz atın </text>
+    <text name="ScanQrCodeWithYourMobileApp">Bu QR kodunu mobil uygulamanız ile tarayın</text>
+    <text name="Profile">Profil</text>
+    <text name="Enable">Etkinleştir</text>
+    <text name="GoogleAuthenticatorIsNotEnabled">Hesabınız için Google Authenticator etkin değil. Ayarlarım sayfasından aktifleştirmelisiniz.</text>
+    <text name="SubscriptionExpiringSoon_Email_Subject">Admin üyeliğiniz sonlanmak üzere</text>
+    <text name="SubscriptionExpiringSoon_Email_Body">Admin üyeliğiniz {0} tarihinde sonlanacaktır.</text>
+    <text name="SubscriptionExpire_Title">Admin üyeliğin sonlanması</text>
+    <text name="SubscriptionExpire_SubTitle">Bu e-posta üyeliğinizin bitimi hakkında bilgilendirmek için gönderilmiştir.</text>
+    <text name="SubscriptionAssignedToAnother_Email_Body">Admin üyeliğiniz {1} tarihinde sonlanmıştır. Mevcut paketiniz {0} olarak değiştirilmişir.</text>
+    <text name="FailedSubscriptionTerminations_Title">Üyelik sonlandırma hatası</text>
+    <text name="FailedSubscriptionTerminations_SubTitle">Bazı müşteriler için üyelik sonlandırma hatası.</text>,,
+    <text name="SubscriptionExpiringSoon_Title">Admin üyeliğin sonlanması</text>
+    <text name="SubscriptionExpiringSoon_SubTitle">Bu e-posta üyelik yakında sonlanacağını bilgilendirmek için gönderilmiştir.</text>
+    <text name="AdminRoleCannotRemoveFromAdminUser">Admin rolü admin kullanıcısından silinemez</text>
+    <text name="YouCannotRemoveUserRolePermissionsFromAdminRole">Kullanıcı/rol düzenleme yetkilerini admin rolünden kaldıramazsınız</text>
+    <text name="YouCannotRemoveUserRolePermissionsFromAdminUser">Kullanıcı/rol düzenleme yetkilerini admin kullanıcısından kaldıramazsınız</text>
+    <text name="SubscriptionInformation">Abonelik bilgileri</text>
+    <text name="PaymentHistory">Ödeme geçmişi</text>
+    <text name="Notification">Bildirim</text>
+    <text name="Gateway">Ödeme yöntemi</text>
+    <text name="Amount">Tutar</text>
+    <text name="Status">Durum</text>
+    <text name="Period">Periyod</text>
+    <text name="DayCount">Gün sayısı</text>
+    <text name="LastModificationTime">Son güncelleme zamanı</text>
+    <text name="PaymentId">Ödeme id</text>
+    <text name="SubscriptionPaymentGatewayType_Paypal">Paypal</text>
+    <text name="SubscriptionPaymentStatus_Completed">Tamamlandı</text>
+    <text name="SubscriptionPaymentStatus_Processing">İşleniyor</text>
+    <text name="SubscriptionPaymentStatus_Failed">Başarısız</text>
+    <text name="PaymentPeriodType_Annual">Yıllık</text>
+    <text name="PaymentPeriodType_Monthly">Aylık</text>
+    <text name="ProcessTime">İşlem zamanı</text>
+    <text name="TotalRecordsCount">Toplam: {0}</text>
+    <text name="SelectUsers">Kullanıcıları şeçin</text>
+    <text name="SmsVerificationEnabled">Telefon numarası için SMS ile doğrulama yapılabilir</text>
+    <text name="SmsVerificationMessage">Telefon Onay Kodunuz: {0}</text>
+    <text name="Verify">Onayla</text>
+    <text name="YourCode">Kodunuz</text>
+    <text name="VerifyYourCode">Size Gönderilen kodu Onaylayın</text>
+    <text name="YourPhoneNumberIsVerified">Telefon numaranız doğrulandı</text>
+    <text name="YourPhoneNumberIsNotVerified">Telefon numaranız doğrulanmadı</text>
+    <text name="WrongSmsVerificationCode">Yanlış doğrulama kodu !</text>
+    <text name="DemoUiComponents">Demo UI Bileşenleri</text>
+    <text name="DateAndTimePickers">Tarih ve Saat Seçici</text>
+    <text name="FileUpload">Dosya Yükleme</text>
+    <text name="PostedValue">Gönderilen değer</text>
+    <text name="SelectDate">Tarih seçin</text>
+    <text name="UploadedFile">Yüklenen dosya</text>
+    <text name="SelectFile">Dosya seçin</text>
+    <text name="PostedData">Gönderilen veri</text>
+    <text name="Remove">Kaldır</text>
+    <text name="OrganizationUnitNotFoundForThisUser">Bu kullanıcıya ait bir Organizasyon Brimi yok.</text>
+    <text name="YouCanManageUsersOrganizationUnitsFromOrganizationUnitsPage">Kullanıcının bağlı olduğu organizasyon birimlerini, Organizasyon Birimleri sayfasından yönetebilirsiniz.</text>
+    <text name="DemoUiComponents_Info">
+      Bu sayfada uygulamanız için örnek olması amacıyla birkaç kullanışlı bileşen gösteriliyor.
+      Bu bileşenlerin sunucu tarafı da kodlanmıştır.
+    </text>
+    <text name="DemoUiComponents_Info_Metronic_Link_Text">Daha fazla bileşen için Metronic temasına bakınız</text>
   </texts>
 </localizationDictionary>

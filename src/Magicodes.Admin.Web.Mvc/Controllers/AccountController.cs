@@ -26,6 +26,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Options;
+using Magicodes.Admin.Authentication.TwoFactor.Google;
 using Magicodes.Admin.Authorization;
 using Magicodes.Admin.Authorization.Accounts;
 using Magicodes.Admin.Authorization.Accounts.Dto;
@@ -290,16 +291,19 @@ namespace Magicodes.Admin.Web.Controllers
 
             CheckCurrentTenant(await _signInManager.GetVerifiedTenantIdAsync());
 
-            var code = await _userManager.GenerateTwoFactorTokenAsync(user, model.SelectedProvider);
-            var message = L("EmailSecurityCodeBody", code);
+            if (model.SelectedProvider != GoogleAuthenticatorProvider.Name)
+            {
+                var code = await _userManager.GenerateTwoFactorTokenAsync(user, model.SelectedProvider);
+                var message = L("EmailSecurityCodeBody", code);
 
-            if (model.SelectedProvider == "Email")
-            {
-                await _emailSender.SendAsync(await _userManager.GetEmailAsync(user), L("EmailSecurityCodeSubject"), message);
-            }
-            else if (model.SelectedProvider == "Phone")
-            {
-                await _smsSender.SendAsync(await _userManager.GetPhoneNumberAsync(user), message);
+                if (model.SelectedProvider == "Email")
+                {
+                    await _emailSender.SendAsync(await _userManager.GetEmailAsync(user), L("EmailSecurityCodeSubject"), message);
+                }
+                else if (model.SelectedProvider == "Phone")
+                {
+                    await _smsSender.SendAsync(await _userManager.GetPhoneNumberAsync(user), message);
+                }
             }
 
             return RedirectToAction(
@@ -347,7 +351,7 @@ namespace Magicodes.Admin.Web.Controllers
                 model.Provider,
                 model.Code,
                 model.RememberMe,
-                (await IsRememberBrowserEnabledAsync()) && model.RememberBrowser
+                await IsRememberBrowserEnabledAsync() && model.RememberBrowser
             );
 
             if (result.Succeeded)

@@ -68,7 +68,14 @@ namespace Magicodes.Admin.MultiTenancy
 
         public async Task<RegisterTenantOutput> RegisterTenant(RegisterTenantInput input)
         {
-            await CheckEditionSubscriptionAsync(input.EditionId, input.SubscriptionStartType, input.Gateway, input.PaymentId);
+            if (input.EditionId.HasValue)
+            {
+                await CheckEditionSubscriptionAsync(input.EditionId.Value, input.SubscriptionStartType, input.Gateway, input.PaymentId);
+            }
+            else
+            {
+                await CheckRegistrationWithoutEdition();
+            }
 
             using (CurrentUnitOfWork.SetTenantId(null))
             {
@@ -84,13 +91,17 @@ namespace Magicodes.Admin.MultiTenancy
                 var isEmailConfirmationRequiredForLogin = await SettingManager.GetSettingValueForApplicationAsync<bool>(AbpZeroSettingNames.UserManagement.IsEmailConfirmationRequiredForLogin);
 
                 DateTime? subscriptionEndDate = null;
-                var isInTrialPeriod = input.SubscriptionStartType == SubscriptionStartType.Trial;
+                var isInTrialPeriod = false;
 
-                if (isInTrialPeriod)
+                if (input.EditionId.HasValue)
                 {
-                    var edition = (SubscribableEdition)await _editionManager.GetByIdAsync(input.EditionId);
+                    isInTrialPeriod = input.SubscriptionStartType == SubscriptionStartType.Trial;
 
-                    subscriptionEndDate = Clock.Now.AddDays(edition.TrialDayCount ?? 0);
+                    if (isInTrialPeriod)
+                    {
+                        var edition = (SubscribableEdition)await _editionManager.GetByIdAsync(input.EditionId.Value);
+                        subscriptionEndDate = Clock.Now.AddDays(edition.TrialDayCount ?? 0);
+                    }
                 }
 
                 var tenantId = await _tenantManager.CreateWithAdminUserAsync(
@@ -129,6 +140,9 @@ namespace Magicodes.Admin.MultiTenancy
                         payment.PaymentPeriodType,
                         payment.EditionId,
                         EditionPaymentType.NewRegistration);
+
+                    await _subscriptionPaymentRepository.UpdateByGatewayAndPaymentIdAsync(input.Gateway.Value,
+                        input.PaymentId, tenantId, SubscriptionPaymentStatus.Completed);
                 }
                 else
                 {
@@ -136,6 +150,11 @@ namespace Magicodes.Admin.MultiTenancy
                 }
 
                 await _appNotifier.NewTenantRegisteredAsync(tenant);
+
+                if (input.EditionId.HasValue && input.Gateway.HasValue && !input.PaymentId.IsNullOrEmpty())
+                {
+                    _paymentCache.RemoveCacheItem(input.Gateway.Value, input.PaymentId);
+                }
 
                 return new RegisterTenantOutput
                 {
@@ -148,6 +167,15 @@ namespace Magicodes.Admin.MultiTenancy
                     IsEmailConfirmationRequired = isEmailConfirmationRequiredForLogin,
                     IsTenantActive = tenant.IsActive
                 };
+            }
+        }
+
+        private async Task CheckRegistrationWithoutEdition()
+        {
+            var editions = await _editionManager.GetAllAsync();
+            if (editions.Any())
+            {
+                throw new Exception("Tenant registration is not allowed without edition because there are editions defined !");
             }
         }
 

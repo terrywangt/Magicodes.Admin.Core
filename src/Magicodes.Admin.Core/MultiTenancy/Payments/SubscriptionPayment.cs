@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using Abp.Application.Editions;
 using Abp.Domain.Entities.Auditing;
 
 namespace Magicodes.Admin.MultiTenancy.Payments
@@ -21,5 +22,7 @@ namespace Magicodes.Admin.MultiTenancy.Payments
         public PaymentPeriodType? PaymentPeriodType { get; set; }
 
         public string PaymentId { get; set; }
+
+        public Edition Edition { get; set; }
     }
 }

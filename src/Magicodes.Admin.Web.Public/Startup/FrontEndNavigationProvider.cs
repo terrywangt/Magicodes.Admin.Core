@@ -62,8 +62,8 @@ namespace Magicodes.Admin.Web.Public.Startup
                 //                )
                 //            ).AddItem(new MenuItemDefinition(
                 //                "MultiLevelMenu.2.3.2",
-                //                new FixedLocalizableString("jtable.org"),
-                //                url: "http://jtable.org"
+                //                new FixedLocalizableString("aspnet"),
+                //                url: "https://AspnetZero.com/"
                 //                )
                 //            )
                 //        )

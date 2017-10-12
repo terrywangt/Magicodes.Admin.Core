@@ -12,12 +12,18 @@ using Newtonsoft.Json;
 
 namespace Magicodes.Admin.ConsoleApiClient
 {
-    /* This is a sample code to create an IdentityServer4 client and use ResourceOwnerPassword
-     * flow to call an API. 
+    /* 
+     * NOTICE THAT THIS SAMPLE IS NOT WORKING SINCE IdentityServer4.AccessTokenValidation IS NOT PORTED TO ASP.NET CORE 2.0 YET.
+     * See note in Startup.cs
+     * 
+     * This is a sample code to create an IdentityServer4 client and use ResourceOwnerPassword flow to call an API. 
+     * Enable IdentityServer from appsettings.json of Web.Host/Web.Mvc project first.
      */
 
     class Program
     {
+        private const string ServerUrlBase = "http://localhost:62114/";
+
         static void Main(string[] args)
         {
             RunDemoAsync().Wait();
@@ -32,11 +38,11 @@ namespace Magicodes.Admin.ConsoleApiClient
 
         private static async Task<string> GetAccessTokenViaOwnerPasswordAsync()
         {
-            var disco = await DiscoveryClient.GetAsync("http://localhost:62114");
+            var disco = await DiscoveryClient.GetAsync(ServerUrlBase);
 
             using (var httpHandler = new HttpClientHandler())
             {
-                httpHandler.CookieContainer.Add(new Uri("http://localhost:62114/"), new Cookie(MultiTenancyConsts.TenantIdResolveKey, "1")); //Set TenantId
+                httpHandler.CookieContainer.Add(new Uri(ServerUrlBase), new Cookie(MultiTenancyConsts.TenantIdResolveKey, "1")); //Set TenantId
 
                 var tokenClient = new TokenClient(disco.TokenEndpoint, "client", "def2edf7-5d42-4edc-a84a-30136c340e13", httpHandler);
                 var tokenResponse = await tokenClient.RequestResourceOwnerPasswordAsync("admin", "123qwe");
@@ -59,7 +65,7 @@ namespace Magicodes.Admin.ConsoleApiClient
             {
                 client.SetBearerToken(accessToken);
 
-                var response = await client.GetAsync("http://localhost:62114/api/services/app/user/getUsers");
+                var response = await client.GetAsync($"{ServerUrlBase}api/services/app/user/getUsers");
                 if (!response.IsSuccessStatusCode)
                 {
                     Console.WriteLine(response.StatusCode);

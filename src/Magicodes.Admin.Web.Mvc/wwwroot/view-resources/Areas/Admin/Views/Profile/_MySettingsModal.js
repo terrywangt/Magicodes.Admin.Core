@@ -9,11 +9,43 @@
 
         this.init = function (modalManager) {
             _modalManager = modalManager;
+            var $modal = _modalManager.getModal();
 
-            _$form = _modalManager.getModal().find('form[name=MySettingsModalForm]');
+            _$form = $modal.find('form[name=MySettingsModalForm]');
             _$form.validate();
 
             _initialTimezone = _$form.find("[name='Timezone']").val();
+
+            var $btnEnableGoogleAuthenticator = $modal.find('#btnEnableGoogleAuthenticator');
+
+            $btnEnableGoogleAuthenticator.click(function () {
+                _profileService.updateGoogleAuthenticatorKey()
+                    .done(function (result) {
+                        $modal.find('.google-authenticator-enable').toggle();
+                        $modal.find('img').attr('src', result.qrCodeSetupImageUrl);
+                    }).always(function () {
+                        _modalManager.setBusy(false);
+                    });
+            });
+
+            var $SmsVerification = $modal.find('#btnSmsVerification');
+            var smsVerificationModal = new app.ModalManager({
+                viewUrl: abp.appPath + 'Admin/Profile/SmsVerificationModal',
+                scriptUrl: abp.appPath + 'view-resources/Areas/Admin/Views/Profile/_SmsVerificationModal.js',
+                modalClass: 'SmsVerificationModal'
+            });
+
+            $SmsVerification.click(function () {
+                _profileService.sendVerificationSms()
+                    .done(function () {
+                        smsVerificationModal.open({}, function () {
+                            document.getElementById('SpanSmsVerificationVerified').style.display = "";
+                            document.getElementById('SpanSmsVerificationUnverified').style.display = "none";
+                             });
+                    });
+            });
+
+            _$form.find(".tooltips").tooltip();
         };
 
         this.save = function () {

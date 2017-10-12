@@ -38,7 +38,7 @@ namespace Magicodes.Admin.Tests.MultiTenancy
             LocalIocManager.IocContainer.Register(Component.For<IPaymentCache>().Instance(_fakePaymentCache).IsDefault());
         }
 
-        [Fact]
+        [MultiTenantFact]
         public async Task SubscriptionEndDateUtc_ShouldBe_Null_After_Free_Registration()
         {
             //Arrange
@@ -73,7 +73,7 @@ namespace Magicodes.Admin.Tests.MultiTenancy
             });
         }
 
-        [Fact]
+        [MultiTenantFact]
         public async Task Cannot_Register_To_Free_Edition_As_Trial()
         {
             //Arrange
@@ -101,7 +101,7 @@ namespace Magicodes.Admin.Tests.MultiTenancy
             exception.Message.ShouldBe("Trial is not available for this edition !");
         }
 
-        [Fact]
+        [MultiTenantFact]
         public async Task Should_Subscribe_To_Edition_As_Trial_If_Trial_Is_Available()
         {
             //Arrange
@@ -141,13 +141,13 @@ namespace Magicodes.Admin.Tests.MultiTenancy
             });
         }
 
-        [Fact]
+        [MultiTenantFact]
         public async Task Monthly_Registratin_Should_Add_30_Days_To_SubscriptionEndDate()
         {
             await Paid_Registratin_Should_Add_N_Days_To_SubscriptionEndDate(PaymentPeriodType.Monthly);
         }
 
-        [Fact]
+        [MultiTenantFact]
         public async Task Annual_Registratin_Should_Add_365_Days_To_SubscriptionEndDate()
         {
             await Paid_Registratin_Should_Add_N_Days_To_SubscriptionEndDate(PaymentPeriodType.Annual);

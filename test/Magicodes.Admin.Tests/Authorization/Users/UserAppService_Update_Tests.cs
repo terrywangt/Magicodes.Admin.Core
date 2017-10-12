@@ -134,14 +134,14 @@ namespace Magicodes.Admin.Tests.Authorization.Users
                         UserName = adminUser.UserName,
                         Password = null
                     },
-                    AssignedRoleNames = new string[0] //Just deleting all roles
+                    AssignedRoleNames = new[]{ StaticRoleNames.Host.Admin } //Just deleting all roles expect admin
                 });
 
             //Assert
             await UsingDbContextAsync(async context =>
             {
                 var roleCount = await context.UserRoles.CountAsync(ur => ur.UserId == adminUser.Id);
-                roleCount.ShouldBe(0);
+                roleCount.ShouldBe(1);
             });
         }
 

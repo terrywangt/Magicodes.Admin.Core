@@ -1,22 +1,4 @@
-﻿@tableWidth: 1600px;
-
-#UsersTable {
-    .jtable-main-container {
-        .jtable-title {
-            min-width: @tableWidth;
-        }
-
-        .jtable {
-            min-width: @tableWidth;
-        }
-
-        .jtable-bottom-panel {
-            min-width: @tableWidth;
-        }
-    }
-}
-
-.user-edit-dialog-profile-image {
+﻿.user-edit-dialog-profile-image {
     margin-bottom: 20px;
 }
 
@@ -33,5 +15,13 @@ div.user-password.has-error {
 
     input {
         border-bottom-width: 2px !important;
+    }
+}
+
+#UsersTable {
+    img.img-circle {
+        height: 24px;
+        margin-right: 5px;
+        box-shadow: 1px 1px 5px 1px hsl(0, 0%, 66%);
     }
 }

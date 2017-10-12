@@ -19,7 +19,14 @@ namespace Magicodes.Admin.Tests.Localization
 
         public LanguageAppService_Tests()
         {
-            LoginAsHostAdmin();
+            if (AdminConsts.MultiTenancyEnabled)
+            {
+                LoginAsHostAdmin();
+            }
+            else
+            {
+                LoginAsDefaultTenantAdmin();
+            }
 
             _languageAppService = Resolve<ILanguageAppService>();
             _languageManager = Resolve<IApplicationLanguageManager>();
@@ -64,7 +71,7 @@ namespace Magicodes.Admin.Tests.Localization
 
             //Assert
             currentLanguages = await _languageManager.GetLanguagesAsync(AbpSession.TenantId);
-            currentLanguages.Any(l => l.Name == newLanguageName).ShouldBeTrue();
+            currentLanguages.Count(l => l.Name == newLanguageName).ShouldBe(1);
         }
 
         [MultiTenantFact]
@@ -118,7 +125,7 @@ namespace Magicodes.Admin.Tests.Localization
                 .GetString(
                     AdminConsts.LocalizationSourceName,
                     "Save",
-                    CultureInfoHelper.Get("en")
+                    CultureInfo.GetCultureInfo("en")
                 );
 
             newValue.ShouldBe("save-new-value");
@@ -142,7 +149,7 @@ namespace Magicodes.Admin.Tests.Localization
                     Language = new ApplicationLanguageEditDto
                     {
                         Id = randomEnabledLanguage.Id,
-                        IsDisabled = true,
+                        IsEnabled = false,
                         Name = randomEnabledLanguage.Name,
                         Icon = output.Flags[RandomHelper.GetRandom(output.Flags.Count)].Value
                     }

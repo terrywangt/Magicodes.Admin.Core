@@ -5,6 +5,7 @@ using Abp.Authorization.Roles;
 using Abp.Authorization.Users;
 using Abp.MultiTenancy;
 using Abp.Notifications;
+using Microsoft.EntityFrameworkCore;
 using Magicodes.Admin.Authorization;
 using Magicodes.Admin.Authorization.Roles;
 using Magicodes.Admin.Authorization.Users;
@@ -31,7 +32,7 @@ namespace Magicodes.Admin.Migrations.Seed.Host
         {
             //Admin role for host
 
-            var adminRoleForHost = _context.Roles.FirstOrDefault(r => r.TenantId == null && r.Name == StaticRoleNames.Host.Admin);
+            var adminRoleForHost = _context.Roles.IgnoreQueryFilters().FirstOrDefault(r => r.TenantId == null && r.Name == StaticRoleNames.Host.Admin);
             if (adminRoleForHost == null)
             {
                 adminRoleForHost = _context.Roles.Add(new Role(null, StaticRoleNames.Host.Admin, StaticRoleNames.Host.Admin) { IsStatic = true, IsDefault = true }).Entity;
@@ -40,7 +41,7 @@ namespace Magicodes.Admin.Migrations.Seed.Host
 
             //admin user for host
 
-            var adminUserForHost = _context.Users.FirstOrDefault(u => u.TenantId == null && u.UserName == AbpUserBase.AdminUserName);
+            var adminUserForHost = _context.Users.IgnoreQueryFilters().FirstOrDefault(u => u.TenantId == null && u.UserName == AbpUserBase.AdminUserName);
             if (adminUserForHost == null)
             {
                 var user = new User
@@ -49,11 +50,11 @@ namespace Magicodes.Admin.Migrations.Seed.Host
                     UserName = AbpUserBase.AdminUserName,
                     Name = "admin",
                     Surname = "admin",
-                    EmailAddress = "wenqiang.li@xin-lai.com",
+                    EmailAddress = "admin@aspnetzero.com",
                     IsEmailConfirmed = true,
                     ShouldChangePasswordOnNextLogin = true,
                     IsActive = true,
-                    Password = "AOEdQVs7aP4oMpOItKAValbRCfv4t0hwvYa/fP6k4wi0brAQ0cLcOGjpFxE/2sdIeA==" //123456abcD
+                    Password = "AM4OLBpptxBYmM79lGOX9egzZk3vIQU3d/gFCJzaBjAPXzYIK3tQ2N7X4fcrHtElTw==" //123qwe
                 };
 
                 user.SetNormalizedNames();

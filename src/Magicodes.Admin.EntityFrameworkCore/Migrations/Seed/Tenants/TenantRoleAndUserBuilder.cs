@@ -6,6 +6,7 @@ using Abp.Authorization.Users;
 using Abp.MultiTenancy;
 using Abp.Notifications;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Magicodes.Admin.Authorization;
 using Magicodes.Admin.Authorization.Roles;
@@ -35,7 +36,7 @@ namespace Magicodes.Admin.Migrations.Seed.Tenants
         {
             //Admin role
 
-            var adminRole = _context.Roles.FirstOrDefault(r => r.TenantId == _tenantId && r.Name == StaticRoleNames.Tenants.Admin);
+            var adminRole = _context.Roles.IgnoreQueryFilters().FirstOrDefault(r => r.TenantId == _tenantId && r.Name == StaticRoleNames.Tenants.Admin);
             if (adminRole == null)
             {
                 adminRole = _context.Roles.Add(new Role(_tenantId, StaticRoleNames.Tenants.Admin, StaticRoleNames.Tenants.Admin) { IsStatic = true }).Entity;
@@ -64,7 +65,7 @@ namespace Magicodes.Admin.Migrations.Seed.Tenants
 
             //User role
 
-            var userRole = _context.Roles.FirstOrDefault(r => r.TenantId == _tenantId && r.Name == StaticRoleNames.Tenants.User);
+            var userRole = _context.Roles.IgnoreQueryFilters().FirstOrDefault(r => r.TenantId == _tenantId && r.Name == StaticRoleNames.Tenants.User);
             if (userRole == null)
             {
                 _context.Roles.Add(new Role(_tenantId, StaticRoleNames.Tenants.User, StaticRoleNames.Tenants.User) { IsStatic = true, IsDefault = true });
@@ -73,7 +74,7 @@ namespace Magicodes.Admin.Migrations.Seed.Tenants
 
             //admin user
 
-            var adminUser = _context.Users.FirstOrDefault(u => u.TenantId == _tenantId && u.UserName == AbpUserBase.AdminUserName);
+            var adminUser = _context.Users.IgnoreQueryFilters().FirstOrDefault(u => u.TenantId == _tenantId && u.UserName == AbpUserBase.AdminUserName);
             if (adminUser == null)
             {
                 adminUser = User.CreateTenantAdminUser(_tenantId, "admin@defaulttenant.com");

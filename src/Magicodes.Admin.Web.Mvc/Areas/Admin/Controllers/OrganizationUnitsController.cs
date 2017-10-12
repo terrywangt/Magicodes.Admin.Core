@@ -5,6 +5,7 @@ using Abp.Domain.Repositories;
 using Abp.Organizations;
 using Microsoft.AspNetCore.Mvc;
 using Magicodes.Admin.Authorization;
+using Magicodes.Admin.Web.Areas.Admin.Models.Common.Modals;
 using Magicodes.Admin.Web.Areas.Admin.Models.OrganizationUnits;
 using Magicodes.Admin.Web.Controllers;
 
@@ -39,6 +40,12 @@ namespace Magicodes.Admin.Web.Areas.Admin.Controllers
             var model = ObjectMapper.Map<EditOrganizationUnitModalViewModel>(organizationUnit);
 
             return PartialView("_EditModal", model);
+        }
+
+        [AbpMvcAuthorize(AppPermissions.Pages_Administration_OrganizationUnits_ManageMembers)]
+        public PartialViewResult AddMemberModal(LookupModalViewModel model)
+        {
+            return PartialView("_AddMemberModal", model);
         }
     }
 }

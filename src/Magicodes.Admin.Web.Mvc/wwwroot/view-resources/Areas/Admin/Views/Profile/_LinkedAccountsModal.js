@@ -16,67 +16,59 @@
         });
 
         $('#LinkNewAccountButton').click(function () {
-            _linkNewAccountModal.open({}, function() {
+            _linkNewAccountModal.open({}, function () {
                 getLinkedUsers();
             });
         });
 
-        _$linkedAccountsTable.jtable({
 
+        var dataTable = _$linkedAccountsTable.DataTable({
             paging: true,
-
-            actions: {
-                listAction: {
-                    method: _userLinkService.getLinkedUsers
-                }
+            serverSide: true,
+            processing: true,
+            listAction: {
+                ajaxFunction: _userLinkService.getLinkedUsers
             },
-
-            fields: {
-                id: {
-                    key: true,
-                    list: false
-                },
-                actions: {
-                    title: app.localize('Actions'),
-                    width: '20%',
-                    display: function (data) {
-                        var $div = $('<div></div>');
-
-                        $('<button class="btn btn-xs btn-primary blue"><i class="icon-login"></i>' + app.localize('LogIn') + '</button>')
-                            .appendTo($div)
+            columnDefs: [
+                {
+                    targets: 0,
+                    data: null,
+                    orderable: false,
+                    defaultContent: '',
+                    rowAction: {
+                        element: $("<button/>")
+                            .addClass("btn btn-xs btn-primary blue")
+                            .text(app.localize('LogIn'))
+                            .append($("<i/>").addClass("icon-login"))
                             .click(function () {
-                                switchToUser(data.record);
-                            });
-
-                        return $div;
-
+                                switchToUser($(this).data());
+                            })
                     }
                 },
-                userName: {
-                    title: app.localize('UserName'),
-                    width: '70%',
-                    display: function (data) {
-                        var $div = $('<div></div>');
-                        $('<span>' + app.getShownLinkedUserName(data.record) + '</span>').appendTo($div);
-                        return $div;
+                {
+                    targets: 1,
+                    data: "username",
+                    orderable: false,
+                    render: function (userName, type, row, meta) {
+                        return $('<div/>').append($("<span/>").text(app.getShownLinkedUserName(row)))[0].outerHTML;
                     }
                 },
-                unlink: {
-                    title: app.localize('Delete'),
-                    width: '10%',
-                    display: function (data) {
-                        var $div = $('<span></span>');
-                        $('<button class="btn btn-xs btn-danger red"><i class="icon-trash"></i></button>')
-                            .appendTo($div)
+                {
+                    targets: 2,
+                    data: null,
+                    orderable: false,
+                    defaultContent: '',
+                    rowAction: {
+                        element: $("<button/>")
+                            .addClass("btn btn-xs btn-danger red")
+                            .attr("title", app.localize('Delete'))
+                            .append($("<i/>").addClass("icon-trash"))
                             .click(function () {
-                                deleteLinkedUser(data.record);
-                            });
-
-                        return $div;
+                                deleteLinkedUser($(this).data());
+                            })
                     }
                 }
-            }
-
+            ]
         });
 
         function switchToUser(linkedUser) {
@@ -96,25 +88,23 @@
 
         function deleteLinkedUser(linkedUser) {
             abp.message.confirm(
-               app.localize('LinkedUserDeleteWarningMessage', linkedUser.username),
-               function (isConfirmed) {
-                   if (isConfirmed) {
-                       _userLinkService.unlinkUser({
-                           userId: linkedUser.id,
-                           tenantId: linkedUser.tenantId
-                       }).done(function () {
-                           getLinkedUsers();
-                           abp.notify.success(app.localize('SuccessfullyUnlinked'));
-                       });
-                   }
-               }
-           );
+                app.localize('LinkedUserDeleteWarningMessage', linkedUser.username),
+                function (isConfirmed) {
+                    if (isConfirmed) {
+                        _userLinkService.unlinkUser({
+                            userId: linkedUser.id,
+                            tenantId: linkedUser.tenantId
+                        }).done(function () {
+                            getLinkedUsers();
+                            abp.notify.success(app.localize('SuccessfullyUnlinked'));
+                        });
+                    }
+                }
+            );
         }
 
         function getLinkedUsers() {
-            _$linkedAccountsTable.jtable('load');
+            dataTable.ajax.reload();
         }
-
-        getLinkedUsers();
     };
 })(jQuery);

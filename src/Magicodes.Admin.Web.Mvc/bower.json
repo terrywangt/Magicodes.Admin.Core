@@ -21,7 +21,6 @@
     "jquery-slimscroll": "^1.3.8",
     "fancyBox": "^2.1.5",
     "OwlCarousel": "^1.3.2",
-    "jtable": "v2.5.0",
     "jstree": "^3.3.1",
     "morris.js": "morrisjs#^0.5.1",
     "bootstrap-daterangepicker": "^2.1.24",
@@ -33,7 +32,7 @@
     "signalr": "^2.2.1",
     "mustache.js": "^2.2.1",
     "jquery-ui": "^1.12.0",
-    "abp-web-resources": "^2.1.2",
+    "abp-web-resources": "^2.2.1",
     "js-cookie": "^2.1.3",
     "tether": "v1.4.0",
     "bootstrap-datepicker": "v1.7.0-RC3",
@@ -47,7 +46,13 @@
     "jquery.sparkline": "https://github.com/imsky/jquery.sparkline.git#^2.4.0",
     "jquery.easy-pie-chart": "^2.1.6",
     "uniform": "jquery-uniform#^1.0.0",
-    "inputmask": "^3.3.7"
+    "inputmask": "^3.3.7",
+    "bower": "*",
+    "install": "^1.0.4",
+    "select2": "4.0.3",
+    "select2-bootstrap-theme": "0.1.0-beta.9",
+    "blueimp-file-upload": "jQuery-File-Upload#v9.18.0",
+    "summernote": "v0.8.6"
   },
   "resolutions": {
     "jquery": ">= 2.1.0"

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Abp.Auditing;
 using Abp.Authorization;
 using Abp.Domain.Repositories;
 using Abp.Timing;
@@ -12,6 +13,7 @@ using Magicodes.Admin.MultiTenancy.Payments;
 
 namespace Magicodes.Admin.MultiTenancy.HostDashboard
 {
+    [DisableAuditing]
     [AbpAuthorize(AppPermissions.Pages_Administration_Host_Dashboard)]
     public class HostDashboardAppService : AdminAppServiceBase, IHostDashboardAppService
     {
@@ -72,7 +74,6 @@ namespace Magicodes.Admin.MultiTenancy.HostDashboard
         private async Task<List<TenantEdition>> GetEditionTenantStatisticsData(DateTime startDate, DateTime endDate)
         {
             return await _tenantRepository.GetAll()
-                .Include(t => t.Edition)
                 .Where(t => t.EditionId.HasValue &&
                             t.IsActive &&
                             t.CreationTime >= startDate &&

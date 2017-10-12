@@ -38,11 +38,13 @@ namespace Magicodes.Admin.Web.Startup
 
         public override void PostInitialize()
         {
-            if (IocManager.Resolve<IMultiTenancyConfig>().IsEnabled)
+            if (!IocManager.Resolve<IMultiTenancyConfig>().IsEnabled)
             {
-                var workManager = IocManager.Resolve<IBackgroundWorkerManager>();
-                workManager.Add(IocManager.Resolve<SubscriptionExpirationCheckWorker>());
+                return;
             }
+            var workManager = IocManager.Resolve<IBackgroundWorkerManager>();
+            workManager.Add(IocManager.Resolve<SubscriptionExpirationCheckWorker>());
+            workManager.Add(IocManager.Resolve<SubscriptionExpireEmailNotifierWorker>());
         }
     }
 }

@@ -9,5 +9,6 @@ namespace Magicodes.Admin.Configuration.Tenants.Dto
         public bool IsEmailConfirmationRequiredForLogin { get; set; }
         
         public bool UseCaptchaOnRegistration { get; set; }
+
     }
 }

@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using System.Text;
+﻿using System.Text;
 using Abp.Dependency;
 using Abp.Extensions;
 using Abp.IO.Extensions;
@@ -11,7 +10,7 @@ namespace Magicodes.Admin.Emailing
     public class EmailTemplateProvider : IEmailTemplateProvider, ITransientDependency
     {
         private readonly IWebUrlService _webUrlService;
-        
+
         public EmailTemplateProvider(
             IWebUrlService webUrlService)
         {

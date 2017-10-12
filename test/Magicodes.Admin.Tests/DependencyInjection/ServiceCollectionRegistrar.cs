@@ -34,7 +34,7 @@ namespace Magicodes.Admin.Tests.DependencyInjection
         private static void RegisterIdentity(IIocManager iocManager)
         {
             var services = new ServiceCollection();
-            IdentityRegistrar.Register(services, "Tests");
+            IdentityRegistrar.Register(services);
             WindsorRegistrationHelper.CreateServiceProvider(iocManager.IocContainer, services);
         }
     }

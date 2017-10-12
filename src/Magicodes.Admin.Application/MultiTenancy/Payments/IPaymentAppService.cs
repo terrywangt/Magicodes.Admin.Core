@@ -2,6 +2,7 @@
 using Abp.Application.Services;
 using Magicodes.Admin.MultiTenancy.Dto;
 using Magicodes.Admin.MultiTenancy.Payments.Dto;
+using Abp.Application.Services.Dto;
 
 namespace Magicodes.Admin.MultiTenancy.Payments
 {
@@ -12,5 +13,7 @@ namespace Magicodes.Admin.MultiTenancy.Payments
         Task<CreatePaymentResponse> CreatePayment(CreatePaymentDto input);
 
         Task<ExecutePaymentResponse> ExecutePayment(ExecutePaymentDto input);
+
+        Task<PagedResultDto<SubscriptionPaymentListDto>> GetPaymentHistory(GetPaymentHistoryInput input);
     }
 }

@@ -16,62 +16,6 @@
             modalClass: 'CreateOrEditEditionModal'
         });
 
-        _$editionsTable.jtable({
-
-            title: app.localize('Editions'),
-
-            actions: {
-                listAction: {
-                    method: _editionService.getEditions
-                }
-            },
-
-            fields: {
-                id: {
-                    key: true,
-                    list: false
-                },
-                actions: {
-                    title: app.localize('Actions'),
-                    width: '30%',
-                    sorting: false,
-                    type: 'record-actions',
-                    cssClass: 'btn btn-xs btn-primary blue',
-                    text: '<i class="fa fa-cog"></i> ' + app.localize('Actions') + ' <span class="caret"></span>',
-
-                    items: [{
-                        text: app.localize('Edit'),
-                        visible: function () {
-                            return _permissions.edit;
-                        },
-                        action: function (data) {
-                            _createOrEditModal.open({ id: data.record.id });
-                        }
-                    }, {
-                        text: app.localize('Delete'),
-                        visible: function () {
-                            return _permissions.delete;
-                        },
-                        action: function (data) {
-                            deleteEdition(data.record);
-                        }
-                    }]
-                },
-                displayName: {
-                    title: app.localize('EditionName'),
-                    width: '35%'
-                },
-                creationTime: {
-                    title: app.localize('CreationTime'),
-                    width: '35%',
-                    display: function (data) {
-                        return moment(data.record.creationTime).format('L');
-                    }
-                }
-            }
-
-        });
-
         function deleteEdition(edition) {
             abp.message.confirm(
                 app.localize('EditionDeleteWarningMessage', edition.displayName),
@@ -92,14 +36,62 @@
             _createOrEditModal.open();
         });
 
-        function getEditions() {
-            _$editionsTable.jtable('load');
-        }
-
         abp.event.on('app.createOrEditEditionModalSaved', function () {
             getEditions();
         });
 
-        getEditions();
+        var dataTable = _$editionsTable.DataTable({
+            paging: false,
+            listAction: {
+                ajaxFunction: _editionService.getEditions
+            },
+            columnDefs: [
+                {
+                    targets: 0,
+                    data: null,
+                    orderable: false,
+                    autoWidth: false,
+                    defaultContent: '',
+                    rowAction: {
+                        cssClass: 'btn btn-xs btn-primary blue',
+                        text: '<i class="fa fa-cog"></i> ' + app.localize('Actions') + ' <span class="caret"></span>',
+                        items: [
+                            {
+                                text: app.localize('Edit'),
+                                visible: function () {
+                                    return _permissions.edit;
+                                },
+                                action: function (data) {
+                                    _createOrEditModal.open({ id: data.record.id });
+                                }
+                            }, {
+                                text: app.localize('Delete'),
+                                visible: function () {
+                                    return _permissions.delete;
+                                },
+                                action: function (data) {
+                                    deleteEdition(data.record);
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    targets: 1,
+                    data: "displayName"
+                },
+                {
+                    targets: 2,
+                    data: "creationTime",
+                    render: function (creationTime) {
+                        return moment(creationTime).format('L');
+                    }
+                }
+            ]
+        });
+
+        function getEditions() {
+            dataTable.ajax.reload();
+        }
     });
 })();

@@ -1,6 +1,5 @@
 ﻿(function () {
     $(function () {
-
         var _$notificationsTable = $('#NotificationsTable');
         var _notificationService = abp.services.app.notification;
 
@@ -9,84 +8,87 @@
 
         var _appUserNotificationHelper = new app.UserNotificationHelper();
 
-        _$notificationsTable.jtable({
+        var createNotificationReadButton = function ($td, record) {
+            var $span = $('<span/>');
+            var $button = $("<button/>")
+                .addClass("btn btn-xs btn-primary blue")
+                .attr("title", app.localize('SetAsRead'))
+                .click(function (e) {
+                    e.preventDefault();
+                    setNotificationAsRead(record, function () {
+                        $button.find('i')
+                            .removeClass('fa-circle-o')
+                            .addClass('fa-check');
+                        $button.attr('disabled', 'disabled');
+                        $td.closest("tr").addClass("notification-read");
+                    });
+                }).appendTo($span);
 
-            title: app.localize('Notifications'),
+            var $i = $('<i class="fa" >').appendTo($button);
+            var notificationState = _appUserNotificationHelper.format(record).state;
+
+            if (notificationState === 'READ') {
+                $button.attr('disabled', 'disabled');
+                $i.addClass('fa-check');
+            }
+
+            if (notificationState === 'UNREAD') {
+                $i.addClass('fa-circle-o');
+            }
+
+            $td.append($span);
+        };
+
+        var dataTable = _$notificationsTable.DataTable({
             paging: true,
-            sorting: true,
-            multiSorting: true,
-
-            actions: {
-                listAction: {
-                    method: _notificationService.getUserNotifications
+            serverSide: true,
+            processing: true,
+            listAction: {
+                ajaxFunction: _notificationService.getUserNotifications,
+                inputFilter: function () {
+                    return {
+                        state: _$targetValueFilterSelectionCombobox.val()
+                    };
                 }
             },
-
-            fields: {
-                id: {
-                    key: true,
-                    list: false
-                },
-                actions: {
-                    title: app.localize('Actions'),
-                    width: '10%',
-                    sorting: false,
-                    listClass: 'text-center',
-                    display: function (data) {
-                        var $span = $('<span></span>');
-
-                        var $button = $('<button class="btn btn-xs btn-primary blue" title="' + app.localize('SetAsRead') + '"></button>').click(function (e) {
-                            e.preventDefault();
-                            setNotificationAsRead(data.record, function () {
-                                $button.find('i')
-                                    .removeClass('fa-circle-o')
-                                    .addClass('fa-check');
-                                $button.attr('disabled', 'disabled');
-
-                            });
-                        }).appendTo($span);
-
-                        var $i = $('<i class="fa" >').appendTo($button);
-
-                        var notificationState = _appUserNotificationHelper.format(data.record).state;
-
-                        if (notificationState === 'READ') {
-                            $button.attr('disabled', 'disabled');
-                            $i.addClass('fa-check');
-                        }
-
-                        if (notificationState === 'UNREAD') {
-                            $i.addClass('fa-circle-o');
-                        }
-
-                        return $span;
+            columnDefs: [
+                {
+                    targets: 0,
+                    data: null,
+                    orderable: false,
+                    defaultContent: '',
+                    createdCell: function (td, cellData, rowData, rowIndex, colIndex) {
+                        createNotificationReadButton($(td), rowData);
                     }
                 },
-                notification: {
-                    title: app.localize('Notification'),
-                    width: '70%',
-                    display: function (data) {
-                        var formattedRecord = _appUserNotificationHelper.format(data.record, false);
+                {
+                    targets: 1,
+                    data: "notification",
+                    render: function (notification, type, row, meta) {
+                        var $container;
+                        var formattedRecord = _appUserNotificationHelper.format(row, false);
                         var rowClass = getRowClass(formattedRecord);
 
                         if (formattedRecord.url && formattedRecord.url !== '#') {
-                            return $('<a title="' + formattedRecord.text + '" href="' + formattedRecord.url + '" class="' + rowClass + '">' + abp.utils.truncateStringWithPostfix(formattedRecord.text, 120) + '</a>');
+                            $container = $('<a title="' + formattedRecord.text + '" href="' + formattedRecord.url + '" class="' + rowClass + '">' + abp.utils.truncateStringWithPostfix(formattedRecord.text, 120) + '</a>');
                         } else {
-                            return $('<span title="' + formattedRecord.text + '" class="' + rowClass + '">' + abp.utils.truncateStringWithPostfix(formattedRecord.text, 120) + '</span>');
+                            $container = $('<span title="' + formattedRecord.text + '" class="' + rowClass + '">' + abp.utils.truncateStringWithPostfix(formattedRecord.text, 120) + '</span>');
                         }
+
+                        return $container[0].outerHTML;
                     }
                 },
-                creationTime: {
-                    title: app.localize('CreationTime'),
-                    width: '20%',
-                    display: function (data) {
-                        var formattedRecord = _appUserNotificationHelper.format(data.record);
+                {
+                    targets: 2,
+                    data: "creationTime",
+                    render: function (creationTime, type, row, meta) {
+                        var formattedRecord = _appUserNotificationHelper.format(row);
                         var rowClass = getRowClass(formattedRecord);
-                        return $('<span title="' + moment(data.record.notification.creationTime).format("llll") + '" class="' + rowClass + '">' + formattedRecord.timeAgo + '</span> &nbsp;');
+                        var $container = $('<span title="' + moment(creationTime).format("llll") + '" class="' + rowClass + '">' + formattedRecord.timeAgo + '</span> &nbsp;');
+                        return $container[0].outerHTML;
                     }
                 }
-            }
-
+            ]
         });
 
         function getRowClass(formattedRecord) {
@@ -94,9 +96,7 @@
         }
 
         function getNotifications() {
-            _$notificationsTable.jtable('load', {
-                state: _$targetValueFilterSelectionCombobox.val()
-            });
+            dataTable.ajax.reload();
         }
 
         function setNotificationAsRead(userNotification, callback) {
@@ -135,6 +135,5 @@
             setAllNotificationsAsRead();
         });
 
-        getNotifications();
     });
 })();

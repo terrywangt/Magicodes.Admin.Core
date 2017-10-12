@@ -37,7 +37,7 @@
                     @if (Model.LoginInformations?.User == null && Model.IsMultiTenancyEnabled && Model.TenantRegistrationEnabled && Model.IsInHostView)
                     {
                         <li>
-                            <a href="@(string.Format("{0}{1}", Model.AdminWebSiteRootAddress,"?redirect=TenantRegistration"))">@L("NewTenant")</a>
+                            <a href="@(string.Format("{0}{1}", Model.AdminWebSiteRootAddress,"?redirect=TenantRegistration&forceNewRegistration=true"))">@L("NewTenant")</a>
                         </li>
                     }
                     <li>

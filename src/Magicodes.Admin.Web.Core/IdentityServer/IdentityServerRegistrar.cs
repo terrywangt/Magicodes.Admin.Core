@@ -11,7 +11,7 @@ namespace Magicodes.Admin.Web.IdentityServer
         public static void Register(IServiceCollection services, IConfigurationRoot configuration)
         {
             services.AddIdentityServer()
-                .AddTemporarySigningCredential()
+                .AddDeveloperSigningCredential()
                 .AddInMemoryIdentityResources(IdentityServerConfig.GetIdentityResources())
                 .AddInMemoryApiResources(IdentityServerConfig.GetApiResources())
                 .AddInMemoryClients(IdentityServerConfig.GetClients(configuration))

@@ -37,9 +37,7 @@ namespace Magicodes.Admin.Tests.Authorization.Users
                        TenantId = AbpSession.TenantId
                    };
 
-            //user.SetNormalizedNames(); //TODO: use this after Abp.ZeroCore v2.1 upgrade!
-            user.NormalizedUserName = user.UserName.ToUpperInvariant();
-            user.NormalizedEmailAddress = user.EmailAddress.ToUpperInvariant();
+            user.SetNormalizedNames();
 
             return user;
         }

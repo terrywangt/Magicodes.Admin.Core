@@ -14,7 +14,7 @@ namespace Magicodes.Admin.Tests.Localization
         [InlineData("en-GB")]
         public void Simple_Localization_Test(string cultureName)
         {
-            CultureInfo.CurrentUICulture = CultureInfoHelper.Get(cultureName);
+            CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo(cultureName);
 
             Resolve<ILanguageManager>().CurrentLanguage.Name.ShouldBe("en");
 

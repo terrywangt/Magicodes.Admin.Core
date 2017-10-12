@@ -69,7 +69,7 @@
                         </div>
                         <div class="col-xs-6">
                             <div class="form-group">
-                                <button id="RefreshRolesButton" class="btn btn-default" style="display: block; width: 100%"><i class="fa fa-refresh"></i> @L("Refresh")</button>
+                                <button id="RefreshRolesButton" class="btn btn-primary blue"><i class="fa fa-refresh"></i> @L("Refresh")</button>
                             </div>
                         </div>
                     </div>
@@ -78,6 +78,14 @@
         </div>
     </div>
     <div class="portlet-body">
-        <div id="RolesTable"></div>
+        <table id="RolesTable" class="display table table-striped table-bordered table-hover dt-responsive nowrap">
+            <thead>
+            <tr>
+                <th>@L("Actions")</th>
+                <th>@L("RoleName")</th>
+                <th>@L("CreationTime")</th>
+            </tr>
+            </thead>
+        </table>
     </div>
 </div>

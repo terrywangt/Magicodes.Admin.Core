@@ -156,7 +156,7 @@ namespace Magicodes.Admin.Migrations
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
 
-            migrationBuilder.Sql("UPDATE AbpEditions SET Discriminator = 'SubscribableEdition' WHERE Discriminator = 'Edition'");
+            migrationBuilder.Sql("UPDATE AbpEditions SET Discriminator = 'SubscribableEdition'");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

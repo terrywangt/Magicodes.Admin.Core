@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Abp;
 using Abp.Extensions;
@@ -23,7 +25,7 @@ namespace Magicodes.Admin.Web.Public.Controllers
         public AccountController(
             UserManager userManager,
             SignInManager signInManager,
-            IWebUrlService webUrlService, 
+            IWebUrlService webUrlService,
             TenantManager tenantManager)
         {
             _userManager = userManager;
@@ -32,8 +34,13 @@ namespace Magicodes.Admin.Web.Public.Controllers
             _tenantManager = tenantManager;
         }
 
-        public async Task<ActionResult> Login(string accessToken, string userId, string tenantId = "", string returlUrl = "")
+        public async Task<ActionResult> Login(string accessToken, string userId, string tenantId = "", string returnUrl = "")
         {
+            if (string.IsNullOrEmpty(accessToken) || string.IsNullOrEmpty(userId))
+            {
+                return await RedirectToExternalLoginPageAsync();
+            }
+
             var targetTenantId = string.IsNullOrEmpty(tenantId) ? null : (int?)Convert.ToInt32(Base64Decode(tenantId));
             CurrentUnitOfWork.SetTenantId(targetTenantId);
 
@@ -53,9 +60,9 @@ namespace Magicodes.Admin.Web.Public.Controllers
             CurrentUnitOfWork.SetTenantId(targetTenantId);
             await _signInManager.SignInAsync(user, false);
 
-            if (!string.IsNullOrEmpty(returlUrl))
+            if (!string.IsNullOrEmpty(returnUrl))
             {
-                return Redirect(returlUrl);
+                return Redirect(returnUrl);
             }
 
             return RedirectToAction("Index", "Home");
@@ -63,18 +70,34 @@ namespace Magicodes.Admin.Web.Public.Controllers
 
         public async Task<ActionResult> Logout()
         {
-            var tenancyName = "";
-            if (AbpSession.TenantId.HasValue)
-            {
-                var tenant = await _tenantManager.GetByIdAsync(AbpSession.GetTenantId());
-                tenancyName = tenant.TenancyName;
-            }
-
+            var tenancyName = await GetCurrentTenancyName();
             var websiteAddress = _webUrlService.GetSiteRootAddress(tenancyName);
             var serverAddress = _webUrlService.GetServerRootAddress(tenancyName);
 
             await _signInManager.SignOutAsync();
             return Redirect(serverAddress.EnsureEndsWith('/') + "account/logout?returnUrl=" + websiteAddress);
+        }
+
+        private async Task<ActionResult> RedirectToExternalLoginPageAsync()
+        {
+            var tenancyName = await GetCurrentTenancyName();
+            var serverAddress = _webUrlService.GetServerRootAddress(tenancyName);
+            var websiteAddress = _webUrlService.GetSiteRootAddress(tenancyName);
+
+            var originalReturnUrl = Request.Query.ContainsKey("ReturnUrl") ? Request.Query["ReturnUrl"].ToString() : "";
+            var returnUrl = websiteAddress.EnsureEndsWith('/') + "account/login?returnUrl="+ websiteAddress.EnsureEndsWith('/')+ originalReturnUrl.TrimStart('/');
+            return Redirect(serverAddress.EnsureEndsWith('/') + "account/login?ss=true&returnUrl=" + WebUtility.UrlEncode(returnUrl));
+        }
+
+        private async Task<string> GetCurrentTenancyName()
+        {
+            if (!AbpSession.TenantId.HasValue)
+            {
+                return "";
+            }
+
+            var tenant = await _tenantManager.GetByIdAsync(AbpSession.GetTenantId());
+            return tenant.TenancyName;
         }
 
         private string Base64Decode(string base64EncodedData)

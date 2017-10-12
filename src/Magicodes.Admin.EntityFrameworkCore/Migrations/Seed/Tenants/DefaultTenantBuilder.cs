@@ -1,4 +1,6 @@
 ﻿using System.Linq;
+using Abp.MultiTenancy;
+using Microsoft.EntityFrameworkCore;
 using Magicodes.Admin.Editions;
 using Magicodes.Admin.EntityFrameworkCore;
 
@@ -22,12 +24,12 @@ namespace Magicodes.Admin.Migrations.Seed.Tenants
         {
             //Default tenant
 
-            var defaultTenant = _context.Tenants.FirstOrDefault(t => t.TenancyName == MultiTenancy.Tenant.DefaultTenantName);
+            var defaultTenant = _context.Tenants.IgnoreQueryFilters().FirstOrDefault(t => t.TenancyName == MultiTenancy.Tenant.DefaultTenantName);
             if (defaultTenant == null)
             {
-                defaultTenant = new MultiTenancy.Tenant(MultiTenancy.Tenant.DefaultTenantName, MultiTenancy.Tenant.DefaultTenantName);
+                defaultTenant = new MultiTenancy.Tenant(AbpTenantBase.DefaultTenantName, AbpTenantBase.DefaultTenantName);
 
-                var defaultEdition = _context.Editions.FirstOrDefault(e => e.Name == EditionManager.DefaultEditionName);
+                var defaultEdition = _context.Editions.IgnoreQueryFilters().FirstOrDefault(e => e.Name == EditionManager.DefaultEditionName);
                 if (defaultEdition != null)
                 {
                     defaultTenant.EditionId = defaultEdition.Id;

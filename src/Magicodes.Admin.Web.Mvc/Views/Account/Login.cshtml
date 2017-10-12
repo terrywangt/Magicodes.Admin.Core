@@ -1,7 +1,10 @@
 ﻿@using System.Globalization
 @using Abp.Extensions
 @using Abp.MultiTenancy
+@using Magicodes.Admin.Identity
+@using Microsoft.AspNetCore.Identity
 @model Magicodes.Admin.Web.Models.Account.LoginFormViewModel
+@inject SignInManager SignInManager
 @section Scripts
 {
     <environment names="Development">
@@ -58,8 +61,7 @@
 </form>
 
 @{
-    var loginProviders = Context.Authentication
-        .GetAuthenticationSchemes()
+    var loginProviders = (await SignInManager.GetExternalAuthenticationSchemesAsync())
         .Where(s => !s.DisplayName.IsNullOrWhiteSpace())
         .ToList();
 

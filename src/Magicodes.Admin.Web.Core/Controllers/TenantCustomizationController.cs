@@ -22,7 +22,7 @@ namespace Magicodes.Admin.Web.Controllers
     {
         private readonly TenantManager _tenantManager;
         private readonly IBinaryObjectManager _binaryObjectManager;
-        
+
         public TenantCustomizationController(
             TenantManager tenantManager,
             IBinaryObjectManager binaryObjectManager)
@@ -137,12 +137,12 @@ namespace Magicodes.Admin.Web.Controllers
         {
             var defaultLogo = "/Common/Images/logo.png";
 
-            if (!tenantId.HasValue)
+            if (tenantId == null)
             {
                 return File(defaultLogo, MimeTypeNames.ImagePng);
             }
 
-            var tenant = await _tenantManager.GetByIdAsync(AbpSession.GetTenantId());
+            var tenant = await _tenantManager.GetByIdAsync(tenantId.Value);
             if (!tenant.HasLogo())
             {
                 return File(defaultLogo, MimeTypeNames.ImagePng);
@@ -157,7 +157,7 @@ namespace Magicodes.Admin.Web.Controllers
                 }
 
                 return File(logoObject.Bytes, tenant.LogoFileType);
-            }   
+            }
         }
 
         [AllowAnonymous]

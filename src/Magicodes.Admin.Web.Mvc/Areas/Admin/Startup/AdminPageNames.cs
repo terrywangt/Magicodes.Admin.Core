@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Magicodes.Admin.Web.Areas.Admin.Startup
+﻿namespace Magicodes.Admin.Web.Areas.Admin.Startup
 {
     public class AdminPageNames
     {
@@ -15,7 +10,7 @@ namespace Magicodes.Admin.Web.Areas.Admin.Startup
             public const string AuditLogs = "Administration.AuditLogs";
             public const string OrganizationUnits = "Administration.OrganizationUnits";
             public const string Languages = "Administration.Languages";
-            public const string Index = "Administration.Index";
+            public const string DemoUiComponents = "Administration.DemoUiComponents";
         }
 
         public static class Host

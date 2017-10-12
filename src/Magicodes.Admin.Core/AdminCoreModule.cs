@@ -8,13 +8,16 @@ using Abp.Reflection.Extensions;
 using Abp.Timing;
 using Abp.Configuration.Startup;
 using Abp.MailKit;
+using Abp.Net.Mail.Smtp;
 using Abp.Zero;
 using Abp.Zero.Configuration;
+using Castle.MicroKernel.Registration;
 using Magicodes.Admin.Authorization.Roles;
 using Magicodes.Admin.Authorization.Users;
 using Magicodes.Admin.Chat;
 using Magicodes.Admin.Configuration;
 using Magicodes.Admin.Debugging;
+using Magicodes.Admin.Emailing;
 using Magicodes.Admin.Features;
 using Magicodes.Admin.Friendships;
 using Magicodes.Admin.Friendships.Cache;
@@ -33,7 +36,7 @@ namespace Magicodes.Admin
     [DependsOn(
         typeof(AbpZeroCoreModule),
 #if FEATURE_LDAP
-        typeof(AbpZeroLdapModule), 
+        typeof(AbpZeroLdapModule),
 #endif
         typeof(AbpAutoMapperModule),
         typeof(AbpMailKitModule))]
@@ -61,7 +64,7 @@ namespace Magicodes.Admin
 
             //Enable this line to create a multi-tenant application.
             Configuration.MultiTenancy.IsEnabled = AdminConsts.MultiTenancyEnabled;
-
+            
             //Enable LDAP authentication (It can be enabled only if MultiTenancy is disabled!)
             //Configuration.Modules.ZeroLdap().Enable(typeof(AppLdapAuthenticationSource));
 
@@ -73,6 +76,15 @@ namespace Magicodes.Admin
                 //Disabling email sending in debug mode
                 Configuration.ReplaceService<IEmailSender, NullEmailSender>(DependencyLifeStyle.Transient);
             }
+
+            Configuration.ReplaceService(typeof(IEmailSenderConfiguration), () =>
+            {
+                Configuration.IocManager.IocContainer.Register(
+                    Component.For<IEmailSenderConfiguration, ISmtpEmailSenderConfiguration>()
+                             .ImplementedBy<AdminSmtpEmailSenderConfiguration>()
+                             .LifestyleTransient()
+                );
+            });
 
             Configuration.Caching.Configure(FriendCacheItem.CacheName, cache =>
             {

@@ -1,7 +1,6 @@
 ﻿@using System.Threading.Tasks
 @using Magicodes.Admin.Authorization
 @using Magicodes.Admin.Web.Areas.Admin.Startup
-@using Magicodes.Admin.Web.Startup
 @{
     ViewBag.CurrentPageName = AdminPageNames.Common.OrganizationUnits;
 }
@@ -49,7 +48,7 @@
                 <div class="actions">
                     @if (IsGranted(AppPermissions.Pages_Administration_OrganizationUnits_ManageOrganizationTree))
                     {
-                        <a id="AddRootUnitButton" class="btn btn-circle btn-default">
+                        <a id="AddRootUnitButton" class="btn btn-circle green-haze">
                             <i class="fa fa-plus"></i> @L("AddRootUnit")
                         </a>
                     }
@@ -75,14 +74,25 @@
                 <div class="actions">
                     @if (IsGranted(AppPermissions.Pages_Administration_OrganizationUnits_ManageMembers))
                     {
-                        <a id="AddUserToOuButton" class="btn btn-circle btn-default">
+                        <a id="AddUserToOuButton" class="btn btn-circle blue" style="display:none">
                             <i class="fa fa-plus"></i> @L("AddMember")
                         </a>
                     }
                 </div>
             </div>
             <div class="portlet-body">
-                <div id="OuMembersTable"></div>
+                <div id="OuMembersTable" style="display:none">
+                    <table class="organization-members-table display table table-striped table-bordered table-hover dt-responsive nowrap">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>@L("UserName")</th>
+                                <th>@L("AddedTime")</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+
                 <div id="OuMembersEmptyInfo" class="text-muted">
                     @L("SelectAnOrganizationUnitToSeeMembers")
                 </div>

@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Security.Claims;
 using Abp.Extensions;
-using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
 
 namespace Magicodes.Admin.Web.IdentityServer
 {

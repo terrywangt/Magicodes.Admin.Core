@@ -25,5 +25,11 @@ namespace Magicodes.Admin.Authorization.Users.Profile
         Task<GetProfilePictureOutput> GetFriendProfilePictureById(GetFriendProfilePictureByIdInput input);
 
         Task ChangeLanguage(ChangeUserLanguageDto input);
+
+        Task<UpdateGoogleAuthenticatorKeyOutput> UpdateGoogleAuthenticatorKey();
+
+        Task SendVerificationSms();
+
+        Task VerifySmsCode(VerifySmsCodeInputDto input);
     }
 }

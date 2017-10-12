@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Abp.Authorization.Users;
 using Abp.AutoMapper;
 
 namespace Magicodes.Admin.Authorization.Users.Profile.Dto
@@ -7,24 +8,30 @@ namespace Magicodes.Admin.Authorization.Users.Profile.Dto
     public class CurrentUserProfileEditDto
     {
         [Required]
-        [StringLength(User.MaxNameLength)]
+        [StringLength(AbpUserBase.MaxNameLength)]
         public string Name { get; set; }
 
         [Required]
-        [StringLength(User.MaxSurnameLength)]
+        [StringLength(AbpUserBase.MaxSurnameLength)]
         public string Surname { get; set; }
 
         [Required]
-        [StringLength(User.MaxUserNameLength)]
+        [StringLength(AbpUserBase.MaxUserNameLength)]
         public string UserName { get; set; }
 
         [Required]
-        [StringLength(User.MaxEmailAddressLength)]
+        [StringLength(AbpUserBase.MaxEmailAddressLength)]
         public string EmailAddress { get; set; }
 
         [StringLength(User.MaxPhoneNumberLength)]
         public string PhoneNumber { get; set; }
 
+        public virtual bool IsPhoneNumberConfirmed { get; set; }
+
         public string Timezone { get; set; }
+
+        public string QrCodeSetupImageUrl { get; set; }
+
+        public bool IsGoogleAuthenticatorEnabled { get; set; }
     }
 }

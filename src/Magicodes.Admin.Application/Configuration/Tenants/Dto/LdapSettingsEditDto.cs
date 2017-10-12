@@ -1,3 +1,5 @@
+using Abp.Auditing;
+
 namespace Magicodes.Admin.Configuration.Tenants.Dto
 {
     public class LdapSettingsEditDto
@@ -9,7 +11,8 @@ namespace Magicodes.Admin.Configuration.Tenants.Dto
         public string Domain { get; set; }
         
         public string UserName { get; set; }
-        
+
+        [DisableAuditing]
         public string Password { get; set; }
     }
 }

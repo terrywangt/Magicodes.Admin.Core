@@ -18,124 +18,118 @@
             modalClass: 'CreateOrEditLanguageModal'
         });
 
-        _$languagesTable.jtable({
-
-            title: app.localize('Languages'),
-
-            actions: {
-                listAction: {
-                    method: _languageService.getLanguages
-                }
+        var dataTable = _$languagesTable.DataTable({
+            paging: false,
+            serverSide: false,
+            processing: false,
+            listAction: {
+                ajaxFunction: _languageService.getLanguages
             },
-
-            fields: {
-                id: {
-                    key: true,
-                    list: false
-                },
-                actions: {
-                    title: app.localize('Actions'),
-                    width: '30%',
-                    sorting: false,
-                    type: 'record-actions',
-                    cssClass: 'btn btn-xs btn-primary blue',
-                    text: '<i class="fa fa-cog"></i> ' + app.localize('Actions') + ' <span class="caret"></span>',
-                    items: [{
-                        text: app.localize('Edit'),
-                        visible: function (data) {
-                            return _permissions.edit && data.record.tenantId === abp.session.tenantId;
-                        },
-                        action: function (data) {
-                            _createOrEditModal.open({ id: data.record.id });
-                        }
-                    }, {
-                        text: app.localize('ChangeTexts'),
-                        visible: function () {
-                            return _permissions.changeTexts;
-                        },
-                        action: function (data) {
-                            document.location.href = abp.appPath + "Admin/Languages/Texts?languageName=" + data.record.name;
-                        }
-                    }, {
-                        text: app.localize('SetAsDefaultLanguage'),
-                        visible: function () {
-                            return _permissions.edit;
-                        },
-                        action: function (data) {
-                            setAsDefaultLanguage(data.record);
-                        }
-                    }, {
-                        text: app.localize('Delete'),
-                        visible: function (data) {
-                            return _permissions.delete && data.record.tenantId === abp.session.tenantId;
-                        },
-                        action: function (data) {
-                            deleteLanguage(data.record);
-                        }
-                    }]
-                },
-                displayName: {
-                    title: app.localize('Name'),
-                    width: '30%',
-                    display: function (data) {
-                        var $span = $('<span></span>');
-
-                        $span.append('<i class="' + data.record.icon + '"></i>');
-                        $span.append(' &nbsp; ');
-                        $span.append('<span data-language-name="' + data.record.name + '">' + data.record.displayName + "</span>");
-
-                        return $span;
+            columnDefs: [
+                {
+                    targets: 0,
+                    data: null,
+                    orderable: false,
+                    autoWidth: false,
+                    defaultContent: '',
+                    rowAction: {
+                        cssClass: 'btn btn-xs btn-primary blue',
+                        text: '<i class="fa fa-cog"></i> ' + app.localize('Actions') + ' <span class="caret"></span>',
+                        items: [{
+                            text: app.localize('Edit'),
+                            visible: function (data) {
+                                return _permissions.edit && data.record.tenantId === abp.session.tenantId;
+                            },
+                            action: function (data) {
+                                _createOrEditModal.open({ id: data.record.id });
+                            }
+                        }, {
+                            text: app.localize('ChangeTexts'),
+                            visible: function () {
+                                return _permissions.changeTexts;
+                            },
+                            action: function (data) {
+                                document.location.href = abp.appPath + "Admin/Languages/Texts?languageName=" + data.record.name;
+                            }
+                        }, {
+                            text: app.localize('SetAsDefaultLanguage'),
+                            visible: function () {
+                                return _permissions.edit;
+                            },
+                            action: function (data) {
+                                setAsDefaultLanguage(data.record);
+                            }
+                        }, {
+                            text: app.localize('Delete'),
+                            visible: function (data) {
+                                return _permissions.delete && data.record.tenantId === abp.session.tenantId;
+                            },
+                            action: function (data) {
+                                deleteLanguage(data.record);
+                            }
+                        }]
                     }
                 },
-                name: {
-                    title: app.localize('Code'),
-                    width: '10%'
-                },
-                tenantId: {
-                    title: app.localize('Default') + '*',
-                    width: '10%',
-                    list: abp.session.tenantId ? true : false, //this field is visible only for tenants
-                    display: function (data) {
-                        var $span = $('<span></span>');
+                {
+                    targets: 1,
+                    data: "displayName",
+                    render: function (displayName, type, row, meta) {
+                        var $span = $('<span/>')
+                            .append($("<i/>").addClass(row.icon).css("margin-right", "5px"))
+                            .append($("<span/>").attr("data-language-name", row.name).text(row.displayName)); 
 
-                        if (data.record.tenantId != abp.session.tenantId) {
-                            $span.append('<span class="label label-default">' + app.localize('Yes') + '</span>');
+                        if (meta.settings.rawServerResponse.defaultLanguageName === row.name) {
+                            $span.addClass("text-bold").append(" (" + app.localize("Default") + ")");
+                        }
+
+                        return $span[0].outerHTML;
+                    }
+                },
+                {
+                    targets: 2,
+                    data: "name"
+                },
+                {
+                    targets: 3,
+                    data: "tenantId",
+                    visible: abp.session.tenantId ? true : false, //this field is visible only for tenants
+                    render: function (tenantId, type, row, meta) {
+                        var $span = $('<span/>').addClass("label");
+
+                        if (tenantId !== abp.session.tenantId) {
+                            $span.addClass("label-default").text(app.localize('Yes'));
                         } else {
-                            $span.append('<span class="label label-success">' + app.localize('No') + '</span>');
+                            $span.addClass("label-success").text(app.localize('No'));
                         }
 
-                        return $span;
+                        return $span[0].outerHTML;
                     }
                 },
-                creationTime: {
-                    title: app.localize('CreationTime'),
-                    width: '20%',
-                    display: function (data) {
-                        return moment(data.record.creationTime).format('L');
+                {
+                    targets: 4,
+                    data: "creationTime",
+                    render: function (creationTime) {
+                        return moment(creationTime).format('L');
                     }
                 },
-                isDisabled: {
-                    title: app.localize('IsDisabled'),
-                    width: '8%',
-                    display: function (data) {
-                        if (data.record.isDisabled) {
-                            return '<span class="label label-default">' + app.localize('Yes') + '</span>';
+                {
+                    targets: 5,
+                    data: "isDisabled",
+                    render: function (isDisabled) {
+                        var isEnabled = !isDisabled;
+                        var $span = $("<span/>").addClass("label");
+                        if (isEnabled) {
+                            $span.addClass("label-success").text(app.localize('Yes'));
                         } else {
-                            return '<span class="label label-success">' + app.localize('No') + '</span>';
+                            $span.addClass("label-default").text(app.localize('No'));
                         }
+
+                        return $span[0].outerHTML;
                     }
                 }
-            },
-
-            recordsLoaded: function (event, data) {
-                _defaultLanguageName = data.serverResponse.originalResult.defaultLanguageName;
-                _$languagesTable
-                    .find('[data-language-name=' + _defaultLanguageName + ']')
-                    .addClass('text-bold')
-                    .append(' (' + app.localize('Default') + ')');
-            }
-
+            ]
         });
+
 
         function setAsDefaultLanguage(language) {
             _languageService.setDefaultLanguage({
@@ -167,13 +161,12 @@
         });
 
         function getLanguages() {
-            _$languagesTable.jtable('load');
+            dataTable.ajax.reload();
         }
 
         abp.event.on('app.createOrEditLanguageModalSaved', function () {
             getLanguages();
         });
 
-        getLanguages();
     });
 })();

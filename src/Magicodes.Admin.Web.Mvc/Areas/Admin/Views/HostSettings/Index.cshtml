@@ -3,7 +3,6 @@
 @using Abp.Extensions
 @using Abp.Timing;
 @using Magicodes.Admin.Web.Areas.Admin.Startup
-@using Magicodes.Admin.Web.Startup
 @model Magicodes.Admin.Web.Areas.Admin.Models.HostSettings.HostSettingsViewModel
 @{
     ViewBag.CurrentPageName = AdminPageNames.Host.Settings;
@@ -135,6 +134,15 @@
                                     <span class="check"></span>
                                     <span class="box"></span>
                                     @L("EmailConfirmationRequiredForLogin")
+                                </label>
+                            </div>
+                            <div class="md-checkbox">
+                                <input id="Settings_SmsVerificationEnabled" class="md-check" type="checkbox" name="SmsVerificationEnabled" value="true" @(Model.Settings.UserManagement.SmsVerificationEnabled ? "checked=\"checked\"" : "")>
+                                <label for="Settings_SmsVerificationEnabled">
+                                    <span class="inc"></span>
+                                    <span class="check"></span>
+                                    <span class="box"></span>
+                                    @L("SmsVerificationEnabled")
                                 </label>
                             </div>
                         </div>
@@ -300,6 +308,15 @@
                                         <span class="check"></span>
                                         <span class="box"></span>
                                         @L("IsSmsVerificationEnabled")
+                                    </label>
+                                </div>
+                                <div class="md-checkbox">
+                                    <input id="Setting_TwoFactorLogin_IsGoogleAuthenticatorEnabled" class="md-check" type="checkbox" name="IsGoogleAuthenticatorEnabled" value="true" @(Model.Settings.Security.TwoFactorLogin.IsGoogleAuthenticatorEnabled ? "checked=\"checked\"" : "")>
+                                    <label for="Setting_TwoFactorLogin_IsGoogleAuthenticatorEnabled">
+                                        <span class="inc"></span>
+                                        <span class="check"></span>
+                                        <span class="box"></span>
+                                        @L("IsGoogleAuthenticatorEnabled")
                                     </label>
                                 </div>
                                 <div class="md-checkbox">

@@ -1,5 +1,6 @@
 using System.Linq;
 using Abp.Application.Features;
+using Microsoft.EntityFrameworkCore;
 using Magicodes.Admin.Editions;
 using Magicodes.Admin.EntityFrameworkCore;
 using Magicodes.Admin.Features;
@@ -22,7 +23,7 @@ namespace Magicodes.Admin.Migrations.Seed.Host
 
         private void CreateEditions()
         {
-            var defaultEdition = _context.Editions.FirstOrDefault(e => e.Name == EditionManager.DefaultEditionName);
+            var defaultEdition = _context.Editions.IgnoreQueryFilters().FirstOrDefault(e => e.Name == EditionManager.DefaultEditionName);
             if (defaultEdition == null)
             {
                 defaultEdition = new SubscribableEdition { Name = EditionManager.DefaultEditionName, DisplayName = EditionManager.DefaultEditionName };
@@ -44,7 +45,7 @@ namespace Magicodes.Admin.Migrations.Seed.Host
 
         private void CreateFeatureIfNotExists(int editionId, string featureName, bool isEnabled)
         {
-            var defaultEditionChatFeature = _context.EditionFeatureSettings
+            var defaultEditionChatFeature = _context.EditionFeatureSettings.IgnoreQueryFilters()
                                                         .FirstOrDefault(ef => ef.EditionId == editionId && ef.Name == featureName);
 
             if (defaultEditionChatFeature == null)

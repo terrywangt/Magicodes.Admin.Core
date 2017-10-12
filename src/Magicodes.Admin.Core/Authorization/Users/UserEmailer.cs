@@ -1,13 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Abp.Authorization.Users;
+using Abp.Configuration;
 using Abp.Dependency;
 using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
 using Abp.Extensions;
+using Abp.Localization;
 using Abp.Net.Mail;
 using Magicodes.Admin.Chat;
+using Magicodes.Admin.Editions;
 using Magicodes.Admin.Emailing;
+using Magicodes.Admin.Localization;
 using Magicodes.Admin.MultiTenancy;
 
 namespace Magicodes.Admin.Authorization.Users
@@ -21,16 +27,28 @@ namespace Magicodes.Admin.Authorization.Users
         private readonly IEmailSender _emailSender;
         private readonly IRepository<Tenant> _tenantRepository;
         private readonly ICurrentUnitOfWorkProvider _unitOfWorkProvider;
+        private readonly IUnitOfWorkManager _unitOfWorkManager;
+        private readonly IRepository<User, long> _userRepository;
+        private readonly ISettingManager _settingManager;
+        private readonly EditionManager _editionManager;
 
-        public UserEmailer(IEmailTemplateProvider emailTemplateProvider,
+        public UserEmailer(
+            IEmailTemplateProvider emailTemplateProvider,
             IEmailSender emailSender,
             IRepository<Tenant> tenantRepository,
-            ICurrentUnitOfWorkProvider unitOfWorkProvider)
+            ICurrentUnitOfWorkProvider unitOfWorkProvider,
+            IUnitOfWorkManager unitOfWorkManager,
+            IRepository<User, long> userRepository,
+            ISettingManager settingManager, EditionManager editionManager)
         {
             _emailTemplateProvider = emailTemplateProvider;
             _emailSender = emailSender;
             _tenantRepository = tenantRepository;
             _unitOfWorkProvider = unitOfWorkProvider;
+            _unitOfWorkManager = unitOfWorkManager;
+            _userRepository = userRepository;
+            _settingManager = settingManager;
+            _editionManager = editionManager;
         }
 
         /// <summary>
@@ -58,11 +76,7 @@ namespace Magicodes.Admin.Authorization.Users
             }
 
             var tenancyName = GetTenancyNameOrNull(user.TenantId);
-
-            var emailTemplate = new StringBuilder(_emailTemplateProvider.GetDefaultTemplate(user.TenantId));
-            emailTemplate.Replace("{EMAIL_TITLE}", L("EmailActivation_Title"));
-            emailTemplate.Replace("{EMAIL_SUB_TITLE}", L("EmailActivation_SubTitle"));
-
+            var emailTemplate = GetTitleAndSubTitle(user.TenantId, L("EmailActivation_Title"), L("EmailActivation_SubTitle"));
             var mailMessage = new StringBuilder();
 
             mailMessage.AppendLine("<b>" + L("NameSurname") + "</b>: " + user.Name + " " + user.Surname + "<br />");
@@ -83,9 +97,7 @@ namespace Magicodes.Admin.Authorization.Users
             mailMessage.AppendLine(L("EmailActivation_ClickTheLinkBelowToVerifyYourEmail") + "<br /><br />");
             mailMessage.AppendLine("<a href=\"" + link + "\">" + link + "</a>");
 
-            emailTemplate.Replace("{EMAIL_BODY}", mailMessage.ToString());
-
-            await _emailSender.SendAsync(user.EmailAddress, L("EmailActivation_Subject"), emailTemplate.ToString());
+            await ReplaceBodyAndSend(user.EmailAddress, L("EmailActivation_Subject"), emailTemplate, mailMessage);
         }
 
         /// <summary>
@@ -101,11 +113,7 @@ namespace Magicodes.Admin.Authorization.Users
             }
 
             var tenancyName = GetTenancyNameOrNull(user.TenantId);
-
-            var emailTemplate = new StringBuilder(_emailTemplateProvider.GetDefaultTemplate(user.TenantId));
-            emailTemplate.Replace("{EMAIL_TITLE}", L("PasswordResetEmail_Title"));
-            emailTemplate.Replace("{EMAIL_SUB_TITLE}", L("PasswordResetEmail_SubTitle"));
-
+            var emailTemplate = GetTitleAndSubTitle(user.TenantId, L("PasswordResetEmail_Title"), L("PasswordResetEmail_SubTitle"));
             var mailMessage = new StringBuilder();
 
             mailMessage.AppendLine("<b>" + L("NameSurname") + "</b>: " + user.Name + " " + user.Surname + "<br />");
@@ -133,28 +141,146 @@ namespace Magicodes.Admin.Authorization.Users
                 mailMessage.AppendLine("<a href=\"" + link + "\">" + link + "</a>");
             }
 
-            emailTemplate.Replace("{EMAIL_BODY}", mailMessage.ToString());
-
-            await _emailSender.SendAsync(user.EmailAddress, L("PasswordResetEmail_Subject"), emailTemplate.ToString());
+            await ReplaceBodyAndSend(user.EmailAddress, L("PasswordResetEmail_Subject"), emailTemplate, mailMessage);
         }
 
-        public void TryToSendChatMessageMail(User user, string senderUsername, string senderTenancyName, ChatMessage chatMessage)
+        public async void TryToSendChatMessageMail(User user, string senderUsername, string senderTenancyName, ChatMessage chatMessage)
         {
             try
             {
-                var emailTemplate = new StringBuilder(_emailTemplateProvider.GetDefaultTemplate(user.TenantId));
-                emailTemplate.Replace("{EMAIL_TITLE}", L("NewChatMessageEmail_Title"));
-                emailTemplate.Replace("{EMAIL_SUB_TITLE}", L("NewChatMessageEmail_SubTitle"));
-
+                var emailTemplate = GetTitleAndSubTitle(user.TenantId, L("NewChatMessageEmail_Title"), L("NewChatMessageEmail_SubTitle"));
                 var mailMessage = new StringBuilder();
+
                 mailMessage.AppendLine("<b>" + L("Sender") + "</b>: " + senderTenancyName + "/" + senderUsername + "<br />");
                 mailMessage.AppendLine("<b>" + L("Time") + "</b>: " + chatMessage.CreationTime.ToString("yyyy-MM-dd HH:mm:ss") + "<br />");
                 mailMessage.AppendLine("<b>" + L("Message") + "</b>: " + chatMessage.Message + "<br />");
                 mailMessage.AppendLine("<br />");
 
-                emailTemplate.Replace("{EMAIL_BODY}", mailMessage.ToString());
+                await ReplaceBodyAndSend(user.EmailAddress, L("NewChatMessageEmail_Subject"), emailTemplate, mailMessage);
+            }
+            catch (Exception exception)
+            {
+                Logger.Error(exception.Message, exception);
+            }
+        }
 
-                _emailSender.Send(user.EmailAddress, L("NewChatMessageEmail_Subject"), emailTemplate.ToString());
+        public async void TryToSendSubscriptionExpireEmail(int tenantId, DateTime utcNow)
+        {
+            try
+            {
+                using (_unitOfWorkManager.Begin())
+                {
+                    using (_unitOfWorkManager.Current.SetTenantId(tenantId))
+                    {
+                        var tenantAdmin = _userRepository.FirstOrDefault(u => u.UserName == AbpUserBase.AdminUserName);
+                        if (tenantAdmin == null || string.IsNullOrEmpty(tenantAdmin.EmailAddress))
+                        {
+                            return;
+                        }
+
+                        var hostAdminLanguage = _settingManager.GetSettingValueForUser(LocalizationSettingNames.DefaultLanguage, tenantAdmin.TenantId, tenantAdmin.Id);
+                        var culture = CultureHelper.GetCultureInfoByChecking(hostAdminLanguage);
+                        var emailTemplate = GetTitleAndSubTitle(tenantId, L("SubscriptionExpire_Title"), L("SubscriptionExpire_SubTitle"));
+                        var mailMessage = new StringBuilder();
+
+                        mailMessage.AppendLine("<b>" + L("Message") + "</b>: " + L("SubscriptionExpire_Email_Body", culture, utcNow.ToString("yyyy-MM-dd") + " UTC") + "<br />");
+                        mailMessage.AppendLine("<br />");
+
+                        await ReplaceBodyAndSend(tenantAdmin.EmailAddress, L("SubscriptionExpire_Email_Subject"), emailTemplate, mailMessage);
+                    }
+                }
+            }
+            catch (Exception exception)
+            {
+                Logger.Error(exception.Message, exception);
+            }
+        }
+
+        public async Task TryToSendSubscriptionAssignedToAnotherEmail(int tenantId, DateTime utcNow, int expiringEditionId)
+        {
+            try
+            {
+                using (_unitOfWorkManager.Begin())
+                {
+                    using (_unitOfWorkManager.Current.SetTenantId(tenantId))
+                    {
+                        var tenantAdmin = _userRepository.FirstOrDefault(u => u.UserName == AbpUserBase.AdminUserName);
+                        if (tenantAdmin == null || string.IsNullOrEmpty(tenantAdmin.EmailAddress))
+                        {
+                            return;
+                        }
+
+                        var hostAdminLanguage = _settingManager.GetSettingValueForUser(LocalizationSettingNames.DefaultLanguage, tenantAdmin.TenantId, tenantAdmin.Id);
+                        var culture = CultureHelper.GetCultureInfoByChecking(hostAdminLanguage);
+                        var expringEdition = await _editionManager.GetByIdAsync(expiringEditionId);
+                        var emailTemplate = GetTitleAndSubTitle(tenantId, L("SubscriptionExpire_Title"), L("SubscriptionExpire_SubTitle"));
+                        var mailMessage = new StringBuilder();
+
+                        mailMessage.AppendLine("<b>" + L("Message") + "</b>: " + L("SubscriptionAssignedToAnother_Email_Body", culture, expringEdition.DisplayName, utcNow.ToString("yyyy-MM-dd") + " UTC") + "<br />");
+                        mailMessage.AppendLine("<br />");
+
+                        await ReplaceBodyAndSend(tenantAdmin.EmailAddress, L("SubscriptionExpire_Email_Subject"), emailTemplate, mailMessage);
+                    }
+                }
+            }
+            catch (Exception exception)
+            {
+                Logger.Error(exception.Message, exception);
+            }
+        }
+
+        public async void TryToSendFailedSubscriptionTerminationsEmail(List<string> failedTenancyNames, DateTime utcNow)
+        {
+            try
+            {
+                var hostAdmin = _userRepository.FirstOrDefault(u => u.UserName == AbpUserBase.AdminUserName);
+                if (hostAdmin == null || string.IsNullOrEmpty(hostAdmin.EmailAddress))
+                {
+                    return;
+                }
+
+                var hostAdminLanguage = _settingManager.GetSettingValueForUser(LocalizationSettingNames.DefaultLanguage, hostAdmin.TenantId, hostAdmin.Id);
+                var culture = CultureHelper.GetCultureInfoByChecking(hostAdminLanguage);
+                var emailTemplate = GetTitleAndSubTitle(null, L("FailedSubscriptionTerminations_Title"), L("FailedSubscriptionTerminations_SubTitle"));
+                var mailMessage = new StringBuilder();
+
+                mailMessage.AppendLine("<b>" + L("Message") + "</b>: " + L("FailedSubscriptionTerminations_Email_Body", culture, string.Join(",", failedTenancyNames), utcNow.ToString("yyyy-MM-dd") + " UTC") + "<br />");
+                mailMessage.AppendLine("<br />");
+
+                await ReplaceBodyAndSend(hostAdmin.EmailAddress, L("FailedSubscriptionTerminations_Email_Subject"), emailTemplate, mailMessage);
+            }
+            catch (Exception exception)
+            {
+                Logger.Error(exception.Message, exception);
+            }
+        }
+
+        public async void TryToSendSubscriptionExpiringSoonEmail(int tenantId, DateTime dateToCheckRemainingDayCount)
+        {
+            try
+            {
+                using (_unitOfWorkManager.Begin())
+                {
+                    using (_unitOfWorkManager.Current.SetTenantId(tenantId))
+                    {
+                        var tenantAdmin = _userRepository.FirstOrDefault(u => u.UserName == AbpUserBase.AdminUserName);
+                        if (tenantAdmin == null || string.IsNullOrEmpty(tenantAdmin.EmailAddress))
+                        {
+                            return;
+                        }
+
+                        var tenantAdminLanguage = _settingManager.GetSettingValueForUser(LocalizationSettingNames.DefaultLanguage, tenantAdmin.TenantId, tenantAdmin.Id);
+                        var culture = CultureHelper.GetCultureInfoByChecking(tenantAdminLanguage);
+
+                        var emailTemplate = GetTitleAndSubTitle(null, L("SubscriptionExpiringSoon_Title"), L("SubscriptionExpiringSoon_SubTitle"));
+                        var mailMessage = new StringBuilder();
+
+                        mailMessage.AppendLine("<b>" + L("Message") + "</b>: " + L("SubscriptionExpiringSoon_Email_Body", culture, dateToCheckRemainingDayCount.ToString("yyyy-MM-dd") + " UTC") + "<br />");
+                        mailMessage.AppendLine("<br />");
+
+                        await ReplaceBodyAndSend(tenantAdmin.EmailAddress, L("SubscriptionExpiringSoon_Email_Subject"), emailTemplate, mailMessage);
+                    }
+                }
             }
             catch (Exception exception)
             {
@@ -173,6 +299,21 @@ namespace Magicodes.Admin.Authorization.Users
             {
                 return _tenantRepository.Get(tenantId.Value).TenancyName;
             }
+        }
+
+        private StringBuilder GetTitleAndSubTitle(int? tenantId, string title, string subTitle)
+        {
+            var emailTemplate = new StringBuilder(_emailTemplateProvider.GetDefaultTemplate(tenantId));
+            emailTemplate.Replace("{EMAIL_TITLE}", title);
+            emailTemplate.Replace("{EMAIL_SUB_TITLE}", subTitle);
+
+            return emailTemplate;
+        }
+
+        private async Task ReplaceBodyAndSend(string emailAddress, string subject, StringBuilder emailTemplate, StringBuilder mailMessage)
+        {
+            emailTemplate.Replace("{EMAIL_BODY}", mailMessage.ToString());
+            await _emailSender.SendAsync(emailAddress, subject, emailTemplate.ToString());
         }
     }
 }

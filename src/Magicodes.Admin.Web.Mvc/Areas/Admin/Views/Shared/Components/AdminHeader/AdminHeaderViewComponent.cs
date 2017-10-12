@@ -1,9 +1,11 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using Abp.Configuration;
 using Abp.Configuration.Startup;
 using Abp.Localization;
 using Abp.Runtime.Session;
 using Microsoft.AspNetCore.Mvc;
+using Magicodes.Admin.Configuration;
 using Magicodes.Admin.Web.Areas.Admin.Models.Layout;
 using Magicodes.Admin.Web.Session;
 using Magicodes.Admin.Web.Views;
@@ -37,7 +39,8 @@ namespace Magicodes.Admin.Web.Areas.Admin.Views.Shared.Components.AdminHeader
                 Languages = _languageManager.GetLanguages().Where(l => !l.IsDisabled).ToList(),
                 CurrentLanguage = _languageManager.CurrentLanguage,
                 IsMultiTenancyEnabled = _multiTenancyConfig.IsEnabled,
-                IsImpersonatedLogin = _abpSession.ImpersonatorUserId.HasValue
+                IsImpersonatedLogin = _abpSession.ImpersonatorUserId.HasValue,
+                SubscriptionExpireNootifyDayCount = SettingManager.GetSettingValue<int>(AppSettings.TenantManagement.SubscriptionExpireNotifyDayCount)
             };
 
             return View(headerModel);

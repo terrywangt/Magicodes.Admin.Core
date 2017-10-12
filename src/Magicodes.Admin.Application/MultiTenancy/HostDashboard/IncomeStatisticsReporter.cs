@@ -29,7 +29,7 @@ namespace Magicodes.Admin.MultiTenancy.HostDashboard
                 .Select(s => new IncomeStastistic
                 {
                     Date = s.First().CreationTime.Date,
-                    Amount = s.DefaultIfEmpty(new SubscriptionPayment()).Sum(c => c.Amount)
+                    Amount = s.Sum(c => c.Amount)
                 })
                 .ToListAsync();
 

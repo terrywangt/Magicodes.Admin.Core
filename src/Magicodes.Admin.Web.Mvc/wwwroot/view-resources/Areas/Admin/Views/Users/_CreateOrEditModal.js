@@ -6,6 +6,7 @@
         var _modalManager;
         var _$userInformationForm = null;
         var _passwordComplexityHelper = new app.PasswordComplexityHelper();
+        var _organizationTree;
 
         function _findAssignedRoleNames() {
             var assignedRoleNames = [];
@@ -23,6 +24,9 @@
 
         this.init = function (modalManager) {
             _modalManager = modalManager;
+
+            _organizationTree = new OrganizationTree();
+            _organizationTree.init(_modalManager.getModal().find('.organization-tree'));
 
             _$userInformationForm = _modalManager.getModal().find('form[name=UserInformationsForm]');
             _$userInformationForm.validate();
@@ -72,7 +76,8 @@
                 user: user,
                 assignedRoleNames: assignedRoleNames,
                 sendActivationEmail: user.SendActivationEmail,
-                SetRandomPassword: user.SetRandomPassword
+                SetRandomPassword: user.SetRandomPassword,
+                organizationUnits: _organizationTree.getSelectedOrganizations()
             }).done(function () {
                 abp.notify.info(app.localize('SavedSuccessfully'));
                 _modalManager.close();

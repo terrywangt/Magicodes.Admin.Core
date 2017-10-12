@@ -24,175 +24,178 @@
             modalClass: 'UserPermissionsModal'
         });
 
-        _$usersTable.jtable({
-
-            title: app.localize('Users'),
-            paging: true,
-            sorting: true,
-            multiSorting: true,
-
-            actions: {
-                listAction: {
-                    method: _userService.getUsers
+        var dataTable = _$usersTable.DataTable({
+            listAction: {
+                ajaxFunction: _userService.getUsers,
+                inputFilter: function () {
+                    return {
+                        filter: $('#UsersTableFilter').val(),
+                        permission: $("#PermissionSelectionCombo").val(),
+                        role: $("#RoleSelectionCombo").val()
+                    };
                 }
             },
+            columnDefs: [
+                {
+                    targets: 0,
+                    data: null,
+                    orderable: false,
+                    autoWidth: false,
+                    defaultContent: '',
+                    rowAction: {
+                        cssClass: 'btn btn-xs btn-primary blue',
+                        text: '<i class="fa fa-cog"></i> ' + app.localize('Actions') + ' <span class="caret"></span>',
+                        items: [{
+                            text: app.localize('LoginAsThisUser'),
+                            visible: function (data) {
+                                return _permissions.impersonation && data.record.id !== abp.session.userId;
+                            },
+                            action: function (data) {
+                                abp.ajax({
+                                    url: abp.appPath + 'Account/Impersonate',
+                                    data: JSON.stringify({
+                                        tenantId: abp.session.tenantId,
+                                        userId: data.record.id
+                                    })
+                                });
+                            }
+                        }, {
+                            text: app.localize('Edit'),
+                            visible: function () {
+                                return _permissions.edit;
+                            },
+                            action: function (data) {
+                                _createOrEditModal.open({ id: data.record.id });
+                            }
+                        }, {
+                            text: app.localize('Permissions'),
+                            visible: function () {
+                                return _permissions.changePermissions;
+                            },
+                            action: function (data) {
+                                _userPermissionsModal.open({ id: data.record.id });
+                            }
+                        }, {
+                            text: app.localize('Unlock'),
+                            visible: function () {
+                                return _permissions.changePermissions;
+                            },
+                            action: function (data) {
+                                _userService.unlockUser({
+                                    id: data.record.id
+                                }).done(function () {
+                                    abp.notify.success(app.localize('UnlockedTheUser', data.record.userName));
+                                });
+                            }
+                        }, {
+                            text: app.localize('Delete'),
+                            visible: function () {
+                                return _permissions.delete;
+                            },
+                            action: function (data) {
+                                deleteUser(data.record);
+                            }
+                        }]
+                    }
+                },
+                {
+                    targets: 1,
+                    data: "userName",
+                    render: function (userName, type, row, meta) {
+                        var $container = $("<span/>");
+                        if (row.profilePictureId) {
+                            var profilePictureUrl = "/Profile/GetProfilePicture?t=" + row.profilePictureId;
+                            var $link = $("<a/>").attr("href", profilePictureUrl).attr("target", "_blank");
+                            var $img = $("<img/>")
+                                .addClass("img-circle")
+                                .attr("src", profilePictureUrl);
 
-            fields: {
-                id: {
-                    key: true,
-                    list: false
-                },
-                actions: {
-                    title: app.localize('Actions'),
-                    width: '15%',
-                    sorting: false,
-                    type: 'record-actions',
-                    cssClass: 'btn btn-xs btn-primary blue',
-                    text: '<i class="fa fa-cog"></i> ' + app.localize('Actions') + ' <span class="caret"></span>',
-                    items: [{
-                        text: app.localize('LoginAsThisUser'),
-                        visible: function (data) {
-                            return _permissions.impersonation && data.record.id !== abp.session.userId;
-                        },
-                        action: function (data) {
-                            abp.ajax({
-                                url: abp.appPath + 'Account/Impersonate',
-                                data: JSON.stringify({
-                                    tenantId: abp.session.tenantId,
-                                    userId: data.record.id
-                                })
-                            });
+                            $link.append($img);
+                            $container.append($link);
                         }
-                    }, {
-                        text: app.localize('Edit'),
-                        visible: function () {
-                            return _permissions.edit;
-                        },
-                        action: function (data) {
-                            _createOrEditModal.open({ id: data.record.id });
-                        }
-                    }, {
-                        text: app.localize('Permissions'),
-                        visible: function () {
-                            return _permissions.changePermissions;
-                        },
-                        action: function (data) {
-                            _userPermissionsModal.open({ id: data.record.id });
-                        }
-                    }, {
-                        text: app.localize('Unlock'),
-                        visible: function () {
-                            return _permissions.changePermissions;
-                        },
-                        action: function (data) {
-                            _userService.unlockUser({
-                                id: data.record.id
-                            }).done(function () {
-                                abp.notify.success(app.localize('UnlockedTheUser', data.record.userName));
-                            });
-                        }
-                    }, {
-                        text: app.localize('Delete'),
-                        visible: function () {
-                            return _permissions.delete;
-                        },
-                        action: function (data) {
-                            deleteUser(data.record);
-                        }
-                    }]
+
+                        $container.append(userName);
+                        return $container[0].outerHTML;
+                    }
                 },
-                userName: {
-                    title: app.localize('UserName'),
-                    width: '9%'
+                {
+                    targets: 2,
+                    data: "name"
                 },
-                name: {
-                    title: app.localize('Name'),
-                    width: '10%'
+                {
+                    targets: 3,
+                    data: "surname"
                 },
-                surname: {
-                    title: app.localize('Surname'),
-                    width: '10%'
-                },
-                roles: {
-                    title: app.localize('Roles'),
-                    width: '12%',
-                    sorting: false,
-                    display: function (data) {
+                {
+                    targets: 4,
+                    data: "roles",
+                    render: function (roles) {
                         var roleNames = '';
-
-                        for (var j = 0; j < data.record.roles.length; j++) {
+                        for (var j = 0; j < roles.length; j++) {
                             if (roleNames.length) {
                                 roleNames = roleNames + ', ';
                             }
 
-                            roleNames = roleNames + data.record.roles[j].roleName;
+                            roleNames = roleNames + roles[j].roleName;
                         };
 
                         return roleNames;
                     }
                 },
-                emailAddress: {
-                    title: app.localize('EmailAddress'),
-                    width: '15%'
+                {
+                    targets: 5,
+                    data: "emailAddress"
                 },
-                isEmailConfirmed: {
-                    title: app.localize('EmailConfirm'),
-                    width: '6%',
-                    display: function (data) {
-                        if (data.record.isEmailConfirmed) {
+                {
+                    targets: 6,
+                    data: "isEmailConfirmed",
+                    render: function (isEmailConfirmed) {
+                        if (isEmailConfirmed) {
                             return '<span class="label label-success">' + app.localize('Yes') + '</span>';
                         } else {
                             return '<span class="label label-default">' + app.localize('No') + '</span>';
                         }
                     }
                 },
-                isActive: {
-                    title: app.localize('Active'),
-                    width: '6%',
-                    display: function (data) {
-                        if (data.record.isActive) {
+                {
+                    targets: 7,
+                    data: "isActive",
+                    render: function (isActive) {
+                        if (isActive) {
                             return '<span class="label label-success">' + app.localize('Yes') + '</span>';
                         } else {
                             return '<span class="label label-default">' + app.localize('No') + '</span>';
                         }
                     }
                 },
-                lastLoginTime: {
-                    title: app.localize('LastLoginTime'),
-                    width: '7%',
-                    display: function (data) {
-                        if (data.record.lastLoginTime) {
-                            return moment(data.record.lastLoginTime).format('L');
+                {
+                    targets: 8,
+                    data: "lastLoginTime",
+                    render: function (lastLoginTime) {
+                        if (lastLoginTime) {
+                            return moment(lastLoginTime).format('L');
                         }
 
-                        return '-';
+                        return "";
                     }
                 },
-                creationTime: {
-                    title: app.localize('CreationTime'),
-                    width: '7%',
-                    display: function (data) {
-                        return moment(data.record.creationTime).format('L');
+                {
+                    targets: 9,
+                    data: "creationTime",
+                    render: function (creationTime) {
+                        return moment(creationTime).format('L');
                     }
                 }
-            }
-
+            ]
         });
 
-        function getUsers(reload) {
-            if (reload) {
-                _$usersTable.jtable('reload');
-            } else {
-                _$usersTable.jtable('load', {
-                    filter: $('#UsersTableFilter').val(),
-                    permission: $("#PermissionSelectionCombo").val(),
-                    role: $("#RoleSelectionCombo").val()
-                });
-            }
+
+        function getUsers() {
+            dataTable.ajax.reload();
         }
 
         function deleteUser(user) {
-            if (user.userName == app.consts.userManagement.defaultAdminUserName) {
+            if (user.userName === app.consts.userManagement.defaultAdminUserName) {
                 abp.message.warn(app.localize("{0}UserCannotBeDeleted", app.consts.userManagement.defaultAdminUserName));
                 return;
             }
@@ -242,10 +245,8 @@
         });
 
         abp.event.on('app.createOrEditUserModalSaved', function () {
-            getUsers(true);
+            getUsers();
         });
-
-        getUsers();
 
         $('#UsersTableFilter').focus();
     });

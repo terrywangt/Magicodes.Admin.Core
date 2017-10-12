@@ -17,104 +17,94 @@
                 _selectedDateRange.endDate = end.format('YYYY-MM-DDT23:59:59.999Z');
             });
 
-        _$auditLogsTable.jtable({
 
-            title: app.localize('AuditLogs'),
-
+        var dataTable = _$auditLogsTable.DataTable({
             paging: true,
-            sorting: true,
-            multiSorting: true,
-
-            actions: {
-                listAction: {
-                    method: _auditLogService.getAuditLogs
+            serverSide: true,
+            processing: true,
+            listAction: {
+                ajaxFunction: _auditLogService.getAuditLogs,
+                inputFilter: function () {
+                    return createRequestParams();
                 }
             },
-
-            fields: {
-                id: {
-                    key: true,
-                    list: false
-                },
-                actions: {
-                    title: '',
-                    width: '5%',
-                    sorting: false,
-                    display: function (data) {
-                        var $div = $('<div class=\"text-center\"></div>');
-
-                        $div.append('<button class="btn btn-default btn-xs"><i class="fa fa-search"></i></button>')
-                            .click(function () {
-                                showDetails(data.record);
-                            });
-
-                        return $div;
+            columnDefs: [
+                {
+                    targets: 0,
+                    data: null,
+                    orderable: false,
+                    defaultContent: '',
+                    rowAction: {
+                        element: $("<div/>")
+                            .addClass("text-center")
+                            .append($("<button/>")
+                                .addClass("btn btn-default btn-xs")
+                                .attr("title", app.localize("AuditLogDetail"))
+                                .append($("<i/>").addClass("fa fa-search"))
+                            ).click(function () {
+                                showDetails($(this).data());
+                            })
                     }
                 },
-                exception: {
-                    title: '',
-                    width: '5%',
-                    sorting: false,
-                    display: function (data) {
-                        var $div = $('<div class=\"text-center\"></div>');
-
-                        if (data.record.exception) {
-                            $div.append('<i class="fa fa-warning font-yellow-gold"></i>');
+                {
+                    targets: 1,
+                    data: "exception",
+                    orderable: false,
+                    render: function (exception) {
+                        var $div = $("<div/>").addClass("text-center");
+                        if (exception) {
+                            $div.append($("<i/>").addClass("fa fa-warning font-yellow-gold").attr("title", app.localize("HasError")));
                         } else {
-                            $div.append('<i class="fa fa-check-circle font-green"></i>');
+                            $div.append($("<i/>").addClass("fa fa-check-circle font-green").attr("title", app.localize("Success")));
                         }
 
-                        return $div;
+                        return $div[0].outerHTML;
                     }
                 },
-                executionTime: {
-                    title: app.localize('Time'),
-                    width: '13%',
-                    display: function (data) {
-                        return moment(data.record.executionTime).format('YYYY-MM-DD HH:mm:ss');
+                {
+                    targets: 2,
+                    data: "executionTime",
+                    render: function (executionTime) {
+                        return moment(executionTime).format('YYYY-MM-DD HH:mm:ss');
                     }
                 },
-                userName: {
-                    title: app.localize('UserName'),
-                    width: '10%'
+                {
+                    targets: 3,
+                    data: "userName"
                 },
-                serviceName: {
-                    title: app.localize('Service'),
-                    width: '17%',
-                    sorting: false
+                {
+                    targets: 4,
+                    data: "serviceName"
                 },
-                methodName: {
-                    title: app.localize('Action'),
-                    width: '10%',
-                    sorting: false
+                {
+                    targets: 5,
+                    data: "methodName"
                 },
-                executionDuration: {
-                    title: app.localize('Duration'),
-                    width: '5%',
-                    display: function (data) {
-                        return app.localize('Xms', data.record.executionDuration);
+                {
+                    targets: 6,
+                    data: "executionDuration",
+                    render: function (executionDuration) {
+                        return app.localize('Xms', executionDuration);
                     }
                 },
-                clientIpAddress: {
-                    title: app.localize('IpAddress'),
-                    width: '10%',
-                    sorting: false
+                {
+                    targets: 7,
+                    data: "clientIpAddress",
+                    orderable: false
                 },
-                clientName: {
-                    title: app.localize('Client'),
-                    width: '10%',
-                    sorting: false
+                {
+                    targets: 8,
+                    data: "clientName"
                 },
-                browserInfo: {
-                    title: app.localize('Browser'),
-                    width: '15%',
-                    sorting: false,
-                    display: function (data) {
-                        return abp.utils.truncateStringWithPostfix(data.browserInfo, 32);
+                {
+                    targets: 9,
+                    data: "browserInfo",
+                    render: function (browserInfo) {
+                        return $("<span/>").text(abp.utils.truncateStringWithPostfix(browserInfo, 32))
+                            .attr("title", browserInfo)[0].outerHTML;
                     }
                 }
-            }
-
+            ]
         });
 
         function createRequestParams() {
@@ -124,7 +114,7 @@
         }
 
         function getAuditLogs() {
-            _$auditLogsTable.jtable('load', createRequestParams());
+            dataTable.ajax.reload();
         }
 
         function getFormattedParameters(parameters) {
@@ -173,8 +163,6 @@
 
             $('#AuditLogDetailModal').modal('show');
         }
-
-        getAuditLogs();
 
         $('#RefreshAuditLogsButton').click(function (e) {
             e.preventDefault();

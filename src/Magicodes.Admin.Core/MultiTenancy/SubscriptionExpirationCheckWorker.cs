@@ -1,15 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
 using System.Linq;
-using Abp.Authorization.Users;
-using Abp.Configuration;
 using Abp.Dependency;
 using Abp.Domain.Repositories;
-using Abp.Domain.Uow;
-using Abp.Localization;
-using Abp.Net.Mail;
 using Abp.Threading;
 using Abp.Threading.BackgroundWorkers;
 using Abp.Threading.Timers;
@@ -24,31 +18,22 @@ namespace Magicodes.Admin.MultiTenancy
         private const int CheckPeriodAsMilliseconds = 1 * 60 * 60 * 1000; //1 hour
 
         private readonly IRepository<Tenant> _tenantRepository;
-        private readonly IRepository<User, long> _useRepository;
-        private readonly IEmailSender _emailSender;
-        private readonly ISettingManager _settingManager;
-        private readonly IUnitOfWorkManager _unitOfWorkManager;
         private readonly IRepository<SubscribableEdition> _editionRepository;
         private readonly TenantManager _tenantManager;
+        private readonly UserEmailer _userEmailer;
 
         public SubscriptionExpirationCheckWorker(
             AbpTimer timer,
             IRepository<Tenant> tenantRepository,
-            IEmailSender emailSender,
-            IRepository<User, long> useRepository,
-            ISettingManager settingManager,
-            IUnitOfWorkManager unitOfWorkManager,
             IRepository<SubscribableEdition> editionRepository,
-            TenantManager tenantManager)
+            TenantManager tenantManager,
+            UserEmailer userEmailer)
             : base(timer)
         {
             _tenantRepository = tenantRepository;
-            _emailSender = emailSender;
-            _useRepository = useRepository;
-            _settingManager = settingManager;
-            _unitOfWorkManager = unitOfWorkManager;
             _editionRepository = editionRepository;
             _tenantManager = tenantManager;
+            _userEmailer = userEmailer;
 
             Timer.Period = CheckPeriodAsMilliseconds;
             Timer.RunOnStart = true;
@@ -56,7 +41,7 @@ namespace Magicodes.Admin.MultiTenancy
             LocalizationSourceName = AdminConsts.LocalizationSourceName;
         }
 
-        protected override void DoWork()
+        protected override async void DoWork()
         {
             var utcNow = Clock.Now.ToUniversalTime();
             var failedTenancyNames = new List<string>();
@@ -89,11 +74,11 @@ namespace Magicodes.Admin.MultiTenancy
 
                     if (endSubscriptionResult == EndSubscriptionResult.TenantSetInActive)
                     {
-                        TryToSendSubscriptionExpireEmail(tenant.Id, utcNow);
+                        _userEmailer.TryToSendSubscriptionExpireEmail(tenant.Id, utcNow);
                     }
                     else if (endSubscriptionResult == EndSubscriptionResult.AssignedToAnotherEdition)
                     {
-                        //TODO: We can send an email in this case too
+                        await _userEmailer.TryToSendSubscriptionAssignedToAnotherEmail(tenant.Id, utcNow, edition.ExpiringEditionId.Value);
                     }
                 }
                 catch (Exception exception)
@@ -109,71 +94,7 @@ namespace Magicodes.Admin.MultiTenancy
                 return;
             }
 
-            TryToSendFailedSubscriptionTerminationsEmail(failedTenancyNames, utcNow);
-        }
-
-        private void TryToSendSubscriptionExpireEmail(int tenantId, DateTime utcNow)
-        {
-            try
-            {
-                using (_unitOfWorkManager.Begin())
-                {
-                    using (_unitOfWorkManager.Current.SetTenantId(tenantId))
-                    {
-                        var tenantAdmin = _useRepository.FirstOrDefault(u => u.UserName == AbpUserBase.AdminUserName);
-                        if (tenantAdmin == null || string.IsNullOrEmpty(tenantAdmin.EmailAddress))
-                        {
-                            return;
-                        }
-
-                        var hostAdminLanguage = _settingManager.GetSettingValueForUser(LocalizationSettingNames.DefaultLanguage, tenantAdmin.TenantId, tenantAdmin.Id);
-                        var culture = GetCultureInfoByChecking(hostAdminLanguage);
-
-                        var subject = L("SubscriptionExpire_Email_Subject", culture);
-                        var body = L("SubscriptionExpire_Email_Body", culture, utcNow.ToString("yyyy-MM-dd") + " UTC");
-                        _emailSender.Send(tenantAdmin.EmailAddress, subject, body);
-                    }
-                }
-            }
-            catch (Exception exception)
-            {
-                Logger.Error(exception.Message, exception);
-            }
-        }
-
-        private void TryToSendFailedSubscriptionTerminationsEmail(List<string> failedTenancyNames, DateTime utcNow)
-        {
-            try
-            {
-                var hostAdmin = _useRepository.FirstOrDefault(u => u.UserName == AbpUserBase.AdminUserName);
-                if (hostAdmin == null || string.IsNullOrEmpty(hostAdmin.EmailAddress))
-                {
-                    return;
-                }
-
-                var hostAdminLanguage = _settingManager.GetSettingValueForUser(LocalizationSettingNames.DefaultLanguage, hostAdmin.TenantId, hostAdmin.Id);
-                var culture = GetCultureInfoByChecking(hostAdminLanguage);
-
-                var subject = L("FailedSubscriptionTerminations_Email_Subject", culture);
-                var body = L("FailedSubscriptionTerminations_Email_Body", culture, string.Join(",", failedTenancyNames), utcNow.ToString("yyyy-MM-dd") + " UTC");
-                _emailSender.Send(hostAdmin.EmailAddress, subject, body);
-            }
-            catch (Exception exception)
-            {
-                Logger.Error(exception.Message, exception);
-            }
-        }
-
-        private static CultureInfo GetCultureInfoByChecking(string name)
-        {
-            try
-            {
-                return CultureInfoHelper.Get(name);
-            }
-            catch (CultureNotFoundException)
-            {
-                return CultureInfo.CurrentCulture;
-            }
+            _userEmailer.TryToSendFailedSubscriptionTerminationsEmail(failedTenancyNames, utcNow);
         }
     }
 }

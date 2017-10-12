@@ -5,6 +5,7 @@ using Abp.Configuration;
 using Abp.Configuration.Startup;
 using Abp.Extensions;
 using Abp.Net.Mail;
+using Abp.Runtime.Security;
 using Abp.Runtime.Session;
 using Abp.Timing;
 using Abp.Zero.Configuration;
@@ -37,7 +38,7 @@ namespace Magicodes.Admin.Configuration.Tenants
 #endif
             IMultiTenancyConfig multiTenancyConfig,
             ITimeZoneService timeZoneService,
-            IEmailSender emailSender, 
+            IEmailSender emailSender,
             IBinaryObjectManager binaryObjectManager) : base(emailSender)
         {
             _multiTenancyConfig = multiTenancyConfig;
@@ -48,7 +49,7 @@ namespace Magicodes.Admin.Configuration.Tenants
             _binaryObjectManager = binaryObjectManager;
         }
 
-#region Get Settings
+        #region Get Settings
 
         public async Task<TenantSettingsEditDto> GetAllSettings()
         {
@@ -100,6 +101,8 @@ namespace Magicodes.Admin.Configuration.Tenants
 
         private async Task<EmailSettingsEditDto> GetEmailSettingsAsync()
         {
+            var smtpPassword = await SettingManager.GetSettingValueAsync(EmailSettingNames.Smtp.Password);
+
             return new EmailSettingsEditDto
             {
                 DefaultFromAddress = await SettingManager.GetSettingValueAsync(EmailSettingNames.DefaultFromAddress),
@@ -107,7 +110,7 @@ namespace Magicodes.Admin.Configuration.Tenants
                 SmtpHost = await SettingManager.GetSettingValueAsync(EmailSettingNames.Smtp.Host),
                 SmtpPort = await SettingManager.GetSettingValueAsync<int>(EmailSettingNames.Smtp.Port),
                 SmtpUserName = await SettingManager.GetSettingValueAsync(EmailSettingNames.Smtp.UserName),
-                SmtpPassword = await SettingManager.GetSettingValueAsync(EmailSettingNames.Smtp.Password),
+                SmtpPassword = SimpleStringCipher.Instance.Decrypt(smtpPassword),
                 SmtpDomain = await SettingManager.GetSettingValueAsync(EmailSettingNames.Smtp.Domain),
                 SmtpEnableSsl = await SettingManager.GetSettingValueAsync<bool>(EmailSettingNames.Smtp.EnableSsl),
                 SmtpUseDefaultCredentials = await SettingManager.GetSettingValueAsync<bool>(EmailSettingNames.Smtp.UseDefaultCredentials)
@@ -143,7 +146,7 @@ namespace Magicodes.Admin.Configuration.Tenants
                 AllowSelfRegistration = await SettingManager.GetSettingValueAsync<bool>(AppSettings.UserManagement.AllowSelfRegistration),
                 IsNewRegisteredUserActiveByDefault = await SettingManager.GetSettingValueAsync<bool>(AppSettings.UserManagement.IsNewRegisteredUserActiveByDefault),
                 IsEmailConfirmationRequiredForLogin = await SettingManager.GetSettingValueAsync<bool>(AbpZeroSettingNames.UserManagement.IsEmailConfirmationRequiredForLogin),
-                UseCaptchaOnRegistration = await SettingManager.GetSettingValueAsync<bool>(AppSettings.UserManagement.UseCaptchaOnRegistration)
+                UseCaptchaOnRegistration = await SettingManager.GetSettingValueAsync<bool>(AppSettings.UserManagement.UseCaptchaOnRegistration),
             };
         }
 
@@ -211,14 +214,15 @@ namespace Magicodes.Admin.Configuration.Tenants
             {
                 settings.IsEmailProviderEnabled = await SettingManager.GetSettingValueAsync<bool>(AbpZeroSettingNames.UserManagement.TwoFactorLogin.IsEmailProviderEnabled);
                 settings.IsSmsProviderEnabled = await SettingManager.GetSettingValueAsync<bool>(AbpZeroSettingNames.UserManagement.TwoFactorLogin.IsSmsProviderEnabled);
+                settings.IsGoogleAuthenticatorEnabled = await SettingManager.GetSettingValueAsync<bool>(AppSettings.UserManagement.TwoFactorLogin.IsGoogleAuthenticatorEnabled);
             }
 
             return settings;
         }
 
-#endregion
+        #endregion
 
-#region Update Settings
+        #region Update Settings
 
         public async Task UpdateAllSettings(TenantSettingsEditDto input)
         {
@@ -271,7 +275,7 @@ namespace Magicodes.Admin.Configuration.Tenants
             await SettingManager.ChangeSettingForApplicationAsync(EmailSettingNames.Smtp.Host, input.SmtpHost);
             await SettingManager.ChangeSettingForApplicationAsync(EmailSettingNames.Smtp.Port, input.SmtpPort.ToString(CultureInfo.InvariantCulture));
             await SettingManager.ChangeSettingForApplicationAsync(EmailSettingNames.Smtp.UserName, input.SmtpUserName);
-            await SettingManager.ChangeSettingForApplicationAsync(EmailSettingNames.Smtp.Password, input.SmtpPassword);
+            await SettingManager.ChangeSettingForApplicationAsync(EmailSettingNames.Smtp.Password, SimpleStringCipher.Instance.Encrypt(input.SmtpPassword));
             await SettingManager.ChangeSettingForApplicationAsync(EmailSettingNames.Smtp.Domain, input.SmtpDomain);
             await SettingManager.ChangeSettingForApplicationAsync(EmailSettingNames.Smtp.EnableSsl, input.SmtpEnableSsl.ToString().ToLowerInvariant());
             await SettingManager.ChangeSettingForApplicationAsync(EmailSettingNames.Smtp.UseDefaultCredentials, input.SmtpUseDefaultCredentials.ToString().ToLowerInvariant());
@@ -373,12 +377,13 @@ namespace Magicodes.Admin.Configuration.Tenants
                 //These settings can only be changed by host, in a multitenant application.
                 await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), AbpZeroSettingNames.UserManagement.TwoFactorLogin.IsEmailProviderEnabled, settings.IsEmailProviderEnabled.ToString().ToLowerInvariant());
                 await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), AbpZeroSettingNames.UserManagement.TwoFactorLogin.IsSmsProviderEnabled, settings.IsSmsProviderEnabled.ToString().ToLowerInvariant());
+                await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), AppSettings.UserManagement.TwoFactorLogin.IsGoogleAuthenticatorEnabled, settings.IsGoogleAuthenticatorEnabled.ToString().ToLowerInvariant());
             }
         }
 
-#endregion
+        #endregion
 
-#region Others
+        #region Others
 
         public async Task ClearLogo()
         {
@@ -416,6 +421,6 @@ namespace Magicodes.Admin.Configuration.Tenants
             tenant.CustomCssId = null;
         }
 
-#endregion
+        #endregion
     }
 }

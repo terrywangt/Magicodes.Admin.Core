@@ -8,6 +8,7 @@ using Magicodes.Admin.MultiTenancy.HostDashboard.Dto;
 using Magicodes.Admin.MultiTenancy.Payments;
 using Shouldly;
 using Xunit;
+using System.Globalization;
 
 namespace Magicodes.Admin.Tests.HostDashboard
 {
@@ -21,7 +22,83 @@ namespace Magicodes.Admin.Tests.HostDashboard
             _hostDashboardService = Resolve<IHostDashboardAppService>();
         }
 
-        [Fact]
+        [MultiTenantFact]
+        public async Task Should_Get_Daily_Income_Statistics_Data_For_Missing_Days()
+        {
+            var now = DateTime.Now;
+            var utcNow = DateTime.Now.ToUniversalTime();
+
+            //Arrange
+            UsingDbContext(
+                context =>
+                {
+                    var specialEdition = new SubscribableEdition
+                    {
+                        Name = "Special Edition",
+                        DisplayName = "Special",
+                        AnnualPrice = 100,
+                        MonthlyPrice = 10,
+                        TrialDayCount = 30,
+                        WaitingDayAfterExpire = 10
+                    };
+
+                    context.SubscribableEditions.Add(specialEdition);
+                    context.SaveChanges();
+
+                    context.SubscriptionPayments.Add(new SubscriptionPayment
+                    {
+                        Amount = 100,
+                        DayCount = 365,
+                        Status = SubscriptionPaymentStatus.Completed,
+                        EditionId = specialEdition.Id,
+                        CreationTime = now.AddDays(-3),
+                        TenantId = 1
+                    });
+
+                    context.SubscriptionPayments.Add(new SubscriptionPayment
+                    {
+                        Amount = 200,
+                        DayCount = 365,
+                        Status = SubscriptionPaymentStatus.Completed,
+                        EditionId = specialEdition.Id,
+                        CreationTime = now.AddDays(-3),
+                        TenantId = 1
+                    });
+
+                    context.SubscriptionPayments.Add(new SubscriptionPayment
+                    {
+                        Amount = 200,
+                        DayCount = 730,
+                        Status = SubscriptionPaymentStatus.Completed,
+                        EditionId = specialEdition.Id,
+                        CreationTime = now.AddDays(-1),
+                        TenantId = 1
+                    });
+
+                    context.Tenants.Add(new Tenant("MyTenant", "My Tenant")
+                    {
+                        SubscriptionEndDateUtc = utcNow.AddDays(1),
+                        CreationTime = now.AddMinutes(-1)
+                    });
+                });
+
+            //Act
+            var output = await _hostDashboardService.GetDashboardStatisticsData(new GetDashboardDataInput
+            {
+                StartDate = now.AddDays(-4),
+                EndDate = now,
+                IncomeStatisticsDateInterval = ChartDateInterval.Daily
+            });
+
+            output.IncomeStatistics.Count.ShouldBe(5);
+            output.IncomeStatistics[0].Amount.ShouldBe(0);
+            output.IncomeStatistics[1].Amount.ShouldBe(300);
+            output.IncomeStatistics[2].Amount.ShouldBe(0);
+            output.IncomeStatistics[3].Amount.ShouldBe(200);
+            output.IncomeStatistics[4].Amount.ShouldBe(0);
+        }
+
+        [MultiTenantFact]
         public async Task Should_Get_Dashboard_Statistics_Data()
         {
             var now = DateTime.Now;
@@ -89,7 +166,7 @@ namespace Magicodes.Admin.Tests.HostDashboard
             output.RecentTenants.Count.ShouldBe(2);
         }
 
-        [Fact]
+        [MultiTenantFact]
         public async Task Should_Get_Edition_Statistics()
         {
             var now = DateTime.Now;
@@ -146,7 +223,7 @@ namespace Magicodes.Admin.Tests.HostDashboard
             output.EditionStatistics.FirstOrDefault(e => e.Label == "Premium Edition").Value.ShouldBe(1);
         }
 
-        [Fact]
+        [MultiTenantFact]
         public async Task Should_Get_Income_Statistics_Daily()
         {
             var date1 = new DateTime(2017, 5, 4);
@@ -207,9 +284,14 @@ namespace Magicodes.Admin.Tests.HostDashboard
             output.IncomeStatistics[3].Date.ShouldBe(date4);
         }
 
-        [Fact]
+        [MultiTenantFact]
         public async Task Should_Get_Income_Statistics_Weekly_NotFirstDayOfWeek()
         {
+            var lastMonth = DateTime.Now.AddMonths(-1);
+            var firstWeek = GetFirstDayOfWeek(lastMonth).AddDays(1).Date;
+            var secondWeek = firstWeek.AddDays(7).Date;
+            var thirdWeek = secondWeek.AddDays(7).Date;
+
             //Arrange
             UsingDbContext(
                 context =>
@@ -220,7 +302,7 @@ namespace Magicodes.Admin.Tests.HostDashboard
                         Amount = 100,
                         Status = SubscriptionPaymentStatus.Completed,
                         EditionId = standardEdition.Id,
-                        CreationTime = new DateTime(2017, 5, 4)
+                        CreationTime = firstWeek
                     });
 
                     context.SubscriptionPayments.Add(new SubscriptionPayment
@@ -228,7 +310,7 @@ namespace Magicodes.Admin.Tests.HostDashboard
                         Amount = 200,
                         Status = SubscriptionPaymentStatus.Completed,
                         EditionId = standardEdition.Id,
-                        CreationTime = new DateTime(2017, 5, 11)
+                        CreationTime = secondWeek
                     });
 
                     context.SubscriptionPayments.Add(new SubscriptionPayment
@@ -236,7 +318,7 @@ namespace Magicodes.Admin.Tests.HostDashboard
                         Amount = 300,
                         Status = SubscriptionPaymentStatus.Completed,
                         EditionId = standardEdition.Id,
-                        CreationTime = new DateTime(2017, 5, 18)
+                        CreationTime = thirdWeek
                     });
 
                 });
@@ -244,23 +326,28 @@ namespace Magicodes.Admin.Tests.HostDashboard
             //Act
             var output = await _hostDashboardService.GetIncomeStatistics(new GetIncomeStatisticsDataInput
             {
-                StartDate = new DateTime(2017, 5, 3),
-                EndDate = new DateTime(2017, 5, 20),
+                StartDate = firstWeek,
+                EndDate = thirdWeek,
                 IncomeStatisticsDateInterval = ChartDateInterval.Weekly
             });
 
             output.IncomeStatistics.Count.ShouldBe(3);
             output.IncomeStatistics[0].Amount.ShouldBe(100);
-            output.IncomeStatistics[0].Date.ShouldBe(new DateTime(2017, 5, 3));
+            output.IncomeStatistics[0].Date.ShouldBe(firstWeek);
             output.IncomeStatistics[1].Amount.ShouldBe(200);
-            output.IncomeStatistics[1].Date.ShouldBe(new DateTime(2017, 5, 8));
+            output.IncomeStatistics[1].Date.ShouldBe(secondWeek.AddDays(-1));
             output.IncomeStatistics[2].Amount.ShouldBe(300);
-            output.IncomeStatistics[2].Date.ShouldBe(new DateTime(2017, 5, 15));
+            output.IncomeStatistics[2].Date.ShouldBe(thirdWeek.AddDays(-1));
         }
 
-        [Fact]
+        [MultiTenantFact]
         public async Task Should_Get_Income_Statistics_Weekly_FirstDayOfWeek()
         {
+            var lastMonth = DateTime.Now.AddMonths(-1);
+            var firstWeek = GetFirstDayOfWeek(lastMonth).Date;
+            var secondWeek = firstWeek.AddDays(7).Date;
+            var thirdWeek = secondWeek.AddDays(7).Date;
+
             //Arrange
             UsingDbContext(
                 context =>
@@ -271,7 +358,7 @@ namespace Magicodes.Admin.Tests.HostDashboard
                         Amount = 100,
                         Status = SubscriptionPaymentStatus.Completed,
                         EditionId = standardEdition.Id,
-                        CreationTime = new DateTime(2017, 5, 1)
+                        CreationTime = firstWeek
                     });
 
                     context.SubscriptionPayments.Add(new SubscriptionPayment
@@ -279,7 +366,7 @@ namespace Magicodes.Admin.Tests.HostDashboard
                         Amount = 200,
                         Status = SubscriptionPaymentStatus.Completed,
                         EditionId = standardEdition.Id,
-                        CreationTime = new DateTime(2017, 5, 10)
+                        CreationTime = secondWeek
                     });
 
                     context.SubscriptionPayments.Add(new SubscriptionPayment
@@ -287,7 +374,7 @@ namespace Magicodes.Admin.Tests.HostDashboard
                         Amount = 300,
                         Status = SubscriptionPaymentStatus.Completed,
                         EditionId = standardEdition.Id,
-                        CreationTime = new DateTime(2017, 5, 21)
+                        CreationTime = thirdWeek
                     });
 
                 });
@@ -295,21 +382,21 @@ namespace Magicodes.Admin.Tests.HostDashboard
             //Act
             var output = await _hostDashboardService.GetIncomeStatistics(new GetIncomeStatisticsDataInput
             {
-                StartDate = new DateTime(2017, 5, 1),
-                EndDate = new DateTime(2017, 5, 21),
+                StartDate = firstWeek,
+                EndDate = thirdWeek,
                 IncomeStatisticsDateInterval = ChartDateInterval.Weekly
             });
 
             output.IncomeStatistics.Count.ShouldBe(3);
             output.IncomeStatistics[0].Amount.ShouldBe(100);
-            output.IncomeStatistics[0].Date.ShouldBe(new DateTime(2017, 5, 1));
+            output.IncomeStatistics[0].Date.ShouldBe(firstWeek);
             output.IncomeStatistics[1].Amount.ShouldBe(200);
-            output.IncomeStatistics[1].Date.ShouldBe(new DateTime(2017, 5, 8));
+            output.IncomeStatistics[1].Date.ShouldBe(secondWeek);
             output.IncomeStatistics[2].Amount.ShouldBe(300);
-            output.IncomeStatistics[2].Date.ShouldBe(new DateTime(2017, 5, 15));
+            output.IncomeStatistics[2].Date.ShouldBe(thirdWeek);
         }
 
-        [Fact]
+        [MultiTenantFact]
         public async Task Should_Get_Income_Statistics_Monthly()
         {
             //Arrange
@@ -354,6 +441,17 @@ namespace Magicodes.Admin.Tests.HostDashboard
             output.IncomeStatistics.Count.ShouldBe(1);
             output.IncomeStatistics[0].Amount.ShouldBe(600);
             output.IncomeStatistics[0].Date.ShouldBe(new DateTime(2017, 5, 3));
+        }
+
+        private static DateTime GetFirstDayOfWeek(DateTime date)
+        {
+            var firstDayOfWeek = CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek;
+            while (date.DayOfWeek != firstDayOfWeek)
+            {
+                date = date.AddDays(-1);
+            }
+
+            return date;
         }
     }
 }

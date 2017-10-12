@@ -1,8 +1,5 @@
-﻿using System.Security.Claims;
-using System.Threading.Tasks;
-using Abp.Authorization;
-using Abp.Domain.Uow;
-using Microsoft.AspNetCore.Builder;
+﻿using Abp.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Magicodes.Admin.Authorization.Roles;
 

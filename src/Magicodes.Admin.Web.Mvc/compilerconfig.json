@@ -58,5 +58,9 @@
   {
     "outputFile": "wwwroot/view-resources/Areas/Admin/Views/HostDashboard/Index.css",
     "inputFile": "wwwroot/view-resources/Areas/Admin/Views/HostDashboard/Index.less"
+  },
+  {
+    "outputFile": "wwwroot/Common/Styles/jstree.css",
+    "inputFile": "wwwroot/Common/Styles/jstree.less"
   }
 ]

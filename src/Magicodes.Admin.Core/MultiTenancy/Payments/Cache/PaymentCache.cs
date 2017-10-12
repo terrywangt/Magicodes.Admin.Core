@@ -29,6 +29,18 @@ namespace Magicodes.Admin.MultiTenancy.Payments.Cache
                 .Set(GetCacheKey(item.GateWay, item.PaymentId), item);
         }
 
+        public void RemoveCacheItem(SubscriptionPaymentGatewayType gateway, string paymentId)
+        {
+            var key = GetCacheKey(gateway, paymentId);
+            var cacheItem = GetCacheItemOrNull(gateway, paymentId);
+            if (cacheItem == null)
+            {
+                return;
+            }
+
+            _cacheManager.GetCache(PaymentCacheItem.CacheName).Remove(key);
+        }
+
         private static string GetCacheKey(SubscriptionPaymentGatewayType gateway, string paymentId)
         {
             return gateway + "_" + paymentId;

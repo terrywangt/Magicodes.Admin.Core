@@ -1,6 +1,5 @@
 ﻿using Abp.Application.Features;
 using Abp.AutoMapper;
-using Abp.Localization;
 using Abp.UI.Inputs;
 
 namespace Magicodes.Admin.Editions.Dto
