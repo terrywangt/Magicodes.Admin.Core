@@ -18,7 +18,7 @@ namespace Magicodes.Admin.Web.Startup
     public partial class Startup
     {
         /// <summary>
-        /// 配置自定义Swagger生成
+        /// 配置自定义
         /// </summary>
         /// <param name="services"></param>
         private void ConfigureCustomServices(IServiceCollection services)
