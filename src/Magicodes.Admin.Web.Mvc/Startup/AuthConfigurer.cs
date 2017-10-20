@@ -75,8 +75,8 @@ namespace Magicodes.Admin.Web.Startup
             {
                 authenticationBuilder.AddQQ(options =>
                 {
-                    options.ClientId = configuration["Authentication:Google:ClientId"];
-                    options.ClientSecret = configuration["Authentication:Google:ClientSecret"];
+                    options.ClientId = configuration["Authentication:QQ:ClientId"];
+                    options.ClientSecret = configuration["Authentication:QQ:ClientSecret"];
                 });
             }
 
@@ -84,8 +84,8 @@ namespace Magicodes.Admin.Web.Startup
             {
                 authenticationBuilder.AddWeibo(options =>
                 {
-                    options.ClientId = configuration["Authentication:Google:ClientId"];
-                    options.ClientSecret = configuration["Authentication:Google:ClientSecret"];
+                    options.ClientId = configuration["Authentication:Weibo:ClientId"];
+                    options.ClientSecret = configuration["Authentication:Weibo:ClientSecret"];
                 });
             }
 
@@ -93,8 +93,8 @@ namespace Magicodes.Admin.Web.Startup
             {
                 authenticationBuilder.AddWeixin(options =>
                 {
-                    options.ClientId = configuration["Authentication:Google:ClientId"];
-                    options.ClientSecret = configuration["Authentication:Google:ClientSecret"];
+                    options.ClientId = configuration["Authentication:Weixin:ClientId"];
+                    options.ClientSecret = configuration["Authentication:Weixin:ClientSecret"];
                 });
             }
 
@@ -102,8 +102,8 @@ namespace Magicodes.Admin.Web.Startup
             {
                 authenticationBuilder.AddBaidu(options =>
                 {
-                    options.ClientId = configuration["Authentication:Google:ClientId"];
-                    options.ClientSecret = configuration["Authentication:Google:ClientSecret"];
+                    options.ClientId = configuration["Authentication:Baidu:ClientId"];
+                    options.ClientSecret = configuration["Authentication:Baidu:ClientSecret"];
                 });
             }
 
