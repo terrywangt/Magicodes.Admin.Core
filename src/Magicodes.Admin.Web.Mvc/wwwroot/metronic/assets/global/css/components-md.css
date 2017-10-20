@@ -12759,14 +12759,11 @@ Social Icons
     .social-icons li .baidu {
         background: url(../img/social/baidu.png) no-repeat;}
     .social-icons li .qq {
-        background: url(../img/social/QQ.png) no-repeat;
-    }
+        background: url(../img/social/QQ.png) no-repeat;}
     .social-icons li .weixin {
-        background: url(../img/social/weixin.png) no-repeat;
-    }
+        background: url(../img/social/weixin.png) no-repeat;}
     .social-icons li .weibo {
-        background: url(../img/social/weibo.png) no-repeat;
-    }
+        background: url(../img/social/weibo.png) no-repeat;}
   .social-icons.social-icons-color > li > a {
     opacity: 0.7;
     background-position: 0 -38px !important; }
@@ -12907,6 +12904,18 @@ Inline Social Icons
 
 .social-icon.quora {
   background: url(../img/social/quora.png) no-repeat; }
+
+.social-icons.baidu {
+    background: url(../img/social/baidu.png) no-repeat;}
+
+.social-icons.qq {
+    background: url(../img/social/QQ.png) no-repeat;}
+
+.social-icons.weixin {
+    background: url(../img/social/weixin.png) no-repeat;}
+
+.social-icons.weibo {
+    background: url(../img/social/weibo.png) no-repeat;}
 
 .social-icon:hover {
   background-position: 0 -38px; }
