@@ -71,6 +71,42 @@ namespace Magicodes.Admin.Web.Startup
                 });
             }
 
+            if (bool.Parse(configuration["Authentication:QQ:IsEnabled"]))
+            {
+                authenticationBuilder.AddQQ(options =>
+                {
+                    options.ClientId = configuration["Authentication:QQ:ClientId"];
+                    options.ClientSecret = configuration["Authentication:QQ:ClientSecret"];
+                });
+            }
+
+            if (bool.Parse(configuration["Authentication:Weibo:IsEnabled"]))
+            {
+                authenticationBuilder.AddWeibo(options =>
+                {
+                    options.ClientId = configuration["Authentication:Weibo:ClientId"];
+                    options.ClientSecret = configuration["Authentication:Weibo:ClientSecret"];
+                });
+            }
+
+            if (bool.Parse(configuration["Authentication:Weixin:IsEnabled"]))
+            {
+                authenticationBuilder.AddWeixin(options =>
+                {
+                    options.ClientId = configuration["Authentication:Weixin:ClientId"];
+                    options.ClientSecret = configuration["Authentication:Weixin:ClientSecret"];
+                });
+            }
+
+            if (bool.Parse(configuration["Authentication:Baidu:IsEnabled"]))
+            {
+                authenticationBuilder.AddBaidu(options =>
+                {
+                    options.ClientId = configuration["Authentication:Baidu:ClientId"];
+                    options.ClientSecret = configuration["Authentication:Baidu:ClientSecret"];
+                });
+            }
+
             if (bool.Parse(configuration["Authentication:JwtBearer:IsEnabled"]))
             {
                 authenticationBuilder.AddJwtBearer(options =>
