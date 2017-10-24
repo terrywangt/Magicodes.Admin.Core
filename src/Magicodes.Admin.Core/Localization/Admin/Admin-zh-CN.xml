@@ -543,5 +543,45 @@
       此页面显示了可在应用程序中使用的一些有用的UI组件。此页面中的组件实现为完整堆栈（包括服务器端）
     </text>
     <text name="DemoUiComponents_Info_Metronic_Link_Text">查看Metronic主题以获取更多UI组件</text>
+
+    <text name="Subscription">订阅</text>
+    <text name="SubscriptionStartDate">订阅开始时间</text>
+    <text name="SubscriptionEndDate">订阅结束时间</text>
+    <text name="SubscriptionEndDateUtc">订阅结束时间</text>
+    <text name="TenantNameOrTenancyCode">租客名或租客编号</text>
+    <text name="UnlimitedTimeSubscription">无期限订阅</text>
+    <text name="Upgrade">升级</text>
+    <text name="Free">免费</text>
+    <text name="MaximumUserCount">最大用户数</text>
+    <text name="TestCheckFeature">测试检查功能</text>
+    <text name="TestCheckFeature2">测试检查功能2</text>
+    <text name="UnlockedTenandAdmin">解锁成功</text>
+    <text name="PasswordComplexity_RequireDigit">密码复杂性要求数字</text>
+    <text name="PasswordComplexity_RequireLowercase">密码复杂性要求小写字母</text>
+    <text name="PasswordComplexity_RequireNonAlphanumeric">密码复杂性要求非字母数字</text>
+    <text name="PasswordComplexity_RequireUppercase">密码复杂性要求大写字母</text>
+    <text name="PasswordComplexity_RequiredLength">密码复杂性要求长度</text>
+    <text name="Unlimited">无限</text>
+
+    <text name="SubscriptionPrice">订阅价格</text>
+    <text name="Paid">支付</text>
+    <text name="MonthlyPrice">每月价格</text>
+    <text name="AnnualPrice">年度价格</text>
+    <text name="IsTrialActive">是否试验激活</text>
+    <text name="TrialDayCount">试验天数</text>
+    <text name="WaitAfterSubscriptionExpireDate">订阅过期等待</text>
+    <text name="WaitingDayAfterExpire">过期等待天数</text>
+    <text name="WhatWillDoneAfterSubscriptionExpiry">订阅过期操作</text>
+    <text name="DeactiveTenant">停用租客</text>
+    <text name="AssignToAnotherEdition">分配其他版本</text>
+    <text name="IsInTrialPeriod">是否在试用期</text>
+    <text name="PaymentInfo">付款信息</text>
+    <text name="Extend_Edition_Description">扩展版的描述</text>
+    <text name="Extend">扩展</text>
+    <text name="TrialExpireNotification">试验过期通知</text>
+    <text name="Trial">试验</text>
+    <text name="BuyNow">现在购买</text>
+    <text name="PerMonth">每月</text>
+    <text name="PerYear">每年</text>
   </texts>
 </localizationDictionary>

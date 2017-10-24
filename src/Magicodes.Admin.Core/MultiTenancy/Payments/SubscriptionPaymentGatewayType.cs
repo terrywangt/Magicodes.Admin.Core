@@ -2,6 +2,8 @@
 {
     public enum SubscriptionPaymentGatewayType
     {
-        Paypal = 1
+        Paypal = 1,
+        //ZhiFuBao = 2,
+        //WeChat = 3
     }
 }
