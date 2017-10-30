@@ -583,5 +583,21 @@
     <text name="BuyNow">现在购买</text>
     <text name="PerMonth">每月</text>
     <text name="PerYear">每年</text>
+
+    <text name="NewSubscriptionAmount">新订购金额</text>
+    <text name="NewTenants">新租户</text>
+    <text name="DashboardSampleStatistics">Demo</text>
+    <text name="DashboardSampleStatisticsHelpText">Demo</text>
+    <text name="IncomeStatistics">收入统计</text>
+    <text name="Daily">每日</text>
+    <text name="Weekly">每周</text>
+    <text name="Monthly">每月</text>
+    <text name="EditionStatistics">版本统计</text>
+    <text name="SubscriptionExpiringTenants">订阅到期租户</text>
+    <text name="RemainingDay">剩余天数</text>
+    <text name="SeeAllRecords">查看所有记录</text>
+    <text name="RecentTenants">最近租户</text>
+    <text name="HostDashboardHeaderInfo">查看统计信息以及相关情况</text>
+  
   </texts>
 </localizationDictionary>
