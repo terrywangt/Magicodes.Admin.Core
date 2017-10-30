@@ -51,6 +51,8 @@
         $loginForm.find('input[name=returnUrlHash]').val(location.hash);
 
         $('input[type=text]').first().focus();
+        //设置每日一图
+        $('body').css('background-image', 'url("http://www.dujin.org/sys/bing/1920.php")');
     }
 
     return {
