@@ -7,6 +7,8 @@
 
 # 演示地址
 http://cloud.xin-lai.com
+账号：Admin
+密码：123456
 
 # 开发文档
 [开发向导](https://shimo.im/doc/ho6czDlTpXgxgbU8?r=3RQZL)
