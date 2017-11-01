@@ -11,6 +11,7 @@ http://cloud.xin-lai.com
 密码：123456
 
 # 开发文档
+[总体介绍](https://shimo.im/doc/hslbAFC3JvsDA7TA?r=3RQZL)
 [开发向导](https://shimo.im/doc/ho6czDlTpXgxgbU8?r=3RQZL)
 
 # 插件库
