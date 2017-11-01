@@ -164,13 +164,16 @@ namespace Magicodes.Admin.MultiTenancy.Demo
 
             //Create chat message
             var friendWithMessage = RandomHelper.GenerateRandomizedList(friends).First();
+            var sharedMessageId = Guid.NewGuid();
             _chatMessageRepository.InsertAndGetId(
                 new ChatMessage(
                     friendWithMessage.ToUserIdentifier(),
                     admin.ToUserIdentifier(),
                     ChatSide.Sender,
                     L("Demo_SampleChatMessage"),
-                    ChatMessageReadState.Read
+                    ChatMessageReadState.Read,
+                    sharedMessageId,
+                    ChatMessageReadState.Unread
                 )
             );
 
@@ -180,7 +183,9 @@ namespace Magicodes.Admin.MultiTenancy.Demo
                     friendWithMessage.ToUserIdentifier(),
                     ChatSide.Receiver,
                     L("Demo_SampleChatMessage"),
-                    ChatMessageReadState.Unread
+                    ChatMessageReadState.Unread,
+                    sharedMessageId,
+                    ChatMessageReadState.Read
                 )
             );
         }

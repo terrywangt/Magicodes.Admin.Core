@@ -107,7 +107,8 @@ div.page-quick-sidebar-chat-users .popover {
   bottom: 12px;
 }
 textarea#ChatMessage,
-button.send-chat-message {
+button.send-chat-message,
+button.select-media {
   height: 71px;
 }
 .page-quick-sidebar-open a.page-quick-sidebar-pinner {
@@ -177,4 +178,33 @@ a.page-quick-sidebar-pinner i.icon-pin.pinned {
 [dir="rtl"] div.selected-chat-user-image span.contact-status {
   left: unset;
   right: 30px;
+}
+.page-quick-sidebar-wrapper .chat-image-preview {
+  width: 235px;
+  margin-top: 5px;
+}
+.page-quick-sidebar-wrapper .chat-file-preview {
+  margin-top: 15px;
+  text-align: left;
+  padding: 5px;
+  background-color: #f0ad4e;
+  display: block;
+  color: #f7f7f7;
+}
+.page-quick-sidebar-wrapper .chat-link-message {
+  display: block;
+  text-overflow: ellipsis;
+  overflow-x: hidden;
+  white-space: nowrap;
+  margin-top: 15px;
+  text-align: left;
+  padding: 5px;
+  background-color: #3598dc;
+  color: #f7f7f7;
+}
+.page-quick-sidebar-wrapper .chat-progress-bar {
+  display: none;
+}
+.page-quick-sidebar-wrapper .fileinput-button {
+  display: block;
 }

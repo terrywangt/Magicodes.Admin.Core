@@ -24,6 +24,9 @@
   <ItemGroup>
     <ProjectReference Include="..\Magicodes.Admin.Core\Magicodes.Admin.Core.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Transactions" />
+  </ItemGroup>
   <PropertyGroup Condition="'$(TargetFramework)'=='net461'">
     <DefineConstants>FEATURE_LDAP;FEATURE_SIGNALR</DefineConstants>
   </PropertyGroup>

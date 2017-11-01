@@ -227,6 +227,27 @@
                     message.profilePicturePath = message.side === app.chat.side.sender ?
                         (!appSession.user.profilePictureId ? (abp.appPath + 'Common/Images/default-profile-picture.png') : (abp.appPath + 'Profile/GetProfilePictureById?id=' + appSession.user.profilePictureId)) :
                         chat.getFriendProfilePicturePath(chat.selectedUser);
+
+                    var readStateClass = message.receiverReadState === app.chat.readState.read ? ' text-success' : '';
+                    message.readStateCheck = message.side === app.chat.side.sender ? '<i class="read-state-check fa fa-check' + readStateClass + '" aria-hidden="true"></i>' : '';
+
+                    if (message.message.startsWith('[image]')) {
+                        var image = JSON.parse(message.message.substring('[image]'.length));
+                        var fileUrl = abp.appPath + 'Admin/Chat/GetImage?id=' + message.id + '&contentType=' + image.contentType;
+                        var uploadedImageMsg = '<a href="' + fileUrl + '" target="_blank"><img src="' + fileUrl + '" class="chat-image-preview"></a>';
+
+                        message.message = uploadedImageMsg;
+                    } else if (message.message.startsWith('[file]')) {
+                        var file = JSON.parse(message.message.substring('[file]'.length));
+                        var fileUrl = abp.appPath + 'Admin/Chat/GetFile?id=' + message.id + '&contentType=' + file.contentType;
+                        var uploadedFileMsg = '<a href="' + fileUrl + '" target="_blank" class="chat-file-preview"><i class="fa fa-file"></i> ' + file.name + ' <i class="fa fa-download pull-right"></i></a>';
+
+                        message.message = uploadedFileMsg;
+                    } else if (message.message.startsWith('[link]')) {
+                        var linkMessage = JSON.parse(message.message.substring('[file]'.length));
+
+                        message.message = '<a href="' + linkMessage.message + '" target="_blank" class="chat-link-message"><i class="fa fa-link"></i> ' + linkMessage.message + '</a>';
+                    }
                 });
 
                 return messages;
@@ -349,8 +370,8 @@
                     invalidHandler: function () {
                         $('#SendChatMessageButton').attr('disabled', 'disabled');
                     },
-                    errorPlacement: function() {
-                        
+                    errorPlacement: function () {
+
                     },
                     success: function () {
                         $('#SendChatMessageButton').removeAttr('disabled');
@@ -452,6 +473,22 @@
                     chat.triggerUnreadMessageCountChangeEvent();
                 });
 
+                abp.event.on('app.chat.readStateChange', function (data) {
+                    var user = chat.getFriendOrNull(data.friend.userId, data.friend.tenantId);
+                    if (!user) {
+                        return;
+                    }
+
+                    $.each(user.messages,
+                        function (index, message) {
+                            message.receiverReadState = app.chat.readState.read;
+                        });
+
+                    if (chat.selectedUser.friendUserId === data.friend.userId) {
+                        $('.read-state-check').not('.text-success').addClass('text-success');
+                    }
+                });
+
                 abp.event.on('app.chat.connected', function () {
                     chat.getFriendsAndSettings(function () {
                         chat.bindUiEvents();
@@ -465,8 +502,8 @@
 
                 appSession.load(function () {
                     chat.interTenantChatAllowed = abp.features.isEnabled('App.ChatFeature.TenantToTenant') ||
-                                                  abp.features.isEnabled('App.ChatFeature.TenantToHost') ||
-                                                  !appSession.tenant;
+                        abp.features.isEnabled('App.ChatFeature.TenantToHost') ||
+                        !appSession.tenant;
                 });
             },
 
@@ -666,5 +703,68 @@
         };
 
         chat.init();
+
+        'use strict';
+        // Change this to the location of your server-side upload handler:
+        var url = abp.appPath + 'Admin/Chat/UploadFile';
+
+        //image upload
+        $('#chatImageUpload').fileupload({
+            url: url,
+            dataType: 'json',
+            maxFileSize: 999000,
+            done: function (e, response) {
+                var jsonResult = response.result;
+
+                $('#ChatMessage').val('[image]{"id":"' + jsonResult.result.id + '", "name":"' + jsonResult.result.name + '", "contentType":"' + jsonResult.result.contentType + '"}');
+                chat.sendMessage();
+                $('.chat-progress-bar').hide();
+            },
+            progressall: function (e, data) {
+                var progress = parseInt(data.loaded / data.total * 100, 10);
+                $('.chat-progress-bar').show();
+                $('#chatFileUploadProgress .progress-bar').css(
+                    'width',
+                    progress + '%'
+                );
+            }
+        }).prop('disabled', !$.support.fileInput)
+            .parent()
+            .addClass($.support.fileInput ? undefined : 'disabled');
+
+        //file upload
+        $('#chatFileUpload').fileupload({
+            url: url,
+            dataType: 'json',
+            maxFileSize: 999000,
+            done: function (e, response) {
+                var jsonResult = response.result;
+
+                $('#ChatMessage').val('[file]{"id":"' + jsonResult.result.id + '", "name":"' + jsonResult.result.name + '", "contentType":"' + jsonResult.result.contentType + '"}');
+                chat.sendMessage();
+                $('.chat-progress-bar').hide();
+            },
+            progressall: function (e, data) {
+                var progress = parseInt(data.loaded / data.total * 100, 10);
+                $('.chat-progress-bar').show();
+                $('#chatFileUploadProgress .progress-bar').css(
+                    'width',
+                    progress + '%'
+                );
+            }
+        }).prop('disabled', !$.support.fileInput)
+            .parent()
+            .addClass($.support.fileInput ? undefined : 'disabled');
+
+
+        $('#btnLinkShare').click(function () {
+            $('#chatDropdownToggle').dropdown('toggle');
+            $('#ChatMessage').val('[link]{"message":"' + window.location.href + '"}');
+            chat.sendMessage();
+        });
+
+        $('.fileinput-button').click(function() {
+            $('#chatDropdownToggle').dropdown('toggle');
+        });
     });
 })(jQuery);

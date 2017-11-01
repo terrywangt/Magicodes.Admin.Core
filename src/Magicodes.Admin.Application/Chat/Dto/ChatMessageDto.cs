@@ -19,9 +19,12 @@ namespace Magicodes.Admin.Chat.Dto
 
         public ChatMessageReadState ReadState { get; set; }
 
+        public ChatMessageReadState ReceiverReadState { get; set; }
+
         public string Message { get; set; }
         
         public DateTime CreationTime { get; set; }
 
+        public string SharedMessageId { get; set; }
     }
 }

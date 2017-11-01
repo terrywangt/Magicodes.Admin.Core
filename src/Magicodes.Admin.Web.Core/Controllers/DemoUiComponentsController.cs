@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Abp.AspNetCore.Mvc.Authorization;
 using Abp.IO.Extensions;
 using Abp.UI;
 using Abp.Web.Models;
@@ -9,6 +10,7 @@ using Magicodes.Admin.Storage;
 
 namespace Magicodes.Admin.Web.Controllers
 {
+    [AbpMvcAuthorize]
     public class DemoUiComponentsController : AdminControllerBase
     {
         private readonly IBinaryObjectManager _binaryObjectManager;

@@ -841,25 +841,32 @@ var app = app || {};
 
     chatHub.client.getUserConnectNotification = function (friend, isConnected) {
         abp.event.trigger('app.chat.userConnectionStateChanged',
-        {
-            friend: friend,
-            isConnected: isConnected
-        });
+            {
+                friend: friend,
+                isConnected: isConnected
+            });
     };
 
     chatHub.client.getUserStateChange = function (friend, state) {
         abp.event.trigger('app.chat.userStateChanged',
-        {
-            friend: friend,
-            state: state
-        });
+            {
+                friend: friend,
+                state: state
+            });
     };
 
     chatHub.client.getallUnreadMessagesOfUserRead = function (friend) {
         abp.event.trigger('app.chat.allUnreadMessagesOfUserRead',
-        {
-            friend: friend
-        });
+            {
+                friend: friend
+            });
+    };
+
+    chatHub.client.getReadStateChange = function (friend) {
+        abp.event.trigger('app.chat.readStateChange',
+            {
+                friend: friend
+            });
     };
 
     app.chat.sendMessage = function (messageData, callback) {

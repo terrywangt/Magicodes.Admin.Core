@@ -675,5 +675,20 @@
       Components in this page are implemented as full stack (includes the server side).
     </text>
     <text name="DemoUiComponents_Info_Metronic_Link_Text">Check Metronic theme for more UI components</text>
+    <text name="Image">صورة</text>
+    <text name="File">ملف</text>
+    <text name="Link">رابط</text>
+    <text name="Billing">فواتير</text>
+    <text name="LegalName">الإسم القانوني</text>
+    <text name="Address">عنوان</text>
+    <text name="Tax/VatNo">ضريبة / رقم ضريبة القيمة المضافة </text>
+    <text name="Invoice">فاتورة</text>
+    <text name="TotalAmount">المبلغ الإجمالي</text>
+    <text name="Print">طباعة</text>
+    <text name="ShowInvoice">عرض الفاتورة</text>
+    <text name="InvoiceInformation">معلومات الفاتورة</text>
+    <text name="InvoiceNo">رقم الفاتورة</text>
+    <text name="Date">التاريخ</text>
+    <text name="ThisInvoiceIsNotYours">هذه الفاتورة ليست لك!</text>
   </texts>
 </localizationDictionary>

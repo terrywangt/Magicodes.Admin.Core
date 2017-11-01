@@ -13,9 +13,6 @@ using Newtonsoft.Json;
 namespace Magicodes.Admin.ConsoleApiClient
 {
     /* 
-     * NOTICE THAT THIS SAMPLE IS NOT WORKING SINCE IdentityServer4.AccessTokenValidation IS NOT PORTED TO ASP.NET CORE 2.0 YET.
-     * See note in Startup.cs
-     * 
      * This is a sample code to create an IdentityServer4 client and use ResourceOwnerPassword flow to call an API. 
      * Enable IdentityServer from appsettings.json of Web.Host/Web.Mvc project first.
      */

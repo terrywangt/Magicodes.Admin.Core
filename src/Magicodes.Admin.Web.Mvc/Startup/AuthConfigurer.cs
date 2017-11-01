@@ -3,6 +3,7 @@ using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Abp.Extensions;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 
@@ -131,6 +132,15 @@ namespace Magicodes.Admin.Web.Startup
                         // If you want to allow a certain amount of clock drift, set that here
                         ClockSkew = TimeSpan.Zero
                     };
+                });
+            }
+
+            if (bool.Parse(configuration["IdentityServer:IsEnabled"]))
+            {
+                authenticationBuilder.AddIdentityServerAuthentication("IdentityBearer", options =>
+                {
+                    options.Authority = configuration["App:WebSiteRootAddress"];
+                    options.RequireHttpsMetadata = false;
                 });
             }
         }

@@ -64,6 +64,11 @@
                         @L("EmailSmtp")
                     </a>
                 </li>
+                <li>
+                    <a href="#BillingTab" data-toggle="tab" aria-expanded="false">
+                        @L("Invoice")
+                    </a>
+                </li>
             </ul>
 
             <div class="tab-content">
@@ -333,78 +338,93 @@
                     </div>
                 </div>
 
-                <div class="tab-pane" id="SettingsEmailSmtpTab">
-                    <form id="EmailSmtpSettingsForm">
-                        <div class="form-group form-md-line-input form-md-floating-label no-hint">
-                            <input type="email" name="DefaultFromAddress" class="form-control@(Model.Settings.Email.DefaultFromAddress.IsNullOrEmpty() ? "" : " edited")" value="@Model.Settings.Email.DefaultFromAddress" maxlength="@Magicodes.Admin.Authorization.Users.User.MaxEmailAddressLength">
-                            <label>@L("DefaultFromAddress")</label>
+            <div class="tab-pane" id="SettingsEmailSmtpTab">
+                <form id="EmailSmtpSettingsForm">
+                    <div class="form-group form-md-line-input form-md-floating-label no-hint">
+                        <input type="email" name="DefaultFromAddress" class="form-control@(Model.Settings.Email.DefaultFromAddress.IsNullOrEmpty() ? "" : " edited")" value="@Model.Settings.Email.DefaultFromAddress" maxlength="@Magicodes.Admin.Authorization.Users.User.MaxEmailAddressLength">
+                        <label>@L("DefaultFromAddress")</label>
+                    </div>
+
+                    <div class="form-group form-md-line-input form-md-floating-label no-hint">
+                        <input type="text" name="DefaultFromDisplayName" class="form-control@(Model.Settings.Email.DefaultFromDisplayName.IsNullOrEmpty() ? "" : " edited")" value="@Model.Settings.Email.DefaultFromDisplayName" maxlength="128">
+                        <label>@L("DefaultFromDisplayName")</label>
+                    </div>
+
+                    <div class="form-group form-md-line-input form-md-floating-label no-hint">
+                        <input type="text" name="SmtpHost" class="form-control@(Model.Settings.Email.SmtpHost.IsNullOrEmpty() ? "" : " edited")" value="@Model.Settings.Email.SmtpHost" maxlength="64">
+                        <label>@L("SmtpHost")</label>
+                    </div>
+
+                    <div class="form-group form-md-line-input form-md-floating-label no-hint">
+                        <input type="number" name="SmtpPort" class="form-control edited" value="@Model.Settings.Email.SmtpPort" maxlength="5">
+                        <label>@L("SmtpPort")</label>
+                    </div>
+
+                    <div class="md-checkbox-list">
+                        <div class="md-checkbox">
+                            <input id="Settings_SmtpEnableSsl" class="md-check" type="checkbox" name="SmtpEnableSsl" value="true" @Html.Raw(Model.Settings.Email.SmtpEnableSsl ? "checked=\"checked\"" : "")>
+                            <label for="Settings_SmtpEnableSsl">
+                                <span class="inc"></span>
+                                <span class="check"></span>
+                                <span class="box"></span>
+                                @L("UseSsl")
+                            </label>
                         </div>
-
-                        <div class="form-group form-md-line-input form-md-floating-label no-hint">
-                            <input type="text" name="DefaultFromDisplayName" class="form-control@(Model.Settings.Email.DefaultFromDisplayName.IsNullOrEmpty() ? "" : " edited")" value="@Model.Settings.Email.DefaultFromDisplayName" maxlength="128">
-                            <label>@L("DefaultFromDisplayName")</label>
+                        <div class="md-checkbox">
+                            <input id="Settings_SmtpUseDefaultCredentials" class="md-check" type="checkbox" name="SmtpUseDefaultCredentials" value="true" @Html.Raw(Model.Settings.Email.SmtpUseDefaultCredentials ? "checked=\"checked\"" : "")>
+                            <label for="Settings_SmtpUseDefaultCredentials">
+                                <span class="inc"></span>
+                                <span class="check"></span>
+                                <span class="box"></span>
+                                @L("UseDefaultCredentials")
+                            </label>
                         </div>
+                    </div>
 
-                        <div class="form-group form-md-line-input form-md-floating-label no-hint">
-                            <input type="text" name="SmtpHost" class="form-control@(Model.Settings.Email.SmtpHost.IsNullOrEmpty() ? "" : " edited")" value="@Model.Settings.Email.SmtpHost" maxlength="64">
-                            <label>@L("SmtpHost")</label>
+                    <div class="form-group form-md-line-input form-md-floating-label no-hint">
+                        <input type="text" name="SmtpDomain" class="form-control@(Model.Settings.Email.SmtpDomain.IsNullOrEmpty() ? "" : " edited")" value="@Model.Settings.Email.SmtpDomain" maxlength="128">
+                        <label>@L("DomainName")</label>
+                    </div>
+
+                    <div class="form-group form-md-line-input form-md-floating-label no-hint">
+                        <input type="text" name="SmtpUserName" class="form-control@(Model.Settings.Email.SmtpUserName.IsNullOrEmpty() ? "" : " edited")" value="@Model.Settings.Email.SmtpUserName" maxlength="128">
+                        <label>@L("UserName")</label>
+                    </div>
+
+                    <div class="form-group form-md-line-input form-md-floating-label no-hint">
+                        <input type="password" name="SmtpPassword" class="form-control@(Model.Settings.Email.SmtpPassword.IsNullOrEmpty() ? "" : " edited")" value="@Model.Settings.Email.SmtpPassword" maxlength="128">
+                        <label>@L("Password")</label>
+                    </div>
+
+                    <hr />
+
+                    <h4>@L("TestEmailSettingsHeader")</h4>
+
+                    <div class="row">
+                        <div class="form-group form-md-line-input has-info form-md-floating-label col-md-4">
+                            <input id="TestEmailAddressInput" type="text" class="form-control input-sm" value="@ViewBag.CurrentUserEmail">
                         </div>
-
-                        <div class="form-group form-md-line-input form-md-floating-label no-hint">
-                            <input type="number" name="SmtpPort" class="form-control edited" value="@Model.Settings.Email.SmtpPort" maxlength="5">
-                            <label>@L("SmtpPort")</label>
+                        <div class="form-group form-md-line-input col-md-2">
+                            <button id="SendTestEmailButton" class="btn green-haze" type="button">@L("SendTestEmail")</button>
                         </div>
+                    </div>
+                </form>
+            </div>
+                
+            <div class="tab-pane" id="BillingTab">
+                <form id="BillingSettingsForm">
 
-                        <div class="md-checkbox-list">
-                            <div class="md-checkbox">
-                                <input id="Settings_SmtpEnableSsl" class="md-check" type="checkbox" name="SmtpEnableSsl" value="true" @Html.Raw(Model.Settings.Email.SmtpEnableSsl ? "checked=\"checked\"" : "")>
-                                <label for="Settings_SmtpEnableSsl">
-                                    <span class="inc"></span>
-                                    <span class="check"></span>
-                                    <span class="box"></span>
-                                    @L("UseSsl")
-                                </label>
-                            </div>
-                            <div class="md-checkbox">
-                                <input id="Settings_SmtpUseDefaultCredentials" class="md-check" type="checkbox" name="SmtpUseDefaultCredentials" value="true" @Html.Raw(Model.Settings.Email.SmtpUseDefaultCredentials ? "checked=\"checked\"" : "")>
-                                <label for="Settings_SmtpUseDefaultCredentials">
-                                    <span class="inc"></span>
-                                    <span class="check"></span>
-                                    <span class="box"></span>
-                                    @L("UseDefaultCredentials")
-                                </label>
-                            </div>
-                        </div>
-
-                        <div class="form-group form-md-line-input form-md-floating-label no-hint">
-                            <input type="text" name="SmtpDomain" class="form-control@(Model.Settings.Email.SmtpDomain.IsNullOrEmpty() ? "" : " edited")" value="@Model.Settings.Email.SmtpDomain" maxlength="128">
-                            <label>@L("DomainName")</label>
-                        </div>
-
-                        <div class="form-group form-md-line-input form-md-floating-label no-hint">
-                            <input type="text" name="SmtpUserName" class="form-control@(Model.Settings.Email.SmtpUserName.IsNullOrEmpty() ? "" : " edited")" value="@Model.Settings.Email.SmtpUserName" maxlength="128">
-                            <label>@L("UserName")</label>
-                        </div>
-
-                        <div class="form-group form-md-line-input form-md-floating-label no-hint">
-                            <input type="password" name="SmtpPassword" class="form-control@(Model.Settings.Email.SmtpPassword.IsNullOrEmpty() ? "" : " edited")" value="@Model.Settings.Email.SmtpPassword" maxlength="128">
-                            <label>@L("Password")</label>
-                        </div>
-
-                        <hr />
-
-                        <h4>@L("TestEmailSettingsHeader")</h4>
-
-                        <div class="row">
-                            <div class="form-group form-md-line-input has-info form-md-floating-label col-md-4">
-                                <input id="TestEmailAddressInput" type="text" class="form-control input-sm" value="@ViewBag.CurrentUserEmail">
-                            </div>
-                            <div class="form-group form-md-line-input col-md-2">
-                                <button id="SendTestEmailButton" class="btn green-haze" type="button">@L("SendTestEmail")</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+                    <div class="form-group form-md-line-input form-md-floating-label no-hint">
+                        <input type="text" name="LegalName" class="form-control@(Model.Settings.Billing.LegalName.IsNullOrEmpty() ? "" : " edited")" value="@Model.Settings.Billing.LegalName" maxlength="64">
+                        <label>@L("LegalName")</label>
+                    </div>
+                    
+                    <div class="form-group form-md-line-input">
+                        <textarea rows="5" name="Address" class="form-control" maxlength="256">@Model.Settings.Billing.Address</textarea>
+                        <label>@L("Address")</label>
+                    </div>
+                </form>
+            </div>
 
             </div>
         </div>

@@ -1,10 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations.Schema;
 using Abp.Application.Editions;
 using Abp.Domain.Entities.Auditing;
+using Abp.MultiTenancy;
 
 namespace Magicodes.Admin.MultiTenancy.Payments
 {
     [Table("AppSubscriptionPayments")]
+    [MultiTenancySide(MultiTenancySides.Host)]
     public class SubscriptionPayment : FullAuditedEntity<long>
     {
         public SubscriptionPaymentGatewayType Gateway { get; set; }
@@ -24,5 +27,7 @@ namespace Magicodes.Admin.MultiTenancy.Payments
         public string PaymentId { get; set; }
 
         public Edition Edition { get; set; }
+        
+        public string InvoiceNo { get; set; }
     }
 }

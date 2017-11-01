@@ -61,8 +61,10 @@ namespace Magicodes.Admin.Chat
                 throw new UserFriendlyException(L("UserIsBlocked"));
             }
 
-            await HandleSenderToReceiverAsync(sender, receiver, message);
-            await HandleReceiverToSenderAsync(sender, receiver, message);
+            var sharedMessageId = Guid.NewGuid();
+
+            await HandleSenderToReceiverAsync(sender, receiver, message, sharedMessageId);
+            await HandleReceiverToSenderAsync(sender, receiver, message, sharedMessageId);
             await HandleSenderUserInfoChangeAsync(sender, receiver, senderTenancyName, senderUserName, senderProfilePictureId);
         }
 
@@ -93,9 +95,9 @@ namespace Magicodes.Admin.Chat
             }
         }
 
-        private async Task HandleSenderToReceiverAsync(UserIdentifier senderIdentifier, UserIdentifier receiverIdentifier, string message)
+        private async Task HandleSenderToReceiverAsync(UserIdentifier senderIdentifier, UserIdentifier receiverIdentifier, string message, Guid sharedMessageId)
         {
-            var friendshipState = (await  _friendshipManager.GetFriendshipOrNullAsync(senderIdentifier, receiverIdentifier))?.State;
+            var friendshipState = (await _friendshipManager.GetFriendshipOrNullAsync(senderIdentifier, receiverIdentifier))?.State;
             if (friendshipState == null)
             {
                 friendshipState = FriendshipState.Accepted;
@@ -127,7 +129,9 @@ namespace Magicodes.Admin.Chat
                 receiverIdentifier,
                 ChatSide.Sender,
                 message,
-                ChatMessageReadState.Read
+                ChatMessageReadState.Read,
+                sharedMessageId,
+                ChatMessageReadState.Unread
             );
 
             Save(sentMessage);
@@ -138,7 +142,7 @@ namespace Magicodes.Admin.Chat
                 );
         }
 
-        private async Task HandleReceiverToSenderAsync(UserIdentifier senderIdentifier, UserIdentifier receiverIdentifier, string message)
+        private async Task HandleReceiverToSenderAsync(UserIdentifier senderIdentifier, UserIdentifier receiverIdentifier, string message, Guid sharedMessageId)
         {
             var friendshipState = (await _friendshipManager.GetFriendshipOrNullAsync(receiverIdentifier, senderIdentifier))?.State;
 
@@ -172,7 +176,10 @@ namespace Magicodes.Admin.Chat
                     senderIdentifier,
                     ChatSide.Receiver,
                     message,
-                    ChatMessageReadState.Unread);
+                    ChatMessageReadState.Unread,
+                    sharedMessageId,
+                    ChatMessageReadState.Read
+                );
 
             Save(sentMessage);
 

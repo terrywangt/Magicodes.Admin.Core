@@ -44,7 +44,8 @@ namespace Magicodes.Admin.Configuration.Host
                 TenantManagement = await GetTenantManagementSettingsAsync(),
                 UserManagement = await GetUserManagementAsync(),
                 Email = await GetEmailSettingsAsync(),
-                Security = await GetSecuritySettingsAsync()
+                Security = await GetSecuritySettingsAsync(),
+                Billing = await GetBillingSettingsAsync()
             };
         }
 
@@ -141,6 +142,15 @@ namespace Magicodes.Admin.Configuration.Host
             };
         }
 
+        private async Task<HostBillingSettingsEditDto> GetBillingSettingsAsync()
+        {
+            return new HostBillingSettingsEditDto
+            {
+                LegalName = await SettingManager.GetSettingValueAsync(AppSettings.HostManagement.BillingLegalName),
+                Address = await SettingManager.GetSettingValueAsync(AppSettings.HostManagement.BillingAddress)
+            };
+        }
+
         private async Task<UserLockOutSettingsEditDto> GetUserLockOutSettingsAsync()
         {
             return new UserLockOutSettingsEditDto
@@ -175,6 +185,14 @@ namespace Magicodes.Admin.Configuration.Host
             await UpdateUserManagementSettingsAsync(input.UserManagement);
             await UpdateSecuritySettingsAsync(input.Security);
             await UpdateEmailSettingsAsync(input.Email);
+            await UpdateBillingSettingsAsync(input.Billing);
+        }
+
+        private async Task UpdateBillingSettingsAsync(HostBillingSettingsEditDto input)
+        {
+            await SettingManager.ChangeSettingForApplicationAsync(AppSettings.HostManagement.BillingLegalName, input.LegalName);
+            await SettingManager.ChangeSettingForApplicationAsync(AppSettings.HostManagement.BillingAddress, input.Address);
+
         }
 
         private async Task UpdateGeneralSettingsAsync(GeneralSettingsEditDto settings)

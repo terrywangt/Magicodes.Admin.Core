@@ -25,7 +25,14 @@ namespace Magicodes.Admin.EntityFrameworkCore
             {
                 Configuration.Modules.AbpEfCore().AddDbContext<AdminDbContext>(options =>
                 {
-                    AdminDbContextConfigurer.Configure(options.DbContextOptions, options.ConnectionString);
+                    if (options.ExistingConnection != null)
+                    {
+                        AdminDbContextConfigurer.Configure(options.DbContextOptions, options.ExistingConnection);
+                    }
+                    else
+                    {
+                        AdminDbContextConfigurer.Configure(options.DbContextOptions, options.ConnectionString);
+                    }
                 });
             }
         }

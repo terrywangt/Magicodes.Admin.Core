@@ -675,5 +675,20 @@
       Components in this page are implemented as full stack (includes the server side).
     </text>
     <text name="DemoUiComponents_Info_Metronic_Link_Text">Check Metronic theme for more UI components</text>
+    <text name="Image">Image</text>
+    <text name="File">File</text>
+    <text name="Link">Link</text>
+    <text name="Billing">Billing</text>
+    <text name="LegalName">Legal Name</text>
+    <text name="Address">Address</text>
+    <text name="Tax/VatNo">Tax/VatNo</text>
+    <text name="Invoice">Invoice</text>
+    <text name="TotalAmount">Total Amount</text>
+    <text name="Print">Print</text>
+    <text name="ShowInvoice">Show Invoice</text>
+    <text name="InvoiceInformation">Invoice Information</text>
+    <text name="InvoiceNo">Invoice No</text>
+    <text name="Date">Date</text>
+    <text name="ThisInvoiceIsNotYours">This invoice is not yours !</text>
   </texts>
 </localizationDictionary>

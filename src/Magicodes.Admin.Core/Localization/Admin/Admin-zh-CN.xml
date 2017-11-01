@@ -598,6 +598,9 @@
     <text name="SeeAllRecords">查看所有记录</text>
     <text name="RecentTenants">最近租户</text>
     <text name="HostDashboardHeaderInfo">查看统计信息以及相关情况</text>
-  
+
+    <text name="Invoce">发票</text>
+    <text name="LegalName">抬头名称</text>
+    <text name="Address">地址</text>
   </texts>
 </localizationDictionary>

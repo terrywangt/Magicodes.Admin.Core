@@ -7,6 +7,7 @@ using Magicodes.Admin.Chat;
 using Magicodes.Admin.Editions;
 using Magicodes.Admin.Friendships;
 using Magicodes.Admin.MultiTenancy;
+using Magicodes.Admin.MultiTenancy.Accounting;
 using Magicodes.Admin.MultiTenancy.Payments;
 using Magicodes.Admin.Storage;
 
@@ -25,6 +26,8 @@ namespace Magicodes.Admin.EntityFrameworkCore
         public virtual DbSet<SubscribableEdition> SubscribableEditions { get; set; }
 
         public virtual DbSet<SubscriptionPayment> SubscriptionPayments { get; set; }
+
+        public virtual DbSet<Invoice> Invoices { get; set; }
 
         public DbSet<PersistedGrantEntity> PersistedGrants { get; set; }
 

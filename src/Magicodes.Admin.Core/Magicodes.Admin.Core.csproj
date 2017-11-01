@@ -21,10 +21,10 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="2.0.0" />
-    <PackageReference Include="Abp.ZeroCore.IdentityServer4.EntityFrameworkCore" Version="3.0.0" />
-    <PackageReference Include="Abp.AutoMapper" Version="3.0.0" />
-    <PackageReference Include="Abp.MailKit" Version="3.0.0" />
-    <PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="3.0.0" />
+    <PackageReference Include="Abp.ZeroCore.IdentityServer4.EntityFrameworkCore" Version="3.1.2" />
+    <PackageReference Include="Abp.AutoMapper" Version="3.1.2" />
+    <PackageReference Include="Abp.MailKit" Version="3.1.2" />
+    <PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="3.1.0" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
     <Reference Include="System" />
@@ -32,7 +32,7 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Transactions" />
-    <PackageReference Include="Abp.Zero.Ldap" Version="3.0.0" />
+    <PackageReference Include="Abp.Zero.Ldap" Version="3.1.2" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp2.0' ">
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.4.0" />

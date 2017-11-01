@@ -31,5 +31,10 @@ namespace Magicodes.Admin.Chat
         {
             
         }
+
+        public void SendReadStateChangeToClients(IReadOnlyList<IOnlineClient> clients, UserIdentifier user)
+        {
+
+        }
     }
 }

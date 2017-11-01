@@ -24,5 +24,10 @@ namespace Magicodes.Admin.MultiTenancy.Payments.Dto
         public string Status { get; set; }
 
         public string EditionDisplayName { get; set; }
+
+        public int TenantId { get; set; }
+
+        public string InvoiceNo { get; set; }
+
     }
 }

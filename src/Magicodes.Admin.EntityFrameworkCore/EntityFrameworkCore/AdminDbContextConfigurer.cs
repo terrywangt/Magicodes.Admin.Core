@@ -8,14 +8,13 @@ namespace Magicodes.Admin.EntityFrameworkCore
         public static void Configure(DbContextOptionsBuilder<AdminDbContext> builder, string connectionString)
         {
             //builder.UseSqlServer(connectionString);
-            //var configuration = AppConfigurations.Get(WebContentDirectoryFinder.CalculateContentRootFolder());
             //以支持SQL Server 2012以下数据库
             builder.UseSqlServer(connectionString, p => p.UseRowNumberForPaging());
         }
 
-        //public static void Configure(DbContextOptionsBuilder<AdminDbContext> builder, DbConnection connection)
-        //{
-        //    builder.UseSqlServer(connection);
-        //}
+        public static void Configure(DbContextOptionsBuilder<AdminDbContext> builder, DbConnection connection)
+        {
+            builder.UseSqlServer(connection);
+        }
     }
 }

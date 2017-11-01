@@ -118,8 +118,3 @@ src/.vs/config/applicationhost.config
 src/Magicodes.Admin.Web.Host/wwwroot/Temp/Downloads
 src/Magicodes.Admin.Web.Mvc/wwwroot/Temp/Downloads
 src/Magicodes.Admin.Web.Mvc/Properties/PublishProfiles
-
-/src/Magicodes.Admin.Web.Mvc/wwwroot/PlugIns/Magicodes.AppSession.dll
-/src/Magicodes.Admin.Web.Mvc/wwwroot/PlugIns/Magicodes.Api.ClientApi.dll
-/src/Magicodes.Admin.Web.Mvc/wwwroot/PlugIns/Magicodes.AppSession.dll
-/src/Magicodes.Admin.Web.Mvc/wwwroot/PlugIns/Magicodes.Api.ClientApi.dll

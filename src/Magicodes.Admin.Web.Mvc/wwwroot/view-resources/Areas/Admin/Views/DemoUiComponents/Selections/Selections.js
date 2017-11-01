@@ -91,7 +91,7 @@
             var message = "";
 
             $.each(data, function (index, item) {
-                message += `<div><strong>id</strong>: ${item.value} - <strong>name</strong>: ${item.name}</div>`;
+                message += '<div><strong>id</strong>: ' + item.value + ' - <strong>name</strong>: ' + item.name + '</div>';
             });
 
             abp.libs.sweetAlert.config.info.html = true;
@@ -121,7 +121,7 @@
             var message = "";
 
             $.each(data, function (index, item) {
-                message += `<div><strong>id</strong>: ${item.value} - <strong>name</strong>: ${item.name}</div>`;
+                message += '<div><strong>id</strong>: ' + item.value + ' - <strong>name</strong>: ' + item.name + '</div>';
             });
 
             abp.libs.sweetAlert.config.info.html = true;
@@ -151,7 +151,7 @@
             var message = "";
 
             $.each(data, function (index, item) {
-                message += `<div><strong>id</strong>: ${item.value} - <strong>name</strong>: ${item.name}</div>`;
+                message += '<div><strong>id</strong>: ' + item.value + ' - <strong>name</strong>: ' + item.name + '</div>';
             });
 
             abp.libs.sweetAlert.config.info.html = true;

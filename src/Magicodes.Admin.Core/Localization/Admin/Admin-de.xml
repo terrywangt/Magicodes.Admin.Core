@@ -506,5 +506,20 @@
     <text name="Free">Kostenlos</text>
     <text name="Paid">Bezahlt</text>
     <text name="IsTrialActive">Ist Trial Active</text>
+    <text name="Image">Bild</text>
+    <text name="File">Datei</text>
+    <text name="Link">Link</text>
+    <text name="Billing">Rechnung</text>
+    <text name="LegalName">Rechnungsempfänger</text>
+    <text name="Address">Adresse</text>
+    <text name="Tax/VatNo">Steuernummer</text>
+    <text name="Invoice">Rechnung</text>
+    <text name="TotalAmount">Gesamtbetrag</text>
+    <text name="Print">Drucken</text>
+    <text name="ShowInvoice">Rechnung anzeigen</text>
+    <text name="InvoiceInformation">Rechnungsinformationen</text>
+    <text name="InvoiceNo">Rechnungsnummer</text>
+    <text name="Date">Datum</text>
+    <text name="ThisInvoiceIsNotYours">Diese Rechnung gehört nicht zu Ihnen!</text>
   </texts>
 </localizationDictionary>

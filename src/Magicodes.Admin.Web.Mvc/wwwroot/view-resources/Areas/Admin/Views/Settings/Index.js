@@ -228,11 +228,13 @@
 
         //Save settings
         $('#SaveAllSettingsButton').click(function () {
+            
             _tenantSettingsService.updateAllSettings({
                 general: $('#GeneralSettingsForm').serializeFormToObject(),
                 userManagement: $.extend($('#FormBasedRegistrationSettingsForm').serializeFormToObject(), $('#OtherSettingsForm').serializeFormToObject()),
                 email: $('#EmailSmtpSettingsForm').serializeFormToObject(),
                 ldap: $('#LdapSettingsForm').serializeFormToObject(),
+                billing: $('#BillingSettingsForm').serializeFormToObject(),
                 security: {
                     useDefaultPasswordComplexitySettings: $('#Setting_PasswordComplexity_UseDefaultSettings').is(":checked"),
                     passwordComplexity: $('#PasswordComplexitySettingsForm').serializeFormToObject(),

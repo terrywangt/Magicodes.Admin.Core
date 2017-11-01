@@ -21,27 +21,27 @@
     <ProjectReference Include="..\Magicodes.Admin.EntityFrameworkCore\Magicodes.Admin.EntityFrameworkCore.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Abp.ZeroCore.IdentityServer4" Version="3.0.0" />
     <PackageReference Include="JoyMoe.AspNetCore.Authentication.Baidu" Version="2.0.1" />
     <PackageReference Include="JoyMoe.AspNetCore.Authentication.QQ" Version="2.0.1" />
     <PackageReference Include="JoyMoe.AspNetCore.Authentication.Weibo" Version="2.0.1" />
     <PackageReference Include="JoyMoe.AspNetCore.Authentication.Weixin" Version="2.0.1" />
+    <PackageReference Include="Abp.ZeroCore.IdentityServer4" Version="3.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="2.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="1.0.0" />
-    <PackageReference Include="Hangfire.SqlServer" Version="1.6.16" />
+    <PackageReference Include="Hangfire.SqlServer" Version="1.6.17" />
     <PackageReference Include="PaulMiami.AspNetCore.Mvc.Recaptcha" Version="1.2.1" />
     <PackageReference Include="System.ValueTuple" Version="4.4.0" />
-    <PackageReference Include="Abp.AspNetCore" Version="3.0.0" />
-    <PackageReference Include="Abp.HangFire.AspNetCore" Version="3.0.0" />
-    <PackageReference Include="Abp.RedisCache" Version="3.0.0" />
+    <PackageReference Include="Abp.AspNetCore" Version="3.1.2" />
+    <PackageReference Include="Abp.HangFire.AspNetCore" Version="3.1.2" />
+    <PackageReference Include="Abp.RedisCache" Version="3.1.2" />
     <PackageReference Include="System.Net.Http" Version="4.3.2" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
-    <PackageReference Include="Abp.Owin" Version="3.0.0" />
-    <PackageReference Include="Abp.Web.SignalR" Version="3.0.0" />
+    <PackageReference Include="Abp.Owin" Version="3.1.2" />
+    <PackageReference Include="Abp.Web.SignalR" Version="3.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Owin" Version="2.0.0" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">

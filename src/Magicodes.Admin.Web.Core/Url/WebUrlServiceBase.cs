@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Abp.Extensions;
-using Abp.MultiTenancy;
-using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Magicodes.Admin.Configuration;
 
 namespace Magicodes.Admin.Web.Url
@@ -15,9 +14,9 @@ namespace Magicodes.Admin.Web.Url
 
         public abstract string ServerRootAddressFormatKey { get; }
 
-        public string WebSiteRootAddressFormat => _hostingEnvironment.GetAppConfiguration()[WebSiteRootAddressFormatKey] ?? "http://localhost:62114/";
+        public string WebSiteRootAddressFormat => _appConfiguration[WebSiteRootAddressFormatKey] ?? "http://localhost:62114/";
 
-        public string ServerRootAddressFormat => _hostingEnvironment.GetAppConfiguration()[ServerRootAddressFormatKey] ?? "http://localhost:62114/";
+        public string ServerRootAddressFormat => _appConfiguration[ServerRootAddressFormatKey] ?? "http://localhost:62114/";
 
         public bool SupportsTenancyNameInUrl
         {
@@ -28,16 +27,11 @@ namespace Magicodes.Admin.Web.Url
             }
         }
 
-        private readonly ITenantCache _tenantCache;
-        private readonly IHostingEnvironment _hostingEnvironment;
+        readonly IConfigurationRoot _appConfiguration;
 
-        public WebUrlServiceBase(
-            IHostingEnvironment hostingEnvironment,
-            ITenantCache tenantCache
-        )
+        public WebUrlServiceBase(IAppConfigurationAccessor configurationAccessor)
         {
-            _hostingEnvironment = hostingEnvironment;
-            _tenantCache = tenantCache;
+            _appConfiguration = configurationAccessor.Configuration;
         }
 
         public string GetSiteRootAddress(string tenancyName = null)
@@ -52,7 +46,7 @@ namespace Magicodes.Admin.Web.Url
 
         public List<string> GetRedirectAllowedExternalWebSites()
         {
-            var values = _hostingEnvironment.GetAppConfiguration()["App:RedirectAllowedExternalWebSites"];
+            var values = _appConfiguration["App:RedirectAllowedExternalWebSites"];
             return values?.Split(',').ToList() ?? new List<string>();
         }
 

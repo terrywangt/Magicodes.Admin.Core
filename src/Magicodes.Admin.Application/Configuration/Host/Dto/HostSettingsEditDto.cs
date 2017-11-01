@@ -19,5 +19,6 @@ namespace Magicodes.Admin.Configuration.Host.Dto
         [Required]
         public SecuritySettingsEditDto Security { get; set; }
 
+        public HostBillingSettingsEditDto Billing { get; set; }
     }
 }

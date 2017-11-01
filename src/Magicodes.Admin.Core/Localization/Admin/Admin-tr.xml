@@ -669,5 +669,20 @@
       Bu bileşenlerin sunucu tarafı da kodlanmıştır.
     </text>
     <text name="DemoUiComponents_Info_Metronic_Link_Text">Daha fazla bileşen için Metronic temasına bakınız</text>
+    <text name="Image">Resim</text>
+    <text name="File">Dosya</text>
+    <text name="Link">Link</text>
+    <text name="Billing">Fatura</text>
+    <text name="LegalName">Resmi İsim</text>
+    <text name="Address">Adres</text>
+    <text name="Tax/VatNo">Vergi No</text>
+    <text name="Invoice">Fatura</text>
+    <text name="TotalAmount">Toplam Tutar</text>
+    <text name="Print">Yazdır</text>
+    <text name="ShowInvoice">Faturayı Göster</text>
+    <text name="InvoiceInformation">Fatura Bilgileri</text>
+    <text name="InvoiceNo">Fatura No</text>
+    <text name="Date">Tarih</text>
+    <text name="ThisInvoiceIsNotYours">Bu fatura size ait değil !</text>
   </texts>
 </localizationDictionary>

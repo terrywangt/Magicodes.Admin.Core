@@ -104,6 +104,20 @@ namespace Magicodes.Admin.Web.Chat.SignalR
             }
         }
 
+        public void SendReadStateChangeToClients(IReadOnlyList<IOnlineClient> clients, UserIdentifier user)
+        {
+            foreach (var client in clients)
+            {
+                var signalRClient = GetSignalRClientOrNull(client);
+                if (signalRClient == null)
+                {
+                    continue;
+                }
+
+                signalRClient.getReadStateChange(user);
+            }
+        }
+
         private dynamic GetSignalRClientOrNull(IOnlineClient client)
         {
             var signalRClient = ChatHub.Clients.Client(client.ConnectionId);

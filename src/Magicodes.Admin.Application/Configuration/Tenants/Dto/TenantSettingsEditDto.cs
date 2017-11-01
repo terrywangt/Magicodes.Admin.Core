@@ -20,6 +20,9 @@ namespace Magicodes.Admin.Configuration.Tenants.Dto
         [Required]
         public SecuritySettingsEditDto Security { get; set; }
 
+        public TenantBillingSettingsEditDto Billing { get; set; }
+
+
         /// <summary>
         /// This validation is done for single-tenant applications.
         /// Because, these settings can only be set by tenant in a single-tenant application.

@@ -69,7 +69,6 @@
       "wwwroot/lib/simple-line-icons/css/simple-line-icons.css",
       "wwwroot/lib/font-awesome/css/font-awesome.css",
       "wwwroot/lib/famfamfam-flags/dist/sprite/famfamfam-flags.css",
-      "wwwroot/lib/bootstrap-rtl/bootstrap-rtl.css",
       "wwwroot/lib/sweetalert/dist/sweetalert.css",
       "wwwroot/lib/toastr/toastr.css"
     ]
@@ -77,21 +76,13 @@
   {
     "outputFileName": "wwwroot/view-resources/Views/_Bundles/frontend-metronic.min.css",
     "inputFiles": [
-      "wwwroot/metronic/assets/global/css/components.css",
-      "wwwroot/metronic/assets/frontend/layout/css/style.css",
-      "wwwroot/metronic/assets/frontend/pages/css/style-revolution-slider.css",
-      "wwwroot/metronic/assets/frontend/layout/css/style-responsive.css",
-      "wwwroot/metronic/assets/frontend/layout/css/themes/red.css"
+      "wwwroot/metronic/assets/global/css/components.css"
     ]
   },
   {
     "outputFileName": "wwwroot/view-resources/Views/_Bundles/frontend-metronic-rtl.min.css",
     "inputFiles": [
-      "wwwroot/metronic/assets/global/css/components-rtl.css",
-      "wwwroot/metronic/assets/frontend/layout/css/style-rtl.css",
-      "wwwroot/metronic/assets/frontend/pages/css/style-revolution-slider.css",
-      "wwwroot/metronic/assets/frontend/layout/css/style-responsive-rtl.css",
-      "wwwroot/metronic/assets/frontend/layout/css/themes/red-rtl.css"
+      "wwwroot/metronic/assets/global/css/components-rtl.css"    
     ]
   },
   {
@@ -117,13 +108,6 @@
       "wwwroot/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.spin.js",
       "wwwroot/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.sweet-alert.js",
       "wwwroot/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.moment.js"
-    ]
-  },
-  {
-    "outputFileName": "wwwroot/view-resources/Views/_Bundles/frontend-metronic.min.js",
-    "inputFiles": [
-      "wwwroot/metronic/assets/frontend/layout/scripts/back-to-top.js",
-      "wwwroot/metronic/assets/frontend/layout/scripts/layout.js"
     ]
   },
   {
@@ -170,7 +154,6 @@
       "wwwroot/lib/simple-line-icons/css/simple-line-icons.css",
       "wwwroot/lib/font-awesome/css/font-awesome.css",
       "wwwroot/lib/famfamfam-flags/dist/sprite/famfamfam-flags.css",
-      "wwwroot/lib/bootstrap-rtl/bootstrap-rtl.css",
       "wwwroot/lib/uniform/css/uniform.default.css",
       "wwwroot/lib/toastr/toastr.css",
       "wwwroot/lib/sweetalert/dist/sweetalert.css",
@@ -206,6 +189,7 @@
       "wwwroot/metronic/assets/admin/layout4/css/themes/light.css",
       "wwwroot/Common/Scripts/Datatables/datatables.css",
       "wwwroot/lib/select2/dist/css/select2.css",
+      "wwwroot/lib/blueimp-file-upload/css/jquery.fileupload.css",
       "wwwroot/lib/select2-bootstrap-theme/dist/select2-bootstrap.css"
     ]
   },
@@ -216,7 +200,6 @@
       "wwwroot/lib/simple-line-icons/css/simple-line-icons.css",
       "wwwroot/lib/font-awesome/css/font-awesome.css",
       "wwwroot/lib/famfamfam-flags/dist/sprite/famfamfam-flags.css",
-      "wwwroot/lib/bootstrap-rtl/bootstrap-rtl.css",
       "wwwroot/lib/uniform/css/uniform.default.css",
       "wwwroot/lib/jstree/dist/themes/default/style.css",
       "wwwroot/lib/morris.js/morris.css",
@@ -232,6 +215,7 @@
       "wwwroot/metronic/assets/global/css/components-md-rtl.css",
       "wwwroot/metronic/assets/global/css/plugins-md-rtl.css",
       "wwwroot/metronic/assets/admin/layout4/css/layout-rtl.css",
+      "wwwroot/lib/blueimp-file-upload/css/jquery.fileupload.css",
       "wwwroot/metronic/assets/admin/layout4/css/themes/light-rtl.css"
     ]
   },
@@ -283,6 +267,9 @@
       "wwwroot/metronic/assets/global/scripts/datatable.min.js",
       "wwwroot/metronic/assets/global/plugins/datatables/datatables.all.min.js",
       "wwwroot/metronic/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js",
+      "wwwroot/lib/blueimp-file-upload/js/vendor/jquery.ui.widget.js",
+      "wwwroot/lib/blueimp-file-upload/js/jquery.iframe-transport.js",
+      "wwwroot/lib/blueimp-file-upload/js/jquery.fileupload.js",
       "wwwroot/lib/select2/dist/js/select2.js"
     ]
   },
@@ -292,12 +279,6 @@
       "wwwroot/metronic/assets/global/scripts/app.js",
       "wwwroot/metronic/assets/admin/layout4/scripts/layout.js",
       "wwwroot/metronic/assets/layouts/global/scripts/quick-sidebar.js"
-    ]
-  },
-  {
-    "outputFileName": "wwwroot/js/views/home/index.min.js",
-    "inputFiles": [
-      "wwwroot/js/views/home/index.js"
     ]
   },
   {
@@ -553,18 +534,6 @@
     ]
   },
   {
-    "outputFileName": "wwwroot/view-resources/Views/Error/_Layout.min.css",
-    "inputFiles": [
-      "wwwroot/view-resources/Views/Error/_Layout.css"
-    ]
-  },
-  {
-    "outputFileName": "wwwroot/view-resources/Views/Layout/layout.min.css",
-    "inputFiles": [
-      "wwwroot/view-resources/Views/Layout/layout.css"
-    ]
-  },
-  {
     "outputFileName": "wwwroot/view-resources/Views/TenantRegistration/Index.min.js",
     "inputFiles": [
       "wwwroot/view-resources/Views/TenantRegistration/Index.js"
@@ -638,12 +607,6 @@
     ]
   },
   {
-    "outputFileName": "wwwroot/view-resources/Views/TenantRegistration/Payment.min.js",
-    "inputFiles": [
-      "wwwroot/view-resources/Views/TenantRegistration/Payment.js"
-    ]
-  },
-  {
     "outputFileName": "wwwroot/view-resources/Areas/Admin/Views/_Bundles/tenant-dashboard-libs.js",
     "inputFiles": [
       "wwwroot/lib/morris.js/morris.js",
@@ -703,7 +666,6 @@
       "wwwroot/view-resources/Areas/Admin/Views/DemoUiComponents/Selections/Selections.css",
       "wwwroot/view-resources/Areas/Admin/Views/DemoUiComponents/InputMask/InputMask.css",
       "wwwroot/view-resources/Areas/Admin/Views/DemoUiComponents/Editor/Editor.css",
-      "wwwroot/lib/blueimp-file-upload/css/jquery.fileupload.css",
       "wwwroot/lib/summernote/dist/summernote.css"
     ]
   },
@@ -716,9 +678,6 @@
       "wwwroot/view-resources/Areas/Admin/Views/DemoUiComponents/InputMask/InputMask.js",
       "wwwroot/view-resources/Areas/Admin/Views/DemoUiComponents/Editor/Editor.js",
       "wwwroot/lib/inputmask/dist/jquery.inputmask.bundle.js",
-      "wwwroot/lib/blueimp-file-upload/js/vendor/jquery.ui.widget.js",
-      "wwwroot/lib/blueimp-file-upload/js/jquery.iframe-transport.js",
-      "wwwroot/lib/blueimp-file-upload/js/jquery.fileupload.js",
       "wwwroot/lib/summernote/dist/summernote.js"
     ]
   }

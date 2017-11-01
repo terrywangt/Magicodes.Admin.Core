@@ -53,6 +53,7 @@
         <link rel="stylesheet" href="~/lib/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.css" asp-append-version="true" />
         <link rel="stylesheet" href="~/lib/bootstrap-select/dist/css/bootstrap-select.css" asp-append-version="true" />
         <link rel="stylesheet" href="~/lib/Jcrop/css/Jcrop.css" asp-append-version="true" />
+        <link rel="stylesheet"  href="/metronic/assets/pages/css/invoice.css" asp-append-version="true" />
         <link rel="stylesheet" href="~/metronic/assets/global/plugins/datatables/datatables.min.css" asp-append-version="true" />
         <link rel="stylesheet" href="~/metronic/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css" asp-append-version="true" />
         <link rel="stylesheet" href="~/metronic/assets/global/css/components@(CultureHelper.IsRtl ? "-rtl" : "").css" asp-append-version="true" />
@@ -63,13 +64,14 @@
         <link rel="stylesheet" href="~/metronic/assets/admin/layout4/css/themes/light@(CultureHelper.IsRtl ? "-rtl" : "").css" asp-append-version="true" />
         <link rel="stylesheet" href="~/Common/_Bundles/common-styles.css" asp-append-version="true" />
         <link rel="stylesheet" href="~/Common/Scripts/Datatables/datatables.css" asp-append-version="true" />
-        
+
         <link rel="stylesheet" href="~/lib/select2/dist/css/select2.css" asp-append-version="true" />
         <link rel="stylesheet" href="~/lib/select2-bootstrap-theme/dist/select2-bootstrap.css" asp-append-version="true" />
 
         @if (isChatEnabled)
         {
             <link rel="stylesheet" href="~/view-resources/Areas/Admin/Views/Layout/_ChatBar.css" asp-append-version="true" />
+            <link rel="stylesheet" href="~/lib/blueimp-file-upload/css/jquery.fileupload.css" asp-append-version="true" />
         }
 
         <link rel="stylesheet" href="~/view-resources/Areas/Admin/Views/Layout/_Layout.css" asp-append-version="true" />
@@ -84,6 +86,7 @@
         @if (isChatEnabled)
         {
             <link rel="stylesheet" href="~/view-resources/Areas/Admin/Views/Layout/_ChatBar.min.css" asp-append-version="true" />
+            <link rel="stylesheet" href="~/lib/blueimp-file-upload/css/jquery.fileupload.min.css" asp-append-version="true" />
         }
 
         <link rel="stylesheet" href="~/view-resources/Areas/Admin/Views/Layout/_Layout.min.css" asp-append-version="true" />
@@ -240,6 +243,9 @@
         @if (isChatEnabled)
         {
             <script src="~/view-resources/Areas/Admin/Views/Layout/_ChatBar.js" asp-append-version="true"></script>
+            <script src="~/lib/blueimp-file-upload/js/vendor/jquery.ui.widget.js" asp-append-version="true"></script>
+            <script src="~/lib/blueimp-file-upload/js/jquery.iframe-transport.js" asp-append-version="true"></script>
+            <script src="~/lib/blueimp-file-upload/js/jquery.fileupload.js" asp-append-version="true"></script>
         }
     </environment>
 
@@ -250,6 +256,9 @@
         @if (isChatEnabled)
         {
             <script src="~/view-resources/Areas/Admin/Views/Layout/_ChatBar.min.js" asp-append-version="true"></script>
+            <script src="~/lib/blueimp-file-upload/js/vendor/jquery.ui.widget.min.js" asp-append-version="true"></script>
+            <script src="~/lib/blueimp-file-upload/js/jquery.iframe-transport.min.js" asp-append-version="true"></script>
+            <script src="~/lib/blueimp-file-upload/js/jquery.fileupload.min.js" asp-append-version="true"></script>
         }
     </environment>
 

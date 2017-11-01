@@ -1,6 +1,5 @@
 using Abp.Dependency;
-using Abp.MultiTenancy;
-using Microsoft.AspNetCore.Hosting;
+using Magicodes.Admin.Configuration;
 using Magicodes.Admin.Url;
 
 namespace Magicodes.Admin.Web.Url
@@ -8,9 +7,8 @@ namespace Magicodes.Admin.Web.Url
     public class WebUrlService : WebUrlServiceBase, IWebUrlService, ITransientDependency
     {
         public WebUrlService(
-            IHostingEnvironment hostingEnvironment,
-            ITenantCache tenantCache) :
-            base(hostingEnvironment, tenantCache)
+            IAppConfigurationAccessor configurationAccessor) :
+            base(configurationAccessor)
         {
         }
 

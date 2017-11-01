@@ -463,7 +463,10 @@ namespace Magicodes.Admin.Web.Controllers
 
             if (provider == GoogleAuthenticatorProvider.Name)
             {
-                await _googleAuthenticatorProvider.ValidateAsync("TwoFactor", authenticateModel.TwoFactorVerificationCode, _userManager, user);
+                if (!await _googleAuthenticatorProvider.ValidateAsync("TwoFactor", authenticateModel.TwoFactorVerificationCode, _userManager, user))
+                {
+                    throw new UserFriendlyException(L("InvalidSecurityCode"));
+                }
             }
             else if (cachedCode?.Code == null || cachedCode.Code != authenticateModel.TwoFactorVerificationCode)
             {

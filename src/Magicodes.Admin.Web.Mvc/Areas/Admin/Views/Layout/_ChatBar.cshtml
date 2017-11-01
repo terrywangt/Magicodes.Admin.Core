@@ -1,4 +1,5 @@
 ﻿@using Magicodes.Admin.Chat
+
 <!-- BEGIN QUICK SIDEBAR -->
 <div class="page-quick-sidebar-wrapper" data-close-on-body-click="false">
     <a href="javascript:;" class="page-quick-sidebar-pinner">
@@ -96,15 +97,58 @@
                         </div>
                         <div class="page-quick-sidebar-chat-user-form">
                             <form name="chatMessageForm" role="form" novalidate class="form-validation">
+
+                                <div id="files" class="files"></div>
+
                                 <div class="col-md-12" style="margin: 5px; padding-right: 25px;">
                                     <button id="UnblockUserButton" type="button" class="btn btn-block btn-success">@L("UnblockUser")</button>
                                 </div>
+                                
+                                <div class="col-md-12 chat-progress-bar">
+                                    <div id="chatFileUploadProgress" class="progress">
+                                        <div class="progress-bar progress-bar-success"></div>
+                                    </div>
+                                </div>
+
                                 <div class="input-group" id="ChatMessageWrapper">
+                                    
                                     <textarea id="ChatMessage" type="text" name="message" class="form-control" placeholder="@L("TypeAMessageHere")" rows="3" required maxlength="@ChatMessage.MaxMessageLength"></textarea>
                                     <div class="input-group-btn">
                                         <button id="SendChatMessageButton" type="button" class="btn green send-chat-message">
-                                            <i class="icon-paper-plane"></i>
+                                            <i class="icon-paper-plane  fa-2x"></i>
                                         </button>
+
+                                        <button id="chatDropdownToggle" type="button" class="btn green dropdown-toggle select-media" data-toggle="dropdown" tabindex="-1" aria-expanded="false">
+                                            <i class="fa fa-paperclip fa-2x"></i>
+                                        </button>
+                                        <ul class="dropdown-menu pull-right bottom-up" role="menu">
+                                            <li>
+                                                <a href="javascript:;">
+                                                    <span class="fileinput-button">
+                                                        <i class="fa fa-camera" aria-hidden="true"></i>
+                                                        <span>@L("Image")</span>
+                                                        <!-- The file input field used as target for the file upload widget -->
+                                                        <input id="chatImageUpload" type="file" name="files">
+                                                    </span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:;">
+                                                    <span class="fileinput-button">
+                                                        <i class="fa fa-file" aria-hidden="true"></i>
+                                                        <span>@L("File")</span>
+                                                        <!-- The file input field used as target for the file upload widget -->
+                                                        <input id="chatFileUpload" type="file" name="files">
+                                                    </span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:;" id="btnLinkShare">
+                                                    <i class="fa fa-link" aria-hidden="true"></i>
+                                                    <span>@L("Link")</span>
+                                                </a>
+                                            </li>
+                                        </ul>
                                     </div>
                                 </div>
                             </form>
@@ -152,7 +196,10 @@
             <span class="datetime">
                 <time class="timeago" datetime="{{creationTime}}"></time>
             </span>
-            <span class="body"> {{message}} </span>
+            <span>
+                {{{readStateCheck}}}
+            </span>
+            <span class="body"> {{{message}}} </span>
         </div>
     </div>
     {{/.}}

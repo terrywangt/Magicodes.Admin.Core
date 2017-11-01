@@ -1,5 +1,4 @@
-﻿using Abp.Application.Editions;
-using Abp.AutoMapper;
+﻿using Abp.AutoMapper;
 
 namespace Magicodes.Admin.MultiTenancy.Payments.Dto
 {
@@ -21,5 +20,9 @@ namespace Magicodes.Admin.MultiTenancy.Payments.Dto
         public string PaymentId { get; set; }
 
         public string PayerId { get; set; }
+
+        public string EditionDisplayName { get; set; }
+
+        public long InvoiceNo { get; set; }
     }
 }

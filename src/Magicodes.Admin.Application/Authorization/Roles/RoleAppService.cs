@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Abp.Application.Services.Dto;
 using Abp.Authorization;
+using Abp.Authorization.Users;
 using Abp.Linq.Extensions;
 using Abp.Extensions;
 using Microsoft.EntityFrameworkCore;
@@ -81,6 +82,13 @@ namespace Magicodes.Admin.Authorization.Roles
         public async Task DeleteRole(EntityDto input)
         {
             var role = await _roleManager.GetRoleByIdAsync(input.Id);
+
+            var users = await UserManager.GetUsersInRoleAsync(role.Name);
+            foreach (var user in users)
+            {
+                CheckErrors(await UserManager.RemoveFromRoleAsync(user, role.Name));
+            }
+
             CheckErrors(await _roleManager.DeleteAsync(role));
         }
 

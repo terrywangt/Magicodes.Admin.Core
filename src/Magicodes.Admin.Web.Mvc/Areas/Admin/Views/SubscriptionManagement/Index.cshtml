@@ -63,16 +63,16 @@
                                 <label class="col-sm-4 control-label bold">@L("Edition")</label>
                                 <div class="col-sm-8">
                                     <p class="form-control-static">
-                                        @tenantEdition.DisplayName
+                                    @tenantEdition.DisplayName
 
-                                        @if (tenantEdition.IsFree)
-                                        {
-                                            <span class="label label-success">@L("Free")</span>
-                                        }
-                                        else if (tenant.IsInTrialPeriod)
-                                        {
-                                            <span class="label label-warning">@L("Trial")</span>
-                                        }
+                                    @if (tenantEdition.IsFree)
+                                    {
+                                        <span class="label label-success">@L("Free")</span>
+                                    }
+                                    else if (tenant.IsInTrialPeriod)
+                                    {
+                                        <span class="label label-warning">@L("Trial")</span>
+                                    }
                                 </div>
                             </div>
                             <div class="form-group">
@@ -132,6 +132,7 @@
                     <table id="PaymentHistoryTable" class="display table table-striped table-bordered table-hover dt-responsive nowrap">
                         <thead>
                         <tr>
+                            <th>@L("Invoice")</th>
                             <th>@L("ProcessTime")</th>
                             <th>@L("Edition")</th>
                             <th>@L("Gateway")</th>
@@ -140,6 +141,8 @@
                             <th>@L("Period")</th>
                             <th>@L("DayCount")</th>
                             <th>@L("PaymentId")</th>
+                            <th>@L("InvoiceNo")</th>
+                            <th></th>
                         </tr>
                         </thead>
                     </table>

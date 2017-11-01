@@ -32,12 +32,18 @@ namespace Magicodes.Admin.Chat
 
         public ChatMessageReadState ReadState { get; private set; }
 
+        public ChatMessageReadState ReceiverReadState { get; private set; }
+
+        public Guid? SharedMessageId { get; set; }
+
         public ChatMessage(
             UserIdentifier user,
             UserIdentifier targetUser,
             ChatSide side,
             string message,
-            ChatMessageReadState readState)
+            ChatMessageReadState readState,
+            Guid sharedMessageId,
+            ChatMessageReadState receiverReadState)
         {
             UserId = user.UserId;
             TenantId = user.TenantId;
@@ -46,6 +52,8 @@ namespace Magicodes.Admin.Chat
             Message = message;
             Side = side;
             ReadState = readState;
+            SharedMessageId = sharedMessageId;
+            ReceiverReadState = receiverReadState;
 
             CreationTime = Clock.Now;
         }
@@ -58,6 +66,11 @@ namespace Magicodes.Admin.Chat
         protected ChatMessage()
         {
 
+        }
+
+        public void ChangeReceiverReadState(ChatMessageReadState newState)
+        {
+            ReceiverReadState = newState;
         }
     }
 }

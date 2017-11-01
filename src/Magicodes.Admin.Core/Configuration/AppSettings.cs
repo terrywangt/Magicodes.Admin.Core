@@ -6,6 +6,13 @@ namespace Magicodes.Admin.Configuration
     /// </summary>
     public static class AppSettings
     {
+        public static class HostManagement
+        {
+            public const string BillingLegalName = "App.HostManagement.BillingLegalName";
+            public const string BillingAddress = "App.HostManagement.BillingAddress";
+        }
+
+
         public static class TenantManagement
         {
             public const string AllowSelfRegistration = "App.TenantManagement.AllowSelfRegistration";
@@ -13,6 +20,9 @@ namespace Magicodes.Admin.Configuration
             public const string UseCaptchaOnRegistration = "App.TenantManagement.UseCaptchaOnRegistration";
             public const string DefaultEdition = "App.TenantManagement.DefaultEdition";
             public const string SubscriptionExpireNotifyDayCount = "App.TenantManagement.SubscriptionExpireNotifyDayCount";
+            public const string BillingLegalName = "App.UserManagement.BillingLegalName";
+            public const string BillingAddress = "App.UserManagement.BillingAddress";
+            public const string BillingTaxVatNo = "App.UserManagement.BillingTaxVatNo";
         }
 
         public static class UserManagement
@@ -28,6 +38,8 @@ namespace Magicodes.Admin.Configuration
             public const string SmsVerificationEnabled = "App.UserManagement.SmsVerificationEnabled";
 
         }
+
+
 
         public static class Recaptcha
         {

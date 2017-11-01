@@ -16,10 +16,10 @@ namespace Magicodes.Admin
     {
         public override void PreInitialize()
         {
-            //添加权限程序
+            //Adding authorization providers
             Configuration.Authorization.Providers.Add<AppAuthorizationProvider>();
 
-            //添加自定义 AutoMapper 配置
+            //Adding custom AutoMapper configuration
             Configuration.Modules.AbpAutoMapper().Configurators.Add(CustomDtoMapper.CreateMappings);
         }
 

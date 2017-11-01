@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
@@ -62,7 +63,7 @@ namespace Magicodes.Admin.Localization
             //Language names
             output.LanguageNames = CultureHelper
                 .AllCultures
-                .Select(c => new ComboboxItemDto(c.Key, c.Value + " (" + c.Key + ")") { IsSelected = output.Language.Name == c.Key })
+                .Select(c => new ComboboxItemDto(c.Name, c.EnglishName + " (" + c.Name + ")") { IsSelected = output.Language.Name == c.Name })
                 .ToList();
 
             //Flags
@@ -124,8 +125,8 @@ namespace Magicodes.Admin.Localization
             }
 
             var source = LocalizationManager.GetSource(input.SourceName);
-            var baseCulture = CultureInfoHelper.Get(input.BaseLanguageName);
-            var targetCulture = CultureInfoHelper.Get(input.TargetLanguageName);
+            var baseCulture = CultureInfo.GetCultureInfo(input.BaseLanguageName);
+            var targetCulture = CultureInfo.GetCultureInfo(input.TargetLanguageName);
 
             var languageTexts = source
                 .GetAllStrings()

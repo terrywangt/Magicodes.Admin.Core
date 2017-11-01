@@ -56,6 +56,8 @@ using Magicodes.Admin.Web.IdentityServer;
 using Owin;
 using Abp.Owin;
 using Magicodes.Admin.Web.Owin;
+using Microsoft.AspNet.SignalR;
+using Microsoft.AspNet.SignalR.Hubs;
 #endif
 
 namespace Magicodes.Admin.Web.Startup
@@ -87,13 +89,12 @@ namespace Magicodes.Admin.Web.Startup
             //Identity server
             if (bool.Parse(_appConfiguration["IdentityServer:IsEnabled"]))
             {
-                identityBuilder.AddAbpIdentityServer();
                 IdentityServerRegistrar.Register(services, _appConfiguration);
             }
 
 
             AuthConfigurer.Configure(services, _appConfiguration);
-
+            
             //Recaptcha
             services.AddRecaptcha(new RecaptchaOptions
             {
@@ -101,7 +102,7 @@ namespace Magicodes.Admin.Web.Startup
                 SecretKey = _appConfiguration["Recaptcha:SecretKey"]
             });
 
-            //Hangfire (Enable to use Hangfire instead of default job manager)
+            //Hangfire
             services.AddHangfire(config =>
             {
                 config.UseSqlServerStorage(_appConfiguration.GetConnectionString("Default"));
@@ -143,24 +144,16 @@ namespace Magicodes.Admin.Web.Startup
             }
 
             app.UseAuthentication();
-            app.UseJwtTokenMiddleware();
+
+            if (bool.Parse(_appConfiguration["Authentication:JwtBearer:IsEnabled"]))
+            {
+                app.UseJwtTokenMiddleware();
+            }
 
             if (bool.Parse(_appConfiguration["IdentityServer:IsEnabled"]))
             {
+                app.UseJwtTokenMiddleware("IdentityBearer");
                 app.UseIdentityServer();
-
-                /* We can not use app.UseIdentityServerAuthentication because IdentityServer4.AccessTokenValidation
-                 * is not ported to asp.net core 2.0 yet. See issue: https://github.com/IdentityServer/IdentityServer4/issues/1055
-                 * Once it's ported, add IdentityServer4.AccessTokenValidation to Web.Core project and enable following lines:
-                 */
-
-                //app.UseIdentityServerAuthentication(
-                //    new IdentityServerAuthenticationOptions
-                //    {
-                //        Authority = _appConfiguration["App:WebSiteRootAddress"],
-                //        RequireHttpsMetadata = false
-                //    }
-                //);
             }
 
             app.UseStaticFiles();
@@ -189,23 +182,19 @@ namespace Magicodes.Admin.Web.Startup
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
 
-            
+
         }
 
 #if FEATURE_SIGNALR
         private static void ConfigureOwinServices(IAppBuilder app)
         {
-            app.Properties["host.AppName"] = "Admin";
+            GlobalHost.DependencyResolver.Register(typeof(IAssemblyLocator), () => new SignalRAssemblyLocator());
+            app.Properties["host.AppName"] = "Magicodes.Admin";
 
             app.UseAbp();
 
             app.MapSignalR();
-
-            //Enable it to use HangFire dashboard (uncomment only if it's enabled in AdminWebCoreModule)
-            app.UseHangfireDashboard("/hangfire", new DashboardOptions
-            {
-                Authorization = new[] { new AbpHangfireAuthorizationFilter(AppPermissions.Pages_Administration_HangfireDashboard) }
-            });
+            
         }
 #endif
     }

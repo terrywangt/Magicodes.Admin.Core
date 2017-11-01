@@ -103,6 +103,7 @@
                 userManagement: $('#UserManagementSettingsForm').serializeFormToObject(),
                 email: $('#EmailSmtpSettingsForm').serializeFormToObject(),
                 chat: $('#ChatSettingsForm').serializeFormToObject(),
+                billing: $('#BillingSettingsForm').serializeFormToObject(),
                 security: {
                     useDefaultPasswordComplexitySettings: $('#Setting_PasswordComplexity_UseDefaultSettings').is(":checked"),
                     passwordComplexity: $('#PasswordComplexitySettingsForm').serializeFormToObject(),

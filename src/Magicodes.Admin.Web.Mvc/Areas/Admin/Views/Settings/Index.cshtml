@@ -72,6 +72,12 @@
                         </a>
                     </li>
                 }
+                
+                <li>
+                    <a href="#BillingTab" data-toggle="tab" aria-expanded="false">
+                        @L("Invoice")
+                    </a>
+                </li>
             </ul>
 
             <div class="tab-content">
@@ -463,6 +469,27 @@
                         </form>
                     </div>
                 }
+                
+            <div class="tab-pane" id="BillingTab">
+                <form id="BillingSettingsForm">
+
+                    <div class="form-group form-md-line-input form-md-floating-label no-hint">
+                        <input type="text" name="LegalName" class="form-control@(Model.Settings.Billing.LegalName.IsNullOrEmpty() ? "" : " edited")" value="@Model.Settings.Billing.LegalName" maxlength="64">
+                        <label>@L("LegalName")</label>
+                    </div>
+                    
+                    <div class="form-group form-md-line-input">
+                        <textarea rows="5" name="Address" class="form-control" maxlength="256">@Model.Settings.Billing.Address</textarea>
+                        <label>@L("Address")</label>
+                    </div>
+
+                    <div class="form-group form-md-line-input form-md-floating-label no-hint">
+                        <input type="text" name="TaxVatNo" class="form-control@(Model.Settings.Billing.TaxVatNo.IsNullOrEmpty() ? "" : " edited")" value="@Model.Settings.Billing.TaxVatNo" maxlength="32">
+                        <label>@L("Tax/VatNo")</label>
+                    </div>
+
+                </form>
+            </div>
 
             </div>
 

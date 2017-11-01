@@ -44,7 +44,6 @@ namespace Magicodes.Admin.Auditing
 
             var resultCount = await query.CountAsync();
             var results = await query
-                .AsNoTracking()
                 .OrderBy(input.Sorting)
                 .PageBy(input)
                 .ToListAsync();

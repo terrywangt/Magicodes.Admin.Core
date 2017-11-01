@@ -56,7 +56,8 @@ namespace Magicodes.Admin.Configuration.Tenants
             var settings = new TenantSettingsEditDto
             {
                 UserManagement = await GetUserManagementSettingsAsync(),
-                Security = await GetSecuritySettingsAsync()
+                Security = await GetSecuritySettingsAsync(),
+                Billing = await GetBillingSettingsAsync()
             };
 
             if (!_multiTenancyConfig.IsEnabled || Clock.SupportsMultipleTimezone)
@@ -84,6 +85,8 @@ namespace Magicodes.Admin.Configuration.Tenants
 
             return settings;
         }
+
+
 
 #if FEATURE_LDAP
         private async Task<LdapSettingsEditDto> GetLdapSettingsAsync()
@@ -180,6 +183,16 @@ namespace Magicodes.Admin.Configuration.Tenants
             };
         }
 
+        private async Task<TenantBillingSettingsEditDto> GetBillingSettingsAsync()
+        {
+            return new TenantBillingSettingsEditDto()
+            {
+                LegalName = await SettingManager.GetSettingValueAsync(AppSettings.TenantManagement.BillingLegalName),
+                Address = await SettingManager.GetSettingValueAsync(AppSettings.TenantManagement.BillingAddress),
+                TaxVatNo = await SettingManager.GetSettingValueAsync(AppSettings.TenantManagement.BillingTaxVatNo)
+            };
+        }
+
         private async Task<UserLockOutSettingsEditDto> GetUserLockOutSettingsAsync()
         {
             return new UserLockOutSettingsEditDto
@@ -228,6 +241,8 @@ namespace Magicodes.Admin.Configuration.Tenants
         {
             await UpdateUserManagementSettingsAsync(input.UserManagement);
             await UpdateSecuritySettingsAsync(input.Security);
+            await UpdateBillingSettingsAsync(input.Billing);
+
 
             //Time Zone
             if (Clock.SupportsMultipleTimezone)
@@ -256,6 +271,14 @@ namespace Magicodes.Admin.Configuration.Tenants
                 }
 #endif
             }
+        }
+
+        private async Task UpdateBillingSettingsAsync(TenantBillingSettingsEditDto input)
+        {
+            await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(),AppSettings.TenantManagement.BillingLegalName, input.LegalName);
+            await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(),AppSettings.TenantManagement.BillingAddress, input.Address);
+            await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(),AppSettings.TenantManagement.BillingTaxVatNo, input.TaxVatNo);
+
         }
 
 #if FEATURE_LDAP

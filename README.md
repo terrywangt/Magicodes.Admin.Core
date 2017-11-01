@@ -13,6 +13,9 @@ http://cloud.xin-lai.com
 # 开发文档
 [开发向导](https://shimo.im/doc/ho6czDlTpXgxgbU8?r=3RQZL)
 
+# 插件库
+https://gitee.com/xl_wenqiang/Admin.Plus.Libs
+
 # 总体设计和规划（脑图）
 http://naotu.baidu.com/file/3fcc3a9e599bc3701e7c1d6f10c4d249?token=22ad815d330f7b51
 

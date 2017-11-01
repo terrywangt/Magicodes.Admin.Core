@@ -25,6 +25,9 @@
         });
 
         var dataTable = _$usersTable.DataTable({
+            paging: true,
+            serverSide: true,
+            processing: true,
             listAction: {
                 ajaxFunction: _userService.getUsers,
                 inputFilter: function () {
@@ -104,7 +107,7 @@
                     render: function (userName, type, row, meta) {
                         var $container = $("<span/>");
                         if (row.profilePictureId) {
-                            var profilePictureUrl = "/Profile/GetProfilePicture?t=" + row.profilePictureId;
+                            var profilePictureUrl = "/Profile/GetProfilePictureById?id=" + row.profilePictureId;
                             var $link = $("<a/>").attr("href", profilePictureUrl).attr("target", "_blank");
                             var $img = $("<img/>")
                                 .addClass("img-circle")

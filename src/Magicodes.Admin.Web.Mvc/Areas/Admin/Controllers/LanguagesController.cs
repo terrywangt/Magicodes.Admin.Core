@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Abp.Application.Services.Dto;
@@ -120,14 +121,14 @@ namespace Magicodes.Admin.Web.Areas.Admin.Controllers
             var baseText = _applicationLanguageTextManager.GetStringOrNull(
                 AbpSession.TenantId,
                 sourceName,
-                CultureInfoHelper.Get(baseLanguageName),
+                CultureInfo.GetCultureInfo(baseLanguageName),
                 key
                 );
 
             var targetText = _applicationLanguageTextManager.GetStringOrNull(
                 AbpSession.TenantId,
                 sourceName,
-                CultureInfoHelper.Get(languageName),
+                CultureInfo.GetCultureInfo(languageName),
                 key,
                 false
                 );
