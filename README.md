@@ -29,6 +29,9 @@ _注意：演示环境不一定是最新代码_
 https://gitee.com/xl_wenqiang/Admin.Plus.Libs
 插件的更新目前难以跟上框架主体更新的速度，请原谅。
 
+# 插件库
+https://gitee.com/xl_wenqiang/Admin.Plus.Libs
+
 # 总体设计和规划（脑图）
 http://naotu.baidu.com/file/3fcc3a9e599bc3701e7c1d6f10c4d249?token=22ad815d330f7b51
 

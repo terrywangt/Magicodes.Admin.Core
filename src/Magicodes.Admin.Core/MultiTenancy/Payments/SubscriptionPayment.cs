@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations.Schema;
 using Abp.Application.Editions;
 using Abp.Domain.Entities.Auditing;
 using Abp.MultiTenancy;
