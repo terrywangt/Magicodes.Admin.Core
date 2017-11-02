@@ -14,6 +14,8 @@
     <UserSecretsId>Magicodes-Admin-894FDFC1-6482-4A56-926A-3C46C9FE0329</UserSecretsId>
     <RootNamespace>Magicodes.Admin</RootNamespace>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>2.0.0.0</Version>
+    <Authors>雪雁</Authors>
   </PropertyGroup>
   <ItemGroup>
     <EmbeddedResource Include="Localization\Admin\*.xml;Emailing\EmailTemplates\default.html" Exclude="bin\**;obj\**;**\*.xproj;packages\**;@(EmbeddedResource)" />

@@ -7,6 +7,7 @@
     <RepositoryUrl>https://gitee.com/xl_wenqiang/Magicodes.Admin.Core</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <Company>湖南心莱信息科技有限公司</Company>
+    <Authors>雪雁</Authors>
     <PackageProjectUrl>http://www.cnblogs.com/codelove/</PackageProjectUrl>
   </PropertyGroup>
 </Project>

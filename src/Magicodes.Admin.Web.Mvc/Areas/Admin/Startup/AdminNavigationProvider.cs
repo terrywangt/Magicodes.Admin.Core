@@ -6,7 +6,7 @@ namespace Magicodes.Admin.Web.Areas.Admin.Startup
 {
     public class AdminNavigationProvider : NavigationProvider
     {
-        public const string MenuName = "AdminMenus";
+        public const string MenuName = AdminConsts.AdminMenuName;
 
         public override void SetNavigation(INavigationProviderContext context)
         {
