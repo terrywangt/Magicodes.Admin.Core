@@ -1,4 +1,5 @@
-﻿using Magicodes.Plus.Core.ViewModels.Common.Modals;
+﻿
+using Magicodes.Admin.ViewModels.Common.Modals;
 
 namespace Magicodes.Admin.Web.Areas.Admin.Models.Common.Modals
 {

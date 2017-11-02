@@ -6,9 +6,9 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Magicodes.Admin.Core")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Magicodes.Admin.Core基础核心库")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Magicodes.Admin")]
+[assembly: AssemblyCompany("湖南心莱信息科技有限公司")]
 [assembly: AssemblyProduct("Magicodes.Admin.Core")]
 [assembly: AssemblyTrademark("")]
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]

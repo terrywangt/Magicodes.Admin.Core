@@ -46,6 +46,7 @@ using Magicodes.Admin.Web.IdentityServer;
 using Magicodes.Admin.Web.Security.Recaptcha;
 using Magicodes.Admin.Web.Session;
 using Magicodes.Admin.Web.Views.Shared.Components.TenantChange;
+using Magicodes.Admin.Sms;
 
 namespace Magicodes.Admin.Web.Controllers
 {
@@ -302,7 +303,7 @@ namespace Magicodes.Admin.Web.Controllers
                 }
                 else if (model.SelectedProvider == "Phone")
                 {
-                    await _smsSender.SendAsync(await _userManager.GetPhoneNumberAsync(user), message);
+                    await _smsSender.SendAsync(await _userManager.GetPhoneNumberAsync(user), code);
                 }
             }
 

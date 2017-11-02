@@ -7,5 +7,7 @@
         string SampleProfileImagesFolder { get; }
 
         string WebLogsFolder { get; set; }
+
+        string DocumentFolder { get; set; }
     }
 }

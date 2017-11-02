@@ -2,7 +2,7 @@
 
 namespace Magicodes.Admin
 {
-    public class AppFolders : IAppFolders, ISingletonDependency
+    public partial class AppFolders : IAppFolders, ISingletonDependency
     {
         public string TempFileDownloadFolder { get; set; }
 

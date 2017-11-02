@@ -3,5 +3,10 @@
   <PropertyGroup>
     <Version>4.1.0</Version>
   </PropertyGroup>
-
+  <PropertyGroup>
+    <RepositoryUrl>https://gitee.com/xl_wenqiang/Magicodes.Admin.Core</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <Company>湖南心莱信息科技有限公司</Company>
+    <PackageProjectUrl>http://www.cnblogs.com/codelove/</PackageProjectUrl>
+  </PropertyGroup>
 </Project>

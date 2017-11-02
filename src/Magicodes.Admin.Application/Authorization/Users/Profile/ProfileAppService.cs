@@ -23,6 +23,7 @@ using Magicodes.Admin.Identity;
 using Magicodes.Admin.Security;
 using Magicodes.Admin.Storage;
 using Magicodes.Admin.Timing;
+using Magicodes.Admin.Sms;
 
 namespace Magicodes.Admin.Authorization.Users.Profile
 {

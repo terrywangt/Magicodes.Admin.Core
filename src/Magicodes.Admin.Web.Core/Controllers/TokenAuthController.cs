@@ -36,6 +36,7 @@ using Magicodes.Admin.Authorization.Impersonation;
 using Magicodes.Admin.Identity;
 using Magicodes.Admin.Notifications;
 using Magicodes.Admin.Web.Authentication.External;
+using Magicodes.Admin.Sms;
 
 namespace Magicodes.Admin.Web.Controllers
 {
@@ -198,7 +199,7 @@ namespace Magicodes.Admin.Web.Controllers
                 }
                 else if (model.Provider == "Phone")
                 {
-                    await _smsSender.SendAsync(await _userManager.GetPhoneNumberAsync(user), message);
+                    await _smsSender.SendAsync(await _userManager.GetPhoneNumberAsync(user), cacheItem.Code);
                 }
             }
 

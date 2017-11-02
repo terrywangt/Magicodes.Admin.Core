@@ -1,21 +1,27 @@
 # 说明
-本框架在ABP的基础上进行了封装和完善，目前基于.NET Core 2.0+（Framework版本)，由于部分组件在.NET Core没有找到替代组件，所以真正意义上跨平台版本会在后续推出。
+本框架在ABP和ASP.NET Zero的基础上进行了封装和完善，目前基于.NET Core 2.0+（Framework版本)，由于部分组件在.NET Core没有找到替代组件，所以真正意义上跨平台版本会在后续推出。
 
 目前本框架已经应用于团队的所有项目，在实际开发过程中还在不断地打磨。
 
-由于本人和团队成员都是利用自己的时间来打磨本框架，因此在大部分情况下，并不会在相关群内进行解答，如果确实是疑难问题，请提交Issue。如果觉得本框架对您有所帮助，请随意打赏。您的支持将鼓励我们继续前行！
+由于本人和团队成员都是利用自己的时间来打磨本框架，因此在大部分情况下，并不会在相关群内进行解答，如果确实是疑难问题，请提交Issue。如果觉得本框架对您有所帮助，请点击Star或者随意打赏。您的支持将鼓励我们继续前行！
+
+**最后奉劝，莫做伸手党！维护框架、插件、文档等需要花费我们大量的精力，因此脑残、小白问题恕不回答，如果觉得不错，愿意贡献自己的力量，那么请以实际行动说话。**
 
 # 演示地址
 http://cloud.xin-lai.com
+
 账号：Admin
 密码：123456
 
+_注意：演示环境不一定是最新代码_
+
 # 开发文档
-[总体介绍](https://shimo.im/doc/hslbAFC3JvsDA7TA?r=3RQZL)
-[开发向导](https://shimo.im/doc/ho6czDlTpXgxgbU8?r=3RQZL)
+1. [总体介绍](https://shimo.im/doc/hslbAFC3JvsDA7TA?r=3RQZL)
+2. [开发向导](https://shimo.im/doc/ho6czDlTpXgxgbU8?r=3RQZL)
 
 # 插件库
 https://gitee.com/xl_wenqiang/Admin.Plus.Libs
+插件的更新目前难以跟上框架主体更新的速度，请原谅。
 
 # 总体设计和规划（脑图）
 http://naotu.baidu.com/file/3fcc3a9e599bc3701e7c1d6f10c4d249?token=22ad815d330f7b51
