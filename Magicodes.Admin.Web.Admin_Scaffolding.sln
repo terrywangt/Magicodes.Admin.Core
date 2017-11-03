@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2005
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Magicodes.Admin.Web.Mvc_Scaffolding", "src\Magicodes.Admin.Web.Mvc\Magicodes.Admin.Web.Mvc_Scaffolding.csproj", "{E6D473B5-1DF6-4120-AF9E-321EF62FB47A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E6D473B5-1DF6-4120-AF9E-321EF62FB47A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6D473B5-1DF6-4120-AF9E-321EF62FB47A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6D473B5-1DF6-4120-AF9E-321EF62FB47A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6D473B5-1DF6-4120-AF9E-321EF62FB47A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {14BFD9FA-74C7-4DFD-8842-164FB5531740}
+	EndGlobalSection
+EndGlobal
