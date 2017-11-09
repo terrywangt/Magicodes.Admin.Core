@@ -1,0 +1,5 @@
+﻿@using Magicodes.Admin.Web.Areas.Admin.Models.Common
+@model IFeatureEditViewModel
+<div class="feature-tree">
+    @Html.Partial("~/Areas/Admin/Views/Common/_FeaturesTreeItem.cshtml", new FeatureTreeItemModel(Model, null))
+</div>

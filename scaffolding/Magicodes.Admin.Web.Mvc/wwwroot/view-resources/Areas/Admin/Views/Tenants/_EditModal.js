@@ -1,0 +1,87 @@
+﻿var EditTenantModal = (function ($) {
+    app.modals.EditTenantModal = function () {
+
+        var _modalManager;
+        var _tenantService = abp.services.app.tenant;
+        var _$tenantInformationForm = null;
+
+
+        this.init = function (modalManager) {
+            _modalManager = modalManager;
+            var modal = _modalManager.getModal();
+
+            _$tenantInformationForm = modal.find('form[name=TenantInformationsForm]');
+            _$tenantInformationForm.validate();
+
+            modal.find('.date-time-picker').datetimepicker({
+                locale: abp.localization.currentLanguage.name,
+                format: 'L'
+            });
+
+            var $subscriptionEndDateDiv = modal.find('input[name=SubscriptionEndDateUtc]').parent('div');
+            var isUnlimitedInput = modal.find('#CreateTenant_IsUnlimited');
+            var subscriptionEndDateUtcInput = modal.find('input[name=SubscriptionEndDateUtc]');
+            function toggleSubscriptionEndDateDiv() {
+                if (isUnlimitedInput.is(':checked')) {
+                    $subscriptionEndDateDiv.slideUp('fast');
+                    subscriptionEndDateUtcInput.removeAttr('required');
+                } else {
+                    $subscriptionEndDateDiv.slideDown('fast');
+                    subscriptionEndDateUtcInput.attr('required', 'required');
+                }
+            }
+
+            isUnlimitedInput.change(function () {
+                toggleSubscriptionEndDateDiv();
+            });
+
+            toggleSubscriptionEndDateDiv();
+
+            var $editionCombobox = modal.find('#EditionId');
+            var $isInTrialCheckbox = modal.find('#EditTenant_IsInTrialPeriod');
+            $editionCombobox.change(function () {
+                var isFree = $('option:selected', this).attr('data-isfree') === "True";
+                var selectedValue = $('option:selected', this).val();
+                if (isFree) {
+                    $isInTrialCheckbox.closest('div').slideUp('fast');
+                } else {
+                    $isInTrialCheckbox.closest('div').slideDown('fast');
+                }
+
+                if (selectedValue <= 0) {
+                    modal.find('.subscription-component').slideUp('fast');
+                } else {
+                    modal.find('.subscription-component').slideDown('fast');
+                }
+            });
+
+            $editionCombobox.trigger('change');
+        };
+
+        this.save = function () {
+            if (!_$tenantInformationForm.valid()) {
+                return;
+            }
+
+            var tenant = _$tenantInformationForm.serializeFormToObject();
+            
+            //take selected date as UTC
+            if ($('#CreateTenant_IsUnlimited').is(':visible') && !$('#CreateTenant_IsUnlimited').is(':checked')) {
+                tenant.SubscriptionEndDateUtc = $('.date-time-picker').data("DateTimePicker").date().format("YYYY-MM-DDTHH:mm:ss") + 'Z';    
+            } else {
+                tenant.SubscriptionEndDateUtc = null;
+            }
+
+            _modalManager.setBusy(true);
+            _tenantService.updateTenant(
+                tenant
+            ).done(function () {
+                abp.notify.info(app.localize('SavedSuccessfully'));
+                _modalManager.close();
+                abp.event.trigger('app.editTenantModalSaved');
+            }).always(function () {
+                _modalManager.setBusy(false);
+            });
+        };
+    };
+})(jQuery);

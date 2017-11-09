@@ -1,0 +1,19 @@
+﻿@using Abp.Extensions
+@using Magicodes.Admin.Web.Areas.Admin.Models.Common
+@model PermissionTreeItemModel
+@{
+    var permissions = Model.EditModel.Permissions.Where(p => p.ParentName == Model.ParentName || (p.ParentName.IsNullOrEmpty() && Model.ParentName.IsNullOrEmpty())).ToList();
+    if (permissions.Any())
+    {
+        <ul>
+            @foreach (var permission in permissions)
+            {
+                var selected = Model.EditModel.GrantedPermissionNames.Contains(permission.Name);
+                <li id="@permission.Name" class="jstree-open" data-jstree='{"selected": @selected.ToString().ToLower()}'>
+                    @permission.DisplayName
+                    @Html.Partial("~/Areas/Admin/Views/Common/_PermissionTreeItem.cshtml", new PermissionTreeItemModel(Model.EditModel, permission.Name))
+                </li>
+            }
+        </ul>
+    }
+}

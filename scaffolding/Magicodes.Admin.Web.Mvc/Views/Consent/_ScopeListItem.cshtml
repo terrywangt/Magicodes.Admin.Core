@@ -1,0 +1,39 @@
+﻿@using Magicodes.Admin.Web.Models.Consent
+@model ScopeViewModel
+<li class="list-group-item">
+    <label>
+        <input type="checkbox"
+               name="ScopesConsented"
+               id="scopes_@Model.Name"
+               value="@Model.Name"
+               checked="@Model.Checked"
+               disabled="@Model.Required" />
+
+        @if (Model.Required)
+        {
+            <input type="hidden"
+                   name="ScopesConsented"
+                   value="@Model.Name" />
+        }
+
+        <strong>&nbsp;@L(Model.DisplayName)</strong>
+
+        @if (Model.Emphasize)
+        {
+            <span class="glyphicon glyphicon-exclamation-sign"></span>
+        }
+
+    </label>
+
+    @if (Model.Required)
+    {
+        <span><em>(@L("Required"))</em></span>
+    }
+
+    @if (Model.Description != null)
+    {
+        <div>
+            <label for="scopes_@Model.Name">@L(Model.Description)</label>
+        </div>
+    }
+</li>

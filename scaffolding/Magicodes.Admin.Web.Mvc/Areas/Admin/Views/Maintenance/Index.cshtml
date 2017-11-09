@@ -1,0 +1,111 @@
+﻿@using System.Threading.Tasks
+@using Magicodes.Admin.Web.Areas.Admin.Models.Maintenance
+@using Magicodes.Admin.Web.Areas.Admin.Startup
+@using Magicodes.Admin.Web.Startup
+@model MaintenanceViewModel
+@{
+    ViewBag.CurrentPageName = AdminPageNames.Host.Maintenance;
+}
+@section Styles
+{
+    <environment names="Development">
+        <link rel="stylesheet" href="~/view-resources/Areas/Admin/Views/Maintenance/Index.css" asp-append-version="true" />
+    </environment>
+
+    <environment names="Staging,Production">
+        <link rel="stylesheet" href="~/view-resources/Areas/Admin/Views/Maintenance/Index.min.css" asp-append-version="true" />
+    </environment>
+}
+@section Scripts
+{
+    <environment names="Development">
+        <script src="~/view-resources/Areas/Admin/Views/Maintenance/Index.js" asp-append-version="true"></script>
+    </environment>
+
+    <environment names="Staging,Production">
+        <script src="~/view-resources/Areas/Admin/Views/Maintenance/Index.min.js" asp-append-version="true"></script>
+    </environment>
+}
+<div class="row margin-bottom-5">
+    <div class="col-xs-12">
+        <div class="page-head">
+            <div class="page-title">
+                <h1>
+                    <span>@L("Maintenance")</span>
+                </h1>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="portlet light margin-bottom-0">
+    <div class="portlet-body">
+
+        <div id="SettingsTabPanel" class="tabbable-line">
+            <ul class="nav nav-tabs ">
+                <li class="active">
+                    <a href="#CachesTab" data-toggle="tab" aria-expanded="true">
+                        @L("Caches")
+                    </a>
+                </li>
+                <li>
+                    <a href="#WebSiteLogsTab" data-toggle="tab" aria-expanded="true">
+                        @L("WebSiteLogs")
+                    </a>
+                </li>
+            </ul>
+
+            <div class="tab-content">
+
+                <div class="tab-pane active" id="CachesTab">
+                    <div class="row margin-bottom-10">
+                        <div class="col-xs-6">
+                            <p>@L("CachesHeaderInfo")</p>
+                        </div>
+                        <div class="col-xs-6 text-right">
+                            <button id="ClearAllCachesButton" class="btn blue"><i class="fa fa-recycle"></i> @L("ClearAll")</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <table class="table table-striped table-hover table-bordered">
+                                <tbody>
+                                    @foreach (var cache in Model.Caches)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <span>@cache.Name</span>
+                                                <button class="btn btn-xs blue pull-right btn-clear-cache" data-cache-name="@cache.Name">
+                                                    <i class="fa fa-recycle"></i> @L("Clear")
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane" id="WebSiteLogsTab">
+                    <div class="row margin-bottom-10">
+                        <div class="col-xs-6">
+                            <p>@L("WebSiteLogsHeaderInfo")</p>
+                        </div>
+                        <div class="col-xs-6 text-right">
+                            <button id="DownloadAllLogsbutton" class="btn blue"><i class="fa fa-download"></i> @L("DownloadAll")</button>
+                            <button id="RefreshButton" class="btn blue"><i class="fa fa-refresh"></i> @L("Refresh")</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div id="WebSiteLogsContent" class="web-log-view full-height">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>

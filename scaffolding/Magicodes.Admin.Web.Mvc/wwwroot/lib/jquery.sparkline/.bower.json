@@ -1,0 +1,14 @@
+{
+  "name": "jquery.sparkline",
+  "homepage": "https://github.com/imsky/jquery.sparkline",
+  "version": "2.4.0",
+  "_release": "2.4.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "v2.4.0",
+    "commit": "5208d455c21d3a34e6d2b308407879fa81d25f06"
+  },
+  "_source": "https://github.com/imsky/jquery.sparkline.git",
+  "_target": "^2.4.0",
+  "_originalSource": "https://github.com/imsky/jquery.sparkline.git"
+}

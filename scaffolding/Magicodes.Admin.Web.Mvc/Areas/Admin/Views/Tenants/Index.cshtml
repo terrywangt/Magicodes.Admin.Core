@@ -1,0 +1,151 @@
+﻿@using System.Threading.Tasks
+@using Abp.Application.Services.Dto
+@using Magicodes.Admin.Authorization
+@using Magicodes.Admin.Web.Areas.Admin.Models.Tenants
+@using Magicodes.Admin.Web.Areas.Admin.Startup
+@model TenantIndexViewModel
+@{
+    ViewBag.CurrentPageName = AdminPageNames.Host.Tenants;
+}
+@section Styles
+{
+    <environment names="Development">
+        <link rel="stylesheet" href="~/view-resources/Areas/Admin/Views/Common/_FeaturesTree.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/view-resources/Areas/Admin/Views/Tenants/Index.css" asp-append-version="true" />
+    </environment>
+
+    <environment names="Staging,Production">
+        <link rel="stylesheet" href="~/view-resources/Areas/Admin/Views/Common/_FeaturesTree.min.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/view-resources/Areas/Admin/Views/Tenants/Index.min.css" asp-append-version="true" />
+    </environment>
+}
+
+@section Scripts
+{
+    <environment names="Development">
+        <script src="~/view-resources/Areas/Admin/Views/_Bundles/tenant-index-libs.js" asp-append-version="true"></script>
+    </environment>
+
+    <environment names="Staging,Production">
+        <script src="~/view-resources/Areas/Admin/Views/_Bundles/tenant-index-libs.min.js" asp-append-version="true"></script>
+    </environment>
+}
+<div class="row margin-bottom-5">
+    <div class="col-xs-6">
+        <div class="page-head">
+            <div class="page-title">
+                <h1>
+                    <span>@L("Tenants")</span> <small>@L("TenantsHeaderInfo")</small>
+                </h1>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-6 text-right">
+        @if (IsGranted(AppPermissions.Pages_Tenants_Create))
+        {
+            <button id="CreateNewTenantButton" class="btn btn-primary blue"><i class="fa fa-plus"></i> @L("CreateNewTenant")</button>
+        }
+    </div>
+</div>
+<div class="portlet light margin-bottom-0">
+    <div class="portlet-title portlet-title-filter">
+        <div class="inputs inputs-full-width">
+            <div class="portlet-input">
+                <form id="TenantsFormFilter">
+                    <div class="form-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="TenantsTableFilter">@L("TenantNameOrTenancyCode")</label>
+                                    <div class="input-group">
+                                        <input id="TenantsTableFilter" class="form-control" type="text" value="@ViewBag.FilterText" placeholder="@L("SearchWithThreeDot")">
+                                        <span class="input-group-btn">
+                                            <button id="GetTenantsButton" class="btn default" type="submit"><i class="icon-magnifier"></i></button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="EditionDropdown">@L("Edition")</label>
+                                @Html.DropDownList("EditionDropdown", Model.EditionItems.Select(i => i.ToSelectListItem()), new { @class = "form-control edited" })
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="md-checkbox-list">
+                                        <div class="md-checkbox">
+                                            <input class="md-check"
+                                                   type="checkbox"
+                                                   id="TenantsTable_SubscriptionEndDateRangeActive"
+                                                   name="SubscriptionEndDateRangeActive"
+                                                   value="true">
+
+                                            <label for="TenantsTable_SubscriptionEndDateRangeActive">
+                                                <span class="inc"></span>
+                                                <span class="check"></span>
+                                                <span class="box"></span>
+                                                @L("SubscriptionEndDate")
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <input type="text" name="SubscriptionEndDateRange" class="form-control date-range-picker">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="md-checkbox-list">
+                                        <div class="md-checkbox">
+                                            <input class="md-check"
+                                                   type="checkbox"
+                                                   id="TenantsTable_CreationDateRangeActive"
+                                                   name="CreationDateRangeActive"
+                                                   value="true">
+
+                                            <label for="TenantsTable_CreationDateRangeActive">
+                                                <span class="inc"></span>
+                                                <span class="check"></span>
+                                                <span class="box"></span>
+                                                @L("CreationTime")
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <input type="text" name="CreationDateRange" class="form-control date-range-picker">
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <div class="row">
+                            <div class="col-md-12 text-right">
+                                <button name="RefreshButton" class="btn green-haze"><i class="fa fa-refresh"></i> @L("Refresh")</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div>
+            <table id="TenantsTable" class="display table table-striped table-bordered table-hover dt-responsive nowrap">
+                <thead>
+                <tr>
+                    <th>@L("Actions")</th>
+                    <th>@L("TenancyCodeName")</th>
+                    <th>@L("Name")</th>
+                    <th>@L("Edition")</th>
+                    <th>@L("SubscriptionEndDateUtc")</th>
+                    <th>@L("Active")</th>
+                    <th>@L("CreationTime")</th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+
+    </div>
+</div>

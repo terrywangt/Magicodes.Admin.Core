@@ -1,0 +1,72 @@
+﻿body.login .content.account-forms {
+    width: 80%;
+    margin-left: 10%;
+    margin-right: 10%;
+    padding: 0px;
+    background-color: transparent;
+    background-color: transparent;
+}
+
+div.container.content {
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+    background-color: transparent;
+}
+
+div.pricing-content-1 {
+    background-color: transparent;
+}
+
+.login .content {
+    border-radius: 0px;
+    -webkit-border-radius: 0px;
+}
+
+/* centered columns styles */
+.row-centered {
+    text-align: center;
+}
+
+.col-centered {
+    display: inline-table;
+    float: none;
+    /* reset the text-align */
+    text-align: left;
+    /* inline-block space fix */
+    margin-right: -4px;
+}
+
+.pricing-content-1 .price-table-pricing h4 {
+    font-size: 20px !important;
+    color: rgb(51, 51, 51);
+}
+
+div.price-table-pricing {
+    min-height: 103px;
+}
+
+div.pricing-content-1 > div.row > div {
+    margin-bottom: 10px;
+}
+
+.pricing-content-1 .price-table-content {
+    font-weight: normal;
+    font-size: 14px;
+}
+
+.price-table-content div.row {
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+/* IE fix */
+.price-column-container {
+    width: 100% !important;
+}
+
+@media (min-width: 768px) and (max-width:992px) {
+    div.price-table-pricing {
+        min-height: 153px !important;
+    }
+}

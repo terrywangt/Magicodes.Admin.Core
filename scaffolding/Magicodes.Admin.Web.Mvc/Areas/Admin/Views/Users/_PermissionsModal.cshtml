@@ -1,0 +1,20 @@
+﻿@using Magicodes.Admin.Web.Areas.Admin.Models.Common.Modals
+@using Magicodes.Admin.Web.Areas.Admin.Models.Users
+@model UserPermissionsEditViewModel
+
+@Html.Partial("~/Areas/Admin/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(L("Permissions") + " - " + Model.User.UserName))
+
+<div class="modal-body">
+    @Html.Partial("~/Areas/Admin/Views/Common/_PermissionTree.cshtml", Model)
+    
+    <div class="note note-warning" style="margin-bottom: 0; margin-top: 15px">
+        <em>@L("Note_RefreshPageForPermissionChanges")</em>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-default pull-left reset-permissions-button" data-toggle="tooltip" title="@L("ResetPermissionsTooltip")" data-placement="top"><span>@L("ResetSpecialPermissions")</span></button>
+    <button type="button" class="btn default close-button" data-dismiss="modal">@L("Cancel")</button>
+    <button type="button" class="btn blue save-button"><i class="fa fa-save"></i> <span>@L("Save")</span></button>
+</div>
+

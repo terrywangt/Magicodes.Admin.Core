@@ -1,0 +1,40 @@
+﻿@using Abp.Collections.Extensions
+@using Magicodes.Admin.Web.Areas.Admin.Views.Shared.Components.AdminSideBar
+@model UserMenuItemViewModel
+
+<li class="@(Model.MenuItemIndex == 0 && Model.RootLevel ? "start" : "") @(Model.MenuItem.IsMenuActive(Model.CurrentPageName) ? "active" : "")">
+    @if (Model.MenuItem.Items.IsNullOrEmpty())
+            {
+        <a href="@Model.MenuItem.CalculateUrl(ApplicationPath)">
+            <i class="@Model.MenuItem.Icon"></i>
+            <span class="title">@Model.MenuItem.DisplayName</span>
+        </a>
+    }
+    else
+    {
+        <a href="javascript:;" class="auto">
+            <i class="@Model.MenuItem.Icon"></i>
+            <span class="title">@Model.MenuItem.DisplayName</span>
+            <span class="arrow"></span>
+        </a>
+        <ul class="sub-menu">
+            @{var items = Model.MenuItem.Items.OrderBy(p => p.Order).ToList();}
+            @for (var i = 0; i < items.Count; i++)
+            {
+                var childMenuItem = items[i];
+                if (!childMenuItem.IsVisible)
+                {
+                    continue;
+                }
+                @Html.Partial("Components/AdminSideBar/_UserMenuItem", new UserMenuItemViewModel
+                {
+                    MenuItem = childMenuItem,
+                    MenuItemIndex = i,
+                    CurrentPageName = Model.CurrentPageName,
+                    RootLevel = false
+                })
+            }
+        </ul>
+    }
+</li>
+    

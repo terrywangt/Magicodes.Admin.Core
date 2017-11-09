@@ -1,0 +1,28 @@
+﻿@using Magicodes.Admin.Web.Areas.Admin.Models.Common.Modals
+@model LookupModalViewModel
+
+@Html.Partial("~/Areas/Admin/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(Model.Title ?? L("SelectAnItem")))
+
+<div class="modal-body">
+    <form>
+        <div class="input-group margin-bottom-10">
+            <input class="form-control lookup-filter-text" placeholder="@L("SearchWithThreeDot")" type="text">
+            <span class="input-group-btn">
+                <button class="btn default lookup-filter-button" type="submit"><i class="icon-magnifier"></i></button>
+            </span>
+        </div>
+    </form>
+    
+    <table class="lookup-modal-table display table table-striped table-bordered table-hover dt-responsive nowrap">
+        <thead>
+        <tr>
+            <th>@L("Select")</th>
+            <th>@L("Name")</th>
+        </tr>
+        </thead>
+    </table>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn default close-button" data-dismiss="modal">@L("Cancel")</button>
+</div>
