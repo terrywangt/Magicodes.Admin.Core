@@ -1,0 +1,67 @@
+﻿/* General */
+.clickable-item {
+  cursor: pointer;
+}
+.text-bold {
+  font-weight: bold;
+}
+/* Portlet */
+.portlet.light > .portlet-title .inputs.inputs-full-width {
+  display: block;
+  float: none;
+}
+/* Tree */
+.tree-item-icon-color {
+  color: #dfba49;
+}
+.page-sidebar .page-sidebar-menu > li > a > i.fa,
+.page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li > a > i.fa {
+  margin-left: 1px;
+  margin-right: 4px;
+  top: 3px;
+}
+/* Forms */
+.form-group.form-md-line-input.no-hint {
+  margin-bottom: 15px;
+}
+.form-group.form-md-line-input.has-error .form-control {
+  border-bottom-color: red;
+}
+.form-group.form-md-line-input.has-error .help-block-info {
+  display: none;
+}
+/* DateRangePicker */
+.daterangepicker_input .input-mini {
+  width: 120px !important;
+}
+/* Portlets */
+.portlet.light > .portlet-title.portlet-title-filter {
+  border: none;
+  margin-bottom: 0;
+}
+/* Buttons */
+button i {
+  margin-right: 5px;
+}
+.btn + .btn {
+  margin-left: 5px;
+}
+/* FamFamFam Flags */
+.famfamfam-flags {
+  display: inline-block;
+}
+/* Social Login Icons */
+.social-icons li .microsoft {
+  background: url(../Images/Social/microsoft.png) no-repeat;
+}
+.margin-bottom-0 {
+  margin-bottom: 0 !important;
+}
+/* Make user menu wider */
+.page-header.navbar .top-menu .navbar-nav > li.dropdown-dark .dropdown-menu {
+  width: 250px;
+}
+/* Fix for issue #407 */
+br {
+  font-family: Verdana;
+}

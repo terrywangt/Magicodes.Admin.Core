@@ -1,0 +1,14 @@
+{
+  "name": "counter-up",
+  "homepage": "https://github.com/bfintal/Counter-Up",
+  "version": "1.0.0",
+  "_release": "1.0.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "1.0.0",
+    "commit": "fef978b279c546923ad4f4118acea4d503e7596c"
+  },
+  "_source": "https://github.com/bfintal/Counter-Up.git",
+  "_target": "1.0.0",
+  "_originalSource": "counter-up"
+}
