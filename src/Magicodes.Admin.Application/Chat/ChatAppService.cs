@@ -137,10 +137,5 @@ namespace Magicodes.Admin.Chat
                 _chatCommunicator.SendReadStateChangeToClients(onlineFriendClients, userIdentifier);
             }
         }
-
-        public async Task<ChatMessage> FindMessageAsync(int id, long userId)
-        {
-            return await _chatMessageRepository.FirstOrDefaultAsync(m => m.Id == id && m.UserId == userId);
-        }
     }
 }

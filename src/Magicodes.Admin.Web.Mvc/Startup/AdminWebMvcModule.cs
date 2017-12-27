@@ -9,6 +9,10 @@ using Magicodes.Admin.Configuration;
 using Magicodes.Admin.EntityFrameworkCore;
 using Magicodes.Admin.MultiTenancy;
 using Magicodes.Admin.Web.Areas.Admin.Startup;
+using Abp.AspNetZeroCore.Web.Authentication.External;
+using Abp.AspNetZeroCore.Web.Authentication.External.Facebook;
+using Abp.AspNetZeroCore.Web.Authentication.External.Google;
+using Abp.AspNetZeroCore.Web.Authentication.External.Microsoft;
 
 namespace Magicodes.Admin.Web.Startup
 {
@@ -97,53 +101,53 @@ namespace Magicodes.Admin.Web.Startup
             );
         }
 
-        if (bool.Parse(_appConfiguration["Authentication:QQ:IsEnabled"]))
-        {
-            externalAuthConfiguration.Providers.Add(
-                new ExternalLoginProviderInfo(
-                    MicrosoftAuthProviderApi.Name,
-                    _appConfiguration["Authentication:QQ:ClientId"],
-                    _appConfiguration["Authentication:QQ:ClientSecret"],
-                    typeof(MicrosoftAuthProviderApi)
-                )
-            );
-        }
+            //if (bool.Parse(_appConfiguration["Authentication:QQ:IsEnabled"]))
+            //{
+            //    externalAuthConfiguration.Providers.Add(
+            //        new ExternalLoginProviderInfo(
+            //            QQAuthProviderApi.Name,
+            //            _appConfiguration["Authentication:QQ:ClientId"],
+            //            _appConfiguration["Authentication:QQ:ClientSecret"],
+            //            typeof(QQProviderApi)
+            //        )
+            //    );
+            //}
 
-        if (bool.Parse(_appConfiguration["Authentication:Weibo:IsEnabled"]))
-        {
-            externalAuthConfiguration.Providers.Add(
-                new ExternalLoginProviderInfo(
-                    MicrosoftAuthProviderApi.Name,
-                    _appConfiguration["Authentication:Weibo:ClientId"],
-                    _appConfiguration["Authentication:Weibo:ClientSecret"],
-                    typeof(MicrosoftAuthProviderApi)
-                )
-            );
-        }
+            //if (bool.Parse(_appConfiguration["Authentication:Weibo:IsEnabled"]))
+            //{
+            //    externalAuthConfiguration.Providers.Add(
+            //        new ExternalLoginProviderInfo(
+            //            WeiboAuthProviderApi.Name,
+            //            _appConfiguration["Authentication:Weibo:ClientId"],
+            //            _appConfiguration["Authentication:Weibo:ClientSecret"],
+            //            typeof(WeiboAuthProviderApi)
+            //        )
+            //    );
+            //}
 
-        if (bool.Parse(_appConfiguration["Authentication:Weixin:IsEnabled"]))
-        {
-            externalAuthConfiguration.Providers.Add(
-                new ExternalLoginProviderInfo(
-                    MicrosoftAuthProviderApi.Name,
-                    _appConfiguration["Authentication:Weixin:ClientId"],
-                    _appConfiguration["Authentication:Weixin:ClientSecret"],
-                    typeof(MicrosoftAuthProviderApi)
-                )
-            );
-        }
+            //if (bool.Parse(_appConfiguration["Authentication:Weixin:IsEnabled"]))
+            //{
+            //    externalAuthConfiguration.Providers.Add(
+            //        new ExternalLoginProviderInfo(
+            //            WeixinAuthProviderApi.Name,
+            //            _appConfiguration["Authentication:Weixin:ClientId"],
+            //            _appConfiguration["Authentication:Weixin:ClientSecret"],
+            //            typeof(WeixinAuthProviderApi)
+            //        )
+            //    );
+            //}
 
-        if (bool.Parse(_appConfiguration["Authentication:Baidu:IsEnabled"]))
-        {
-            externalAuthConfiguration.Providers.Add(
-                new ExternalLoginProviderInfo(
-                    MicrosoftAuthProviderApi.Name,
-                    _appConfiguration["Authentication:Baidu:ClientId"],
-                    _appConfiguration["Authentication:Baidu:ClientSecret"],
-                    typeof(MicrosoftAuthProviderApi)
-                )
-            );
+            //if (bool.Parse(_appConfiguration["Authentication:Baidu:IsEnabled"]))
+            //{
+            //    externalAuthConfiguration.Providers.Add(
+            //        new ExternalLoginProviderInfo(
+            //            BaiduAuthProviderApi.Name,
+            //            _appConfiguration["Authentication:Baidu:ClientId"],
+            //            _appConfiguration["Authentication:Baidu:ClientSecret"],
+            //            typeof(BaiduAuthProviderApi)
+            //        )
+            //    );
+            //}
         }
     }
-}
 }

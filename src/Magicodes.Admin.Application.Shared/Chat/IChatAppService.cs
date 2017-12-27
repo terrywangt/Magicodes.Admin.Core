@@ -12,7 +12,5 @@ namespace Magicodes.Admin.Chat
         Task<ListResultDto<ChatMessageDto>> GetUserChatMessages(GetUserChatMessagesInput input);
 
         Task MarkAllUnreadMessagesOfUserAsRead(MarkAllUnreadMessagesOfUserAsReadInput input);
-
-        Task<ChatMessage> FindMessageAsync(int id, long userId);
     }
 }
