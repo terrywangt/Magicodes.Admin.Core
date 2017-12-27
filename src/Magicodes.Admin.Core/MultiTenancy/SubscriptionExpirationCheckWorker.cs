@@ -41,7 +41,7 @@ namespace Magicodes.Admin.MultiTenancy
             LocalizationSourceName = AdminConsts.LocalizationSourceName;
         }
 
-        protected override async void DoWork()
+        protected override void DoWork()
         {
             var utcNow = Clock.Now.ToUniversalTime();
             var failedTenancyNames = new List<string>();
@@ -78,7 +78,7 @@ namespace Magicodes.Admin.MultiTenancy
                     }
                     else if (endSubscriptionResult == EndSubscriptionResult.AssignedToAnotherEdition)
                     {
-                        await _userEmailer.TryToSendSubscriptionAssignedToAnotherEmail(tenant.Id, utcNow, edition.ExpiringEditionId.Value);
+                        AsyncHelper.RunSync(() => _userEmailer.TryToSendSubscriptionAssignedToAnotherEmail(tenant.Id, utcNow, edition.ExpiringEditionId.Value));
                     }
                 }
                 catch (Exception exception)

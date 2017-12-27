@@ -1,11 +1,14 @@
-<div class="portlet light">
-    <div class="portlet-title">
-        <div class="caption">
-            <span class="caption-subject"> @L("FileUpload")</span>
+<div class="m-portlet m-portlet--mobile">
+    <div class="m-portlet__head">
+        <div class="m-portlet__head-caption">
+            <div class="m-portlet__head-title">
+                <h3 class="m-portlet__head-text">
+                    @L("FileUpload")
+                </h3>
+            </div>
         </div>
     </div>
-    <div class="portlet-body">
-
+    <div class="m-portlet__body">
         <form role="form">
 
             <div class="row">
@@ -14,15 +17,15 @@
                 </div>
                 <div class="col-md-10">
 
-                    <div class="form-group form-md-line-input form-md-floating-label">
-                        <input type="text" name="DefaultFileUploadTextInput" class="form-control">
+                    <div class="form-group">
                         <label>Free text</label>
+                        <input type="text" name="DefaultFileUploadTextInput" class="form-control">
                     </div>
 
-                    <div class="form-group form-md-line-input form-md-floating-label">
+                    <div class="form-group">
 
                         <!-- The fileinput-button span is used to style the file input field as button -->
-                        <span class="btn btn-success fileinput-button">
+                        <span class="btn btn-primary fileinput-button">
                             <i class="glyphicon glyphicon-plus"></i>
                             <span>Select files...</span>
                             <!-- The file input field used as target for the file upload widget -->
@@ -46,6 +49,5 @@
             </div>
 
         </form>
-
     </div>
 </div>

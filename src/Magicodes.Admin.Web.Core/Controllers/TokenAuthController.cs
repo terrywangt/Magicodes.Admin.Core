@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Abp;
 using Abp.AspNetCore.Mvc.Authorization;
+using Abp.AspNetZeroCore.Web.Authentication.External;
 using Abp.Authorization;
 using Abp.Authorization.Users;
 using Abp.MultiTenancy;
@@ -35,8 +36,6 @@ using Magicodes.Admin.Web.Models.TokenAuth;
 using Magicodes.Admin.Authorization.Impersonation;
 using Magicodes.Admin.Identity;
 using Magicodes.Admin.Notifications;
-using Magicodes.Admin.Web.Authentication.External;
-using Magicodes.Admin.Sms;
 
 namespace Magicodes.Admin.Web.Controllers
 {
@@ -166,6 +165,7 @@ namespace Magicodes.Admin.Web.Controllers
                 EncryptedAccessToken = GetEncrpyedAccessToken(accessToken),
                 ExpireInSeconds = (int)_configuration.Expiration.TotalSeconds,
                 TwoFactorRememberClientToken = twoFactorRememberClientToken,
+                UserId = loginResult.User.Id,
                 ReturnUrl = returnUrl
             };
         }
@@ -199,7 +199,7 @@ namespace Magicodes.Admin.Web.Controllers
                 }
                 else if (model.Provider == "Phone")
                 {
-                    await _smsSender.SendAsync(await _userManager.GetPhoneNumberAsync(user), cacheItem.Code);
+                    await _smsSender.SendAsync(await _userManager.GetPhoneNumberAsync(user), message);
                 }
             }
 
@@ -345,7 +345,7 @@ namespace Magicodes.Admin.Web.Controllers
                 externalLoginInfo.Name,
                 externalLoginInfo.Surname,
                 externalLoginInfo.EmailAddress,
-                externalLoginInfo.EmailAddress,
+                externalLoginInfo.EmailAddress.ToMd5(),
                 Authorization.Users.User.CreateRandomPassword(),
                 true,
                 null

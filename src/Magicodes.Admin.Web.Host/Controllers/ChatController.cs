@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Net;
 using System.Threading.Tasks;
-using Abp.Runtime.Session;
 using Microsoft.AspNetCore.Mvc;
 using Magicodes.Admin.Chat;
 using Magicodes.Admin.Storage;
-using Newtonsoft.Json.Linq;
 
 namespace Magicodes.Admin.Web.Controllers
 {
     public class ChatController : ChatControllerBase
     {
-        public ChatController(IBinaryObjectManager binaryObjectManager, IChatAppService chatAppService) : 
-            base(binaryObjectManager, chatAppService)
+        public ChatController(IBinaryObjectManager binaryObjectManager, IChatMessageManager chatMessageManager) : 
+            base(binaryObjectManager, chatMessageManager)
         {
         }
 

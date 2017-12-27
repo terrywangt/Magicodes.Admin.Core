@@ -17,7 +17,6 @@ using Abp.Organizations;
 using Abp.Runtime.Session;
 using Abp.UI;
 using Abp.Zero.Configuration;
-using Castle.Components.DictionaryAdapter;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Magicodes.Admin.Authorization.Permissions;
@@ -306,17 +305,17 @@ namespace Magicodes.Admin.Authorization.Users
             user.TenantId = AbpSession.TenantId;
 
             //Set password
-            if (!input.User.Password.IsNullOrEmpty())
+            if (input.SetRandomPassword|| input.User.Password.IsNullOrEmpty())
+            {
+                input.User.Password = User.CreateRandomPassword();
+            }
+            else
             {
                 await UserManager.InitializeOptionsAsync(AbpSession.TenantId);
                 foreach (var validator in _passwordValidators)
                 {
                     CheckErrors(await validator.ValidateAsync(UserManager, user, input.User.Password));
                 }
-            }
-            else
-            {
-                input.User.Password = User.CreateRandomPassword();
             }
 
             user.Password = _passwordHasher.HashPassword(user, input.User.Password);
@@ -365,7 +364,7 @@ namespace Magicodes.Admin.Authorization.Users
             foreach (var user in userListDtos)
             {
                 var rolesOfUser = userRoles.Where(userRole => userRole.UserId == user.Id).ToList();
-                user.Roles = ObjectMapper.Map<List<UserListDto.UserListRoleDto>>(rolesOfUser);
+                user.Roles = ObjectMapper.Map<List<UserListRoleDto>>(rolesOfUser);
             }
 
             var roleNames = new Dictionary<int, string>();

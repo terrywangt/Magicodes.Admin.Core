@@ -13,9 +13,9 @@
         var _$editionStatisticsCaptionHelper = _$container.find(".edition-statistics .caption-helper");
         var _$editionStatisticsChartContainer = _$container.find(".edition-statistics .edition-statistics-chart");
         var _$incomeStatisticsCaptionHelper = _$container.find(".income-statistics .caption-helper");
-        var _$newTenantsStatusTitle = _$container.find(".new-tenants-statistics .progress-info .status .status-title");
+        var _$newTenantsStatusTitle = _$container.find(".new-tenants-statistics .status-title");
         var _$newTenantsStatisticsCountPlaceholder = _$container.find(".new-tenants-statistics .new-tenants-count");
-        var _$newSubscriptionAmountTitle = _$container.find(".new-subscription-statistics .progress-info .status .status-title");
+        var _$newSubscriptionAmountTitle = _$container.find(".new-subscription-statistics .status-title");
         var _$newSubscriptionAmountPlaceholder = _$container.find(".new-subscription-statistics .new-subscription-amount");
         var _$dashboardStatisticsPlaceholder1 = _$container.find(".dashboard-statistics1 .dashboard-placeholder1");
         var _$dashboardStatisticsPlaceholder2 = _$container.find(".dashboard-statistics2 .dashboard-placeholder2");
@@ -25,8 +25,6 @@
         var _$counterUp = _$container.find(".counterup");
         var _expiringTenantsData = [], _recentTenantsData = [], _incomeStatisticsData = [];
         var _currency = "$";
-        var initialReportDayCount = _$container.find(".dashboard-report-range .selected-date-text")
-            .data("initial-report-day-count");
 
         var chartDateInterval = {
             daily: 1,
@@ -35,13 +33,13 @@
         };
 
         var _selectedDateRange = {
-            startDate: moment().subtract(initialReportDayCount, "day").startOf("day"),
+            startDate: moment().add(-7, 'days').startOf('day'),
             endDate: moment().endOf("day")
         };
 
         var showSelectedDate = function () {
             if (_$dateRangePicker.attr("data-display-range") !== "0") {
-                _$dateRangePicker.html(_selectedDateRange.startDate.format("LL") +
+                _$dateRangePicker.find(".m-subheader__daterange-date").html(_selectedDateRange.startDate.format("LL") +
                     " - " +
                     _selectedDateRange.endDate.format("LL"));
             }

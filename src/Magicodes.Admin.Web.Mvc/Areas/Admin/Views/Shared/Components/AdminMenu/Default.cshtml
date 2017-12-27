@@ -1,0 +1,30 @@
+﻿@using Magicodes.Admin.Web.Areas.Admin.Models.Layout
+@using Magicodes.Admin.Web.Areas.Admin.Views.Shared.Components.AdminSideBar
+@using Magicodes.Admin.Web.Theme
+@inject IUiThemeCustomizer UiThemeCustomizer
+@model MenuViewModel
+@{
+
+}
+<div id="m_ver_menu"
+     class="m-aside-menu  
+            m-aside-menu--skin-@UiThemeCustomizer.LeftAsideAsideSkin 
+            m-aside-menu--submenu-skin-@(UiThemeCustomizer.LeftAsideDropdownSubmenuSkin == "inherit" ? UiThemeCustomizer.LeftAsideAsideSkin: UiThemeCustomizer.LeftAsideDropdownSubmenuSkin) 
+            @(UiThemeCustomizer.LeftAsideSubmenuToggle == "dropdown" ? "m-aside-menu--dropdown":"")"
+     data-menu-vertical="true"
+     @(UiThemeCustomizer.LeftAsideSubmenuToggle == "dropdown" ? "data-menu-dropdown=true" : "") 
+     @(UiThemeCustomizer.LeftAsideFixedAside ? "data-menu-scrollable=true" : "data-menu-scrollable=false") data-menu-dropdown-timeout="500">
+    <ul class="m-menu__nav  @(UiThemeCustomizer.LeftAsideDropdownSubmenuArrow ? "m-menu__nav--dropdown-submenu-arrow":"") ">
+        @for (var i = 0; i < Model.Menu.Items.Count; i++)
+        {
+            var menuItem = Model.Menu.Items[i];
+            @Html.Partial("Components/AdminMenu/_UserMenuItem", new UserMenuItemViewModel
+            {
+                MenuItem = menuItem,
+                MenuItemIndex = i,
+                RootLevel = true,
+                CurrentPageName = Model.CurrentPageName
+            })
+        }
+    </ul>
+</div>

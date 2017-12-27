@@ -10,53 +10,39 @@
 }
 @section Styles
 {
-    <environment names="Development">
-        <link rel="stylesheet" href="~/view-resources/Areas/Admin/Views/Roles/Index.css" asp-append-version="true" />
-    </environment>
-
-    <environment names="Staging,Production">
-        <link rel="stylesheet" href="~/view-resources/Areas/Admin/Views/Roles/Index.min.css" asp-append-version="true" />
-    </environment>
+    <link rel="stylesheet" abp-href="/view-resources/Areas/Admin/Views/Roles/Index.css" asp-append-version="true" />
 }
 @section Scripts
 {
-    <environment names="Development">
-        <script src="~/view-resources/Areas/Admin/Views/Common/_PermissionTree.js" asp-append-version="true"></script>
-        <script src="~/view-resources/Areas/Admin/Views/Roles/_CreateOrEditModal.js" asp-append-version="true"></script>
-        <script src="~/view-resources/Areas/Admin/Views/Roles/Index.js" asp-append-version="true"></script>
-    </environment>
-
-    <environment names="Staging,Production">
-        <script src="~/view-resources/Areas/Admin/Views/Common/_PermissionTree.min.js" asp-append-version="true"></script>
-        <script src="~/view-resources/Areas/Admin/Views/Roles/_CreateOrEditModal.min.js" asp-append-version="true"></script>
-        <script src="~/view-resources/Areas/Admin/Views/Roles/Index.min.js" asp-append-version="true"></script>
-    </environment>
+    <script abp-src="/view-resources/Areas/Admin/Views/_Bundles/role-list.js" asp-append-version="true"></script>
 }
-<div class="row margin-bottom-5">
-    <div class="col-xs-6">
-        <div class="page-head">
-            <div class="page-title">
-                <h1>
-                    <span>@L("Roles")</span> <small>@L("RolesHeaderInfo")</small>
-                </h1>
-            </div>
+
+<div class="m-subheader ">
+    <div class="row align-items-center">
+        <div class="mr-auto col-sm-12 col-md-6">
+            <h3 class="m-subheader__title m-subheader__title--separator">
+                <span>@L("Roles")</span>
+            </h3>
+            <span class="m-section__sub">
+                @L("RolesHeaderInfo")
+            </span>
         </div>
-    </div>
-    <div class="col-xs-6 text-right">
-        @if (IsGranted(AppPermissions.Pages_Administration_Roles_Create))
-        {
-            <button id="CreateNewRoleButton" class="btn btn-primary blue"><i class="fa fa-plus"></i> @L("CreateNewRole")</button>
-        }
+        <div class="col-sm-12 col-md-6 text-right">
+            @if (IsGranted(AppPermissions.Pages_Administration_Roles_Create))
+            {
+                <button id="CreateNewRoleButton" class="btn btn-primary blue"><i class="la la-plus"></i> @L("CreateNewRole")</button>
+            }
+        </div>
     </div>
 </div>
 
-<div class="portlet light margin-bottom-0">
-    <div class="portlet-title portlet-title-filter">
-        <div class="inputs inputs-full-width">
-            <div class="portlet-input">
-                <form>
-                    <div class="row">
-                        <div class="col-xs-6">
+<div class="m-content">
+    <div class="m-portlet m-portlet--mobile">
+        <div class="m-portlet__body">
+            <div class="m-form m-form--label-align-right">
+                <div class="row m--margin-bottom-10">
+                    <div class="col-xl-6">
+                        <div class="form-group">
                             @Html.DropDownList(
                                 "PermissionSelectionCombobox", Model.Permissions.Select(i => i.ToSelectListItem()),
                                 new
@@ -67,25 +53,24 @@
                                     id = "PermissionSelectionCombo"
                                 })
                         </div>
-                        <div class="col-xs-6">
-                            <div class="form-group">
-                                <button id="RefreshRolesButton" class="btn btn-primary blue"><i class="fa fa-refresh"></i> @L("Refresh")</button>
-                            </div>
-                        </div>
                     </div>
-                </form>
+                    <div class="col-xl-6 text-right">
+                        <button id="RefreshRolesButton" class="btn btn-metal"><i class="la la-refresh"></i> @L("Refresh")</button>
+                    </div>
+                </div>
             </div>
+            <div class="row align-items-center">
+                <table id="RolesTable" class="display table table-striped table-bordered table-hover dt-responsive nowrap">
+                    <thead>
+                        <tr>
+                            <th>@L("Actions")</th>
+                            <th>@L("RoleName")</th>
+                            <th>@L("CreationTime")</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+
         </div>
-    </div>
-    <div class="portlet-body">
-        <table id="RolesTable" class="display table table-striped table-bordered table-hover dt-responsive nowrap">
-            <thead>
-            <tr>
-                <th>@L("Actions")</th>
-                <th>@L("RoleName")</th>
-                <th>@L("CreationTime")</th>
-            </tr>
-            </thead>
-        </table>
     </div>
 </div>

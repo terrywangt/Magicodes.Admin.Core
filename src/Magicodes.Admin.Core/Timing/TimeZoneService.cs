@@ -1,9 +1,12 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Abp.Application.Services.Dto;
 using Abp.Configuration;
 using Abp.Dependency;
 using Abp.Timing;
-using Abp.Extensions;
+using TimeZoneConverter;
 
 namespace Magicodes.Admin.Timing
 {
@@ -13,7 +16,7 @@ namespace Magicodes.Admin.Timing
         readonly ISettingDefinitionManager _settingDefinitionManager;
 
         public TimeZoneService(
-            ISettingManager settingManager, 
+            ISettingManager settingManager,
             ISettingDefinitionManager settingDefinitionManager)
         {
             _settingManager = settingManager;
@@ -44,6 +47,17 @@ namespace Magicodes.Admin.Timing
             }
 
             throw new Exception("Unknown scope for default timezone setting.");
+        }
+
+        public List<NameValueDto> GetWindowsTimezones()
+        {
+            return TZConvert.KnownWindowsTimeZoneIds.Select(TZConvert.GetTimeZoneInfo)
+                .OrderBy(tz => tz.BaseUtcOffset)
+                .Select(tz => new NameValueDto
+                {
+                    Value = tz.Id,
+                    Name = tz.DisplayName
+                }).ToList();
         }
     }
 }

@@ -1,12 +1,14 @@
-﻿<div class="row">
-  <div class="col-md-12 page-404">
-    <div class="number font-red"> 404 </div>
-    <div class="details">
-      <h3>@L("OopsYouAreLost")</h3>
-      <p>
+﻿<div class="m-error_container">
+    <span class="m-error_title">
+        <h1>
+            404
+        </h1>
+    </span>
+    <p class="m-error_subtitle">
+        @L("OopsYouAreLost")
+    </p>
+    <p class="m-error_description">
         @L("WeCanNotFindThePage")<br>
         <a href="@Url.Action("Index", "Home")" class="link">@L("HomePage")</a>.
-      </p>
-    </div>
-  </div>
+    </p>
 </div>

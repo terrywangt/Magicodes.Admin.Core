@@ -1,4 +1,5 @@
 ﻿@using System.Threading.Tasks
+@using Abp.AspNetZeroCore.Timing
 @using Abp.Web.Security.AntiForgery
 @using Magicodes.Admin.Timing
 @using Magicodes.Admin.Web.Public.Views.Shared.Components.Header
@@ -10,7 +11,7 @@
     AbpAntiForgeryManager.SetCookie(Context);
 }
 <!DOCTYPE html>
-<html lang="en" @(CultureHelper.IsRtl ? "dir=\"rtl\"" : "")>
+<html lang="en" @(CultureHelper.IsRtl ? "dir=\"rtl\"" : "" )>
 <head>
     <meta charset="utf-8">
     <title>Admin</title>
@@ -42,8 +43,7 @@
         <link rel="stylesheet" href="~/lib/simple-line-icons/css/simple-line-icons.css" asp-append-version="true" />
         <link rel="stylesheet" href="~/lib/font-awesome/css/font-awesome.css" asp-append-version="true" />
         <link rel="stylesheet" href="~/lib/famfamfam-flags/dist/sprite/famfamfam-flags.css" asp-append-version="true" />
-        <link rel="stylesheet" href="@(CultureHelper.IsRtl ? "~/lib/bootstrap-rtl/bootstrap-rtl.css" : "~/lib/bootstrap/dist/css/bootstrap.css")" asp-append-version="true" />
-        <link rel="stylesheet" href="~/lib/sweetalert/dist/sweetalert.css" asp-append-version="true" />
+        <link rel="stylesheet" href="@(CultureHelper.IsRtl ? "~/metronic/assets/global/plugins/bootstrap/css/bootstrap-rtl.css" : "~/lib/bootstrap/dist/css/bootstrap.css")" asp-append-version="true" />
         <link rel="stylesheet" href="~/lib/toastr/toastr.css" asp-append-version="true" />
 
         @* Bundled: wwwroot/view-resources/Views/_Bundles/frontend-metronic[-rtl].min.css *@
@@ -103,7 +103,7 @@
         <script src="~/lib/js-cookie/src/js.cookie.js" asp-append-version="true"></script>
         <script src="~/lib/spin.js/spin.js" asp-append-version="true"></script>
         <script src="~/lib/spin.js/jquery.spin.js" asp-append-version="true"></script>
-        <script src="~/lib/sweetalert/dist/sweetalert-dev.js" asp-append-version="true"></script>
+        <script src="~/assets/sweetalert/dist/sweetalert.min.js" asp-append-version="true"></script>
         <script src="~/lib/toastr/toastr.js" asp-append-version="true"></script>
         <script src="~/lib/moment/min/moment-with-locales.js" asp-append-version="true"></script>
         <script src="~/lib/moment-timezone/builds/moment-timezone-with-data.js" asp-append-version="true"></script>
@@ -122,6 +122,8 @@
 
     <script type="text/javascript">
         abp.localization.defaultSourceName = '@LocalizationSourceName';
+        abp.security.antiForgery.tokenCookieName = "Public-XSRF-TOKEN";
+        abp.security.antiForgery.tokenHeaderName = "Public-X-XSRF-TOKEN";
     </script>
 
     <!-- Dynamic scripts of ABP system (They are created on runtime and can not be bundled) -->
@@ -131,8 +133,6 @@
         @* Bundled: wwwroot/view-resources/Views/_Bundles/frontend-metronic.min.js *@
         <script src="~/metronic/assets/frontend/layout/scripts/back-to-top.js" asp-append-version="true"></script>
         <script src="~/metronic/assets/frontend/layout/scripts/layout.js" asp-append-version="true"></script>
-
-        
     </environment>
 
     <environment names="Staging,Production">

@@ -15,14 +15,14 @@ namespace Magicodes.Admin.Web.Areas.Admin.Controllers
     [AbpMvcAuthorize]
     public class ChatController : ChatControllerBase
     {
-        public ChatController(IBinaryObjectManager binaryObjectManager, IChatAppService chatAppService) :
-            base(binaryObjectManager, chatAppService)
+        public ChatController(IBinaryObjectManager binaryObjectManager, IChatMessageManager chatMessageManager) :
+            base(binaryObjectManager, chatMessageManager)
         {
         }
 
         public async Task<ActionResult> GetImage(int id, string contentType)
         {
-            var message = await ChatAppService.FindMessageAsync(id, AbpSession.GetUserId());
+            var message = await ChatMessageManager.FindMessageAsync(id, AbpSession.GetUserId());
             var jsonMessage = JObject.Parse(message.Message.Substring("[image]".Length));
             using (CurrentUnitOfWork.SetTenantId(null))
             {
@@ -38,7 +38,7 @@ namespace Magicodes.Admin.Web.Areas.Admin.Controllers
 
         public async Task<ActionResult> GetFile(int id, string contentType)
         {
-            var message =await ChatAppService.FindMessageAsync(id, AbpSession.GetUserId());
+            var message =await ChatMessageManager.FindMessageAsync(id, AbpSession.GetUserId());
             var jsonMessage = JObject.Parse(message.Message.Substring("[file]".Length));
             using (CurrentUnitOfWork.SetTenantId(null))
             {

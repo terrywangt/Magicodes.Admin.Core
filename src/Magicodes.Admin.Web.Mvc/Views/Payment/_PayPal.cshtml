@@ -13,12 +13,20 @@
 <input type="hidden" name="PayerId" value="" />
 @if (!Model.GetAdditionalData(SubscriptionPaymentGatewayType.Paypal, "DemoUsername").IsNullOrEmpty())
 {
-    <div class="note note-info text-center">
-        <h4 class="block">@L("DemoPayPalAccount")</h4>
-        <p>
-            <span>@L("UserName"): <strong>@Model.GetAdditionalData(SubscriptionPaymentGatewayType.Paypal, "DemoUsername")</strong></span><br />
-            <span>@L("Password"): <strong>@Model.GetAdditionalData(SubscriptionPaymentGatewayType.Paypal, "DemoPassword")</strong></span>
-        </p>
+    <div class="m-alert m-alert--icon m-alert--icon-solid m-alert--outline alert alert-brand alert-dismissible fade show" role="alert">
+        <div class="m-alert__icon">
+            <i class="flaticon-exclamation"></i>
+            <span></span>
+        </div>
+        <div class="m-alert__text">
+            <h4>
+                @L("DemoPayPalAccount")
+            </h4>
+            <p>
+                <span>@L("UserName"): <strong>@Model.GetAdditionalData(SubscriptionPaymentGatewayType.Paypal, "DemoUsername")</strong></span><br />
+                <span>@L("Password"): <strong>@Model.GetAdditionalData(SubscriptionPaymentGatewayType.Paypal, "DemoPassword")</strong></span>
+            </p>
+        </div>
     </div>
 }
 <div id="paypal-button"></div>

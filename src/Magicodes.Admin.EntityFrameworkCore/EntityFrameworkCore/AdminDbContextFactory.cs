@@ -12,7 +12,7 @@ namespace Magicodes.Admin.EntityFrameworkCore
         public AdminDbContext CreateDbContext(string[] args)
         {
             var builder = new DbContextOptionsBuilder<AdminDbContext>();
-            var configuration = AppConfigurations.Get(WebContentDirectoryFinder.CalculateContentRootFolder());
+            var configuration = AppConfigurations.Get(WebContentDirectoryFinder.CalculateContentRootFolder(), addUserSecrets: true);
 
             AdminDbContextConfigurer.Configure(builder, configuration.GetConnectionString(AdminConsts.ConnectionStringName));
 

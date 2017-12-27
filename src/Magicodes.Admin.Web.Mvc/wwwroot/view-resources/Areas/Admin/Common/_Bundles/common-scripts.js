@@ -274,21 +274,21 @@ jQuery(document).ready(function ($) {
 });
 (function ($) {
     $.validator.setDefaults({
-        errorElement: 'span',
-        errorClass: 'help-block help-block-validation-error',
+        errorElement: 'div',
+        errorClass: 'form-control-feedback',
         focusInvalid: false,
         submitOnKeyPress: true,
-
+        ignore:':hidden',
         highlight: function (element) {
-            $(element).closest('.form-group').addClass('has-error');
+            $(element).closest('.form-group').addClass('has-danger');
         },
 
         unhighlight: function (element) {
-            $(element).closest('.form-group').removeClass('has-error');
+            $(element).closest('.form-group').removeClass('has-danger');
         },
 
         errorPlacement: function (error, element) {
-            if (element.closest('.input-icon').size() === 1) {
+            if (element.closest('.input-icon').length === 1) {
                 error.insertAfter(element.closest('.input-icon'));
             } else {
                 error.insertAfter(element);
@@ -296,7 +296,7 @@ jQuery(document).ready(function ($) {
         },
 
         success: function (label) {
-            label.closest('.form-group').removeClass('has-error');
+            label.closest('.form-group').removeClass('has-danger');
             label.remove();
         },
 

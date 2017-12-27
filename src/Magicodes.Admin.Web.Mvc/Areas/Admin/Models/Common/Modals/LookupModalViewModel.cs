@@ -1,9 +1,6 @@
-﻿
-using Magicodes.Admin.ViewModels.Common.Modals;
-
-namespace Magicodes.Admin.Web.Areas.Admin.Models.Common.Modals
+﻿namespace Magicodes.Admin.Web.Areas.Admin.Models.Common.Modals
 {
-    public class LookupModalViewModel : ILookupModalViewModel
+    public class LookupModalViewModel
     {
         public string Title { get; set; }
     }

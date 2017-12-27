@@ -7,6 +7,7 @@ using Abp.Localization;
 using Abp.Runtime.Session;
 using Abp.UI;
 using Castle.Core.Logging;
+using Castle.Windsor;
 using Microsoft.AspNet.SignalR;
 using Magicodes.Admin.Chat;
 
@@ -26,16 +27,20 @@ namespace Magicodes.Admin.Web.Chat.SignalR
 
         private readonly IChatMessageManager _chatMessageManager;
         private readonly ILocalizationManager _localizationManager;
+        private readonly IWindsorContainer _windsorContainer;
+        private bool _isCallByRelease;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ChatHub"/> class.
         /// </summary>
         public ChatHub(
             IChatMessageManager chatMessageManager,
-            ILocalizationManager localizationManager)
+            ILocalizationManager localizationManager, 
+            IWindsorContainer windsorContainer)
         {
             _chatMessageManager = chatMessageManager;
             _localizationManager = localizationManager;
+            _windsorContainer = windsorContainer;
 
             Logger = NullLogger.Instance;
             AbpSession = NullAbpSession.Instance;
@@ -62,6 +67,20 @@ namespace Magicodes.Admin.Web.Chat.SignalR
                 Logger.Warn("Could not send chat message to user: " + receiver);
                 Logger.Warn(ex.ToString(), ex);
                 return _localizationManager.GetSource("AbpWeb").GetString("InternalServerError");
+            }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (_isCallByRelease)
+            {
+                return;
+            }
+            base.Dispose(disposing);
+            if (disposing)
+            {
+                _isCallByRelease = true;
+                _windsorContainer.Release(this);
             }
         }
     }

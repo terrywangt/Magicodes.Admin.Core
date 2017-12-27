@@ -25,6 +25,7 @@
             },
             min: moment('2015-05-01'),
             minDate: moment('2015-05-01'),
+            opens: 'left',
             ranges: {}
         };
 

@@ -11,29 +11,29 @@
         var createNotificationReadButton = function ($td, record) {
             var $span = $('<span/>');
             var $button = $("<button/>")
-                .addClass("btn btn-xs btn-primary blue")
+                .addClass("btn btn-sm btn-primary")
                 .attr("title", app.localize('SetAsRead'))
                 .click(function (e) {
                     e.preventDefault();
                     setNotificationAsRead(record, function () {
                         $button.find('i')
-                            .removeClass('fa-circle-o')
-                            .addClass('fa-check');
+                            .removeClass('la-circle-o')
+                            .addClass('la-check');
                         $button.attr('disabled', 'disabled');
                         $td.closest("tr").addClass("notification-read");
                     });
                 }).appendTo($span);
 
-            var $i = $('<i class="fa" >').appendTo($button);
+            var $i = $('<i class="la" >').appendTo($button);
             var notificationState = _appUserNotificationHelper.format(record).state;
 
             if (notificationState === 'READ') {
                 $button.attr('disabled', 'disabled');
-                $i.addClass('fa-check');
+                $i.addClass('la-check');
             }
 
             if (notificationState === 'UNREAD') {
-                $i.addClass('fa-circle-o');
+                $i.addClass('la-circle-o');
             }
 
             $td.append($span);

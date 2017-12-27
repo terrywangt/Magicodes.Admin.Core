@@ -26,10 +26,10 @@
             app.localize('TenantName_Regex_Description'));
 
         $('.register-form').validate({
-            errorElement: 'span', //default input error message container
-            errorClass: 'help-block', // default input error message class
+            errorElement: 'div',
+            errorClass: 'form-control-feedback',
             focusInvalid: false, // do not focus the last invalid input
-            ignore: "",
+            ignore: ':hidden',
             rules: {
                 AdminPasswordRepeat: {
                     equalTo: "#AdminPassword"
@@ -46,14 +46,14 @@
 
             },
             highlight: function (element) {
-                $(element).closest('.form-group').addClass('has-error');
+                $(element).closest('.form-group').addClass('has-danger');
             },
             success: function (label) {
-                label.closest('.form-group').removeClass('has-error');
+                label.closest('.form-group').removeClass('has-danger');
                 label.remove();
             },
             errorPlacement: function (error, element) {
-                if (element.closest('.input-icon').size() === 1) {
+                if (element.closest('.input-icon').length === 1) {
                     error.insertAfter(element.closest('.input-icon'));
                 } else {
                     error.insertAfter(element);

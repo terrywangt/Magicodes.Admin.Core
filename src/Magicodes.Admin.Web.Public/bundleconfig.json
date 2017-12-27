@@ -23,7 +23,6 @@
       "wwwroot/lib/font-awesome/css/font-awesome.css",
       "wwwroot/lib/famfamfam-flags/dist/sprite/famfamfam-flags.css",
       "wwwroot/lib/bootstrap/dist/css/bootstrap.css",
-      "wwwroot/lib/sweetalert/dist/sweetalert.css",
       "wwwroot/lib/toastr/toastr.css"
     ]
   },
@@ -33,8 +32,7 @@
       "wwwroot/lib/simple-line-icons/css/simple-line-icons.css",
       "wwwroot/lib/font-awesome/css/font-awesome.css",
       "wwwroot/lib/famfamfam-flags/dist/sprite/famfamfam-flags.css",
-      "wwwroot/lib/bootstrap-rtl/bootstrap-rtl.css",
-      "wwwroot/lib/sweetalert/dist/sweetalert.css",
+      "wwwroot/metronic/assets/global/plugins/bootstrap/css/bootstrap-rtl.css",
       "wwwroot/lib/toastr/toastr.css"
     ]
   },
@@ -70,7 +68,7 @@
       "wwwroot/lib/js-cookie/src/js.cookie.js",
       "wwwroot/lib/spin.js/spin.js",
       "wwwroot/lib/spin.js/jquery.spin.js",
-      "wwwroot/lib/sweetalert/dist/sweetalert-dev.js",
+      "wwwroot/assets/sweetalert/dist/sweetalert.min.js",
       "wwwroot/lib/toastr/toastr.js",
       "wwwroot/lib/moment/min/moment-with-locales.js",
       "wwwroot/lib/moment-timezone/builds/moment-timezone-with-data.js",
@@ -103,7 +101,7 @@
       "wwwroot/lib/toastr/toastr.js",
       "wwwroot/lib/spin.js/spin.js",
       "wwwroot/lib/spin.js/jquery.spin.js",
-      "wwwroot/lib/sweetalert/dist/sweetalert-dev.js",
+      "wwwroot/assets/sweetalert/dist/sweetalert.min.js",
       "wwwroot/lib/abp-web-resources/Abp/Framework/scripts/abp.js",
       "wwwroot/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.jquery.js",
       "wwwroot/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.toastr.js",

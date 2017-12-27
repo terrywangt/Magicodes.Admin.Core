@@ -86,6 +86,7 @@
                 var items = {
                     editUnit: {
                         label: app.localize('Edit'),
+                        icon: 'la la-pencil',
                         _disabled: !_permissions.manageOrganizationTree,
                         action: function (data) {
                             var instance = $.jstree.reference(data.reference);
@@ -101,6 +102,7 @@
 
                     addSubUnit: {
                         label: app.localize('AddSubUnit'),
+                        icon: 'la la-plus',
                         _disabled: !_permissions.manageOrganizationTree,
                         action: function () {
                             organizationTree.addUnit(node.id);
@@ -109,6 +111,7 @@
 
                     addMember: {
                         label: app.localize('AddMember'),
+                        icon: 'la la-user-plus',
                         _disabled: !_permissions.manageMembers,
                         action: function () {
                             members.openAddModal();
@@ -117,6 +120,7 @@
 
                     'delete': {
                         label: app.localize("Delete"),
+                        icon: 'la la-remove',
                         _disabled: !_permissions.manageOrganizationTree,
                         action: function (data) {
                             var instance = $.jstree.reference(data.reference);
@@ -249,10 +253,10 @@
                             },
                             types: {
                                 "default": {
-                                    "icon": "fa fa-folder tree-item-icon-color icon-lg"
+                                    "icon": "fa fa-folder m--font-warning"
                                 },
                                 "file": {
-                                    "icon": "fa fa-file tree-item-icon-color icon-lg"
+                                    "icon": "fa fa-file  m--font-warning"
                                 }
                             },
                             contextmenu: {
@@ -376,7 +380,7 @@
                 if (!ouId) {
                     return;
                 }
-                
+
                 _addUserModal.open({
                     title: app.localize('SelectAUser'),
                     organizationUnitId: ouId
@@ -403,15 +407,16 @@
                             data: null,
                             orderable: false,
                             defaultContent: '',
+                            className: 'text-center',
                             rowAction: {
                                 targets: 0,
                                 data: null,
                                 orderable: false,
                                 defaultContent: '',
                                 element: $("<button/>")
-                                    .addClass("btn btn-default btn-xs")
+                                    .addClass("btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only m-btn--pill")
                                     .attr("title", app.localize('Delete'))
-                                    .append($("<i/>").addClass("fa fa-times")).click(function () {
+                                    .append($("<i/>").addClass("la la-times")).click(function () {
                                         var record = $(this).data();
                                         members.remove(record);
                                     }),

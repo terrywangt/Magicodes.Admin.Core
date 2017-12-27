@@ -4,11 +4,11 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using Abp.AspNetZeroCore.Net;
 using Abp.Dependency;
 using Abp.Extensions;
 using Abp.UI;
 using Magicodes.Admin.Editions;
-using Magicodes.Admin.Net.MimeTypes;
 using Newtonsoft.Json;
 
 namespace Magicodes.Admin.MultiTenancy.Payments.Paypal

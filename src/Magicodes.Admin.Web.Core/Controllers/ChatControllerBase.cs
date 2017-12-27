@@ -1,28 +1,24 @@
-using System;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using Abp.AspNetCore.Mvc.Authorization;
 using Abp.IO.Extensions;
-using Abp.Runtime.Session;
 using Abp.UI;
 using Abp.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Magicodes.Admin.Chat;
 using Magicodes.Admin.Storage;
-using Newtonsoft.Json.Linq;
 
 namespace Magicodes.Admin.Web.Controllers
 {
     public class ChatControllerBase : AdminControllerBase
     {
         protected readonly IBinaryObjectManager BinaryObjectManager;
-        protected readonly IChatAppService ChatAppService;
+        protected readonly IChatMessageManager ChatMessageManager;
 
-        public ChatControllerBase(IBinaryObjectManager binaryObjectManager, IChatAppService chatAppService)
+        public ChatControllerBase(IBinaryObjectManager binaryObjectManager, IChatMessageManager chatMessageManager)
         {
             BinaryObjectManager = binaryObjectManager;
-            ChatAppService = chatAppService;
+            ChatMessageManager = chatMessageManager;
         }
 
         [HttpPost]

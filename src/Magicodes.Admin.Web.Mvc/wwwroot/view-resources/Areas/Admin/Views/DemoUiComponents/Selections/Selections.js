@@ -4,7 +4,8 @@
     // 
     // select2 initialize
     //
-    $(".select2").select2({
+    $(".m-select2").select2({
+        placeholder: 'Select',
         ajax: {
             url: abp.appPath + "api/services/app/DemoUiComponents/GetCountries",
             dataType: 'json',
@@ -77,7 +78,7 @@
     // single select - post
     //
     $('.test-btn-select2-single').click(function () {
-        var $selectElement = $(this).closest('.input-group').find('select');
+        var $selectElement = $('#select2SingleSelect');
 
         var input = [];
         input.push({
@@ -104,7 +105,7 @@
     // multi select - post
     //
     $('.test-btn-select2-multiple').click(function () {
-        var $selectElement = $(this).closest('.input-group').find('select');
+        var $selectElement = $('#select2MultiSelect');
 
         var input = [];
 
@@ -134,7 +135,7 @@
     // tag select - post
     //
     $('.test-btn-select2-tagging').click(function () {
-        var $selectElement = $(this).closest('.input-group').find('select');
+        var $selectElement = $('#select2Tagging');
 
         var input = [];
 

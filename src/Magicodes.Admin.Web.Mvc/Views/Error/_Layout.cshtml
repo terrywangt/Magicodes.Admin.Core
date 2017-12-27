@@ -20,37 +20,11 @@
     <meta content="Admin" name="keywords" />
     <meta content="Admin" name="author" />
 
-    <link rel="shortcut icon" href="~/favicon.ico">
+    <link rel="shortcut icon" href="~/favicon.ico" />
 
-    <link rel="stylesheet" href="~/fonts/fonts-open-sans.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/fonts/fonts-ptsans-narrow.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/fonts/fonts-sourcesans-pro.css" asp-append-version="true" />
-
-    <environment names="Development">
-        @* Bundled: wwwroot/view-resources/Views/_Bundles/frontend-libs[-rtl].min.css *@
-        <link rel="stylesheet" href="~/lib/simple-line-icons/css/simple-line-icons.css" asp-append-version="true" />
-        <link rel="stylesheet" href="~/lib/font-awesome/css/font-awesome.css" asp-append-version="true" />
-        <link rel="stylesheet" href="~/lib/famfamfam-flags/dist/sprite/famfamfam-flags.css" asp-append-version="true" />
-        <link rel="stylesheet" href="@(CultureHelper.IsRtl ? "~/lib/bootstrap-rtl/bootstrap-rtl.css" : "~/lib/bootstrap/dist/css/bootstrap.css")" asp-append-version="true" />
-        <link rel="stylesheet" href="~/lib/sweetalert/dist/sweetalert.css" asp-append-version="true" />
-        <link rel="stylesheet" href="~/lib/toastr/toastr.css" asp-append-version="true" />
-
-        @* Bundled: wwwroot/view-resources/Views/_Bundles/frontend-metronic[-rtl].min.css *@
-        <link rel="stylesheet" href="~/metronic/assets/global/css/components@(CultureHelper.IsRtl ? "-rtl" : "").css" asp-append-version="true" />
-        <link rel="stylesheet" href="~/metronic/assets/frontend/layout/css/style@(CultureHelper.IsRtl ? "-rtl" : "").css" asp-append-version="true" />
-        <link rel="stylesheet" href="~/metronic/assets/frontend/pages/css/style-revolution-slider.css" asp-append-version="true" />
-        <link rel="stylesheet" href="~/metronic/assets/frontend/layout/css/style-responsive@(CultureHelper.IsRtl ? "-rtl" : "").css" asp-append-version="true" />
-        <link rel="stylesheet" href="~/metronic/assets/frontend/layout/css/themes/red@(CultureHelper.IsRtl ? "-rtl" : "").css" asp-append-version="true" />
-
-    </environment>
-
-    <environment names="Staging,Production">
-        <link rel="stylesheet" href="~/view-resources/Views/_Bundles/frontend-libs@(CultureHelper.IsRtl ? "-rtl" : "").min.css" asp-append-version="true" />
-        <link rel="stylesheet" href="~/view-resources/Views/_Bundles/frontend-metronic@(CultureHelper.IsRtl ? "-rtl" : "").min.css" asp-append-version="true" />
-    </environment>
-
-    @*@Html.IncludeStyle("~/metronic/assets/global/css/components-md" + (CultureHelper.IsRtl ? "-rtl" : "") + ".css")
-        @Html.IncludeStyle("~/metronic/assets/global/css/plugins-md" + (CultureHelper.IsRtl ? "-rtl" : "") + ".css")*@
+    <link rel="stylesheet" abp-href="/view-resources/Areas/Admin/Views/_Bundles/vendors.bundle.css" asp-append-version="true" />
+    <link rel="stylesheet" href="/metronic/dist/html/default/assets/demo/default/base/style.bundle.css" asp-append-version="true" />
+    <link rel="stylesheet" abp-href="/view-resources/Areas/Admin/Views/_Bundles/common-styles.css" asp-append-version="true" />
 
     <script type="text/javascript">
         @* This is used to get the application's root path from javascript.
@@ -59,26 +33,14 @@
     </script>
 
 </head>
-<body class="corporate">
-
-    <div class="main">
-        <div class="container text-center">
+<body class="m--skin- m-header--fixed m-header--fixed-mobile m-aside-left--enabled m-aside-left--skin-dark m-aside-left--offcanvas m-footer--push m-aside--offcanvas-default">
+    <div class="m-grid m-grid--hor m-grid--root m-page">
+        <div class="m-grid__item m-grid__item--fluid m-grid  m-error-5" style="background-image: url(/metronic/src/media/app/img/error/bg5.jpg);">
             @RenderBody()
         </div>
     </div>
 
-    <environment names="Development">
-        @* Bundled: TODO! *@
-        <script src="~/lib/jquery/dist/jquery.js" asp-append-version="true"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.js" asp-append-version="true"></script>
-
-    </environment>
-
-    <environment names="Staging,Production">
-        @* Bundled: TODO! *@
-        <script src="~/lib/jquery/dist/jquery.js" asp-append-version="true"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.js" asp-append-version="true"></script>
-    </environment>
+    <script abp-src="/view-resources/Areas/Admin/Views/_Bundles/account-layout-libs.js" asp-append-version="true"></script>
 
     <script type="text/javascript">
         abp.localization.defaultSourceName = '@LocalizationSourceName';
@@ -86,18 +48,6 @@
 
     <!-- Dynamic scripts of ABP system (They are created on runtime and can not be bundled) -->
     <script src="~/AbpScripts/GetScripts?v=@(Clock.Now.Ticks)" type="text/javascript"></script>
-
-    <script type="text/javascript">
-        App.setAssetsPath(abp.appPath + 'metronic/assets/');
-    </script>
-
-    <script>
-        jQuery(document).ready(function () {
-            if (CurrentPage) {
-                CurrentPage.init();
-            }
-        });
-    </script>
 </body>
 
 </html>

@@ -10,134 +10,107 @@
 }
 @section Styles
 {
-    <environment names="Development">
-        <link rel="stylesheet" href="~/view-resources/Areas/Admin/Views/Users/Index.css" asp-append-version="true" />
-    </environment>
-
-    <environment names="Staging,Production">
-        <link rel="stylesheet" href="~/view-resources/Areas/Admin/Views/Users/Index.min.css" asp-append-version="true" />
-    </environment>
+    <link rel="stylesheet" abp-href="/view-resources/Areas/Admin/Views/Users/Index.css" asp-append-version="true" />
 }
 @section Scripts
 {
-    <environment names="Development">
-        <script src="~/view-resources/Areas/Admin/Views/Common/_PermissionTree.js" asp-append-version="true"></script>
-        <script src="~/view-resources/Areas/Admin/Views/Common/_OrganizationTree.js" asp-append-version="true"></script>
-        <script src="~/view-resources/Areas/Admin/Views/Users/_CreateOrEditModal.js" asp-append-version="true"></script>
-        <script src="~/view-resources/Areas/Admin/Views/Users/_PermissionsModal.js" asp-append-version="true"></script>
-        <script src="~/view-resources/Areas/Admin/Views/Users/Index.js" asp-append-version="true"></script>
-    </environment>
-
-    <environment names="Staging,Production">
-        <script src="~/view-resources/Areas/Admin/Views/Common/_PermissionTree.min.js" asp-append-version="true"></script>
-        <script src="~/view-resources/Areas/Admin/Views/Common/_OrganizationTree.js" asp-append-version="true"></script>
-        <script src="~/view-resources/Areas/Admin/Views/Users/_CreateOrEditModal.min.js" asp-append-version="true"></script>
-        <script src="~/view-resources/Areas/Admin/Views/Users/_PermissionsModal.min.js" asp-append-version="true"></script>
-        <script src="~/view-resources/Areas/Admin/Views/Users/Index.min.js" asp-append-version="true"></script>
-    </environment>
+    <script abp-src="/view-resources/Areas/Admin/Views/_Bundles/user-list.js" asp-append-version="true"></script>
 }
-<div class="row margin-bottom-5">
-    <div class="col-xs-6">
-        <div class="page-head">
-            <div class="page-title">
-                <h1>
-                    <span>@L("Users")</span> <small>@L("UsersHeaderInfo")</small>
-                </h1>
-            </div>
+<div class="m-subheader">
+    <div class="row align-items-center">
+        <div class="mr-auto col-sm-12 col-md-6">
+            <h3 class="m-subheader__title m-subheader__title--separator">
+                <span>@L("Users")</span>
+            </h3>
+            <span class="m-section__sub">
+                @L("UsersHeaderInfo")
+            </span>
+        </div>
+        <div class="col-sm-12 col-md-6 text-right">
+            <button id="ExportUsersToExcelButton" class="btn btn-outline-success"><i class="fa fa-file-excel-o"></i> @L("ExportToExcel")</button>
+            @if (IsGranted(AppPermissions.Pages_Administration_Users_Create))
+            {
+                <button id="CreateNewUserButton" class="btn btn-primary blue"><i class="fa fa-plus"></i> @L("CreateNewUser")</button>
+            }
         </div>
     </div>
-    <div class="col-xs-6 text-right">
-        <button id="ExportUsersToExcelButton" class="btn green-haze"><i class="fa fa-file-excel-o"></i> @L("ExportToExcel")</button>
-        @if (IsGranted(AppPermissions.Pages_Administration_Users_Create))
-        {
-            <button id="CreateNewUserButton" class="btn btn-primary blue"><i class="fa fa-plus"></i> @L("CreateNewUser")</button>
-        }
-    </div>
 </div>
-
-<div class="portlet light margin-bottom-0">
-    <div class="portlet-body">
-        <div class="form">
-            <form class="horizontal-form">
-                <div class="form-body">
-                    <div class="row margin-bottom-10">
-                        <div class="col-md-12">
-                            <div class="inputs inputs-full-width">
-                                <div class="portlet-input">
-                                    <form>
-                                        <div class="input-group">
-                                            <input id="UsersTableFilter" class="form-control" placeholder="@L("SearchWithThreeDot")" type="text" value="@Model.FilterText">
-                                            <span class="input-group-btn">
-                                                <button id="GetUsersButton" class="btn default" type="submit"><i class="icon-magnifier"></i></button>
-                                            </span>
-                                        </div>
-                                    </form>
-                                </div>
+<div class="m-content">
+    <div class="m-portlet m-portlet--mobile">
+        <div class="m-portlet__body">
+            <div class="m-form m-form--label-align-right">
+                <div class="row align-items-center m--margin-bottom-10">
+                    <div class="col-xl-12">
+                        <div class="form-group m-form__group align-items-center">
+                            <div class="input-group">
+                                <input type="text" id="UsersTableFilter" class="form-control m-input" placeholder="@L("SearchWithThreeDot")" value="@Model.FilterText">
+                                <span class="input-group-btn">
+                                    <button id="GetUsersButton" class="btn btn-primary" type="submit"><i class="flaticon-search-1"></i></button>
+                                </span>
                             </div>
                         </div>
                     </div>
-                    <div id="AdvacedAuditFiltersArea" style="display: none">
-                        <div class="row margin-bottom-10">
-                            <div class="@(IsGranted(AppPermissions.Pages_Administration_Roles) ? "col-md-6" : "col-md-12")">
-                                <div class="form-group">
-                                    @Html.DropDownList(
-                                        "PermissionSelectionCombobox", Model.Permissions.Select(i => i.ToSelectListItem()),
+                </div>
+                <div id="AdvacedAuditFiltersArea" style="display: none" class="row m--margin-bottom-10">
+                    <div class="@(IsGranted(AppPermissions.Pages_Administration_Roles) ? "col-xl-6" : "col-xl-12")">
+                        <div class="form-group">
+                            @Html.DropDownList(
+                                    "PermissionSelectionCombobox", Model.Permissions.Select(i => i.ToSelectListItem()),
+                                    new
+                                    {
+                                        @class = "form-control selectpicker",
+                                        data_live_search = "true",
+                                        data_none_selected_text = L("FilterByPermission"),
+                                        id = "PermissionSelectionCombo"
+                                    })
+                        </div>
+                    </div>
+                    @if (IsGranted(AppPermissions.Pages_Administration_Roles))
+                    {
+                        <div class="col-xl-6">
+                            <div class="form-group">
+                                @Html.DropDownList(
+                                        "RoleSelectionCombobox", Model.Roles.Select(i => i.ToSelectListItem()),
                                         new
                                         {
                                             @class = "form-control selectpicker",
                                             data_live_search = "true",
-                                            data_none_selected_text = L("FilterByPermission"),
-                                            id = "PermissionSelectionCombo"
+                                            data_none_selected_text = L("FilterByRole"),
+                                            id = "RoleSelectionCombo"
                                         })
-                                </div>
-                            </div>
-                            @if (IsGranted(AppPermissions.Pages_Administration_Roles))
-                            {
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        @Html.DropDownList(
-                                            "RoleSelectionCombobox", Model.Roles.Select(i => i.ToSelectListItem()),
-                                            new
-                                            {
-                                                @class = "form-control selectpicker",
-                                                data_live_search = "true",
-                                                data_none_selected_text = L("FilterByRole"),
-                                                id = "RoleSelectionCombo"
-                                            })
-                                    </div>
-                                </div>
-                            }
-                        </div>
-                        <div class="row margin-bottom-10">
-                            <div class="col-sm-12 text-right">
-                                <button id="RefreshUserListButton" class="btn blue"><i class="fa fa-refresh"></i> @L("Refresh")</button>
                             </div>
                         </div>
+                    }
+                    <div class="col-xl-12 text-right">
+                        <button id="RefreshUserListButton" class="btn btn-metal"><i class="fa fa-refresh"></i> @L("Refresh")</button>
                     </div>
                 </div>
-                <div class="row margin-bottom-10">
-                    <div class="col-sm-12">
-                        <span id="ShowAdvancedFiltersSpan" class="clickable-item text-muted"><i class="fa fa-angle-down"></i> @L("ShowAdvancedFilters")</span>
-                        <span id="HideAdvancedFiltersSpan" class="clickable-item text-muted" style="display: none"><i class="fa fa-angle-up"></i> @L("HideAdvancedFilters")</span>
+                <div class="row m--margin-bottom-10">
+                    <div class="col-xl-12">
+                        <span id="ShowAdvancedFiltersSpan" class="text-muted clickable-item"><i class="fa fa-angle-down"></i> @L("ShowAdvancedFilters")</span>
+                        <span id="HideAdvancedFiltersSpan" class="text-muted clickable-item" style="display: none"><i class="fa fa-angle-up"></i> @L("HideAdvancedFilters")</span>
                     </div>
                 </div>
-            </form>
+            </div>
+            <div class="row align-items-center">
+                <table id="UsersTable" class="display table table-striped table-bordered table-hover dt-responsive nowrap">
+                    <thead>
+                        <tr>
+                            <th>@L("Actions")</th>
+                            <th>@L("UserName")</th>
+                            <th>@L("Name")</th>
+                            <th>@L("Surname")</th>
+                            <th>@L("Roles")</th>
+                            <th>@L("EmailAddress")</th>
+                            <th>@L("EmailConfirm")</th>
+                            <th>@L("Active")</th>
+                            <th>@L("LastLoginTime")</th>
+                            <th>@L("CreationTime")</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+
         </div>
-        <table id="UsersTable" class="display table table-striped table-bordered table-hover dt-responsive nowrap">
-            <thead>
-            <tr>
-                <th>@L("Actions")</th>
-                <th>@L("UserName")</th>
-                <th>@L("Name")</th>
-                <th>@L("Surname")</th>
-                <th>@L("Roles")</th>
-                <th>@L("EmailAddress")</th>
-                <th>@L("EmailConfirm")</th>
-                <th>@L("Active")</th>
-                <th>@L("LastLoginTime")</th>
-                <th>@L("CreationTime")</th>
-            </tr>
-            </thead>
-        </table>
     </div>
 </div>

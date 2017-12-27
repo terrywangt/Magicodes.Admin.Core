@@ -97,7 +97,7 @@ namespace Magicodes.Admin.Configuration.Host
         private async Task<EmailSettingsEditDto> GetEmailSettingsAsync()
         {
             var smtpPassword = await SettingManager.GetSettingValueAsync(EmailSettingNames.Smtp.Password);
-            
+
             return new EmailSettingsEditDto
             {
                 DefaultFromAddress = await SettingManager.GetSettingValueAsync(EmailSettingNames.DefaultFromAddress),

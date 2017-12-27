@@ -39,9 +39,9 @@
                 _profileService.sendVerificationSms()
                     .done(function () {
                         smsVerificationModal.open({}, function () {
-                            document.getElementById('SpanSmsVerificationVerified').style.display = "";
-                            document.getElementById('SpanSmsVerificationUnverified').style.display = "none";
-                             });
+                            $('#SpanSmsVerificationVerified').show();
+                            $('#SpanSmsVerificationUnverified').hide();
+                        });
                     });
             });
 

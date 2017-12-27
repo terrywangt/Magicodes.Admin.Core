@@ -21,10 +21,10 @@
         };
 
         var _urlParams = {
-            creationDateStart: $.url().param('creationDateStart'),
-            creationDateEnd: $.url().param('creationDateEnd'),
-            subscriptionEndDateStart: $.url().param('subscriptionEndDateStart'),
-            subscriptionEndDateEnd: $.url().param('subscriptionEndDateEnd')
+            creationDateStart: $.url('?creationDateStart'),
+            creationDateEnd: $.url('?creationDateEnd'),
+            subscriptionEndDateStart: $.url('?subscriptionEndDateStart'),
+            subscriptionEndDateEnd: $.url('?subscriptionEndDateEnd')
         }
 
         var _selectedSubscriptionEndDateRange = {
@@ -230,6 +230,11 @@
                 }
             ]
         });
+
+        function getQueryStringParameter(name) {
+            var uri = URI.parseQuery(document.location.href);
+            return uri[name];
+        }
 
         function getTenants() {
             dataTable.ajax.reload();

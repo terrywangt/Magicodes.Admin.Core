@@ -1,0 +1,120 @@
+//
+//** Timeline 1 Snippet
+//
+
+//== Snippet Base
+@mixin m-build-component--timeline-base() {
+	.m-timeline-1 {
+		position: relative;   
+	    margin: 0 auto;
+	    padding-top: 30px;
+
+	    &::after {
+			content: '';
+			position: absolute;
+			width: 5.5px;
+			background-color: #E6EAF5;
+			top: 4px;
+			bottom: 0;
+			left: 50%;
+			margin-left: -2.8px;	
+			margin-top: 50px;		    
+		}
+
+		&.m-timeline-1--fixed {
+			width: 80%; 
+	    	margin: 0 auto;			
+			.m-timeline-1__container {			 
+				.m-timeline-1__items {					
+    				position: relative; 
+
+					.m-timeline-1__item {						 
+						 
+						.m-timeline-1__arrow-left {                        
+			                @include m--build-smooth-arrow-horizontal(left, default);
+			                margin-left: 99.8%; 
+			                margin-top: 8px;
+			                color: red;			                                               
+			            }     
+
+			            .m-timeline-1__arrow-right {                        
+			                @include m--build-smooth-arrow-horizontal(right, default);			                
+			                margin-top: 8px;
+			                color: red;			                                               
+			            }  
+
+						&.m-timeline-1__item-left {							
+							background-color: red;
+							margin-top: 70px;
+							width: 46%;
+							height: 250px;
+							position: relative;
+							@include border-radius(10px);  
+
+							&::after {
+							    left: 105%;	
+							     				   
+							}							
+						}
+
+						&.m-timeline-1__item-right {							
+							background-color: red;
+							margin-top: -190px;
+							width: 46%;
+							height: 250px;
+							position: relative;	
+							@include border-radius(10px);  
+							left: 54%; 
+							
+							&::after {
+							    right: 105%;
+							     					   
+							}
+						}	
+
+						.m-timeline-1__badge {
+						  	width: 20px;
+							height: 20px;
+							border:6px solid white;						    
+							position: absolute;							  	
+							z-index: 100;
+						  	@include border-radius(50%); 
+						  	top: 18px; 
+						  	margin-left: -9.26px;
+
+						  	&.m-timeline-1__badge-left {						  		 
+							  	left: 108.5%;							  	 
+						  	}
+
+						  	&.m-timeline-1__badge-right {						  		 
+							  	left: -8.88%;							  	 
+						  	}
+						}						 		
+					}
+				} 
+			} 
+		}
+	}	 
+}
+
+
+ 
+
+ 
+ 
+	 
+
+
+//== Snippet Skin
+@mixin m-build-component--timeline-skin() {
+$skin: get-default-skin();
+
+}
+
+//== Build Snippet Base
+@include m-build-component--timeline-base();
+
+//== Build Snippet Skin
+@include m-build-component--timeline-skin();
+
+ 

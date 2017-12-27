@@ -147,9 +147,9 @@
     <text name="ExportToExcel" value="Экспорт в Excel" />
     <text name="ChangeProfilePicture" value="Фото для профиля" />
     <text name="TenantName_Regex_Description" value="Имя клиента должно иметь 2 знака, начинаться с латинской буквы и продолжаться латинской буквой, цифрой, тире или подчеркиванием." />
-    <text name="ProfilePicture_Change_Info" value="Вы можете выбрать файл в формате JPG/JPEG/PNG и размером не более 1MB." />
+    <text name="ProfilePicture_Change_Info" value="Вы можете выбрать файл в формате JPG/JPEG/PNG и размером не более {0}MB." />
     <text name="ProfilePicture_Change_Error" value="Фото для вашего профиля не может быть изменено." />
-    <text name="ProfilePicture_Warn_SizeLimit" value="Картинка должна быть менее 1 MB. Пожалуйста, выберите другой файл." />
+    <text name="ProfilePicture_Warn_SizeLimit" value="Картинка должна быть менее {0}MB. Пожалуйста, выберите другой файл." />
     <text name="ProfilePicture_Warn_FileType" value="Вы можете выбрать только файл в формате JPG/JPEG. Пожалуйста, выберите другой файл." />
     <text name="Dashboard" value="Аналитика" />
     <text name="DashboardHeaderInfo" value="статистика и отчеты" />
@@ -323,7 +323,7 @@
     <text name="YouCannotLinkToSameAccount">Нельзя добавить такой же профиль.</text>
     <text name="ChangePasswordBeforeLinkToAnAccount">Вы должны изменить свой пароль до добавления этого профиля!</text>
     <text name="LinkedAccounts">Связанные профили</text>
-    <text name="ManageAccounts">Управление</text>
+    <text name="ManageLinkedAccounts">Управление</text>
     <text name="LinkNewAccount">Добавить новый профиль</text>
     <text name="SuccessfullyUnlinked">Успешно отвязано</text>
     <text name="LinkedUserDeleteWarningMessage">Связь с пользователем {0} будет удалена.</text>
@@ -371,7 +371,7 @@
     <text name="LoginAttempts">Попытки входа</text>
     <text name="Failed">Неуспешно</text>
     <text name="NewTenant">Новый клиент</text>
-    <text name="ResizedProfilePicture_Warn_SizeLimit" value="Сжатая картинка должна быть менее 100KB. Пожалуйста, уменьшите и попытайтесь снова." />
+    <text name="ResizedProfilePicture_Warn_SizeLimit" value="Сжатая картинка должна быть менее {0}KB. Пожалуйста, уменьшите и попытайтесь снова." />
     <text name="RegisterFormUserNameInvalidMessage">Пожалуйста, не вводите Email адрес для имени пользователя.</text>
     <text name="UseHostDatabase" value="Использовать общую базу данных" />
     <text name="DatabaseConnectionString" value="Строка подключения к базе данных" />
@@ -480,7 +480,7 @@
     <text name="CustomCSS">Собственный CSS</text>
     <text name="Upload">Upload</text>
     <text name="Download">Download</text>
-    <text name="UploadLogo_Info">Выберите JPG/JPEG/PNG/GIF файл с максимальным размером 30KB и с разрешением 168x33 пикселей.</text>
+    <text name="UploadLogo_Info">Выберите JPG/JPEG/PNG/GIF файл с максимальным размером 30KB и с разрешением 139x35 пикселей.</text>
     <text name="UploadCSS_Info">Выберите .css файл с максимальным размером 1MB.</text>
     <text name="Browse">Обзор</text>
     <text name="Appearance">Внешний вид</text>

@@ -1,26 +1,31 @@
-﻿using Abp.Configuration.Startup;
+﻿using Abp.AspNetZeroCore;
+using Abp.AspNetZeroCore.Web.Authentication.External;
+using Abp.AspNetZeroCore.Web.Authentication.External.Facebook;
+using Abp.AspNetZeroCore.Web.Authentication.External.Google;
+using Abp.AspNetZeroCore.Web.Authentication.External.Microsoft;
+using Abp.Configuration.Startup;
 using Abp.Modules;
 using Abp.Reflection.Extensions;
 using Abp.Threading.BackgroundWorkers;
+using Abp.Timing;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Magicodes.Admin.Configuration;
+using Magicodes.Admin.EntityFrameworkCore;
 using Magicodes.Admin.MultiTenancy;
-using Magicodes.Admin.Web.Authentication.External;
-using Magicodes.Admin.Web.Authentication.External.Facebook;
-using Magicodes.Admin.Web.Authentication.External.Google;
-using Magicodes.Admin.Web.Authentication.External.Microsoft;
 
 namespace Magicodes.Admin.Web.Startup
 {
     [DependsOn(
-        typeof(AdminWebCoreModule))]
+        typeof(AdminWebCoreModule)
+    )]
     public class AdminWebHostModule : AbpModule
     {
         private readonly IHostingEnvironment _env;
         private readonly IConfigurationRoot _appConfiguration;
 
-        public AdminWebHostModule(IHostingEnvironment env)
+        public AdminWebHostModule(
+            IHostingEnvironment env)
         {
             _env = env;
             _appConfiguration = env.GetAppConfiguration();
@@ -29,6 +34,7 @@ namespace Magicodes.Admin.Web.Startup
         public override void PreInitialize()
         {
             Configuration.Modules.AbpWebCommon().MultiTenancy.DomainFormat = _appConfiguration["App:ServerRootAddress"] ?? "http://localhost:22742/";
+            Configuration.Modules.AspNetZero().LicenseCode = _appConfiguration["AbpZeroLicenseCode"];
         }
 
         public override void Initialize()
@@ -38,17 +44,22 @@ namespace Magicodes.Admin.Web.Startup
 
         public override void PostInitialize()
         {
+            if (!DatabaseCheckHelper.Exist(_appConfiguration["ConnectionStrings:Default"]))
+            {
+                return;
+            }
+
             if (IocManager.Resolve<IMultiTenancyConfig>().IsEnabled)
             {
                 var workManager = IocManager.Resolve<IBackgroundWorkerManager>();
                 workManager.Add(IocManager.Resolve<SubscriptionExpirationCheckWorker>());
                 workManager.Add(IocManager.Resolve<SubscriptionExpireEmailNotifierWorker>());
             }
-
-            ConfigureXXX();
+            
+            ConfigureExternalAuthProviders();
         }
 
-        private void ConfigureXXX()
+        private void ConfigureExternalAuthProviders()
         {
             var externalAuthConfiguration = IocManager.Resolve<ExternalAuthConfiguration>();
 

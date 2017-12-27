@@ -3,6 +3,7 @@ using Abp.IdentityServer4;
 using Abp.Modules;
 using Abp.Reflection.Extensions;
 using Abp.Zero.EntityFrameworkCore;
+using Magicodes.Admin.Configuration;
 using Magicodes.Admin.Migrations.Seed;
 
 namespace Magicodes.Admin.EntityFrameworkCore
@@ -44,7 +45,8 @@ namespace Magicodes.Admin.EntityFrameworkCore
 
         public override void PostInitialize()
         {
-            if (!SkipDbSeed)
+            var configurationAccessor = IocManager.Resolve<IAppConfigurationAccessor>();
+            if (!SkipDbSeed && DatabaseCheckHelper.Exist(configurationAccessor.Configuration["ConnectionStrings:Default"]))
             {
                 SeedHelper.SeedHostDb(IocManager);
             }

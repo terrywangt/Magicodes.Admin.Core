@@ -28,7 +28,7 @@
             return $('<div id="' + _containerId + '"></div>')
                 .append(
                     '<div id="' + modalId + '" class="modal fade" tabindex="-1" role="modal" aria-hidden="true">' +
-                    '  <div class="modal-dialog">' +
+                    '  <div class="modal-dialog modal-lg">' +
                     '    <div class="modal-content"></div>' +
                     '  </div>' +
                     '</div>'

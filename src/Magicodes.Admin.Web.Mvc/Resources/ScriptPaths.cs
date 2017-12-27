@@ -40,7 +40,7 @@ namespace Magicodes.Admin.Web.Resources
         {
             try
             {
-                var relativeFilePath = @"lib/jquery-validation/src/localization/messages_" + cultureCode + ".js";
+                var relativeFilePath = @"lib/jquery-validation/dist/localization/messages_" + cultureCode + ".js";
                 var physicalFilePath = GetPhysicalPath(relativeFilePath);
                 if (File.Exists(physicalFilePath))
                 {
@@ -99,7 +99,7 @@ namespace Magicodes.Admin.Web.Resources
                 {
                     var path = GetLocalizationFileForBootstrapSelect(CultureInfo.CurrentUICulture.Name.ToLower())
                                ?? GetLocalizationFileForBootstrapSelect(CultureInfo.CurrentUICulture.Name.Left(2).ToLower())
-                               ?? "lib/bootstrap-select/js/i18n/defaults-en_US.js";
+                               ?? "lib/bootstrap-select/dist/js/i18n/defaults-en_US.js";
                     return "~/" + path;
                 });
             }
@@ -114,7 +114,7 @@ namespace Magicodes.Admin.Web.Resources
                 {
                     if (localizationFile.StartsWith(cultureCode))
                     {
-                        return "lib/bootstrap-select/js/i18n/defaults-" + localizationFile + ".js";
+                        return "lib/bootstrap-select/dist/js/i18n/defaults-" + localizationFile + ".js";
                     }
                 }
             }
@@ -135,7 +135,7 @@ namespace Magicodes.Admin.Web.Resources
                 {
                     var path = GetLocalizationFileForjQueryTimeagoOrNull(CultureInfo.CurrentUICulture.Name.ToLower().Replace("-", "_"))
                        ?? GetLocalizationFileForjQueryTimeagoOrNull(CultureInfo.CurrentUICulture.Name.Left(2).ToLower())
-                       ?? "lib/jquery-timeago/locales/jquery.timeago.en.js";
+                       ?? "lib/timeago/locales/jquery.timeago.en.js";
                     return "~/" + path;
                 });
             }
@@ -145,7 +145,7 @@ namespace Magicodes.Admin.Web.Resources
         {
             try
             {
-                var relativeFilePath = "lib/jquery-timeago/locales/jquery.timeago." + cultureCode + ".js";
+                var relativeFilePath = "lib/timeago/locales/jquery.timeago." + cultureCode + ".js";
                 var physicalFilePath = GetPhysicalPath(relativeFilePath);
                 if (File.Exists(physicalFilePath))
                 {

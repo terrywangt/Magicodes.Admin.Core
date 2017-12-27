@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -9,7 +8,7 @@ using Abp.IO.Extensions;
 using Abp.Runtime.Session;
 using Abp.UI;
 using Abp.Web.Models;
-using Microsoft.AspNetCore.Mvc;
+using Magicodes.Admin.Authorization.Users.Profile.Dto;
 using Magicodes.Admin.IO;
 using Magicodes.Admin.Web.Helpers;
 
@@ -18,13 +17,14 @@ namespace Magicodes.Admin.Web.Controllers
     public abstract class ProfileControllerBase : AdminControllerBase
     {
         private readonly IAppFolders _appFolders;
+        private const int MaxProfilePictureSize = 5242880; //5MB
 
         protected ProfileControllerBase(IAppFolders appFolders)
         {
             _appFolders = appFolders;
         }
 
-        public JsonResult UploadProfilePicture()
+        public UploadProfilePictureOutput UploadProfilePicture()
         {
             try
             {
@@ -36,9 +36,9 @@ namespace Magicodes.Admin.Web.Controllers
                     throw new UserFriendlyException(L("ProfilePicture_Change_Error"));
                 }
 
-                if (profilePictureFile.Length > 1048576) //1MB.
+                if (profilePictureFile.Length > MaxProfilePictureSize)
                 {
-                    throw new UserFriendlyException(L("ProfilePicture_Warn_SizeLimit"));
+                    throw new UserFriendlyException(L("ProfilePicture_Warn_SizeLimit", AppConsts.MaxProfilPictureBytesUserFriendlyValue));
                 }
 
                 byte[] fileBytes;
@@ -63,12 +63,17 @@ namespace Magicodes.Admin.Web.Controllers
 
                 using (var bmpImage = new Bitmap(tempFilePath))
                 {
-                    return Json(new AjaxResponse(new { fileName = tempFileName, width = bmpImage.Width, height = bmpImage.Height }));
+                    return new UploadProfilePictureOutput
+                    {
+                        FileName = tempFileName,
+                        Width = bmpImage.Width,
+                        Height = bmpImage.Height
+                    };
                 }
             }
             catch (UserFriendlyException ex)
             {
-                return Json(new AjaxResponse(new ErrorInfo(ex.Message)));
+                return new UploadProfilePictureOutput(new ErrorInfo(ex.Message));
             }
         }
     }

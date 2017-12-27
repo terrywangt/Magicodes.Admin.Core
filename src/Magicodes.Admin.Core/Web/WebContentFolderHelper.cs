@@ -20,7 +20,7 @@ namespace Magicodes.Admin.Web
             }
 
             var directoryInfo = new DirectoryInfo(coreAssemblyDirectoryPath);
-            while (!DirectoryContains(directoryInfo.FullName, "Magicodes.Admin.sln"))
+            while (!DirectoryContains(directoryInfo.FullName, "Magicodes.Admin.Web.sln"))
             {
                 if (directoryInfo.Parent == null)
                 {

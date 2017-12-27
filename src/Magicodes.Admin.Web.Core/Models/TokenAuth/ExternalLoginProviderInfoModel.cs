@@ -1,5 +1,5 @@
-﻿using Abp.AutoMapper;
-using Magicodes.Admin.Web.Authentication.External;
+﻿using Abp.AspNetZeroCore.Web.Authentication.External;
+using Abp.AutoMapper;
 
 namespace Magicodes.Admin.Web.Models.TokenAuth
 {

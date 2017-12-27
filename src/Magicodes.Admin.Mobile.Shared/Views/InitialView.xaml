@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:behaviors="clr-namespace:Magicodes.Admin.Behaviors;assembly=Magicodes.Admin.Mobile.Shared"
+             xmlns:extensions="clr-namespace:Magicodes.Admin.Extensions.MarkupExtensions;assembly=Magicodes.Admin.Mobile.Shared"
+             xmlns:base="clr-namespace:Magicodes.Admin.ViewModels.Base;assembly=Magicodes.Admin.Mobile.Shared"
+             x:Class="Magicodes.Admin.Views.InitialView"
+             base:ViewManager.AutoWireViewModel="true"
+             Title="{extensions:Translate WelcomePage_Title}">
+
+    <ContentPage.Content>
+        <StackLayout Padding="10,10,10,10" 
+                     IsVisible="{Binding NoAuthorizedMenuItem}">
+            <Label Text="{extensions:Translate WelcomePage_Info}"
+                   VerticalOptions="CenterAndExpand" 
+                   HorizontalTextAlignment="Center"
+                   HorizontalOptions="CenterAndExpand" />
+        </StackLayout>
+    </ContentPage.Content>
+
+    <ContentPage.Behaviors>
+        <behaviors:EventHandlerBehavior EventName="Appearing">
+            <behaviors:InvokeCommandAction Command="{Binding PageAppearingCommand}" />
+        </behaviors:EventHandlerBehavior>
+    </ContentPage.Behaviors>
+</ContentPage>

@@ -5,113 +5,269 @@
 @using Magicodes.Admin.Editions
 @using Magicodes.Admin.Features
 @using Magicodes.Admin.Web.Areas.Admin.Models.Layout
+@using Magicodes.Admin.Web.Areas.Admin.Views.Shared.Components.AdminMenu
+@using Magicodes.Admin.Web.Theme
+@inject IUiThemeCustomizer UiThemeCustomizer
 @model HeaderViewModel
 @{
     Layout = null;
+    var isChatEnabled = SignalRFeature.IsAvailable && (AbpSession.MultiTenancySide == MultiTenancySides.Host || IsFeatureEnabled(AppFeatures.ChatFeature));
 }
-<div class="page-header-inner">
-    <div class="page-logo">
-        <a href="@Url.Action("Index", "Home", new {area = string.Empty})" target="_blank">
-            <img id="AppLogo" src="@Model.GetLogoUrl(ApplicationPath)" alt="logo" class="logo-default" width="168" height="33" />
-        </a>
-        <div class="menu-toggler sidebar-toggler">
-            <!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->
-        </div>
-    </div>
-    <a href="javascript:;" class="menu-toggler responsive-toggler" data-toggle="collapse" data-target=".navbar-collapse">
-    </a>
-    <div class="page-top">
-        <div class="top-menu">
-            <ul class="nav navbar-nav pull-right">
-
-                @if (Model.Languages.Count > 1)
-                {
-                    <li class="dropdown dropdown-language">
-                        <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                            <i class="@Model.CurrentLanguage.Icon"></i>
-                            <span class="langname">
-                                @Model.CurrentLanguage.DisplayName
-                            </span>
-                            <i class="fa fa-angle-down"></i>
-                        </a>
-                        <ul class="dropdown-menu">
-                            @foreach (var language in Model.Languages.Where(language => language.Name != Model.CurrentLanguage.Name))
+<header class="m-grid__item m-header"
+        @(!string.IsNullOrEmpty(UiThemeCustomizer.HeaderDesktopMinimizeMode) ? "data-minimize=\"" + UiThemeCustomizer.HeaderDesktopMinimizeMode + "\"" : "")
+        @(UiThemeCustomizer.HeaderMobileFixedHeader ? "data-minimize-mobile=\"" + UiThemeCustomizer.HeaderDesktopMinimizeMode + "\"" : "")
+        data-minimize-offset="200" data-minimize-mobile-offset="200">
+    <div class="m-header__top">
+        <div class="m-container @(UiThemeCustomizer.LayoutType == "boxed" ? "m-container--responsive":"m-container--fluid") m-container--xxl m-container--full-height">
+            <div class="m-stack m-stack--ver m-stack--desktop">
+                <!-- BEGIN: Brand -->
+                <div class="m-stack__item m-brand  m-brand--skin-@UiThemeCustomizer.LeftAsideAsideSkin d-print-none">
+                    <div class="m-stack m-stack--ver m-stack--general">
+                        <div class="m-stack__item m-stack__item--middle m-brand__logo">
+                            <a href="@Url.Action("Index", "Home", new {area = string.Empty})" target="_blank" class="m-brand__logo-wrapper">
+                                <img id="AppLogo" src="@Model.GetLogoUrl(ApplicationPath, UiThemeCustomizer.LeftAsideAsideSkin)" alt="logo" width="139" height="35" />
+                            </a>
+                        </div>
+                        <div class="m-stack__item m-stack__item--middle m-brand__tools">
+                            <!-- BEGIN: Left Aside Minimize Toggle -->
+                            @if (UiThemeCustomizer.IsLeftMenuUsed)
                             {
-                                <li>
-                                    <a href="~/AbpLocalization/ChangeCulture?cultureName=@language.Name&returnUrl=@Context.Request.Path" href="#">
-                                        <i class="@language.Icon"></i> @language.DisplayName
+                                if (UiThemeCustomizer.LeftAsideAllowAsideMinimizing)
+                                {
+                                    <a href="javascript:;" id="m_aside_left_minimize_toggle" class="m-brand__icon m-brand__toggler m-brand__toggler--left m--visible-desktop-inline-block">
+                                        <span></span>
                                     </a>
-                                </li>
+                                }
+                                else if (UiThemeCustomizer.LeftAsideAllowAsideHiding)
+                                {
+                                    <a href="javascript:;" id="m_aside_left_hide_toggle" class="m-brand__icon m-brand__toggler m-brand__toggler--left m--visible-desktop-inline-block">
+                                        <span></span>
+                                    </a>
+                                }
                             }
-                        </ul>
-                    </li>
-                }
 
-                <!-- BEGIN NOTIFICATION DROPDOWN -->
-                <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
-                <li class="dropdown dropdown-extended dropdown-notification dropdown-dark" id="header_notification_bar">
-
-                </li>
-                <!-- END NOTIFICATION DROPDOWN -->
-
-                <li class="separator hide"> </li>
-
-                <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
-                <li class="dropdown dropdown-user dropdown-dark">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" title="@(Model.IsImpersonatedLogin ? L("YouCanBackToYourAccount") : "")">
-                        <span class="username username-hide-on-mobile">
-                            @if (Model.IsImpersonatedLogin)
+                            <!-- END -->
+                            <!-- BEGIN: Responsive Aside Left Menu Toggler -->
+                            @if (UiThemeCustomizer.IsLeftMenuUsed)
                             {
-                                <i class="icon-action-undo font-red-sunglo"></i>
+                            <a href="javascript:;" id="m_aside_left_offcanvas_toggle" class="m-brand__icon m-brand__toggler m-brand__toggler--left m--visible-tablet-and-mobile-inline-block">
+                                <span></span>
+                            </a>
                             }
-                            @Html.Raw(Model.GetShownLoginName())
-                        </span>
-                        <img id="HeaderProfilePicture" alt="" class="img-circle" src="@Url.Action("GetProfilePicture", "Profile", new {area = string.Empty})?t=@Clock.Now.Ticks.ToString()" />
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-default">
-                        @if (Model.IsImpersonatedLogin)
-                        {
-                            <li>
-                                <a id="UserProfileBackToMyAccountButton" href="#"><i class="icon-action-undo"></i> <strong>@L("BackToMyAccount")</strong></a>
-                            </li>
-                            <li class="divider"></li>
-                        }
-                        <li class="dropdown-submenu">
-                            <a class="open-left" href=""><i class="icon-link"></i> @L("LinkedAccounts")</a>
-                            <ul id="RecentlyUsedLinkedUsers" class="dropdown-menu" style=""></ul>
-                        </li>
-                        <li>
-                            <a id="UserProfileChangePasswordLink" href="#"><i class="icon-key"></i> @L("ChangePassword")</a>
-                        </li>
-                        <li>
-                            <a id="ShowLoginAttemptsLink" href="#"><i class="icon-shield"></i> @L("LoginAttempts")</a>
-                        </li>
-                        <li>
-                            <a id="UserProfileChangePictureLink" href="#"><i class="icon-user"></i> @L("ChangeProfilePicture")</a>
-                        </li>
-                        <li>
-                            <a id="UserProfileMySettingsLink" href="#"><i class="icon-settings"></i> @L("MySettings")</a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="@Url.Action("Logout", "Account", new {area = string.Empty})"><i class="icon-logout"></i> @L("Logout")</a>
-                        </li>
-                    </ul>
-                </li>
+                            <!-- END -->
+                            <!-- begin::Responsive Header Menu Toggler-->
+                            @if (UiThemeCustomizer.IsTopMenuUsed)
+                            {
+                            <a id="m_aside_header_menu_mobile_toggle" href="javascript:;" class="m-brand__icon m-brand__toggler m--visible-tablet-and-mobile-inline-block">
+                                <span></span>
+                            </a>
+                            }
+                            <!-- end::Responsive Header Menu Toggler-->
+                            <!-- BEGIN: Topbar Toggler -->
+                            <a id="m_aside_header_topbar_mobile_toggle" href="javascript:;" class="m-brand__icon m--visible-tablet-and-mobile-inline-block">
+                                <i class="flaticon-more"></i>
+                            </a>
+                            <!-- BEGIN: Topbar Toggler -->
+                        </div>
+                    </div>
+                </div>
+                <!-- END: Brand -->
+                <div class="m-stack__item m-stack__item--fluid m-header-head d-print-none" id="m_header_nav">
+                    <!-- BEGIN: Topbar -->
+                    <div id="m_header_topbar" class="m-topbar  m-stack m-stack--ver m-stack--general">
+                        <div class="m-stack__item m-topbar__nav-wrapper">
+                            <ul class="m-topbar__nav m-nav m-nav--inline">
+                                @if (Model.Languages.Count > 1)
+                                {
+                                <li class="m-nav__item m-dropdown m-dropdown--large m-dropdown--arrow m-dropdown--align-center m-dropdown--mobile-full-width m-dropdown--skin-light m-list-search m-list-search--skin-light m-dropdown--open dropdown-language">
+                                    <a href="javascript:;" class="m-nav__link m-dropdown__toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                                        <i class="@Model.CurrentLanguage.Icon"></i>
+                                        <span class="m-menu__link-text langname">
+                                            @Model.CurrentLanguage.DisplayName
+                                        </span>
+                                        <i class="fa fa-angle-down"></i>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        @foreach (var language in Model.Languages.Where(language => language.Name != Model.CurrentLanguage.Name))
+                                            {
+                                            <li>
+                                                <a href="~/AbpLocalization/ChangeCulture?cultureName=@language.Name&returnUrl=@Context.Request.Path" href="#">
+                                                    <i class="@language.Icon"></i> @language.DisplayName
+                                                </a>
+                                            </li>
+                                            }
+                                    </ul>
+                                </li>
+                                }
+                                <li class="m-nav__item m-topbar__notifications m-topbar__notifications--img m-dropdown m-dropdown--large m-dropdown--header-bg-fill m-dropdown--arrow m-dropdown--align-center 	m-dropdown--mobile-full-width" data-dropdown-toggle="click" data-dropdown-persistent="true" id="header_notification_bar">
 
-                @if (SignalRFeature.IsAvailable && (AbpSession.MultiTenancySide == MultiTenancySides.Host || IsFeatureEnabled(AppFeatures.ChatFeature)))
-                {
-                    <!-- BEGIN QUICK SIDEBAR TOGGLER -->
-                    <li class="dropdown dropdown-extended quick-sidebar-toggler">
-                        <span class="sr-only">Toggle Quick Sidebar</span>
-                        <i class="icon-speech"></i>
-                        <span id="UnreadChatMessageCount" class="badge badge-danger hidden">0</span>
-                    </li>
-                    <!-- END QUICK SIDEBAR TOGGLER -->
-                }
-            </ul>
+                                </li>
+                                <li class="m-nav__item m-topbar__user-profile m-topbar__user-profile--img  m-dropdown m-dropdown--medium m-dropdown--arrow m-dropdown--header-bg-fill m-dropdown--align-right m-dropdown--mobile-full-width m-dropdown--skin-light" data-dropdown-toggle="click">
+                                    <a href="#" class="m-nav__link m-dropdown__toggle">
+                                        <span class="m-topbar__username m--font-primary">
+                                            @if (Model.IsImpersonatedLogin)
+                                            {
+                                            <i class="fa fa-reply m--font-danger"></i>
+                                            }
+                                            @Html.Raw(Model.GetShownLoginName())
+                                        </span>
+                                        <span class="m-topbar__userpic">
+                                            <img alt="" class="header-profile-picture m--img-rounded m--marginless m--img-centered" src="@Url.Action("GetProfilePicture", "Profile", new {area = string.Empty})?t=@Clock.Now.Ticks.ToString()" />
+                                        </span>
+                                    </a>
+                                    <div class="m-dropdown__wrapper">
+                                        <span class="m-dropdown__arrow m-dropdown__arrow--right m-dropdown__arrow--adjust"></span>
+                                        <div class="m-dropdown__inner">
+                                            <div class="m-dropdown__header m--align-center" style="background: url(/Common/Images/user_profile_bg.png); background-size: cover;">
+                                                <div class="m-card-user m-card-user--skin-dark">
+                                                    <div class="m-card-user__pic">
+                                                        <img alt="" class="header-profile-picture m--img-rounded m--marginless m--img-centered" src="@Url.Action("GetProfilePicture", "Profile", new {area = string.Empty})?t=@Clock.Now.Ticks.ToString()" />
+                                                    </div>
+                                                    <div class="m-card-user__details">
+                                                        <span class="m-card-user__name m--font-weight-500">
+                                                            @Html.Raw(Model.GetShownLoginName())
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="m-dropdown__body">
+                                                <div class="m-dropdown__content">
+                                                    <ul class="m-nav m-nav--skin-light">
+                                                        @if (Model.IsImpersonatedLogin)
+                                                        {
+                                                        <li class="m-nav__item">
+                                                            <a href="#" class="m-nav__link">
+                                                                <i class="m-nav__link-icon fa fa-reply m--font-danger"></i>
+                                                                <span class="m-nav__link-title">
+                                                                    <span class="m-nav__link-wrap">
+                                                                        <span id="UserProfileBackToMyAccountButton" class="m-nav__link-text">
+                                                                            @L("BackToMyAccount")
+                                                                        </span>
+                                                                    </span>
+                                                                </span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="m-nav__separator m-nav__separator--fit"></li>
+                                                        }
+                                                        <li class="m-nav__item">
+                                                            <a href="#" class="m-nav__link">
+                                                                <i class="m-nav__link-icon flaticon-user-settings"></i>
+                                                                <span class="m-nav__link-title">
+                                                                    <span class="m-nav__link-wrap">
+                                                                        <span id="ManageLinkedAccountsLink" class="m-nav__link-text">
+                                                                            @L("ManageLinkedAccounts")
+                                                                        </span>
+                                                                    </span>
+                                                                </span>
+                                                            </a>
+                                                            <ul id="RecentlyUsedLinkedUsers" class="m-nav linked-accounts"></ul>
+                                                        </li>
+                                                        <li class="m-nav__separator m-nav__separator--fit"></li>
+                                                        <li class="m-nav__item">
+                                                            <a href="#" class="m-nav__link">
+                                                                <i class="m-nav__link-icon flaticon-more-v6"></i>
+                                                                <span class="m-nav__link-title">
+                                                                    <span class="m-nav__link-wrap">
+                                                                        <span id="UserProfileChangePasswordLink" class="m-nav__link-text">
+                                                                            @L("ChangePassword")
+                                                                        </span>
+                                                                    </span>
+                                                                </span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="m-nav__item">
+                                                            <a href="#" class="m-nav__link">
+                                                                <i class="m-nav__link-icon flaticon-list"></i>
+                                                                <span class="m-nav__link-title">
+                                                                    <span class="m-nav__link-wrap">
+                                                                        <span id="ShowLoginAttemptsLink" class="m-nav__link-text">
+                                                                            @L("LoginAttempts")
+                                                                        </span>
+                                                                    </span>
+                                                                </span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="m-nav__item">
+                                                            <a href="#" class="m-nav__link">
+                                                                <i class="m-nav__link-icon flaticon-profile-1"></i>
+                                                                <span class="m-nav__link-title">
+                                                                    <span class="m-nav__link-wrap">
+                                                                        <span id="UserProfileChangePictureLink" class="m-nav__link-text">
+                                                                            @L("ChangeProfilePicture")
+                                                                        </span>
+                                                                    </span>
+                                                                </span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="m-nav__item">
+                                                            <a href="#" class="m-nav__link">
+                                                                <i class="m-nav__link-icon flaticon-cogwheel"></i>
+                                                                <span class="m-nav__link-title">
+                                                                    <span class="m-nav__link-wrap">
+                                                                        <span id="UserProfileMySettingsLink" class="m-nav__link-text">
+                                                                            @L("MySettings")
+                                                                        </span>
+                                                                    </span>
+                                                                </span>
+                                                            </a>
+                                                        </li>
+                                                        @if (!Model.HasUiCustomizationPagePermission)
+                                                        {
+                                                        <li class="m-nav__item">
+                                                            <a href="@Url.Action("Index", "UiCustomization")" class="m-nav__link">
+                                                                <i class="m-nav__link-icon flaticon-medical"></i>
+                                                                <span class="m-nav__link-title">
+                                                                    <span class="m-nav__link-wrap">
+                                                                        <span class="m-nav__link-text">
+                                                                            @L("VisualSettings")
+                                                                        </span>
+                                                                    </span>
+                                                                </span>
+                                                            </a>
+                                                        </li>
+                                                        }
+                                                        <li class="m-nav__separator m-nav__separator--fit"></li>
+                                                        <li class="m-nav__item">
+                                                            <a href="@Url.Action("Logout", "Account", new {area = string.Empty})" class="btn m-btn--pill btn-secondary m-btn m-btn--custom m-btn--label-brand m-btn--bolder">@L("Logout")</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                @if (isChatEnabled)
+                                {
+                                    <li id="chat_is_connecting_icon" class="m-nav__item m-topbar__notifications m-topbar__notifications--img m-dropdown m-dropdown--large m-dropdown--header-bg-fill m-dropdown--arrow m-dropdown--align-center 	m-dropdown--mobile-full-width">
+                                        <a href="javascript:;" class="m-nav__link">
+                                            <span class="m-nav__link-icon">
+                                                <img src="/Common/Images/loading.gif" style="width: 23px;" tooltip="@L("ChatIsConnecting")" placement="left" />
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li id="m_quick_sidebar_toggle" class="m-nav__item d-none">
+                                        <a href="#" class="m-nav__link m-dropdown__toggle">
+                                            <span class="m-nav__link-icon">
+                                                <i class="flaticon-chat"></i>
+                                            </span>
+                                            <span class="m-badge m-badge--danger d-none" id="UnreadChatMessageCount">0</span>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- END: Topbar -->
+                </div>
+            </div>
         </div>
     </div>
+    @if (UiThemeCustomizer.IsTopMenuUsed)
+    {
+        <div class="m-header__bottom m-aside-menu--skin-@UiThemeCustomizer.LeftAsideAsideSkin">
+            @await Component.InvokeAsync(typeof(AdminMenuViewComponent), new { currentPageName = ViewBag.CurrentPageName })
+        </div>
+    }
 
     @if (AbpSession.MultiTenancySide != MultiTenancySides.Host)
     {
@@ -119,19 +275,10 @@
             (Model.LoginInformations.Tenant.IsInTrialPeriod || Model.LoginInformations.Tenant.SubscriptionIsExpiringSoon(Model.SubscriptionExpireNootifyDayCount)))
         {
             <style>
-                .page-header-fixed .page-container {
-                    margin-top: 100px;
-                }
-
-                @@media (max-width: 991px) {
-                    .page-header-fixed .page-container {
-                        margin-top: 15px !important;
-                    }
-                }
-
-                @@media (max-width: 767px) {
-                    .page-header-fixed .page-container {
-                        margin-top: 15px !important;
+                @@media (min-width: 993px) {
+                    .m-header--fixed .m-body,
+                    .m-aside-left--fixed.m-header--fixed .m-aside-left, .m-aside-left--fixed.m-header--static .m-aside-left {
+                        margin-top: 30px !important;
                     }
                 }
             </style>
@@ -140,7 +287,7 @@
                 {
                     @Html.Raw(L("TrialSubscriptionNotification",
                         "<strong>" + Model.LoginInformations.Tenant.Edition.DisplayName + "</strong>",
-                        "<a href='" + Url.Action("Buy", "Payment", new {area = "", editionId = Model.LoginInformations.Tenant.Edition.Id, editionPaymentType = EditionPaymentType.BuyNow}) + "'>" + L("ClickHere") + "</a>")
+                        "<a href='" + Url.Action("Buy", "Payment", new { area = "", editionId = Model.LoginInformations.Tenant.Edition.Id, editionPaymentType = EditionPaymentType.BuyNow }) + "'>" + L("ClickHere") + "</a>")
                         )
                 }
                 @if (Model.LoginInformations.Tenant.SubscriptionIsExpiringSoon(Model.SubscriptionExpireNootifyDayCount))
@@ -159,73 +306,90 @@
             </div>
         }
     }
-</div>
+
+</header>
+
 
 
 <script id="linkedAccountsSubMenuTemplate" type="x-tmpl-mustache">
     {{#items}}
-    <li>
-        <a href="" data-user-id="{{id}}" data-tenant-id="{{tenantId}}" class="recently-linked-user">
-            {{shownUserName}}
+    <li class="m-nav__item">
+        <a href="" data-user-id="{{id}}" data-tenant-id="{{tenantId}}" class="recently-linked-user m-nav__link">
+            <span class="m-nav__link-bullet m-nav__link-bullet--dot">
+                <span></span>
+            </span>
+            <span class="m-nav__link-text">
+                {{shownUserName}}
+            </span>
         </a>
     </li>
     {{/items}}
-    {{#hasLinkedUsers}}
-    <li class="divider"></li>
-    {{/hasLinkedUsers}}
-    <li>
-        <a href="" id="ManageLinkedAccountsLink">
-            <i class="icon-settings"></i> @L("ManageAccounts")
-        </a>
-    </li>
 </script>
 <script id="headerNotificationBarTemplate" type="x-tmpl-mustache">
-    <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-        <i class="icon-bell"></i>
-        {{#unreadCount}}
-        <span class="badge badge-danger"> {{unreadCount}} </span>
-        {{/unreadCount}}
+    <a href="#" class="m-nav__link m-dropdown__toggle" id="m_topbar_notification_icon{{^unreadMessageExists}}_not{{/unreadMessageExists}}">
+        <span class="m-nav__link-badge m-badge m-badge--dot m-badge--dot-small {{#unreadMessageExists}}m-badge--danger{{/unreadMessageExists}}"></span>
+        <span class="m-nav__link-icon">
+            <i class="flaticon-music-2"></i>
+        </span>
     </a>
-    <ul class="dropdown-menu" id="UserNotificationDropdown">
-        <li class="external notifications-header">
-            <div class="text-left">
-                {{#unreadCount}}
-                <a href="" id="setAllNotificationsAsReadLink">@L("SetAllAsRead")</a>
-                {{/unreadCount}}
-                <a id="openNotificationSettingsModalLink" class="pull-right" href="">@L("Settings")</a>
+    <div class="m-dropdown__wrapper">
+        <span class="m-dropdown__arrow m-dropdown__arrow--center"></span>
+        <div class="m-dropdown__inner">
+            <div class="m-dropdown__header m--align-center" style="background: url(/metronic/dist/html/default/assets/demo/default/media/img/misc/notification_bg.jpg); background-size: cover;">
+                <span class="m-dropdown__header-title">
+                    {{unreadCount}} @L("NewNotifications")
+                </span>
             </div>
-        </li>
-        <li>
-            <ul class="dropdown-menu-list">
-                {{#notifications}}
-                <li>
-                    <a href="{{url}}" class="user-notification-item {{#url}}user-notification-item-clickable{{/url}} {{#isUnread}}user-notification-item-unread{{/isUnread}}">
-                        <span class="details">
-                            <i class="{{icon}}"></i> {{text}}
-                        </span>
-                        <div>
-                            <span class="notification-time" title="{{time}}">{{timeAgo}}</span>
-                            {{#isUnread}}
-                            <span>
-                                -
-                                <span data-notification-id="{{userNotificationId}}" class="set-as-read-text set-notification-as-read">@L("SetAsRead")</span>
-                            </span>
-                            {{/isUnread}}
+            <div class="m-dropdown__body">
+                <div class="m-dropdown__content">
+                    <div class="row">
+                        <div class="text-left col-md-8">
+                            {{#unreadCount}}
+                            <a href="" id="setAllNotificationsAsReadLink">@L("SetAllAsRead")</a>
+                            {{/unreadCount}}
                         </div>
-                    </a>
-                </li>
-                {{/notifications}}
-            </ul>
-            {{^notifications.length}}
-            <div class="notification-empty-text">
-                @L("ThereIsNoNotification")
+                        <div class="text-right col-md-4">
+                            <a id="openNotificationSettingsModalLink" class="text-right" href="">@L("Settings")</a>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="m-scrollable" data-scrollable="true" data-max-height="250" data-mobile-max-height="200">
+                        <div class="m-list-timeline m-list-timeline--skin-light m-nav">
+                            <div class="m-list-timeline__items {{^notifications.length}}empty{{/notifications.length}}">
+                                {{#notifications}}
+                                <div class="m-list-timeline__item user-notification-item {{#url}}user-notification-item-clickable{{/url}} {{#isUnread}}user-notification-item-unread{{/isUnread}}" " data-url="{{url}}">
+                                    <span class="m-list-timeline__badge m-list-timeline__badge--success"></span>
+                                    <span class="m-list-timeline__icon {{icon}}"></span>
+                                    <span class="m-list-timeline__text">
+                                        {{text}}
+                                    </span>
+                                    <span class="m-list-timeline__time">
+                                        {{timeAgo}}
+                                        {{#isUnread}}
+                                        <span>
+                                            <a href="javascript:;" data-notification-id="{{userNotificationId}}" class="m-link set-notification-as-read">@L("SetAsRead")</a>
+                                        </span>
+                                        {{/isUnread}}
+                                    </span>
+                                </div>
+                                {{/notifications}}
+                                {{^notifications.length}}
+                                <span class="notification-empty-text">
+                                    @L("ThereIsNoNotification")
+                                </span>
+                                {{/notifications.length}}
+                            </div>
+                            {{#notifications.length}}
+                            <div class="m-nav__separator m-nav__separator--fit"></div>
+                            <div class="external notifications-footer">
+                                <div class="text-center"><a href="@Url.Action("Index", "Notifications", new {area = "Admin"})">@L("SeeAllNotifications")</a></div>
+                            </div>
+                            {{/notifications.length}}
+                        </div>
+                    </div>
+                </div>
             </div>
-            {{/notifications.length}}
-        </li>
-        {{#notifications.length}}
-        <li class="external notifications-footer">
-            <div class="text-center"><a href="@Url.Action("Index", "Notifications", new {area = "Admin"})">@L("SeeAllNotifications")</a></div>
-        </li>
-        {{/notifications.length}}
-    </ul>
+        </div>
+    </div>
+
 </script>

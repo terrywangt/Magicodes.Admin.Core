@@ -147,9 +147,9 @@
     <text name="ExportToExcel" value="Export to excel" />
     <text name="ChangeProfilePicture" value="Change profile picture" />
     <text name="TenantName_Regex_Description" value="Tenant name must be at least 2 chars, starts with a letter and continue with letter, number, dash or underscore." />
-    <text name="ProfilePicture_Change_Info" value="You can select a JPG/JPEG/PNG file with a maximum 1MB size." />
+    <text name="ProfilePicture_Change_Info" value="You can select a JPG/JPEG/PNG file with a maximum {0}MB size." />
     <text name="ProfilePicture_Change_Error" value="Your profile picture could not be changed." />
-    <text name="ProfilePicture_Warn_SizeLimit" value="Picture size must be smalled than 1MB. Please select another file." />
+    <text name="ProfilePicture_Warn_SizeLimit" value="Picture size must be smalled than {0}MB. Please select another file." />
     <text name="ProfilePicture_Warn_FileType" value="You can only select JPG/JPEG file. Please select another file." />
     <text name="Dashboard" value="Dashboard" />
     <text name="DashboardHeaderInfo" value="statistics and reports" />
@@ -322,7 +322,7 @@
     <text name="YouCannotLinkToSameAccount">You can not link to same account!</text>
     <text name="ChangePasswordBeforeLinkToAnAccount">You must change your password before linking this account!</text>
     <text name="LinkedAccounts">Linked accounts</text>
-    <text name="ManageAccounts">Manage accounts</text>
+    <text name="ManageLinkedAccounts">Manage linked accounts</text>
     <text name="LinkNewAccount">Link new account</text>
     <text name="SuccessfullyUnlinked">Successfully unlinked</text>
     <text name="LinkedUserDeleteWarningMessage">Link to user {0} will be deleted.</text>
@@ -370,7 +370,7 @@
     <text name="LoginAttempts">Login attempts</text>
     <text name="Failed">Failed</text>
     <text name="NewTenant">New tenant</text>
-    <text name="ResizedProfilePicture_Warn_SizeLimit" value="Resized picture size must be smalled than 100KB. Please resize down and try again." />
+    <text name="ResizedProfilePicture_Warn_SizeLimit" value="Resized picture size must be smalled than {0}KB. Please resize down and try again." />
     <text name="RegisterFormUserNameInvalidMessage">Please do not enter an email address for username.</text>
     <text name="UseHostDatabase" value="Use host database" />
     <text name="DatabaseConnectionString" value="Database connection string" />
@@ -481,7 +481,7 @@
     <text name="CustomCSS">Custom CSS</text>
     <text name="Upload">Upload</text>
     <text name="Download">Download</text>
-    <text name="UploadLogo_Info">Select a JPG/JPEG/PNG/GIF file with a maximum of 30KB size and 168x33 pixel resolution.</text>
+    <text name="UploadLogo_Info">Select a JPG/JPEG/PNG/GIF file with a maximum of 30KB size and 139x35 pixel resolution.</text>
     <text name="UploadCSS_Info">Select a .css file with a maximum of 1MB size.</text>
     <text name="Browse">Browse</text>
     <text name="Appearance">Appearance</text>
@@ -690,5 +690,76 @@
     <text name="InvoiceNo">Invoice No</text>
     <text name="Date">Date</text>
     <text name="ThisInvoiceIsNotYours">This invoice is not yours !</text>
+    <text name="UiCustomizationHeaderInfo">Change the look of UI</text>
+    <text name="UiCustomization_Layout">Layout</text>
+    <text name="UiCustomization_LayoutType">Layout type</text>
+    <text name="UiCustomization_Fluid">Fluid</text>
+    <text name="UiCustomization_Boxed">Boxed</text>
+    <text name="UiCustomization_PageLoader">Page loader</text>
+    <text name="UiCustomization_Disabled">Disabled</text>
+    <text name="UiCustomization_Default">Default</text>
+    <text name="UiCustomization_SpinnerMessage">Spinner message</text>
+    <text name="UiCustomization_ContentSkin">Content skin</text>
+    <text name="UiCustomization_LightGrey">Light grey</text>
+    <text name="UiCustomization_White">White</text>
+    <text name="UiCustomization_DesktopFixedHeader">Fixed header</text>
+    <text name="UiCustomization_DesktopMinimizeMode">Minimize mode</text>
+    <text name="UiCustomization_None">None</text>
+    <text name="UiCustomization_Hide">Hide</text>
+    <text name="UiCustomization_MobileFixedHeader">Fixed header</text>
+    <text name="UiCustomization_DisplayHeaderMenu">Display header menu</text>
+    <text name="UiCustomization_DropdownSkinDesktop">Skin</text>
+    <text name="UiCustomization_Light">Light</text>
+    <text name="UiCustomization_Dark">Dark</text>
+    <text name="UiCustomization_DisplaySubmenuArrowDesktop">Display submenu arrow</text>
+    <text name="UiCustomization_DropdownSkin">Dropdown skin</text>
+    <text name="UiCustomization_Menu">Menu</text>
+    <text name="UiCustomization_MenuPosition">Position</text>
+    <text name="UiCustomization_Left">Left</text>
+    <text name="UiCustomization_Top">Top</text>
+    <text name="UiCustomization_MenuSkin">Menu skin</text>
+    <text name="UiCustomization_FixedMenu">Fixed menu</text>
+    <text name="UiCustomization_AllowAsideMinimizing">Allow aside minimizing</text>
+    <text name="UiCustomization_DefaultMinimizedAside">Default minimized aside</text>
+    <text name="UiCustomization_AllowAsideHiding">Allow aside hiding</text>
+    <text name="UiCustomization_SubmenuToggle">Submenu toggle</text>
+    <text name="UiCustomization_Dropdown">Dropdown</text>
+    <text name="UiCustomization_Accordion">Accordion</text>
+    <text name="UiCustomization_DropdownSubmenuSkin">Dropdown submenu skin</text>
+    <text name="UiCustomization_Inherit">Inherit</text>
+    <text name="UiCustomization_DropdownSubmenuArrow">Dropdown submenu arrow</text>
+    <text name="UiCustomization_Footer">Footer</text>
+    <text name="UiCustomization_FixedFooter">Fixed footer</text>
+    <text name="UiCustomization_PushFooter">Push footer</text>
+    <text name="UiCustomization_Header">Header bar</text>
+    <text name="VisualSettings">Visual Settings</text>
+    <text name="SaveAsSystemDefault">Save as system default</text>
+    <text name="UseSystemDefaults">Use system defaults</text>
+    <text name="NewNotifications">New notifications</text>
+    <text name="Subscriptions">Subscriptions</text>
+    <text name="UiCustomization_DefaultHiddenAside">Default hidden aside</text>
+    <text name="LoadWithThreeDot">Loading...</text>
+    <text name="NoInternetConnection">You are currently not connected to internet</text>
+    <text name="Warning">Warning</text>
+    <text name="RequestTimedOut">Your request timed out, please try again later.</text>
+    <text name="AnErrorOccurred">An error occurred, please try again later.</text>
+    <text name="AnHttpErrorOccured">There was an error communicating with the server.</text>
+    <text name="ChangePasswordToLogin">You must change your password before logging on!</text>
+    <text name="NoPermission">You do not have any permission. Contact your administrator.</text>
+    <text name="NoCamera">No available camera found!</text>
+    <text name="PickFromGallery">Pick from gallery</text>
+    <text name="TakePhoto">Take a photo</text>
+    <text name="Rotate">Rotate</text>
+    <text name="PasswordsDontMatch">Passwords do not match!</text>
+    <text name="RequiredField">{0} field is required.</text>
+    <text name="StringLengthDoesntMatch">The field {0} must be a minimum length of {1} and a maximum length of {2}.</text>
+    <text name="LessThanMinStringLength">The field {0} must be a minumum length of {1}.</text>
+    <text name="InvalidPhoneNumber">The field {0} is not a valid phone number</text>
+    <text name="InvalidRegularExpression">The field {0} is not valid.</text>
+    <text name="LengthNotInRange">The lenth of field {0} must be between {1} and {2}.</text>
+    <text name="UiCustomization_Mobile">Mobile</text>
+    <text name="UiCustomization_Desktop">Desktop</text>
+    <text name="TwoFactorLoginIsNotSupported">Two factor login is not currenlty supported!</text>
+    <text name="LinkToCurrentPage">Link to current page</text>
   </texts>
 </localizationDictionary>

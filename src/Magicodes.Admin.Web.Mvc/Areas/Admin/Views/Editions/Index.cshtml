@@ -5,62 +5,50 @@
     ViewBag.CurrentPageName = AdminPageNames.Host.Editions;
 }
 @section Styles
-{
-    <environment names="Development">
-        <link rel="stylesheet" href="~/view-resources/Areas/Admin/Views/Common/_FeaturesTree.css" asp-append-version="true" />
-        <link rel="stylesheet" href="~/view-resources/Areas/Admin/Views/Editions/Index.css" asp-append-version="true" />
-    </environment>
-
-    <environment names="Staging,Production">
-        <link rel="stylesheet" href="~/view-resources/Areas/Admin/Views/Common/_FeaturesTree.min.css" asp-append-version="true" />
-        <link rel="stylesheet" href="~/view-resources/Areas/Admin/Views/Editions/Index.min.css" asp-append-version="true" />
-    </environment>
+    {
+    <link rel="stylesheet" abp-href="/view-resources/Areas/Admin/Views/_Bundles/host-list.css" asp-append-version="true" />
 }
 
 @section Scripts
-{
-    <environment names="Development">
-        <script src="~/lib/inputmask/dist/jquery.inputmask.bundle.js" asp-append-version="true"></script>
-        <script src="~/view-resources/Areas/Admin/Views/Common/_FeaturesTree.js" asp-append-version="true"></script>
-        <script src="~/view-resources/Areas/Admin/Views/Editions/_CreateOrEditModal.js" asp-append-version="true"></script>
-        <script src="~/view-resources/Areas/Admin/Views/Editions/Index.js" asp-append-version="true"></script>
-    </environment>
-
-    <environment names="Staging,Production">
-        <script src="~/lib/inputmask/dist/min/jquery.inputmask.bundle.min.js" asp-append-version="true"></script>
-        <script src="~/view-resources/Areas/Admin/Views/Common/_FeaturesTree.min.js" asp-append-version="true"></script>
-        <script src="~/view-resources/Areas/Admin/Views/Editions/_CreateOrEditModal.min.js" asp-append-version="true"></script>
-        <script src="~/view-resources/Areas/Admin/Views/Editions/Index.min.js" asp-append-version="true"></script>
-    </environment>
+    {
+    <script abp-src="/view-resources/Areas/Admin/Views/_Bundles/host-list.js" asp-append-version="true"></script>
 }
-<div class="row margin-bottom-5">
-    <div class="col-xs-6">
-        <div class="page-head">
-            <div class="page-title">
-                <h1>
-                    <span>@L("Editions")</span> <small>@L("EditionsHeaderInfo")</small>
-                </h1>
-            </div>
+
+<div class="m-subheader ">
+    <div class="row align-items-center">
+        <div class="mr-auto col-sm-12 col-md-6">
+            <h3 class="m-subheader__title m-subheader__title--separator">
+                <span>@L("Editions")</span>
+            </h3>
+            <span class="m-section__sub">
+                @L("EditionsHeaderInfo")
+            </span>
         </div>
-    </div>
-    <div class="col-xs-6 text-right">
-        @if (IsGranted(AppPermissions.Pages_Editions_Create))
-        {
-            <button id="CreateNewEditionButton" class="btn btn-primary blue"><i class="fa fa-plus"></i> @L("CreateNewEdition")</button>
-        }
+        <div class="col-sm-12 col-md-6 text-right">
+            @if (IsGranted(AppPermissions.Pages_Editions_Create))
+            {
+                <button id="CreateNewEditionButton" class="btn btn-primary blue"><i class="fa fa-plus"></i> @L("CreateNewEdition")</button>
+            }
+        </div>
     </div>
 </div>
 
-<div class="portlet light margin-bottom-0">
-    <div class="portlet-body">
-        <table id="EditionsTable" class="display table table-striped table-bordered table-hover dt-responsive nowrap">
-            <thead>
-            <tr>
-                <th>@L("Actions")</th>
-                <th>@L("EditionName")</th>
-                <th>@L("CreationTime")</th>
-            </tr>
-            </thead>
-        </table>
+
+<div class="m-content">
+    <div class="m-portlet m-portlet--mobile">
+        <div class="m-portlet__body">
+            <div class="row align-items-center">
+                <table id="EditionsTable" class="display table table-striped table-bordered table-hover dt-responsive nowrap">
+                    <thead>
+                        <tr>
+                            <th>@L("Actions")</th>
+                            <th>@L("EditionName")</th>
+                            <th>@L("CreationTime")</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+
+        </div>
     </div>
 </div>

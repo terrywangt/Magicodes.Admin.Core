@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Abp.AspNetZeroCore.Validation;
 using Abp.Auditing;
 using Abp.Authorization.Users;
 using Abp.Extensions;
 using Magicodes.Admin.Authorization.Users;
 using Magicodes.Admin.Security;
-using Magicodes.Admin.Validation;
 
 namespace Magicodes.Admin.Web.Models.Account
 {

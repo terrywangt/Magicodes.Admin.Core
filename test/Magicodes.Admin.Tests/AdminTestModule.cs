@@ -1,13 +1,15 @@
 ﻿using System;
+using System.IO;
+using Abp.AspNetZeroCore;
 using Abp.AutoMapper;
 using Abp.Configuration.Startup;
 using Abp.Dependency;
 using Abp.Modules;
-using Abp.MultiTenancy;
 using Abp.Net.Mail;
 using Abp.TestBase;
 using Abp.Zero.Configuration;
 using Castle.MicroKernel.Registration;
+using Microsoft.Extensions.Configuration;
 using Magicodes.Admin.Configuration;
 using Magicodes.Admin.EntityFrameworkCore;
 using Magicodes.Admin.Security.Recaptcha;
@@ -33,6 +35,8 @@ namespace Magicodes.Admin.Tests
 
         public override void PreInitialize()
         {
+            var configuration = GetConfiguration();
+
             Configuration.UnitOfWork.Timeout = TimeSpan.FromMinutes(30);
             Configuration.UnitOfWork.IsTransactional = false;
 
@@ -50,6 +54,8 @@ namespace Magicodes.Admin.Tests
 
             Configuration.ReplaceService<IAppConfigurationAccessor, TestAppConfigurationAccessor>();
             Configuration.ReplaceService<IEmailSender, NullEmailSender>(DependencyLifeStyle.Transient);
+
+            Configuration.Modules.AspNetZero().LicenseCode = configuration["AbpZeroLicenseCode"];
         }
 
         public override void Initialize()
@@ -65,6 +71,11 @@ namespace Magicodes.Admin.Tests
                     .UsingFactoryMethod(() => Substitute.For<TService>())
                     .LifestyleSingleton()
             );
+        }
+
+        private static IConfigurationRoot GetConfiguration()
+        {
+            return AppConfigurations.Get(Directory.GetCurrentDirectory(), addUserSecrets: true);
         }
     }
 }

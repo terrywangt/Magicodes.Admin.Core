@@ -1,0 +1,28 @@
+version: '2'
+
+services:
+
+    zero_host:
+        image: zero/host
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Staging
+        ports:
+            - "9901:80"
+        volumes:
+            - "./Host-Logs:/app/App_Data/Logs"
+
+    zero_ng:
+        image: zero/ng
+        ports:
+            - "9902:80"
+        volumes:
+            - "./nginx.conf:/etc/nginx/nginx.conf:ro"
+
+    zero_public:
+        image: zero/public
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Staging
+        ports:
+            - "9905:80"
+        volumes:
+            - "./Public-Logs:/app/App_Data/Logs"

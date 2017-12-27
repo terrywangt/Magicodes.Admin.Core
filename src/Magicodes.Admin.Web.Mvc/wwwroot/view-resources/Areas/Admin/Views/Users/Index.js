@@ -46,7 +46,7 @@
                     autoWidth: false,
                     defaultContent: '',
                     rowAction: {
-                        cssClass: 'btn btn-xs btn-primary blue',
+                        cssClass: 'btn btn-brand dropdown-toggle',
                         text: '<i class="fa fa-cog"></i> ' + app.localize('Actions') + ' <span class="caret"></span>',
                         items: [{
                             text: app.localize('LoginAsThisUser'),
@@ -243,6 +243,15 @@
         });
 
         $('#GetUsersButton, #RefreshUserListButton').click(function (e) {
+            e.preventDefault();
+            getUsers();
+        });
+
+        $('#UsersTableFilter').on('keydown', function (e) {
+            if (e.keyCode !== 13) {
+                return;
+            }
+
             e.preventDefault();
             getUsers();
         });

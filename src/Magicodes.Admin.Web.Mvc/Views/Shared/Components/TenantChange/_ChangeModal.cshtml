@@ -9,10 +9,10 @@
 
 <div class="modal-body">
     <form name="TenantChangeForm" role="form" novalidate class="form-validation">
-        <div class="form-group form-md-line-input form-md-floating-label">
-            <input class="form-control" type="text" name="TenancyName" maxlength="@AbpTenantBase.MaxTenancyNameLength" value="@Model.TenancyName">
+        <div class="form-group">
             <label>@L("TenancyName")</label>
-            <span class="help-block">@L("LeaveEmptyToSwitchToHost")</span>
+            <input class="form-control" type="text" name="TenancyName" maxlength="@AbpTenantBase.MaxTenancyNameLength" value="@Model.TenancyName">
+            <span class="m-form__help">@L("LeaveEmptyToSwitchToHost")</span>
         </div>
     </form>
 </div>

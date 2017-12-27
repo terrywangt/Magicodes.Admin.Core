@@ -34,9 +34,9 @@
                     }
 
                     //File size check
-                    if (file.size > 1048576) //1MB
+                    if (file.size > 5242880) //5MB
                     {
-                        abp.message.warn(app.localize('ProfilePicture_Warn_SizeLimit'));
+                        abp.message.warn(app.localize('ProfilePicture_Warn_SizeLimit', app.maxProfilPictureBytesUserFriendlyValue));
                         return false;
                     }
 
@@ -109,7 +109,7 @@
             }).done(function () {
                 $jcropApi.destroy();
                 $jcropApi = null;
-                $('#HeaderProfilePicture').attr('src', app.getUserProfilePicturePath());
+                $('.header-profile-picture').attr('src', app.getUserProfilePicturePath());
                 _modalManager.close();
             });
         };

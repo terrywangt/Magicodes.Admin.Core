@@ -29,7 +29,7 @@ namespace Magicodes.Admin.EntityFrameworkCore
 
         public virtual DbSet<Invoice> Invoices { get; set; }
 
-        public DbSet<PersistedGrantEntity> PersistedGrants { get; set; }
+        public virtual DbSet<PersistedGrantEntity> PersistedGrants { get; set; }
 
         public AdminDbContext(DbContextOptions<AdminDbContext> options)
             : base(options)

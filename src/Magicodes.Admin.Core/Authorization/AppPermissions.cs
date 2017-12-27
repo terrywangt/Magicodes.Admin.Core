@@ -39,6 +39,8 @@
 
         public const string Pages_Administration_HangfireDashboard = "Pages.Administration.HangfireDashboard";
 
+        public const string Pages_Administration_UiCustomization = "Pages.Administration.UiCustomization";
+
         //TENANT-SPECIFIC PERMISSIONS
 
         public const string Pages_Tenant_Dashboard = "Pages.Tenant.Dashboard";

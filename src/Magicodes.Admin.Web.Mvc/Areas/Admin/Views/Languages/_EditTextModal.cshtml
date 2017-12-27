@@ -12,14 +12,14 @@
         <input type="hidden" name="LanguageName" value="@Model.TargetLanguage.Name" />
         <input type="hidden" name="Key" value="@Model.Key" />
 
-        <div class="form-group form-md-line-input form-md-floating-label no-hint">
-            <textarea readonly class="form-control edited" rows="4">@Model.BaseText</textarea>
+        <div class="form-group">
             <label><i class="@Model.BaseLanguage.Icon"></i> @Model.BaseLanguage.DisplayName </label>
+            <textarea readonly class="form-control edited" rows="4">@Model.BaseText</textarea>
         </div>
 
-        <div class="form-group form-md-line-input form-md-floating-label no-hint">
-            <textarea name="Value" auto-focus class="form-control @(Model.TargetText.IsNullOrEmpty() ? "" : "edited")" rows="4">@Model.TargetText</textarea>
+        <div class="form-group">
             <label><i class="@Model.TargetLanguage.Icon"></i> @Model.TargetLanguage.DisplayName </label>
+            <textarea name="Value" auto-focus class="form-control @(Model.TargetText.IsNullOrEmpty() ? "" : "edited")" rows="4">@Model.TargetText</textarea>
         </div>
 
     </form>

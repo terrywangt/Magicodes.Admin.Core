@@ -114,21 +114,21 @@
                     animate: 1000,
                     size: 75,
                     lineWidth: 3,
-                    barColor: App.getBrandColor('yellow')
+                    barColor: "#ffb822"
                 });
 
                 $('.easy-pie-chart .number.visits').easyPieChart({
                     animate: 1000,
                     size: 75,
                     lineWidth: 3,
-                    barColor: App.getBrandColor('green')
+                    barColor: "#36a3f7"
                 });
 
                 $('.easy-pie-chart .number.bounce').easyPieChart({
                     animate: 1000,
                     size: 75,
                     lineWidth: 3,
-                    barColor: App.getBrandColor('red')
+                    barColor: "#f4516c"
                 });
             }
 
@@ -144,54 +144,77 @@
             createPieCharts();
         };
 
-        var initServerStatCharts = function (networkLoad, cpuLoad, loadRate) {
-            //Server stats => Sparklines: https://github.com/imsky/jquery.sparkline
+        //== Daily Sales chart.
+        //** Based on Chartjs plugin - http://www.chartjs.org/
+        var initDailySales = function (data) {
+            var dayLabels = [];
+            for (var day = 1; day <= data.length; day++) {
+                dayLabels.push("Day " + day);
+            }
 
-            var draw = function (networkLoad, cpuLoad, loadRate) {
-                $("#network").sparkline(loadRate,
-                    {
-                        type: 'bar',
-                        width: '100',
-                        barWidth: 5,
-                        height: '55',
-                        barColor: '#35aa47',
-                        negBarColor: '#e02222'
-                    });
-
-                $("#cpu-load").sparkline(cpuLoad,
-                    {
-                        type: 'bar',
-                        width: '100',
-                        barWidth: 5,
-                        height: '55',
-                        barColor: '#ffb848',
-                        negBarColor: '#e02222'
-                    });
-
-                $("#load-rate").sparkline(loadRate,
-                    {
-                        type: 'line',
-                        width: '100',
-                        height: '55',
-                        lineColor: '#ffb848'
-                    });
+            var chartData = {
+                labels: dayLabels,
+                datasets: [{
+                    //label: 'Dataset 1',
+                    backgroundColor: mUtil.getColor('success'),
+                    data: data
+                }, {
+                    //label: 'Dataset 2',
+                    backgroundColor: '#f3f3fb',
+                    data: data
+                }]
             };
 
-            var refreshServerStats = function () {
-                _tenantDashboardService
-                    .getServerStats({})
-                    .done(function (result) {
-                        draw(result.networkLoad, result.cpuLoad, result.loadRate);
-                    });
-            };
+            var chartContainer = $('#m_chart_daily_sales');
 
-            $("#serverStatsReload").click(function () {
-                refreshServerStats();
+            if (chartContainer.length === 0) {
+                return;
+            }
+
+            var chart = new Chart(chartContainer, {
+                type: 'bar',
+                data: chartData,
+                options: {
+                    title: {
+                        display: false,
+                    },
+                    tooltips: {
+                        intersect: false,
+                        mode: 'nearest',
+                        xPadding: 10,
+                        yPadding: 10,
+                        caretPadding: 10
+                    },
+                    legend: {
+                        display: false
+                    },
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    barRadius: 4,
+                    scales: {
+                        xAxes: [{
+                            display: false,
+                            gridLines: false,
+                            stacked: true
+                        }],
+                        yAxes: [{
+                            display: false,
+                            stacked: true,
+                            gridLines: false
+                        }]
+                    },
+                    layout: {
+                        padding: {
+                            left: 0,
+                            right: 0,
+                            top: 0,
+                            bottom: 0
+                        }
+                    }
+                }
             });
+        }
 
-            draw(networkLoad, cpuLoad, loadRate);
-            $(".sparkline-chart-loading").hide();
-        };
 
         var initWorldMap = function () {
             //World map => DataMaps: https://github.com/markmarkoh/datamaps/
@@ -281,65 +304,92 @@
             });
         };
 
-        var initActivitiesTimeline = function (records) {
-            //Activities => Horizontal timeline: https://github.com/CodyHouse/horizontal-timeline
-
-            var $timelineDetails = $("#timelineDetails");
-            var $timelineDateList = $("#timelineDateList");
-            var $horizontalTimelineContainer = $("#horizontalTimelineContainer");
-            var $horizontalTimelineLoading = $("#horizontalTimelineLoading");
-
-            $timelineDetails.empty();
-            $timelineDateList.empty();
-
-            for (var i = 0; i < records.length; i++) {
-                var record = records[i];
-
-                var timeLineHeader = abp.utils.formatString(
-                    "<li><a href='#0' data-date='{0}' class='border-after-red bg-after-red {2}'>{1}</a></li>",
-                    record.shortDate,
-                    record.titleDate,
-                    i === 0 ? "selected" : "");
-
-                $timelineDateList.append(timeLineHeader);
-
-                var timeLineDetail = abp.utils.formatString("<li class='{0}' data-date='{1}'>" +
-                    "<div class='mt-title'>" +
-                    "<h2 class='mt-content-title'>{2}</h2>" +
-                    "</div>" +
-                    "<div class='mt-author' > " +
-                    "<div class='mt-avatar' > " +
-                    "<img src='{3}'/>" +
-                    "</div> " +
-                    "<div class='mt-author-name' > " +
-                    "<a href= 'javascript:;' class='font-blue-madison'>{4}</a > " +
-                    "</div>" +
-                    "<div class='mt-author-datetime font-grey-mint'>{5}</div>" +
-                    "</div> " +
-                    "<div class='clearfix'></div > " +
-                    "<div class='mt-content border-grey-steel' style='max-height: 70px;overflow: auto;'> " +
-                    "<p>{6}</p> " +
-                    "</div > " +
-                    "</li>",
-                    (i === 0 ? "selected" : ""),
-                    record.shortDate,
-                    record.title,
-                    abp.appPath + 'metronic/assets/admin/layout4/media/users/' + record.image,
-                    record.autherName,
-                    record.longDate,
-                    record.text);
-
-                $timelineDetails.append(timeLineDetail);
+        //== Profit Share Chart.
+        //** Based on Chartist plugin - https://gionkunz.github.io/chartist-js/index.html
+        var profitShare = function (data) {
+            var $chart = $('#m_chart_profit_share');
+            if ($chart.length === 0) {
+                return;
             }
 
-            $horizontalTimelineContainer.addClass("cd-horizontal-timeline mt-timeline-horizontal");
-            if (records) {
-                $('.cd-horizontal-timeline').horizontalTimeline();
-            }
+            var $chartItems = $chart.closest('.m-widget14').find('.m-widget14__legend-text');
 
-            $horizontalTimelineLoading.hide();
-            $horizontalTimelineContainer.show();
-        };
+            $($chartItems[0]).text(data[0] + '% Product Sales');
+            $($chartItems[1]).text(data[1] + '% Online Courses');
+            $($chartItems[2]).text(data[2] + '% Custom Development');
+
+            var chart = new Chartist.Pie('#m_chart_profit_share', {
+                series: [{
+                    value: data[0],
+                    className: 'custom',
+                    meta: {
+                        color: mUtil.getColor('brand')
+                    }
+                },
+                {
+                    value: data[1],
+                    className: 'custom',
+                    meta: {
+                        color: mUtil.getColor('accent')
+                    }
+                },
+                {
+                    value: data[2],
+                    className: 'custom',
+                    meta: {
+                        color: mUtil.getColor('warning')
+                    }
+                }
+                ],
+                labels: [1, 2, 3]
+            }, {
+                    donut: true,
+                    donutWidth: 17,
+                    showLabel: false
+                });
+
+            chart.on('draw', function (data) {
+                if (data.type === 'slice') {
+                    // Get the total path length in order to use for dash array animation
+                    var pathLength = data.element._node.getTotalLength();
+
+                    // Set a dasharray that matches the path length as prerequisite to animate dashoffset
+                    data.element.attr({
+                        'stroke-dasharray': pathLength + 'px ' + pathLength + 'px'
+                    });
+
+                    // Create animation definition while also assigning an ID to the animation for later sync usage
+                    var animationDefinition = {
+                        'stroke-dashoffset': {
+                            id: 'anim' + data.index,
+                            dur: 1000,
+                            from: -pathLength + 'px',
+                            to: '0px',
+                            easing: Chartist.Svg.Easing.easeOutQuint,
+                            // We need to use `fill: 'freeze'` otherwise our animation will fall back to initial (not visible)
+                            fill: 'freeze',
+                            'stroke': data.meta.color
+                        }
+                    };
+
+                    // If this was not the first slice, we need to time the animation so that it uses the end sync event of the previous animation
+                    if (data.index !== 0) {
+                        animationDefinition['stroke-dashoffset'].begin = 'anim' + (data.index - 1) + '.end';
+                    }
+
+                    // We need to set an initial value before the animation starts as we are not in guided mode which would do that for us
+
+                    data.element.attr({
+                        'stroke-dashoffset': -pathLength + 'px',
+                        'stroke': data.meta.color
+                    });
+
+                    // We can't use guided mode as the animations need to rely on setting begin manually
+                    // See http://gionkunz.github.io/chartist-js/api-documentation.html#chartistsvg-function-animate
+                    data.element.animate(animationDefinition, false);
+                }
+            });
+        }
 
         var initMemberActivity = function () {
             var refreshMemberActivity = function () {
@@ -378,9 +428,9 @@
                 .done(function (result) {
                     initSalesSummaryChart(result.salesSummary, result.totalSales, result.revenue, result.expenses, result.growth);
                     initDashboardTopStats(result.totalProfit, result.newFeedbacks, result.newOrders, result.newUsers);
-                    initServerStatCharts(result.networkLoad, result.cpuLoad, result.loadRate);
+                    initDailySales(result.dailySales);
                     initGeneralStats(result.transactionPercent, result.newVisitPercent, result.bouncePercent);
-                    initActivitiesTimeline(result.timeLineItems);
+                    profitShare(result.profitShares);
                     $(".counterup").counterUp();
                 });
         };

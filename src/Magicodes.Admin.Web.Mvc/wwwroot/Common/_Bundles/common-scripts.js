@@ -350,13 +350,12 @@ var app = app || {};
 
     //Localize Sweet Alert
     if (abp.libs.sweetAlert) {
-        abp.libs.sweetAlert.config.info.confirmButtonText = app.localize("Ok");
-        abp.libs.sweetAlert.config.success.confirmButtonText = app.localize("Ok");
-        abp.libs.sweetAlert.config.warn.confirmButtonText = app.localize("Ok");
-        abp.libs.sweetAlert.config.error.confirmButtonText = app.localize("Ok");
+        abp.libs.sweetAlert.config.info.buttons = [app.localize("Ok")];
+        abp.libs.sweetAlert.config.success.buttons = [app.localize("Ok")];
+        abp.libs.sweetAlert.config.warn.buttons = [app.localize("Ok")];
+        abp.libs.sweetAlert.config.error.buttons = [app.localize("Ok")];
 
-        abp.libs.sweetAlert.config.confirm.confirmButtonText = app.localize("Yes");
-        abp.libs.sweetAlert.config.confirm.cancelButtonText = app.localize("Cancel");
+        abp.libs.sweetAlert.config.confirm.buttons = [app.localize("Cancel"), app.localize("Yes")];
     }
 
 })();
@@ -390,7 +389,7 @@ var app = app || {};
             return $('<div id="' + _containerId + '"></div>')
                 .append(
                     '<div id="' + modalId + '" class="modal fade" tabindex="-1" role="modal" aria-hidden="true">' +
-                    '  <div class="modal-dialog">' +
+                    '  <div class="modal-dialog modal-lg">' +
                     '    <div class="modal-content"></div>' +
                     '  </div>' +
                     '</div>'
@@ -1021,16 +1020,15 @@ var app = app || {};
 
     var _createButtonDropdown = function (record, field) {
         var $container = $('<div/>')
-            .addClass('btn-group')
             .addClass('dropdown')
             .addClass('action-button');
 
         var $dropdownButton = $('<button/>')
             .html(field.text)
-            .addClass('dropdown-toggle')
+            .addClass('btn btn-brand btn-sm dropdown-toggle')
             .attr('data-toggle', 'dropdown')
             .attr('aria-haspopup', 'true')
-            .attr('aria-expanded', 'true');
+            .attr('aria-expanded', 'false');
 
         if (field.cssClass) {
             $dropdownButton.addClass(field.cssClass);

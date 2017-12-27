@@ -39,3 +39,9 @@
   background-color: #8877a9 !important;
   color: white;
 }
+h3 small {
+  padding-left: 0px !important;
+}
+.dataTables_wrapper table thead tr {
+  height: 41px;
+}

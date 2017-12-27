@@ -3,7 +3,10 @@ using System.IO;
 using System.Text;
 using Abp.AspNetCore;
 using Abp.AspNetCore.Configuration;
+using Abp.AspNetZeroCore.Licensing;
+using Abp.AspNetZeroCore.Web;
 using Abp.Configuration.Startup;
+using Abp.Dependency;
 using Abp.Hangfire;
 using Abp.Hangfire.Configuration;
 using Abp.IO;
@@ -28,13 +31,13 @@ namespace Magicodes.Admin.Web
     [DependsOn(
         typeof(AdminApplicationModule),
         typeof(AdminEntityFrameworkCoreModule),
-        typeof(AbpAspNetCoreModule),
+        typeof(AbpAspNetZeroCoreWebModule),
 #if FEATURE_SIGNALR
         typeof(AbpWebSignalRModule),
 #endif
         typeof(AbpRedisCacheModule), //AbpRedisCacheModule dependency (and Abp.RedisCache nuget package) can be removed if not using Redis cache
         typeof(AbpHangfireAspNetCoreModule) //AbpHangfireModule dependency (and Abp.Hangfire.AspNetCore nuget package) can be removed if not using Hangfire
-    )] 
+    )]
     public class AdminWebCoreModule : AbpModule
     {
         private readonly IHostingEnvironment _env;
@@ -45,7 +48,7 @@ namespace Magicodes.Admin.Web
             _env = env;
             _appConfiguration = env.GetAppConfiguration();
         }
-        
+
         public override void PreInitialize()
         {
             //Set default connection string
@@ -70,7 +73,7 @@ namespace Magicodes.Admin.Web
             {
                 ConfigureTokenAuth();
             }
-            
+
             Configuration.ReplaceService<IAppConfigurationAccessor, AppConfigurationAccessor>();
 
             //Uncomment this line to use Hangfire instead of default background job manager (remember also to uncomment related lines in Startup.cs file(s)).
@@ -111,9 +114,9 @@ namespace Magicodes.Admin.Web
         {
             var appFolders = IocManager.Resolve<AppFolders>();
 
-            appFolders.SampleProfileImagesFolder = Path.Combine(_env.WebRootPath, @"Common\Images\SampleProfilePics");
-            appFolders.TempFileDownloadFolder = Path.Combine(_env.WebRootPath, @"Temp\Downloads");
-            appFolders.WebLogsFolder = Path.Combine(_env.ContentRootPath, @"App_Data\Logs");
+            appFolders.SampleProfileImagesFolder = Path.Combine(_env.WebRootPath, $"Common{Path.DirectorySeparatorChar}Images{Path.DirectorySeparatorChar}SampleProfilePics");
+            appFolders.TempFileDownloadFolder = Path.Combine(_env.WebRootPath, $"Temp{Path.DirectorySeparatorChar}Downloads");
+            appFolders.WebLogsFolder = Path.Combine(_env.ContentRootPath, $"App_Data{Path.DirectorySeparatorChar}Logs");
 
 #if NET461
             if (_env.IsDevelopment())
@@ -121,7 +124,7 @@ namespace Magicodes.Admin.Web
                 var currentAssemblyDirectoryPath = typeof(AdminWebCoreModule).GetAssembly().GetDirectoryPathOrNull();
                 if (currentAssemblyDirectoryPath != null)
                 {
-                    appFolders.WebLogsFolder = Path.Combine(currentAssemblyDirectoryPath, @"App_Data\Logs");
+                    appFolders.WebLogsFolder = Path.Combine(currentAssemblyDirectoryPath, $"App_Data{Path.DirectorySeparatorChar}Logs");
                 }
             }
 #endif

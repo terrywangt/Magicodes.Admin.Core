@@ -25,11 +25,11 @@ namespace Magicodes.Admin.Auditing
         private readonly IRepository<User, long> _userRepository;
         private readonly IAuditLogListExcelExporter _auditLogListExcelExporter;
         private readonly INamespaceStripper _namespaceStripper;
-    
+
         public AuditLogAppService(
-            IRepository<AuditLog, long> auditLogRepository, 
-            IRepository<User, long> userRepository, 
-            IAuditLogListExcelExporter auditLogListExcelExporter, 
+            IRepository<AuditLog, long> auditLogRepository,
+            IRepository<User, long> userRepository,
+            IAuditLogListExcelExporter auditLogListExcelExporter,
             INamespaceStripper namespaceStripper)
         {
             _auditLogRepository = auditLogRepository;
@@ -37,7 +37,7 @@ namespace Magicodes.Admin.Auditing
             _auditLogListExcelExporter = auditLogListExcelExporter;
             _namespaceStripper = namespaceStripper;
         }
-        
+
         public async Task<PagedResultDto<AuditLogListDto>> GetAuditLogs(GetAuditLogsInput input)
         {
             var query = CreateAuditLogAndUsersQuery(input);
@@ -56,9 +56,9 @@ namespace Magicodes.Admin.Auditing
         public async Task<FileDto> GetAuditLogsToExcel(GetAuditLogsInput input)
         {
             var auditLogs = await CreateAuditLogAndUsersQuery(input)
-                        .AsNoTracking()
-                        .OrderByDescending(al => al.AuditLog.ExecutionTime)
-                        .ToListAsync();
+                .AsNoTracking()
+                .OrderByDescending(al => al.AuditLog.ExecutionTime)
+                .ToListAsync();
 
             var auditLogListDtos = ConvertToAuditLogListDtos(auditLogs);
 
@@ -83,7 +83,7 @@ namespace Magicodes.Admin.Auditing
                 join user in _userRepository.GetAll() on auditLog.UserId equals user.Id into userJoin
                 from joinedUser in userJoin.DefaultIfEmpty()
                 where auditLog.ExecutionTime >= input.StartDate && auditLog.ExecutionTime <= input.EndDate
-                select new AuditLogAndUser {AuditLog = auditLog, User = joinedUser};
+                select new AuditLogAndUser { AuditLog = auditLog, User = joinedUser };
 
             query = query
                 .WhereIf(!input.UserName.IsNullOrWhiteSpace(), item => item.User.UserName.Contains(input.UserName))

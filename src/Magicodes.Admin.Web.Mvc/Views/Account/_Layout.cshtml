@@ -1,11 +1,10 @@
 ﻿@using System.Threading.Tasks
+@using Abp.AspNetZeroCore.Timing
 @using Abp.Configuration.Startup
-@using Abp.Timing
 @using Abp.Web.Security.AntiForgery
 @using Magicodes.Admin.Timing
 @using Magicodes.Admin.Url
 @using Magicodes.Admin.Web.Resources
-@using Magicodes.Admin.Web.Url
 @using CultureHelper = Magicodes.Admin.Localization.CultureHelper
 @inject ScriptPaths ScriptPaths
 @inject AppTimes AppTimes
@@ -23,7 +22,7 @@
     <meta charset="utf-8" />
     <title>Admin</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
 
     @* Fill these meta tags upon your project specification *@
@@ -33,33 +32,13 @@
 
     <link rel="shortcut icon" href="~/favicon.ico" />
 
-    <environment names="Development">
-        <link rel="stylesheet" href="~/fonts/fonts-open-sans.css" asp-append-version="true" />
+    <link rel="stylesheet" abp-href="/view-resources/Areas/Admin/Views/_Bundles/vendors.bundle.css" asp-append-version="true" />
+    <link rel="stylesheet" href="/metronic/dist/html/default/assets/demo/default/base/style.bundle.css" asp-append-version="true" />
 
-        @* Bundled: view-resources/Views/_Bundles/account-layout-libs[-rtl].min.css *@
-        <link rel="stylesheet" href="~/lib/simple-line-icons/css/simple-line-icons.css" asp-append-version="true" />
-        <link rel="stylesheet" href="~/lib/font-awesome/css/font-awesome.css" asp-append-version="true" />
-        <link rel="stylesheet" href="~/lib/famfamfam-flags/dist/sprite/famfamfam-flags.css" asp-append-version="true" />
-        <link rel="stylesheet" href="@(CultureHelper.IsRtl ? "~/lib/bootstrap-rtl/bootstrap-rtl.css" : "~/lib/bootstrap/dist/css/bootstrap.css")" asp-append-version="true" />
-        <link rel="stylesheet" href="~/lib/uniform/css/uniform.default.css" asp-append-version="true" />
-        <link rel="stylesheet" href="~/lib/toastr/toastr.css" asp-append-version="true" />
-        <link rel="stylesheet" href="~/lib/sweetalert/dist/sweetalert.css" asp-append-version="true" />
-        <link rel="stylesheet" href="~/metronic/assets/global/css/components-md@(CultureHelper.IsRtl ? "-rtl" : "").css" asp-append-version="true" />
-        <link rel="stylesheet" href="~/metronic/assets/global/css/plugins-md@(CultureHelper.IsRtl ? "-rtl" : "").css" asp-append-version="true" />
-        <link rel="stylesheet" href="~/metronic/assets/admin/layout/css/layout@(CultureHelper.IsRtl ? "-rtl" : "").css" asp-append-version="true" />
-        <link rel="stylesheet" href="~/metronic/assets/admin/layout/css/themes/default@(CultureHelper.IsRtl ? "-rtl" : "").css" asp-append-version="true" />
+    <link rel="stylesheet" abp-href="/view-resources/Areas/Admin/Views/_Bundles/account-layout-libs.css" asp-append-version="true" />
 
-        <link rel="stylesheet" href="~/Common/_Bundles/common-styles.css" asp-append-version="true" />
-
-        <link rel="stylesheet" href="~/view-resources/Views/Account/_Layout@(CultureHelper.IsRtl ? "-rtl" : "").css" asp-append-version="true" />
-    </environment>
-
-    <environment names="Staging,Production">
-        <link rel="stylesheet" href="~/fonts/fonts-open-sans.css" asp-append-version="true" />
-        <link rel="stylesheet" href="~/view-resources/Views/_Bundles/account-layout-libs@(CultureHelper.IsRtl ? "-rtl" : "").min.css" asp-append-version="true" />
-        <link rel="stylesheet" href="~/Common/_Bundles/common-styles.min.css" asp-append-version="true" />
-        <link rel="stylesheet" href="~/view-resources/Views/Account/_Layout@(CultureHelper.IsRtl ? "-rtl" : "").min.css" asp-append-version="true" />
-    </environment>
+    <link rel="stylesheet" abp-href="/view-resources/Areas/Admin/Views/_Bundles/common-styles.css" asp-append-version="true" />
+    <link rel="stylesheet" abp-href="/view-resources/Views/Account/_Layout.css" asp-append-version="true" />
 
     @RenderSection("Styles", false)
 
@@ -70,93 +49,60 @@
     </script>
 
 </head>
-<body class="page-md login">
-    <div class="menu-toggler sidebar-toggler">
-    </div>
-
-    <vc:account-logo></vc:account-logo>
-    
-    @if (!(ViewBag.DisableTenantChange ?? false) && MultiTenancyConfig.IsEnabled && !WebUrlService.SupportsTenancyNameInUrl)
-    {
-        <div class="content tenant-change-box">
-            <vc:tenant-change></vc:tenant-change>
+<body class="m--skin- m-header--fixed m-header--fixed-mobile m-aside-left--enabled m-aside-left--skin-dark m-aside-left--offcanvas m-footer--push m-aside--offcanvas-default">
+    <!-- begin:: Page -->
+    <div class="m-grid m-grid--hor m-grid--root m-page">
+        <div class="m-grid__item m-grid__item--fluid m-grid m-grid--ver-desktop m-grid--desktop m-grid--tablet-and-mobile m-grid--hor-tablet-and-mobile 		m-login m-login--1 m-login--singin" id="m_login">
+            <div class="m-grid__item m-grid__item--order-tablet-and-mobile-2 m-login__aside">
+                <div class="m-stack m-stack--hor m-stack--desktop">
+                    <div class="m-stack__item m-stack__item--fluid">
+                        <div class="m-login__wrapper">
+                            <div class="m-login__logo">
+                                <a href="#">
+                                    <vc:account-logo></vc:account-logo>
+                                </a>
+                            </div>
+                            @if (!(ViewBag.DisableTenantChange ?? false) && MultiTenancyConfig.IsEnabled && !WebUrlService.SupportsTenancyNameInUrl)
+                            {
+                                <div class="content tenant-change-box">
+                                    <vc:tenant-change></vc:tenant-change>
+                                </div>
+                            }
+                            @RenderBody()
+                        </div>
+                        <div>
+                            <vc:account-languages></vc:account-languages>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="m-grid__item m-grid__item--fluid m-grid m-grid--center m-grid--hor m-grid__item--order-tablet-and-mobile-1	m-login__content" style="background-image: url(/metronic/src/media/app/img/bg/bg-4.jpg)">
+                <div class="m-grid__item m-grid__item--middle">
+                    <h3 class="m-login__welcome">
+                        AspNet Zero
+                    </h3>
+                    <p class="m-login__msg">
+                        Base solution for your next web application
+                    </p>
+                </div>
+            </div>
         </div>
-    }
-
-    <div class="content account-forms">
-        @RenderBody()
     </div>
-
-    <vc:account-languages></vc:account-languages>
-
-    <div class="copyright">
-        @Clock.Now.Year © Admin.
-    </div>
-
-    <environment names="Development">
-        @* Bundled: wwwroot/view-resources/Views/_Bundles/account-layout-libs.min.js *@
-        <script src="~/lib/json2/json2.js" asp-append-version="true"></script>
-        <script src="~/lib/jquery/dist/jquery.js" asp-append-version="true"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.js" asp-append-version="true"></script>
-        <script src="~/lib/jquery-validation/dist/jquery.validate.js" asp-append-version="true"></script>
-        <script src="~/lib/blockUI/jquery.blockUI.js" asp-append-version="true"></script>
-        <script src="~/lib/uniform/jquery.uniform.js" asp-append-version="true"></script>
-        <script src="~/lib/js-cookie/src/js.cookie.js" asp-append-version="true"></script>
-        <script src="~/lib/toastr/toastr.js" asp-append-version="true"></script>
-        <script src="~/lib/spin.js/spin.js" asp-append-version="true"></script>
-        <script src="~/lib/spin.js/jquery.spin.js" asp-append-version="true"></script>
-        <script src="~/lib/sweetalert/dist/sweetalert-dev.js" asp-append-version="true"></script>
-        <script src="~/lib/abp-web-resources/Abp/Framework/scripts/abp.js" asp-append-version="true"></script>
-        <script src="~/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.jquery.js" asp-append-version="true"></script>
-        <script src="~/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.toastr.js" asp-append-version="true"></script>
-        <script src="~/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.blockUI.js" asp-append-version="true"></script>
-        <script src="~/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.spin.js" asp-append-version="true"></script>
-        <script src="~/lib/abp-web-resources/Abp/Framework/scripts/libs/abp.sweet-alert.js" asp-append-version="true"></script>
-    </environment>
-
-    <environment names="Staging,Production">
-        <script src="~/view-resources/Views/_Bundles/account-layout-libs.min.js" asp-append-version="true"></script>
-    </environment>
-
-    <script type="text/javascript">
-        abp.localization.defaultSourceName = '@LocalizationSourceName';
-    </script>
-
+    <!-- end:: Page -->
+    <!--begin::Base Scripts -->
+    <script abp-src="/view-resources/Areas/Admin/Views/_Bundles/account-layout-libs.js" asp-append-version="true"></script>    
+    
     <!-- Dynamic scripts of ABP system (They are created on runtime and can not be bundled) -->
     <script src="~/AbpServiceProxies/GetAll?v=@(AppTimes.StartupTime.Ticks)" type="text/javascript"></script>
-    <script src="~/AbpScripts/GetScripts?v=@AppTimes.StartupTime.Ticks" type="text/javascript"></script>
-
+    <script src="~/AbpScripts/GetScripts?v=@(AppTimes.StartupTime.Ticks)" type="text/javascript"></script>
+    
+    <script abp-src="/view-resources/Areas/Admin/Views/_Bundles/common-scripts.js" asp-append-version="true"></script>
     <script src="@ScriptPaths.JQuery_Validation_Localization" asp-append-version="true"></script>
 
-    <environment names="Development">
-        <script src="~/metronic/assets/global/scripts/app.js" asp-append-version="true"></script>
-    </environment>
-
-    <environment names="Staging,Production">
-        <script src="~/metronic/assets/global/scripts/app.js" asp-append-version="true"></script>
-    </environment>
-
-    <script type="text/javascript">
-        App.setAssetsPath(abp.appPath + 'metronic/assets/');
-    </script>
-
-    <environment names="Development">
-        @* Bundle (not minified) for all scripts in Common/Scripts folder. Minified: wwwroot/Common/_Bundles/common-scripts.min.js *@
-        <script src="~/Common/_Bundles/common-scripts.js" asp-append-version="true"></script>
-        <script src="~/view-resources/Areas/Admin/Common/Scripts/jquery-validation-custom.js" asp-append-version="true"></script>
-        <script src="~/metronic/assets/admin/layout/scripts/layout.js" asp-append-version="true"></script>
-    </environment>
-
-    <environment names="Staging,Production">
-        <script src="~/Common/_Bundles/common-scripts.min.js" asp-append-version="true"></script>
-        <script src="~/view-resources/Areas/Admin/Common/Scripts/jquery-validation-custom.js" asp-append-version="true"></script>
-        <script src="~/metronic/assets/admin/layout/scripts/layout.js" asp-append-version="true"></script>
-    </environment>
-    
     @WebResourceManager.RenderScripts();
 
     @RenderSection("Scripts", false)
-
+    
     <script>
         jQuery(document).ready(function () {
             if (window.CurrentPage) {

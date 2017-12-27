@@ -38,8 +38,13 @@ namespace Magicodes.Admin.Chat
         [DisableAuditing]
         public GetUserChatFriendsWithSettingsOutput GetUserChatFriendsWithSettings()
         {
-            var cacheItem = _userFriendsCache.GetCacheItem(AbpSession.ToUserIdentifier());
+            var userIdentifier = AbpSession.ToUserIdentifier();
+            if (userIdentifier == null)
+            {
+                return new GetUserChatFriendsWithSettingsOutput();
+            }
 
+            var cacheItem = _userFriendsCache.GetCacheItem(userIdentifier);
             var friends = ObjectMapper.Map<List<FriendDto>>(cacheItem.Friends);
 
             foreach (var friend in friends)
@@ -131,11 +136,6 @@ namespace Magicodes.Admin.Chat
             {
                 _chatCommunicator.SendReadStateChangeToClients(onlineFriendClients, userIdentifier);
             }
-        }
-
-        public async Task<ChatMessage> FindMessageAsync(int id, long userId)
-        {
-            return await _chatMessageRepository.FirstOrDefaultAsync(m => m.Id == id && m.UserId == userId);
         }
     }
 }

@@ -147,9 +147,9 @@
     <text name="ExportToExcel" value="Exportar a Excel" />
     <text name="ChangeProfilePicture" value="Cambiar foto de perfil" />
     <text name="TenantName_Regex_Description" value="El nombre de la instancia debe ser de al menos 2 caracteres, empezar con una letra y continuar con una letra, número, guión o guión bajo." />
-    <text name="ProfilePicture_Change_Info" value="Puedes seleccionar una imagen en formato JPG/JPEG/PNG de máximo 1MB." />
+    <text name="ProfilePicture_Change_Info" value="Puedes seleccionar una imagen en formato JPG/JPEG/PNG de máximo {0}MB." />
     <text name="ProfilePicture_Change_Error" value="Tu foto de perfil no pudo ser actualizada." />
-    <text name="ProfilePicture_Warn_SizeLimit" value="El tamaño de la imagen debe ser menor a 1MB. Por favor, selecciona otro archivo." />
+    <text name="ProfilePicture_Warn_SizeLimit" value="El tamaño de la imagen debe ser menor a {0}MB. Por favor, selecciona otro archivo." />
     <text name="ProfilePicture_Warn_FileType" value="Sólo puedes seleccionar archivos JPG/JPEG. Por favor, selecciona otro archivo." />
     <text name="Dashboard" value="Tablero de control" />
     <text name="DashboardHeaderInfo" value="estadísticas y reportes" />
@@ -323,7 +323,7 @@
     <text name="YouCannotLinkToSameAccount">¡No puedes ligar a la misma cuenta!</text>
     <text name="ChangePasswordBeforeLinkToAnAccount">¡Debes cambiar la contraseña antes de ligar esta cuenta!</text>
     <text name="LinkedAccounts">Cuentas ligadas</text>
-    <text name="ManageAccounts">Administrar cuentas</text>
+    <text name="ManageLinkedAccounts">Administrar cuentas</text>
     <text name="LinkNewAccount">Ligar nueva cuenta</text>
     <text name="SuccessfullyUnlinked">Desligada exitosamente</text>
     <text name="LinkedUserDeleteWarningMessage">Se eliminará la liga al usuario {0}.</text>
@@ -371,7 +371,7 @@
     <text name="LoginAttempts">Intentos de login</text>
     <text name="Failed">Fallido</text>
     <text name="NewTenant">Nueva instancia</text>
-    <text name="ResizedProfilePicture_Warn_SizeLimit" value="El tamaño de las imágenes redimensionadas debe ser menor a 100KB. Por favor redimensione aún más y vuelva a intentar." />
+    <text name="ResizedProfilePicture_Warn_SizeLimit" value="El tamaño de las imágenes redimensionadas debe ser menor a {0}KB. Por favor redimensione aún más y vuelva a intentar." />
     <text name="RegisterFormUserNameInvalidMessage">Por favor no especifique una cuenta de correo como nombre de usuario.</text>
     <text name="UseHostDatabase" value="Usar base de datos 'host'" />
     <text name="DatabaseConnectionString" value="Cadena de conexión a la base de datos" />
@@ -494,7 +494,7 @@
     <text name="CustomCSS">CSS Personalizado</text>
     <text name="Upload">Subir</text>
     <text name="Download">Bajar</text>
-    <text name="UploadLogo_Info">Selecciona un archivo JPG/JPEG/PNG/GIF con un tamaño máximo de 30KB y una resolución de 168x33 pixels.</text>
+    <text name="UploadLogo_Info">Selecciona un archivo JPG/JPEG/PNG/GIF con un tamaño máximo de 30KB y una resolución de 139x35 pixels.</text>
     <text name="UploadCSS_Info">Selecciona un arcivo .css con un tamaño máximo de 1MB.</text>
     <text name="Browse">Navegar</text>
     <text name="Appearance">Apariencia</text>

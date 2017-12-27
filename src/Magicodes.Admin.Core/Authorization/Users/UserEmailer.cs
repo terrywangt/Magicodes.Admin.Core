@@ -15,6 +15,7 @@ using Magicodes.Admin.Editions;
 using Magicodes.Admin.Emailing;
 using Magicodes.Admin.Localization;
 using Magicodes.Admin.MultiTenancy;
+using System.Net.Mail;
 
 namespace Magicodes.Admin.Authorization.Users
 {
@@ -313,7 +314,13 @@ namespace Magicodes.Admin.Authorization.Users
         private async Task ReplaceBodyAndSend(string emailAddress, string subject, StringBuilder emailTemplate, StringBuilder mailMessage)
         {
             emailTemplate.Replace("{EMAIL_BODY}", mailMessage.ToString());
-            await _emailSender.SendAsync(emailAddress, subject, emailTemplate.ToString());
+            await _emailSender.SendAsync(new MailMessage
+            {
+                To = { emailAddress },
+                Subject = subject,
+                Body = emailTemplate.ToString(),
+                IsBodyHtml = true
+            });
         }
     }
 }

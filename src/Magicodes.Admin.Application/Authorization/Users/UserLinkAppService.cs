@@ -70,11 +70,13 @@ namespace Magicodes.Admin.Authorization.Users
             }
 
             var query = CreateLinkedUsersQuery(currentUserAccount, input.Sorting);
-            query = query.Skip(input.SkipCount)
-                        .Take(input.MaxResultCount);
 
             var totalCount = await query.CountAsync();
-            var linkedUsers = await query.ToListAsync();
+            
+            var linkedUsers = await query
+                .Skip(input.SkipCount)
+                .Take(input.MaxResultCount)
+                .ToListAsync();
 
             return new PagedResultDto<LinkedUserDto>(
                 totalCount,
@@ -92,7 +94,7 @@ namespace Magicodes.Admin.Authorization.Users
             }
 
             var query = CreateLinkedUsersQuery(currentUserAccount, "LastLoginTime DESC");
-            var recentlyUsedlinkedUsers = await query.Skip(0).Take(3).ToListAsync();
+            var recentlyUsedlinkedUsers = await query.Take(3).ToListAsync();
 
             return new ListResultDto<LinkedUserDto>(recentlyUsedlinkedUsers);
         }

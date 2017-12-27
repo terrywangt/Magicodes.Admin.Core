@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView 
+    xmlns="http://xamarin.com/schemas/2014/forms" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+    x:Class="Magicodes.Admin.Controls.LabelSection">
+    
+    <ContentView.Padding>
+        <OnPlatform x:TypeArguments="Thickness">
+            <On Platform="iOS">16,24,16,4</On>
+            <On Platform="Android">16,16,16,4</On>
+        </OnPlatform>
+    </ContentView.Padding>
+    
+    <ContentView.Content>
+        <Label Style="{DynamicResource SectionLabelTextStyle}" x:Name="SectionLabel"/>
+    </ContentView.Content>
+</ContentView>

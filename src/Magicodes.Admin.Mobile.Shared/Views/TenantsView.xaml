@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Name="TenantsPage"
+             x:Class="Magicodes.Admin.Views.TenantsView"
+             xmlns:behaviors="clr-namespace:Magicodes.Admin.Behaviors;assembly=Magicodes.Admin.Mobile.Shared"
+             xmlns:base="clr-namespace:Magicodes.Admin.ViewModels.Base;assembly=Magicodes.Admin.Mobile.Shared"
+             xmlns:controls="clr-namespace:Magicodes.Admin.Controls;assembly=Magicodes.Admin.Mobile.Shared"
+             xmlns:extensions="clr-namespace:Magicodes.Admin.Extensions.MarkupExtensions;assembly=Magicodes.Admin.Mobile.Shared"
+             xmlns:permission="clr-namespace:Magicodes.Admin.Services.Permission;assembly=Magicodes.Admin.Mobile.Shared"
+             base:ViewManager.AutoWireViewModel="true" 
+             Title="{Binding Title}">
+
+    <ContentPage.ToolbarItems>
+
+        <controls:HideableToolbarItem 
+            Order="Primary" 
+            Text="{extensions:Translate CreateNewTenant}"  
+            Command="{Binding CreateNewTenantCommand}" 
+            IsVisible="{extensions:HasPermission Text={x:Static permission:PermissionKey.TenantCreate}}"
+            ParentPage="{x:Reference TenantsPage}" />
+        
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.Content>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <SearchBar Grid.Row="0" 
+                       Grid.Column="0" 
+                       Text="{Binding FilterText}" 
+                       Placeholder="{extensions:Translate SearchWithThreeDot}"/>
+
+            <StackLayout Orientation="Vertical" 
+                         VerticalOptions="FillAndExpand" 
+                         HorizontalOptions="CenterAndExpand"
+                         Grid.Row="1" 
+                         Grid.Column="0">
+
+                <ListView SeparatorVisibility="None"  
+                      HasUnevenRows="True"
+                      ItemsSource="{Binding Tenants}" 
+                      IsPullToRefreshEnabled="{Binding IsNotBusy}"
+                      IsRefreshing="{Binding IsBusy}"
+                      RefreshCommand="{Binding RefreshTenantsCommand}"
+                      ItemAppearing="ListView_OnItemAppearing"
+                      SelectedItem="{Binding SelectedTenant, Mode=TwoWay}"
+                      CachingStrategy="RetainElement">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell >
+                                <controls:CardView  Margin="10, 5, 10, 5" Padding="10" >
+
+                                    <Grid VerticalOptions="FillAndExpand"  HorizontalOptions="FillAndExpand"  HeightRequest="75">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="0.8*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="0.3*"/>
+                                            <RowDefinition Height="0.3*"/>
+                                            <RowDefinition Height="0.3*"/>
+                                        </Grid.RowDefinitions>
+
+                                        <Label Grid.Row="0" Grid.Column="0" Text="{extensions:Translate TenancyName}" Style="{StaticResource PrimaryLabel}"/>
+                                        <Label Grid.Row="0" Grid.Column="1" Text="{Binding TenancyName}" Style="{StaticResource ActiveLabel}" />
+
+                                        <Label Grid.Row="1" Grid.Column="0" Text="{extensions:Translate Name}" Style="{StaticResource PrimaryLabel}"/>
+                                        <Label Grid.Row="1" Grid.Column="1" Text="{Binding Name}" Style="{StaticResource ActiveLabel}"/>
+
+                                        <Label Grid.Row="2" Grid.Column="0" Text="{extensions:Translate Edition}" Style="{StaticResource PrimaryLabel}"/>
+                                        <Label Grid.Row="2" Grid.Column="1" Text="{Binding EditionDisplayName}" Style="{StaticResource ActiveLabel}"/>
+
+                                    </Grid>
+                                    
+                                </controls:CardView>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+            </StackLayout>
+        </Grid>
+
+    </ContentPage.Content>
+
+    <ContentPage.Behaviors>
+        <behaviors:EventHandlerBehavior EventName="Appearing">
+            <behaviors:InvokeCommandAction Command="{Binding PageAppearingCommand}" />
+        </behaviors:EventHandlerBehavior>
+    </ContentPage.Behaviors>
+
+</ContentPage>

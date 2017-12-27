@@ -68,6 +68,12 @@ br {
 span.phone-number-verified {
   border-bottom: #36c6d3 2px solid !important;
 }
+.margin-top-20 {
+  margin-top: 20px;
+}
+.margin-bottom-10 {
+  margin-bottom: 10px;
+}
 /* jsTree default theme */
 .jstree-node,
 .jstree-children,
@@ -1128,4 +1134,99 @@ span.phone-number-verified {
     margin-left: 0;
     margin-right: 0;
   }
+}
+.input-group span.input-group-btn button i {
+  font-size: 1rem;
+}
+.small-profile-pic {
+  height: 30px;
+}
+.easy-pie-chart {
+  text-align: center;
+}
+.easy-pie-chart .number {
+  font-size: 14px !important;
+  font-weight: 300;
+  margin: 0 auto;
+  position: relative;
+  text-align: center;
+  width: 75px;
+  height: 75px;
+  line-height: 75px;
+}
+.easy-pie-chart .number canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.easy-pie-chart .title {
+  display: block;
+  text-align: center;
+  color: #333;
+  font-weight: 300;
+  font-size: 16px;
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
+.easy-pie-chart .title:hover {
+  color: #666;
+  text-decoration: none;
+}
+.easy-pie-chart .title > i {
+  margin-top: 5px;
+}
+.m-login.m-login--1 .m-login__wrapper .m-login__logo {
+  margin-bottom: .5rem !important;
+}
+.m--border-top-primary {
+  border-top-color: #5867dd !important;
+}
+body.m-page--boxed {
+  background-image: url(/metronic/src/media/app/img/bg/bg-4.jpg);
+}
+.m-brand__logo-wrapper {
+  margin-left: -5px !important;
+}
+.m-footer {
+  z-index: 100 !important;
+}
+table.dataTable {
+  border: 1px solid #edeef9 !important;
+  border-bottom: 1px solid #edeef9 !important;
+}
+table.dataTable tbody tr td {
+  vertical-align: middle;
+}
+table.dataTable ul.dropdown-menu li a {
+  cursor: pointer !important;
+}
+.alert.alert-warning {
+  color: #333;
+}
+.modal .modal-content .modal-header .close:before {
+  cursor: pointer !important;
+}
+.m-messenger__message {
+  width: 100% !important;
+}
+.m-messenger__message .m-messenger__message-body {
+  width: 100% !important;
+}
+.m-messenger__message .m-messenger__message-body .m-messenger__message-username {
+  text-align: right !important;
+}
+.m-messenger__message .m-messenger__message-body .m-messenger__message-username span {
+  float: left;
+}
+.m-messenger__message.m-messenger__message--out .m-messenger__message-body .m-messenger__message-username {
+  text-align: left !important;
+}
+.m-messenger__message.m-messenger__message--out .m-messenger__message-body .m-messenger__message-username span {
+  float: right;
+}
+.m-messenger__message.m-messenger__message--out .m-messenger__message-body .m-messenger__message-text {
+  text-align: right;
+}
+.m-checkbox > input:disabled ~ span {
+  opacity: .3;
 }

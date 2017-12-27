@@ -60,11 +60,15 @@
     $.fn.serializeFormToObject = function() {
         //serialize to array
         var data = $(this).serializeArray();
-
+        
         //add also disabled items
         $(':disabled[name]', this)
-            .each(function() {
-                data.push({ name: this.name, value: $(this).val() });
+            .each(function (item) {
+                if ($(this).is(":checkbox")) {
+                    data.push({ name: this.name, value: $(this).is(':checked') });
+                } else {
+                    data.push({ name: this.name, value: $(this).val() });
+                }
             });
 
         //map to object

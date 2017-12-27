@@ -91,8 +91,16 @@ namespace Magicodes.Admin.Chat
         {
             using (CurrentUnitOfWork.SetTenantId(receiver.TenantId))
             {
-                return _chatMessageRepository.Count(cm => cm.UserId == receiver.UserId && cm.TargetUserId == sender.UserId && cm.TargetTenantId == sender.TenantId && cm.ReadState == ChatMessageReadState.Unread);
+                return _chatMessageRepository.Count(cm => cm.UserId == receiver.UserId &&
+                                                          cm.TargetUserId == sender.UserId &&
+                                                          cm.TargetTenantId == sender.TenantId &&
+                                                          cm.ReadState == ChatMessageReadState.Unread);
             }
+        }
+
+        public async Task<ChatMessage> FindMessageAsync(int id, long userId)
+        {
+            return await _chatMessageRepository.FirstOrDefaultAsync(m => m.Id == id && m.UserId == userId);
         }
 
         private async Task HandleSenderToReceiverAsync(UserIdentifier senderIdentifier, UserIdentifier receiverIdentifier, string message, Guid sharedMessageId)

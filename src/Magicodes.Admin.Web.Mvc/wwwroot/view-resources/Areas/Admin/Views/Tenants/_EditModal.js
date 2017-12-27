@@ -20,14 +20,11 @@
 
             var $subscriptionEndDateDiv = modal.find('input[name=SubscriptionEndDateUtc]').parent('div');
             var isUnlimitedInput = modal.find('#CreateTenant_IsUnlimited');
-            var subscriptionEndDateUtcInput = modal.find('input[name=SubscriptionEndDateUtc]');
             function toggleSubscriptionEndDateDiv() {
                 if (isUnlimitedInput.is(':checked')) {
                     $subscriptionEndDateDiv.slideUp('fast');
-                    subscriptionEndDateUtcInput.removeAttr('required');
                 } else {
                     $subscriptionEndDateDiv.slideDown('fast');
-                    subscriptionEndDateUtcInput.attr('required', 'required');
                 }
             }
 
@@ -67,7 +64,7 @@
             
             //take selected date as UTC
             if ($('#CreateTenant_IsUnlimited').is(':visible') && !$('#CreateTenant_IsUnlimited').is(':checked')) {
-                tenant.SubscriptionEndDateUtc = $('.date-time-picker').data("DateTimePicker").date().format("YYYY-MM-DDTHH:mm:ss") + 'Z';    
+                tenant.SubscriptionEndDateUtc = moment($('.date-time-picker').datetimepicker('getDate')).format("YYYY-MM-DDTHH:mm:ss") + 'Z';    
             } else {
                 tenant.SubscriptionEndDateUtc = null;
             }

@@ -9,143 +9,104 @@
 }
 @section Styles
 {
-    <environment names="Development">
-        <link rel="stylesheet" href="~/view-resources/Areas/Admin/Views/Common/_FeaturesTree.css" asp-append-version="true" />
-        <link rel="stylesheet" href="~/view-resources/Areas/Admin/Views/Tenants/Index.css" asp-append-version="true" />
-    </environment>
-
-    <environment names="Staging,Production">
-        <link rel="stylesheet" href="~/view-resources/Areas/Admin/Views/Common/_FeaturesTree.min.css" asp-append-version="true" />
-        <link rel="stylesheet" href="~/view-resources/Areas/Admin/Views/Tenants/Index.min.css" asp-append-version="true" />
-    </environment>
+    <link rel="stylesheet" abp-href="/view-resources/Areas/Admin/Views/_Bundles/tenant-list.css" asp-append-version="true" />
 }
 
 @section Scripts
 {
-    <environment names="Development">
-        <script src="~/view-resources/Areas/Admin/Views/_Bundles/tenant-index-libs.js" asp-append-version="true"></script>
-    </environment>
-
-    <environment names="Staging,Production">
-        <script src="~/view-resources/Areas/Admin/Views/_Bundles/tenant-index-libs.min.js" asp-append-version="true"></script>
-    </environment>
+    <script abp-src="/view-resources/Areas/Admin/Views/_Bundles/tenant-index-libs.js" asp-append-version="true"></script>
 }
-<div class="row margin-bottom-5">
-    <div class="col-xs-6">
-        <div class="page-head">
-            <div class="page-title">
-                <h1>
-                    <span>@L("Tenants")</span> <small>@L("TenantsHeaderInfo")</small>
-                </h1>
-            </div>
+
+<div class="m-subheader ">
+    <div class="row align-items-center">
+        <div class="mr-auto col-sm-12 col-md-6">
+            <h3 class="m-subheader__title m-subheader__title--separator">
+                <span>@L("Tenants")</span>
+            </h3>
+            <span class="m-section__sub">
+                @L("TenantsHeaderInfo")
+            </span>
         </div>
-    </div>
-    <div class="col-xs-6 text-right">
-        @if (IsGranted(AppPermissions.Pages_Tenants_Create))
-        {
-            <button id="CreateNewTenantButton" class="btn btn-primary blue"><i class="fa fa-plus"></i> @L("CreateNewTenant")</button>
-        }
+        <div class="col-sm-12 col-md-6 text-right">
+            @if (IsGranted(AppPermissions.Pages_Tenants_Create))
+            {
+                <button id="CreateNewTenantButton" class="btn btn-primary blue"><i class="fa fa-plus"></i> @L("CreateNewTenant")</button>
+            }
+        </div>
     </div>
 </div>
-<div class="portlet light margin-bottom-0">
-    <div class="portlet-title portlet-title-filter">
-        <div class="inputs inputs-full-width">
-            <div class="portlet-input">
-                <form id="TenantsFormFilter">
-                    <div class="form-body">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="TenantsTableFilter">@L("TenantNameOrTenancyCode")</label>
-                                    <div class="input-group">
-                                        <input id="TenantsTableFilter" class="form-control" type="text" value="@ViewBag.FilterText" placeholder="@L("SearchWithThreeDot")">
-                                        <span class="input-group-btn">
-                                            <button id="GetTenantsButton" class="btn default" type="submit"><i class="icon-magnifier"></i></button>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
 
-                            <div class="col-md-6">
-                                <label for="EditionDropdown">@L("Edition")</label>
-                                @Html.DropDownList("EditionDropdown", Model.EditionItems.Select(i => i.ToSelectListItem()), new { @class = "form-control edited" })
+
+<div class="m-content">
+    <div class="m-portlet m-portlet--mobile">
+        <div class="m-portlet__body">
+            <div class="m-form m-form--label-align-right">
+                <div id="TenantsFormFilter">
+                    <div class="row m--margin-bottom-10">
+                        <div class="col-xl-6">
+                            <label for="TenantsTableFilter">@L("TenantNameOrTenancyCode")</label>
+                            <div class="input-group">
+                                <input id="TenantsTableFilter" class="form-control m-input" type="text" value="@ViewBag.FilterText" placeholder="@L("SearchWithThreeDot")" aria-describedby="basic-addon2">
+                                <span class="input-group-btn">
+                                    <button id="GetTenantsButton" class="btn btn-primary" type="submit"><i class="flaticon-search-1"></i></button>
+                                </span>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <div class="md-checkbox-list">
-                                        <div class="md-checkbox">
-                                            <input class="md-check"
-                                                   type="checkbox"
-                                                   id="TenantsTable_SubscriptionEndDateRangeActive"
-                                                   name="SubscriptionEndDateRangeActive"
-                                                   value="true">
-
-                                            <label for="TenantsTable_SubscriptionEndDateRangeActive">
-                                                <span class="inc"></span>
-                                                <span class="check"></span>
-                                                <span class="box"></span>
-                                                @L("SubscriptionEndDate")
-                                            </label>
-                                        </div>
-                                    </div>
-
-                                    <input type="text" name="SubscriptionEndDateRange" class="form-control date-range-picker">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <div class="md-checkbox-list">
-                                        <div class="md-checkbox">
-                                            <input class="md-check"
-                                                   type="checkbox"
-                                                   id="TenantsTable_CreationDateRangeActive"
-                                                   name="CreationDateRangeActive"
-                                                   value="true">
-
-                                            <label for="TenantsTable_CreationDateRangeActive">
-                                                <span class="inc"></span>
-                                                <span class="check"></span>
-                                                <span class="box"></span>
-                                                @L("CreationTime")
-                                            </label>
-                                        </div>
-                                    </div>
-
-                                    <input type="text" name="CreationDateRange" class="form-control date-range-picker">
-                                </div>
-
-                            </div>
+                        <div class="col-xl-6">
+                            <label for="EditionDropdown">@L("Edition")</label>
+                            @Html.DropDownList("EditionDropdown", Model.EditionItems.Select(i => i.ToSelectListItem()), new { @class = "form-control edited" })
                         </div>
                     </div>
-                    <div class="form-actions">
-                        <div class="row">
-                            <div class="col-md-12 text-right">
-                                <button name="RefreshButton" class="btn green-haze"><i class="fa fa-refresh"></i> @L("Refresh")</button>
+                    <div class="row m--margin-bottom-10">
+                        <div class="col-xl-6">
+                            <div class="m-checkbox-list">
+                                <label class="m-checkbox">
+                                    <input type="checkbox"
+                                           id="TenantsTable_SubscriptionEndDateRangeActive"
+                                           name="SubscriptionEndDateRangeActive"
+                                           value="true">
+                                    @L("SubscriptionEndDate")
+                                    <span></span>
+                                </label>
                             </div>
+                            <input type="text" name="SubscriptionEndDateRange" class="form-control date-range-picker">
+                        </div>
+                        <div class="col-xl-6">
+                            <div class="m-checkbox-list">
+                                <label class="m-checkbox">
+                                    <input type="checkbox"
+                                           id="TenantsTable_CreationDateRangeActive"
+                                           name="CreationDateRangeActive"
+                                           value="true">
+                                    @L("CreationTime")
+                                    <span></span>
+                                </label>
+                            </div>
+                            <input type="text" name="CreationDateRange" class="form-control date-range-picker">
                         </div>
                     </div>
-                </form>
+                    <div class="row m--margin-bottom-10">
+                        <div class="col-xl-12 text-right">
+                            <button name="RefreshButton" class="btn green-haze"><i class="fa fa-refresh"></i> @L("Refresh")</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row align-items-center">
+                <table id="TenantsTable" class="display table table-striped table-bordered table-hover dt-responsive nowrap">
+                    <thead>
+                        <tr>
+                            <th>@L("Actions")</th>
+                            <th>@L("TenancyCodeName")</th>
+                            <th>@L("Name")</th>
+                            <th>@L("Edition")</th>
+                            <th>@L("SubscriptionEndDateUtc")</th>
+                            <th>@L("Active")</th>
+                            <th>@L("CreationTime")</th>
+                        </tr>
+                    </thead>
+                </table>
             </div>
         </div>
-    </div>
-    <div class="portlet-body">
-        <div>
-            <table id="TenantsTable" class="display table table-striped table-bordered table-hover dt-responsive nowrap">
-                <thead>
-                <tr>
-                    <th>@L("Actions")</th>
-                    <th>@L("TenancyCodeName")</th>
-                    <th>@L("Name")</th>
-                    <th>@L("Edition")</th>
-                    <th>@L("SubscriptionEndDateUtc")</th>
-                    <th>@L("Active")</th>
-                    <th>@L("CreationTime")</th>
-                </tr>
-                </thead>
-            </table>
-        </div>
-
     </div>
 </div>

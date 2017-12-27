@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Abp;
 using Abp.AspNetCore.Mvc.Authorization;
+using Abp.AspNetZeroCore.Net;
 using Abp.Auditing;
 using Abp.Domain.Uow;
 using Abp.Extensions;
@@ -9,7 +10,6 @@ using Abp.Runtime.Session;
 using Microsoft.AspNetCore.Mvc;
 using Magicodes.Admin.Authorization.Users;
 using Magicodes.Admin.Friendships;
-using Magicodes.Admin.Net.MimeTypes;
 using Magicodes.Admin.Storage;
 
 namespace Magicodes.Admin.Web.Controllers

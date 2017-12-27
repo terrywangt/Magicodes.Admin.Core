@@ -7,3 +7,12 @@
 .ou-text.ou-text-has-members .ou-text-member-count {
   font-weight: bold;
 }
+
+.dataTables_info .select-info {
+ display: none;
+}
+
+table.dataTable .m-checkbox > span:after {
+ margin-left: -3px;
+ margin-top: -8px;
+}

@@ -9,134 +9,102 @@
 @Html.Partial("~/Areas/Admin/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(L("CreateNewTenant")))
 
 <div class="modal-body">
-
     <form name="TenantInformationsForm">
-
-        <div class="form-group form-md-line-input form-md-floating-label">
-            <input class="form-control" type="text" name="TenancyName" required maxlength="@Tenant.MaxTenancyNameLength" regex="@Tenant.TenancyNameRegex">
+        <div class="form-group">
             <label>@L("TenancyName")</label>
+            <input class="form-control" type="text" name="TenancyName" required maxlength="@Tenant.MaxTenancyNameLength" regex="@Tenant.TenancyNameRegex">
         </div>
 
-        <div class="form-group form-md-line-input form-md-floating-label no-hint">
-            <input type="text" name="Name" class="form-control" required maxlength="@Tenant.MaxNameLength">
+        <div class="form-group no-hint">
             <label>@L("Name")</label>
+            <input type="text" name="Name" class="form-control" required maxlength="@Tenant.MaxNameLength">
         </div>
 
-        <div class="md-checkbox-list">
-            <div class="md-checkbox">
-                <input id="CreateTenant_UseHostDb" class="md-check" type="checkbox" name="UseHostDb" value="true" checked="checked">
-                <label for="CreateTenant_UseHostDb">
-                    <span class="inc"></span>
-                    <span class="check"></span>
-                    <span class="box"></span>
-                    @L("UseHostDatabase")
-                </label>
-            </div>
+        <div class="m-checkbox-list">
+            <label class="m-checkbox">
+                <input id="CreateTenant_UseHostDb" type="checkbox" name="UseHostDb" value="true" checked="checked">
+                @L("UseHostDatabase")
+                <span></span>
+            </label>
         </div>
 
-        <div class="form-group form-md-line-input form-md-floating-label no-hint" style="display:none">
-            <input type="text" name="ConnectionString" class="form-control" required maxlength="@Tenant.MaxConnectionStringLength">
+        <div class="form-group no-hint" style="display: none">
             <label>@L("DatabaseConnectionString")</label>
+            <input type="text" name="ConnectionString" class="form-control" required maxlength="@Tenant.MaxConnectionStringLength">
         </div>
 
-        <div class="form-group form-md-line-input form-md-floating-label">
-            <input type="email" name="AdminEmailAddress" class="form-control" required maxlength="@Magicodes.Admin.Authorization.Users.User.MaxEmailAddressLength">
+        <div class="form-group">
             <label>@L("AdminEmailAddress")</label>
+            <input type="email" name="AdminEmailAddress" class="form-control" required maxlength="@Magicodes.Admin.Authorization.Users.User.MaxEmailAddressLength">
         </div>
 
-        <div class="md-checkbox-list">
-            <div class="md-checkbox">
-                <input id="CreateTenant_SetRandomPassword" class="md-check" type="checkbox" name="SetRandomPassword" value="true" checked="checked" />
-                <label for="CreateTenant_SetRandomPassword">
-                    <span class="inc"></span>
-                    <span class="check"></span>
-                    <span class="box"></span>
-                    @L("SetRandomPassword")
-                </label>
-            </div>
+        <div class="m-checkbox-list">
+            <label class="m-checkbox">
+                <input id="CreateTenant_SetRandomPassword" type="checkbox" name="SetRandomPassword" value="true" checked="checked" />
+                @L("SetRandomPassword")
+                <span></span>
+            </label>
         </div>
 
-        <div class="form-group form-md-line-input form-md-floating-label no-hint tenant-admin-password" style="display:none">
-            <input id="CreateTenant_AdminPassword" type="password" name="AdminPassword" class="form-control" maxlength="@Magicodes.Admin.Authorization.Users.User.MaxPlainPasswordLength">
+        <div class="form-group no-hint tenant-admin-password" style="display: none">
             <label>@L("Password")</label>
+            <input id="CreateTenant_AdminPassword" type="password" name="AdminPassword" class="form-control" maxlength="@Magicodes.Admin.Authorization.Users.User.MaxPlainPasswordLength">
         </div>
 
-        <div class="form-group form-md-line-input form-md-floating-label tenant-admin-password" style="display:none">
-            <input type="password" name="AdminPasswordRepeat" class="form-control" maxlength="@Magicodes.Admin.Authorization.Users.User.MaxPlainPasswordLength" equalto="#CreateTenant_AdminPassword">
+        <div class="form-group tenant-admin-password" style="display: none">
             <label>@L("PasswordRepeat")</label>
+            <input type="password" name="AdminPasswordRepeat" class="form-control" maxlength="@Magicodes.Admin.Authorization.Users.User.MaxPlainPasswordLength" equalto="#CreateTenant_AdminPassword">
         </div>
 
-        <div class="form-group form-md-line-input form-md-floating-label no-hint">
-            <select class="form-control edited" id="EditionId" name="EditionId">
+        <div class="form-group no-hint">
+            <label for="EditionId">@L("Edition")</label>
+            <select class="form-control" id="EditionId" name="EditionId">
                 @foreach (var edition in Model.EditionItems)
                 {
                     <option value="@edition.Value" data-isfree="@edition.IsFree">@edition.DisplayText</option>
                 }
             </select>
-            <label for="EditionId">@L("Edition")</label>
         </div>
 
-        <div class="md-checkbox-list subscription-component">
-            <div class="md-checkbox">
-                <input id="CreateTenant_IsUnlimited" class="md-check" type="checkbox" name="IsUnlimited" />
-                <label for="CreateTenant_IsUnlimited">
-                    <span class="inc"></span>
-                    <span class="check"></span>
-                    <span class="box"></span>
-                    @L("UnlimitedTimeSubscription")
-                </label>
-            </div>
+        <div class="m-checkbox-list subscription-component">
+            <label for="CreateTenant_IsUnlimited" class="m-checkbox">
+                <input id="CreateTenant_IsUnlimited" type="checkbox" name="IsUnlimited" />
+                @L("UnlimitedTimeSubscription")
+                <span></span>
+            </label>
         </div>
 
-        <div class="form-group form-md-line-input form-md-floating-label subscription-component">
-            <input type="datetime" name="SubscriptionEndDateUtc" class="form-control date-time-picker" required>
+        <div class="form-group subscription-component">
             <label>@L("SubscriptionEndDateUtc")</label>
+            <input type="datetime" name="SubscriptionEndDateUtc" class="form-control date-time-picker" required>
         </div>
 
-        <div class="md-checkbox-list subscription-component">
-            <div class="md-checkbox">
+        <div class="m-checkbox-list subscription-component">
+            <label for="CreateTenant_IsInTrialPeriod" class="m-checkbox">
                 <input id="CreateTenant_IsInTrialPeriod" class="md-check" type="checkbox" name="IsInTrialPeriod" value="true" />
-                <label for="CreateTenant_IsInTrialPeriod">
-                    <span class="inc"></span>
-                    <span class="check"></span>
-                    <span class="box"></span>
-                    @L("IsInTrialPeriod")
-                </label>
-            </div>
+                @L("IsInTrialPeriod")
+                <span></span>
+            </label>
         </div>
 
-        <div class="md-checkbox-list">
-            <div class="md-checkbox">
-                <input id="CreateTenant_ShouldChangePasswordOnNextLogin" class="md-check" type="checkbox" name="ShouldChangePasswordOnNextLogin" value="true" checked="checked">
-                <label for="CreateTenant_ShouldChangePasswordOnNextLogin">
-                    <span class="inc"></span>
-                    <span class="check"></span>
-                    <span class="box"></span>
-                    @L("ShouldChangePasswordOnNextLogin")
-                </label>
-            </div>
-            <div class="md-checkbox">
-                <input id="CreateTenant_SendActivationEmail" class="md-check" type="checkbox" name="SendActivationEmail" value="true" checked="checked">
-                <label for="CreateTenant_SendActivationEmail">
-                    <span class="inc"></span>
-                    <span class="check"></span>
-                    <span class="box"></span>
-                    @L("SendActivationEmail")
-                </label>
-            </div>
-            <div class="md-checkbox">
-                <input id="CreateTenant_IsActive" class="md-check" type="checkbox" name="IsActive" value="true" checked="checked">
-                <label for="CreateTenant_IsActive">
-                    <span class="inc"></span>
-                    <span class="check"></span>
-                    <span class="box"></span>
-                    @L("Active")
-                </label>
-            </div>
+        <div class="m-checkbox-list">
+            <label for="CreateTenant_ShouldChangePasswordOnNextLogin" class="m-checkbox">
+                <input id="CreateTenant_ShouldChangePasswordOnNextLogin" type="checkbox" name="ShouldChangePasswordOnNextLogin" value="true" checked="checked">
+                @L("ShouldChangePasswordOnNextLogin")
+                <span></span>
+            </label>
+            <label for="CreateTenant_SendActivationEmail" class="m-checkbox">
+                <input id="CreateTenant_SendActivationEmail" type="checkbox" name="SendActivationEmail" value="true" checked="checked">
+                @L("SendActivationEmail")
+                <span></span>
+            </label>
+            <label for="CreateTenant_IsActive" class="m-checkbox">
+                <input id="CreateTenant_IsActive" type="checkbox" name="IsActive" value="true" checked="checked">
+                @L("Active")
+                <span></span>
+            </label>
         </div>
-
     </form>
-
 </div>
 
 @Html.Partial("~/Areas/Admin/Views/Common/Modals/_ModalFooterWithSaveAndCancel.cshtml")

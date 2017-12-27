@@ -10,8 +10,6 @@ namespace Magicodes.Admin.Authorization.Users
     /// </summary>
     public class User : AbpUser<User>
     {
-        public const int MaxPhoneNumberLength = 24;
-
         public virtual Guid? ProfilePictureId { get; set; }
 
         public virtual bool ShouldChangePasswordOnNextLogin { get; set; }

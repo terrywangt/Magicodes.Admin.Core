@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using Abp.AspNetZeroCore.Net;
 using Abp.Authorization;
 using Abp.IO;
 using Magicodes.Admin.Authorization;
 using Magicodes.Admin.Dto;
 using Magicodes.Admin.IO;
 using Magicodes.Admin.Logging.Dto;
-using Magicodes.Admin.Net.MimeTypes;
 
 namespace Magicodes.Admin.Logging
 {

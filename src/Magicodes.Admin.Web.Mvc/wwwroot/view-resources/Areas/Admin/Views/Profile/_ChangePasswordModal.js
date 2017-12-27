@@ -12,17 +12,7 @@
 
             _profileService.getPasswordComplexitySetting().done(function (result) {
                 _$form = _modalManager.getModal().find('form[name=ChangePasswordModalForm]');
-                _$form.validate({
-                    errorElement: 'span',
-                    errorClass: 'help-block text-danger',
-                    errorPlacement: function (error, element) {
-                        if (element.closest('.input-icon').size() === 1) {
-                            error.insertAfter(element.closest('.input-icon'));
-                        } else {
-                            error.insertAfter(element.parent());
-                        }
-                    }
-                });
+                _$form.validate();
                 
                 _passwordComplexityHelper.setPasswordComplexityRules(_$form.find("input[name=NewPassword],input[name=NewPasswordRepeat]"), result.setting);
             });

@@ -1,29 +1,23 @@
-﻿<div class="portlet light">
-    <div class="portlet-title">
-        <div class="caption">
-            <span class="caption-subject">Editor</span>
+﻿<div class="m-portlet m-portlet--mobile">
+    <div class="m-portlet__head">
+        <div class="m-portlet__head-caption">
+            <div class="m-portlet__head-title">
+                <h3 class="m-portlet__head-text">
+                    Summernote editor
+                </h3>
+            </div>
         </div>
     </div>
-    <div class="portlet-body">
-
-        <form role="form">
-
-            <div class="form-group form-md-line-input form-md-floating-label row">
-                <label class="col-md-2 control-label">Summernote editor</label>
-                <div class="col-md-10">
-                    <div class="input-group">
-                        <div class="input-group-control">
-                            <div id="summernote"></div>
-                        </div>
-                       
-                    </div>
-                </div>
-                <div class="col-md-offset-2 col-md-10">
-                    <button class="btn green-haze test-btn-summernote" type="button">@L("Submit")</button>
-                </div>
+    <form class="m-form m-form--fit m-form--label-align-right">
+        <div class="m-portlet__body">
+            <div class="form-group m-form__group">
+                <div id="summernote"></div>
             </div>
-
-        </form>
-
-    </div>
+        </div>
+        <div class="m-portlet__foot m-portlet__foot--fit">
+            <div class="m-form__actions">
+                <button class="btn btn-primary test-btn-summernote" type="button">@L("Submit")</button>
+            </div>
+        </div>
+    </form>
 </div>

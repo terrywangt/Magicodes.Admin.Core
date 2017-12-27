@@ -33,16 +33,15 @@
 
     var _createButtonDropdown = function (record, field) {
         var $container = $('<div/>')
-            .addClass('btn-group')
             .addClass('dropdown')
             .addClass('action-button');
 
         var $dropdownButton = $('<button/>')
             .html(field.text)
-            .addClass('dropdown-toggle')
+            .addClass('btn btn-brand btn-sm dropdown-toggle')
             .attr('data-toggle', 'dropdown')
             .attr('aria-haspopup', 'true')
-            .attr('aria-expanded', 'true');
+            .attr('aria-expanded', 'false');
 
         if (field.cssClass) {
             $dropdownButton.addClass(field.cssClass);

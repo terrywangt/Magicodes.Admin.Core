@@ -147,9 +147,9 @@
     <text name="ExportToExcel" value="Esporta in Excel" />
     <text name="ChangeProfilePicture" value="Cambia immagine del profilo" />
     <text name="TenantName_Regex_Description" value="Il nome istanza deve essere di alemno 2 caratteri, iniziare con una lettere e continuare con una lettere, un numero, il trattino basso ('_') o meno ('-')" />
-    <text name="ProfilePicture_Change_Info" value="Puoi selezionare un immagine JPG/JPEG/PNG con una dimensione massima di 1MB." />
+    <text name="ProfilePicture_Change_Info" value="Puoi selezionare un immagine JPG/JPEG/PNG con una dimensione massima di {0}MB." />
     <text name="ProfilePicture_Change_Error" value="La tua immagine del profilo non può essere modificata." />
-    <text name="ProfilePicture_Warn_SizeLimit" value="L'immagine del profilo deve essere minore di 1MB. Per favore seleziona un altro file." />
+    <text name="ProfilePicture_Warn_SizeLimit" value="L'immagine del profilo deve essere minore di {0}MB. Per favore seleziona un altro file." />
     <text name="ProfilePicture_Warn_FileType" value="Puoi selezionare solo file JPG/JPEG. Per favore seleziona un altro file." />
     <text name="Dashboard" value="Dashboard" />
     <text name="DashboardHeaderInfo" value="statistice e report" />
@@ -297,7 +297,7 @@
     <text name="DifferentTenantImpersonationErrorMessage" value="Non puoi impersonare un utente di un'altra istanza!" />
     <text name="ImpersonationTokenErrorMessage" value="Token per impersonare non valido o scaduto!" />
     <text name="LinkedAccounts" value="Account collegati" />
-    <text name="ManageAccounts" value="Gestione Account" />
+    <text name="ManageLinkedAccounts" value="Gestione Account" />
     <text name="LinkNewAccount" value="Collega nuovo account" />
     <text name="SuccessfullyUnlinked" value="Correttamente collegato" />
     <text name="LinkedUserDeleteWarningMessage" value="Il collegamento all'utente {0} verrà cancellato." />

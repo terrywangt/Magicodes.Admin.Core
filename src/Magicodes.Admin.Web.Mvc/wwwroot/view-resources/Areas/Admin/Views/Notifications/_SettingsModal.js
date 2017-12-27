@@ -11,21 +11,21 @@
 
             _$form = _modalManager.getModal().find('form[name=NotificationSettingsForm]');
             _$form.validate();
-
+            
             $('.make-switch').bootstrapSwitch().on('switchChange.bootstrapSwitch', function () {
                 var receiveNotifications = $(this).is(":checked");
                 var notificationCount = $("div.notification").length;
 
                 if (notificationCount) {
-                    $('.notification-types-header').removeClass('hidden');
+                    $('.notification-types-header').removeClass('d-none');
                 } else {
-                    $('.notification-types-header').addClass('hidden');
+                    $('.notification-types-header').addClass('d-none');
                 }
 
                 if (notificationCount && !receiveNotifications) {
-                    $('.disable-info').removeClass('hidden');
+                    $('.disable-info').removeClass('d-none');
                 } else {
-                    $('.disable-info').addClass('hidden');
+                    $('.disable-info').addClass('d-none');
                 }
 
                 if (!receiveNotifications) {

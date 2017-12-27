@@ -38,9 +38,9 @@
                         element: $("<div/>")
                             .addClass("text-center")
                             .append($("<button/>")
-                                .addClass("btn btn-default btn-xs")
+                                .addClass("btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill")
                                 .attr("title", app.localize("AuditLogDetail"))
-                                .append($("<i/>").addClass("fa fa-search"))
+                                .append($("<i/>").addClass("la la-search"))
                             ).click(function () {
                                 showDetails($(this).data());
                             })
@@ -53,9 +53,9 @@
                     render: function (exception) {
                         var $div = $("<div/>").addClass("text-center");
                         if (exception) {
-                            $div.append($("<i/>").addClass("fa fa-warning font-yellow-gold").attr("title", app.localize("HasError")));
+                            $div.append($("<i/>").addClass("fa fa-warning m--font-warning").attr("title", app.localize("HasError")));
                         } else {
-                            $div.append($("<i/>").addClass("fa fa-check-circle font-green").attr("title", app.localize("Success")));
+                            $div.append($("<i/>").addClass("fa fa-check-circle m--font-success").attr("title", app.localize("Success")));
                         }
 
                         return $div[0].outerHTML;

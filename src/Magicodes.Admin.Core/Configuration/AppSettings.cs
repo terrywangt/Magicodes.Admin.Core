@@ -12,6 +12,42 @@ namespace Magicodes.Admin.Configuration
             public const string BillingAddress = "App.HostManagement.BillingAddress";
         }
 
+        public static class UiManagement
+        {
+            public const string LayoutType = "App.UiManagement.LayoutType";
+            public const string PageLoader = "App.UiManagement.PageLoader";
+            public const string ContentSkin = "App.UiManagement.ContentSkin";
+
+            public static class Header
+            {
+                public const string DesktopFixedHeader = "App.UiManagement.Header.DesktopFixedHeader";
+                public const string DesktopMinimizeMode = "App.UiManagement.Header.DesktopMinimizeMode";
+                public const string MobileFixedHeader = "App.UiManagement.Header.MobileFixedHeader"; 
+                public const string DropdownSkinDesktop = "App.UiManagement.Header.DropdownSkin_Desktop"; 
+                public const string DisplaySubmenuArrowDesktop = "App.UiManagement.Header.DisplaySubmenuArrow_Desktop"; 
+                public const string DropdownSkin = "App.UiManagement.Header.DropdownSkin"; 
+            }
+
+            public static class LeftAside
+            {
+                public const string Position = "App.UiManagement.Left.Position";
+                public const string AsideSkin = "App.UiManagement.Left.AsideSkin";
+                public const string FixedAside = "App.UiManagement.Left.FixedAside"; 
+                public const string AllowAsideMinimizing = "App.UiManagement.Left.AllowAsideMinimizing"; 
+                public const string DefaultMinimizedAside = "App.UiManagement.Left.DefaultMinimizedAside"; 
+                public const string AllowAsideHiding = "App.UiManagement.Left.AllowAsideHiding"; 
+                public const string DefaultHiddenAside = "App.UiManagement.Left.DefaultHiddenAside"; 
+                public const string SubmenuToggle = "App.UiManagement.Left.SubmenuToggle"; 
+                public const string DropdownSubmenuSkin = "App.UiManagement.Left.DropdownSubmenuSkin"; 
+                public const string DropdownSubmenuArrow = "App.UiManagement.Left.DropdownSubmenuArrow"; 
+            }
+
+            public static class Footer
+            {
+                public const string FixedFooter = "App.UiManagement.Footer.FixedFooter";
+            }
+        }
+
 
         public static class TenantManagement
         {

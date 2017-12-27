@@ -1,0 +1,55 @@
+﻿@using Abp.Collections.Extensions
+@using Magicodes.Admin.Web.Areas.Admin.Views.Shared.Components.AdminSideBar
+@model UserMenuItemViewModel
+
+<li class="m-menu__item @(Model.MenuItem.Items.IsNullOrEmpty() ? "":"m-menu__item--submenu") @(Model.MenuItem.IsMenuActive(Model.CurrentPageName) ? "m-menu__item--active" : "")" aria-haspopup="true" data-menu-submenu-toggle="hover">
+    @if (Model.MenuItem.Items.IsNullOrEmpty())
+    {
+        <a href="@Model.MenuItem.CalculateUrl(ApplicationPath)" class="m-menu__link">
+            <i class="m-menu__link-icon @Model.MenuItem.Icon"></i>
+            <span class="m-menu__link-text">
+                <span class="title">@Model.MenuItem.DisplayName</span>
+            </span>
+        </a>
+    }
+    else
+    {
+        <a href="#" class="m-menu__link m-menu__toggle">
+            <i class="m-menu__link-icon @Model.MenuItem.Icon"></i>
+            <span class="m-menu__link-text">
+                <span class="title">@Model.MenuItem.DisplayName</span>
+            </span>
+
+            @if (Model.RootLevel)
+            {
+                <i class="m-menu__hor-arrow la la-angle-down"></i>
+                <i class="m-menu__ver-arrow la la-angle-right"></i>
+            }
+            else
+            {
+                <i class="m-menu__hor-arrow la la-angle-right"></i>
+                <i class="m-menu__ver-arrow la la-angle-right"></i>
+            }
+        </a>
+        <div class="m-menu__submenu m-menu__submenu--classic @(Model.RootLevel ? "":"m-menu__submenu--right")">
+            <span class="m-menu__arrow"></span>
+            <ul class="m-menu__subnav">
+                @for (var i = 0; i < Model.MenuItem.Items.Count; i++)
+                {
+                    var childMenuItem = Model.MenuItem.Items[i];
+                    if (!childMenuItem.IsVisible)
+                    {
+                        continue;
+                    }
+                    @Html.Partial("Components/AdminMenu/_TopUserMenuItem", new UserMenuItemViewModel
+                    {
+                        MenuItem = childMenuItem,
+                        MenuItemIndex = i,
+                        CurrentPageName = Model.CurrentPageName,
+                        RootLevel = false
+                    })
+                }
+            </ul>
+        </div>
+    }
+</li>

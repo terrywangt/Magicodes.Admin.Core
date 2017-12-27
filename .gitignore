@@ -118,3 +118,7 @@ src/.vs/config/applicationhost.config
 src/Magicodes.Admin.Web.Host/wwwroot/Temp/Downloads
 src/Magicodes.Admin.Web.Mvc/wwwroot/Temp/Downloads
 src/Magicodes.Admin.Web.Mvc/Properties/PublishProfiles
+src/Magicodes.Admin.Web.Mvc/node_modules
+src/Magicodes.Admin.Web.Mvc/wwwroot/lib
+
+src/Magicodes.Admin.Web.Public/wwwroot/lib

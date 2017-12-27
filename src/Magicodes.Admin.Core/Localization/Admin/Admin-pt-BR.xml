@@ -147,9 +147,9 @@
     <text name="ExportToExcel" value="Exportar para excel" />
     <text name="ChangeProfilePicture" value="Mudar a foto do perfil" />
     <text name="TenantName_Regex_Description" value="Nome de instância deve ter no mínimo 2 caracteres, começa com uma letra e continuar com letra, número, traço ou sublinhado." />
-    <text name="ProfilePicture_Change_Info" value="Você pode selecionar um arquivo JPG / JPEG / PNG com um tamanho máximo de 1MB." />
+    <text name="ProfilePicture_Change_Info" value="Você pode selecionar um arquivo JPG / JPEG / PNG com um tamanho máximo de {0}MB." />
     <text name="ProfilePicture_Change_Error" value="Sua imagem de perfil não pode ser alterada." />
-    <text name="ProfilePicture_Warn_SizeLimit" value="O tamanho da imagem deve ser menor que 1MB. Por favor, selecione outro arquivo." />
+    <text name="ProfilePicture_Warn_SizeLimit" value="O tamanho da imagem deve ser menor que {0}MB. Por favor, selecione outro arquivo." />
     <text name="ProfilePicture_Warn_FileType" value="Você só pode selecionar o arquivo JPG / JPEG. Por favor, selecione outro arquivo." />
     <text name="Dashboard" value="Dashboard" />
     <text name="DashboardHeaderInfo" value="estatísticas e relatórios" />
@@ -323,7 +323,7 @@
     <text name="YouCannotLinkToSameAccount">Você não pode ligar as mesmas contas!</text>
     <text name="ChangePasswordBeforeLinkToAnAccount">Você deve mudar sua senha antes de ligar esta conta de usuário a sua!</text>
     <text name="LinkedAccounts">Contas de usuários ligadas</text>
-    <text name="ManageAccounts">Gerenciar contas</text>
+    <text name="ManageLinkedAccounts">Gerenciar contas</text>
     <text name="LinkNewAccount">Ligar nova conta de usuário</text>
     <text name="SuccessfullyUnlinked">Desligado com sucesso</text>
     <text name="LinkedUserDeleteWarningMessage">O ligamento com o usuário {0} vai ser deletado.</text>

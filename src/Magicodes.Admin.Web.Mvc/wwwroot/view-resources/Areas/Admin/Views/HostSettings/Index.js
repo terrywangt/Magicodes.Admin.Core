@@ -12,7 +12,7 @@
 
         var _$tenantSettingsCheckboxes = _$tabPanel
            .find('input[name=IsNewRegisteredTenantActiveByDefault],input[name=UseCaptchaOnRegistration]')
-           .closest('.md-checkbox');
+           .closest('.m-checkbox');
 
         var _$userLockOutSettingsFormItems = $('#UserLockOutSettingsForm')
             .find('input')
@@ -22,7 +22,7 @@
         var _$twoFactorLoginSettingsFormItems = $('#TwoFactorLoginSettingsForm')
             .find('input')
             .not('#Setting_TwoFactorLogin_IsEnabled')
-            .closest('.md-checkbox');
+            .closest('.m-checkbox');
 
         function toggleSmtpCredentialFormGroups() {
             if ($('#Settings_SmtpUseDefaultCredentials').is(':checked')) {

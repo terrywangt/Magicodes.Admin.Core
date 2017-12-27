@@ -165,6 +165,11 @@
 
                 _appUserNotificationHelper.openSettingsModal();
             });
+
+            $('div.user-notification-item-clickable').click(function() {
+                var url = $(this).attr('data-url');
+                document.location.href = url;
+            });
         }
 
         function loadNotifications() {
@@ -172,6 +177,7 @@
                 maxResultCount: 3
             }).done(function (result) {
                 result.notifications = [];
+                result.unreadMessageExists = result.unreadCount > 0;
                 $.each(result.items, function (index, item) {
                     result.notifications.push(_appUserNotificationHelper.format(item));
                 });
@@ -181,6 +187,7 @@
                 var template = $('#headerNotificationBarTemplate').html();
                 Mustache.parse(template);
                 var rendered = Mustache.render(template, result);
+
                 $li.html(rendered);
 
                 bindNotificationEvents();
@@ -203,9 +210,9 @@
         //Chat
         abp.event.on('app.chat.unreadMessageCountChanged', function (messageCount) {
             if (messageCount) {
-                $('#UnreadChatMessageCount').removeClass('hidden');
+                $('#UnreadChatMessageCount').removeClass('d-none');
             } else {
-                $('#UnreadChatMessageCount').addClass('hidden');
+                $('#UnreadChatMessageCount').addClass('d-none');
             }
 
             $('#UnreadChatMessageCount').html(messageCount);

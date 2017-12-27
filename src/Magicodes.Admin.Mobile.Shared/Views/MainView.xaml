@@ -1,0 +1,157 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<MasterDetailPage xmlns="http://xamarin.com/schemas/2014/forms" 
+                  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                  xmlns:base="clr-namespace:Magicodes.Admin.ViewModels.Base;assembly=Magicodes.Admin.Mobile.Shared"
+                  xmlns:views="clr-namespace:Magicodes.Admin.Views;assembly=Magicodes.Admin.Mobile.Shared"
+                  xmlns:behaviors="clr-namespace:Magicodes.Admin.Behaviors;assembly=Magicodes.Admin.Mobile.Shared"
+                  xmlns:extensions="clr-namespace:Magicodes.Admin.Extensions.MarkupExtensions;assembly=Magicodes.Admin.Mobile.Shared"
+                  xmlns:iconize="clr-namespace:FormsPlugin.Iconize;assembly=FormsPlugin.Iconize"
+                  xmlns:controls="clr-namespace:Magicodes.Admin.Controls;assembly=Magicodes.Admin.Mobile.Shared"
+                  xmlns:image="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin.Abstractions"
+                  x:Class="Magicodes.Admin.Views.MainView"  
+                  MasterBehavior="Popover" 
+                  IsPresented="{Binding ShowMasterPage, Mode=TwoWay}"
+                  base:ViewManager.AutoWireViewModel="true">
+
+    <MasterDetailPage.Master>
+        <ContentPage Title="Admin" 
+                     Icon="hamburger.png" 
+                     BackgroundColor="{StaticResource MasterPageBackgroundColor}">
+            
+            <StackLayout Orientation="Vertical"  Spacing="0">
+
+                <!--NAME SURNAME & PROFILE PICTURE-->
+                <Grid VerticalOptions="FillAndExpand" >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="110" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <BoxView Grid.Row="0" 
+                             Color="{StaticResource NavigationMenuTopColor}" />
+
+                    <Label Text="{Binding UserNameAndSurname}"
+                           FontSize="20"    
+                           Grid.Row="1"  
+                           TextColor="White"  
+                           Margin="0, -100, 0, 0" 
+                           HorizontalTextAlignment="Center"
+                           HorizontalOptions="CenterAndExpand"/>
+
+                    <image:CircleImage  
+                        Grid.Row="2"
+                        Grid.RowSpan="2"
+                        Source="{Binding Photo}" 
+                        WidthRequest="130" 
+                        HeightRequest="130" 
+                        Aspect="AspectFill"
+                        HorizontalOptions="CenterAndExpand" 
+                        Margin="0, -80, 0, 0" 
+                        BorderThickness="7"
+                        FillColor="White"
+                        BorderColor="{StaticResource NavigationMenuTopColor}">
+                        <image:CircleImage.GestureRecognizers >
+                            <TapGestureRecognizer
+                                Command="{Binding ShowProfilePhotoCommand}"
+                                NumberOfTapsRequired="1" />
+                        </image:CircleImage.GestureRecognizers>
+                    </image:CircleImage>
+
+                    <iconize:IconButton 
+                        Grid.Row="3"  
+                        Text="fa-camera" 
+                        FontSize="15" 
+                        WidthRequest="38" 
+                        HeightRequest="38"
+                        Margin="70, -15, 0, 0" 
+                        BorderRadius="20"
+                        TextColor="White"
+                        BackgroundColor="#e29384"
+                        HorizontalOptions="Center" 
+                        Command="{Binding ChangeProfilePhotoCommand}" />
+
+                </Grid>
+
+                <!--NAVIGATION MENU-->
+                <ListView SeparatorVisibility="None" 
+                          ItemsSource="{Binding MenuItems}"  
+                          Margin="0,10,0,0"
+                          SelectedItem="{Binding SelectedMenuItem, Mode=TwoWay}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+
+                                <StackLayout>
+                                    <Grid Padding="5,10" 
+                                          BackgroundColor="{Binding IsSelected,
+                                                                Converter={StaticResource BackgroundColorConverter}, 
+                                                                ConverterParameter={StaticResource SelectedNavigationMenuBackgroundColor}}">
+                                        
+                                         <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="30"/>
+                                            <ColumnDefinition Width="*" />
+                                         </Grid.ColumnDefinitions>
+
+                                        <Image  Source="{Binding Icon, Converter={StaticResource ImageSourceConverter}}" />
+                                        
+                                         <Label  
+                                             Grid.Column="1"
+                                             Text="{Binding Title}" 
+                                             VerticalOptions="FillAndExpand" />
+                                     </Grid>
+
+                                    <controls:Divider Margin="0,-6,0,0" 
+                                                      BackgroundColor="{StaticResource SelectedNavigationMenuBackgroundColor}"/>
+
+                                </StackLayout>
+                                
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <!--LOGOUT BUTTON-->
+                 
+                <Grid ColumnSpacing="10" 
+                      BackgroundColor="{StaticResource MasterPageBackgroundColor}"
+                      Margin="0,0,0,5"
+                      MinimumHeightRequest="20"
+                      Padding="5">
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="25"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Image Source="{extensions:ImageSource 'Magicodes.Admin.UI.Assets.Images.Logout.png'}"/>
+                    <Label Grid.Column="1" Text="{extensions:Translate Logout}" VerticalOptions="CenterAndExpand"/>
+
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer NumberOfTapsRequired="1" Command="{Binding LogoutCommand}"/>
+                    </Grid.GestureRecognizers>
+                </Grid>
+
+                <controls:Divider />
+
+                <!--APP VERSION-->
+                <Label  Text="{Binding ApplicationInfo}"  
+                        Style="{StaticResource SmallInfoLabel}"
+                        VerticalOptions="EndAndExpand"/>
+
+            </StackLayout>
+        </ContentPage>
+    </MasterDetailPage.Master>
+
+    <MasterDetailPage.Detail>
+        <views:InitialView/>
+    </MasterDetailPage.Detail>
+
+    <MasterDetailPage.Behaviors>
+        <behaviors:EventHandlerBehavior EventName="Appearing">
+            <behaviors:InvokeCommandAction Command="{Binding PageAppearingCommand}" />
+        </behaviors:EventHandlerBehavior>
+    </MasterDetailPage.Behaviors>
+
+</MasterDetailPage>

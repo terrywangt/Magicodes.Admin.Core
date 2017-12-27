@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Abp.AspNetZeroCore.Net;
 using Abp.Collections.Extensions;
 using Abp.Dependency;
 using Magicodes.Admin.Dto;
-using Magicodes.Admin.Net.MimeTypes;
 using OfficeOpenXml;
 
 namespace Magicodes.Admin.DataExporting.Excel.EpPlus

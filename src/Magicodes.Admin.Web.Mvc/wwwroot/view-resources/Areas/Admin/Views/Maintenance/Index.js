@@ -49,11 +49,11 @@
             var resultHtml = '';
             $.each(logLines, function (index, logLine) {
                 resultHtml += '<span class="log-line">' + _.escape(logLine)
-                .replace('DEBUG', '<span class="label label-default">DEBUG</span>')
-                .replace('INFO', '<span class="label label-info">INFO</span>')
-                .replace('WARN', '<span class="label label-warning">WARN</span>')
-                .replace('ERROR', '<span class="label label-danger">ERROR</span>')
-                .replace('FATAL', '<span class="label label-danger">FATAL</span>') + '</span>';
+                    .replace('DEBUG', '<span class="m-badge m-badge--wide m-badge--metal">DEBUG</span>')
+                    .replace('INFO', '<span class="m-badge m-badge--wide m-badge--info">INFO</span>')
+                    .replace('WARN', '<span class="m-badge m-badge--wide m-badge--warning">WARN</span>')
+                    .replace('ERROR', '<span class="m-badge m-badge--wide m-badge--danger">ERROR</span>')
+                    .replace('FATAL', '<span class="m-badge m-badge--wide m-badge--danger">FATAL</span>') + '</span>';
             });
             return resultHtml;
         }

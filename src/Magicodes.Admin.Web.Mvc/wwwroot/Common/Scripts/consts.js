@@ -3,6 +3,7 @@
 
     $.extend(app, {
         consts: {
+            maxProfilPictureBytesUserFriendlyValue: 5,
             grid: {
                 defaultPageSize: 10,
                 defaultPageSizes: [10, 20, 50, 100]

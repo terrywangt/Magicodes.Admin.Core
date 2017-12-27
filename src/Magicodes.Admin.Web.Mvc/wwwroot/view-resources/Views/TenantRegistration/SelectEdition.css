@@ -70,3 +70,7 @@ div.pricing-content-1 > div.row > div {
         min-height: 153px !important;
     }
 }
+
+div.edition-description {
+ font-size: 12px !important;
+}

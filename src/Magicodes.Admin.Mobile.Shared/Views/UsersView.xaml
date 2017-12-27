@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Name="UsersPage"
+             x:Class="Magicodes.Admin.Views.UsersView"
+             xmlns:behaviors="clr-namespace:Magicodes.Admin.Behaviors;assembly=Magicodes.Admin.Mobile.Shared"
+             xmlns:base="clr-namespace:Magicodes.Admin.ViewModels.Base;assembly=Magicodes.Admin.Mobile.Shared"
+             xmlns:controls="clr-namespace:Magicodes.Admin.Controls;assembly=Magicodes.Admin.Mobile.Shared"
+             xmlns:image="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin.Abstractions"
+             xmlns:extensions="clr-namespace:Magicodes.Admin.Extensions.MarkupExtensions;assembly=Magicodes.Admin.Mobile.Shared"
+             xmlns:permission="clr-namespace:Magicodes.Admin.Services.Permission;assembly=Magicodes.Admin.Mobile.Shared"
+             base:ViewManager.AutoWireViewModel="true" 
+             Title="{Binding Title}">
+
+    <ContentPage.ToolbarItems>
+        
+        <controls:HideableToolbarItem 
+            Order="Primary" 
+            Text="{extensions:Translate CreateNewUser}"  
+            Command="{Binding CreateNewUserCommand}" 
+            IsVisible="{extensions:HasPermission Text={x:Static permission:PermissionKey.UserCreate}}"
+            ParentPage="{x:Reference UsersPage}" />
+        
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.Content>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <SearchBar Grid.Row="0" 
+                       Grid.Column="0" 
+                       Text="{Binding FilterText}" 
+                       Placeholder="{extensions:Translate SearchWithThreeDot}"/>
+
+            <StackLayout Orientation="Vertical" 
+                         VerticalOptions="FillAndExpand" 
+                         HorizontalOptions="CenterAndExpand"
+                         Grid.Row="1" 
+                         Grid.Column="0">
+
+                <ListView 
+                      SeparatorVisibility="None"  
+                      HasUnevenRows="True"
+                      ItemsSource="{Binding Users}" 
+                      IsPullToRefreshEnabled="{Binding IsNotBusy}"
+                      IsRefreshing="{Binding IsBusy}"
+                      RefreshCommand="{Binding RefreshUsersCommand}"
+                      ItemAppearing="ListView_OnItemAppearing"
+                      SelectedItem="{Binding SelectedUser, Mode=TwoWay}"
+                      CachingStrategy="RetainElement">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell >
+                                <controls:CardView  Margin="10, 5, 10, 5" Padding="10" >
+
+                                    <Grid  ColumnSpacing="16">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <image:CircleImage 
+                                            Source="{Binding Photo}" 
+                                            WidthRequest="70" 
+                                            HeightRequest="70" 
+                                            Aspect="AspectFill"
+                                            HorizontalOptions="CenterAndExpand" 
+                                            BorderThickness="2"
+                                            FillColor="White"
+                                            BorderColor="{StaticResource PrimaryColor}">
+                                        </image:CircleImage>
+
+                                        <StackLayout VerticalOptions="Center" Grid.Column="1" Spacing="0">
+                                            <Label Text="{Binding UserName}" Font="Bold"  Style="{StaticResource ActiveLabel}" />
+
+                                            <StackLayout Orientation="Horizontal">
+                                                <Label Text="{Binding Name}"  Style="{StaticResource ActiveLabel}"/>
+                                                <Label Text="{Binding Surname}"  Style="{StaticResource ActiveLabel}"/>
+                                            </StackLayout>
+
+                                            <Label Text="{Binding EmailAddress}" FontSize="{StaticResource SmallFont}"  Style="{StaticResource ActiveLabel}"/>
+
+                                        </StackLayout>
+
+                                    </Grid>
+
+                                </controls:CardView>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+            </StackLayout>
+
+        </Grid>
+    </ContentPage.Content>
+
+    <ContentPage.Behaviors>
+        <behaviors:EventHandlerBehavior EventName="Appearing">
+            <behaviors:InvokeCommandAction Command="{Binding PageAppearingCommand}" />
+        </behaviors:EventHandlerBehavior>
+    </ContentPage.Behaviors>
+
+</ContentPage>

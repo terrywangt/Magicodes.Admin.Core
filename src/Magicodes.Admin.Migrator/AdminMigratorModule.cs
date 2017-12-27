@@ -1,3 +1,4 @@
+using Abp.AspNetZeroCore;
 using Abp.Events.Bus;
 using Abp.Modules;
 using Abp.Reflection.Extensions;
@@ -28,6 +29,7 @@ namespace Magicodes.Admin.Migrator
             Configuration.DefaultNameOrConnectionString = _appConfiguration.GetConnectionString(
                 AdminConsts.ConnectionStringName
                 );
+            Configuration.Modules.AspNetZero().LicenseCode = _appConfiguration["AbpZeroLicenseCode"];
 
             Configuration.BackgroundJobs.IsJobExecutionEnabled = false;
             Configuration.ReplaceService(typeof(IEventBus), () =>

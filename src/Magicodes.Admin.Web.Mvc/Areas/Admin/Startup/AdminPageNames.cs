@@ -11,6 +11,7 @@
             public const string OrganizationUnits = "Administration.OrganizationUnits";
             public const string Languages = "Administration.Languages";
             public const string DemoUiComponents = "Administration.DemoUiComponents";
+            public const string UiCustomization = "Administration.UiCustomization";
         }
 
         public static class Host

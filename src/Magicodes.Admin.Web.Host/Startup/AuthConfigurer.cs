@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Abp.Runtime.Security;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -45,6 +46,15 @@ namespace Magicodes.Admin.Web.Startup
                     {
                         OnMessageReceived = QueryStringTokenResolver
                     };
+                });
+            }
+
+            if (bool.Parse(configuration["IdentityServer:IsEnabled"]))
+            {
+                authenticationBuilder.AddIdentityServerAuthentication("IdentityBearer", options =>
+                {
+                    options.Authority = configuration["App:ServerRootAddress"];
+                    options.RequireHttpsMetadata = false;
                 });
             }
         }

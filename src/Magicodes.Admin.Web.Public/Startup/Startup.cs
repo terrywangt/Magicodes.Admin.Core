@@ -14,7 +14,7 @@ using Magicodes.Admin.Identity;
 #if FEATURE_SIGNALR
 using Owin;
 using Abp.Owin;
-using Magicodes.Admin.Web.Owin;
+using Abp.AspNetZeroCore.Web.Owin;
 #endif
 
 namespace Magicodes.Admin.Web.Public.Startup

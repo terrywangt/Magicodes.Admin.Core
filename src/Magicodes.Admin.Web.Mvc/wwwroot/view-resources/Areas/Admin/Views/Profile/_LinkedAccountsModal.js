@@ -21,7 +21,6 @@
             });
         });
 
-
         var dataTable = _$linkedAccountsTable.DataTable({
             paging: true,
             serverSide: true,
@@ -37,9 +36,9 @@
                     defaultContent: '',
                     rowAction: {
                         element: $("<button/>")
-                            .addClass("btn btn-xs btn-primary blue")
+                            .addClass("btn btn-primary btn-sm m-btn--icon")
                             .text(app.localize('LogIn'))
-                            .append($("<i/>").addClass("icon-login"))
+                            .prepend($("<i/>").addClass("la la-sign-in"))
                             .click(function () {
                                 switchToUser($(this).data());
                             })
@@ -60,9 +59,9 @@
                     defaultContent: '',
                     rowAction: {
                         element: $("<button/>")
-                            .addClass("btn btn-xs btn-danger red")
+                            .addClass("btn btn-outline-danger m-btn m-btn--icon btn-sm m-btn--icon-only m-btn--pill m-btn--air")
                             .attr("title", app.localize('Delete'))
-                            .append($("<i/>").addClass("icon-trash"))
+                            .append($("<i/>").addClass("la la-trash"))
                             .click(function () {
                                 deleteLinkedUser($(this).data());
                             })

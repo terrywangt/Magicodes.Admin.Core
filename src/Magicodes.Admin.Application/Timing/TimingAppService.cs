@@ -44,11 +44,9 @@ namespace Magicodes.Admin.Timing
         {
             var defaultTimezoneId = await _timeZoneService.GetDefaultTimezoneAsync(defaultTimezoneScope, AbpSession.TenantId);
             var defaultTimezone = TimeZoneInfo.FindSystemTimeZoneById(defaultTimezoneId);
-            var defaultTimezoneName = string.Format("{0} [{1}]", L("Default"), defaultTimezone.DisplayName);
+            var defaultTimezoneName = $"{L("Default")} [{defaultTimezone.DisplayName}]";
 
-            var timeZones = TimeZoneInfo.GetSystemTimeZones()
-                                        .Select(tz => new NameValueDto(tz.DisplayName, tz.Id))
-                                        .ToList();
+            var timeZones = _timeZoneService.GetWindowsTimezones();
 
             timeZones.Insert(0, new NameValueDto(defaultTimezoneName, string.Empty));
             return timeZones;

@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Abp.AspNetCore;
+using Abp.AspNetZeroCore.Web.Authentication.JwtBearer;
 using Abp.Castle.Logging.Log4Net;
 using Abp.Dependency;
 using Abp.Extensions;
@@ -20,15 +21,15 @@ using Magicodes.Admin.Authorization;
 using Magicodes.Admin.Authorization.Roles;
 using Magicodes.Admin.Authorization.Users;
 using Magicodes.Admin.Configuration;
+using Magicodes.Admin.EntityFrameworkCore;
 using Magicodes.Admin.Identity;
+using Magicodes.Admin.Install;
 using Magicodes.Admin.MultiTenancy;
 using Magicodes.Admin.Web.Authentication.JwtBearer;
 using PaulMiami.AspNetCore.Mvc.Recaptcha;
 using Swashbuckle.AspNetCore.Swagger;
 using Magicodes.Admin.Web.IdentityServer;
-
 #if FEATURE_SIGNALR
-using Magicodes.Admin.Web.Owin;
 using Abp.Owin;
 using Microsoft.AspNet.SignalR;
 using Microsoft.Owin.Cors;
@@ -36,6 +37,7 @@ using Owin;
 using Owin.Security.AesDataProtectorProvider;
 using Abp.Web.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
+using Abp.AspNetZeroCore.Web.Owin;
 #endif
 
 namespace Magicodes.Admin.Web.Startup
@@ -127,24 +129,16 @@ namespace Magicodes.Admin.Web.Startup
             
             if (bool.Parse(_appConfiguration["IdentityServer:IsEnabled"]))
             {
+                app.UseJwtTokenMiddleware("IdentityBearer");
                 app.UseIdentityServer();
-
-                /* We can not use app.UseIdentityServerAuthentication because IdentityServer4.AccessTokenValidation
-                 * is not ported to asp.net core 2.0 yet. See issue: https://github.com/IdentityServer/IdentityServer4/issues/1055
-                 * Once it's ported, add IdentityServer4.AccessTokenValidation to Web.Core project and enable following lines:
-                 */
-
-                //app.UseIdentityServerAuthentication(
-                //    new IdentityServerAuthenticationOptions
-                //    {
-                //        Authority = _appConfiguration["App:ServerRootAddress"],
-                //        RequireHttpsMetadata = false
-                //    });
             }
 
             app.UseStaticFiles();
 
-            app.UseAbpRequestLocalization();
+            if (DatabaseCheckHelper.Exist(_appConfiguration["ConnectionStrings:Default"]))
+            {
+                app.UseAbpRequestLocalization();
+            }
 
 #if FEATURE_SIGNALR
             //Integrate to OWIN

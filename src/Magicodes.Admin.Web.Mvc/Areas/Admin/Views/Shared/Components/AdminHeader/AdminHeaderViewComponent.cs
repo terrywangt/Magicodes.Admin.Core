@@ -1,10 +1,12 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using Abp.Authorization;
 using Abp.Configuration;
 using Abp.Configuration.Startup;
 using Abp.Localization;
 using Abp.Runtime.Session;
 using Microsoft.AspNetCore.Mvc;
+using Magicodes.Admin.Authorization;
 using Magicodes.Admin.Configuration;
 using Magicodes.Admin.Web.Areas.Admin.Models.Layout;
 using Magicodes.Admin.Web.Session;
@@ -40,6 +42,7 @@ namespace Magicodes.Admin.Web.Areas.Admin.Views.Shared.Components.AdminHeader
                 CurrentLanguage = _languageManager.CurrentLanguage,
                 IsMultiTenancyEnabled = _multiTenancyConfig.IsEnabled,
                 IsImpersonatedLogin = _abpSession.ImpersonatorUserId.HasValue,
+                HasUiCustomizationPagePermission = await PermissionChecker.IsGrantedAsync(AppPermissions.Pages_Administration_UiCustomization),
                 SubscriptionExpireNootifyDayCount = SettingManager.GetSettingValue<int>(AppSettings.TenantManagement.SubscriptionExpireNotifyDayCount)
             };
 

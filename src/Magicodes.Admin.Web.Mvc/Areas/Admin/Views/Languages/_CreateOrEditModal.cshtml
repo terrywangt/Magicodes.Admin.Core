@@ -9,7 +9,7 @@
     <form name="LanguageInformationsForm" role="form" novalidate class="form-validation">
         @if (Model.IsEditMode)
         {
-            <input type="hidden" name="Id" value="@Model.Language.Id"/>
+            <input type="hidden" name="Id" value="@Model.Language.Id" />
         }
 
         <div class="form-group">
@@ -33,17 +33,13 @@
                 }
             </select>
         </div>
-        
-        <div class="md-checkbox-list">
-            <div class="md-checkbox">
-                <input id="EditLanguage_IsEnabled" class="md-check" type="checkbox" name="IsEnabled" value="true" @(Model.Language.IsEnabled ? "checked=\"checked\"" : "") />
-                <label for="EditLanguage_IsEnabled">
-                    <span class="inc"></span>
-                    <span class="check"></span>
-                    <span class="box"></span>
-                    @L("IsEnabled")
-                </label>
-            </div>
+
+        <div class="m-checkbox-list">
+            <label for="EditLanguage_IsEnabled" class="m-checkbox">
+                <input id="EditLanguage_IsEnabled" class="md-check" type="checkbox" name="IsEnabled" value="true" @(Model.Language.IsEnabled || !Model.IsEditMode ? "checked=\"checked\"" : "") />
+                @L("IsEnabled")
+                <span></span>
+            </label>
         </div>
 
     </form>

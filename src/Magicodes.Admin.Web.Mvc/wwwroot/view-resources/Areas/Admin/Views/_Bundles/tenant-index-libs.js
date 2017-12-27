@@ -36,10 +36,10 @@ var FeaturesTree = (function ($) {
                 }).jstree({
                     "types": {
                         "default": {
-                            "icon": "fa fa-folder tree-item-icon-color icon-lg"
+                            "icon": "fa fa-folder m--font-warning"
                         },
                         "file": {
-                            "icon": "fa fa-file tree-item-icon-color icon-lg"
+                            "icon": "fa fa-file  m--font-warning"
                         }
                     },
                     'checkbox': {
@@ -330,7 +330,7 @@ var FeaturesTree = (function ($) {
 
             //take selected date as UTC
             if ($('#CreateTenant_IsUnlimited').is(':visible') && !$('#CreateTenant_IsUnlimited').is(':checked')) {
-                tenant.SubscriptionEndDateUtc = $('.date-time-picker').data("DateTimePicker").date().format("YYYY-MM-DDTHH:mm:ss") + 'Z';
+                tenant.SubscriptionEndDateUtc = moment($('.date-time-picker').datadatetimepicker('getDate')).format("YYYY-MM-DDTHH:mm:ss") + 'Z';
             } else {
                 tenant.SubscriptionEndDateUtc = null;
             }
@@ -378,14 +378,11 @@ var EditTenantModal = (function ($) {
 
             var $subscriptionEndDateDiv = modal.find('input[name=SubscriptionEndDateUtc]').parent('div');
             var isUnlimitedInput = modal.find('#CreateTenant_IsUnlimited');
-            var subscriptionEndDateUtcInput = modal.find('input[name=SubscriptionEndDateUtc]');
             function toggleSubscriptionEndDateDiv() {
                 if (isUnlimitedInput.is(':checked')) {
                     $subscriptionEndDateDiv.slideUp('fast');
-                    subscriptionEndDateUtcInput.removeAttr('required');
                 } else {
                     $subscriptionEndDateDiv.slideDown('fast');
-                    subscriptionEndDateUtcInput.attr('required', 'required');
                 }
             }
 
@@ -425,7 +422,7 @@ var EditTenantModal = (function ($) {
             
             //take selected date as UTC
             if ($('#CreateTenant_IsUnlimited').is(':visible') && !$('#CreateTenant_IsUnlimited').is(':checked')) {
-                tenant.SubscriptionEndDateUtc = $('.date-time-picker').data("DateTimePicker").date().format("YYYY-MM-DDTHH:mm:ss") + 'Z';    
+                tenant.SubscriptionEndDateUtc = moment($('.date-time-picker').datetimepicker('getDate')).format("YYYY-MM-DDTHH:mm:ss") + 'Z';    
             } else {
                 tenant.SubscriptionEndDateUtc = null;
             }
@@ -521,10 +518,10 @@ var EditTenantModal = (function ($) {
         };
 
         var _urlParams = {
-            creationDateStart: $.url().param('creationDateStart'),
-            creationDateEnd: $.url().param('creationDateEnd'),
-            subscriptionEndDateStart: $.url().param('subscriptionEndDateStart'),
-            subscriptionEndDateEnd: $.url().param('subscriptionEndDateEnd')
+            creationDateStart: $.url('?creationDateStart'),
+            creationDateEnd: $.url('?creationDateEnd'),
+            subscriptionEndDateStart: $.url('?subscriptionEndDateStart'),
+            subscriptionEndDateEnd: $.url('?subscriptionEndDateEnd')
         }
 
         var _selectedSubscriptionEndDateRange = {
@@ -730,6 +727,11 @@ var EditTenantModal = (function ($) {
                 }
             ]
         });
+
+        function getQueryStringParameter(name) {
+            var uri = URI.parseQuery(document.location.href);
+            return uri[name];
+        }
 
         function getTenants() {
             dataTable.ajax.reload();

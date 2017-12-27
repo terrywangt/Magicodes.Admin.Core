@@ -147,9 +147,9 @@
     <text name="ExportToExcel">تصدير إلى إكسل - Excel</text>
     <text name="ChangeProfilePicture">تغيير الصورة الشخصية</text>
     <text name="TenantName_Regex_Description">يجب أن يكون اسم العميل على الأقل حرفين ويبدأ بحرف ومن ثم : حرف أو رقم أو شرطه أو شرطه سفلية.</text>
-    <text name="ProfilePicture_Change_Info">يمكنك إختيار ملف JPG/JPEG/PNG وبحد أقصى للحجم 1024 كيلوبايت  </text>
+    <text name="ProfilePicture_Change_Info">يمكنك إختيار ملف JPG/JPEG/PNG وبحد أقصى للحجم {0} كيلوبايت  </text>
     <text name="ProfilePicture_Change_Error">تعذّر تغيير صورة ملفك الشخصي</text>
-    <text name="ProfilePicture_Warn_SizeLimit">يجب أن يكون حجم الصورة أصغر من 1024 كيلوبايت يرجى تحديد ملف آخر</text>
+    <text name="ProfilePicture_Warn_SizeLimit">يجب أن يكون حجم الصورة أصغر من {0} كيلوبايت يرجى تحديد ملف آخر</text>
     <text name="ProfilePicture_Warn_FileType">  يرجى تحديد ملف آخر  JPG / JPEG  يمكنك فقط اختيار ملف</text>
     <text name="Dashboard">لوحة القيادة</text>
     <text name="DashboardHeaderInfo">الإحصاءات والتقارير</text>
@@ -322,7 +322,7 @@
     <text name="YouCannotLinkToSameAccount">لايمكن ربط نفس الحساب</text>
     <text name="ChangePasswordBeforeLinkToAnAccount">يجب تغيير كلمة المرور قبل ربط هذا الحساب</text>
     <text name="LinkedAccounts">حسابات مرتبطة</text>
-    <text name="ManageAccounts">إدارة الحسابات</text>
+    <text name="ManageLinkedAccounts">إدارة الحسابات</text>
     <text name="LinkNewAccount">ربط حساب</text>
     <text name="SuccessfullyUnlinked">تم إزالة الربط بنجاح.</text>
     <text name="LinkedUserDeleteWarningMessage">سيتم إزالة الربط بالمستخدم {0}</text>
@@ -370,7 +370,7 @@
     <text name="LoginAttempts">محاولات الدخول</text>
     <text name="Failed">فشل</text>
     <text name="NewTenant">إشتراك العملاء</text>
-    <text name="ResizedProfilePicture_Warn_SizeLimit" value="حجم الصورة بعد التصغير يجب أن يكون أقل من 100 كيلوبايت. قم بتصغير الصورة وحاول مرة اخرى." />
+    <text name="ResizedProfilePicture_Warn_SizeLimit" value="حجم الصورة بعد التصغير يجب أن يكون أقل من {0} كيلوبايت. قم بتصغير الصورة وحاول مرة اخرى." />
     <text name="RegisterFormUserNameInvalidMessage">من فضلك لاتدخل بريد إلكتروني كإسم مستخدم.</text>
     <text name="UseHostDatabase" value="إستخدم قاعدة بيانات المضيف" />
     <text name="DatabaseConnectionString" value="Database connection string" />
@@ -481,7 +481,7 @@
     <text name="CustomCSS">ملف Css خاص</text>
     <text name="Upload">رفع</text>
     <text name="Download">تحميل</text>
-    <text name="UploadLogo_Info">إختر ملف JPG / JPEG / PNG / GIF  بحجم 30 KB  كحد أقصى و 168X33  بكسل.</text>
+    <text name="UploadLogo_Info">إختر ملف JPG / JPEG / PNG / GIF  بحجم 30 KB  كحد أقصى و 139X35  بكسل.</text>
     <text name="UploadCSS_Info">إختر ملف CSS بحجم MB 1  كحد أقصى.</text>
     <text name="Browse">تصفَح</text>
     <text name="Appearance">المظهر</text>
@@ -690,5 +690,76 @@
     <text name="InvoiceNo">رقم الفاتورة</text>
     <text name="Date">التاريخ</text>
     <text name="ThisInvoiceIsNotYours">هذه الفاتورة ليست لك!</text>
+    <text name="UiCustomizationHeaderInfo">تغيير مظهر واجهة المستخدم</text>
+    <text name="UiCustomization_Layout">التصميم</text>
+    <text name="UiCustomization_LayoutType">نوع التصميم</text>
+    <text name="UiCustomization_Fluid">سلس</text>
+    <text name="UiCustomization_Boxed">مربع</text>
+    <text name="UiCustomization_PageLoader">محمّل الصفحة</text>
+    <text name="UiCustomization_Disabled">معطّل</text>
+    <text name="UiCustomization_Default">إفتراضي</text>
+    <text name="UiCustomization_SpinnerMessage">رسالة المحمّل</text>
+    <text name="UiCustomization_ContentSkin">تصميم المحتوى</text>
+    <text name="UiCustomization_LightGrey">رمادي فاتح</text>
+    <text name="UiCustomization_White">أبيض</text>
+    <text name="UiCustomization_DesktopFixedHeader">رأس ثابت</text>
+    <text name="UiCustomization_DesktopMinimizeMode">وضع التصغير</text>
+    <text name="UiCustomization_None">لايوجد</text>
+    <text name="UiCustomization_Hide">مخفي</text>
+    <text name="UiCustomization_MobileFixedHeader">رأس ثابت</text>
+    <text name="UiCustomization_DisplayHeaderMenu">عرض رأس الصفحة</text>
+    <text name="UiCustomization_DropdownSkinDesktop">التصميم</text>
+    <text name="UiCustomization_Light">فاتح</text>
+    <text name="UiCustomization_Dark">داكن</text>
+    <text name="UiCustomization_DisplaySubmenuArrowDesktop">عرض سهم القائمة الفرعية</text>
+    <text name="UiCustomization_DropdownSkin">تصميم القائمة المنسدلة</text>
+    <text name="UiCustomization_Menu">القائمة</text>
+    <text name="UiCustomization_MenuPosition">الموضع</text>
+    <text name="UiCustomization_Left">يسار</text>
+    <text name="UiCustomization_Top">فوق</text>
+    <text name="UiCustomization_MenuSkin">تصميم القائمة</text>
+    <text name="UiCustomization_FixedMenu">قائمة ثابتة</text>
+    <text name="UiCustomization_AllowAsideMinimizing">السماح بتقليل الجانب</text>
+    <text name="UiCustomization_DefaultMinimizedAside">الجانب مقلّل افتراضيا</text>
+    <text name="UiCustomization_AllowAsideHiding">السماح بغلق الجانب</text>
+    <text name="UiCustomization_SubmenuToggle">ترجيح القائمة الفرعية</text>
+    <text name="UiCustomization_Dropdown">القائمة المنسدلة</text>
+    <text name="UiCustomization_Accordion">قائمة الأكورديون</text>
+    <text name="UiCustomization_DropdownSubmenuSkin">تصميم القائمة المنسدلة</text>
+    <text name="UiCustomization_Inherit">موروث</text>
+    <text name="UiCustomization_DropdownSubmenuArrow">سهم القائمة المنسدلة</text>
+    <text name="UiCustomization_Footer">الهامش</text>
+    <text name="UiCustomization_FixedFooter">هامش ثابت</text>
+    <text name="UiCustomization_PushFooter">هامش مدفوع</text>
+    <text name="UiCustomization_Header">قائم الرأس</text>
+    <text name="VisualSettings">إعدادات بصرية</text>
+    <text name="SaveAsSystemDefault">حفظ كخيار افتراضي للنظام</text>
+    <text name="UseSystemDefaults">استخدام الإعدادات الافتراضية للنظام</text>
+    <text name="NewNotifications">إشعارات جديدة</text>
+    <text name="Subscriptions">الاشتراكات</text>
+    <text name="UiCustomization_DefaultHiddenAside">الجانب مخفي افتراضيا</text>
+    <text name="LoadWithThreeDot">جار التحميل...</text>
+    <text name="NoInternetConnection">أنت غير متصل حاليا بالإنترنت</text>
+    <text name="Warning">تحذير</text>
+    <text name="RequestTimedOut">انتهت مهلة طلبك، الرجاء إعادة المحاولة لاحقا.</text>
+    <text name="AnErrorOccurred">لقد حدث خطأ، رجاء أعد المحاولة لاحقا.</text>
+    <text name="AnHttpErrorOccured">حدث خطأ أثناء الاتصال بالخادم.</text>
+    <text name="ChangePasswordToLogin">يجب تغيير كلمة المرور قبل تسجيل الدخول!</text>
+    <text name="NoPermission">ليس لديك أي إذن. تواصل مع مشرف النظام.</text>
+    <text name="NoCamera">لم يتم العثور على كاميرا متاحة!</text>
+    <text name="PickFromGallery">اختيار من المعرض</text>
+    <text name="TakePhoto">التقاط صورة</text>
+    <text name="Rotate">استدارة</text>
+    <text name="PasswordsDontMatch">كلمة المرور غير مطابقة!</text>
+    <text name="RequiredField">حقل {0} مطلوب.</text>
+    <text name="StringLengthDoesntMatch">يجب أن يكون {0} كحد ادنى {1} وحد اقصى {2}.</text>
+    <text name="LessThanMinStringLength"> {0} يجب أن يكون كحد ادنى {1}.</text>
+    <text name="InvalidPhoneNumber"> {0} ليس رقم هاتف صالحا</text>
+    <text name="InvalidRegularExpression"> {0} غير صالح.</text>
+    <text name="LengthNotInRange">يجب أن يكون طول {0} بين {1} و {2}.</text>
+    <text name="UiCustomization_Mobile">موبايل</text>
+    <text name="UiCustomization_Desktop">كمبيوتر</text>
+    <text name="TwoFactorLoginIsNotSupported">لا يتم اعتماد تسجيل دخول العاملين حاليا!</text>
+    <text name="LinkToCurrentPage">رابط الصفحة الحالية</text>
   </texts>
 </localizationDictionary>

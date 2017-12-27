@@ -279,11 +279,10 @@ namespace Magicodes.Admin.MultiTenancy
 
         private async Task CheckEditionSubscriptionAsync(int editionId, SubscriptionStartType subscriptionStartType, SubscriptionPaymentGatewayType? gateway, string paymentId)
         {
-            var edition = await _editionManager.GetByIdAsync(editionId);
-            var subscribableEdition = ObjectMapper.Map<SubscribableEdition>(edition);
-
-            CheckSubscriptionStart(subscribableEdition, subscriptionStartType);
-            CheckPaymentCache(subscribableEdition, subscriptionStartType, gateway, paymentId);
+            var edition = await _editionManager.GetByIdAsync(editionId) as SubscribableEdition;
+            
+            CheckSubscriptionStart(edition, subscriptionStartType);
+            CheckPaymentCache(edition, subscriptionStartType, gateway, paymentId);
         }
 
         private void CheckPaymentCache(SubscribableEdition edition, SubscriptionStartType subscriptionStartType, SubscriptionPaymentGatewayType? gateway, string paymentId)

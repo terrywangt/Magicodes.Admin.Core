@@ -29,19 +29,22 @@ namespace Magicodes.Admin.Authorization.Accounts
         private readonly IImpersonationManager _impersonationManager;
         private readonly IUserLinkManager _userLinkManager;
         private readonly IPasswordHasher<User> _passwordHasher;
+        private readonly IWebUrlService _webUrlService;
 
         public AccountAppService(
-            IUserEmailer userEmailer, 
-            UserRegistrationManager userRegistrationManager, 
-            IImpersonationManager impersonationManager, 
+            IUserEmailer userEmailer,
+            UserRegistrationManager userRegistrationManager,
+            IImpersonationManager impersonationManager,
             IUserLinkManager userLinkManager,
-            IPasswordHasher<User> passwordHasher)
+            IPasswordHasher<User> passwordHasher,
+            IWebUrlService webUrlService)
         {
             _userEmailer = userEmailer;
             _userRegistrationManager = userRegistrationManager;
             _impersonationManager = impersonationManager;
             _userLinkManager = userLinkManager;
             _passwordHasher = passwordHasher;
+            _webUrlService = webUrlService;
 
             AppUrlService = NullAppUrlService.Instance;
             RecaptchaValidator = NullRecaptchaValidator.Instance;
@@ -60,7 +63,7 @@ namespace Magicodes.Admin.Authorization.Accounts
                 return new IsTenantAvailableOutput(TenantAvailabilityState.InActive);
             }
 
-            return new IsTenantAvailableOutput(TenantAvailabilityState.Available, tenant.Id);
+            return new IsTenantAvailableOutput(TenantAvailabilityState.Available, tenant.Id, _webUrlService.GetServerRootAddress(input.TenancyName));
         }
 
         public async Task<RegisterOutput> Register(RegisterInput input)
@@ -81,7 +84,7 @@ namespace Magicodes.Admin.Authorization.Accounts
             );
 
             var isEmailConfirmationRequiredForLogin = await SettingManager.GetSettingValueAsync<bool>(AbpZeroSettingNames.UserManagement.IsEmailConfirmationRequiredForLogin);
-            
+
             return new RegisterOutput
             {
                 CanLogin = user.IsActive && (user.IsEmailConfirmed || !isEmailConfirmationRequiredForLogin)
@@ -183,7 +186,7 @@ namespace Magicodes.Admin.Authorization.Accounts
             {
                 return false;
             }
-            
+
             return SettingManager.GetSettingValue<bool>(AppSettings.UserManagement.UseCaptchaOnRegistration);
         }
 
@@ -202,7 +205,7 @@ namespace Magicodes.Admin.Authorization.Accounts
 
             return tenant;
         }
-        
+
         private async Task<string> GetTenancyNameOrNullAsync(int? tenantId)
         {
             return tenantId.HasValue ? (await GetActiveTenantAsync(tenantId.Value)).TenancyName : null;

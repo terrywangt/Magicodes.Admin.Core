@@ -147,9 +147,9 @@
     <text name="ExportToExcel" value="Nach Excel exportieren" />
     <text name="ChangeProfilePicture" value="Profilbild ändern" />
     <text name="TenantName_Regex_Description" value="Mandantenname muss aus mindestens 2 Buchstaben bestehen und mit einem Buchstaben beginnen." />
-    <text name="ProfilePicture_Change_Info" value="Sie können eine JPG/JPEG/PNG Datei mit maximal 1MB Größe auswählen." />
+    <text name="ProfilePicture_Change_Info" value="Sie können eine JPG/JPEG/PNG Datei mit maximal {0}MB Größe auswählen." />
     <text name="ProfilePicture_Change_Error" value="Es ist ein Fehler beim ändern des Profilbilds aufgetreten." />
-    <text name="ProfilePicture_Warn_SizeLimit" value="Bildergröße muss unter 1MB sein. Bitte wählen Sie eine andere Datei." />
+    <text name="ProfilePicture_Warn_SizeLimit" value="Bildergröße muss unter {0}MB sein. Bitte wählen Sie eine andere Datei." />
     <text name="ProfilePicture_Warn_FileType" value="Sie können nur JPG/JPEG Dateien wählen. Bitte wählen Sie eine andere Datei." />
     <text name="Dashboard" value="Übersichtsseite" />
     <text name="DashboardHeaderInfo" value="Statistiken und Berichte" />
@@ -315,7 +315,7 @@
     <text name="YouCannotLinkToSameAccount" value="Sie können sich nicht selbst vertreten!" />
     <text name="ChangePasswordBeforeLinkToAnAccount" value="Sie müssen zuerst ihr Passwort ändern!" />
     <text name="LinkedAccounts" value="Verknüpfte Konten" />
-    <text name="ManageAccounts" value="Konten verwalten" />
+    <text name="ManageLinkedAccounts" value="Konten verwalten" />
     <text name="LinkNewAccount" value="Neue Verknüpfung erstellen" />
     <text name="SuccessfullyUnlinked" value="Verknüpfung erfolgreich aufgehoben" />
     <text name="LinkedUserDeleteWarningMessage" value="Verknüpfung zu Benutzer {0} wird gelöscht." />
@@ -363,7 +363,7 @@
     <text name="LoginAttempts" value="Login Versuche" />
     <text name="Failed" value="Fehlgeschlagen" />
     <text name="NewTenant" value="Neuer Mandant" />
-    <text name="ResizedProfilePicture_Warn_SizeLimit" value="Bild muss kleiner als 100KB sein. Bitte verkleinern und noch einmal versuchen." />
+    <text name="ResizedProfilePicture_Warn_SizeLimit" value="Bild muss kleiner als {0}KB sein. Bitte verkleinern und noch einmal versuchen." />
     <text name="RegisterFormUserNameInvalidMessage" value="Bitte keine Email als Benutzername verwenden." />
     <text name="UseHostDatabase" value="Datenbank des Hosts verwenden" />
     <text name="DatabaseConnectionString" value="Database Connection String" />

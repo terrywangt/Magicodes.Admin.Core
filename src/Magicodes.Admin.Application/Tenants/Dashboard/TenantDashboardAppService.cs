@@ -33,10 +33,8 @@ namespace Magicodes.Admin.Tenants.Dashboard
                 TransactionPercent = DashboardRandomDataGenerator.GetRandomInt(10, 100),
                 NewVisitPercent = DashboardRandomDataGenerator.GetRandomInt(10, 100),
                 BouncePercent = DashboardRandomDataGenerator.GetRandomInt(10, 100),
-                NetworkLoad = DashboardRandomDataGenerator.GetRandomArray(20, 8, 15),
-                CpuLoad = DashboardRandomDataGenerator.GetRandomArray(20, 8, 15),
-                LoadRate = DashboardRandomDataGenerator.GetRandomArray(20, 8, 15),
-                TimeLineItems = DashboardRandomDataGenerator.GenerateTimeLineItems()
+                DailySales = DashboardRandomDataGenerator.GetRandomArray(30, 10, 50),
+                ProfitShares = DashboardRandomDataGenerator.GetRandomPercentageArray(3)
             };
 
             return output;
@@ -50,16 +48,6 @@ namespace Magicodes.Admin.Tenants.Dashboard
         public GetWorldMapOutput GetWorldMap(GetWorldMapInput input)
         {
             return new GetWorldMapOutput(DashboardRandomDataGenerator.GenerateWorldMapCountries());
-        }
-
-        public GetServerStatsOutput GetServerStats(GetServerStatsInput input)
-        {
-            return new GetServerStatsOutput
-            {
-                NetworkLoad = DashboardRandomDataGenerator.GetRandomArray(20, 8, 15),
-                CpuLoad = DashboardRandomDataGenerator.GetRandomArray(20, 8, 15),
-                LoadRate = DashboardRandomDataGenerator.GetRandomArray(20, 8, 15)
-            };
         }
 
         public GetGeneralStatsOutput GetGeneralStats(GetGeneralStatsInput input)

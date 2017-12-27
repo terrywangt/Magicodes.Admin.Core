@@ -16,6 +16,8 @@ namespace Magicodes.Admin.Web.Areas.Admin.Models.Layout
 
         public bool IsImpersonatedLogin { get; set; }
 
+        public bool HasUiCustomizationPagePermission { get; set; }
+
         public int SubscriptionExpireNootifyDayCount { get; set; }
 
         public string GetShownLoginName()
@@ -32,11 +34,11 @@ namespace Magicodes.Admin.Web.Areas.Admin.Models.Layout
                 : LoginInformations.Tenant.TenancyName + "\\" + userName;
         }
 
-        public string GetLogoUrl(string appPath)
+        public string GetLogoUrl(string appPath, string menuSkin)
         {
             if (!IsMultiTenancyEnabled || LoginInformations.Tenant?.LogoId == null)
             {
-                return appPath + "Common/Images/app-logo-on-light.png";
+                return appPath + $"Common/Images/app-logo-on-{menuSkin}.png";
             }
 
             //id parameter is used to prevent caching only.

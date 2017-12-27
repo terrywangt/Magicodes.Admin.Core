@@ -48,16 +48,10 @@
                         data: null,
                         defaultContent: '',
                         render: function (data) {
-                            return '<div class="md-checkbox-list">' +
-                                '<div class="md-checkbox">' +
-                                '<input class="md-check" type="checkbox" id="checkbox_' + data.value + '" />' +
-                                '<label for="checkbox_' + data.value + '">' +
-                                '<span class="inc"></span>' +
-                                '<span class="check"></span>' +
-                                '<span class="box"></span>' +
-                                '</label>' +
-                                '</div>' +
-                                '</div>';
+                            return '<label for="checkbox_' + data.value + '" class="m-checkbox">' +
+                                        '<input type="checkbox" id="checkbox_' + data.value + '" />' +
+                                        '<span></span>' +
+                                    '</label>';
                         }
                     },
                     {
@@ -72,7 +66,7 @@
                 ],
                 select: {
                     style: 'multi',
-                    selector: 'td:first-child input[type="checkbox"]'
+                    selector: 'td:first-child input'
                 }
             });
 
@@ -86,7 +80,7 @@
             _modalManager.getModal()
                 .find('.modal-body')
                 .keydown(function (e) {
-                    if (e.which == 13) {
+                    if (e.which === 13) {
                         e.preventDefault();
                         refreshTable();
                     }

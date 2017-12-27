@@ -13,16 +13,16 @@
         <input type="hidden" name="Id" value="@Model.Tenant.Id" />
         <input type="hidden" name="TenancyName" value="@Model.Tenant.TenancyName" />
 
-        <div class="form-group form-md-line-input form-md-floating-label no-hint">
-            <input type="text" name="Name" value="@Model.Tenant.Name" class="form-control edited" required maxlength="@Tenant.MaxNameLength">
+        <div class="form-group">
             <label>@L("Name")</label>
+            <input type="text" name="Name" value="@Model.Tenant.Name" class="form-control edited" required maxlength="@Tenant.MaxNameLength">
         </div>
 
         @if (!Model.Tenant.ConnectionString.IsNullOrEmpty())
         {
-            <div class="form-group form-md-line-input form-md-floating-label no-hint">
-                <input type="text" name="ConnectionString" class="form-control edited" value="@Model.Tenant.ConnectionString" required maxlength="@Tenant.MaxConnectionStringLength">
+            <div class="form-group">
                 <label>@L("DatabaseConnectionString")</label>
+                <input type="text" name="ConnectionString" class="form-control edited" value="@Model.Tenant.ConnectionString" required maxlength="@Tenant.MaxConnectionStringLength">
             </div>
 
             <div>
@@ -30,55 +30,43 @@
             </div>
         }
 
-        <div class="form-group form-md-line-input form-md-floating-label no-hint">
-            <select class="form-control edited" id="EditionId" name="EditionId">
+        <div class="form-group">
+            <label for="EditionId">@L("Edition")</label>
+            <select class="form-control" id="EditionId" name="EditionId">
                 @foreach (var edition in Model.EditionItems)
                 {
                     <option value="@edition.Value" data-isfree="@edition.IsFree" selected="@edition.IsSelected">@edition.DisplayText</option>
                 }
             </select>
-            <label for="EditionId">@L("Edition")</label>
         </div>
         
-        <div class="md-checkbox-list subscription-component">
-            <div class="md-checkbox">
-                <input id="CreateTenant_IsUnlimited" class="md-check" type="checkbox" name="IsUnlimited" value="true" @(!Model.Tenant.SubscriptionEndDateUtc.HasValue ? "checked=\"checked\"" : "") />
-                <label for="CreateTenant_IsUnlimited">
-                    <span class="inc"></span>
-                    <span class="check"></span>
-                    <span class="box"></span>
-                    @L("UnlimitedTimeSubscription")
-                </label>
-            </div>
+        <div class="m-checkbox-list subscription-component">
+            <label class="m-checkbox">
+                <input id="CreateTenant_IsUnlimited" type="checkbox" name="IsUnlimited" @(!Model.Tenant.SubscriptionEndDateUtc.HasValue ? "checked=\"checked\"" : "") />
+                @L("UnlimitedTimeSubscription")
+                <span></span>
+            </label>
         </div>
         
-        <div class="form-group form-md-line-input form-md-floating-label subscription-component">
-            <input type="datetime" name="SubscriptionEndDateUtc" value="@Model.Tenant.SubscriptionEndDateUtc" class="form-control edited date-time-picker" @(!Model.Tenant.SubscriptionEndDateUtc.HasValue ? "required" : "")>
+        <div class="form-group subscription-component">
             <label>@L("SubscriptionEndDateUtc")</label>
+            <input type="datetime" name="SubscriptionEndDateUtc" value="@(Model.Tenant.SubscriptionEndDateUtc?.ToString("yyyy-MM-dd"))" class="form-control edited date-time-picker" @(!Model.Tenant.SubscriptionEndDateUtc.HasValue ? "required" : "")>
         </div>
         
-        <div class="md-checkbox-list subscription-component">
-            <div class="md-checkbox">
-                <input id="EditTenant_IsInTrialPeriod" class="md-check" type="checkbox" name="IsInTrialPeriod" value="true" @(Model.Tenant.IsInTrialPeriod ? "checked=\"checked\"" : "")/>
-                <label for="EditTenant_IsInTrialPeriod">
-                    <span class="inc"></span>
-                    <span class="check"></span>
-                    <span class="box"></span>
-                    @L("IsInTrialPeriod")
-                </label>
-            </div>
+        <div class="m-checkbox-list subscription-component">
+            <label class="m-checkbox">
+                <input id="EditTenant_IsInTrialPeriod" type="checkbox" name="IsInTrialPeriod" value="true" @(Model.Tenant.IsInTrialPeriod ? "checked=\"checked\"" : "") />
+                @L("IsInTrialPeriod")
+                <span></span>
+            </label>
         </div>
-
-        <div class="md-checkbox-list">
-            <div class="md-checkbox">
-                <input id="EditTenant_IsActive" class="md-check" type="checkbox" name="IsActive" value="true" @Html.Raw(Model.Tenant.IsActive ? "checked=\"checked\"" : "")>
-                <label for="EditTenant_IsActive">
-                    <span class="inc"></span>
-                    <span class="check"></span>
-                    <span class="box"></span>
-                    @L("Active")
-                </label>
-            </div>
+        
+        <div class="m-checkbox-list">
+            <label class="m-checkbox">
+                <input id="EditTenant_IsActive" type="checkbox" name="IsActive" value="true" @Html.Raw(Model.Tenant.IsActive ? "checked=\"checked\"" : "")>
+                @L("Active")
+                <span></span>
+            </label>
         </div>
 
     </form>

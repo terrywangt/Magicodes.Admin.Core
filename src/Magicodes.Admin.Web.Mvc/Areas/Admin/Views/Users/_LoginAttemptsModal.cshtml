@@ -7,58 +7,57 @@
     <form id="loginAttemptsModalForm" class="form-horizontal">
         <div class="form-body">
             <div class="row">
-                <div class="col-xs-12">
+                <div class="col-sm-12">
                     @foreach (var loginAttempt in Model.LoginAttempts)
                     {
-                        <div class="alert bg-grey-cararra bg-font-grey-cararra">
-                            <div class="row">
-                                <div class="col-xs-3 text-center">
-                                    <img src="@(loginAttempt.Result == "Success" ?
+                        <div class="m-alert m-alert--icon m-alert--icon-solid m-alert--outline alert @(loginAttempt.Result == "Success" ?"alert-success":"alert-danger")" role="alert">
+                            <div class="m-alert__icon">
+                                <img src="@(loginAttempt.Result == "Success" ?
                                                 "/Profile/GetProfilePicture?v="+Clock.Now.Ticks :
-                                                "/Common/Images/default-profile-picture.png")" class="img-circle" width="50" height="50"><br />
-                                    <span class="label @(loginAttempt.Result == "Success" ?"label-success":"label-danger")"> @(loginAttempt.Result == "Success" ? L("Success") : L("Failed")) </span>
-                                </div>
-                                <div class="col-xs-9">
-                                    @if (!string.IsNullOrEmpty(loginAttempt.ClientIpAddress))
-                                    {
-                                        <div class="row">
-                                            <label class="control-label col-sm-3 text-right">@L("IpAddress")</label>
-                                            <div class="col-sm-9">
-                                                <p class="form-control-static">
-                                                    @loginAttempt.ClientIpAddress
-                                                </p>
-                                            </div>
-                                        </div>
-                                    }
-                                    @if (!string.IsNullOrEmpty(loginAttempt.ClientName))
-                                    {
-                                        <div class="row">
-                                            <label class="control-label col-sm-3 text-right">@L("Client")</label>
-                                            <div class="col-sm-9">
-                                                <p class="form-control-static">
-                                                    @loginAttempt.ClientName
-                                                </p>
-                                            </div>
-                                        </div>
-                                    }
-                                    @if (!string.IsNullOrEmpty(loginAttempt.BrowserInfo))
-                                    {
-                                        <div class="row">
-                                            <label class="control-label col-sm-3 text-right">@L("Browser")</label>
-                                            <div class="col-sm-9">
-                                                <p class="form-control-static">
-                                                    @loginAttempt.BrowserInfo
-                                                </p>
-                                            </div>
-                                        </div>
-                                    }
+                                                "/Common/Images/default-profile-picture.png")" class="m--img-rounded m--marginless m--img-centered" width="50" height="50">
+                                <span></span>
+                                <small class="label"> @(loginAttempt.Result == "Success" ? L("Success") : L("Failed")) </small>
+                            </div>
+                            <div class="m-alert__text">
+                                @if (!string.IsNullOrEmpty(loginAttempt.ClientIpAddress))
+                                {
                                     <div class="row">
-                                        <label class="control-label col-sm-3 text-right">@L("Time")</label>
+                                        <label class="control-label col-sm-3 text-right">@L("IpAddress")</label>
                                         <div class="col-sm-9">
-                                            <p class="form-control-static login-attempt-date" data-date="@loginAttempt.CreationTime.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")">
-                                                
+                                            <p class="form-control-static">
+                                                @loginAttempt.ClientIpAddress
                                             </p>
                                         </div>
+                                    </div>
+                                }
+                                @if (!string.IsNullOrEmpty(loginAttempt.ClientName))
+                                {
+                                    <div class="row">
+                                        <label class="control-label col-sm-3 text-right">@L("Client")</label>
+                                        <div class="col-sm-9">
+                                            <p class="form-control-static">
+                                                @loginAttempt.ClientName
+                                            </p>
+                                        </div>
+                                    </div>
+                                }
+                                @if (!string.IsNullOrEmpty(loginAttempt.BrowserInfo))
+                                {
+                                    <div class="row">
+                                        <label class="control-label col-sm-3 text-right">@L("Browser")</label>
+                                        <div class="col-sm-9">
+                                            <p class="form-control-static">
+                                                @loginAttempt.BrowserInfo
+                                            </p>
+                                        </div>
+                                    </div>
+                                }
+                                <div class="row">
+                                    <label class="control-label col-sm-3 text-right">@L("Time")</label>
+                                    <div class="col-sm-9">
+                                        <p class="form-control-static login-attempt-date" data-date="@loginAttempt.CreationTime.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")">
+
+                                        </p>
                                     </div>
                                 </div>
                             </div>

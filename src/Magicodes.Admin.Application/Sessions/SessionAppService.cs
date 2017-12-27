@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Abp.Auditing;
-using Abp.MultiTenancy;
 using Abp.Runtime.Session;
 using Microsoft.EntityFrameworkCore;
 using Magicodes.Admin.Chat.SignalR;
@@ -26,7 +25,7 @@ namespace Magicodes.Admin.Sessions
                     ReleaseDate = AppVersionHelper.ReleaseDate,
                     Features = new Dictionary<string, bool>
                     {
-                        { "SignalR", SignalRFeature.IsAvailable }
+                        {"SignalR", SignalRFeature.IsAvailable}
                     }
                 }
             };
@@ -34,10 +33,10 @@ namespace Magicodes.Admin.Sessions
             if (AbpSession.TenantId.HasValue)
             {
                 output.Tenant = ObjectMapper
-                                    .Map<TenantLoginInfoDto>(await TenantManager
-                                        .Tenants
-                                        .Include(t => t.Edition)
-                                        .FirstAsync(t => t.Id == AbpSession.GetTenantId()));
+                    .Map<TenantLoginInfoDto>(await TenantManager
+                        .Tenants
+                        .Include(t => t.Edition)
+                        .FirstAsync(t => t.Id == AbpSession.GetTenantId()));
             }
 
             if (AbpSession.UserId.HasValue)
@@ -50,14 +49,31 @@ namespace Magicodes.Admin.Sessions
                 return output;
             }
 
-            output.Tenant.Edition?.SetEditionIsHighest(GetTopEditionOrNullByMonthlyPrice());
-            output.Tenant.SubscriptionDateString = GetTenantSubscriptionDateString(output);
-            output.Tenant.CreationTimeString = output.Tenant.CreationTime.ToString("d");
+            if (output.Tenant.Edition != null)
+            {
+                output.Tenant.Edition.IsHighestEdition = IsEditionHighest(output.Tenant.Edition.Id);
+            }
 
-            return output;
+            output.Tenant.SubscriptionDateString = GetTenantSubscriptionDateString(output);
+            {
+                output.Tenant.CreationTimeString = output.Tenant.CreationTime.ToString("d");
+
+                return output;
+            }
         }
 
-        private SubscribableEdition GetTopEditionOrNullByMonthlyPrice()
+        private bool IsEditionHighest(int editionId)
+        {
+            var topEdition = GetHighestEditionOrNullByMonthlyPrice();
+            if (topEdition == null)
+            {
+                return false;
+            }
+
+            return editionId == topEdition.Id;
+        }
+
+        private SubscribableEdition GetHighestEditionOrNullByMonthlyPrice()
         {
             var editions = TenantManager.EditionManager.Editions;
             if (editions == null || !editions.Any())
@@ -66,9 +82,9 @@ namespace Magicodes.Admin.Sessions
             }
 
             return ObjectMapper
-                  .Map<IEnumerable<SubscribableEdition>>(editions)
-                  .OrderByDescending(e => e.MonthlyPrice)
-                  .FirstOrDefault();
+                .Map<IEnumerable<SubscribableEdition>>(editions)
+                .OrderByDescending(e => e.MonthlyPrice)
+                .FirstOrDefault();
         }
 
         private string GetTenantSubscriptionDateString(GetCurrentLoginInformationsOutput output)
@@ -91,7 +107,9 @@ namespace Magicodes.Admin.Sessions
             {
                 SignInToken = user.SignInToken,
                 EncodedUserId = Convert.ToBase64String(Encoding.UTF8.GetBytes(user.Id.ToString())),
-                EncodedTenantId = user.TenantId.HasValue ? Convert.ToBase64String(Encoding.UTF8.GetBytes(user.TenantId.Value.ToString())) : ""
+                EncodedTenantId = user.TenantId.HasValue
+                    ? Convert.ToBase64String(Encoding.UTF8.GetBytes(user.TenantId.Value.ToString()))
+                    : ""
             };
         }
     }

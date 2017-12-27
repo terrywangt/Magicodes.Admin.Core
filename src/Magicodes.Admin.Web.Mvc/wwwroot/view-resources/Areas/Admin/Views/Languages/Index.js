@@ -76,8 +76,8 @@
                     render: function (displayName, type, row, meta) {
                         var $span = $('<span/>')
                             .append($("<i/>").addClass(row.icon).css("margin-right", "5px"))
-                            .append($("<span/>").attr("data-language-name", row.name).text(row.displayName)); 
-
+                            .append($("<span/>").attr("data-language-name", row.name).text(row.displayName));
+                        
                         if (meta.settings.rawServerResponse.defaultLanguageName === row.name) {
                             $span.addClass("text-bold").append(" (" + app.localize("Default") + ")");
                         }
@@ -97,9 +97,9 @@
                         var $span = $('<span/>').addClass("label");
 
                         if (tenantId !== abp.session.tenantId) {
-                            $span.addClass("label-default").text(app.localize('Yes'));
+                            $span.addClass("m-badge m-badge--success m-badge--wide").text(app.localize('Yes'));
                         } else {
-                            $span.addClass("label-success").text(app.localize('No'));
+                            $span.addClass("m-badge m-badge--metal m-badge--wide").text(app.localize('No'));
                         }
 
                         return $span[0].outerHTML;
@@ -119,9 +119,9 @@
                         var isEnabled = !isDisabled;
                         var $span = $("<span/>").addClass("label");
                         if (isEnabled) {
-                            $span.addClass("label-success").text(app.localize('Yes'));
+                            $span.addClass("m-badge m-badge--success m-badge--wide").text(app.localize('Yes'));
                         } else {
-                            $span.addClass("label-default").text(app.localize('No'));
+                            $span.addClass("m-badge m-badge--metal m-badge--wide").text(app.localize('No'));
                         }
 
                         return $span[0].outerHTML;

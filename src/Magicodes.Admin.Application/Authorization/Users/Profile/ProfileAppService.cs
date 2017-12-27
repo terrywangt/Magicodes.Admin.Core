@@ -23,13 +23,13 @@ using Magicodes.Admin.Identity;
 using Magicodes.Admin.Security;
 using Magicodes.Admin.Storage;
 using Magicodes.Admin.Timing;
-using Magicodes.Admin.Sms;
 
 namespace Magicodes.Admin.Authorization.Users.Profile
 {
     [AbpAuthorize]
     public class ProfileAppService : AdminAppServiceBase, IProfileAppService
     {
+        private const int MaxProfilPictureBytes = 1048576; //1MB
         private readonly IAppFolders _appFolders;
         private readonly IBinaryObjectManager _binaryObjectManager;
         private readonly ITimeZoneService _timeZoneService;
@@ -129,7 +129,7 @@ namespace Magicodes.Admin.Authorization.Users.Profile
             user.IsPhoneNumberConfirmed = true;
             await UserManager.UpdateAsync(user);
         }
-        
+
         public async Task UpdateCurrentUserProfile(CurrentUserProfileEditDto input)
         {
             var user = await GetCurrentUserAsync();
@@ -190,9 +190,9 @@ namespace Magicodes.Admin.Authorization.Users.Profile
                 }
             }
 
-            if (byteArray.Length > 102400) //100 KB
+            if (byteArray.Length > MaxProfilPictureBytes)
             {
-                throw new UserFriendlyException(L("ResizedProfilePicture_Warn_SizeLimit"));
+                throw new UserFriendlyException(L("ResizedProfilePicture_Warn_SizeLimit", AppConsts.ResizedMaxProfilPictureBytesUserFriendlyValue));
             }
 
             var user = await UserManager.GetUserByIdAsync(AbpSession.GetUserId());

@@ -44,7 +44,7 @@
     //
     var selectedDateRange = {
         startDate: moment().add(-7, 'days').startOf('day'),
-        endDate:  moment().endOf('day')
+        endDate: moment().endOf('day')
     };
 
     $('.daterange-picker').daterangepicker(
@@ -53,7 +53,7 @@
                 allowFutureDate: true
             }),
             selectedDateRange),
-        function(start, end, label) {
+        function (start, end, label) {
             selectedDateRange.startDate = start;
             selectedDateRange.endDate = end;
         });

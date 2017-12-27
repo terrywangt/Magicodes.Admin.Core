@@ -4,6 +4,11 @@
         var chatService = abp.services.app.chat;
         var friendshipService = abp.services.app.friendship;
 
+        var $friendsPanel = $('.m-messenger-friends');
+        var $messagesPanel = $('.m-messenger-conversation');
+        var $quickSidebarBack = $('#m_quick_sidebar_back');
+        var $messengerMessages = $('.m-messenger-conversation .m-messenger__messages');
+
         var appSession = {
             load: function (callback) {
                 abp.services.app.session.getCurrentLoginInformations({ async: false })
@@ -56,17 +61,19 @@
                     app.localStorage.getItem('app.chat.pinned', function (pinned) {
                         chat.pinned = pinned;
                         var $sidebarPinner = $('a.page-quick-sidebar-pinner');
-                        $sidebarPinner.find('i.icon-pin').attr('class', 'icon-pin ' + (chat.pinned ? 'pinned' : 'unpinned'));
+                        $sidebarPinner.attr('class', 'page-quick-sidebar-pinner ' + (chat.pinned ? 'pinned' : 'unpinned'));
                     });
 
                     if (chat.isOpen) {
-                        $('body').addClass('page-quick-sidebar-open').promise().done(function () {
+
+                        $('body, #m_quick_sidebar').addClass('m-quick-sidebar--on').promise().done(function () {
+                            $('#m_quick_sidebar .m-quick-sidebar__content').removeClass("m--hide");
                             app.localStorage.getItem('app.chat.selectedUser', function (user) {
                                 if (user) {
-                                    $('.page-quick-sidebar-chat').addClass('page-quick-sidebar-content-item-shown');
+                                    chat.showMessagesPanel();
                                     chat.selectFriend(user.friendUserId, user.friendTenantId);
                                 } else {
-                                    $('.page-quick-sidebar-chat').removeClass('page-quick-sidebar-content-item-shown');
+                                    chat.showFriendsPanel();
                                 }
                             });
                         });
@@ -89,7 +96,7 @@
             changeChatPanelPinned: function (pinned) {
                 chat.pinned = pinned;
                 var $sidebarPinner = $(".page-quick-sidebar-pinner");
-                $sidebarPinner.find('i.icon-pin').attr('class', 'icon-pin ' + (chat.pinned ? 'pinned' : 'unpinned'));
+                $sidebarPinner.attr('class', 'page-quick-sidebar-pinner ' + (chat.pinned ? 'pinned' : 'unpinned'));
                 chat.changeChatPanelPinnedOnLocalStorage();
             },
 
@@ -99,6 +106,8 @@
                 chat.selectedUser = chatUser;
                 chat.changeChatUserOnLocalStorage();
                 chat.user.setSelectedUserOnlineStatus(chatUser.isOnline);
+
+                chat.showMessagesPanel();
 
                 if (chat.selectedUser.friendProfilePictureId) {
                     var tenantId = chat.selectedUser.friendTenantId ? chat.selectedUser.friendTenantId : '';
@@ -136,6 +145,28 @@
 
                     chat.user.markAllUnreadMessagesOfUserAsRead(chat.selectedUser);
                 }
+            },
+
+            initConversationScrollbar: function () {
+                var height = $('#m_quick_sidebar').outerHeight(true) - $(".selected-chat-user").outerHeight(true) - $('#chatMessageForm').outerHeight(true) - 150;
+                $messengerMessages.slimScroll({ destroy: true });
+                $messengerMessages.slimScroll({
+                    height: height
+                });
+            },
+
+            showMessagesPanel: function () {
+                $friendsPanel.hide();
+                $messagesPanel.show(function () {
+                    chat.initConversationScrollbar();
+                });
+                $quickSidebarBack.removeClass("d-none");
+            },
+
+            showFriendsPanel: function () {
+                $friendsPanel.show();
+                $messagesPanel.hide();
+                $quickSidebarBack.addClass("d-none");
             },
 
             changeFriendState: function (user, state) {
@@ -219,7 +250,8 @@
             getFormattedMessages: function (messages) {
                 $.each(messages, function (index, message) {
                     message.creationTime = chat.getFixedMessageTime(message.creationTime);
-                    message.cssClass = message.side === app.chat.side.sender ? 'post out' : 'post in';
+                    message.cssClass = message.side === app.chat.side.sender ? 'm-messenger__message--out' : 'm-messenger__message--in';
+                    message.isIn = message.side !== app.chat.side.sender;
                     message.shownUserName = message.side === app.chat.side.sender
                         ? appSession.user.userName
                         : chat.selectedUser.friendUserName;
@@ -228,7 +260,7 @@
                         (!appSession.user.profilePictureId ? (abp.appPath + 'Common/Images/default-profile-picture.png') : (abp.appPath + 'Profile/GetProfilePictureById?id=' + appSession.user.profilePictureId)) :
                         chat.getFriendProfilePicturePath(chat.selectedUser);
 
-                    var readStateClass = message.receiverReadState === app.chat.readState.read ? ' text-success' : '';
+                    var readStateClass = message.receiverReadState === app.chat.readState.read ? ' m--font-info' : ' m--font-secondary';
                     message.readStateCheck = message.side === app.chat.side.sender ? '<i class="read-state-check fa fa-check' + readStateClass + '" aria-hidden="true"></i>' : '';
 
                     if (message.message.startsWith('[image]')) {
@@ -240,7 +272,7 @@
                     } else if (message.message.startsWith('[file]')) {
                         var file = JSON.parse(message.message.substring('[file]'.length));
                         var fileUrl = abp.appPath + 'Admin/Chat/GetFile?id=' + message.id + '&contentType=' + file.contentType;
-                        var uploadedFileMsg = '<a href="' + fileUrl + '" target="_blank" class="chat-file-preview"><i class="fa fa-file"></i> ' + file.name + ' <i class="fa fa-download pull-right"></i></a>';
+                        var uploadedFileMsg = '<a href="' + fileUrl + '" target="_blank" class="chat-file-preview"><i class="la la-file"></i> ' + file.name + ' <i class="la la-download pull-right"></i></a>';
 
                         message.message = uploadedFileMsg;
                     } else if (message.message.startsWith('[link]')) {
@@ -263,9 +295,8 @@
             },
 
             scrollToBottom: function () {
-                var $scrollArea = $('.page-quick-sidebar-chat-user-messages');
-                var scrollToVal = $scrollArea.prop('scrollHeight') + 'px';
-                $scrollArea.slimScroll({ scrollTo: scrollToVal });
+                var scrollToVal = $messengerMessages.prop('scrollHeight') + 'px';
+                $messengerMessages.slimScroll({ scrollTo: scrollToVal });
             },
 
             //Events & UI
@@ -288,28 +319,43 @@
             },
 
             bindUiEvents: function () {
-                QuickSidebar.init(function (e, pos) {
-                    if (pos === 0 && !chat.selectedUser.allPreviousMessagesLoaded && !chat.user.loadingPreviousUserMessages) {
-                        chat.user.loadMessages(chat.selectedUser);
-                    }
+                $('#m_quick_sidebar').mOffcanvas({
+                    class: 'm-quick-sidebar',
+                    //overlay: false,  
+                    close: $('#m_quick_sidebar_close'),
+                    toggle: $('#m_quick_sidebar_toggle')
                 });
 
-                $('.page-quick-sidebar-back-to-list').on('click', function () {
+                // run once on first time dropdown shown
+                $('#m_quick_sidebar').mOffcanvas().one('afterShow', () => {
+                    mApp.block($('#m_quick_sidebar'));
+
+                    setTimeout(() => {
+                        mApp.unblock($('#m_quick_sidebar'));
+                        $('#m_quick_sidebar').find('.m-quick-sidebar__content').removeClass('m--hide');
+                    }, 1000);
+                });
+
+                $('#m_quick_sidebar').on('click', '#m_quick_sidebar_back', function () {
                     chat.selectedUser = null;
                     chat.changeChatUserOnLocalStorage();
                 });
 
-                $('.dropdown-quick-sidebar-toggler a, .page-quick-sidebar-toggler, .quick-sidebar-toggler').on('click', function () {
-                    chat.isOpen = $('body').hasClass('page-quick-sidebar-open');
+                $('#m_quick_sidebar_toggle').on('click', function () {
+                    chat.isOpen = $('body').hasClass('m-quick-sidebar--on');
                     chat.adjustNotifyPosition();
                     chat.changeChatPanelIsOpenOnLocalStorage();
                     chat.user.markAllUnreadMessagesOfUserAsRead(chat.selectedUser);
                 });
 
-                $('.page-quick-sidebar-chat-users').on('click', '.media-list > .media', function () {
+                $('.m-messenger-friends').on('click', '.m-list-search__result-item', function () {
                     var friendUserId = $(this).attr('data-friend-user-id');
                     var friendTenantId = $(this).attr('data-friend-tenant-id');
                     chat.selectFriend(friendUserId, friendTenantId);
+                });
+
+                $quickSidebarBack.on('click', function () {
+                    chat.showFriendsPanel();
                 });
 
                 $('#liBanChatUser a').click(function () {
@@ -317,6 +363,10 @@
                 });
                 $('#liUnbanChatUser, #UnblockUserButton').click(function () {
                     chat.user.unblock(chat.selectedUser);
+                });
+
+                $(window).on('resize', function () {
+                    chat.initConversationScrollbar();
                 });
 
                 $('#SearchChatUserButton').click(function () {
@@ -329,9 +379,6 @@
                     }
                 });
 
-                $('#SendChatMessageButton').click(function () {
-                    chat.sendMessage();
-                });
 
                 $('#ChatMessage').keypress(function (e) {
                     if (e.which === 13) {
@@ -343,9 +390,9 @@
                 $('#ChatUserSearchUserName').on('keyup', function () {
                     var userName = $(this).val();
                     if (userName) {
-                        $('#SearchChatUserButton').removeClass('hidden');
+                        $('#SearchChatUserButton').removeClass('d-none');
                     } else {
-                        $('#SearchChatUserButton').addClass('hidden');
+                        $('#SearchChatUserButton').addClass('d-none');
                     }
 
                     var friends = _.filter(chat.friends, function (friend) {
@@ -355,12 +402,13 @@
                     chat.renderFriendLists(friends);
                 });
 
-                $('div.page-quick-sidebar-wrapper').on('mouseleave', function () {
+                $('div.m-quick-sidebar').on('mouseleave', function () {
                     if (chat.pinned) {
                         return;
                     }
 
-                    $('body').removeClass('page-quick-sidebar-open');
+                    $('body, #m_quick_sidebar').removeClass('m-quick-sidebar--on');
+                    $('#m_quick_sidebar').mOffcanvas().hide();
                     chat.isOpen = false;
                     chat.adjustNotifyPosition();
                     chat.changeChatPanelIsOpenOnLocalStorage();
@@ -410,15 +458,13 @@
                                     null,
                                     {
                                         onclick: function () {
-                                            if (!$('body').hasClass('page-quick-sidebar-open')) {
-                                                $('body').addClass('page-quick-sidebar-open');
+                                            if (!$('body').hasClass('m-quick-sidebar--on')) {
+                                                $('body').addClass('m-quick-sidebar--on');
                                                 chat.isOpen = true;
                                                 chat.changeChatPanelIsOpenOnLocalStorage();
                                             }
 
-                                            if (!$('.page-quick-sidebar-chat').hasClass('page-quick-sidebar-content-item-shown')) {
-                                                $('.page-quick-sidebar-chat').addClass('page-quick-sidebar-content-item-shown');
-                                            }
+                                            chat.showMessagesPanel();
 
                                             chat.selectFriend(user.friendUserId, user.friendTenantId);
                                             chat.changeChatPanelPinned(true);
@@ -484,12 +530,14 @@
                             message.receiverReadState = app.chat.readState.read;
                         });
 
-                    if (chat.selectedUser.friendUserId === data.friend.userId) {
-                        $('.read-state-check').not('.text-success').addClass('text-success');
+                    if (chat.selectedUser && chat.selectedUser.friendUserId === data.friend.userId) {
+                        $('.read-state-check').not('.m--font-info').addClass('m--font-info');
                     }
                 });
 
                 abp.event.on('app.chat.connected', function () {
+                    $('#chat_is_connecting_icon').hide();
+                    $('#m_quick_sidebar_toggle').removeClass('d-none');
                     chat.getFriendsAndSettings(function () {
                         chat.bindUiEvents();
                         chat.loadLastState();
@@ -575,15 +623,15 @@
                     if (!tenantId) {
                         tenantId = '';
                     }
-                    var $userItems = $('li.media[data-friend-tenant-id="' + tenantId + '"][data-friend-user-id="' + userId + '"]');
+                    var $userItems = $('a.m-list-search__result-item[data-friend-tenant-id="' + tenantId + '"][data-friend-user-id="' + userId + '"]');
                     if ($userItems) {
-                        var $item = $($userItems[0]).find('.media-status span');
+                        var $item = $($userItems[0]).find('span.m-badge');
                         $item.html(messageCount);
 
                         if (messageCount) {
-                            $item.removeClass('hidden');
+                            $item.removeClass('d-none');
                         } else {
-                            $item.addClass('hidden');
+                            $item.addClass('d-none');
                         }
                     }
                 },
@@ -647,7 +695,6 @@
 
                 search: function () {
                     var userNameValue = $('#ChatUserSearchUserName').val();
-
                     var tenancyName = '';
                     var userName = '';
 
@@ -680,7 +727,7 @@
                     user.isOnline = isOnline;
 
                     var statusClass = 'contact-status ' + (isOnline ? 'online' : 'offline');
-                    var $userItems = $('li.media[data-friend-tenant-id="' + (tenantId ? tenantId : '') + '"][data-friend-user-id="' + userId + '"]');
+                    var $userItems = $('a.m-list-search__result-item[data-friend-tenant-id="' + (tenantId ? tenantId : '') + '"][data-friend-user-id="' + userId + '"]');
                     if ($userItems) {
                         $($userItems[0]).find('.contact-status').attr('class', statusClass);
                     }
@@ -695,7 +742,7 @@
 
                 setSelectedUserOnlineStatus: function (isOnline) {
                     if (chat.selectedUser) {
-                        var statusClass = 'contact-status ' + (isOnline ? 'online' : 'offline');
+                        var statusClass = 'contact-status2 ' + (isOnline ? 'online' : 'offline');
                         $('#selectedChatUserStatus').attr('class', statusClass);
                     }
                 }
@@ -704,7 +751,6 @@
 
         chat.init();
 
-        'use strict';
         // Change this to the location of your server-side upload handler:
         var url = abp.appPath + 'Admin/Chat/UploadFile';
 
@@ -763,7 +809,7 @@
             chat.sendMessage();
         });
 
-        $('.fileinput-button').click(function() {
+        $('.fileinput-button').click(function () {
             $('#chatDropdownToggle').dropdown('toggle');
         });
     });

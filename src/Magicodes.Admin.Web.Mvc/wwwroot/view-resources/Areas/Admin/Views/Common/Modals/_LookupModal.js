@@ -72,11 +72,12 @@
                         data: null,
                         orderable: false,
                         defaultContent: '',
+                        className:'text-center',
                         rowAction: {
                             element: $("<button/>")
-                                .addClass("btn btn-default btn-xs")
+                                .addClass("btn btn-metal m-btn m-btn--icon m-btn--icon-only")
                                 .attr("title", app.localize('Select'))
-                                .append($("<i/>").addClass("fa fa-chevron-circle-right")).click(function () {
+                                .append($("<i/>").addClass("la la-chevron-circle-right")).click(function () {
                                     var record = $(this).data();
                                     selectItem(record);
                                 })

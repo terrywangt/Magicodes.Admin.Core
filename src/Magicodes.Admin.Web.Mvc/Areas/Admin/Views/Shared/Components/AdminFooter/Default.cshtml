@@ -4,14 +4,18 @@
 @{
     Layout = null;
 }
-<div class="page-footer-inner">
-    <span class="text-muted">
-        <small>
-            @Model.GetProductNameWithEdition() <br />
-            v@(AppVersionHelper.Version) [@AppVersionHelper.ReleaseDate.ToString("yyyyMMdd")]
-        </small>
-    </span>
-</div>
-<div class="scroll-to-top">
-    <i class="icon-arrow-up"></i>
-</div>
+<footer class="m-grid__item m-footer ">
+    <div class="m-container m-container--fluid m-container--full-height m-page__container">
+        <div class="m-stack m-stack--flex-tablet-and-mobile m-stack--ver m-stack--desktop">
+            <div class="m-stack__item m-stack__item--left m-stack__item--middle m-stack__item--last">
+                <span class="m-footer__copyright">
+                    @Model.GetProductNameWithEdition() <br />
+                    v@(AppVersionHelper.Version) [@AppVersionHelper.ReleaseDate.ToString("yyyyMMdd")]
+                </span>
+            </div>
+            <div class="m-stack__item m-stack__item--right m-stack__item--middle m-stack__item--first">
+
+            </div>
+        </div>
+    </div>
+</footer>

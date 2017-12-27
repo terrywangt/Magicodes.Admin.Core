@@ -1,6 +1,8 @@
-﻿@model Magicodes.Admin.Web.Views.Shared.Components.AccountLogo.AccountLogoViewModel
+﻿@using Magicodes.Admin.Web.Theme
+@model Magicodes.Admin.Web.Views.Shared.Components.AccountLogo.AccountLogoViewModel
+@inject IUiThemeCustomizer UiThemeCustomizer
 <div class="logo">
     <a href="~/">
-        <img src="@Model.GetLogoUrl(ApplicationPath)" alt="" width="168" height="33" />
+        <img src="@Model.GetLogoUrl(ApplicationPath)" alt="" width="139" height="35" />
     </a>
 </div>

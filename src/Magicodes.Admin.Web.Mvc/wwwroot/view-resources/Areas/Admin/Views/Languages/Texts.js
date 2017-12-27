@@ -56,7 +56,7 @@
                     orderable: false,
                     defaultContent: '',
                     rowAction: {
-                        element: $('<button class="btn btn-default btn-xs" title="' + app.localize('Edit') + '"><i class="fa fa-edit"></i></button>')
+                        element: $('<button class="btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="' + app.localize('Edit') + '"><i class="la la-edit"></i></button>')
                             .click(function () {
                                 var data = $(this).data();
                                 _editTextModal.open({

@@ -12,5 +12,7 @@ namespace Magicodes.Admin.Chat
         long Save(ChatMessage message);
 
         int GetUnreadMessageCount(UserIdentifier userIdentifier, UserIdentifier sender);
+
+        Task<ChatMessage> FindMessageAsync(int id, long userId);
     }
 }

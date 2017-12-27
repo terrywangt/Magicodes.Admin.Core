@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Abp.AspNetCore.Mvc.Authorization;
+using Abp.AspNetZeroCore.Net;
 using Abp.Extensions;
 using Abp.IO.Extensions;
 using Abp.Runtime.Session;
@@ -11,7 +12,6 @@ using Abp.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Magicodes.Admin.MultiTenancy;
-using Magicodes.Admin.Net.MimeTypes;
 using Magicodes.Admin.Storage;
 using Magicodes.Admin.Web.Helpers;
 
@@ -133,9 +133,9 @@ namespace Magicodes.Admin.Web.Controllers
         }
 
         [AllowAnonymous]
-        public async Task<ActionResult> GetTenantLogo(int? tenantId)
+        public async Task<ActionResult> GetTenantLogo(string skin, int? tenantId)
         {
-            var defaultLogo = "/Common/Images/logo.png";
+            var defaultLogo = "/Common/Images/app-logo-on-" + skin + ".png";
 
             if (tenantId == null)
             {

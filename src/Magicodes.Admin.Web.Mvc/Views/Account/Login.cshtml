@@ -7,23 +7,8 @@
 @inject SignInManager SignInManager
 @section Scripts
 {
-    <environment names="Development">
-        <script src="~/view-resources/Views/Account/Login.js" asp-append-version="true"></script>
-    </environment>
-
-    <environment names="Staging,Production">
-        <script src="~/view-resources/Views/Account/Login.min.js" asp-append-version="true"></script>
-    </environment>
+    <script abp-src="/view-resources/Views/Account/Login.js" asp-append-version="true"></script>
 }
-
-<h3 class="form-title">@L("LogIn")</h3>
-
-<div class="alert alert-danger display-hide">
-    <button class="close" data-close="alert"></button>
-    <span>
-        <i class="fa fa-warning"></i> @L("PleaseEnterLoginInformation")
-    </span>
-</div>
 
 @if (!Model.SuccessMessage.IsNullOrEmpty())
 {
@@ -35,30 +20,39 @@
     </div>
 }
 
-<form asp-action="Login" class="login-form" method="post">
-    <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
-    <input type="hidden" name="returnUrlHash" />
-    <input type="hidden" name="ss" value="@ViewBag.SingleSignIn" />
-    <div class="form-group">
-        <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-        <label class="control-label visible-ie8 visible-ie9">@L("UserNameOrEmail")</label>
-        <input class="form-control form-control-solid placeholder-no-fix input-ltr" type="text" autocomplete="off" placeholder="@L("UserNameOrEmail")" name="usernameOrEmailAddress" value="@(Model.UserNameOrEmailAddress ?? "")" required />
+<div class="m-login__signin">
+    <div class="m-login__head">
+        <h3 class="m-login__title">
+            @L("LogIn")
+        </h3>
     </div>
-    <div class="form-group">
-        <label class="control-label visible-ie8 visible-ie9">@L("Password")</label>
-        <input class="form-control form-control-solid placeholder-no-fix input-ltr" type="password" autocomplete="off" placeholder="@L("Password")" name="password" />
-    </div>
-    <div class="form-group">
-        <label class="mt-checkbox mt-checkbox-outline margin-bottom-0">
-            <input class="form-control" type="checkbox" name="rememberMe" value="true" />@L("RememberMe")
-            <span></span>
-        </label>
-    </div>
-    <div class="form-actions">
-        <button type="submit" class="btn btn-success uppercase">@L("LogIn")</button>
-        <a href="@Url.Action("ForgotPassword", "Account")" id="forget-password" class="forget-password">@L("ForgotPassword")</a>
-    </div>
-</form>
+    <form class="m-login__form m-form login-form" asp-action="Login" method="post">
+        <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
+        <input type="hidden" name="returnUrlHash" />
+        <input type="hidden" name="ss" value="@ViewBag.SingleSignIn" />
+        <div class="form-group m-form__group">
+            <input class="form-control m-input" type="text" placeholder="@L("UserNameOrEmail")" name="usernameOrEmailAddress" autocomplete="off" value="@(Model.UserNameOrEmailAddress ?? "")" required>
+        </div>
+        <div class="form-group m-form__group">
+            <input class="form-control m-input m-login__form-input--last" type="password" placeholder="@L("Password")" name="password">
+        </div>
+        <div class="row m-login__form-sub">
+            <div class="col m--align-left">
+                <label class="m-checkbox m-checkbox--focus">
+                    <input type="checkbox" name="rememberMe" value="true">
+                    @L("RememberMe")
+                    <span></span>
+                </label>
+            </div>
+            <div class="col m--align-right">
+                <a href="@Url.Action("ForgotPassword", "Account")" id="forget-password" class="m-link forget-password">@L("ForgotPassword")</a>
+            </div>
+        </div>
+        <div class="m-login__form-action">
+            <button type="submit" class="btn btn-focus m-btn m-btn--pill m-btn--custom m-btn--air">@L("LogIn")</button>
+        </div>
+    </form>
+</div>
 
 @{
     var loginProviders = (await SignInManager.GetExternalAuthenticationSchemesAsync())
@@ -68,11 +62,6 @@
     Func<string, string> getSocialIconClass = (provider) =>
     {
         provider = provider.ToLower(CultureInfo.InvariantCulture);
-
-        if (provider == "google")
-        {
-            return "googleplus";
-        }
 
         return provider;
     };
@@ -102,18 +91,18 @@
     </div>
 }
 
-<div class="create-account">
-    <p>
+<div class="m-stack__item m-stack__item--center">
+    <div class="m-login__account">
         @if (Model.IsSelfRegistrationEnabled)
         {
-            <a href="@Url.Action("Register", "Account", new { ss = ViewBag.SingleSignIn, returnUrl = ViewBag.ReturnUrl })" id="register-btn" class="uppercase">@L("CreateAnAccount")</a>
+            <a href="@Url.Action("Register", "Account", new { ss = ViewBag.SingleSignIn, returnUrl = ViewBag.ReturnUrl })" id="register-btn" class="m-link m-link--focus m-login__account-link">@L("CreateAnAccount")</a>
             <span class="pipe-divider"> | </span>
         }
         @if (!AbpSession.TenantId.HasValue)
         {
-            <a href="@Url.Action("SelectEdition", "TenantRegistration")" id="register-btn" class="uppercase">@L("NewTenant")</a>
+            <a href="@Url.Action("SelectEdition", "TenantRegistration")" id="register-btn" class="m-link m-link--focus m-login__account-link">@L("NewTenant")</a>
             <span class="pipe-divider"> | </span>
         }
-        <a href="@Url.Action("EmailActivation", "Account")" id="email-activation-btn" class="uppercase">@L("EmailActivation")</a>
-    </p>
+        <a href="@Url.Action("EmailActivation", "Account")" id="email-activation-btn" class="m-link m-link--focus m-login__account-link">@L("EmailActivation")</a>
+    </div>
 </div>

@@ -42,91 +42,23 @@
     }
 }
 
-#UserNotificationDropdown {
-    max-width: 320px;
-    width: 320px;
-
-    @media (max-width: 767px) {
-        margin-right: -60px;
-
-        &:before, &:after {
-            margin-right: 70px;
-        }
+/* Begin Notification Bar */
+div.user-notification-item {
+    .m-list-timeline__text {
+        color: #dadada !important;
     }
 
-    a.user-notification-item {
-        cursor: default;
-        color: #ccc;
-
-        &:hover {
-            text-decoration: none;
-        }
-
-        &.user-notification-item-unread {
-            color: #fff;
-
-            .notification-time {
-                color: #ccc;
-            }
-        }
-
-        &.user-notification-item-clickable {
-            cursor: pointer;
-        }
-
-        .set-as-read-text {
-            color: #00dd00;
-            cursor: pointer;
-        }
-
-        .fa-info {
-            color: #00ffff;
-        }
-
-        .fa-check {
-            color: #0f0;
-        }
-
-        .fa-warning {
-            color: rgb(255, 162, 0);
-        }
-
-        .fa-bolt, .fa-bomb {
-            color: #ff0000;
-        }
+    &.user-notification-item-clickable {
+        cursor: pointer;
     }
 
-    a {
-        color: #fff;
-    }
-
-    .notifications-header {
-        /*position: relative;*/
-        text-align: left;
-        min-height: 35px;
-        padding: 8px;
-        margin: 0;
-
-        a {
-            &:hover {
-                text-decoration: underline;
-            }
+    &.user-notification-item-unread {
+        .m-list-timeline__text {
+            color: #575962 !important;
         }
-    }
-
-    .notifications-footer {
-        min-height: 35px;
-        padding: 8px;
-        margin: 0;
-    }
-
-    .notification-empty-text {
-        color: #ccc;
-        padding: 10px;
-        text-align: center;
     }
 }
-
+/* End Notification Bar */
 .jcrop-keymgr {
     opacity: 0;
 }
@@ -152,4 +84,41 @@
     .edition-info-text {
         display: none;
     }
+}
+
+li.dropdown-language {
+    a {
+        padding-top: 25px !important;
+    }
+
+    ul {
+        top: 0px !important;
+        min-width: 200px;
+
+        li a {
+            padding-top: 5px !important;
+        }
+    }
+}
+
+@media (max-width: 992px) {
+    li.dropdown-language {
+        a {
+            padding-top: 15px !important;
+        }
+    }
+}
+
+@media (min-width: 993px) {
+    #m_header_nav {
+        height: 70px !important;
+    }
+}
+
+ul.linked-accounts li {
+    margin-left: 35px !important;
+}
+
+span.m-topbar__username {
+    padding-right: 10px;
 }

@@ -20,6 +20,9 @@
             paging: false,
             serverSide: false,
             processing: false,
+            drawCallback: function (settings) {
+                $('[data-toggle=m-tooltip]').tooltip();
+            },
             listAction: {
                 ajaxFunction: _roleService.getRoles,
                 inputFilter: function () {
@@ -67,8 +70,8 @@
                         if (row.isStatic) {
                             $span.append(
                                 $("<span/>")
-                                    .addClass("label label-info")
-                                    .attr("data-toggle", "tooltip")
+                                    .addClass("m-badge m-badge--brand m-badge--wide")
+                                    .attr("data-toggle", "m-tooltip")
                                     .attr("title", app.localize('StaticRole_Tooltip'))
                                     .attr("data-placement", "top")
                                     .text(app.localize('Static'))
@@ -79,8 +82,8 @@
                         if (row.isDefault) {
                             $span.append(
                                 $("<span/>")
-                                    .addClass("label label-default")
-                                    .attr("data-toggle", "tooltip")
+                                    .addClass("m-badge m-badge--metal m-badge--wide")
+                                    .attr("data-toggle", "m-tooltip")
                                     .attr("title", app.localize('DefaultRole_Description'))
                                     .attr("data-placement", "top")
                                     .text(app.localize('Default'))
@@ -88,7 +91,6 @@
                             );
                         }
 
-                        $span.find('[data-toggle=tooltip]').tooltip();
                         return $span[0].outerHTML;
                     }
                 },

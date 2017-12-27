@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Reflection;
+using Abp.AspNetZeroCore;
+using Abp.AspNetZeroCore.Timing;
 using Abp.AutoMapper;
 using Abp.Dependency;
 using Abp.Modules;
@@ -25,7 +27,6 @@ using Magicodes.Admin.Localization;
 using Magicodes.Admin.MultiTenancy;
 using Magicodes.Admin.MultiTenancy.Payments.Cache;
 using Magicodes.Admin.Notifications;
-using Magicodes.Admin.Timing;
 
 #if FEATURE_LDAP
 using Abp.Zero.Ldap;
@@ -39,11 +40,16 @@ namespace Magicodes.Admin
         typeof(AbpZeroLdapModule),
 #endif
         typeof(AbpAutoMapperModule),
+        typeof(AbpAspNetZeroCoreModule),
         typeof(AbpMailKitModule))]
     public class AdminCoreModule : AbpModule
     {
         public override void PreInitialize()
         {
+            //workaround for issue: https://github.com/aspnet/EntityFrameworkCore/issues/9825
+            //related github issue: https://github.com/aspnet/EntityFrameworkCore/issues/10407
+            AppContext.SetSwitch("Microsoft.EntityFrameworkCore.Issue9825", true);
+
             Configuration.Auditing.IsEnabledForAnonymousUsers = true;
 
             //Declare entity types

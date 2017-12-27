@@ -147,9 +147,9 @@
     <text name="ExportToExcel" value="Exporter vers Excel" />
     <text name="ChangeProfilePicture" value="Modifier l'image du profil" />
     <text name="TenantName_Regex_Description" value="Le nom du tenant doit contenir au moins 2 caractères, commence par une lettre et continue avec la lettre, le nombre, le tiret ou le trait de soulignement." />
-    <text name="ProfilePicture_Change_Info" value="Vous pouvez sélectionner un fichier JPG / JPEG / PNG avec une taille maximale de 1 Mo." />
+    <text name="ProfilePicture_Change_Info" value="Vous pouvez sélectionner un fichier JPG / JPEG / PNG avec une taille maximale de {0}Mo." />
     <text name="ProfilePicture_Change_Error" value="Votre image de profil n'a pas pu être modifiée." />
-    <text name="ProfilePicture_Warn_SizeLimit" value="La taille de l'image doit être inférieure à 1 Mo. Veuillez sélectionner un autre fichier." />
+    <text name="ProfilePicture_Warn_SizeLimit" value="La taille de l'image doit être inférieure à {0}Mo. Veuillez sélectionner un autre fichier." />
     <text name="ProfilePicture_Warn_FileType" value="Vous ne pouvez sélectionner que le fichier JPG / JPEG. Sélectionnez un autre fichier." />
     <text name="Dashboard" value="Tableau de bord" />
     <text name="DashboardHeaderInfo" value="statistiques et rapports" />
@@ -323,7 +323,7 @@
     <text name="YouCannotLinkToSameAccount">Vous ne pouvez pas lier au même compte!</text>
     <text name="ChangePasswordBeforeLinkToAnAccount">Vous devez changer votre mot de passe avant de lier ce compte!</text>
     <text name="LinkedAccounts">Comptes liés</text>
-    <text name="ManageAccounts">Gérer les comptes</text>
+    <text name="ManageLinkedAccounts">Gérer les comptes</text>
     <text name="LinkNewAccount">Créer un nouveau compte</text>
     <text name="SuccessfullyUnlinked">Désactivé avec succès</text>
     <text name="LinkedUserDeleteWarningMessage">Le lien vers l'utilisateur {0} sera supprimé.</text>
@@ -371,7 +371,7 @@
     <text name="LoginAttempts">tentatives de connexion </text>
     <text name="Failed">Échec</text>
     <text name="NewTenant">Nouveau tenant</text>
-    <text name="ResizedProfilePicture_Warn_SizeLimit" value="La taille de l'image redimensionnée doit être inférieure à 100KB. Veuillez redimensionner et réessayer." />
+    <text name="ResizedProfilePicture_Warn_SizeLimit" value="La taille de l'image redimensionnée doit être inférieure à {0}KB. Veuillez redimensionner et réessayer." />
     <text name="RegisterFormUserNameInvalidMessage">Veuillez ne pas entrer d'adresse e-mail pour le nom d'utilisateur.</text>
     <text name="UseHostDatabase" value="Utiliser la base de données hôte" />
     <text name="DatabaseConnectionString" value="Chaîne de connexion à la base de données" />

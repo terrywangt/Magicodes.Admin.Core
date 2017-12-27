@@ -31,6 +31,26 @@ namespace Magicodes.Admin.Tenants.Dashboard
             return array;
         }
 
+        public static int[] GetRandomPercentageArray(int size)
+        {
+            if (size == 1)
+            {
+                return new int[100];
+            }
+
+            var array = new int[size];
+            var total = 0;
+            for (var i = 0; i < size - 1; i++)
+            {
+                array[i] = GetRandomInt(0, 100 - total);
+                total += array[i];
+            }
+
+            array[size - 1] = 100 - total;
+
+            return array;
+        }
+
         public static List<SalesSummaryData> GenerateSalesSummaryData(SalesSummaryDatePeriod inputSalesSummaryDatePeriod)
         {
             List<SalesSummaryData> data = null;
@@ -95,13 +115,13 @@ namespace Magicodes.Admin.Tenants.Dashboard
                 new MemberActivity("Brain", "$" + GetRandomInt(100, 500), GetRandomInt(10, 100), GetRandomInt(10, 150),
                     GetRandomInt(10, 99) + "%"),
 
-                new MemberActivity("Nick", "$" + GetRandomInt(100, 500), GetRandomInt(10, 100), GetRandomInt(10, 150),
+                new MemberActivity("Jane", "$" + GetRandomInt(100, 500), GetRandomInt(10, 100), GetRandomInt(10, 150),
                     GetRandomInt(10, 99) + "%"),
 
                 new MemberActivity("Tim", "$" + GetRandomInt(100, 500), GetRandomInt(10, 100), GetRandomInt(10, 150),
                     GetRandomInt(10, 99) + "%"),
 
-                new MemberActivity("Tom", "$" + GetRandomInt(100, 500), GetRandomInt(10, 100), GetRandomInt(10, 150),
+                new MemberActivity("Kate", "$" + GetRandomInt(100, 500), GetRandomInt(10, 100), GetRandomInt(10, 150),
                     GetRandomInt(10, 99) + "%")
             };
         }
@@ -116,69 +136,6 @@ namespace Magicodes.Admin.Tenants.Dashboard
             }
 
             return countries;
-        }
-
-        public static List<TimeLineItem> GenerateTimeLineItems()
-        {
-            return new List<TimeLineItem>
-            {
-                new TimeLineItem(DateTime.Now.AddDays(-60))
-                {
-                    AutherName = "Andres Iniesta",
-                    Image = "avatar80_2.jpg",
-                    Title = "New User",
-                    Text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
-                },
-                new TimeLineItem(DateTime.Now.AddDays(-50))
-                {
-                    AutherName = "Hugh Grant",
-                    Image = "avatar80_3.jpg",
-                    Title = "Sending Shipment",
-                    Text = "Etiam euismod eleifend ipsum, at posuere augue."
-                },
-                new TimeLineItem(DateTime.Now.AddDays(-10))
-                {
-                    AutherName = "Rory Matthew",
-                    Image = "avatar80_1.jpg",
-                    Title = "Blue Chambray",
-                    Text = "Volosoft software."
-                },
-                new TimeLineItem(DateTime.Now)
-                {
-                    AutherName = "Andres Iniesta",
-                    Image = "avatar80_2.jpg",
-                    Title = "Timeline Received",
-                    Text = "Pellentesque mi felis, aliquam at iaculis eu, finibus eu ex."
-                },
-                new TimeLineItem(DateTime.Now.AddDays(20))
-                {
-                    AutherName = "Matt Goldman",
-                    Image = "avatar80_7.jpg",
-                    Title = "Event Success",
-                    Text = "Integer efficitur leo eget dolor tincidunt, et dignissim risus lacinia."
-                },
-                new TimeLineItem(DateTime.Now.AddDays(30))
-                {
-                    AutherName = "Rory Matthew",
-                    Image = "avatar80_1.jpg",
-                    Title = "Conference Call",
-                    Text = "Nam in egestas nunc. Suspendisse potenti."
-                },
-                new TimeLineItem(DateTime.Now.AddDays(50))
-                {
-                    AutherName = "Andres Iniesta",
-                    Image = "avatar80_2.jpg",
-                    Title = "Timeline Received",
-                    Text = "Sed sit amet molestie elit, vel placerat ipsum. Ut consectetur odio non est rhoncus volutpat."
-                },
-                new TimeLineItem(DateTime.Now.AddDays(80))
-                {
-                    AutherName = "Andres Iniesta",
-                    Image = "avatar80_2.jpg",
-                    Title = "Code Review",
-                    Text = "Praesent dignissim luctus risus sed sodales."
-                }
-            };
         }
     }
 }
