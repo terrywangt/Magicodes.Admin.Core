@@ -22,6 +22,26 @@ using Microsoft.AspNetCore.Mvc.ViewComponents;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+/*
+ *  ┏┓　　　┏┓ 
+ *┏┛┻━━━┛┻┓ 
+ *┃　　　　　　　┃ 　 
+ *┃　　　━　　　┃ 
+ *┃　┳┛　┗┳　┃ 
+ *┃　　　　　　　┃ 
+ *┃　　　┻　　　┃ 
+ *┃　　　　　　　┃ 
+ *┗━┓　　　┏━┛ 
+ *　　┃　　　┃神兽保佑 
+ *　　┃　　　┃代码无BUG！
+ *　　┃　　　┗━━━┓ 
+ *　　┃　　　　　　　┣┓ 
+ *　　┃　　　　　　　┏┛ 
+ *　　┗┓┓┏━┳┓┏┛ 
+ *　　　┃┫┫　┃┫┫ 
+ *　　　┗┻┛　┗┻┛  
+ *　　　 
+ */
 using Microsoft.Extensions.Logging;
 using Magicodes.Admin.Authorization;
 using Magicodes.Admin.Authorization.Roles;
@@ -46,17 +66,22 @@ using Abp.AspNetZeroCore.Web.Owin;
 
 namespace Magicodes.Admin.Web.Startup
 {
-    public class Startup
+    public partial class Startup
     {
         private readonly IConfigurationRoot _appConfiguration;
+        private readonly IHostingEnvironment _hostingEnvironment;
 
         public Startup(IHostingEnvironment env)
         {
             _appConfiguration = env.GetAppConfiguration();
+            _hostingEnvironment = env;
         }
 
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            //设置自定义服务配置
+            ConfigureCustomServices(services);
+
             //MVC
             services.AddMvc(options =>
             {
@@ -73,13 +98,6 @@ namespace Magicodes.Admin.Web.Startup
 
             AuthConfigurer.Configure(services, _appConfiguration);
 
-            //Swagger - Enable this line and the related lines in Configure method to enable swagger UI
-            //services.AddSwaggerGen(options =>
-            //{
-            //    options.SwaggerDoc("v1", new Info { Title = "Admin API", Version = "v1" });
-            //    options.DocInclusionPredicate((docName, description) => true);
-            //});
-
             //Recaptcha
             services.AddRecaptcha(new RecaptchaOptions
             {
@@ -87,11 +105,6 @@ namespace Magicodes.Admin.Web.Startup
                 SecretKey = _appConfiguration["Recaptcha:SecretKey"]
             });
 
-            //Hangfire (Enable to use Hangfire instead of default job manager)
-            //services.AddHangfire(config =>
-            //{
-            //    config.UseSqlServerStorage(_appConfiguration.GetConnectionString("Default"));
-            //});
 
             services.AddScoped<IWebResourceManager, WebResourceManager>();
 
@@ -102,11 +115,16 @@ namespace Magicodes.Admin.Web.Startup
                 options.IocManager.IocContainer.AddFacility<LoggingFacility>(
                     f => f.UseAbpLog4Net().WithConfig("log4net.config")
                 );
+
+                //启用插件
+                UsePlugInSources(options);
             });
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            ConfigureCustom(app, env, loggerFactory);
+
             //Initializes ABP framework.
             app.UseAbp(options =>
             {
@@ -148,13 +166,6 @@ namespace Magicodes.Admin.Web.Startup
             app.UseAppBuilder(ConfigureOwinServices);
 #endif
 
-            //Hangfire dashboard & server (Enable to use Hangfire instead of default job manager)
-            //app.UseHangfireDashboard("/hangfire", new DashboardOptions
-            //{
-            //    Authorization = new[] { new AbpHangfireAuthorizationFilter(AppPermissions.Pages_Administration_HangfireDashboard)  }
-            //});
-            //app.UseHangfireServer();
-
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -165,21 +176,13 @@ namespace Magicodes.Admin.Web.Startup
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-
-            // Enable middleware to serve generated Swagger as a JSON endpoint
-            //app.UseSwagger();
-            // Enable middleware to serve swagger-ui assets (HTML, JS, CSS etc.)
-            //app.UseSwaggerUI(options =>
-            //{
-            //    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Admin API V1");
-            //}); //URL: /swagger
         }
 
 #if FEATURE_SIGNALR
         private static void ConfigureOwinServices(IAppBuilder app)
         {
             GlobalHost.DependencyResolver.Register(typeof(IAssemblyLocator), () => new SignalRAssemblyLocator());
-            app.Properties["host.AppName"] = "Admin";
+            app.Properties["host.AppName"] = "Magicodes.Admin";
 
             app.UseAbp();
 

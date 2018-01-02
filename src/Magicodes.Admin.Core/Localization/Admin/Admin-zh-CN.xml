@@ -602,5 +602,6 @@
     <text name="Invoce">发票</text>
     <text name="LegalName">抬头名称</text>
     <text name="Address">地址</text>
+    <text name="LoginMsg">分布式后台快速开发框架</text>
   </texts>
 </localizationDictionary>

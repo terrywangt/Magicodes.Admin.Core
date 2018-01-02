@@ -64,13 +64,13 @@
     "inputFile": "wwwroot/Common/Styles/jstree.less"
   },
   {
-    "outputFile": "wwwroot/metronic/sass/demo/default/style.css",
-    "inputFile": "wwwroot/metronic/sass/demo/default/style.scss"
+    "outputFile": "wwwroot/metronic/src/sass/demo/default/style.css",
+    "inputFile": "wwwroot/metronic/src/sass/demo/default/style.scss"
   },
-  {
-    "outputFile": "wwwroot/metronic/theme/src/sass/demo/default/style.css",
-    "inputFile": "wwwroot/metronic/theme/src/sass/demo/default/style.scss"
-  },
+  //{
+  //  "outputFile": "wwwroot/metronic/theme/src/sass/demo/default/style.css",
+  //  "inputFile": "wwwroot/metronic/theme/src/sass/demo/default/style.scss"
+  //},
   {
     "outputFile": "wwwroot/Common/Styles/metronic-customize.css",
     "inputFile": "wwwroot/Common/Styles/metronic-customize.less"
@@ -83,10 +83,10 @@
     "outputFile": "wwwroot/view-resources/Views/Payment/Payment.css",
     "inputFile": "wwwroot/view-resources/Views/Payment/Payment.less"
   },
-  {
-    "outputFile": "wwwroot/Common/Styles/metronic-customize-top-menu.css",
-    "inputFile": "wwwroot/Common/Styles/metronic-customize-top-menu.less"
-  },
+  //{
+  //  "outputFile": "wwwroot/Common/Styles/metronic-customize-top-menu.css",
+  //  "inputFile": "wwwroot/Common/Styles/metronic-customize-top-menu.less"
+  //},
   {
     "outputFile": "wwwroot/view-resources/Views/Shared/metronic-customize-top-menu.css",
     "inputFile": "wwwroot/view-resources/Views/Shared/metronic-customize-top-menu.less"

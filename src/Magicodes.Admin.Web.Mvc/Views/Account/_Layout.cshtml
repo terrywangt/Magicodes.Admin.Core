@@ -5,6 +5,7 @@
 @using Magicodes.Admin.Timing
 @using Magicodes.Admin.Url
 @using Magicodes.Admin.Web.Resources
+@using Magicodes.Admin.Web.Configuration
 @using CultureHelper = Magicodes.Admin.Localization.CultureHelper
 @inject ScriptPaths ScriptPaths
 @inject AppTimes AppTimes
@@ -12,6 +13,7 @@
 @inject IMultiTenancyConfig MultiTenancyConfig
 @inject IWebResourceManager WebResourceManager
 @inject IWebUrlService WebUrlService
+@inject AppConfigurationAccessor AppConfiguration
 @{
     Layout = null;
     AbpAntiForgeryManager.SetCookie(Context);
@@ -24,30 +26,22 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
-
     @* Fill these meta tags upon your project specification *@
     <meta content="Admin" name="description" />
     <meta content="Admin" name="keywords">
     <meta content="Admin" name="author" />
-
     <link rel="shortcut icon" href="~/favicon.ico" />
-
     <link rel="stylesheet" abp-href="/view-resources/Areas/Admin/Views/_Bundles/vendors.bundle.css" asp-append-version="true" />
     <link rel="stylesheet" href="/metronic/dist/html/default/assets/demo/default/base/style.bundle.css" asp-append-version="true" />
-
     <link rel="stylesheet" abp-href="/view-resources/Areas/Admin/Views/_Bundles/account-layout-libs.css" asp-append-version="true" />
-
     <link rel="stylesheet" abp-href="/view-resources/Areas/Admin/Views/_Bundles/common-styles.css" asp-append-version="true" />
     <link rel="stylesheet" abp-href="/view-resources/Views/Account/_Layout.css" asp-append-version="true" />
-
     @RenderSection("Styles", false)
-
     <script type="text/javascript">
         @* This is used to get the application's root path from javascript.
         It's useful if you're running application in a virtual directory under IIS. *@
         var abp = abp || {}; abp.appPath = '@ApplicationPath';
     </script>
-
 </head>
 <body class="m--skin- m-header--fixed m-header--fixed-mobile m-aside-left--enabled m-aside-left--skin-dark m-aside-left--offcanvas m-footer--push m-aside--offcanvas-default">
     <!-- begin:: Page -->
@@ -76,13 +70,13 @@
                     </div>
                 </div>
             </div>
-            <div class="m-grid__item m-grid__item--fluid m-grid m-grid--center m-grid--hor m-grid__item--order-tablet-and-mobile-1	m-login__content" style="background-image: url(/metronic/src/media/app/img/bg/bg-4.jpg)">
+            <div class="m-grid__item m-grid__item--fluid m-grid m-grid--center m-grid--hor m-grid__item--order-tablet-and-mobile-1	m-login__content" style="background-image: url(https://api.dujin.org/bing/1366.php)">
                 <div class="m-grid__item m-grid__item--middle">
                     <h3 class="m-login__welcome">
-                        AspNet Zero
+                        @AppConfiguration.Configuration["CustomInfo:Name"]
                     </h3>
                     <p class="m-login__msg">
-                        Base solution for your next web application
+                        @L("LoginMsg")
                     </p>
                 </div>
             </div>
@@ -90,19 +84,18 @@
     </div>
     <!-- end:: Page -->
     <!--begin::Base Scripts -->
-    <script abp-src="/view-resources/Areas/Admin/Views/_Bundles/account-layout-libs.js" asp-append-version="true"></script>    
-    
+    <script abp-src="/view-resources/Areas/Admin/Views/_Bundles/account-layout-libs.js" asp-append-version="true"></script>
+
     <!-- Dynamic scripts of ABP system (They are created on runtime and can not be bundled) -->
     <script src="~/AbpServiceProxies/GetAll?v=@(AppTimes.StartupTime.Ticks)" type="text/javascript"></script>
     <script src="~/AbpScripts/GetScripts?v=@(AppTimes.StartupTime.Ticks)" type="text/javascript"></script>
-    
+
     <script abp-src="/view-resources/Areas/Admin/Views/_Bundles/common-scripts.js" asp-append-version="true"></script>
     <script src="@ScriptPaths.JQuery_Validation_Localization" asp-append-version="true"></script>
-
     @WebResourceManager.RenderScripts();
 
     @RenderSection("Scripts", false)
-    
+
     <script>
         jQuery(document).ready(function () {
             if (window.CurrentPage) {
