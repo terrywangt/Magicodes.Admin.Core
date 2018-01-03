@@ -1,0 +1,21 @@
+<input type="hidden" name="PaymentId" value="" />
+<input type="hidden" name="PayerId" value="" />
+
+<div *ngIf="demoUsername" class="m-alert m-alert--icon m-alert--icon-solid m-alert--outline alert alert-brand alert-dismissible fade show" role="alert">
+    <div class="m-alert__icon">
+        <i class="flaticon-exclamation"></i>
+        <span></span>
+    </div>
+    <div class="m-alert__text">
+        <h4>
+            {{l("DemoPayPalAccount")}}
+        </h4>
+        <p>
+            <span>{{l("UserName")}}: <strong>{{demoUsername}}</strong></span><br />
+            <span>{{l("Password")}}: <strong>{{demoPassword}}</strong></span>
+        </p>
+    </div>
+</div>
+
+<div id="paypal-button"></div>
+<div [busyIf]="paypalIsLoading" *ngIf="paypalIsLoading"></div>

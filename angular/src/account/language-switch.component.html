@@ -1,0 +1,5 @@
+﻿<div *ngIf="languages.length > 1" class="language-switch-area">
+    <a *ngFor="let language of languages" (click)="changeLanguage(language)">
+        <span [ngClass]="{'language-icon-current': language.name==currentLanguage.name}" title="{{language.displayName}}"><i class="{{language.icon}}"></i></span>
+    </a>
+</div>

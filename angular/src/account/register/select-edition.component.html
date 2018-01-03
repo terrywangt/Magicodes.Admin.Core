@@ -1,0 +1,74 @@
+<div [@routerTransition]>
+    <div class="pricing-content-1">
+        <div class="row row-centered">
+            <div class="col-lg-3 col-md-6 col-sm-6 col-sm-12 col-centered" *ngFor="let editionWithFeatures of editionsSelectOutput.editionsWithFeatures">
+                <div class="price-column-container border-active">
+                    <div class="price-table-head m--bg-primary">
+                        <h2 class="no-margin">{{editionWithFeatures.edition.displayName}}</h2>
+                    </div>
+                    <div class="arrow-down m--border-top-primary"></div>
+                    <div class="price-table-pricing">
+                        <div class="row" *ngIf="isFree(editionWithFeatures.edition)">
+                            <div class="col-md-12">
+                                <h4>
+                                    {{l("Free")}}
+                                </h4>
+                            </div>
+                        </div>
+
+                        <div class="row" *ngIf="!isFree(editionWithFeatures.edition)">
+                            <div class="col-md-6">
+                                <h4 class="col-md-12">
+                                    <sup class="price-sign">$</sup>{{editionWithFeatures.edition.monthlyPrice}}
+                                </h4>
+                                <p class="col-md-12">{{l("PerMonth")}}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <h4 class="col-md-12">
+                                    <sup class="price-sign">$</sup>{{editionWithFeatures.edition.annualPrice}}
+                                </h4>
+                                <p class="col-md-12">{{l("PerYear")}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="price-table-content">
+                        <div class="row mobile-padding" *ngFor="let feature of editionsSelectOutput.allFeatures">
+                            <!--Checbox Feature-->
+                            <div class="col-sm-3 col-md-2 text-right mobile-padding" *ngIf="isTrueFalseFeature(feature)">
+                                <i class="la la-check-circle m--font-success" *ngIf="featureEnabledForEdition(feature,editionWithFeatures)"></i>
+                                <i class="la la-times-circle m--font-danger" *ngIf="!featureEnabledForEdition(feature,editionWithFeatures)"></i>
+                            </div>
+                            <div class="col-sm-9 col-md-10 text-left mobile-padding edition-description" *ngIf="isTrueFalseFeature(feature)">{{feature.displayName}}</div>
+                            <!--Checbox Feature-->
+                            <!--Not Checbox Feature-->
+                            <div class="col-sm-3 col-md-2 text-right mobile-padding" *ngIf="!isTrueFalseFeature(feature)">
+                                <i class="la la-check-circle m--font-success"></i>
+                            </div>
+                            <div class="col-sm-9 col-md-10 text-left mobile-padding edition-description" *ngIf="!isTrueFalseFeature(feature)">{{feature.displayName}}:{{getFeatureValueForEdition(feature,editionWithFeatures)}}</div>
+                            <!--Not Checbox Feature-->
+                        </div>
+                    </div>
+                    <div class="arrow-down arrow-grey"></div>
+                    <div class="price-table-footer">
+                        <button class="btn btn-warning" (click)="upgrade(editionWithFeatures.edition, editionPaymentType.Upgrade)" *ngIf="isUserLoggedIn" [disabled]="!canUpgrade(editionWithFeatures.edition)">
+                            {{l("Upgrade")}}
+                        </button>
+
+                        <button class="btn btn-success" [routerLink]="['/account/register-tenant']" [queryParams]="{editionId: editionWithFeatures.edition.id, subscriptionStartType: subscriptionStartType.Free}" href="#" *ngIf="!isUserLoggedIn && isFree(editionWithFeatures.edition)">
+                            {{l("Start")}}
+                        </button>
+
+                        <button class="btn btn-warning" [routerLink]="['/account/register-tenant']" [queryParams]="{editionId: editionWithFeatures.edition.id, subscriptionStartType: subscriptionStartType.Trial}" href="#" *ngIf="!isUserLoggedIn && !isFree(editionWithFeatures.edition) && editionWithFeatures.edition.trialDayCount">
+                            {{l("FreeTrial")}}
+                        </button>
+
+                        <button class="btn btn-info" [routerLink]="['/account/buy']" [queryParams]="{editionId: editionWithFeatures.edition.id, editionPaymentType: editionPaymentType.NewRegistration, subscriptionStartType: subscriptionStartType.Paid}" href="#" *ngIf="!isUserLoggedIn && !isFree(editionWithFeatures.edition)">
+                            {{l("BuyNow")}}
+                        </button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

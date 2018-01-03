@@ -1,0 +1,28 @@
+<div [@routerTransition]>
+    <div class="m-login__signin">
+        <div class="m-login__head">
+            <h3 class="m-login__title">
+                {{l('SendSecurityCode')}}
+            </h3>
+        </div>
+        <form #twoFactorForm="ngForm" class="m-login__form m-form" method="post" (ngSubmit)="submit()">
+            <p>{{l("SendSecurityCode_Information")}}</p>
+            <div class="form-group m-form__group">
+                <select autoFocus
+                        size="1"
+                        class="form-control"
+                        [(ngModel)]="selectedTwoFactorProvider"
+                        name="selectedTwoFactorProvider">
+                    <option *ngFor="let provider of loginService.authenticateResult.twoFactorAuthProviders" [value]="provider">{{provider}}</option>
+                </select>
+            </div>
+
+            <div class="m-login__form-action">
+                <button type="submit" class="btn btn-focus m-btn m-btn--pill m-btn--custom m-btn--air">{{l("Submit")}}</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+

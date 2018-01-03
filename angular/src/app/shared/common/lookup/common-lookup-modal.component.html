@@ -1,0 +1,71 @@
+<div bsModal #modal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal"
+     (onShown)="shown()"
+     aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    {{options.title}}
+                </h4>
+                <button type="button" class="close" (click)="close()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form novalidate (ngSubmit)="refreshTable()" autocomplete="off">
+                    <div *ngIf="options.isFilterEnabled" class="input-group margin-bottom-10">
+                        <input autoFocus [(ngModel)]="filterText" name="filterText" class="form-control" placeholder="{{l('SearchWithThreeDot')}}" type="text">
+                        <span class="input-group-btn">
+                            <button class="btn btn btn-primary" type="submit"><i class="flaticon-search-1"></i></button>
+                        </span>
+                    </div>
+
+                    <!--<Primeng-Datatable-Start>-->
+                    <div class="primeng-datatable-container" [busyIf]="primengDatatableHelper.isLoading">
+                        <p-dataTable #dataTable
+                                     (onLazyLoad)="getRecordsIfNeeds($event)"
+                                     [value]="primengDatatableHelper.records"
+                                     rows="{{primengDatatableHelper.defaultRecordsCountPerPage}}"
+                                     [paginator]="false"
+                                     [lazy]="true"
+                                     emptyMessage="{{l('NoData')}}"
+                                     [responsive]="primengDatatableHelper.isResponsive">
+                            <p-column field=""
+                                      header="{{l('Select')}}"
+                                      [sortable]="false"
+                                      [style]="{'width':'15%'}"
+                                      styleClass="text-center">
+                                <ng-template let-record="rowData" pTemplate="body">
+                                    <button class="btn btn-metal m-btn m-btn--icon m-btn--icon-only"
+                                            (click)="selectItem(record)"
+                                            title="{{l('Select')}}">
+                                        <i class="la la-chevron-circle-right"></i>
+                                    </button>
+                                </ng-template>
+                            </p-column>
+                            <p-column field="name" header="{{l('Name')}}" [sortable]="false"></p-column>
+                        </p-dataTable>
+                        <div class="primeng-paging-container">
+                            <p-paginator rows="{{primengDatatableHelper.defaultRecordsCountPerPage}}"
+                                         #paginator
+                                         (onPageChange)="getRecordsIfNeeds($event)"
+                                         [totalRecords]="primengDatatableHelper.totalRecordsCount"
+                                         [rowsPerPageOptions]="primengDatatableHelper.predefinedRecordsCountPerPage">
+                            </p-paginator>
+                            <span class="total-records-count">
+                                {{l('TotalRecordsCount', primengDatatableHelper.totalRecordsCount)}}
+                            </span>
+                        </div>
+                    </div>
+                    <!--<Primeng-Datatable-End>-->
+                </form>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" (click)="close()">{{l("Cancel")}}</button>
+            </div>
+
+        </div>
+    </div>
+</div>

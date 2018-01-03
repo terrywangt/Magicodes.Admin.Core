@@ -1,0 +1,127 @@
+<div bsModal #createOrEditModal="bs-modal" (onShown)="onShown()" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createOrEditModal"
+     aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #roleForm="ngForm" novalidate (ngSubmit)="save()">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <span *ngIf="edition.id">{{l("EditEdition")}}: {{edition.displayName}}</span>
+                        <span *ngIf="!edition.id">{{l("CreateNewEdition")}}</span>
+                    </h5>
+                    <button type="button" class="close" (click)="close()" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <tabset class="tab-container tabbable-line">
+                        <tab heading="{{l('EditionProperties')}}" customClass="m-tabs__item">
+                            <div class="form-group">
+                                <label>{{l("EditionName")}}</label>
+                                <input #editionNameInput class="form-control" type="text" name="EditionDisplayName" [ngClass]="{'edited':edition.displayName}" [(ngModel)]="edition.displayName" required maxlength="64">
+                            </div>
+
+                            <label>{{l("SubscriptionPrice")}}</label>
+                            <div class="m-radio-inline">
+                                <label for="EditEdition_IsFree" class="m-radio">
+                                    <input id="EditEdition_IsFree" name="SubscriptionPrice" [(ngModel)]="isFree" (ngModelChange)="resetPrices($event)" [value]="true" type="radio">
+                                    {{l("Free")}}
+                                    <span></span>
+                                </label>
+                                <label for="EditEdition_IsPaid" class="m-radio">
+                                    <input id="EditEdition_IsPaid" name="SubscriptionPrice" [(ngModel)]="isFree" [value]="false" type="radio">
+                                    {{l("Paid")}}
+                                    <span></span>
+                                </label>
+                            </div>
+                            <div class="row" *ngIf="!isFree">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>{{l("MonthlyPrice")}}</label>
+                                        <input type="text"
+                                               name="MonthlyPrice"
+                                               currencyInput
+                                               class="form-control"
+                                               autocomplete="off"
+                                               [ngClass]="{'edited':edition.monthlyPrice}"
+                                               [required]="!isFree"
+                                               [(ngModel)]="edition.monthlyPrice" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>{{l("AnnualPrice")}}</label>
+                                        <input type="text"
+                                               name="AnnualPrice"
+                                               currencyInput
+                                               class="form-control"
+                                               autocomplete="off"
+                                               [ngClass]="{'edited':edition.annualPrice}"
+                                               [required]="!isFree"
+                                               [(ngModel)]="edition.annualPrice" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div [hidden]="isFree" class="paid-features">
+                                <div class="m-checkbox-list">
+                                    <label for="EditEdition_IsTrialActive" class="m-checkbox">
+                                        <input id="EditEdition_IsTrialActive" type="checkbox" name="isTrialActive" [(ngModel)]="isTrialActive" />
+                                        {{l("IsTrialActive")}}
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="form-group trial-day-count" *ngIf="isTrialActive">
+                                    <label>{{l("TrialDayCount")}}</label>
+                                    <input class="form-control"
+                                           type="number" name="TrialDayCount"
+                                           [required]="isTrialActive"
+                                           [(ngModel)]="edition.trialDayCount"
+                                           [ngClass]="{'edited':edition.trialDayCount}">
+                                </div>
+                                <div class="m-checkbox-list">
+                                    <label for="EditEdition_IsWaitingDayActive" class="m-checkbox">
+                                        <input id="EditEdition_IsWaitingDayActive" class="md-check" type="checkbox" name="IsWaitingDayActive" [(ngModel)]="isWaitingDayActive" />
+                                        {{l("WaitAfterSubscriptionExpireDate")}}
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="form-group waiting-day-after-expire" *ngIf="isWaitingDayActive">
+                                    <label>{{l("WaitingDayAfterExpire")}}</label>
+                                    <input class="form-control"
+                                           type="number" name="WaitingDayAfterExpire"
+                                           [required]="isWaitingDayActive"
+                                           [(ngModel)]="edition.waitingDayAfterExpire"
+                                           [ngClass]="{'edited':edition.waitingDayAfterExpire}">
+                                </div>
+                                <label>{{l("WhatWillDoneAfterSubscriptionExpiry")}}</label>
+                                <div class="m-radio-inline">
+                                    <label for="EditEdition_ExpireAction_DeactiveUser" class="m-radio">
+                                        <input id="EditEdition_ExpireAction_DeactiveUser" name="ExpireAction" [(ngModel)]="expireAction" [value]="expireActionEnum.DeactiveTenant" (ngModelChange)="removeExpiringEdition($event)" type="radio">
+                                        {{l("DeactiveTenant")}}
+                                        <span></span>
+                                    </label>
+                                    <label for="EditEdition_ExpireAction_AssignEdition" class="m-radio">
+                                        <input id="EditEdition_ExpireAction_AssignEdition" name="ExpireAction" [(ngModel)]="expireAction" [value]="expireActionEnum.AssignToAnotherEdition" type="radio">
+                                        {{l("AssignToAnotherEdition")}}
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="form-group edition-list" *ngIf="expireAction == expireActionEnum.AssignToAnotherEdition">
+                                    <select name="expiringEdition" class="form-control edited" [(ngModel)]="edition.expiringEditionId" [minValue]="expireAction == expireActionEnum.AssignToAnotherEdition ? 1:0" [ngClass]="{'edited':edition.expiringEditionId}">
+                                        <option *ngFor="let expiringEdition of expiringEditions" [value]="expiringEdition.value">{{expiringEdition.displayText}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </tab>
+                        <tab heading="{{l('Features')}}" customClass="m-tabs__item">
+                            <feature-tree #featureTree></feature-tree>
+                        </tab>
+                    </tabset>
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-secondary" (click)="close()">{{l("Cancel")}}</button>
+                    <button type="submit" class="btn btn-primary" [disabled]="!roleForm.form.valid" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

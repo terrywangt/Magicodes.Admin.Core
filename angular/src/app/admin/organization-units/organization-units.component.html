@@ -1,0 +1,25 @@
+<div [@routerTransition]>
+    <div class="m-subheader">
+        <div class="d-flex align-items-center">
+            <div class="mr-auto">
+                <h3 class="m-subheader__title m-subheader__title--separator">
+                    <span>{{l("OrganizationUnits")}}</span>
+                </h3>
+                <span class="m-section__sub">
+                    {{l("OrganizationUnitsHeaderInfo")}}
+                </span>
+            </div>
+
+        </div>
+    </div>
+    <div class="m-content">
+        <div class="row">
+            <div class="col-lg-6">
+                <organization-tree #ouTree (ouSelected)="ouMembers.organizationUnit = $event"></organization-tree>
+            </div>
+            <div class="col-lg-6">
+                <organization-unit-members #ouMembers (membersAdded)="ouTree.membersAdded($event)" (memberRemoved)="ouTree.memberRemoved($event)"></organization-unit-members>
+            </div>
+        </div>
+    </div>
+</div>

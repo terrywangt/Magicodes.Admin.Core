@@ -1,0 +1,49 @@
+<div class="m-portlet m-portlet--mobile">
+    <div class="m-portlet__head">
+        <div class="m-portlet__head-caption">
+            <div class="m-portlet__head-title">
+                <h3 class="m-portlet__head-text">
+                    {{l("DateAndTimePickers")}}
+                </h3>
+            </div>
+        </div>
+    </div>
+    <div class="m-portlet__body">
+        <form role="form">
+
+            <div class="form-group m-form__group row">
+                <label class="col-md-12">Default date picker</label>
+                <div class="col-lg-10 col-md-9 col-sm-8">
+                    <input type="datetime" #SampleDatePicker name="SampleDatePicker" class="form-control">
+                </div>
+                <div class="col-lg-2 col-md-3 col-sm-4">
+                    <button class="btn btn-primary" type="button" (click)="submitDate()">{{l("Submit")}}</button>
+                </div>
+            </div>
+
+            <div class="form-group m-form__group row">
+                <label class="col-md-12">Default datetime picker</label>
+                <div class="col-lg-10 col-md-9 col-sm-8">
+                    <input type="datetime" #SampleDateTimePicker name="SampleDateTimePicker" class="form-control">
+                </div>
+                <div class="col-lg-2 col-md-3 col-sm-4">
+                    <button class="btn btn-primary" (click)="submitDateTime()" type="button">{{l("Submit")}}</button>
+                </div>
+            </div>
+
+            <div class="form-group m-form__group row">
+                <label class="col-md-12">Default daterange picker</label>
+                <div class="col-lg-10 col-md-9 col-sm-8">
+                    <date-range-picker name="SampleDateRangePicker"
+                                       [(startDate)]="dateRangePickerStartDate"
+                                       [(endDate)]="dateRangePickerEndDate"
+                                       [allowFutureDate]="true">
+                    </date-range-picker>
+                </div>
+                <div class="col-lg-2 col-md-3 col-sm-4">
+                    <button class="btn btn-primary" (click)="submitDateRange()" type="button">{{l("Submit")}}</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

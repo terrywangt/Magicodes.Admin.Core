@@ -1,0 +1,37 @@
+<div bsModal #createOrEditModal="bs-modal" (onShown)="onShown()" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createOrEditModal"
+     aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+
+        <div class="modal-content">
+
+            <form *ngIf="active" #editForm="ngForm" novalidate (ngSubmit)="save()">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <span *ngIf="organizationUnit.id">{{l("Edit")}}: {{organizationUnit.displayName}}</span>
+                        <span *ngIf="!organizationUnit.id">{{l("NewOrganizationUnit")}}</span>
+                    </h5>
+                    <button type="button" class="close" (click)="close()" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+
+                    <div class="form-group form-md-line-input form-md-floating-label no-hint">
+                        <label>{{l("Name")}}</label>
+                        <input #organizationUnitDisplayName class="form-control" type="text" name="displayName" [ngClass]="{'edited': organizationUnit.displayName}" [(ngModel)]="organizationUnit.displayName" required maxlength="128">
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">{{l("Cancel")}}</button>
+                    <button type="submit" class="btn btn-primary blue" [disabled]="!editForm.form.valid" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>

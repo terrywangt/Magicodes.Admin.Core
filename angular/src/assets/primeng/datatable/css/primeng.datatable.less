@@ -1,0 +1,240 @@
+.primeng-datatable-container {
+    width: 100%;
+
+    .ui-datatable {
+        border: 1px solid #ececec !important;
+
+        div.ui-chkbox-box {
+            color: #575962 !important;
+            display: inline-block !important;
+            position: relative !important;
+            cursor: pointer !important;
+            font-size: 1rem !important;
+            transition: all .3s !important;
+
+            &.ui-state-active {
+                border: 1px solid #bdc3d4;
+                background-color: #fff;
+            }
+
+            span {
+                display: block;
+                border-radius: 3px;
+                background: 0 0;
+                position: absolute;
+                top: 1px;
+                left: 0;
+                height: 18px;
+                width: 18px;
+
+                &.fa-check:before {
+                    margin-left: -3px;
+                    font-size: 12px !important;
+                    top: -2px !important;
+                    position: relative;
+                }
+            }
+        }
+
+        th {
+            font-family: 'Poppins', 'Roboto';
+            border: none !important;
+            padding: 10px 18px !important;
+            text-align: left;
+
+            &.ui-selection-column {
+                padding-left: 11.5px !important;
+            }
+
+            span {
+                font-weight: 700;
+            }
+        }
+
+        td {
+            font-family: 'Poppins', 'Roboto';
+            border: none !important;
+            border-right: 1px solid #ececec !important;
+            padding: 8px 10px !important;
+        }
+
+        table {
+            table-layout: fixed;
+
+            th, td {
+                overflow-wrap: break-word;
+            }
+
+            td .dropdown-menu li {
+                white-space: nowrap;
+            }
+
+            thead {
+                tr {
+                    vertical-align: middle !important;
+
+                    th {
+                        background-color: #e6e6e6 !important;
+                        font-size: 14px;
+                        font-family: Poppins;
+                        font-weight: 300;
+                        line-height: 21px;
+                        vertical-align: middle;
+
+                        &.ui-state-active {
+                            color: #000 !important;
+
+                            span.ui-sortable-column-icon {
+                                color: #5867dd !important;
+                            }
+                        }
+                    }
+                }
+            }
+
+            tbody {
+                border: none !important;
+
+                tr.ui-datatable-even {
+                    background-color: #f4f3fb !important;
+                }
+
+                tr.ui-widget-content {
+                    border: none !important;
+                }
+
+                tr.ui-datatable-even.ui-state-highlight {
+                    color: #212529;
+                }
+            }
+        }
+    }
+
+    .primeng-paging-container {
+        padding: 6px;
+
+        .ui-paginator {
+            text-align: right;
+            border: none !important;
+
+            span {
+                padding: 0px;
+
+                a {
+                    padding-top: 8px;
+                    color: #5867dd;
+                    cursor: pointer !important;
+                    margin-right: 5px !important;
+
+                    &:last-child {
+                        margin-right: 0px !important;
+                    }
+
+                    &.ui-state-active {
+                        background: #716aca;
+                        color: #fff;
+                    }
+
+                    &:hover {
+                        background-color: #deddf3;
+                    }
+                }
+            }
+
+            a {
+                display: inline-block;
+                cursor: pointer !important;
+                height: 2.25rem;
+                width: 2.25rem;
+                vertical-align: middle;
+                padding: 0;
+                padding-top: 8px;
+                -webkit-border-radius: 50%;
+                -moz-border-radius: 50%;
+                -ms-border-radius: 50%;
+                -o-border-radius: 50%;
+                border-radius: 50%;
+                text-align: center;
+                position: relative;
+                -webkit-justify-content: center;
+                -moz-justify-content: center;
+                -ms-justify-content: center;
+                justify-content: center;
+                -webkit-align-items: center;
+                -moz-align-items: center;
+                -ms-align-items: center;
+                align-items: center;
+                text-align: center;
+                vertical-align: middle;
+                font-size: 1rem;
+                line-height: 1rem;
+                font-weight: 400;
+                background-color: #edecf8;
+                opacity: 1 !important;
+
+                &:hover {
+                    background-color: #deddf3;
+                }
+
+                &.ui-paginator-first {
+                    span.fa-step-backward:before {
+                        content: "\f100" !important;
+                    }
+                }
+
+                &.ui-paginator-prev {
+                    span.fa-backward:before {
+                        content: "\f104" !important;
+                    }
+                }
+
+                &.ui-paginator-next {
+                    span.fa-forward:before {
+                        content: "\f105" !important;
+                    }
+                }
+
+                &.ui-paginator-last {
+                    span.fa-step-forward:before {
+                        content: "\f101" !important;
+                    }
+                }
+
+                span {
+                    color: #5867dd;
+                }
+            }
+
+            .ui-paginator-rpp-options {
+                float: left;
+                margin-left: 100px;
+            }
+        }
+    }
+
+    .total-records-count {
+        float: left;
+        position: relative;
+        bottom: 30px;
+    }
+
+    p-datatable[ng-reflect-paginator=false] {
+        .ui-datatable-footer {
+            text-align: left;
+            background: none !important;
+            border: 1px solid #fff;
+            border-top: 1px solid #ececec;
+            margin-left: -1px;
+            margin-bottom: -1px;
+            margin-right: -1px;
+        }
+    }
+
+    .ui-datatable-resizable {
+        padding-bottom: 0px !important;
+    }
+
+    .ui-datatable-loading-content {
+        display: none;
+    }
+}

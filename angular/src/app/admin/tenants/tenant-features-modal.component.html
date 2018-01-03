@@ -1,0 +1,25 @@
+<div bsModal #tenantFeaturesModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="tenantFeaturesModal"
+     aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+
+        <div class="modal-content">
+
+            <form #editTenantFeaturesForm="ngForm" name="editTenantFeaturesForm" role="form" novalidate class="form-validation" (submit)="save()" *ngIf="active">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span>{{l("Features")}} - {{tenantName}}</span>
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <feature-tree #featureTree></feature-tree>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" [disabled]="saving" [buttonBusy]="resettingFeatures" [busyText]="l('SavingWithThreeDot')" class="btn btn-default pull-left" (click)="resetFeatures()" [tooltipHtml]="l('ResetFeaturesTooltip')" placement="top"><span>{{l("ResetSpecialFeatures")}}</span></button>
+                    <button type="button" [disabled]="saving || resettingFeatures" class="btn btn-default" (click)="close()">{{l("Cancel")}}</button>
+                    <button type="submit" [disabled]="resettingFeatures" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')" class="btn btn-primary"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>

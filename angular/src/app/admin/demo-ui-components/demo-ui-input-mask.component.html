@@ -1,0 +1,56 @@
+<div class="m-portlet m-portlet--mobile">
+    <div class="m-portlet__head">
+        <div class="m-portlet__head-caption">
+            <div class="m-portlet__head-title">
+                <h3 class="m-portlet__head-text">
+                    Input Mask
+                </h3>
+            </div>
+        </div>
+    </div>
+    <div class="m-portlet__body">
+        <form role="form">
+
+            <div class="form-group m-form__group row">
+                <label class="col-lg-12">Date</label>
+                <div class="col-lg-10 col-md-9 col-sm-8">
+                    <p-inputMask [(ngModel)]="dateValue" name="dateValue" mask="99/99/9999" placeholder="mm/dd/yyyy" slotChar="mm/dd/yyyy" styleClass="form-control"></p-inputMask>
+                </div>
+                <div class="col-lg-2 col-md-3 col-sm-4">
+                    <button class="btn btn-primary" type="button" (click)="submitDateValue()">{{l("Submit")}}</button>
+                </div>
+            </div>
+
+            <div class="form-group m-form__group row">
+                <label class="col-lg-12">Phone</label>
+                <div class="col-lg-10 col-md-9 col-sm-8">
+                    <p-inputMask [(ngModel)]="phoneValue" name="phoneValue" mask="(999) 999-9999" placeholder="(999) 999-9999" styleClass="form-control"></p-inputMask>
+                </div>
+                <div class="col-lg-2 col-md-3 col-sm-4">
+                    <button class="btn btn-primary" type="button" (click)="submiPhoneValue()">{{l("Submit")}}</button>
+                </div>
+            </div>
+
+            <div class="form-group m-form__group row">
+                <label class="col-lg-12">Phone Ext</label>
+                <div class="col-lg-10 col-md-9 col-sm-8">
+                    <p-inputMask mask="(999) 999-9999? x99999" name="phoneExtValue" [(ngModel)]="phoneExtValue" placeholder="(999) 999-9999? x99999" styleClass="form-control"></p-inputMask>
+                </div>
+                <div class="col-lg-2 col-md-3 col-sm-4">
+                    <button class="btn btn-primary" type="button" (click)="submitPhoneExtValue()">{{l("Submit")}}</button>
+                </div>
+            </div>
+
+            <div class="form-group m-form__group row">
+                <label class="col-lg-12">Serial</label>
+                <div class="col-lg-10 col-md-9 col-sm-8">
+                    <p-inputMask [(ngModel)]="serialValue" name="serialValue" mask="a*-999-a999" placeholder="a*-999-a999" styleClass="form-control"></p-inputMask>
+                </div>
+                <div class="col-lg-2 col-md-3 col-sm-4">
+                    <button class="btn btn-primary" type="button" (click)="submitSerialValue()">{{l("Submit")}}</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>

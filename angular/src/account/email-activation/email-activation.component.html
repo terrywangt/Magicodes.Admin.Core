@@ -1,0 +1,23 @@
+<div [@routerTransition]>
+    <div class="m-login__signin">
+        <div class="m-login__head">
+            <h3 class="m-login__title">
+                {{l("EmailActivation")}}
+            </h3>
+        </div>
+        <form class="m-login__form m-form email-activation-form" #emailActivationForm="ngForm" method="post" novalidate (ngSubmit)="save()">
+            <p>
+                {{l("SendEmailActivationLink_Information")}}
+            </p>
+            <div class="form-group m-form__group">
+                <input [(ngModel)]="model.emailAddress" class="form-control form-control-solid placeholder-no-fix input-ltr" type="text" autocomplete="off" placeholder="{{l('EmailAddress')}}" name="emailAddress" required maxlength="256" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{1,})+$" />
+            </div>
+
+            <div class="m-login__form-action">
+
+                <button [disabled]="saving" routerLink="/account/login" type="button" class="btn btn-outline-focus  m-btn m-btn--pill m-btn--custom"><i class="fa fa-arrow-left"></i> {{l("Back")}}</button>
+                <button type="submit" class="btn btn-focus m-btn m-btn--pill m-btn--custom m-btn--air" [disabled]="!emailActivationForm.form.valid" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-check"></i> {{l("Submit")}}</button>
+            </div>
+        </form>
+    </div>
+</div>

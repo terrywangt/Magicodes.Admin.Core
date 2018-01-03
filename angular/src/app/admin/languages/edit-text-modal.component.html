@@ -1,0 +1,35 @@
+<div bsModal #modal="bs-modal" class="modal fade" (onShown)="onShown()" tabindex="-1" role="dialog" aria-labelledby="createOrEditModal"
+     aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #editForm="ngForm" novalidate (ngSubmit)="save()">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span>{{l("EditText")}}</span>
+                    </h4>
+                    <button type="button" class="close" (click)="close()" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>{{l("Key")}}</label>
+                        <div><strong>{{model.key}}</strong></div>
+                    </div>
+                    <div class="form-group form-md-line-input form-md-floating-label no-hint">
+                        <label><i class="{{baseLanguage.icon}}"></i> {{baseLanguage.displayName}} </label>
+                        <textarea readonly class="form-control edited" rows="4" [ngModel]="baseText" name="baseText"></textarea>
+                    </div>
+                    <div class="form-group form-md-line-input form-md-floating-label no-hint">
+                        <label><i class="{{targetLanguage.icon}}"></i> {{targetLanguage.displayName}} </label>
+                        <textarea #targetValueInput class="form-control" [ngClass]="{'edited':model.value}" rows="4" [(ngModel)]="model.value" name="value"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">{{l("Cancel")}}</button>
+                    <button type="submit" class="btn btn-primary blue" [disabled]="!editForm.form.valid" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

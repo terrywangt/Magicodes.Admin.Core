@@ -1,0 +1,80 @@
+<div [@routerTransition]>
+    <div class="m-login__signin">
+        <div class="m-login__head">
+            <h3 class="m-login__title">
+                {{l("TenantSignUp")}}
+            </h3>
+        </div>
+
+        <div *ngIf="model.edition" class="hint text-center">({{l("Edition")}}: {{model.edition.displayName}})</div>
+
+        <form #registerForm="ngForm" role="form" novalidate (submit)="save()" class="m-login__form m-form register-form">
+            <h4 class="m-login__title m--margin-top-20">
+                {{l("TenantInformations")}}
+            </h4>
+
+            <div class="form-group m-form__group">
+                <input #tenancyName="ngModel" class="form-control" autoFocus type="text" placeholder="{{l('TenancyName')}}" [(ngModel)]="model.tenancyName" name="tenancyName" required maxlength="64" pattern="^[a-zA-Z][a-zA-Z0-9_-]{1,}$" />
+                <div *ngIf="!tenancyName.valid && !tenancyName.pristine">
+                    <span class="help-block text-danger">{{l("TenantName_Regex_Description")}}</span>
+                </div>
+            </div>
+
+            <div class="form-group m-form__group">
+                <input class="form-control" type="text" placeholder="{{l('Name')}}" [(ngModel)]="model.name" name="Name" required maxlength="128" />
+            </div>
+
+            <h4 class="m-login__title m--margin-top-20">
+                {{l("AccountSettings")}}
+            </h4>
+
+            <div class="form-group m-form__group">
+                <input class="form-control" type="email" placeholder="{{l('AdminEmailAddress')}}" [(ngModel)]="model.adminEmailAddress" name="adminEmailAddress" required maxlength="256" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{1,})+$" />
+            </div>
+
+            <div class="form-group m-form__group">
+                <input type="password" name="Password" class="form-control" [(ngModel)]="model.adminPassword" #Password="ngModel" placeholder="{{l('AdminPassword')}}" validateEqual="PasswordRepeat"
+                       reverse="true" [requireDigit]="passwordComplexitySetting.requireDigit" [requireLowercase]="passwordComplexitySetting.requireLowercase"
+                       [requireUppercase]="passwordComplexitySetting.requireUppercase" [requireNonAlphanumeric]="passwordComplexitySetting.requireNonAlphanumeric" [requiredLength]="passwordComplexitySetting.requiredLength"
+                       required>
+            </div>
+            <div [hidden]="registerForm.form.valid || registerForm.form.pristine" class="form-group m-form__group">
+                <ul class="help-block text-danger" *ngIf="Password.errors">
+                    <li [hidden]="!Password.errors.requireDigit">{{l("PasswordComplexity_RequireDigit_Hint")}}</li>
+                    <li [hidden]="!Password.errors.requireLowercase">{{l("PasswordComplexity_RequireLowercase_Hint")}}</li>
+                    <li [hidden]="!Password.errors.requireUppercase">{{l("PasswordComplexity_RequireUppercase_Hint")}}</li>
+                    <li [hidden]="!Password.errors.requireNonAlphanumeric">{{l("PasswordComplexity_RequireNonAlphanumeric_Hint")}}</li>
+                    <li [hidden]="!Password.errors.requiredLength">{{l("PasswordComplexity_RequiredLength_Hint", passwordComplexitySetting.requiredLength)}}</li>
+                </ul>
+            </div>
+            <div class="form-group m-form__group">
+                <input type="password" name="PasswordRepeat" class="form-control" [ngModel]="model.passwordRepeat" #PasswordRepeat="ngModel" placeholder="{{l('PasswordRepeat')}}" validateEqual="Password"
+                       reverse="false" [requireDigit]="passwordComplexitySetting.requireDigit" [requireLowercase]="passwordComplexitySetting.requireLowercase" [requireUppercase]="passwordComplexitySetting.requireUppercase"
+                       [requireNonAlphanumeric]="passwordComplexitySetting.requireNonAlphanumeric" [requiredLength]="passwordComplexitySetting.requiredLength"
+                       required>
+            </div>
+
+            <div [hidden]="registerForm.form.valid || registerForm.form.pristine" class="form-group m-form__group">
+                <ul class="help-block text-danger" *ngIf="PasswordRepeat.errors">
+                    <li [hidden]="!PasswordRepeat.errors.requireDigit">{{l("PasswordComplexity_RequireDigit_Hint")}}</li>
+                    <li [hidden]="!PasswordRepeat.errors.requireLowercase">{{l("PasswordComplexity_RequireLowercase_Hint")}}</li>
+                    <li [hidden]="!PasswordRepeat.errors.requireUppercase">{{l("PasswordComplexity_RequireUppercase_Hint")}}</li>
+                    <li [hidden]="!PasswordRepeat.errors.requireNonAlphanumeric">{{l("PasswordComplexity_RequireNonAlphanumeric_Hint")}}</li>
+                    <li [hidden]="!PasswordRepeat.errors.requiredLength">{{l("PasswordComplexity_RequiredLength_Hint", passwordComplexitySetting.requiredLength)}}</li>
+                </ul>
+            </div>
+            <h4 *ngIf="useCaptcha" class="m-login__title m--margin-top-20">
+                {{l("Captha_Hint")}}
+            </h4>
+
+            <div *ngIf="useCaptcha" class="form-group m--margin-bottom-20">
+                <re-captcha (resolved)="captchaResolved($event)" [siteKey]="recaptchaSiteKey"></re-captcha>
+            </div>
+
+            <div class="m-login__form-action">
+                <button [disabled]="saving" routerLink="/account/login" type="button" class="btn btn-outline-focus  m-btn m-btn--pill m-btn--custom"><i class="fa fa-arrow-left"></i> {{l("Back")}}</button>
+                <button type="submit" class="btn btn-focus m-btn m-btn--pill m-btn--custom m-btn--air" [disabled]="!registerForm.form.valid" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-check"></i> {{l("Submit")}}</button>
+            </div>
+        </form>
+    </div>
+</div>

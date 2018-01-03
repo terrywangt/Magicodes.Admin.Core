@@ -1,0 +1,79 @@
+<div [@routerTransition]>
+    <div class="m-subheader ">
+        <div class="d-flex align-items-center">
+            <div class="mr-auto col-xs-6 ">
+                <h3 class="m-subheader__title m-subheader__title--separator">
+                    <span>{{("Editions")}}</span>
+                </h3>
+                <span class="m-section__sub">
+                    {{l("EditionsHeaderInfo")}}
+                </span>
+            </div>
+            <div class="col-xs-6 text-right">
+                <button *ngIf="permission.isGranted('Pages.Editions.Create')" class="btn btn-primary blue" (click)="createEdition()"><i class="fa fa-plus"></i> {{l("CreateNewEdition")}}</button>
+            </div>
+        </div>
+    </div>
+    <div class="m-content">
+        <div class="m-portlet m-portlet--mobile">
+            <div class="m-portlet__body">
+                <div class="row align-items-center">
+                    <!--<Primeng-Datatable-Start>-->
+                    <div class="primeng-datatable-container" [busyIf]="primengDatatableHelper.isLoading">
+                        <p-dataTable #dataTable
+                                     (onLazyLoad)="getEditions()"
+                                     [value]="primengDatatableHelper.records"
+                                     rows="{{primengDatatableHelper.defaultRecordsCountPerPage}}"
+                                     [paginator]="false"
+                                     [lazy]="true"
+                                     emptyMessage="{{l('NoData')}}"
+                                     [responsive]="primengDatatableHelper.isResponsive">
+                            <p-footer>
+                                {{l('TotalRecordsCount', primengDatatableHelper.totalRecordsCount)}}
+                            </p-footer>
+
+                            <p-column field=""
+                                      [sortable]="false"
+                                      header="{{l('Actions')}}"
+                                      [style]="{'width':'130px','text-align':'center'}"
+                                      [hidden]="!isGrantedAny('Pages.Editions.Edit', 'Pages.Editions.Delete')">
+                                <ng-template let-record="rowData" pTemplate="body">
+                                    <div class="btn-group dropdown">
+                                        <button class="dropdown-toggle btn btn-sm btn-primary"
+                                                data-toggle="dropdown"
+                                                aria-haspopup="true"
+                                                aria-expanded="false">
+                                            <i class="fa fa-cog"></i><span class="caret"></span> {{l("Actions")}}
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a *ngIf="permission.isGranted('Pages.Editions.Edit')"
+                                                   (click)="createOrEditEditionModal.show(record.id)">{{l('Edit')}}</a>
+                                            </li>
+
+                                            <li>
+                                                <a *ngIf="permission.isGranted('Pages.Editions.Delete')"
+                                                   (click)="deleteEdition(record)">{{l('Delete')}}</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </ng-template>
+                            </p-column>
+                            <p-column field="displayName" header="{{l('EditionName')}}" [sortable]="false"></p-column>
+                            <p-column field="creationTime" header="{{l('CreationTime')}}" [sortable]="false">
+                                <ng-template let-record="rowData" pTemplate="body">
+                                    {{record.creationTime | momentFormat:'L'}}
+                                </ng-template>
+                            </p-column>
+
+                        </p-dataTable>
+
+                    </div>
+                    <!--<Primeng-Datatable-End>-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <createOrEditEditionModal #createOrEditEditionModal (modalSave)="getEditions()"></createOrEditEditionModal>
+</div>

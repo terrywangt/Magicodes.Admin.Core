@@ -1,0 +1,139 @@
+/* General */
+
+.clickable-item {
+    cursor: pointer;
+}
+
+.text-bold {
+    font-weight: bold;
+}
+
+/* Portlet */
+.portlet.light > .portlet-title .inputs.inputs-full-width {
+    display: block;
+    float: none;
+}
+
+/* Tree */
+
+.tree-item-icon-color {
+    color: #dfba49;
+}
+
+//Fix for font-awesome usage on menu (issue #17)
+.page-sidebar .page-sidebar-menu > li > a > i.fa, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li > a > i.fa {
+    margin-left: 1px;
+    margin-right: 4px;
+    top: 3px;
+}
+
+/* Forms */
+
+.form-group.form-md-line-input.no-hint {
+    margin-bottom: 15px;
+}
+
+.form-group.form-md-line-input.has-error .form-control {
+    border-bottom-color: red;
+}
+
+.form-group.form-md-line-input.has-error .help-block-info {
+    display: none;
+}
+
+/* Portlets */
+.portlet.light > .portlet-title.portlet-title-filter {
+    border: none;
+    margin-bottom: 0;
+}
+
+/* Buttons */
+
+button {
+    i {
+        margin-right: 5px;
+    }
+}
+
+.btn + .btn {
+    margin-left: 5px;
+}
+
+/* FamFamFam Flags */
+.famfamfam-flags {
+    display: inline-block;
+}
+
+/* Social Login Icons */
+.social-icons li .microsoft {
+    background: url(../../assets/common/images/social/microsoft.png) no-repeat;
+}
+
+.margin-bottom-0 {
+    margin-bottom: 0 !important;
+}
+
+/* Material Design form input angular validation colors */
+
+.form-group.form-md-line-input .form-control.ng-touched.ng-invalid {
+    border-bottom-color: red;
+}
+
+.form-group.form-md-line-input .form-control.ng-touched.ng-invalid.edited:not([readonly]) ~ label:after {
+    background-color: red;
+}
+
+.page-footer-inner {
+    padding-bottom: 10px;
+}
+
+.md-shadow-zero-light {
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0.1), 0 0 1px rgba(0, 0, 0, 0.18) !important;
+}
+
+/* even in RTL languages below types are LTR */
+.input-ltr, input[type="email"], input[type="url"], input[type="number"], input[type="tel"] {
+    direction: ltr;
+}
+
+.form-group.form-md-line-input .form-control.edited:not([readonly]):not(:focus) ~ .help-block {
+    opacity: 1;
+}
+
+/* JS Tree */
+.jstree-default .jstree-icon,
+.jstree-default-small .jstree-icon,
+.jstree-default-large .jstree-icon {
+    background-image: url("../../assets/common/images/32px.png");
+}
+
+#jstree-dnd.jstree-default .jstree-er,
+#jstree-dnd.jstree-default-small .jstree-er,
+#jstree-dnd.jstree-default-large .jstree-er {
+    background-image: url("../../assets/common/images/32px.png");
+    background-repeat: no-repeat;
+    background-color: transparent;
+}
+
+.jstree-default .jstree-themeicon-custom {
+    background-image: none;
+}
+
+/* Make user menu wider */
+.page-header.navbar .top-menu .navbar-nav > li.dropdown-dark .dropdown-menu {
+    width: 250px;
+}
+
+/* Fix for issue #407 */
+br {
+    font-family: Verdana;
+}
+
+
+.margin-top-20 {
+    margin-top: 20px
+}
+
+.margin-bottom-10 {
+    margin-bottom: 10px
+}

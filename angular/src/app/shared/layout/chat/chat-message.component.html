@@ -1,0 +1,15 @@
+<a *ngIf="chatMessageType === 'image'" [href]="chatMessage" target="_blank">
+    <img [src]="chatMessage" class="chat-image-preview" />
+</a>
+<a *ngIf="chatMessageType === 'file'" [href]="chatMessage" target="_blank" class="chat-file-preview">
+    <i class="fa fa-file"></i>
+    {{fileName}}
+    <i class="fa fa-download pull-right"></i>
+</a>
+<a *ngIf="chatMessageType === 'link'" [href]="chatMessage" target="_blank" class="chat-link-message">
+    <i class="fa fa-link"></i>
+    {{chatMessage}}
+</a>
+<span *ngIf="chatMessageType === 'text'">
+    {{chatMessage}}
+</span>

@@ -1,0 +1,21 @@
+﻿<div [@routerTransition]>
+    <h4>{{l("SuccessfullyRegistered")}}</h4>
+    <ul>
+        <li><span class="text-muted">{{l("TenancyName")}}:</span> {{model.tenancyName}}</li>
+        <li><span class="text-muted">{{l("Name")}}:</span> {{model.name}}</li>
+        <li><span class="text-muted">{{l("UserName")}}:</span> {{model.userName}}</li>
+        <li><span class="text-muted">{{l("EmailAddress")}}:</span> {{model.emailAddress}}</li>
+    </ul>
+    <div>
+        <div *ngIf="model.isEmailConfirmationRequired" class="alert alert-warning" role="alert">
+            {{l("ConfirmationMailSentPleaseClickLinkInTheEmail", model.emailAddress)}}
+        </div>
+        <div *ngIf="!model.isActive" class="alert alert-warning" role="alert">
+            {{l("YourAccountIsWaitingToBeActivatedByAdmin")}}
+        </div>
+        <div *ngIf="tenantUrl" class="alert alert-info" role="alert">
+            {{l("TenantRegistrationLoginInfo")}}<br />
+            <a href="{{tenantUrl}}">{{tenantUrl}}</a>
+        </div>
+    </div>
+</div>

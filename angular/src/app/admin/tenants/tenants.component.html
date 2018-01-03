@@ -1,0 +1,179 @@
+<div [@routerTransition]>
+    <div class="m-subheader ">
+        <div class="d-flex align-items-center">
+            <div class="mr-auto col-xs-6">
+                <h3 class="m-subheader__title m-subheader__title--separator">
+                    <span>{{l("Tenants")}}</span>
+                </h3>
+                <span class="m-section__sub">
+                    {{l("TenantsHeaderInfo")}}
+                </span>
+            </div>
+            <div class="col-xs-6 text-right">
+                <button ng-if="vm.permissions.create" class="btn btn-primary blue" (click)="createTenant()"><i class="fa fa-plus"></i>{{l("CreateNewTenant")}}</button>
+            </div>
+        </div>
+    </div>
+    <div class="m-content">
+        <div class="m-portlet m-portlet--mobile">
+            <div class="m-portlet__body">
+                <div class="m-form m-form--label-align-right">
+                    <form (submit)="getTenants()" autocomplete="off">
+                        <div class="form-body">
+
+                            <div class="row m--margin-bottom-10">
+                                <div class="col-xl-6">
+                                    <label>{{l('TenantNameOrTenancyCode')}}</label>
+                                    <div class="input-group">
+                                        <input [(ngModel)]="filters.filterText" name="filterText" class="form-control" placeholder="{{l('SearchWithThreeDot')}}" type="text">
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-primary" type="submit"><i class="flaticon-search-1"></i></button>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6">
+                                    <label for="EditionDropdown">{{l('Edition')}}</label>
+                                    <edition-combo [(selectedEdition)]="filters.selectedEditionId"></edition-combo>
+                                </div>
+                            </div>
+                            <div class="row m--margin-bottom-10">
+                                <div class="col-xl-6">
+                                    <div class="m-checkbox-list">
+                                        <label class="m-checkbox">
+                                            <input type="checkbox"
+                                                   [(ngModel)]="filters.subscriptionEndDateRangeActive"
+                                                   id="TenantsTable_SubscriptionEndDateRangeActive"
+                                                   name="SubscriptionEndDateRangeActive"
+                                                   value="true">
+                                            {{l('SubscriptionEndDate')}}
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                    <date-range-picker name="SubscriptionEndDateRange"
+                                                       [isDisabled]="!filters.subscriptionEndDateRangeActive"
+                                                       [(startDate)]="filters.subscriptionEndDateStart"
+                                                       [(endDate)]="filters.subscriptionEndDateEnd"
+                                                       [allowFutureDate]="true">
+                                    </date-range-picker>
+                                </div>
+                                <div class="col-xl-6">
+                                    <div class="m-checkbox-list">
+                                        <label class="m-checkbox">
+                                            <input type="checkbox"
+                                                   [(ngModel)]="filters.creationDateRangeActive"
+                                                   id="TenantsTable_CreationDateRangeActive"
+                                                   name="CreationDateRangeActive"
+                                                   value="true">
+                                            {{l('CreationTime')}}
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                    <date-range-picker name="CreationDateRange"
+                                                       [isDisabled]="!filters.creationDateRangeActive"
+                                                       [(startDate)]="filters.creationDateStart"
+                                                       [(endDate)]="filters.creationDateEnd"
+                                                       [allowFutureDate]="false">
+                                    </date-range-picker>
+                                </div>
+                            </div>
+                            <div class="row m--margin-bottom-10">
+                                <div class="col-xl-12 text-right">
+                                    <button name="RefreshButton" class="btn btn-metal"><i class="fa fa-refresh"></i> {{l('Refresh')}}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="row align-items-center">
+                    <!--<Primeng-Datatable-Start>-->
+                    <div class="primeng-datatable-container" [busyIf]="primengDatatableHelper.isLoading">
+                        <p-dataTable #dataTable
+                                     (onLazyLoad)="getTenants($event)"
+                                     [value]="primengDatatableHelper.records"
+                                     rows="{{primengDatatableHelper.defaultRecordsCountPerPage}}"
+                                     [paginator]="false"
+                                     [lazy]="true"
+                                     emptyMessage="{{l('NoData')}}"
+                                     [responsive]="primengDatatableHelper.isResponsive">
+
+                            <p-column field="" [sortable]="false" header="{{l('Actions')}}" [style]="{'width':'130px','text-align':'center'}">
+                                <ng-template let-record="rowData" pTemplate="body">
+                                    <div class="btn-group dropdown">
+                                        <button class="dropdown-toggle btn btn-sm btn-primary"
+                                                data-toggle="dropdown"
+                                                aria-haspopup="true"
+                                                aria-expanded="false">
+                                            <i class="fa fa-cog"></i><span class="caret"></span> {{l("Actions")}}
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li [class.disabled]="!record.isActive">
+                                                <a *ngIf="permission.isGranted('Pages.Tenants.Impersonation')"
+                                                   (click)="record.isActive && showUserImpersonateLookUpModal(record)">{{l('LoginAsThisTenant')}}</a>
+                                            </li>
+                                            <li>
+                                                <a *ngIf="permission.isGranted('Pages.Tenants.Edit')"
+                                                   (click)="editTenantModal.show(record.id)">{{l('Edit')}}</a>
+                                            </li>
+                                            <li>
+                                                <a *ngIf="permission.isGranted('Pages.Tenants.ChangeFeatures')"
+                                                   (click)="tenantFeaturesModal.show(record.id, record.name)">{{l('Features')}}</a>
+                                            </li>
+                                            <li>
+                                                <a *ngIf="permission.isGranted('Pages.Tenants.Delete')"
+                                                   (click)="deleteTenant(record)">{{l('Delete')}}</a>
+                                            </li>
+                                            <li>
+                                                <a (click)="unlockUser(record)">{{l('Unlock')}}</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </ng-template>
+                            </p-column>
+                            <p-column field="tenancyName" header="{{l('TenancyCodeName')}}" [sortable]="true">
+                                <ng-template let-record="rowData" pTemplate="body">
+                                    <i *ngIf="record.connectionString" class="fa fa-database" title="{{l('HasOwnDatabase')}}"></i>
+                                    {{record.tenancyName}}
+                                </ng-template>
+                            </p-column>
+                            <p-column field="name" header="{{l('Name')}}" [sortable]="true"></p-column>
+                            <p-column field="editionDisplayName" header="{{l('Edition')}}" [sortable]="true"></p-column>
+                            <p-column field="subscriptionEndDateUtc" header="{{l('SubscriptionEndDateUtc')}}" [sortable]="true">
+                                <ng-template let-record="rowData" pTemplate="body">
+                                    {{ record.subscriptionEndDateUtc ? (record.subscriptionEndDateUtc | momentFormat:'L') : '-'}}
+                                </ng-template>
+                            </p-column>
+                            <p-column field="isActive" header="{{l('Active')}}" [sortable]="true">
+                                <ng-template let-record="rowData" pTemplate="body">
+                                    <span *ngIf="record.isActive" class="label label-success">{{l('Yes')}}</span>
+                                    <span *ngIf="!record.isActive" class="label label-default">{{l('No')}}</span>
+                                </ng-template>
+                            </p-column>
+                            <p-column field="creationTime" header="{{l('CreationTime')}}" [sortable]="true">
+                                <ng-template let-record="rowData" pTemplate="body">
+                                    {{record.creationTime | momentFormat:'L'}}
+                                </ng-template>
+                            </p-column>
+                        </p-dataTable>
+                        <div class="primeng-paging-container">
+                            <p-paginator rows="{{primengDatatableHelper.defaultRecordsCountPerPage}}"
+                                         #paginator
+                                         (onPageChange)="getTenants($event)"
+                                         [totalRecords]="primengDatatableHelper.totalRecordsCount"
+                                         [rowsPerPageOptions]="primengDatatableHelper.predefinedRecordsCountPerPage">
+                            </p-paginator>
+                            <span class="total-records-count">
+                                {{l('TotalRecordsCount', primengDatatableHelper.totalRecordsCount)}}
+                            </span>
+                        </div>
+                    </div>
+                    <!--<Primeng-Datatable-End>-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <createTenantModal #createTenantModal (modalSave)="getTenants()"></createTenantModal>
+    <editTenantModal #editTenantModal (modalSave)="getTenants()"></editTenantModal>
+    <tenantFeaturesModal #tenantFeaturesModal></tenantFeaturesModal>
+    <commonLookupModal #impersonateUserLookupModal (itemSelected)="impersonateUser($event)"></commonLookupModal>
+</div>

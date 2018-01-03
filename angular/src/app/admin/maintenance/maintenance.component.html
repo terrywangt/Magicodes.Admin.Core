@@ -1,0 +1,66 @@
+<div [@routerTransition]>
+    <div class="m-subheader ">
+        <div class="d-flex align-items-center">
+            <div class="mr-auto">
+                <h3 class="m-subheader__title">
+                    <span>{{l("Maintenance")}}</span>
+                </h3>
+            </div>
+        </div>
+    </div>
+    <div class="m-content">
+        <div class="m-portlet m-portlet--mobile">
+            <div class="m-portlet__body">
+                <tabset class="tab-container tabbable-line">
+                    <tab heading=" {{l('Caches')}}" customClass="m-tabs__item">
+                        <div class="row margin-bottom-10">
+                            <div class="col-xl-6">
+                                <p>{{l("CachesHeaderInfo")}}</p>
+                            </div>
+                            <div class="col-xl-6 text-right">
+                                <button class="btn btn-primary" (click)="clearAllCaches()"><i class="fa fa-recycle"></i> {{l("ClearAll")}}</button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <table class="table table-striped table-hover table-bordered">
+                                    <tbody>
+                                        <tr *ngFor="let cache of caches">
+                                            <td>
+                                                <span>{{cache.name}}</span>
+                                                <button class="btn btn-primary btn-sm pull-right" (click)="clearCache(cache.name);">
+                                                    {{l("Clear")}}
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </tab>
+                    <tab heading="{{l('WebSiteLogs')}}" customClass="m-tabs__item">
+                        <div class="row margin-bottom-10">
+                            <div class="col-xl-6">
+                                <p>{{l("WebSiteLogsHeaderInfo")}}</p>
+                            </div>
+                            <div class="col-xl-6 text-right">
+                                <button class="btn btn-metal" (click)="downloadWebLogs()"><i class="fa fa-download"></i> {{l("DownloadAll")}}</button>
+                                <button class="btn btn-primary" (click)="getWebLogs()"><i class="fa fa-refresh"></i> {{l("Refresh")}}</button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="web-log-view full-height">
+                                    <span class="log-line" *ngFor="let log of logs">
+                                        <span [class]="getLogClass(log)">{{getLogType(log)}}</span>
+                                        {{getRawLogContent(log)}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </tab>
+                </tabset>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net461</TargetFramework>
+    <!--<ApplicationManifest>\src\shared\utils\chat-message.component.html</ApplicationManifest>-->
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="dist\**" />
+    <Compile Remove="external_libs\**" />
+    <Compile Remove="node_modules\**" />
+    <Compile Remove="src\assets\common\scripts\**" />
+    <Compile Remove="src\assets\metronic\admin\**" />
+    <EmbeddedResource Remove="dist\**" />
+    <EmbeddedResource Remove="external_libs\**" />
+    <EmbeddedResource Remove="node_modules\**" />
+    <EmbeddedResource Remove="src\assets\common\scripts\**" />
+    <EmbeddedResource Remove="src\assets\metronic\admin\**" />
+    <None Remove="dist\**" />
+    <None Remove="external_libs\**" />
+    <None Remove="node_modules\**" />
+    <None Remove="src\assets\common\scripts\**" />
+    <None Remove="src\assets\metronic\admin\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove=".editorconfig" />
+    <None Remove=".gitignore" />
+    <None Remove="npm-shrinkwrap.json" />
+    <None Remove="yarn.lock" />
+  </ItemGroup>
+</Project>

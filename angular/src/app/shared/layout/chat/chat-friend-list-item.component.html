@@ -1,0 +1,21 @@
+<a href="javascript:;" class="m-list-search__result-item" (click)="selectChatFriend.emit($event)">
+    <span class="m-list-search__result-item-pic">
+        <!--<img class="m--img-rounded" src="{{profilePicturePath}}" title="">-->
+        <friend-profile-picture [profilePictureId]="friend.friendProfilePictureId" [userId]="friend.friendUserId" [tenantId]="friend.friendTenantId"></friend-profile-picture>
+    </span>
+    <span class="m-list-search__result-item-text">
+        {{getShownUserName(friend.friendTenancyName,friend.friendUserName)}}
+    </span>
+
+    
+    <span *ngIf="friend.unreadMessageCount" class="m-badge m-badge--warning">
+        {{friend.unreadMessageCount}}
+    </span>
+    
+    <span *ngIf="!friend.unreadMessageCount" class="m-badge m-badge--warning d-none">
+        {{friend.unreadMessageCount}}
+    </span>
+
+    <span *ngIf="friend.isOnline" class="contact-status1 online"></span>
+    <span *ngIf="!friend.isOnline" class="contact-status1 offline"></span>
+</a>

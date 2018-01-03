@@ -1,0 +1,174 @@
+<!-- begin::Quick Sidebar -->
+<div id="m_quick_sidebar" class="m-quick-sidebar m-quick-sidebar--tabbed m-quick-sidebar--skin-light">
+    <div class="m-quick-sidebar__content m--hide">
+        <a href="javascript:;" id="m_quick_sidebar_back">
+            <i class="la la-arrow-circle-left"></i>
+        </a>
+        <a href="javascript:;" class="page-quick-sidebar-pinner" [ngClass]="{'pinned':pinned, 'unpinned':!pinned}" (click)="reversePinned()">
+            <i class="icon-pin"></i>
+        </a>
+        <span id="m_quick_sidebar_close" class="m-quick-sidebar__close">
+            <i class="la la-close"></i>
+        </span>
+        <div class="m-messenger m-messenger-friends m-messenger--skin-light">
+            <div class="row">
+                <div class="col-md-12" style="padding-top: 30px; margin: 5px; padding-right: 25px;">
+                    <div class="m-input-icon m-input-icon--right">
+                        <input type="text" class="form-control input-mini" placeholder="{{l('FilterOrAddUser')}}" [(ngModel)]="userNameFilter">
+                        <span class="m-input-icon__icon m-input-icon__icon--right">
+                            <span>
+                                <i *ngIf="tenantToTenantChatAllowed || tenantToHostChatAllowed" class="la la-info-circle" data-toggle="m-popover" data-placement="bottom" data-html="true" title="{{l('ChatUserSearch_Hint')}}"></i>
+                            </span>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-12" style="margin: 5px; padding-right: 25px;">
+                    <button type="button" class="btn btn-block btn-success" *ngIf="userNameFilter.length" (click)="search()">{{l('AddFriend')}}</button>
+                </div>
+            </div>
+            <div class="m-list-search">
+                <div class="m-list-search__results">
+                    <span class="m-list-search__result-category">
+                        {{l("Friends")}}
+                    </span>
+                    <div id="friendListFriends">
+                        <div class="media-list list-items" *ngFor="let friend of getFilteredFriends(friendDtoState.Accepted, userNameFilter)">
+                            <chat-friend-list-item [friend]="friend" (selectChatFriend)="selectFriend(friend)"></chat-friend-list-item>
+                        </div>
+                    </div>
+                    <p *ngIf="getFilteredFriendsCount(friendDtoState.Accepted) == 0">{{l('YouDontHaveAnyFriend')}}</p>
+                </div>
+            </div>
+            <div class="m-list-search">
+                <div class="m-list-search__results">
+                    <span class="m-list-search__result-category">
+                        {{l("BlockedUsers")}}
+                    </span>
+                    <div class="media-list list-items" *ngFor="let friend of getFilteredFriends(friendDtoState.Blocked, userNameFilter)">
+                        <chat-friend-list-item [friend]="friend" (selectChatFriend)="selectFriend(friend)"></chat-friend-list-item>
+                    </div>
+                    <p *ngIf="getFilteredFriendsCount(friendDtoState.Blocked) == 0">{{l("YouDontHaveAnyBlockedFriend")}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="m-scrollable m-messenger-conversation" style="display: none;">
+            <div class="selected-chat-user">
+                <div class="selected-chat-user-image">
+                    <friend-profile-picture [profilePictureId]="selectedUser.friendProfilePictureId" [userId]="selectedUser.friendUserId" [tenantId]="selectedUser.friendTenantId"></friend-profile-picture>
+                    <span class="contact-status2" [ngClass]="{'online': selectedUser.isOnline, 'offline':!selectedUser.isOnline}"></span>
+                </div>
+                <h6>{{getShownUserName(selectedUser.friendTenancyName,selectedUser.friendUserName)}}</h6>
+                <div class="actions">
+                    <a class="btn btn-metal m-btn m-btn--icon m-btn--icon-only m-btn--pill m-btn--air" href="javascript:;" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" aria-expanded="false">
+                        <i class="fa fa-angle-down"></i>
+                    </a>
+                    <ul class="dropdown-menu pull-right">
+                        <li *ngIf="selectedUser.state !== friendDtoState.Blocked">
+                            <a href="javascript:;" (click)="block(selectedUser)">
+                                <i class="fa fa-ban"></i>
+                                {{l("BlockUser")}}
+                            </a>
+                        </li>
+                        <li *ngIf="selectedUser.state === friendDtoState.Blocked">
+                            <a href="javascript:;" (click)="unblock(selectedUser)">
+                                <i class="fa fa-check"></i>
+                                {{l("UnblockUser")}}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <hr />
+            <div class="m-messenger m-messenger--message-arrow m-messenger--skin-light">
+                <div class="m-messenger__messages">
+                    <div class="m-messenger__message" *ngFor="let message of selectedUser.messages" [ngClass]="{'m-messenger__message--out':message.side === 1, 'm-messenger__message--in':message.side !== 1}">
+                        <div *ngIf="message.side !== 1" class="m-messenger__message-pic">
+                            <friend-profile-picture [cssClass]="'mCS_img_loaded'" [profilePictureId]="selectedUser.friendProfilePictureId" [userId]="selectedUser.friendUserId" [tenantId]="selectedUser.friendTenantId"></friend-profile-picture>
+                        </div>
+
+                        <div class="m-messenger__message-body">
+                            <div class="m-messenger__message-arrow"></div>
+                            <div class="m-messenger__message-content">
+                                <div class="m-messenger__message-username">
+                                    <span>{{getUserNameByChatSide(message.side)}}</span>
+                                    <time jq-plugin="timeago" class="timeago" [attr.datetime]="getFixedMessageTime(message.creationTime)"></time>
+                                    <i  *ngIf="message.side === appChatSide.Sender"  [ngClass]="message.receiverReadState === appChatMessageReadState.Read ? 'fa fa-check m--font-info' : 'fa fa-check'" class="read-state-check" aria-hidden="true"></i>
+                                </div>
+                                <div class="m-messenger__message-text">
+                                    <chat-message [message]="message"></chat-message>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="m-messenger__seperator"></div>
+                <form #chatMessageForm="ngForm" id="chatMessageForm" role="form">
+                    <div id="files" class="files"></div>
+                    <div class="col-md-12" style="margin: 5px; padding-right: 25px;" *ngIf="selectedUser.state === friendDtoState.Blocked">
+                        <button (click)="unblock(selectedUser)" type="button" class="btn btn-block btn-success">{{l("UnblockUser")}}</button>
+                    </div>
+
+                    <div class="col-md-12 chat-progress-bar">
+                        <div class="progress">
+                            <p-progressBar [value]="progress" [showValue]="true" *ngIf="isFileSelected"></p-progressBar>
+                        </div>
+                    </div>
+
+                    <div class="m-messenger__form" *ngIf="selectedUser.state !== friendDtoState.Blocked">
+                        <div class="m-messenger__form-controls">
+                            <input id="ChatMessage" name="ChatMessage" type="text" class="m-messenger__form-input" rows="3" placeholder="{{l('TypeAMessageHere')}}" [(ngModel)]="chatMessage" (keydown.Enter)="sendMessage()" [disabled]="selectedUser.state == friendDtoState.Blocked" maxlength="4096" required />
+                        </div>
+                        <div class="m-messenger__form-tools">
+                            <a id="chatDropdownToggle" href="javascript:;" class="m-messenger__form-attachment select-media" data-toggle="dropdown" tabindex="-1" aria-expanded="false">
+                                <i class="la la-paperclip"></i>
+                            </a>
+                            <ul class="dropdown-menu pull-right bottom-up" role="menu">
+                                <li>
+                                    <a href="javascript:;">
+                                        <span class="fileinput-button">
+                                            <p-fileUpload mode="basic"
+                                                          id="chatImageUpload"
+                                                          name="ChatImageUpload"
+                                                          [url]="uploadUrl"
+                                                          maxFileSize="10000000"
+                                                          auto="auto"
+                                                          (onUpload)="onUploadImage($event)"
+                                                          (onBeforeSend)="onBeforeSend($event)"
+                                                          (onSelect)="onFileSelect($event)"
+                                                          chooseLabel="{{l('Image')}}">
+                                            </p-fileUpload>
+                                        </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="javascript:;">
+                                        <span class="fileinput-button">
+                                            <p-fileUpload mode="basic"
+                                                          id="chatFileUpload"
+                                                          name="ChatFileUpload"
+                                                          [url]="uploadUrl"
+                                                          maxFileSize="10000000"
+                                                          auto="auto"
+                                                          (onUpload)="onUploadFile($event)"
+                                                          (onBeforeSend)="onBeforeSend($event)"
+                                                          (onSelect)="onFileSelect($event)"
+                                                          chooseLabel="{{l('File')}}">
+                                            </p-fileUpload>
+                                        </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="javascript:;">
+                                        <button pButton type="button" icon="fa fa-link" label="{{l('LinkToCurrentPage')}}" (click)="shareCurrentLink()" class="chat-link-button ui-button-secondary"></button>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end::Quick Sidebar -->
+<commonLookupModal #userLookupModal (itemSelected)="addFriendSelected($event)"></commonLookupModal>

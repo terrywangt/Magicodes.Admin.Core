@@ -1,0 +1,124 @@
+<div [@routerTransition]>
+    <div class="m-subheader ">
+        <div class="d-flex align-items-center">
+            <div class="mr-auto">
+                <h3 class="m-subheader__title">
+                    <span>{{l("Subscription")}}</span>
+                </h3>
+            </div>
+        </div>
+    </div>
+    <div class="m-content">
+        <div class="m-portlet m-portlet--mobile">
+            <div class="m-portlet__body">
+                <tabset class="tab-container tabbable-line">
+                    <tab heading="{{l('SubscriptionInformation')}}" customClass="m-tabs__item">
+                        <form class="m-form m-form--label-align-right">
+                            <input type="hidden" Name="PaymentPeriodType" value="@tenant.PaymentPeriodType" />
+                            <input type="hidden" Name="Gateway" value="@SubscriptionPaymentGatewayType.Paypal" />
+
+                            <div class="form-group m-form__group row">
+                                <label class="col-sm-4 control-label m--font-bold">{{l("Edition")}}</label>
+                                <div class="col-sm-8">
+                                    <p *ngIf="tenant.edition">
+                                        {{tenant.edition.displayName}}
+                                        <span *ngIf="tenant.edition.isFree" class="m-badge m-badge--success m-badge--wide">{{l("Free")}}</span>
+                                        <span *ngIf="tenant.isInTrialPeriod" class="m-badge m-badge--warning m-badge--wide">{{l("Trial")}}</span>
+                                </div>
+                            </div>
+                            <div class="form-group m-form__group row">
+                                <label class="col-sm-4 control-label m--font-bold">{{l("SubscriptionStartDate")}}</label>
+                                <div class="col-sm-8">
+                                    <p>{{ tenant.creationTimeString }}</p>
+                                </div>
+                            </div>
+                            <div class="form-group m-form__group row">
+                                <label class="col-sm-4 control-label m--font-bold">{{l("SubscriptionEndDate")}}</label>
+                                <div class="col-sm-8">
+                                    <p *ngIf="tenant.edition">
+                                        <span>{{tenant.subscriptionDateString}}</span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="form-group m-form__group row">
+                                <label class="col-sm-4 control-label"></label>
+                                <div class="col-sm-8">
+                                    <a *ngIf="tenant.edition && !tenant.edition.isFree && !tenant.isInTrialPeriod"
+                                       [routerLink]="['/account/extend']" [queryParams]="{ editionPaymentType: editionPaymentType.Extend}" class="btn btn-info">
+                                        {{l("Extend")}}
+                                    </a>
+                                    <a *ngIf="tenant.isInTrialPeriod"
+                                       [routerLink]="['/account/buy']" [queryParams]="{editionPaymentType: editionPaymentType.BuyNow, editionId: tenant.edition.id }"
+                                       class="btn btn-info">
+                                        {{l("BuyNow")}}
+                                    </a>
+                                    <a *ngIf="tenant.edition && (tenant.edition.isFree || !tenant.edition.isHighestEdition) && !tenant.isInTrialPeriod"
+                                       [routerLink]="['/account/select-edition']" class="btn btn-warning">
+                                        {{l("Upgrade")}}
+                                    </a>
+                                </div>
+                            </div>
+                        </form>
+                    </tab>
+                    <tab heading="{{l('PaymentHistory')}}" customClass="m-tabs__item">
+                        <div class="primeng-datatable-container"
+                             [busyIf]="primengDatatableHelper.isLoading">
+                            <p-dataTable #dataTable
+                                         (onLazyLoad)="getPaymentHistory($event)"
+                                         [value]="primengDatatableHelper.records"
+                                         rows="{{primengDatatableHelper.defaultRecordsCountPerPage}}"
+                                         [paginator]="false"
+                                         [lazy]="true"
+                                         emptyMessage="{{l('NoData')}}"
+                                         [responsive]="primengDatatableHelper.isResponsive">
+
+                                <p-column header="{{l('Invoice')}}">
+                                    <ng-template let-record="rowData" pTemplate="body">
+                                        <button type="button" class="btn btn-sm btn-primary blue" (click)="createOrShowInvoice(record.id, record.invoiceNo)">{{l('ShowInvoice')}}</button>
+                                    </ng-template>
+                                </p-column>
+                                <p-column field="creationTime" header="{{l('ProcessTime')}}" [sortable]="true">
+                                    <ng-template let-record="rowData" pTemplate="body">
+                                        <span *ngIf="record.creationTime">{{record.creationTime | momentFormat:'L'}}</span>
+                                        <span *ngIf="!record.creationTime">-</span>
+                                    </ng-template>
+                                </p-column>
+                                <p-column field="editionDisplayName" header="{{l('Edition')}}" [sortable]="true"></p-column>
+                                <p-column field="gateway" header="{{l('Gateway')}}" [sortable]="true">
+                                    <ng-template let-record="rowData" pTemplate="body">
+                                        {{l('SubscriptionPaymentGatewayType_' + record.gateway)}}
+                                    </ng-template>
+                                </p-column>
+                                <p-column field="amount" header="{{l('Amount')}}" [sortable]="true"></p-column>
+                                <p-column field="status" header="{{l('Status')}}" [sortable]="true">
+                                    <ng-template let-record="rowData" pTemplate="body">
+                                        {{l('SubscriptionPaymentStatus_' + record.status)}}
+                                    </ng-template>
+                                </p-column>
+                                <p-column field="paymentPeriodType" header="{{l('Period')}}" [sortable]="true">
+                                    <ng-template let-record="rowData" pTemplate="body">
+                                        {{l('PaymentPeriodType_' + record.paymentPeriodType)}}
+                                    </ng-template>
+                                </p-column>
+                                <p-column field="dayCount" header="{{l('DayCount')}}" [sortable]="false"></p-column>
+                                <p-column field="paymentId" header="{{l('PaymentId')}}" [style]="{'width':'250px'}" [sortable]="false"></p-column>
+                                <p-column field="invoiceNo" header="{{l('InvoiceNo')}}" [sortable]="true"></p-column>
+                            </p-dataTable>
+                            <div class="primeng-paging-container">
+                                <p-paginator rows="{{primengDatatableHelper.defaultRecordsCountPerPage}}"
+                                             #paginator
+                                             (onPageChange)="getPaymentHistory($event)"
+                                             [totalRecords]="primengDatatableHelper.totalRecordsCount"
+                                             [rowsPerPageOptions]="primengDatatableHelper.predefinedRecordsCountPerPage">
+                                </p-paginator>
+                                <span class="total-records-count">
+                                    {{l('TotalRecordsCount', primengDatatableHelper.totalRecordsCount)}}
+                                </span>
+                            </div>
+                        </div>
+                    </tab>
+                </tabset>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,49 @@
+<div bsModal #createOrEditModal="bs-modal" (onShown)="onShown()" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createOrEditModal"
+     aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #roleForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="role.id">{{l("EditRole")}}: {{role.displayName}}</span>
+                        <span *ngIf="!role.id">{{l("CreateNewRole")}}</span>
+                    </h4>
+                    <button type="button" class="close" (click)="close()" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <tabset class="tab-container tabbable-line">
+                        <tab heading="{{l('RoleName')}}" customClass="m-tabs__item">
+                            <div class="form-group">
+                                <label>{{l("RoleName")}}</label>
+                                <input #roleNameInput class="form-control" type="text" name="DisplayName" [(ngModel)]="role.displayName" required maxlength="64">
+                            </div>
+
+                            <div class="m-checkbox-list">
+                                <label class="m-checkbox">
+                                    <input id="EditRole_IsDefault" type="checkbox" name="IsDefault" [(ngModel)]="role.isDefault">
+                                    {{l("Default")}}
+                                    <span></span>
+                                </label>
+                                <span class="help-block">{{l("DefaultRole_Description")}}</span>
+                            </div>
+                        </tab>
+                        <tab heading="{{l('Permissions')}}" customClass="m-tabs__item">
+                            <permission-tree #permissionTree></permission-tree>
+                        </tab>
+                    </tabset>
+                    <div class="alert alert-warning" style="margin-top: 30px;">
+                        <em>{{l('Note_RefreshPageForPermissionChanges')}}</em>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-secondary" (click)="close()">{{l("Cancel")}}</button>
+                    <button type="submit" class="btn btn-primary" [disabled]="!roleForm.form.valid" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>

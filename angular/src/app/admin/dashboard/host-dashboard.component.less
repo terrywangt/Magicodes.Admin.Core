@@ -1,0 +1,74 @@
+#HostDashboard {
+    @chartHeight: 260;
+
+    div.chart {
+        height: @chartHeight*1px;
+        width: 100%;
+
+        h3 {
+            small {
+                padding-left: 0px !important;
+            }
+        }
+    }
+
+    .primeNgDataTableTheme(@backgroundColor) {
+        thead th {
+            background-color: @backgroundColor !important;
+            color: white;
+        }
+    }
+
+    .expiring-tenants-table {
+        .primeNgDataTableTheme(#E08283);
+    }
+
+    .recent-tenants-table {
+        .primeNgDataTableTheme(#8877a9);
+    }
+
+    .expiring-tenants-table {
+        color: green
+    }
+
+    div.pie-chart-label {
+        border: 1px solid grey;
+        font-size: 8pt;
+        text-align: center;
+        padding: 5px;
+        color: white;
+    }
+
+    div.portlet {
+        div.portlet-title {
+            div.caption {
+                div.caption-helper {
+                    margin-top: 5px;
+                }
+            }
+
+            div.actions {
+                padding: 0;
+            }
+        }
+
+        div.portlet-body {
+            min-height: (@chartHeight + 70)*1px;
+        }
+    }
+
+    div.flot-x-axis > div {
+        white-space: nowrap;
+        transform: translate(0px, 0) rotate(-25deg);
+        text-indent: -6%;
+        transform-origin: bottom;
+    }
+
+    input[type="radio"] {
+        display: none;
+    }
+
+    .portlet > .portlet-title > .caption > .caption-helper {
+        font-size: 11px;
+    }
+}

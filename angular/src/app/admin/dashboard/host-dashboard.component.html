@@ -1,0 +1,322 @@
+<div [@routerTransition]>
+    <div id="HostDashboard">
+        <div class="m-subheader">
+            <div class="d-flex align-items-center">
+                <div class="mr-auto">
+                    <h3 class="m-subheader__title m-subheader__title--separator">
+                        <span>{{l("Dashboard")}}</span>
+                    </h3>
+                    <span class="m-section__sub">
+                        {{l("HostDashboardHeaderInfo")}}
+                    </span>
+                </div>
+                <div>
+                    <button name="RefreshButton" class="btn btn-primary" (click)="getDashboardStatisticsData()"><i class="la la-refresh"></i>{{l("Refresh")}}</button>
+                    <span #DashboardDateRangePicker class="m-subheader__daterange dashboard-report-range">
+                        <span class="m-subheader__daterange-label">
+                            <span class="m-subheader__daterange-title"></span>
+                            <span class="m-subheader__daterange-date m--font-brand">
+                                {{selectedDateRange.startDate.format('LL')}} - {{selectedDateRange.endDate.format('LL')}}
+                            </span>
+                        </span>
+                        <a href="javascript:;" class="btn btn-sm btn-brand m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill">
+                            <i class="la la-angle-down"></i>
+                        </a>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="m-content">
+            <div class="m-portlet">
+                <div class="m-portlet__body  m-portlet__body--no-padding">
+                    <div class="row m-row--no-padding m-row--col-separator-xl">
+                        <div class="col-md-12 col-lg-6 col-xl-3">
+                            <div class="m-widget24 new-subscription-statistics">
+                                <div class="m-widget24__item">
+                                    <h4 class="m-widget24__title">
+                                        {{l("NewSubscriptionAmount")}}
+                                    </h4>
+                                    <br>
+                                    <span class="m-widget24__desc">
+                                        {{("Subscriptions")}}
+                                    </span>
+                                    <span class="m-widget24__stats m--font-brand">
+                                        $<span class="new-subscription-amount counterup">
+                                            {{hostDashboardData != null ? hostDashboardData.newSubscriptionAmount : "..."}}
+                                        </span>
+                                    </span>
+                                    <div class="m--space-10"></div>
+                                    <div class="progress m-progress--sm">
+                                        <div class="progress-bar m--bg-brand" role="progressbar" style="width: 100%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                    <span class="m-widget24__change">
+                                        <div class="status-title">
+                                            {{selectedDateRange.startDate.format('L')}} - {{selectedDateRange.endDate.format('L')}}
+                                        </div>
+                                    </span>
+                                    <span class="m-widget24__number">
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-lg-6 col-xl-3">
+                            <div class="m-widget24 new-tenants-statistics">
+                                <div class="m-widget24__item">
+                                    <h4 class="m-widget24__title">
+                                        {{l("NewTenants")}}
+                                    </h4>
+                                    <br>
+                                    <span class="m-widget24__desc">
+                                        {{l("Tenants")}}
+                                    </span>
+                                    <span class="m-widget24__stats m--font-info new-tenants-count counterup">
+                                        {{hostDashboardData != null ? hostDashboardData.newTenantsCount : "..."}}
+                                    </span>
+                                    <div class="m--space-10"></div>
+                                    <div class="progress m-progress--sm">
+                                        <div class="progress-bar m--bg-info" role="progressbar" style="width: 100%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                    <span class="m-widget24__change">
+                                        <div class="status-title">
+                                            {{selectedDateRange.startDate.format('L')}} - {{selectedDateRange.endDate.format('L')}}
+                                        </div>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-lg-6 col-xl-3">
+                            <div class="m-widget24 dashboard-statistics1">
+                                <div class="m-widget24__item">
+                                    <h4 class="m-widget24__title">
+                                        {{l("DashboardSampleStatistics")}} 1
+                                    </h4>
+                                    <br>
+                                    <span class="m-widget24__desc">
+                                        {{l("DashboardSampleStatistics")}}
+                                    </span>
+                                    <span class="m-widget24__stats m--font-danger dashboard-placeholder1 counterup">
+                                        {{hostDashboardData != null ? hostDashboardData.dashboardPlaceholder1 : "..."}}
+                                    </span>
+                                    <div class="m--space-10"></div>
+                                    <div class="progress m-progress--sm">
+                                        <div class="progress-bar m--bg-danger" role="progressbar" style="width: 45%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                    <span class="m-widget24__change">
+                                        {{l("DashboardSampleStatisticsHelpText")}}
+                                    </span>
+                                    <span class="m-widget24__number">
+                                        <span class="counterup">45</span>%
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-lg-6 col-xl-3">
+                            <div class="m-widget24 dashboard-statistics2">
+                                <div class="m-widget24__item">
+                                    <h4 class="m-widget24__title">
+                                        {{l("DashboardSampleStatistics")}} 2
+                                    </h4>
+                                    <br>
+                                    <span class="m-widget24__desc">
+                                        {{l("DashboardSampleStatistics")}}
+                                    </span>
+                                    <span class="m-widget24__stats m--font-success dashboard-placeholder2 counterup">
+                                        {{hostDashboardData != null ? hostDashboardData.dashboardPlaceholder2 : "..."}}
+                                    </span>
+                                    <div class="m--space-10"></div>
+                                    <div class="progress m-progress--sm">
+                                        <div class="progress-bar m--bg-success" role="progressbar" style="width: 65%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                    <span class="m-widget24__change">
+                                        {{l("DashboardSampleStatisticsHelpText")}}
+                                    </span>
+                                    <span class="m-widget24__number">
+                                        <span class="counterup">65</span>%
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <div class="m-portlet m-portlet--full-height income-statistics">
+                        <div class="m-portlet__head">
+                            <div class="m-portlet__head-caption">
+                                <div class="m-portlet__head-title">
+                                    <h3 class="m-portlet__head-text">
+                                        <i class="la la-line-chart m--font-info"></i>
+                                        <span class="caption-subject font-blue bold uppercase">{{l("IncomeStatistics")}}</span>
+                                        <small>
+                                            <span class="caption-helper">
+                                                {{selectedDateRange.startDate.format('L')}} - {{selectedDateRange.endDate.format('L')}}
+                                            </span>
+                                        </small>
+                                    </h3>
+                                </div>
+                            </div>
+                            <div class="m-portlet__head-tools">
+                                <div class="btn-group btn-group-devided" data-toggle="buttons">
+                                    <label class="btn m-btn--pill btn-secondary active" (click)="incomeStatisticsDateIntervalChange(appIncomeStatisticsDateInterval.Daily)">
+                                        <input type="radio"
+                                               name="IncomeStatisticsDatePeriod"
+                                               class="toggle"
+                                               [value]="appIncomeStatisticsDateInterval.Daily">
+                                        {{l("Daily")}}
+                                    </label>
+                                    <label class="btn m-btn--pill btn-secondary" (click)="incomeStatisticsDateIntervalChange(appIncomeStatisticsDateInterval.Weekly)">
+                                        <input type="radio"
+                                               name="IncomeStatisticsDatePeriod"
+                                               class="toggle"
+                                               [value]="appIncomeStatisticsDateInterval.Weekly">
+                                        {{l("Weekly")}}
+                                    </label>
+                                    <label class="btn m-btn--pill btn-secondary" (click)="incomeStatisticsDateIntervalChange(appIncomeStatisticsDateInterval.Monthly)">
+                                        <input type="radio"
+                                               name="IncomeStatisticsDatePeriod"
+                                               class="toggle"
+                                               [value]="appIncomeStatisticsDateInterval.Monthly">
+                                        {{l("Monthly")}}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="m-portlet__body">
+                            <div #IncomeStatisticsChart
+                                 class="chart income-statistics-chart"
+                                 [busyIf]="loadingIncomeStatistics"
+                                 [hidden]="!incomeStatisticsHasData">
+                            </div>
+                            <div class="note note-info text-center chart"
+                                 [hidden]="incomeStatisticsHasData">
+                                <small class="text-muted">{{l("NoData")}}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <div class="m-portlet m-portlet--full-height edition-statistics">
+                        <div class="m-portlet__head">
+                            <div class="m-portlet__head-caption">
+                                <div class="m-portlet__head-title">
+                                    <h3 class="m-portlet__head-text">
+                                        <i class="la la-pie-chart m--font-success"></i>
+                                        <span class="caption-subject font-green-seagreen">{{l("EditionStatistics")}}</span>
+                                        <small>
+                                            <span class="caption-helper">
+                                                {{selectedDateRange.startDate.format('L')}} - {{selectedDateRange.endDate.format('L')}}
+                                            </span>
+                                        </small>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="m-portlet__body">
+                            <div #EditionStatisticsChart
+                                 class="edition-statistics-chart chart"
+                                 [hidden]="!editionStatisticsHasData">
+                            </div>
+                            <div class="note note-info text-center text-muted "
+                                 [hidden]="editionStatisticsHasData">
+                                <small class="text-muted">{{l("NoData")}}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-6 col-xs-12 col-sm-12">
+                    <div class="m-portlet m-portlet--full-height expiring-tenants">
+                        <div class="m-portlet__head">
+                            <div class="m-portlet__head-caption">
+                                <div class="m-portlet__head-title">
+                                    <h3 class="m-portlet__head-text">
+                                        <i class="icon-graduation font-red-pink"></i>
+                                        <span class="caption-subject font-red-pink bold uppercase">{{l("SubscriptionExpiringTenants")}}</span><br />
+                                        <small>
+                                            <span class="caption-helper" *ngIf="hostDashboardData">
+                                                {{l("ExpiringTenantsHelpText", hostDashboardData.subscriptionEndAlertDayCount, hostDashboardData.maxExpiringTenantsShownCount)}}
+                                            </span>
+                                        </small>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="m-portlet__body">
+                            <div class="scroller chart m-scrollable" data-always-visible="1" data-rail-visible="0" data-scrollable="true">
+                                <div class="primeng-datatable-container expiring-tenants-table" [busyIf]="primengDatatableHelper.isLoading">
+                                    <p-dataTable #ExpiringTenantsTable
+                                                 [value]="expiringTenantsData"
+                                                 rows="{{primengDatatableHelper.defaultRecordsCountPerPage}}"
+                                                 [paginator]="false"
+                                                 [lazy]="false"
+                                                 emptyMessage="{{l('NoData')}}"
+                                                 [responsive]="primengDatatableHelper.isResponsive">
+
+                                        <p-column field="tenantName" header="{{l('TenantName')}}"></p-column>
+                                        <p-column field="remainingDayCount" header="{{l('RemainingDay')}}"></p-column>
+                                    </p-dataTable>
+                                </div>
+                            </div>
+                            <div class="scroller-footer">
+                                <div class="btn-arrow-link pull-right">
+                                    <a href="javascript:;" class="see-all-expiring-tenants" (click)="gotoAllExpiringTenants()">{{l("SeeAllRecords")}}</a>
+                                    <i class="icon-arrow-right"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-xs-12 col-sm-12">
+                    <div class="m-portlet m-portlet--full-height recent-tenants">
+                        <div class="m-portlet__head">
+                            <div class="m-portlet__head-caption">
+                                <div class="m-portlet__head-title">
+                                    <h3 class="m-portlet__head-text">
+                                        <i class="icon-user-follow font-purple-soft"></i>
+                                        <span class="caption-subject font-purple-soft">{{l("RecentTenants")}}</span><br />
+                                        <small>
+                                            <span class="caption-helper" *ngIf="hostDashboardData">
+                                                {{l("RecentTenantsHelpText", hostDashboardData.recentTenantsDayCount, hostDashboardData.maxRecentTenantsShownCount)}}
+                                            </span>
+                                        </small>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="m-portlet__body">
+                            <div class="scroller chart m-scrollable" data-always-visible="1" data-rail-visible="0" data-scrollable="true">
+                                <div class="primeng-datatable-container recent-tenants-table" [busyIf]="primengDatatableHelper.isLoading">
+                                    <p-dataTable #RecentTenantsTable
+                                                 [value]="recentTenantsData"
+                                                 rows="{{primengDatatableHelper.defaultRecordsCountPerPage}}"
+                                                 [paginator]="false"
+                                                 [lazy]="false"
+                                                 emptyMessage="{{l('NoData')}}"
+                                                 [responsive]="primengDatatableHelper.isResponsive">
+
+                                        <p-column field="name" header="{{l('TenantName')}}"></p-column>
+                                        <p-column field="creationTime" header="{{l('CreationTime')}}">
+                                            <ng-template let-record="rowData" pTemplate="body">
+                                                {{ record.creationTime | momentFormat:'L LT'}}
+                                            </ng-template>
+                                        </p-column>
+                                    </p-dataTable>
+                                </div>
+                            </div>
+                            <div class="scroller-footer">
+                                <div class="btn-arrow-link pull-right">
+                                    <a href="javascript:;" class="see-all-recent-tenants" (click)="gotoAllRecentTenants()">{{l("SeeAllRecords")}}</a>
+                                    <i class="icon-arrow-right"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,27 @@
+<div bsModal #smsVerificationModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #smsVerificationModalForm="ngForm" (ngSubmit)="save()">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <span>{{l("VerifyYourCode")}}</span>
+                    </h5>
+                    <button type="button" class="close" aria-label="Close" (click)="close()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="inputDiv" class="form-group">
+                        <label>{{l("YourCode")}}</label>
+                        <input class="form-control" autoFocus type="text" name="Code" [(ngModel)]="verifyCode.code" required maxlength="6" minlength="6">
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" [disabled]="!smsVerificationModalForm.form.valid || saving"><i class="fa fa-save"></i> <span>{{l("Verify")}}</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

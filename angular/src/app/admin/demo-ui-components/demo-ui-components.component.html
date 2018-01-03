@@ -1,0 +1,30 @@
+<div [@routerTransition]>
+    <div class="m-subheader ">
+        <div class="d-flex align-items-center">
+            <div class="mr-auto">
+                <h3 class="m-subheader__title">
+                    <span>{{l("DemoUiComponents")}}</span>
+                </h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="m-content">
+        <div class="col-lg-12 alert alert-success">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+            {{l("DemoUiComponents_Info")}}<br />
+            <a href="http://keenthemes.com/metronic/preview/?demo=default" class="alert-link" target="_blank">{{l("DemoUiComponents_Info_Metronic_Link_Text")}}</a>
+        </div>   
+    
+        <demo-ui-date-time #demoUiDateTime></demo-ui-date-time>
+
+        <demo-ui-file-upload #demoUiFileUpload></demo-ui-file-upload>
+
+        <demo-ui-selection #demoUiSelection></demo-ui-selection>
+
+        <demo-ui-input-mask #demoUiInputMask></demo-ui-input-mask>
+
+        <demo-ui-editor #demoUiEditor></demo-ui-editor>
+    </div>
+</div>
+

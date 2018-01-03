@@ -1,0 +1,14 @@
+﻿[
+  {
+    "outputFile": "src/assets/primeng/datatable/css/primeng.datatable.css",
+    "inputFile": "src/assets/primeng/datatable/css/primeng.datatable.less"
+  },
+  {
+    "outputFile": "src/assets/primeng/file-upload/css/primeng.file-upload.css",
+    "inputFile": "src/assets/primeng/file-upload/css/primeng.file-upload.less"
+  },
+  {
+    "outputFile": "src/assets/primeng/autocomplete/css/primeng.autocomplete.css",
+    "inputFile": "src/assets/primeng/autocomplete/css/primeng.autocomplete.less"
+  }
+]

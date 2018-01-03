@@ -1,0 +1,285 @@
+#UnreadChatMessageCount {
+    margin-top: 14px !important;
+}
+
+#m_quick_sidebar_back {
+    i.la-arrow-circle-left {
+        color: #cfcedb;
+        text-decoration: none;
+
+        &:hover {
+            color: #716aca !important;
+        }
+    }
+}
+
+.contact-status1 {
+    position: absolute;
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50% !important;
+    left: 52px;
+    margin-top: 26px;
+
+    &.online {
+        background-color: #26C281;
+    }
+
+    &.offline {
+        background-color: #BFCAD1;
+    }
+}
+
+span.contact-status2 {
+    position: relative;
+    width: 12px;
+    height: 12px;
+    border-radius: 50% !important;
+    left: 0px;
+    top: 0px !important;
+    display: block;
+    margin-left: 30px;
+    margin-top: -10px;
+
+    &.online {
+        background-color: #26C281;
+    }
+
+    &.offline {
+        background-color: #BFCAD1;
+    }
+}
+
+.m-quick-sidebar {
+    overflow-y: hidden !important;
+}
+
+div.selected-chat-user {
+    margin: 10px;
+    padding-bottom: 5px;
+    display: block;
+    padding-right: 5px;
+
+    div.selected-chat-user-image {
+        display: inline-block;
+
+        img {
+            display: inline-block;
+            width: 40px;
+        }
+    }
+
+    h6 {
+        display: inline-block;
+        margin-left: 5px;
+    }
+
+    div.actions {
+        display: inline-block;
+        float: right;
+        padding-top: 5px;
+
+        a.btn-sm {
+            padding: 6px 26px 6px 10px !important;
+            width: 50px;
+        }
+    }
+}
+
+#friendListFriends {
+    .m-badge.m-badge--warning {
+        color: white !important;
+        float: right;
+    }
+}
+
+.m-messenger__message--out {
+    .m-messenger__message-username {
+        text-align: right !important;
+    }
+}
+
+.chat-progress-bar {
+    display: none;
+}
+
+.chat-image-preview {
+    width: 235px;
+    margin-top: 5px;
+}
+
+.chat-file-preview {
+    margin-top: 15px;
+    text-align: left;
+    padding: 5px;
+    background-color: #625dbb;
+    display: block;
+    color: #d9d9d9;
+
+    i.la-file {
+        margin-right: 2px;
+    }
+
+    i.la-download {
+        margin-top: 2px;
+    }
+
+    &:hover {
+        color: #fff;
+
+        i {
+            text-decoration: none;
+        }
+    }
+}
+
+.chat-link-message {
+    display: block;
+    text-overflow: ellipsis;
+    overflow-x: hidden;
+    white-space: nowrap;
+    margin-top: 15px;
+    text-align: left;
+    padding: 5px;
+    background-color: #3598dc;
+    color: #f7f7f7;
+}
+
+.chat-progress-bar {
+    display: none;
+}
+
+.m-messenger-friends {
+    .m-list-search__result-category {
+        margin-top: 10px !important;
+    }
+}
+
+.slimScrollBar {
+    width: 2px !important;
+    background-color: lightgray !important;
+}
+
+#m_quick_sidebar_close {
+    cursor: pointer;
+}
+
+/* Quick Sidebar Pinner */
+.m-quick-sidebar--on a.page-quick-sidebar-pinner {
+    display: inline-block !important;
+}
+
+a.page-quick-sidebar-pinner {
+    overflow: hidden;
+    z-index: 99999;
+    width: 28px;
+    height: 27px;
+    position: fixed;
+    top: 10px;
+    right: 50px;
+    text-align: center;
+    padding-top: 6px;
+    display: none;
+}
+
+@media (min-width: 767px) {
+    a.page-quick-sidebar-pinner {
+        right: 15px;
+    }
+}
+
+a.page-quick-sidebar-pinner {
+    opacity: 0.5 !important;
+    background-repeat: no-repeat;
+    background-position-y: 12px;
+}
+
+a.page-quick-sidebar-pinner:hover {
+    color: #fff;
+}
+
+a.page-quick-sidebar-pinner.unpinned {
+    background-image: url("/assets/common/images/unpinned.png");
+}
+
+a.page-quick-sidebar-pinner.pinned {
+    background-image: url("/assets/common/images/pinned.png");
+}
+
+.m-quick-sidebar__close {
+    @media (min-width: 767px) {
+        display: none;
+    }
+}
+
+.toast-chat-open {
+    right: 460px;
+    bottom: 12px;
+}
+
+/*Stlye for Chat Buttons */
+.m-messenger__form-tools .ui-button {
+    display: block;
+    margin: 0;
+    text-align: left;
+    border-radius: 0;
+    transition: none !important;
+}
+
+.ui-fileupload-choose.ui-button, .ui-fileupload-choose.ui-button .ui-widget, .ui-fileupload-choose.ui-button .ui-state-default {
+    background-color: #fff;
+    color: #6f6f6f;
+}
+
+.ui-fileupload-choose.ui-button.ui-state-hover, .ui-fileupload-choose.ui-button.ui-state-focus, .ui-fileupload-choose.ui-button.ui-state-active {
+    background-color: #eee;
+}
+
+.m-messenger__form-tools {
+    a:hover {
+        .ui-button {
+            background-color: #f4f5f8 !important;
+        }
+    }
+}
+.m-messenger__form-tools .ui-fileupload-choose:not(.ui-state-disabled):hover,
+.m-messenger__form-tools .ui-fileupload-choose:not(.ui-state-disabled):focus,
+.m-messenger__form-tools .ui-fileupload-choose:not(.ui-state-disabled):active {
+    background-color: #f4f5f8 !important;
+    box-shadow: none !important;
+}
+
+.m-messenger__form-tools .chat-link-button {
+    width: 100%;
+    border: none;
+}
+
+.m-messenger__form-tools .ui-button span {
+}
+
+.m-messenger__form-tools .chat-image-preview {
+    width: 235px;
+    margin-top: 5px;
+}
+
+.m-messenger__form-tools .chat-file-preview {
+    margin-top: 15px;
+    text-align: left;
+    padding: 5px;
+    background-color: #f0ad4e;
+    display: block;
+    color: #f7f7f7;
+}
+
+.m-messenger__form-tools .chat-link-message {
+    display: block;
+    text-overflow: ellipsis;
+    overflow-x: hidden;
+    white-space: nowrap;
+    margin-top: 15px;
+    text-align: left;
+    padding: 5px;
+    background-color: #3598dc;
+    color: #f7f7f7;
+}

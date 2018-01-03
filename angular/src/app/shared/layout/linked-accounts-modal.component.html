@@ -1,0 +1,70 @@
+<div bsModal #linkedAccountsModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+     aria-hidden="true" [config]="{keyboard: false}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <span>{{l("LinkedAccounts")}}</span>
+                </h4>
+                <button class="btn btn-primary pull-right" (click)="manageLinkedAccounts()"><i class="fa fa-plus"></i>{{l("LinkNewAccount")}}</button>
+            </div>
+            <div class="modal-body">
+                <!--<Primeng-Datatable-Start>-->
+                <div class="primeng-datatable-container"
+                     [busyIf]="primengDatatableHelper.isLoading">
+                    <p-dataTable #dataTable
+                                 (onLazyLoad)="getLinkedUsers($event)"
+                                 [value]="primengDatatableHelper.records"
+                                 rows="{{primengDatatableHelper.defaultRecordsCountPerPage}}"
+                                 [paginator]="false"
+                                 [lazy]="true"
+                                 emptyMessage="{{l('NoData')}}"
+                                 [responsive]="primengDatatableHelper.isResponsive">
+
+                        <p-column field=""
+                                  header="{{l('Actions')}}"
+                                  [sortable]="false"
+                                  [style]="{'width':'130px','text-align':'center'}">
+                            <ng-template let-record="rowData" pTemplate="body">
+                                <button class="btn btn-sm btn-primary" (click)="switchToUser(record)">
+                                    <i class="fa fa-sign-in"></i>{{l('LogIn')}}
+                                </button>
+                            </ng-template>
+                        </p-column>
+                        <p-column field="userName" header="{{l('UserName')}}" [sortable]="true" styleClass="width-percent-60">
+                            <ng-template let-record="rowData" pTemplate="body">
+                                {{getShownLinkedUserName(record)}}
+                            </ng-template>
+                        </p-column>
+                        <p-column field="unlink"
+                                  header="{{l('Delete')}}"
+                                  [style]="{'width':'20%','text-align':'center'}"
+                                  [sortable]="false">
+                            <ng-template let-record="rowData" pTemplate="body">
+                                <button class="btn btn-sm btn-danger red" (click)="deleteLinkedUser(record)">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </ng-template>
+                        </p-column>
+                    </p-dataTable>
+                    <div class="primeng-paging-container">
+                        <p-paginator rows="{{primengDatatableHelper.defaultRecordsCountPerPage}}"
+                                     #paginator
+                                     (onPageChange)="getLinkedUsers($event)"
+                                     [totalRecords]="primengDatatableHelper.totalRecordsCount"
+                                     [rowsPerPageOptions]="primengDatatableHelper.predefinedRecordsCountPerPage">
+                        </p-paginator>
+                        <span class="total-records-count">
+                            {{l('TotalRecordsCount', primengDatatableHelper.totalRecordsCount)}}
+                        </span>
+                    </div>
+                </div>
+                <!--<Primeng-Datatable-End>-->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-right" (click)="close()">{{l("Close")}}</button>
+            </div>
+        </div>
+    </div>
+</div>
+<linkAccountModal #linkAccountModal (modalSave)="getLinkedUsers()"></linkAccountModal>

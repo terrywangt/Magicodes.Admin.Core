@@ -1,0 +1,81 @@
+<div bsModal #editModal="bs-modal" (onShown)="onShown()" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="editModal"
+     aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+
+        <div class="modal-content">
+
+            <form #tenantEditForm="ngForm" role="form" novalidate class="form-validation" (submit)="save()" *ngIf="tenant && active">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <span>{{l("EditTenant")}}: {{tenant.tenancyName}}</span>
+                    </h5>
+                    <button type="button" class="close" (click)="close()" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label>{{l("Name")}}</label>
+                        <input #nameInput type="text" name="Name" class="form-control" [ngClass]="{'edited':tenant.name}" [(ngModel)]="tenant.name" required maxlength="128">
+                    </div>
+
+                    <div class="form-group" *ngIf="currentConnectionString">
+                        <label>{{l("DatabaseConnectionString")}}</label>
+                        <input type="text" name="ConnectionString" class="form-control" [(ngModel)]="tenant.connectionString" required maxlength="1024">
+                    </div>
+
+                    <div *ngIf="currentConnectionString">
+                        <span class="help-block text-warning">{{l("TenantDatabaseConnectionStringChangeWarningMessage")}}</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="edition">{{l("Edition")}}</label>
+                        <select id="edition" name="edition" class="form-control" [(ngModel)]="tenant.editionId" (change)="onEditionChange($event)">
+                            <option *ngFor="let edition of editions" [value]="edition.value">{{edition.displayText}}</option>
+                        </select>
+                    </div>
+
+                    <div [hidden]="!isSubscriptionFieldsVisible" class="m-checkbox-list">
+                        <label class="m-checkbox">
+                            <input id="CreateTenant_IsUnlimited" type="checkbox" name="IsUnlimited" [(ngModel)]="isUnlimited" (ngModelChange)="onUnlimitedChange()"/>
+                            {{l("UnlimitedTimeSubscription")}}
+                            <span></span>
+                        </label>
+                    </div>
+
+                    <div [hidden]="isUnlimited || !isSubscriptionFieldsVisible" class="form-group" [ngClass]="{'has-error': !subscriptionEndDateUtcIsValid }">
+                        <label>{{l("SubscriptionEndDateUtc")}}</label>
+                        <input type="datetime" #SubscriptionEndDateUtc name="SubscriptionEndDateUtc" class="form-control"
+                               [ngClass]="{'edited':tenant.subscriptionEndDateUtc}"
+                               [value]="formatSubscriptionEndDate(tenant.subscriptionEndDateUtc)"
+                               [required]="!isUnlimited">
+                    </div>
+
+                    <div [hidden]="!isSubscriptionFieldsVisible" class="m-checkbox-list">
+                        <label class="m-checkbox">
+                            <input id="CreateTenant_IsInTrialPeriod" type="checkbox" name="IsInTrialPeriod" [disabled]="selectedEditionIsFree()" [(ngModel)]="tenant.isInTrialPeriod">
+                            {{l("IsInTrialPeriod")}}
+                            <span></span>
+                        </label>
+                    </div>
+
+                    <div class="m-checkbox-list">
+                        <label class="m-checkbox">
+                            <input id="EditTenant_IsActive" type="checkbox" name="IsActive" [(ngModel)]="tenant.isActive">
+                            {{l("Active")}}
+                            <span></span>
+                        </label>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" [disabled]="saving" class="btn btn-secondary" (click)="close()">{{l("Cancel")}}</button>
+                    <button type="submit" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')" class="btn btn-primary" [disabled]="!tenantEditForm.form.valid || saving || !subscriptionEndDateUtcIsValid"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

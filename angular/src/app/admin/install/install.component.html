@@ -1,0 +1,141 @@
+<div [@routerTransition] style="background-image: url('/assets/metronic/src/media/app/img/bg/bg-1.jpg');">
+    <div class="content col-lg-12">
+        <div class="m-content">
+            <div class="m-portlet m-portlet--mobile">
+                <div class="m-portlet__head">
+                    <div class="m-portlet__head-caption">
+                        <div class="m-portlet__head-title">
+                            <h3 class="m-portlet__head-text">
+                                Admin Installation
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+                <form id="installForm" class="m-form m-form--fit">
+                    <div class="m-portlet__body">
+                        <div class="form-group m-form__group">
+                            <div class="m-alert m-alert--icon alert alert-warning" role="alert">
+                                <div class="m-alert__icon">
+                                    <i class="la la-warning"></i>
+                                </div>
+                                <div class="m-alert__text">
+                                    <strong>
+                                        Clear your cookies before installing Admin ! Otherwise, you might have some pro
+                                    </strong>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="m-form__section">
+                            <div class="m-form__heading">
+                                <h5 class="m-form__heading-title">
+                                    Connection String
+                                </h5>
+                            </div>
+                            <div class="form-group m-form__group">
+                                <input type="text" class="form-control" placeholder="Connection String" [(ngModel)]="setupSettings.connectionString" name="connectionString" value="{{setupSettings.connectionString}}" autocomplete="off">
+                            </div>
+                            <div class="m-form__seperator m-form__seperator--dashed"></div>
+                            <div class="m-form__heading">
+                                <h5 class="m-form__heading-title">
+                                    Admin Password
+                                </h5>
+                            </div>
+                            <div class="form-group m-form__group">
+                                <input type="password" class="form-control" placeholder="Admin Password" [(ngModel)]="setupSettings.adminPassword" name="adminPassword" autocomplete="off">
+                            </div>
+                            <div class="m-form__seperator m-form__seperator--dashed"></div>
+                            <div class="m-form__heading">
+                                <h5 class="m-form__heading-title">
+                                    Client Side URL
+                                </h5>
+                            </div>
+                            <div class="form-group m-form__group">
+                                <input type="text" class="form-control" placeholder="Client Side URL" [(ngModel)]="setupSettings.webSiteUrl" name="webSiteUrl" value="{{setupSettings.webSiteUrl}}">
+                            </div>
+                            <div class="m-form__heading">
+                                <h5 class="m-form__heading-title">
+                                    Server Side URL
+                                </h5>
+                            </div>
+                            <div class="form-group m-form__group">
+                                <input type="text" class="form-control" placeholder="Server Side URL" [(ngModel)]="setupSettings.serverUrl" name="serverUrl" value="{{setupSettings.serverUrl}}">
+                            </div>
+                            <div class="m-form__seperator m-form__seperator--dashed"></div>
+                            <div class="m-form__heading">
+                                <h5 class="m-form__heading-title">
+                                    Default Language
+                                </h5>
+                            </div>
+                            <div class="form-group m-form__group">
+                                <select class="form-control" [(ngModel)]="setupSettings.defaultLanguage" name="defaultLanguage">
+                                    <option *ngFor="let language of languages" value="{{language.value}}">
+                                        {{language.name}}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="m-form__seperator m-form__seperator--dashed"></div>
+                            <div class="m-form__heading">
+                                <h5 class="m-form__heading-title">
+                                    SMTP Settings
+                                </h5>
+                            </div>
+                            <div class="form-group m-form__group">
+                                <input type="email" placeholder="Default from address" class="form-control" [(ngModel)]="setupSettings.smtpSettings.defaultFromAddress" name="defaultFromAddress">
+                            </div>
+                            <div class="form-group m-form__group">
+                                <input type="text" placeholder="Default from displayName" class="form-control" [(ngModel)]="setupSettings.smtpSettings.defaultFromDisplayName" name="defaultFromDisplayName">
+                            </div>
+                            <div class="form-group m-form__group">
+                                <input type="text" placeholder="SMTP host" class="form-control" [(ngModel)]="setupSettings.smtpSettings.smtpHost" name="smtpHost">
+                            </div>
+                            <div class="form-group m-form__group">
+                                <input type="number" placeholder="SMTP port" class="form-control" [(ngModel)]="setupSettings.smtpSettings.smtpPort" name="smtpPort">
+                            </div>
+                            <div class="form-group m-form__group">
+                                <label class="control-label col-md-12"></label>
+                                <div class="m-checkbox-list">
+                                    <label class="m-checkbox">
+                                        <input id="Settings_SmtpEnableSsl" type="checkbox" [(ngModel)]="setupSettings.smtpSettings.smtpEnableSsl" name="smtpEnableSsl" value="true">
+                                        UseSsl
+                                        <span></span>
+                                    </label>
+                                    <label class="m-checkbox">
+                                        <input id="Settings_SmtpUseDefaultCredentials" type="checkbox" [(ngModel)]="setupSettings.smtpSettings.smtpUseDefaultCredentials" name="smtpUseDefaultCredentials" value="true">
+                                        Use Default Credentials
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group m-form__group">
+                                <input type="text" placeholder="Domain name" class="form-control" [(ngModel)]="setupSettings.smtpSettings.smtpDomain" name="smtpDomain">
+                            </div>
+                            <div class="form-group m-form__group">
+                                <input type="text" placeholder="User name" class="form-control" [(ngModel)]="setupSettings.smtpSettings.smtpUserName" name="smtpUserName">
+                            </div>
+                            <div class="form-group m-form__group">
+                                <input type="password" placeholder="Password" class="form-control" [(ngModel)]="setupSettings.smtpSettings.smtpPassword" name="smtpPassword" id="SmtpPassword">
+                            </div>
+                            <div class="m-form__seperator m-form__seperator--dashed"></div>
+                            <div class="m-form__heading">
+                                <h5 class="m-form__heading-title">
+                                    Invoice Info
+                                </h5>
+                            </div>
+                            <div class="form-group m-form__group">
+                                <input type="text" class="form-control" name="legalName" [(ngModel)]="setupSettings.billInfo.legalName" placeholder="Legal name">
+                            </div>
+                            <div class="form-group m-form__group">
+                                <textarea class="form-control" name="billAddress" rows="5" [(ngModel)]="setupSettings.billInfo.address" placeholder="Address"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-portlet__foot m-portlet__no-border m-portlet__foot--fit">
+                        <div class="m-form__actions m-form__actions--solid">
+                            <button id="SaveButton" class="btn btn-primary" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')" (click)="saveAll()">Save</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

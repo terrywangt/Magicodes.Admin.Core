@@ -1,0 +1,58 @@
+<div class="m-login__signin" [@routerTransition]>
+    <div class="m-login__head">
+        <h3 class="m-login__title">
+            {{l("LogIn")}}
+        </h3>
+    </div>
+    <form #loginForm="ngForm" class="m-login__form m-form login-form" method="post" novalidate (ngSubmit)="login()">
+
+        <div class="form-group m-form__group">
+            <input [(ngModel)]="loginService.authenticateModel.userNameOrEmailAddress" autoFocus class="form-control m-input" type="text" autocomplete="off" placeholder="{{l('UserNameOrEmail')}}" name="userNameOrEmailAddress" required />
+        </div>
+
+        <div class="form-group m-form__group">
+            <input [(ngModel)]="loginService.authenticateModel.password" class="form-control m-input" type="password" autocomplete="off" placeholder="{{l('Password')}}" name="password" required maxlength="32" />
+        </div>
+
+        <div class="row m-login__form-sub">
+            <div class="col m--align-left">
+                <label class="m-checkbox m-checkbox--focus">
+                    <input class="form-control" [(ngModel)]="loginService.rememberMe" type="checkbox" name="rememberMe" value="true" />{{l("RememberMe")}}
+                    <span></span>
+                </label>
+            </div>
+            <div class="col m--align-right">
+                <a routerLink="/account/forgot-password" id="forget-password" class="m-link forget-password">{{l("ForgotPassword")}}</a>
+            </div>
+        </div>
+
+        <div class="m-login__form-action">
+            <button type="submit" class="btn btn-focus m-btn m-btn--pill m-btn--custom m-btn--air" [disabled]="!loginForm.form.valid">{{l("LogIn")}}</button>
+        </div>
+    </form>
+
+    <div class="login-options" *ngIf="multiTenancySideIsTeanant && loginService.externalLoginProviders.length > 0">
+        <h4>{{l("LoginWith")}}</h4>
+        <ul class="social-icons">
+            <li *ngFor="let provider of loginService.externalLoginProviders">
+                <a class="social-login-icon social-icon-color {{provider.icon}}"
+                   (click)="externalLogin(provider)"
+                   title="{{provider.name}}"></a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="m-stack__item m-stack__item--center">
+        <div class="m-login__account">
+            <span *ngIf="isSelfRegistrationAllowed">
+                <a routerLink="/account/register" id="register-btn" class="m-link m-link--focus m-login__account-link">{{l("CreateAnAccount")}}</a>
+                <span class="pipe-divider"> | </span>
+            </span>
+            <span *ngIf="!multiTenancySideIsTeanant">
+                <a routerLink="/account/select-edition" id="register-btn" class="m-link m-link--focus m-login__account-link">{{l("NewTenant")}}</a>
+                <span class="pipe-divider"> | </span>
+            </span>
+            <a routerLink="/account/email-activation" id="email-activation-btn" class="m-link m-link--focus m-login__account-link">{{l("EmailActivation")}}</a>
+        </div>
+    </div>
+</div>

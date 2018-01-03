@@ -1,0 +1,27 @@
+<div bsModal #changeProfilePictureModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" (onShown)="onModalShown()" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #changeProfilePictureModalForm="ngForm" (ngSubmit)="save()">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <span>{{l("ChangeProfilePicture")}}</span>
+                    </h5>
+                    <button type="button" class="close" aria-label="Close" (click)="close()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <input type="file" ng2FileSelect [uploader]="uploader" />
+                        <span class="help-block m-b-none">{{l("ProfilePicture_Change_Info", maxProfilPictureBytesUserFriendlyValue)}}</span>
+                    </div>
+                    <img id="ProfilePictureResize" [hidden]="!temporaryPictureUrl" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="close()" [disabled]="saving">{{l("Cancel")}}</button>
+                    <button type="submit" class="btn btn-primary" [disabled]="!changeProfilePictureModalForm.form.valid || saving"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

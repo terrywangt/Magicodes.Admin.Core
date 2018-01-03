@@ -1,0 +1,35 @@
+<div [ngClass]="{'m-grid m-grid--hor m-grid--root m-page': !useFullWidthLayout(), 'm-content': useFullWidthLayout() }" [style.text-align]="useFullWidthLayout() ? 'center' : 'left'">
+    <div [ngClass]="{'m-grid__item m-grid__item--fluid m-grid m-grid--ver-desktop m-grid--desktop m-grid--tablet-and-mobile m-grid--hor-tablet-and-mobile m-login m-login--1 m-login--singin': !useFullWidthLayout(), 'row':useFullWidthLayout()}" id="m_login">
+        <div [ngClass]="{'m-grid__item m-grid__item--order-tablet-and-mobile-2 m-login__aside': !useFullWidthLayout(), 'col-md-12': useFullWidthLayout()}">
+            <div [ngClass]="{'m-stack m-stack--hor m-stack--desktop': !useFullWidthLayout()}">
+                <div [ngClass]="{'m-stack__item m-stack__item--fluid': !useFullWidthLayout()}">
+                    <div class="m-login__wrapper">
+                        <div class="m-login__logo">
+                            <a (click)="goToHome()">
+                                <img *ngIf="!appSession.tenant || !appSession.tenant.logoId" src="/assets/common/images/logo.png" alt="logo" width="139" height="35" />
+                                <img *ngIf="appSession.tenant && appSession.tenant.logoId" [src]="remoteServiceBaseUrl + '/TenantCustomization/GetTenantLogo?skin=light&tenantId=' + appSession.tenant.id + '&id=' + appSession.tenant.logoId" alt="logo" width="168" height="33" />
+                            </a>
+                        </div>
+                        <div *ngIf="showTenantChange()" class="content tenant-change-box">
+                            <tenant-change></tenant-change>
+                        </div>
+                        <router-outlet></router-outlet>
+                    </div>
+                    <div>
+                        <language-switch></language-switch>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="!useFullWidthLayout()" class="m-grid__item m-grid__item--fluid m-grid m-grid--center m-grid--hor m-grid__item--order-tablet-and-mobile-1 m-login__content" style="background-image: url(./assets/metronic/src/media/app/img/bg/bg-4.jpg)">
+            <div class="m-grid__item m-grid__item--middle">
+                <h3 class="m-login__welcome">
+                   AspNet Zero
+                </h3>
+                <p class="m-login__msg">
+                    Base solution for your next web application
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,61 @@
+<a href="javascript:;" class="m-nav__link m-dropdown__toggle" *ngIf="unreadNotificationCount" id="m_topbar_notification_icon">
+    <span class="m-nav__link-badge m-badge m-badge--dot m-badge--dot-small" [ngClass]="{'m-badge--danger':unreadNotificationCount}"></span>
+    <span class="m-nav__link-icon">
+        <i class="flaticon-music-2"></i>
+    </span>
+</a>
+<a href="javascript:;" class="m-nav__link m-dropdown__toggle" *ngIf="!unreadNotificationCount" id="m_topbar_notification_icon_not">
+    <span class="m-nav__link-badge m-badge m-badge--dot m-badge--dot-small" [ngClass]="{'m-badge--danger':unreadNotificationCount}"></span>
+    <span class="m-nav__link-icon">
+        <i class="flaticon-music-2"></i>
+    </span>
+</a>
+<div class="m-dropdown__wrapper">
+    <span class="m-dropdown__arrow m-dropdown__arrow--center"></span>
+    <div class="m-dropdown__inner">
+        <div class="m-dropdown__header m--align-center" style="background: url(/assets/metronic/dist/html/default/assets/demo/default/media/img/misc/notification_bg.jpg); background-size: cover;">
+            <span class="m-dropdown__header-title">
+                {{unreadNotificationCount}} {{l("NewNotifications")}}
+            </span>
+        </div>
+        <div class="m-dropdown__body">
+            <div class="m-dropdown__content">
+                <div class="row">
+                    <div class="text-left col-md-8">
+                        <a href="javascript:;" (click)="setAllNotificationsAsRead(); $event.preventDefault(); $event.stopPropagation();" *ngIf="unreadNotificationCount">{{l("SetAllAsRead")}}</a>
+                    </div>
+                    <div class="text-right col-md-4">
+                        <a (click)="openNotificationSettingsModal()" class="text-right" href="javascript:;">{{l("Settings")}}</a>
+                    </div>
+                </div>
+                <hr />
+                <div class="m-scrollable" data-scrollable="true">
+                    <div class="m-list-timeline m-list-timeline--skin-light m-nav">
+                        <div class="m-list-timeline__items" [ngClass]="{'empty':!notifications.length}">
+                            <div *ngFor="let notification of notifications" class="m-list-timeline__item user-notification-item" (click)="gotoUrl(notification.url)" [ngClass]="{'user-notification-item-clickable': notification.url,'user-notification-item-unread': notification.isUnread}">
+                                <span class="m-list-timeline__badge m-list-timeline__badge--success"></span>
+                                <span class="m-list-timeline__icon {{notification.icon}}"></span>
+                                <span class="m-list-timeline__text">
+                                    {{notification.text}}
+                                </span>
+                                <span class="m-list-timeline__time" jq-plugin="timeago">
+                                    {{notification.time}}
+                                    <span *ngIf="notification.isUnread">
+                                        <a href="javascript:;" *ngIf="notification.state=='UNREAD'" class="m-link set-notification-as-read" (click)="setNotificationAsRead(notification); $event.preventDefault(); $event.stopPropagation();">{{l("SetAsRead")}}</a>
+                                    </span>
+                                </span>
+                            </div>
+                            <span *ngIf="!notifications.length" class="notification-empty-text">
+                                {{l("ThereIsNoNotification")}}
+                            </span>
+                        </div>
+                        <div *ngIf="notifications.length" class="m-nav__separator m-nav__separator--fit"></div>
+                        <div *ngIf="notifications.length" class="external notifications-footer">
+                            <div class="text-center"><a routerLink="notifications">{{l("SeeAllNotifications")}}</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

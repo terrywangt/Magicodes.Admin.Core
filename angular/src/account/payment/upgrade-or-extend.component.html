@@ -1,0 +1,50 @@
+<div [@routerTransition]>
+    <div class="m-login__head">
+        <h3 class="m-login__title">
+            {{l("PaymentInfo")}}
+        </h3>
+    </div>
+
+    <form class="register-form" method="post" asp-action="PaymentResult" id="formPaymentResult">
+        <input type="hidden" name="EditionId" [(ngModel)]="edition.id"/>
+        <input type="hidden" name="Gateway" [(ngModel)]="subscriptionPaymentGateway.Paypal"/>
+        <input type="hidden" name="EditionPaymentType" [(ngModel)]="editionPaymentType"/>
+
+        <div *ngIf="editionPaymentType == editionPaymentTypeCheck.Extend" class="text-center">{{l("Extend_Edition_Description",edition.displayName)}}</div>
+        <div *ngIf="editionPaymentType == editionPaymentTypeCheck.Upgrade" class="text-center m--margin-bottom-20">{{l("Upgrade_Edition_Description",edition.displayName)}}</div>
+
+        <div *ngIf="!isUpgrade()" class="form-group">
+            <label class="m-radio">
+                <input class="form-control" type="radio" name="PaymentPeriodType"
+                       checked
+                       [value]="paymentPeriodType.Monthly"
+                       (change)="onPaymentPeriodChangeChange(paymentPeriodType.Monthly)"/>{{l("MonthlyPrice")}}: ${{edition.monthlyPrice | number : '1.2-2'}}
+                <span></span>
+            </label>
+        </div>
+
+        <div *ngIf="!isUpgrade()" class="form-group">
+            <label class="m-radio">
+                <input class="form-control" type="radio" name="PaymentPeriodType"
+                       [value]="paymentPeriodType.Annual"
+                       (change)="onPaymentPeriodChangeChange(paymentPeriodType.Annual)"/>{{l("AnnualPrice")}}: ${{edition.annualPrice | number : '1.2-2'}}
+                <span></span>
+            </label>
+        </div>
+
+        <hr *ngIf="isUpgrade()"/>
+
+        <div *ngIf="isUpgrade()" class="form-actions">
+            <div class="form-group row">
+                <label class="col-sm-8 control-label">{{l("Total")}}</label>
+                <div class="col-sm-4 text-right">
+                    <p class="m--font-bold" id="totalPrice">
+                        {{additionalPrice}}
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <paymentGateways [(edition)]="edition" [(paymentPeriodType)]="selectedPaymentPeriodType" [(editionPaymentType)]="editionPaymentType"></paymentGateways>
+    </form>
+</div>

@@ -1,0 +1,32 @@
+<div bsModal #tenantChangeModal="bs-modal" (onShown)="onShown()" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="tenantChangeModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+
+        <div class="modal-content">
+
+            <form *ngIf="active" #changeTenantForm="ngForm" novalidate (ngSubmit)="save()">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <span>{{l("ChangeTenant")}}</span>
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="float-left">{{l("TenancyName")}}</label>
+                        <input #tenancyNameInput type="text" name="TenancyName" class="form-control" [ngClass]="{'edited':tenancyName}" [(ngModel)]="tenancyName" maxlength="64">
+                        <span class="float-left m-form__help">{{l("LeaveEmptyToSwitchToHost")}}</span>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-secondary close-button" (click)="close()">{{l("Cancel")}}</button>
+                    <button type="submit" class="btn btn-primary save-button" [disabled]="!changeTenantForm.form.valid" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>

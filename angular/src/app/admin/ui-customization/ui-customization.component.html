@@ -1,0 +1,188 @@
+<div [@routerTransition]>
+    <div class="m-subheader ">
+        <div class="row align-items-center">
+            <div class="mr-auto col-sm-12 col-md-6">
+                <h3 class="m-subheader__title m-subheader__title--separator">
+                    <span>{{l("VisualSettings")}}</span>
+                </h3>
+                <span class="m-section__sub">
+                    {{l("UiCustomizationHeaderInfo")}}
+                </span>
+            </div>
+            <div class="col-sm-12 col-md-6 text-right">
+                <button *ngIf="isGranted('Pages.Administration.UiCustomization')" (click)="updateDefaultUiManagementSettings()" class="btn btn-primary blue"><i class="fa fa-floppy-o"></i> {{l("SaveAsSystemDefault")}}</button>
+                <button *ngIf="!isGranted('Pages.Administration.UiCustomization')" (click)="updateUiManagementSettings()" class="btn btn-primary blue"><i class="fa fa-floppy-o"></i> {{l("Save")}}</button>
+                <button *ngIf="!isGranted('Pages.Administration.UiCustomization')" (click)="useSystemDefaultSettings()" class="btn btn-metal blue"> {{l("UseSystemDefaults")}}</button>
+            </div>
+        </div>
+    </div>
+    <div class="m-content">
+        <div class="m-portlet m-portlet--mobile">
+            <div class="m-portlet__body">
+                <tabset class="tab-container tabbable-line" *ngIf="settings">
+                    <tab heading="{{l('UiCustomization_Layout')}}" customClass="m-tabs__item">
+                        <form id="LayoutSettingsForm">
+                            <div class="form-group m-form__group">
+                                <label>{{l("UiCustomization_LayoutType")}}</label>
+                                <select name="LayoutType" class="form-control" [(ngModel)]="settings.layout.layoutType">
+                                    <option value="fluid">{{l("UiCustomization_Fluid")}}</option>
+                                    <option value="boxed">{{l("UiCustomization_Boxed")}}</option>
+                                </select>
+                            </div>
+                            <div class="form-group m-form__group">
+                                <label>{{l("UiCustomization_PageLoader")}}</label>
+                                <select name="PageLoader" class="form-control" [(ngModel)]="settings.layout.pageLoader">
+                                    <option value="">{{l("UiCustomization_Disabled")}}</option>
+                                    <option value="default">{{l("UiCustomization_Default")}}</option>
+                                    <option value="spinner-message">{{l("UiCustomization_SpinnerMessage")}}</option>
+                                </select>
+                            </div>
+                            <div class="form-group m-form__group">
+                                <label>{{l("UiCustomization_ContentSkin")}}</label>
+                                <select name="ContentSkin" class="form-control" [(ngModel)]="settings.layout.contentSkin">
+                                    <option value="light2">{{l("UiCustomization_LightGrey")}}</option>
+                                    <option value="light">{{l("UiCustomization_White")}}</option>
+                                </select>
+                            </div>
+                        </form>
+                    </tab>
+                    <tab heading="{{l('UiCustomization_Header')}}" customClass="m-tabs__item">
+                        <form id="HeaderSettingsForm">
+                            <div class="form-group m-form__group">
+                                <label>{{l("UiCustomization_DropdownSkin")}}</label>
+                                <select name="DropdownSkin" class="form-control" [(ngModel)]="settings.header.dropdownSkin">
+                                    <option value="light">{{l("UiCustomization_Light")}}</option>
+                                    <option value="dark">{{l("UiCustomization_Dark")}}</option>
+                                </select>
+                            </div>
+                            <h5>{{l('UiCustomization_Desktop')}}</h5>
+                            <div class="form-group m-form__group">
+                                <label class="m-checkbox col-lg-12">
+                                    <input type="checkbox" name="DesktopFixedHeader" [(ngModel)]="settings.header.desktopFixedHeader">
+                                    {{l("UiCustomization_DesktopFixedHeader")}}
+                                    <span></span>
+                                </label>
+                            </div>
+                            <div class="form-group m-form__group">
+                                <label>{{l("UiCustomization_DesktopMinimizeMode")}}</label>
+                                <select name="DesktopMinimizeMode" class="form-control" [(ngModel)]="settings.header.desktopMinimizeMode">
+                                    <option value="">{{l("UiCustomization_None")}}</option>
+                                    <option value="hide">{{l("UiCustomization_Hide")}}</option>
+                                </select>
+                            </div>
+                            <div class="form-group m-form__group">
+                                <label>{{l("UiCustomization_DropdownSkinDesktop")}}</label>
+                                <select name="DropdownSkinDesktop" class="form-control" [(ngModel)]="settings.header.dropdownSkinDesktop">
+                                    <option value="light">{{l("UiCustomization_Light")}}</option>
+                                    <option value="dark">{{l("UiCustomization_Dark")}}</option>
+                                </select>
+                            </div>
+                            <div class="form-group m-form__group">
+                                <label class="m-checkbox col-lg-12">
+                                    <input type="checkbox" name="DisplaySubmenuArrowDesktop" [(ngModel)]="settings.header.displaySubmenuArrowDesktop">
+                                    {{l("UiCustomization_DisplaySubmenuArrowDesktop")}}
+                                    <span></span>
+                                </label>
+                            </div>
+
+                            <h5>{{l('UiCustomization_Mobile')}}</h5>
+                            <div class="form-group m-form__group">
+                                <label class="m-checkbox col-lg-12">
+                                    <input type="checkbox" name="MobileFixedHeader" [(ngModel)]="settings.header.mobileFixedHeader">
+                                    {{l("UiCustomization_MobileFixedHeader")}}
+                                    <span></span>
+                                </label>
+                            </div>
+                        </form>
+                    </tab>
+                    <tab heading="{{l('UiCustomization_Menu')}}" customClass="m-tabs__item">
+                        <form id="MenuSettingsForm">
+                            <div class="form-group m-form__group">
+                                <label>{{l("UiCustomization_MenuPosition")}}</label>
+                                <select name="Position" class="form-control" [(ngModel)]="settings.menu.position">
+                                    <option value="left">{{l("UiCustomization_Left")}}</option>
+                                    <option value="top">{{l("UiCustomization_Top")}}</option>
+                                </select>
+                            </div>
+                            <div class="form-group m-form__group">
+                                <label>{{l("UiCustomization_MenuSkin")}}</label>
+                                <select name="AsideSkin" class="form-control" [(ngModel)]="settings.menu.asideSkin">
+                                    <option value="light">{{l("UiCustomization_Light")}}</option>
+                                    <option value="dark">{{l("UiCustomization_Dark")}}</option>
+                                </select>
+                            </div>
+                            <div class="form-group m-form__group" *ngIf="leftMenuPositionSelected()">
+                                <label class="m-checkbox col-lg-12">
+                                    <input type="checkbox" name="FixedAside" [(ngModel)]="settings.menu.fixedAside">
+                                    {{l("UiCustomization_FixedMenu")}}
+                                    <span></span>
+                                </label>
+                            </div>
+                            <div class="form-group m-form__group" *ngIf="leftMenuPositionSelected()">
+                                <label class="m-checkbox col-lg-12">
+                                    <input type="checkbox" name="AllowAsideMinimizing" [(ngModel)]="settings.menu.allowAsideMinimizing" (ngModelChange)="allowAsideMinimizingChange($event)">
+                                    {{l("UiCustomization_AllowAsideMinimizing")}}
+                                    <span></span>
+                                </label>
+                            </div>
+                            <div class="form-group m-form__group" *ngIf="leftMenuPositionSelected()">
+                                <label class="m-checkbox col-lg-12">
+                                    <input type="checkbox" name="DefaultMinimizedAside" [(ngModel)]="settings.menu.defaultMinimizedAside" [(disabled)]="!settings.menu.allowAsideMinimizing">
+                                    {{l("UiCustomization_DefaultMinimizedAside")}}
+                                    <span></span>
+                                </label>
+                            </div>
+                            <div class="form-group m-form__group" *ngIf="leftMenuPositionSelected()">
+                                <label class="m-checkbox col-lg-12">
+                                    <input type="checkbox" name="AllowAsideHiding" [(ngModel)]="settings.menu.allowAsideHiding" [(disabled)]="settings.menu.allowAsideMinimizing" (ngModelChange)="allowAsideHidingChange($event)">
+                                    {{l("UiCustomization_AllowAsideHiding")}}
+                                    <span></span>
+                                </label>
+                            </div>
+                            <div class="form-group m-form__group" *ngIf="leftMenuPositionSelected()">
+                                <label class="m-checkbox col-lg-12">
+                                    <input type="checkbox" name="DefaultHiddenAside" [(ngModel)]="settings.menu.defaultHiddenAside" [(disabled)]="!settings.menu.allowAsideHiding">
+                                    {{l("UiCustomization_DefaultHiddenAside")}}
+                                    <span></span>
+                                </label>
+                            </div>
+                            <div class="form-group m-form__group" *ngIf="leftMenuPositionSelected()">
+                                <label>{{l("UiCustomization_SubmenuToggle")}}</label>
+                                <select name="SubmenuToggle" class="form-control" [(ngModel)]="settings.menu.submenuToggle">
+                                    <option value="dropdown">{{l("UiCustomization_Dropdown")}}</option>
+                                    <option value="accordion">{{l("UiCustomization_Accordion")}}</option>
+                                </select>
+                            </div>
+                            <div class="form-group m-form__group" *ngIf="leftMenuPositionSelected()">
+                                <label>{{l("UiCustomization_DropdownSubmenuSkin")}}</label>
+                                <select name="DropdownSubmenuSkin" class="form-control" [(ngModel)]="settings.menu.dropdownSubmenuSkin">
+                                    <option value="inherit">{{l("UiCustomization_Inherit")}}</option>
+                                    <option value="light">{{l("UiCustomization_Light")}}</option>
+                                    <option value="dark">{{l("UiCustomization_Dark")}}</option>
+                                </select>
+                            </div>
+                            <div class="form-group m-form__group" *ngIf="leftMenuPositionSelected()">
+                                <label class="m-checkbox col-lg-12">
+                                    <input type="checkbox" name="DropdownSubmenuArrow" [(ngModel)]="settings.menu.dropdownSubmenuArrow">
+                                    {{l("UiCustomization_DropdownSubmenuArrow")}}
+                                    <span></span>
+                                </label>
+                            </div>
+                        </form>
+                    </tab>
+                    <tab heading="{{l('UiCustomization_Footer')}}" customClass="m-tabs__item">
+                        <form id="FooterSettingsForm">
+                            <div class="form-group m-form__group">
+                                <label class="m-checkbox col-lg-12">
+                                    <input type="checkbox" name="FixedFooter" [(ngModel)]="settings.footer.fixedFooter">
+                                    {{l("UiCustomization_FixedFooter")}}
+                                    <span></span>
+                                </label>
+                            </div>
+                        </form>
+                    </tab>
+                </tabset>
+            </div>
+        </div>
+    </div>
+</div>

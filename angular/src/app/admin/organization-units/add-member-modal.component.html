@@ -1,0 +1,63 @@
+<div bsModal #modal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal"
+     (onShown)="shown()"
+     aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <span>{{l('SelectUsers')}}</span>
+                </h5>
+                <button type="button" class="close" (click)="close()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <form novalidate (ngSubmit)="refreshTable()" autocomplete="off">
+                    <div class="input-group margin-bottom-10">
+                        <input autoFocus [(ngModel)]="filterText" name="filterText" class="form-control" placeholder="{{l('SearchWithThreeDot')}}" type="text">
+                        <span class="input-group-btn">
+                            <button class="btn btn-primary" type="submit"><i class="flaticon-search-1"></i></button>
+                        </span>
+                    </div>
+
+                    <!--<Primeng-Datatable-Start>-->
+                    <div class="primeng-datatable-container" [busyIf]="primengDatatableHelper.isLoading">
+                        <p-dataTable #dataTable
+                                     (onLazyLoad)="getRecordsIfNeeds($event)"
+                                     [value]="primengDatatableHelper.records"
+                                     rows="{{primengDatatableHelper.defaultRecordsCountPerPage}}"
+                                     [paginator]="false"
+                                     [lazy]="true"
+                                     emptyMessage="{{l('NoData')}}"
+                                     [responsive]="primengDatatableHelper.isResponsive"
+                                     [(selection)]="selectedMembers">
+                            <p-column selectionMode="multiple" [style]="{'width':'38px'}"></p-column>
+                            <p-column field="name" header="{{l('Name')}}" [sortable]="false"></p-column>
+                        </p-dataTable>
+                        <div class="primeng-paging-container">
+                            <p-paginator rows="{{primengDatatableHelper.defaultRecordsCountPerPage}}"
+                                         #paginator
+                                         (onPageChange)="getRecordsIfNeeds($event)"
+                                         [totalRecords]="primengDatatableHelper.totalRecordsCount"
+                                         [rowsPerPageOptions]="primengDatatableHelper.predefinedRecordsCountPerPage">
+                            </p-paginator>
+                            <span class="total-records-count">
+                                {{l('TotalRecordsCount', primengDatatableHelper.totalRecordsCount)}}
+                            </span>
+                        </div>
+                    </div>
+                    <!--<Primeng-Datatable-End>-->
+                </form>
+
+            </div>
+            
+            <div class="modal-footer">
+                <button [disabled]="saving" type="button" class="btn btn-secondary" (click)="close()">{{l("Cancel")}}</button>
+                <button class="btn btn-primary" (click)="addUsersToOrganizationUnit()" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+            </div>
+
+        </div>
+    </div>
+</div>

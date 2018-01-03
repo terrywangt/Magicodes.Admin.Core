@@ -1,0 +1,71 @@
+<div bsModal #loginAttemptsModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <span>{{l("LoginAttempts")}}</span>
+                </h5>
+                <button type="button" class="close" aria-label="Close" (click)="close()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="loginAttemptsModalForm" class="form-horizontal">
+                    <div class="form-body">
+                        <div class="row">
+                            <div class="col-sm-12" *ngFor="let userLoginAttempt of userLoginAttempts">
+                                <div class="m-alert m-alert--icon m-alert--icon-solid m-alert--outline alert" [ngClass]="userLoginAttempt.result == 'Success' ? 'alert-success' : 'alert-danger'" role="alert">
+                                    <div class="m-alert__icon">
+                                        <!-- get image url -->
+                                        <img *ngIf="profilePicture && userLoginAttempt.result == 'Success'" [src]="profilePicture" class="m--img-rounded m--marginless m--img-centered" width="50" height="50"><br />
+                                        <img *ngIf="!profilePicture || userLoginAttempt.result != 'Success'" src="/assets/common/images/default-profile-picture.png" class="m--img-rounded m--marginless m--img-centered" width="50" height="50"><br />
+                                        <span></span>
+                                        <small class="label"> {{userLoginAttempt.result == "Success" ? l("Success") : l("Failed")}} </small>
+                                    </div>
+                                    <div class="m-alert__text">
+                                        <div class="row" *ngIf="userLoginAttempt.clientIpAddress">
+                                            <label class="control-label col-sm-3 text-right">{{l("IpAddress")}}</label>
+                                            <div class="col-sm-9">
+                                                <p class="form-control-static">
+                                                    {{userLoginAttempt.clientIpAddress}}
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div class="row" *ngIf="userLoginAttempt.clientName">
+                                            <label class="control-label col-sm-3 text-right">{{l("Client")}}</label>
+                                            <div class="col-sm-9">
+                                                <p class="form-control-static">
+                                                    {{userLoginAttempt.clientName}}
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div class="row" *ngIf="userLoginAttempt.browserInfo">
+                                            <label class="control-label col-sm-3 text-right">{{l("Browser")}}</label>
+                                            <div class="col-sm-9">
+                                                <p class="form-control-static">
+                                                    {{userLoginAttempt.browserInfo}}
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <label class="control-label col-sm-3 text-right">{{l("Time")}}</label>
+                                            <div class="col-sm-9">
+                                                <p class="form-control-static login-attempt-date">
+                                                    {{getLoginAttemptTime(userLoginAttempt)}}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
