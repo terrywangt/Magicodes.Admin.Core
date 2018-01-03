@@ -1,1 +1,39 @@
-<Project Sdk="Microsoft.NET.Sdk"><Import Project="..\..\common.props"></Import><PropertyGroup><TargetFramework>net461</TargetFramework><AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback><AssemblyName>Magicodes.Admin.Application</AssemblyName><PackageId>Magicodes.Admin.Application</PackageId><GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute><GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute><GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute><GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute><GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute><RootNamespace>Magicodes.Admin</RootNamespace></PropertyGroup><ItemGroup><PackageReference Include="EPPlus.Core" Version="1.5.3" /></ItemGroup><ItemGroup><Reference Include="System.Drawing" /><Reference Include="System" /><Reference Include="Microsoft.CSharp" /><Reference Include="System.Transactions" /></ItemGroup><ItemGroup><ProjectReference Include="..\Magicodes.Admin.Application.Shared\Magicodes.Admin.Application.Shared.csproj" /><ProjectReference Include="..\Magicodes.Admin.Core\Magicodes.Admin.Core.csproj" /><ProjectReference Include="..\Magicodes.Admin.EntityFrameworkCore\Magicodes.Admin.EntityFrameworkCore.csproj" /></ItemGroup><ItemGroup><Reference Include="System.Transactions" /></ItemGroup><PropertyGroup><DefineConstants>FEATURE_LDAP;FEATURE_SIGNALR</DefineConstants></PropertyGroup></Project>
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\common.props"></Import>
+  <PropertyGroup>
+    <TargetFramework>net461</TargetFramework>
+    <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
+    <AssemblyName>Magicodes.Admin.Application</AssemblyName>
+    <PackageId>Magicodes.Admin.Application</PackageId>
+    <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
+    <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <RootNamespace>Magicodes.Admin</RootNamespace>
+    <Version>5.0.0.0</Version>
+    <AssemblyVersion>5.0.0.0</AssemblyVersion>
+    <FileVersion>5.0.0.0</FileVersion>
+    <Description>Magicodes.Admin 应用服务基础核心库</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="EPPlus.Core" Version="1.5.3" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Transactions" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Magicodes.Admin.Application.Shared\Magicodes.Admin.Application.Shared.csproj" />
+    <ProjectReference Include="..\Magicodes.Admin.Core\Magicodes.Admin.Core.csproj" />
+    <ProjectReference Include="..\Magicodes.Admin.EntityFrameworkCore\Magicodes.Admin.EntityFrameworkCore.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Transactions" />
+  </ItemGroup>
+  <PropertyGroup>
+    <DefineConstants>FEATURE_LDAP;FEATURE_SIGNALR</DefineConstants>
+  </PropertyGroup>
+</Project>
