@@ -67,7 +67,7 @@ namespace Magicodes.Admin.Web.SwaggerUI
                     options.DocInclusionPredicate((docName, description) => true);
                     options.DocumentFilter<HiddenApiFilter>(configuration);
 
-                    if (configuration["SwaggerDoc:UseFullNameForSchemaId"] == null && bool.Parse(configuration["SwaggerDoc:UseFullNameForSchemaId"]))
+                    if (configuration["SwaggerDoc:UseFullNameForSchemaId"] != null && bool.Parse(configuration["SwaggerDoc:UseFullNameForSchemaId"]))
                     {
                         //使用全名作为架构id
                         options.CustomSchemaIds(p => p.FullName);
