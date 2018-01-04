@@ -29,6 +29,9 @@ using Magicodes.Admin.Web.Authentication.JwtBearer;
 using PaulMiami.AspNetCore.Mvc.Recaptcha;
 using Swashbuckle.AspNetCore.Swagger;
 using Magicodes.Admin.Web.IdentityServer;
+using Magicodes.Admin.Web.SwaggerUI;
+using System.IO;
+using Abp.PlugIns;
 #if FEATURE_SIGNALR
 using Abp.Owin;
 using Microsoft.AspNet.SignalR;
@@ -47,10 +50,12 @@ namespace Magicodes.Admin.Web.Startup
         private const string DefaultCorsPolicyName = "localhost";
 
         private readonly IConfigurationRoot _appConfiguration;
+        private readonly IHostingEnvironment _hostingEnvironment;
 
         public Startup(IHostingEnvironment env)
         {
             _appConfiguration = env.GetAppConfiguration();
+            _hostingEnvironment = env;
         }
 
         public IServiceProvider ConfigureServices(IServiceCollection services)
@@ -77,19 +82,15 @@ namespace Magicodes.Admin.Web.Startup
 
             IdentityRegistrar.Register(services);
             AuthConfigurer.Configure(services, _appConfiguration);
-            
+
             //Identity server
             if (bool.Parse(_appConfiguration["IdentityServer:IsEnabled"]))
             {
                 IdentityServerRegistrar.Register(services, _appConfiguration);
             }
 
-            //Swagger - Enable this line and the related lines in Configure method to enable swagger UI
-            services.AddSwaggerGen(options =>
-            {
-                options.SwaggerDoc("v1", new Info { Title = "Admin API", Version = "v1" });
-                options.DocInclusionPredicate((docName, description) => true);
-            });
+            //添加自定义API文档生成(支持文档配置)
+            services.AddCustomSwaggerGen(_appConfiguration, _hostingEnvironment);
 
             //Recaptcha
             services.AddRecaptcha(new RecaptchaOptions
@@ -111,6 +112,13 @@ namespace Magicodes.Admin.Web.Startup
                 options.IocManager.IocContainer.AddFacility<LoggingFacility>(
                     f => f.UseAbpLog4Net().WithConfig("log4net.config")
                 );
+
+                //设置插件目录
+                var plusPath = Path.Combine(_hostingEnvironment.WebRootPath, "PlugIns");
+                if (!Directory.Exists(plusPath))
+                    Directory.CreateDirectory(plusPath);
+
+                options.PlugInSources.AddFolder(plusPath);
             });
         }
 
@@ -126,7 +134,7 @@ namespace Magicodes.Admin.Web.Startup
 
             app.UseAuthentication();
             app.UseJwtTokenMiddleware();
-            
+
             if (bool.Parse(_appConfiguration["IdentityServer:IsEnabled"]))
             {
                 app.UseJwtTokenMiddleware("IdentityBearer");
@@ -163,13 +171,8 @@ namespace Magicodes.Admin.Web.Startup
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
 
-            // Enable middleware to serve generated Swagger as a JSON endpoint
-            app.UseSwagger();
-            // Enable middleware to serve swagger-ui assets (HTML, JS, CSS etc.)
-            app.UseSwaggerUI(options =>
-            {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Admin API V1");
-            }); //URL: /swagger
+            //启用自定义API文档(支持文档配置)
+            app.UseCustomSwaggerUI(_appConfiguration);
         }
 
 #if FEATURE_SIGNALR

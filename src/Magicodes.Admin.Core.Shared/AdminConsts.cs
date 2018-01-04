@@ -9,5 +9,7 @@
         public const bool MultiTenancyEnabled = true;
 
         public const int PaymentCacheDurationInMinutes = 30;
+
+        public const string AdminMenuName = "AdminMenus";
     }
 }

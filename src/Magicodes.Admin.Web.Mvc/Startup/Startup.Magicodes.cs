@@ -4,6 +4,7 @@ using Abp.Hangfire;
 using Abp.PlugIns;
 using Hangfire;
 using Magicodes.Admin.Authorization;
+using Magicodes.Admin.Web.SwaggerUI;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.ResponseCompression;
@@ -47,44 +48,8 @@ namespace Magicodes.Admin.Web.Startup
                 });
             }
 
-            if (bool.Parse(_appConfiguration["SwaggerDoc:IsEnabled"]))
-            {
-                //设置API文档生成
-                services.AddSwaggerGen(options =>
-                {
-                    options.DescribeAllEnumsAsStrings();
-                    options.SwaggerDoc("v1", new Info
-                    {
-                        Title = _appConfiguration["SwaggerDoc:Title"],
-                        Version = _appConfiguration["SwaggerDoc:Version"],
-                        Description = _appConfiguration["SwaggerDoc:Description"],
-                        Contact = new Contact
-                        {
-                            Name = _appConfiguration["SwaggerDoc:Contact:Name"],
-                            Email = _appConfiguration["SwaggerDoc:Contact:Email"]
-                        }
-                    });
-
-                    //遍历所有xml并加载
-                    var paths = new List<string>();
-                    var xmlFiles = new DirectoryInfo(Path.Combine(_hostingEnvironment.WebRootPath, "PlugIns")).GetFiles("*.Application.xml");
-                    foreach (var item in xmlFiles)
-                    {
-                        paths.Add(item.FullName);
-                    }
-                    var binXmlFiles = new DirectoryInfo(_hostingEnvironment.ContentRootPath).GetFiles("*.Application.xml");
-                    foreach (var item in binXmlFiles)
-                    {
-                        paths.Add(item.FullName);
-                    }
-                    foreach (var filePath in paths)
-                    {
-                        options.IncludeXmlComments(filePath);
-                    }
-                    options.DocInclusionPredicate((docName, description) => true);
-                    options.DocumentFilter<HiddenApiFilter>();
-                });
-            }
+            //添加自定义API文档生成(支持文档配置)
+            services.AddCustomSwaggerGen(_appConfiguration, _hostingEnvironment);
 
             //启用Hangfire (使用Hangfire 代替默认的 job manager)
             services.AddHangfire(config =>
@@ -101,16 +66,8 @@ namespace Magicodes.Admin.Web.Startup
                 app.UseResponseCompression();
             }
 
-            if (bool.Parse(_appConfiguration["SwaggerDoc:IsEnabled"]))
-            {
-                // Enable middleware to serve generated Swagger as a JSON endpoint
-                app.UseSwagger();
-                // Enable middleware to serve swagger-ui assets (HTML, JS, CSS etc.)
-                app.UseSwaggerUI(options =>
-                {
-                    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Admin API V1");
-                }); //URL: /swagger
-            }
+            //启用自定义API文档(支持文档配置)
+            app.UseCustomSwaggerUI(_appConfiguration);
 
             //启用Hangfire后台面板
             app.UseHangfireDashboard("/hangfire", new DashboardOptions
