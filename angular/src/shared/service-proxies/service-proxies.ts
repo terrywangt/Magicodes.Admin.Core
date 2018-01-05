@@ -13413,6 +13413,7 @@ export interface ITenantLoginInfoDto {
 }
 
 export class ApplicationInfoDto implements IApplicationInfoDto {
+    name: string;
     version: string;
     releaseDate: moment.Moment;
     features: { [key: string] : boolean; };
@@ -13428,6 +13429,7 @@ export class ApplicationInfoDto implements IApplicationInfoDto {
 
     init(data?: any) {
         if (data) {
+            this.name = data["name"];
             this.version = data["version"];
             this.releaseDate = data["releaseDate"] ? moment(data["releaseDate"].toString()) : <any>undefined;
             if (data["features"]) {
@@ -13448,6 +13450,7 @@ export class ApplicationInfoDto implements IApplicationInfoDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
         data["version"] = this.version;
         data["releaseDate"] = this.releaseDate ? this.releaseDate.toISOString() : <any>undefined;
         if (this.features) {
@@ -13462,6 +13465,7 @@ export class ApplicationInfoDto implements IApplicationInfoDto {
 }
 
 export interface IApplicationInfoDto {
+    name: string;
     version: string;
     releaseDate: moment.Moment;
     features: { [key: string] : boolean; };
@@ -16565,78 +16569,78 @@ export interface IGetLatestWebLogsOutput {
 }
 
 export enum IncomeStatisticsDateInterval {
-    _1 = 1, 
-    _2 = 2, 
-    _3 = 3, 
+    Daily = <any>"Daily", 
+    Weekly = <any>"Weekly", 
+    Monthly = <any>"Monthly", 
 }
 
 export enum IncomeStatisticsDateInterval2 {
-    _1 = 1, 
-    _2 = 2, 
-    _3 = 3, 
+    Daily = <any>"Daily", 
+    Weekly = <any>"Weekly", 
+    Monthly = <any>"Monthly", 
 }
 
 export enum State {
-    _0 = 0, 
-    _1 = 1, 
+    Unread = <any>"Unread", 
+    Read = <any>"Read", 
 }
 
 export enum SalesSummaryDatePeriod {
-    _1 = 1, 
-    _2 = 2, 
-    _3 = 3, 
+    Daily = <any>"Daily", 
+    Weekly = <any>"Weekly", 
+    Monthly = <any>"Monthly", 
 }
 
 export enum SalesSummaryDatePeriod2 {
-    _1 = 1, 
-    _2 = 2, 
-    _3 = 3, 
+    Daily = <any>"Daily", 
+    Weekly = <any>"Weekly", 
+    Monthly = <any>"Monthly", 
 }
 
 export enum DefaultTimezoneScope {
-    _1 = 1, 
-    _2 = 2, 
-    _4 = 4, 
-    _7 = 7, 
+    Application = <any>"Application", 
+    Tenant = <any>"Tenant", 
+    User = <any>"User", 
+    All = <any>"All", 
 }
 
 export enum IsTenantAvailableOutputState {
-    _1 = 1, 
-    _2 = 2, 
-    _3 = 3, 
+    Available = <any>"Available", 
+    InActive = <any>"InActive", 
+    NotFound = <any>"NotFound", 
 }
 
 export enum FriendDtoState {
-    _1 = 1, 
-    _2 = 2, 
+    Accepted = <any>"Accepted", 
+    Blocked = <any>"Blocked", 
 }
 
 export enum ChatMessageDtoSide {
-    _1 = 1, 
-    _2 = 2, 
+    Sender = <any>"Sender", 
+    Receiver = <any>"Receiver", 
 }
 
 export enum ChatMessageDtoReadState {
-    _1 = 1, 
-    _2 = 2, 
+    Unread = <any>"Unread", 
+    Read = <any>"Read", 
 }
 
 export enum ChatMessageDtoReceiverReadState {
-    _1 = 1, 
-    _2 = 2, 
+    Unread = <any>"Unread", 
+    Read = <any>"Read", 
 }
 
 export enum UserNotificationState {
-    _0 = 0, 
-    _1 = 1, 
+    Unread = <any>"Unread", 
+    Read = <any>"Read", 
 }
 
 export enum TenantNotificationSeverity {
-    _0 = 0, 
-    _1 = 1, 
-    _2 = 2, 
-    _3 = 3, 
-    _4 = 4, 
+    Info = <any>"Info", 
+    Success = <any>"Success", 
+    Warn = <any>"Warn", 
+    Error = <any>"Error", 
+    Fatal = <any>"Fatal", 
 }
 
 export class AdditionalData implements IAdditionalData {
@@ -16687,50 +16691,50 @@ export interface IAdditionalData {
 }
 
 export enum CreatePaymentDtoEditionPaymentType {
-    _0 = 0, 
-    _1 = 1, 
-    _2 = 2, 
-    _3 = 3, 
+    NewRegistration = <any>"NewRegistration", 
+    BuyNow = <any>"BuyNow", 
+    Upgrade = <any>"Upgrade", 
+    Extend = <any>"Extend", 
 }
 
 export enum CreatePaymentDtoPaymentPeriodType {
-    _30 = 30, 
-    _365 = 365, 
+    Monthly = <any>"Monthly", 
+    Annual = <any>"Annual", 
 }
 
 export enum CreatePaymentDtoSubscriptionPaymentGatewayType {
-    _1 = 1, 
+    Paypal = <any>"Paypal", 
 }
 
 export enum ExecutePaymentDtoGateway {
-    _1 = 1, 
+    Paypal = <any>"Paypal", 
 }
 
 export enum ExecutePaymentDtoEditionPaymentType {
-    _0 = 0, 
-    _1 = 1, 
-    _2 = 2, 
-    _3 = 3, 
+    NewRegistration = <any>"NewRegistration", 
+    BuyNow = <any>"BuyNow", 
+    Upgrade = <any>"Upgrade", 
+    Extend = <any>"Extend", 
 }
 
 export enum ExecutePaymentDtoPaymentPeriodType {
-    _30 = 30, 
-    _365 = 365, 
+    Monthly = <any>"Monthly", 
+    Annual = <any>"Annual", 
 }
 
 export enum TenantLoginInfoDtoPaymentPeriodType {
-    _30 = 30, 
-    _365 = 365, 
+    Monthly = <any>"Monthly", 
+    Annual = <any>"Annual", 
 }
 
 export enum RegisterTenantInputSubscriptionStartType {
-    _1 = 1, 
-    _2 = 2, 
-    _3 = 3, 
+    Free = <any>"Free", 
+    Trial = <any>"Trial", 
+    Paid = <any>"Paid", 
 }
 
 export enum RegisterTenantInputGateway {
-    _1 = 1, 
+    Paypal = <any>"Paypal", 
 }
 
 export class SwaggerException extends Error {

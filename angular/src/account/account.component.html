@@ -21,13 +21,13 @@
                 </div>
             </div>
         </div>
-        <div *ngIf="!useFullWidthLayout()" class="m-grid__item m-grid__item--fluid m-grid m-grid--center m-grid--hor m-grid__item--order-tablet-and-mobile-1 m-login__content" style="background-image: url(./assets/metronic/src/media/app/img/bg/bg-4.jpg)">
+        <div *ngIf="!useFullWidthLayout()" class="m-grid__item m-grid__item--fluid m-grid m-grid--center m-grid--hor m-grid__item--order-tablet-and-mobile-1 m-login__content" style="background-image: url(https://api.dujin.org/bing/1366.php)">
             <div class="m-grid__item m-grid__item--middle">
                 <h3 class="m-login__welcome">
-                   AspNet Zero
+                        {{appSession.application.name}}
                 </h3>
                 <p class="m-login__msg">
-                    Base solution for your next web application
+                        {{l("LoginMsg")}}
                 </p>
             </div>
         </div>

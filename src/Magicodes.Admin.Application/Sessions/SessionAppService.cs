@@ -9,20 +9,27 @@ using Microsoft.EntityFrameworkCore;
 using Magicodes.Admin.Chat.SignalR;
 using Magicodes.Admin.Editions;
 using Magicodes.Admin.Sessions.Dto;
+using Microsoft.AspNetCore.Hosting;
+using Magicodes.Admin.Configuration;
 
 namespace Magicodes.Admin.Sessions
 {
     public class SessionAppService : AdminAppServiceBase, ISessionAppService
     {
+        public IHostingEnvironment HostingEnvironment { get; set; }
+
         [DisableAuditing]
         public async Task<GetCurrentLoginInformationsOutput> GetCurrentLoginInformations()
         {
+            var configuration = HostingEnvironment.GetAppConfiguration();
+            DateTime releaseDate = configuration["CustomInfo:ReleaseDate"] != null ? Convert.ToDateTime(configuration["CustomInfo:ReleaseDate"]) : AppVersionHelper.ReleaseDate;
             var output = new GetCurrentLoginInformationsOutput
             {
                 Application = new ApplicationInfoDto
                 {
-                    Version = AppVersionHelper.Version,
-                    ReleaseDate = AppVersionHelper.ReleaseDate,
+                    Version = configuration["CustomInfo:Version"] ?? AppVersionHelper.Version,
+                    ReleaseDate = releaseDate,
+                    Name = configuration["CustomInfo:Name"] ?? "Magicodes.Admin",
                     Features = new Dictionary<string, bool>
                     {
                         {"SignalR", SignalRFeature.IsAvailable}
