@@ -9,7 +9,6 @@
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <RootNamespace>Magicodes.Admin.Web</RootNamespace>
-    <Version>5.0.0.2</Version>
     <AssemblyVersion>5.0.0.0</AssemblyVersion>
     <FileVersion>5.0.0.0</FileVersion>
     <Description>Magicodes.Admin Web基础核心库</Description>

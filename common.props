@@ -1,10 +1,11 @@
 <Project>
   <PropertyGroup>
-    <Version>5.0.0</Version>
+    <Version>5.0.0.5</Version>
   </PropertyGroup>
   <PropertyGroup>
     <RepositoryUrl>https://gitee.com/xl_wenqiang/Magicodes.Admin.Core</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
+    <Description>\n官方网址：http://xin-lai.com \n开源库地址:https://github.com/xin-lai \n博客地址：http://www.cnblogs.com/codelove/ \n交流QQ群：85318032 \n小店地址：https://shop113059108.taobao.com/ </Description>
     <Company>湖南心莱信息科技有限公司</Company>
     <Authors>雪雁</Authors>
     <PackageProjectUrl>http://www.cnblogs.com/codelove/</PackageProjectUrl>

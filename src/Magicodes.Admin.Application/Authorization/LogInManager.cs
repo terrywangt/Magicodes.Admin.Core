@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Magicodes.Admin.Authorization.Roles;
 using Magicodes.Admin.Authorization.Users;
 using Magicodes.Admin.MultiTenancy;
+using System.Threading.Tasks;
 
 namespace Magicodes.Admin.Authorization
 {
@@ -41,6 +42,11 @@ namespace Magicodes.Admin.Authorization
                   claimsPrincipalFactory)
         {
 
+        }
+
+        public async Task<AbpLoginResult<Tenant, User>> CreateLoginResultAsync(User user, Tenant tenant = null)
+        {
+            return await base.CreateLoginResultAsync(user, tenant);
         }
     }
 }
