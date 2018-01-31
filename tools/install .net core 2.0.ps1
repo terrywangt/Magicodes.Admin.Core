@@ -1,0 +1,1 @@
+./dotnet-install.ps1 -SharedRuntime -Version 2.0.4
