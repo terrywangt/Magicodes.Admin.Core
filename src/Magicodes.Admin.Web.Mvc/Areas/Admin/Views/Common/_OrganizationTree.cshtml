@@ -1,9 +1,0 @@
-﻿@using Magicodes.Admin.Web.Areas.Admin.Models.Common
-@model IOrganizationUnitsEditViewModel
-
-<div class="form-group">
-    <input id="OrganizationTreeFilter" type="text" class="form-control" placeholder="@L("SearchWithThreeDot")">
-</div>
-<div class="organization-tree">
-    @Html.Partial("~/Areas/Admin/Views/Common/_OrganizationUnitTreeItem.cshtml", new OrganizationUnitTreeItemModel(Model, null))
-</div>
