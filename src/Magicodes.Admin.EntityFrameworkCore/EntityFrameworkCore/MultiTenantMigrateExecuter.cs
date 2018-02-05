@@ -72,10 +72,10 @@ namespace Magicodes.Admin.EntityFrameworkCore
             {
                 var tenant = tenants[i];
                 Logger.Info(string.Format("租户数据库迁移已启动... ({0} / {1})", (i + 1), tenants.Count));
-                Logger.Info("Name              : " + tenant.Name);
-                Logger.Info("TenancyName       : " + tenant.TenancyName);
-                Logger.Info("Tenant Id         : " + tenant.Id);
-                Logger.Info("Connection string : " + SimpleStringCipher.Instance.Decrypt(tenant.ConnectionString));
+                Logger.Info("名称 ： " + tenant.Name);
+                Logger.Info("租户名称 ： " + tenant.TenancyName);
+                Logger.Info("租户Id ： " + tenant.Id);
+                Logger.Info("连接字符串 ： " + SimpleStringCipher.Instance.Decrypt(tenant.ConnectionString));
 
                 if (!migratedDatabases.Contains(tenant.ConnectionString))
                 {
