@@ -1,10 +1,13 @@
-﻿using Abp.EntityFrameworkCore.Configuration;
+﻿using Abp.Dependency;
+using Abp.EntityFrameworkCore.Configuration;
 using Abp.IdentityServer4;
 using Abp.Modules;
 using Abp.Reflection.Extensions;
 using Abp.Zero.EntityFrameworkCore;
 using Magicodes.Admin.Configuration;
 using Magicodes.Admin.Migrations.Seed;
+using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace Magicodes.Admin.EntityFrameworkCore
 {
@@ -48,7 +51,15 @@ namespace Magicodes.Admin.EntityFrameworkCore
             var configurationAccessor = IocManager.Resolve<IAppConfigurationAccessor>();
             if (!SkipDbSeed && DatabaseCheckHelper.Exist(configurationAccessor.Configuration["ConnectionStrings:Default"]))
             {
+
                 SeedHelper.SeedHostDb(IocManager);
+                if (Convert.ToBoolean(configurationAccessor.Configuration["Database:AutoMigrate"] ?? "true"))
+                {
+                    using (var migrateExecuter = IocManager.ResolveAsDisposable<MultiTenantMigrateExecuter>())
+                    {
+                        migrateExecuter.Object.Run();
+                    }
+                }
             }
         }
     }
