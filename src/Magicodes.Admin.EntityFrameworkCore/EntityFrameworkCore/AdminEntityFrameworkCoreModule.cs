@@ -51,8 +51,6 @@ namespace Magicodes.Admin.EntityFrameworkCore
             var configurationAccessor = IocManager.Resolve<IAppConfigurationAccessor>();
             if (!SkipDbSeed && DatabaseCheckHelper.Exist(configurationAccessor.Configuration["ConnectionStrings:Default"]))
             {
-
-                SeedHelper.SeedHostDb(IocManager);
                 if (Convert.ToBoolean(configurationAccessor.Configuration["Database:AutoMigrate"] ?? "true"))
                 {
                     using (var migrateExecuter = IocManager.ResolveAsDisposable<MultiTenantMigrateExecuter>())
@@ -60,6 +58,7 @@ namespace Magicodes.Admin.EntityFrameworkCore
                         migrateExecuter.Object.Run();
                     }
                 }
+                SeedHelper.SeedHostDb(IocManager);
             }
         }
     }
