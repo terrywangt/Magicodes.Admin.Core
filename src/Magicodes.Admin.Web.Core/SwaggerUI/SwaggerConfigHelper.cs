@@ -55,7 +55,7 @@ namespace Magicodes.Admin.Web.SwaggerUI
                             paths.Add(item.FullName);
                         }
                     }
-                    var binXmlFiles = new DirectoryInfo(hostingEnvironment.ContentRootPath).GetFiles("*.Application.xml");
+                    var binXmlFiles = new DirectoryInfo(hostingEnvironment.ContentRootPath).GetFiles("*.Application.xml", hostingEnvironment.EnvironmentName == "Development" ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
                     foreach (var item in binXmlFiles)
                     {
                         paths.Add(item.FullName);
