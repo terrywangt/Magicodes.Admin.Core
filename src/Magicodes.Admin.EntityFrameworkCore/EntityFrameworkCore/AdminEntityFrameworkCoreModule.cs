@@ -1,5 +1,6 @@
 ﻿using Abp.Dependency;
 using Abp.EntityFrameworkCore.Configuration;
+using Abp.Extensions;
 using Abp.IdentityServer4;
 using Abp.Modules;
 using Abp.Reflection.Extensions;
@@ -51,7 +52,7 @@ namespace Magicodes.Admin.EntityFrameworkCore
             var configurationAccessor = IocManager.Resolve<IAppConfigurationAccessor>();
             if (!SkipDbSeed && DatabaseCheckHelper.Exist(configurationAccessor.Configuration["ConnectionStrings:Default"]))
             {
-                if (Convert.ToBoolean(configurationAccessor.Configuration["Database:AutoMigrate"] ?? "true"))
+                if (Convert.ToBoolean(configurationAccessor.Configuration["Database:AutoMigrate"] ?? "true") && !configurationAccessor.Configuration["ConnectionStrings:Default"].IsNullOrEmpty())
                 {
                     using (var migrateExecuter = IocManager.ResolveAsDisposable<MultiTenantMigrateExecuter>())
                     {
