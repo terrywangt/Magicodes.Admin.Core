@@ -4,9 +4,9 @@
     <TargetFramework>net461</TargetFramework>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
     <PreserveCompilationContext>true</PreserveCompilationContext>
-    <AssemblyName>Magicodes.Admin.Web.Host</AssemblyName>
+    <AssemblyName>Magicodes.Admin.App.Host</AssemblyName>
     <OutputType>Exe</OutputType>
-    <PackageId>Magicodes.Admin.Web.Host</PackageId>
+    <PackageId>Magicodes.Admin.App.Host</PackageId>
     <UserSecretsId>Magicodes-Admin-894FDFC1-6482-4A56-926A-3C46C9FE0329</UserSecretsId>
     <RootNamespace>Magicodes.Admin.Web</RootNamespace>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -34,6 +34,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Magicodes.Admin.Web.Core\Magicodes.Admin.Web.Core.csproj" />
+    <ProjectReference Include="..\Magicodes.App.Application\Magicodes.App.Application.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="2.0.1" />

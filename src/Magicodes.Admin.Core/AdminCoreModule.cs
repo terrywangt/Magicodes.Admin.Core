@@ -27,6 +27,7 @@ using Magicodes.Admin.Localization;
 using Magicodes.Admin.MultiTenancy;
 using Magicodes.Admin.MultiTenancy.Payments.Cache;
 using Magicodes.Admin.Notifications;
+using Magicodes.Admin.Identity;
 
 #if FEATURE_LDAP
 using Abp.Zero.Ldap;
@@ -101,6 +102,9 @@ namespace Magicodes.Admin
             {
                 cache.DefaultSlidingExpireTime = TimeSpan.FromMinutes(AdminConsts.PaymentCacheDurationInMinutes);
             });
+
+            //允许替换
+            IocManager.IocContainer.Register(Component.For<ISmsSender>().ImplementedBy<SmsSender>().IsFallback());
         }
 
         public override void Initialize()

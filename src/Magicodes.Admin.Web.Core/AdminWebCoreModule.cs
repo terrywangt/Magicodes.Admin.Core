@@ -59,11 +59,6 @@ namespace Magicodes.Admin.Web
             //Use database for language management
             Configuration.Modules.Zero().LanguageManagement.EnableDbLocalization();
 
-            Configuration.Modules.AbpAspNetCore()
-                .CreateControllersForAppServices(
-                    typeof(AdminApplicationModule).GetAssembly()
-                );
-
             Configuration.Caching.Configure(TwoFactorCodeCacheItem.CacheName, cache =>
             {
                 cache.DefaultAbsoluteExpireTime = TimeSpan.FromMinutes(2);
