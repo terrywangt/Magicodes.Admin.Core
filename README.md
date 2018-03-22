@@ -20,12 +20,15 @@ _注意：演示环境不一定是最新代码_
 1. [Magicodes.Admin源码基础版授权合同](Magicodes.Admin源码基础版授权合同.doc)
 2. [Magicodes.Admin源码高级版授权合同](Magicodes.Admin源码高级版授权合同.doc)
 
-# 开发文档
-1. [总体介绍](https://shimo.im/doc/hslbAFC3JvsDA7TA?r=3RQZL)
-2. [开发向导](https://shimo.im/doc/ho6czDlTpXgxgbU8?r=3RQZL)
+# 开发环境
+![开发环境要求](/documents/开发环境要求.png)
 
-# 代码生成
+# 开发文档
+即将更新
+
+# 生成服务
  高级版附送代码生成工具以及相关源代码。
+
  ## 后台前端生成
  1. 路由规则
  2. 组件注册
@@ -62,9 +65,13 @@ _注意：演示环境不一定是最新代码_
 ![Admin Web App生成](/res/2.png)
 ![后台服务生成](/res/3.png)
 
+## 接口定义生成以及单元测试和Postman文件生成
+ 已完成，即将发布
+
+## 接口文档生成与配置
+
 # 插件库
 https://gitee.com/xl_wenqiang/Admin.Plus.Libs
-插件的更新目前难以跟上框架主体更新的速度，请原谅。
 
 # 总体设计和规划（脑图）
 http://naotu.baidu.com/file/3fcc3a9e599bc3701e7c1d6f10c4d249?token=22ad815d330f7b51
