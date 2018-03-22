@@ -20,8 +20,8 @@ _注意：演示环境不一定是最新代码_
 1. [Magicodes.Admin源码基础版授权合同](Magicodes.Admin源码基础版授权合同.doc)
 2. [Magicodes.Admin源码高级版授权合同](Magicodes.Admin源码高级版授权合同.doc)
 
-# 开发环境
-![开发环境要求](/documents/开发环境要求.png)
+# 推荐开发环境
+![推荐开发环境](/documents/Magicodes.Admin推荐开发环境.png)
 
 # 开发文档
 即将更新
