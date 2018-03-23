@@ -99,11 +99,16 @@ namespace Magicodes.Admin.Web.Startup
                 SecretKey = _appConfiguration["Recaptcha:SecretKey"]
             });
 
-            //Hangfire (Enable to use Hangfire instead of default job manager)
-            //services.AddHangfire(config =>
-            //{
-            //    config.UseSqlServerStorage(_appConfiguration.GetConnectionString("Default"));
-            //});
+            //仅在后台服务启用
+            if (!_appConfiguration["Abp:Hangfire:IsEnabled"].IsNullOrEmpty() && Convert.ToBoolean(_appConfiguration["Abp:Hangfire:IsEnabled"]))
+            {
+                //使用Hangfire替代默认的任务调度
+                services.AddHangfire(config =>
+                {
+                    config.UseSqlServerStorage(_appConfiguration.GetConnectionString("Default"));
+                });
+            }
+
 
             //Configure Abp and Dependency Injection
             return services.AddAbp<AdminWebHostModule>(options =>
@@ -152,13 +157,16 @@ namespace Magicodes.Admin.Web.Startup
             //Integrate to OWIN
             app.UseAppBuilder(ConfigureOwinServices);
 #endif
-
-            //Hangfire dashboard & server (Enable to use Hangfire instead of default job manager)
-            //app.UseHangfireDashboard("/hangfire", new DashboardOptions
-            //{
-            //    Authorization = new[] { new AbpHangfireAuthorizationFilter(AppPermissions.Pages_Administration_HangfireDashboard)  }
-            //});
-            //app.UseHangfireServer();
+            //仅在后台服务启用
+            if (!_appConfiguration["Abp:Hangfire:IsEnabled"].IsNullOrEmpty() && Convert.ToBoolean(_appConfiguration["Abp:Hangfire:IsEnabled"]) && !_appConfiguration["Abp:Hangfire:DashboardEnabled"].IsNullOrEmpty() && Convert.ToBoolean(_appConfiguration["Abp:Hangfire:DashboardEnabled"]))
+            {
+                //启用Hangfire仪表盘
+                app.UseHangfireDashboard("/hangfire", new DashboardOptions
+                {
+                    Authorization = new[] { new AbpHangfireAuthorizationFilter(AppPermissions.Pages_Administration_HangfireDashboard) }
+                });
+                app.UseHangfireServer();
+            }
 
             app.UseMvc(routes =>
             {

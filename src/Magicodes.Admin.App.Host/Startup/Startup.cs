@@ -92,19 +92,6 @@ namespace Magicodes.Admin.Web.Startup
             //添加自定义API文档生成(支持文档配置)
             services.AddCustomSwaggerGen(_appConfiguration, _hostingEnvironment);
 
-            //Recaptcha
-            services.AddRecaptcha(new RecaptchaOptions
-            {
-                SiteKey = _appConfiguration["Recaptcha:SiteKey"],
-                SecretKey = _appConfiguration["Recaptcha:SecretKey"]
-            });
-
-            //Hangfire (Enable to use Hangfire instead of default job manager)
-            //services.AddHangfire(config =>
-            //{
-            //    config.UseSqlServerStorage(_appConfiguration.GetConnectionString("Default"));
-            //});
-
             //Configure Abp and Dependency Injection
             return services.AddAbp<AdminWebHostModule>(options =>
             {
@@ -152,13 +139,6 @@ namespace Magicodes.Admin.Web.Startup
             //Integrate to OWIN
             app.UseAppBuilder(ConfigureOwinServices);
 #endif
-
-            //Hangfire dashboard & server (Enable to use Hangfire instead of default job manager)
-            //app.UseHangfireDashboard("/hangfire", new DashboardOptions
-            //{
-            //    Authorization = new[] { new AbpHangfireAuthorizationFilter(AppPermissions.Pages_Administration_HangfireDashboard)  }
-            //});
-            //app.UseHangfireServer();
 
             app.UseMvc(routes =>
             {
