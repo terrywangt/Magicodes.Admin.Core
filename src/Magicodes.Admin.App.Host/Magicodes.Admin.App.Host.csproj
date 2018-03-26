@@ -37,6 +37,7 @@
     <ProjectReference Include="..\Magicodes.App.Application\Magicodes.App.Application.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Magicodes.SwaggerUI" Version="1.0.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="2.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics" Version="2.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.0.3" />
