@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\..\common.props"></Import>
   <PropertyGroup>
-    <TargetFramework>net461</TargetFramework>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
     <AssemblyName>Magicodes.Admin.Core</AssemblyName>
     <PackageId>Magicodes.Admin.Core</PackageId>
@@ -12,31 +12,26 @@
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <UserSecretsId>Magicodes-Admin-894FDFC1-6482-4A56-926A-3C46C9FE0329</UserSecretsId>
     <RootNamespace>Magicodes.Admin</RootNamespace>
-    <AssemblyVersion>5.0.0.0</AssemblyVersion>
-    <FileVersion>5.0.0.0</FileVersion>
-    <Description>Magicodes.Admin 基础核心库</Description>
   </PropertyGroup>
   <ItemGroup>
     <EmbeddedResource Include="Localization\Admin\*.xml;Emailing\EmailTemplates\default.html" Exclude="bin\**;obj\**;**\*.xproj;packages\**;@(EmbeddedResource)" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="2.0.0" />
-    <PackageReference Include="Abp.ZeroCore.IdentityServer4.EntityFrameworkCore" Version="3.3.0" />
-    <PackageReference Include="Abp.AutoMapper" Version="3.3.0" />
-    <PackageReference Include="Abp.MailKit" Version="3.3.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="2.0.1" />
     <PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="3.3.0" />
-    <PackageReference Include="Abp.AspNetZeroCore" Version="1.0.14" />
-    <PackageReference Include="TimeZoneConverter" Version="2.2.1" />
+    <PackageReference Include="TimeZoneConverter" Version="2.3.1" />
+    <PackageReference Include="Abp.AspNetZeroCore" Version="1.1.1" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Transactions" />
-    <PackageReference Include="Abp.Zero.Ldap" Version="3.3.0" />
+    <PackageReference Include="Abp.ZeroCore.IdentityServer4.EntityFrameworkCore" Version="3.5.0" />
+    <PackageReference Include="Abp.AutoMapper" Version="3.5.0" />
+    <PackageReference Include="Abp.MailKit" Version="3.5.0" />
+    <PackageReference Include="Abp.Zero.Ldap" Version="3.5.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="System.ComponentModel.Annotations" Version="4.4.1" />
   </ItemGroup>
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.Extensions.SecretManager.Tools" Version="2.0.0" />
@@ -44,7 +39,4 @@
   <ItemGroup>
     <ProjectReference Include="..\Magicodes.Admin.Core.Shared\Magicodes.Admin.Core.Shared.csproj" />
   </ItemGroup>
-  <PropertyGroup>
-    <DefineConstants>FEATURE_LDAP;FEATURE_SIGNALR</DefineConstants>
-  </PropertyGroup>
 </Project>

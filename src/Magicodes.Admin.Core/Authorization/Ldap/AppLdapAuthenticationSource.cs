@@ -1,5 +1,4 @@
-﻿#if FEATURE_LDAP
-using Abp.Zero.Ldap.Authentication;
+﻿using Abp.Zero.Ldap.Authentication;
 using Abp.Zero.Ldap.Configuration;
 using Magicodes.Admin.Authorization.Users;
 using Magicodes.Admin.MultiTenancy;
@@ -14,4 +13,3 @@ namespace Magicodes.Admin.Authorization.Ldap
         }
     }
 }
-#endif

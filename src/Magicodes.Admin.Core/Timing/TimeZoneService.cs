@@ -6,6 +6,7 @@ using Abp.Application.Services.Dto;
 using Abp.Configuration;
 using Abp.Dependency;
 using Abp.Timing;
+using Abp.Timing.Timezone;
 using TimeZoneConverter;
 
 namespace Magicodes.Admin.Timing
@@ -49,10 +50,14 @@ namespace Magicodes.Admin.Timing
             throw new Exception("Unknown scope for default timezone setting.");
         }
 
+        public TimeZoneInfo FindTimeZoneById(string timezoneId)
+        {
+            return TZConvert.GetTimeZoneInfo(timezoneId);
+        }
+
         public List<NameValueDto> GetWindowsTimezones()
         {
-            return TZConvert.KnownWindowsTimeZoneIds.Select(TZConvert.GetTimeZoneInfo)
-                .OrderBy(tz => tz.BaseUtcOffset)
+            return TimezoneHelper.GetWindowsTimeZoneInfos().OrderBy(tz => tz.BaseUtcOffset)
                 .Select(tz => new NameValueDto
                 {
                     Value = tz.Id,

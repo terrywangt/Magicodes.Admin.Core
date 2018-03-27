@@ -15,7 +15,6 @@ namespace Magicodes.Admin.Configuration
         public static class UiManagement
         {
             public const string LayoutType = "App.UiManagement.LayoutType";
-            public const string PageLoader = "App.UiManagement.PageLoader";
             public const string ContentSkin = "App.UiManagement.ContentSkin";
 
             public static class Header

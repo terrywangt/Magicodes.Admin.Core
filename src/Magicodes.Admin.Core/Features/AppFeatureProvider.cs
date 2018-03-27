@@ -23,6 +23,9 @@ namespace Magicodes.Admin.Features
 
             #region ######## Example Features - You can delete them #########
 
+            context.Create("TestTenantScopeFeature", "false", L("TestTenantScopeFeature"), scope: FeatureScopes.Tenant);
+            context.Create("TestEditionScopeFeature", "false", L("TestEditionScopeFeature"), scope: FeatureScopes.Edition);
+
             context.Create(
                 AppFeatures.TestCheckFeature,
                 defaultValue: "false",

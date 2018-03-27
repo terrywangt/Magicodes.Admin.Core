@@ -695,7 +695,6 @@
     <text name="UiCustomization_LayoutType">نوع التصميم</text>
     <text name="UiCustomization_Fluid">سلس</text>
     <text name="UiCustomization_Boxed">مربع</text>
-    <text name="UiCustomization_PageLoader">محمّل الصفحة</text>
     <text name="UiCustomization_Disabled">معطّل</text>
     <text name="UiCustomization_Default">إفتراضي</text>
     <text name="UiCustomization_SpinnerMessage">رسالة المحمّل</text>
@@ -761,5 +760,9 @@
     <text name="UiCustomization_Desktop">كمبيوتر</text>
     <text name="TwoFactorLoginIsNotSupported">لا يتم اعتماد تسجيل دخول العاملين حاليا!</text>
     <text name="LinkToCurrentPage">رابط الصفحة الحالية</text>
+    <text name="ThisFieldIsRequired">هذه الخانة مطلوبه.</text>
+    <text name="PleaseEnterAtLeastNCharacter">الرجاء إدخال {0} حرفا على الأقل.</text>
+    <text name="PleaseEnterNoMoreThanNCharacter">الرجاء إدخال أكثر من {0} حرفا.</text>
+    <text name="SelectTwoFactorProvider">اختر مزود التوثيق ذو العاملين</text>
   </texts>
 </localizationDictionary>

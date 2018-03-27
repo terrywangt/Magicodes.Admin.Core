@@ -7,7 +7,7 @@ namespace Magicodes.Admin.Authorization.Impersonation
     {
         Task<UserAndIdentity> GetImpersonatedUserAndIdentity(string impersonationToken);
 
-        Task<string> GetImpoersonateToken(long userId, int? tenantId);
+        Task<string> GetImpersonationToken(long userId, int? tenantId);
 
         Task<string> GetBackToImpersonatorToken();
     }

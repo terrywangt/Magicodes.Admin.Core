@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reflection;
 using Abp.AspNetZeroCore;
 using Abp.AspNetZeroCore.Timing;
 using Abp.AutoMapper;
@@ -13,7 +12,10 @@ using Abp.MailKit;
 using Abp.Net.Mail.Smtp;
 using Abp.Zero;
 using Abp.Zero.Configuration;
+using Abp.Zero.Ldap;
+using Abp.Zero.Ldap.Configuration;
 using Castle.MicroKernel.Registration;
+using Magicodes.Admin.Authorization.Ldap;
 using Magicodes.Admin.Authorization.Roles;
 using Magicodes.Admin.Authorization.Users;
 using Magicodes.Admin.Chat;
@@ -27,19 +29,12 @@ using Magicodes.Admin.Localization;
 using Magicodes.Admin.MultiTenancy;
 using Magicodes.Admin.MultiTenancy.Payments.Cache;
 using Magicodes.Admin.Notifications;
-using Magicodes.Admin.Identity;
-
-#if FEATURE_LDAP
-using Abp.Zero.Ldap;
-#endif
 
 namespace Magicodes.Admin
 {
     [DependsOn(
         typeof(AbpZeroCoreModule),
-#if FEATURE_LDAP
         typeof(AbpZeroLdapModule),
-#endif
         typeof(AbpAutoMapperModule),
         typeof(AbpAspNetZeroCoreModule),
         typeof(AbpMailKitModule))]
@@ -102,7 +97,6 @@ namespace Magicodes.Admin
             {
                 cache.DefaultSlidingExpireTime = TimeSpan.FromMinutes(AdminConsts.PaymentCacheDurationInMinutes);
             });
-
             //允许替换
             IocManager.IocContainer.Register(Component.For<ISmsSender>().ImplementedBy<SmsSender>().IsFallback());
         }

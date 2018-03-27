@@ -64,7 +64,7 @@ namespace Magicodes.Admin.Authorization.Impersonation
             return new UserAndIdentity(user, identity);
         }
 
-        public Task<string> GetImpoersonateToken(long userId, int? tenantId)
+        public Task<string> GetImpersonationToken(long userId, int? tenantId)
         {
             if (AbpSession.ImpersonatorUserId.HasValue)
             {

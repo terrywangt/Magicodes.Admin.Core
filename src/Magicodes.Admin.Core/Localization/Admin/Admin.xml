@@ -157,7 +157,7 @@
     <text name="TenantInformations" value="Tenant informations" />
     <text name="PersonalInformations" value="Personal information" />
     <text name="AccountSettings" value="Account settings" />
-    <text name="Captha_Hint" value="Please proof that you are not a robot" />
+    <text name="Captha_Hint" value="Please prove that you are not a robot" />
     <text name="Back" value="Back" />
     <text name="Submit" value="Submit" />
     <text name="SignUp" value="Sign up" />
@@ -695,7 +695,6 @@
     <text name="UiCustomization_LayoutType">Layout type</text>
     <text name="UiCustomization_Fluid">Fluid</text>
     <text name="UiCustomization_Boxed">Boxed</text>
-    <text name="UiCustomization_PageLoader">Page loader</text>
     <text name="UiCustomization_Disabled">Disabled</text>
     <text name="UiCustomization_Default">Default</text>
     <text name="UiCustomization_SpinnerMessage">Spinner message</text>
@@ -761,5 +760,11 @@
     <text name="UiCustomization_Desktop">Desktop</text>
     <text name="TwoFactorLoginIsNotSupported">Two factor login is not currenlty supported!</text>
     <text name="LinkToCurrentPage">Link to current page</text>
+    <text name="ThisFieldIsRequired">This field is required.</text>
+    <text name="PleaseEnterAtLeastNCharacter">Please enter at least {0} characters.</text>
+    <text name="PleaseEnterNoMoreThanNCharacter">Please enter no more than {0} characters.</text>
+    <text name="SelectTwoFactorProvider">Select two factor authentication provider</text>
+    <text name="InvoiceInfoIsMissingOrNotCompleted">Invoice info is missing or not completed</text>
+    <text name="InvoiceTo">Invoice to</text>
   </texts>
 </localizationDictionary>

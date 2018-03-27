@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using Abp.Dependency;
 using Abp.Extensions;
 using Abp.IO.Extensions;
@@ -23,6 +24,8 @@ namespace Magicodes.Admin.Emailing
             {
                 var bytes = stream.GetAllBytes();
                 var template = Encoding.UTF8.GetString(bytes, 3, bytes.Length - 3);
+                //TODO:支持公司名称配置
+                template = template.Replace("{THIS_YEAR}",DateTime.Now.Year.ToString());
                 return template.Replace("{EMAIL_LOGO_URL}", GetTenantLogoUrl(tenantId));
             }
         }
