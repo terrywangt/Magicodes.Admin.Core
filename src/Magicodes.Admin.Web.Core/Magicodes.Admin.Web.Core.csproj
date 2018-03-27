@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\..\common.props"></Import>
   <PropertyGroup>
-    <TargetFramework>net461</TargetFramework>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
     <AssemblyName>Magicodes.Admin.Web.Core</AssemblyName>
     <PackageId>Magicodes.Admin.Web.Core</PackageId>
@@ -9,41 +9,28 @@
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <RootNamespace>Magicodes.Admin.Web</RootNamespace>
-    <AssemblyVersion>5.0.0.0</AssemblyVersion>
-    <FileVersion>5.0.0.0</FileVersion>
-    <Description>Magicodes.Admin Web基础核心库</Description>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Magicodes.Admin.Application\Magicodes.Admin.Application.csproj" />
     <ProjectReference Include="..\Magicodes.Admin.EntityFrameworkCore\Magicodes.Admin.EntityFrameworkCore.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Abp.AspNetZeroCore.Web" Version="1.0.14" />
-    <PackageReference Include="Abp.ZeroCore.IdentityServer4" Version="3.3.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="2.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="2.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="2.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="2.0.1" />
+    <PackageReference Include="Abp.AspNetZeroCore.Web" Version="1.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="2.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="2.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="2.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="2.0.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="2.3.0" />
     <PackageReference Include="Hangfire.SqlServer" Version="1.6.17" />
     <PackageReference Include="PaulMiami.AspNetCore.Mvc.Recaptcha" Version="1.2.1" />
     <PackageReference Include="System.ValueTuple" Version="4.4.0" />
-    <PackageReference Include="Abp.AspNetCore" Version="3.4.0" />
-    <PackageReference Include="Abp.HangFire.AspNetCore" Version="3.3.0" />
-    <PackageReference Include="Abp.RedisCache" Version="3.3.0" />
     <PackageReference Include="System.Net.Http" Version="4.3.3" />
-    <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="2.1.0" />
+    <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="2.4.0" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Abp.Owin" Version="3.3.0" />
-    <PackageReference Include="Abp.Web.SignalR" Version="3.3.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Owin" Version="2.0.1" />
+    <PackageReference Include="Abp.ZeroCore.IdentityServer4" Version="3.5.0" />
+    <PackageReference Include="Abp.AspNetCore" Version="3.5.0" />
+    <PackageReference Include="Abp.HangFire.AspNetCore" Version="3.5.0" />
+    <PackageReference Include="Abp.RedisCache" Version="3.5.0" />
   </ItemGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="Microsoft.CSharp" />
-  </ItemGroup>
-  <PropertyGroup>
-    <DefineConstants>NET461;FEATURE_LDAP;FEATURE_SIGNALR</DefineConstants>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-  </PropertyGroup>
 </Project>
