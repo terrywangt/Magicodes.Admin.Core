@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Abp;
 using Abp.Auditing;
 using Abp.Authorization;
-using Abp.Configuration;
 using Abp.Domain.Uow;
 using Abp.Localization;
 using Abp.Net.Mail;
@@ -73,14 +72,11 @@ namespace Magicodes.Admin.Install
         public AppSettingsJsonDto GetAppSettingsJson()
         {
             var appsettingsjson = JObject.Parse(File.ReadAllText("appsettings.json"));
-
-            var connectionStrings = (JObject)appsettingsjson["ConnectionStrings"];
             var appUrl = (JObject)appsettingsjson["App"];
 
             if (appUrl.Property("WebSiteRootAddress").IsNullOrEmpty())
                 return new AppSettingsJsonDto
                 {
-                    ConnectionString = connectionStrings.Property("Default").Value.ToString(),
                     WebSiteUrl = appUrl.Property("ClientRootAddress").Value.ToString(),
                     ServerSiteUrl = appUrl.Property("ServerRootAddress").Value.ToString(),
                     Languages = DefaultLanguagesCreator.InitialLanguages.Select(l => new NameValue(l.DisplayName, l.Name)).ToList()
@@ -88,7 +84,6 @@ namespace Magicodes.Admin.Install
 
             return new AppSettingsJsonDto
             {
-                ConnectionString = connectionStrings.Property("Default").Value.ToString(),
                 WebSiteUrl = appUrl.Property("WebSiteRootAddress").Value.ToString()
             };
         }
@@ -103,13 +98,21 @@ namespace Magicodes.Admin.Install
 
         private bool CheckDatabaseInternal()
         {
-            var connectionString = GetAppSettingsJson().ConnectionString;
+            var connectionString = GetConnectionString();
+
             if (string.IsNullOrEmpty(connectionString))
             {
                 return false;
             }
 
-            return DatabaseCheckHelper.Exist(GetAppSettingsJson().ConnectionString);
+            return DatabaseCheckHelper.Exist(connectionString);
+        }
+
+        private string GetConnectionString()
+        {
+            var appsettingsjson = JObject.Parse(File.ReadAllText("appsettings.json"));
+            var connectionStrings = (JObject)appsettingsjson["ConnectionStrings"];
+            return connectionStrings.Property(AdminConsts.ConnectionStringName).Value.ToString();
         }
 
         private void SetConnectionString(string constring)

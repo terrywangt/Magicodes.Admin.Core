@@ -45,9 +45,9 @@ namespace Magicodes.Admin.Tenants.Dashboard
             return new GetSalesSummaryOutput(DashboardRandomDataGenerator.GenerateSalesSummaryData(input.SalesSummaryDatePeriod));
         }
 
-        public GetWorldMapOutput GetWorldMap(GetWorldMapInput input)
+        public GetRegionalStatsOutput GetRegionalStats(GetRegionalStatsInput input)
         {
-            return new GetWorldMapOutput(DashboardRandomDataGenerator.GenerateWorldMapCountries());
+            return new GetRegionalStatsOutput(DashboardRandomDataGenerator.GenerateRegionalStat());
         }
 
         public GetGeneralStatsOutput GetGeneralStats(GetGeneralStatsInput input)

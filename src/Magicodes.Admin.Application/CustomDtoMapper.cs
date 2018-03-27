@@ -67,7 +67,7 @@ namespace Magicodes.Admin
             configuration.CreateMap<UserRole, UserListRoleDto>();
 
             //Edition
-            configuration.CreateMap<EditionEditDto, SubscribableEdition>();
+            configuration.CreateMap<EditionEditDto, SubscribableEdition>().ReverseMap();
             configuration.CreateMap<EditionSelectDto, SubscribableEdition>().ReverseMap();
             configuration.CreateMap<SubscribableEdition, EditionInfoDto>();
 

@@ -25,8 +25,7 @@ namespace Magicodes.Admin.Common
 
         public async Task<ListResultDto<SubscribableEditionComboboxItemDto>> GetEditionsForCombobox(bool onlyFreeItems = false)
         {
-            var editions = await _editionManager.Editions.ToListAsync();
-            var subscribableEditions = ObjectMapper.Map<List<SubscribableEdition>>(editions)
+            var subscribableEditions = (await _editionManager.Editions.Cast<SubscribableEdition>().ToListAsync())
                 .WhereIf(onlyFreeItems, e => e.IsFree)
                 .OrderBy(e => e.MonthlyPrice);
 

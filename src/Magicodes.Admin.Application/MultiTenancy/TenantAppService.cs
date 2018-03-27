@@ -3,6 +3,7 @@ using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using Abp;
+using Abp.Application.Features;
 using Abp.Application.Services.Dto;
 using Abp.Authorization;
 using Abp.Authorization.Users;
@@ -37,7 +38,7 @@ namespace Magicodes.Admin.MultiTenancy
                 .WhereIf(input.CreationDateEnd.HasValue, t => t.CreationTime <= input.CreationDateEnd.Value)
                 .WhereIf(input.SubscriptionEndDateStart.HasValue, t => t.SubscriptionEndDateUtc >= input.SubscriptionEndDateStart.Value.ToUniversalTime())
                 .WhereIf(input.SubscriptionEndDateEnd.HasValue, t => t.SubscriptionEndDateUtc <= input.SubscriptionEndDateEnd.Value.ToUniversalTime())
-                .WhereIf(input.EditionIdSpecified, t=> t.EditionId == input.EditionId);
+                .WhereIf(input.EditionIdSpecified, t => t.EditionId == input.EditionId);
 
             var tenantCount = await query.CountAsync();
             var tenants = await query.OrderBy(input.Sorting).PageBy(input).ToListAsync();
@@ -98,7 +99,8 @@ namespace Magicodes.Admin.MultiTenancy
         [AbpAuthorize(AppPermissions.Pages_Tenants_ChangeFeatures)]
         public async Task<GetTenantFeaturesEditOutput> GetTenantFeaturesForEdit(EntityDto input)
         {
-            var features = FeatureManager.GetAll();
+            var features = FeatureManager.GetAll()
+                .Where(f => f.Scope.HasFlag(FeatureScopes.Tenant));
             var featureValues = await TenantManager.GetFeatureValuesAsync(input.Id);
 
             return new GetTenantFeaturesEditOutput

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Abp;
 using Abp.Application.Editions;
+using Abp.Application.Features;
 using Abp.Application.Services.Dto;
 using Abp.Authorization;
 using Abp.Collections.Extensions;
@@ -40,7 +41,8 @@ namespace Magicodes.Admin.Editions
         [AbpAuthorize(AppPermissions.Pages_Editions_Create, AppPermissions.Pages_Editions_Edit)]
         public async Task<GetEditionEditOutput> GetEditionForEdit(NullableIdDto input)
         {
-            var features = FeatureManager.GetAll();
+            var features = FeatureManager.GetAll()
+                .Where(f=>f.Scope.HasFlag(FeatureScopes.Edition));
 
             EditionEditDto editionEditDto;
             List<NameValue> featureValues;

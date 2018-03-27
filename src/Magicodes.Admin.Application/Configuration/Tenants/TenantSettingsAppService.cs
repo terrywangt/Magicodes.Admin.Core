@@ -9,15 +9,13 @@ using Abp.Runtime.Security;
 using Abp.Runtime.Session;
 using Abp.Timing;
 using Abp.Zero.Configuration;
+using Abp.Zero.Ldap.Configuration;
 using Magicodes.Admin.Authorization;
 using Magicodes.Admin.Configuration.Host.Dto;
 using Magicodes.Admin.Configuration.Tenants.Dto;
 using Magicodes.Admin.Security;
 using Magicodes.Admin.Storage;
 using Magicodes.Admin.Timing;
-#if FEATURE_LDAP
-using Abp.Zero.Ldap.Configuration;
-#endif
 
 namespace Magicodes.Admin.Configuration.Tenants
 {
@@ -27,24 +25,17 @@ namespace Magicodes.Admin.Configuration.Tenants
         private readonly IMultiTenancyConfig _multiTenancyConfig;
         private readonly ITimeZoneService _timeZoneService;
         private readonly IBinaryObjectManager _binaryObjectManager;
-
-#if FEATURE_LDAP
         private readonly IAbpZeroLdapModuleConfig _ldapModuleConfig;
-#endif
 
         public TenantSettingsAppService(
-#if FEATURE_LDAP
             IAbpZeroLdapModuleConfig ldapModuleConfig,
-#endif
             IMultiTenancyConfig multiTenancyConfig,
             ITimeZoneService timeZoneService,
             IEmailSender emailSender,
             IBinaryObjectManager binaryObjectManager) : base(emailSender)
         {
             _multiTenancyConfig = multiTenancyConfig;
-#if FEATURE_LDAP
             _ldapModuleConfig = ldapModuleConfig;
-#endif
             _timeZoneService = timeZoneService;
             _binaryObjectManager = binaryObjectManager;
         }
@@ -69,7 +60,6 @@ namespace Magicodes.Admin.Configuration.Tenants
             {
                 settings.Email = await GetEmailSettingsAsync();
 
-#if FEATURE_LDAP
                 if (_ldapModuleConfig.IsEnabled)
                 {
                     settings.Ldap = await GetLdapSettingsAsync();
@@ -78,17 +68,11 @@ namespace Magicodes.Admin.Configuration.Tenants
                 {
                     settings.Ldap = new LdapSettingsEditDto { IsModuleEnabled = false };
                 }
-#else
-                settings.Ldap = new LdapSettingsEditDto { IsModuleEnabled = false };
-#endif
             }
 
             return settings;
         }
 
-
-
-#if FEATURE_LDAP
         private async Task<LdapSettingsEditDto> GetLdapSettingsAsync()
         {
             return new LdapSettingsEditDto
@@ -100,7 +84,6 @@ namespace Magicodes.Admin.Configuration.Tenants
                 Password = await SettingManager.GetSettingValueAsync(LdapSettingNames.Password),
             };
         }
-#endif
 
         private async Task<EmailSettingsEditDto> GetEmailSettingsAsync()
         {
@@ -264,12 +247,10 @@ namespace Magicodes.Admin.Configuration.Tenants
 
                 await UpdateEmailSettingsAsync(input.Email);
 
-#if FEATURE_LDAP
                 if (_ldapModuleConfig.IsEnabled)
                 {
                     await UpdateLdapSettingsAsync(input.Ldap);
                 }
-#endif
             }
         }
 
@@ -281,7 +262,6 @@ namespace Magicodes.Admin.Configuration.Tenants
 
         }
 
-#if FEATURE_LDAP
         private async Task UpdateLdapSettingsAsync(LdapSettingsEditDto input)
         {
             await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), LdapSettingNames.IsEnabled, input.IsEnabled.ToString().ToLowerInvariant());
@@ -289,7 +269,6 @@ namespace Magicodes.Admin.Configuration.Tenants
             await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), LdapSettingNames.UserName, input.UserName.IsNullOrWhiteSpace() ? null : input.UserName);
             await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), LdapSettingNames.Password, input.Password.IsNullOrWhiteSpace() ? null : input.Password);
         }
-#endif
 
         private async Task UpdateEmailSettingsAsync(EmailSettingsEditDto input)
         {

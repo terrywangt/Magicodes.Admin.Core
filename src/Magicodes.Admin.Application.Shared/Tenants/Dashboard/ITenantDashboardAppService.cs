@@ -11,7 +11,7 @@ namespace Magicodes.Admin.Tenants.Dashboard
 
         GetSalesSummaryOutput GetSalesSummary(GetSalesSummaryInput input);
 
-        GetWorldMapOutput GetWorldMap(GetWorldMapInput input);
+        GetRegionalStatsOutput GetRegionalStats(GetRegionalStatsInput input);
 
         GetGeneralStatsOutput GetGeneralStats(GetGeneralStatsInput input);
     }

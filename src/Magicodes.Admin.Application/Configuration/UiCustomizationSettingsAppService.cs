@@ -25,7 +25,6 @@ namespace Magicodes.Admin.Configuration
                 Layout = new UiCustomizationLayoutSettingsEditDto
                 {
                     LayoutType = await _settingManager.GetSettingValueAsync(AppSettings.UiManagement.LayoutType),
-                    PageLoader = await _settingManager.GetSettingValueAsync(AppSettings.UiManagement.PageLoader),
                     ContentSkin = await _settingManager.GetSettingValueAsync(AppSettings.UiManagement.ContentSkin)
                 },
                 Header = new UiCustomizationHeaderSettingsEditDto
@@ -97,7 +96,6 @@ namespace Magicodes.Admin.Configuration
                 Layout = new UiCustomizationLayoutSettingsEditDto
                 {
                     LayoutType = await _settingManager.GetSettingValueForApplicationAsync(AppSettings.UiManagement.LayoutType),
-                    PageLoader = await _settingManager.GetSettingValueForApplicationAsync(AppSettings.UiManagement.PageLoader),
                     ContentSkin = await _settingManager.GetSettingValueForApplicationAsync(AppSettings.UiManagement.ContentSkin)
                 },
                 Header = new UiCustomizationHeaderSettingsEditDto
@@ -138,7 +136,6 @@ namespace Magicodes.Admin.Configuration
                 Layout = new UiCustomizationLayoutSettingsEditDto
                 {
                     LayoutType = await _settingManager.GetSettingValueForTenantAsync(AppSettings.UiManagement.LayoutType, tenantId),
-                    PageLoader = await _settingManager.GetSettingValueForTenantAsync(AppSettings.UiManagement.PageLoader, tenantId),
                     ContentSkin = await _settingManager.GetSettingValueForTenantAsync(AppSettings.UiManagement.ContentSkin, tenantId)
                 },
                 Header = new UiCustomizationHeaderSettingsEditDto
@@ -175,7 +172,6 @@ namespace Magicodes.Admin.Configuration
             var tenantId = AbpSession.GetTenantId();
 
             await _settingManager.ChangeSettingForTenantAsync(tenantId, AppSettings.UiManagement.LayoutType, settings.Layout.LayoutType);
-            await _settingManager.ChangeSettingForTenantAsync(tenantId, AppSettings.UiManagement.PageLoader, settings.Layout.PageLoader);
             await _settingManager.ChangeSettingForTenantAsync(tenantId, AppSettings.UiManagement.ContentSkin, settings.Layout.ContentSkin);
 
             await _settingManager.ChangeSettingForTenantAsync(tenantId, AppSettings.UiManagement.Header.DesktopFixedHeader, settings.Header.DesktopFixedHeader.ToString());
@@ -202,7 +198,6 @@ namespace Magicodes.Admin.Configuration
         private async Task UpdateApplicationUiManagementSettingsAsync(UiCustomizationSettingsEditDto settings)
         {
             await _settingManager.ChangeSettingForApplicationAsync(AppSettings.UiManagement.LayoutType, settings.Layout.LayoutType);
-            await _settingManager.ChangeSettingForApplicationAsync(AppSettings.UiManagement.PageLoader, settings.Layout.PageLoader);
             await _settingManager.ChangeSettingForApplicationAsync(AppSettings.UiManagement.ContentSkin, settings.Layout.ContentSkin);
 
             await _settingManager.ChangeSettingForApplicationAsync(AppSettings.UiManagement.Header.DesktopFixedHeader, settings.Header.DesktopFixedHeader.ToString());
@@ -231,7 +226,6 @@ namespace Magicodes.Admin.Configuration
             var userIdentifier = AbpSession.ToUserIdentifier();
 
             await _settingManager.ChangeSettingForUserAsync(userIdentifier, AppSettings.UiManagement.LayoutType, settings.Layout.LayoutType);
-            await _settingManager.ChangeSettingForUserAsync(userIdentifier, AppSettings.UiManagement.PageLoader, settings.Layout.PageLoader);
             await _settingManager.ChangeSettingForUserAsync(userIdentifier, AppSettings.UiManagement.ContentSkin, settings.Layout.ContentSkin);
 
             await _settingManager.ChangeSettingForUserAsync(userIdentifier, AppSettings.UiManagement.Header.DesktopFixedHeader, settings.Header.DesktopFixedHeader.ToString());

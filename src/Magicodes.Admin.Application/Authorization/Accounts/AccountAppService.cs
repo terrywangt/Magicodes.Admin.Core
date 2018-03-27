@@ -152,7 +152,7 @@ namespace Magicodes.Admin.Authorization.Accounts
         {
             return new ImpersonateOutput
             {
-                ImpersonationToken = await _impersonationManager.GetImpoersonateToken(input.UserId, input.TenantId),
+                ImpersonationToken = await _impersonationManager.GetImpersonationToken(input.UserId, input.TenantId),
                 TenancyName = await GetTenancyNameOrNullAsync(input.TenantId)
             };
         }

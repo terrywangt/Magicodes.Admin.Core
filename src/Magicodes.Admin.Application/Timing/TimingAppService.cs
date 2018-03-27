@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Abp.Application.Services.Dto;
@@ -43,7 +42,7 @@ namespace Magicodes.Admin.Timing
         private async Task<List<NameValueDto>> GetTimezoneInfos(SettingScopes defaultTimezoneScope)
         {
             var defaultTimezoneId = await _timeZoneService.GetDefaultTimezoneAsync(defaultTimezoneScope, AbpSession.TenantId);
-            var defaultTimezone = TimeZoneInfo.FindSystemTimeZoneById(defaultTimezoneId);
+            var defaultTimezone = _timeZoneService.FindTimeZoneById(defaultTimezoneId);
             var defaultTimezoneName = $"{L("Default")} [{defaultTimezone.DisplayName}]";
 
             var timeZones = _timeZoneService.GetWindowsTimezones();

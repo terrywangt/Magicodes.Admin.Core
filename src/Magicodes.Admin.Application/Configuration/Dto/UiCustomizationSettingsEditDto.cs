@@ -15,8 +15,6 @@ namespace Magicodes.Admin.Configuration.Dto
     {
         public string LayoutType { get; set; }
 
-        public string PageLoader { get; set; }
-
         public string ContentSkin { get; set; }
     }
 

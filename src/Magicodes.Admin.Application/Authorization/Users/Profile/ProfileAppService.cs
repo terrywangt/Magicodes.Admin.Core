@@ -178,8 +178,8 @@ namespace Magicodes.Admin.Authorization.Users.Profile
             {
                 using (var bmpImage = new Bitmap(fsTempProfilePicture))
                 {
-                    var width = input.Width == 0 ? bmpImage.Width : input.Width;
-                    var height = input.Height == 0 ? bmpImage.Height : input.Height;
+                    var width = (input.Width == 0 || input.Width > bmpImage.Width) ? bmpImage.Width : input.Width;
+                    var height = (input.Height == 0 || input.Height > bmpImage.Height) ? bmpImage.Height : input.Height;
                     var bmCrop = bmpImage.Clone(new Rectangle(input.X, input.Y, width, height), bmpImage.PixelFormat);
 
                     using (var stream = new MemoryStream())

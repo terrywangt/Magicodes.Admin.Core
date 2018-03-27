@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\..\common.props"></Import>
   <PropertyGroup>
-    <TargetFramework>net461</TargetFramework>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
     <AssemblyName>Magicodes.Admin.Application</AssemblyName>
     <PackageId>Magicodes.Admin.Application</PackageId>
@@ -11,18 +11,9 @@
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <RootNamespace>Magicodes.Admin</RootNamespace>
-    <AssemblyVersion>5.0.0.0</AssemblyVersion>
-    <FileVersion>5.0.0.0</FileVersion>
-    <Description>Magicodes.Admin 应用服务基础核心库</Description>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="EPPlus.Core" Version="1.5.3" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="System.Drawing" />
-    <Reference Include="System" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Transactions" />
+    <PackageReference Include="EPPlus.Core" Version="1.5.4" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Magicodes.Admin.Application.Shared\Magicodes.Admin.Application.Shared.csproj" />
@@ -32,8 +23,4 @@
   <ItemGroup>
     <Reference Include="System.Transactions" />
   </ItemGroup>
-  <PropertyGroup>
-    <DefineConstants>FEATURE_LDAP;FEATURE_SIGNALR</DefineConstants>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-  </PropertyGroup>
 </Project>
