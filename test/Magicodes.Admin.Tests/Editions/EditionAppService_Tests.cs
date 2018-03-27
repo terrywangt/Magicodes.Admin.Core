@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Abp.Application.Services.Dto;
 using Microsoft.EntityFrameworkCore;
@@ -61,6 +62,35 @@ namespace Magicodes.Admin.Tests.Editions
                     sampleFeatureValue.Value.ShouldBe("true");
                 }
             });
+        }
+
+        [MultiTenantFact]
+        public async Task Should_Create_Subscribable_Edition()
+        {
+            var editionName = "Premium Edition";
+            var monthlyPrice = 10;
+            var annualPrice = 100;
+
+            await _editionAppService.CreateOrUpdateEdition(
+                new CreateOrUpdateEditionDto
+                {
+                    Edition = new EditionEditDto
+                    {
+                        DisplayName = editionName,
+                        MonthlyPrice = monthlyPrice,
+                        AnnualPrice = annualPrice,
+                    },
+                    FeatureValues = new List<NameValueDto>()
+                });
+
+            var editionRecord = UsingDbContext(context => context.Editions.FirstOrDefault(e => e.DisplayName == editionName));
+            var output = await _editionAppService.GetEditionForEdit(new NullableIdDto(editionRecord.Id));
+
+            var premiumEditon = output.Edition;
+            premiumEditon.ShouldNotBeNull();
+
+            premiumEditon.MonthlyPrice.ShouldBe(monthlyPrice);
+            premiumEditon.AnnualPrice.ShouldBe(annualPrice);
         }
 
         [MultiTenantFact]

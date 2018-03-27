@@ -20,7 +20,7 @@ namespace Magicodes.Admin.Web
             }
 
             var directoryInfo = new DirectoryInfo(coreAssemblyDirectoryPath);
-            while (!DirectoryContains(directoryInfo.FullName, "Magicodes.Admin.Web.sln"))
+            while (!DirectoryContains(directoryInfo.FullName, "Magicodes.Admin.Host.sln"))
             {
                 if (directoryInfo.Parent == null)
                 {
@@ -28,12 +28,6 @@ namespace Magicodes.Admin.Web
                 }
 
                 directoryInfo = directoryInfo.Parent;
-            }
-
-            var webMvcFolder = Path.Combine(directoryInfo.FullName, $"src{Path.DirectorySeparatorChar}Magicodes.Admin.Web.Mvc");
-            if (Directory.Exists(webMvcFolder))
-            {
-                return webMvcFolder;
             }
 
             var webHostFolder = Path.Combine(directoryInfo.FullName, $"src{Path.DirectorySeparatorChar}Magicodes.Admin.Web.Host");

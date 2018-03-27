@@ -1,5 +1,8 @@
-﻿using Abp;
+﻿using System;
+using Abp;
+using Abp.Dependency;
 using Abp.EntityFrameworkCore.Configuration;
+using Abp.Extensions;
 using Abp.IdentityServer4;
 using Abp.Modules;
 using Abp.Organizations;
@@ -41,7 +44,7 @@ namespace Magicodes.Admin.EntityFrameworkCore
                 });
             }
 
-            //Uncomment below line to write change logs for the entities below:
+            //取消该注释将启用组织机构、角色、租户的数据变更历史记录
             //Configuration.EntityHistory.Selectors.Add("AdminEntities", typeof(OrganizationUnit), typeof(Role), typeof(Tenant));
         }
 

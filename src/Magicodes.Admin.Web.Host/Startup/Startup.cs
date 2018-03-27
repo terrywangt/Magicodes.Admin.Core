@@ -29,9 +29,9 @@ using Magicodes.Admin.Web.Authentication.JwtBearer;
 using PaulMiami.AspNetCore.Mvc.Recaptcha;
 using Swashbuckle.AspNetCore.Swagger;
 using Magicodes.Admin.Web.IdentityServer;
-using Magicodes.Admin.Web.SwaggerUI;
 using System.IO;
 using Abp.PlugIns;
+using Magicodes.SwaggerUI;
 #if FEATURE_SIGNALR
 using Abp.Owin;
 using Microsoft.AspNet.SignalR;
