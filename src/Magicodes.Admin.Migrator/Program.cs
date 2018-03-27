@@ -4,12 +4,13 @@ using Abp.Collections.Extensions;
 using Abp.Dependency;
 using Castle.Facilities.Logging;
 using Abp.Castle.Logging.Log4Net;
+using Abp.PlugIns;
 
 namespace Magicodes.Admin.Migrator
 {
     public class Program
     {
-        private static bool _skipConnVerification = false;
+        private static bool _skipConnVerification;
 
         public static void Main(string[] args)
         {
@@ -41,14 +42,11 @@ namespace Magicodes.Admin.Migrator
                 return;
             }
 
-            for (int i = 0; i < args.Length; i++)
+            foreach (var arg in args)
             {
-                var arg = args[i];
-                switch (arg)
+                if (arg == "-s")
                 {
-                    case "-s":
-                        _skipConnVerification = true;
-                        break;
+                    _skipConnVerification = true;
                 }
             }
         }

@@ -17,7 +17,7 @@ namespace Magicodes.Admin.Migrations.Seed.Host
             var tenantId = AdminConsts.MultiTenancyEnabled ? null : (int?)1;
             return new List<ApplicationLanguage>
             {
-                new ApplicationLanguage(tenantId, "en", "English", "famfamfam-flags gb"),
+                new ApplicationLanguage(tenantId, "en", "English", "famfamfam-flags us"),
                 new ApplicationLanguage(tenantId, "ar", "العربية", "famfamfam-flags sa"),
                 new ApplicationLanguage(tenantId, "de", "Deutsch", "famfamfam-flags de"),
                 new ApplicationLanguage(tenantId, "it", "Italiano", "famfamfam-flags it"),

@@ -19,9 +19,10 @@ using System;
 namespace Magicodes.Admin.Migrations
 {
     [DbContext(typeof(AdminDbContext))]
-    partial class AdminDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180118065703_Added_Entity_History")]
+    partial class Added_Entity_History
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -399,18 +400,15 @@ namespace Magicodes.Admin.Migrations
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("LoginProvider")
-                        .HasMaxLength(64);
+                    b.Property<string>("LoginProvider");
 
-                    b.Property<string>("Name")
-                        .HasMaxLength(128);
+                    b.Property<string>("Name");
 
                     b.Property<int?>("TenantId");
 
                     b.Property<long>("UserId");
 
-                    b.Property<string>("Value")
-                        .HasMaxLength(512);
+                    b.Property<string>("Value");
 
                     b.HasKey("Id");
 
@@ -879,8 +877,7 @@ namespace Magicodes.Admin.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasMaxLength(128);
+                        .IsConcurrencyToken();
 
                     b.Property<DateTime>("CreationTime");
 
@@ -938,8 +935,7 @@ namespace Magicodes.Admin.Migrations
                         .HasMaxLength(64);
 
                     b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasMaxLength(128);
+                        .IsConcurrencyToken();
 
                     b.Property<DateTime>("CreationTime");
 
@@ -997,13 +993,11 @@ namespace Magicodes.Admin.Migrations
                     b.Property<string>("PasswordResetCode")
                         .HasMaxLength(328);
 
-                    b.Property<string>("PhoneNumber")
-                        .HasMaxLength(32);
+                    b.Property<string>("PhoneNumber");
 
                     b.Property<Guid?>("ProfilePictureId");
 
-                    b.Property<string>("SecurityStamp")
-                        .HasMaxLength(128);
+                    b.Property<string>("SecurityStamp");
 
                     b.Property<bool>("ShouldChangePasswordOnNextLogin");
 

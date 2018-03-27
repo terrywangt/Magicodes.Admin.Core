@@ -1,14 +1,14 @@
-﻿using Abp.Dependency;
+﻿using Abp;
 using Abp.EntityFrameworkCore.Configuration;
-using Abp.Extensions;
 using Abp.IdentityServer4;
 using Abp.Modules;
+using Abp.Organizations;
 using Abp.Reflection.Extensions;
 using Abp.Zero.EntityFrameworkCore;
+using Magicodes.Admin.Authorization.Roles;
 using Magicodes.Admin.Configuration;
 using Magicodes.Admin.Migrations.Seed;
-using Microsoft.EntityFrameworkCore;
-using System;
+using Magicodes.Admin.MultiTenancy;
 
 namespace Magicodes.Admin.EntityFrameworkCore
 {
@@ -40,6 +40,9 @@ namespace Magicodes.Admin.EntityFrameworkCore
                     }
                 });
             }
+
+            //Uncomment below line to write change logs for the entities below:
+            //Configuration.EntityHistory.Selectors.Add("AdminEntities", typeof(OrganizationUnit), typeof(Role), typeof(Tenant));
         }
 
         public override void Initialize()
@@ -52,6 +55,7 @@ namespace Magicodes.Admin.EntityFrameworkCore
             var configurationAccessor = IocManager.Resolve<IAppConfigurationAccessor>();
             if (!SkipDbSeed && DatabaseCheckHelper.Exist(configurationAccessor.Configuration["ConnectionStrings:Default"]))
             {
+                //系统启动时自动执行迁移
                 if (Convert.ToBoolean(configurationAccessor.Configuration["Database:AutoMigrate"] ?? "true") && !configurationAccessor.Configuration["ConnectionStrings:Default"].IsNullOrEmpty())
                 {
                     using (var migrateExecuter = IocManager.ResolveAsDisposable<MultiTenantMigrateExecuter>())

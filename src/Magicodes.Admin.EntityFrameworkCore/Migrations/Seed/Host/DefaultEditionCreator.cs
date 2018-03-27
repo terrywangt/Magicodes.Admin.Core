@@ -53,7 +53,7 @@ namespace Magicodes.Admin.Migrations.Seed.Host
                 _context.EditionFeatureSettings.Add(new EditionFeatureSetting
                 {
                     Name = featureName,
-                    Value = isEnabled.ToString(),
+                    Value = isEnabled.ToString().ToLower(),
                     EditionId = editionId
                 });
             }
