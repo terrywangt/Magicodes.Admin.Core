@@ -10,7 +10,7 @@
 			float: right;
 
 			// spinner
-			&.m-spinner-4:before {
+			&.m-loader:before {
 				right: array-get($layout, spinner, right, desktop);	
 			}
 		}
@@ -101,8 +101,8 @@
 				float: none;
 				
 				// form input spinner
-				&.m-spinner-4:before {
-					right: array-get($layout, spinner, right, mobile);	
+				&.m-loader:before {
+					//right: array-get($layout, spinner, right, mobile);	
 				}
 			}
 

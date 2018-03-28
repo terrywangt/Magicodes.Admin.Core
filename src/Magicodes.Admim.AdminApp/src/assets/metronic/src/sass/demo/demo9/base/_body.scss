@@ -1,0 +1,149 @@
+//
+//** Body
+// Page body container
+
+//== General Mode
+.m-body {	
+	.m-header--static & {
+		//height: calc(100% - #{array-get($m-config-header, header, default, height, desktop)});
+	}
+	
+	.m-content {
+		padding: array-get($m-config-base, body, content, padding, desktop, y) array-get($m-config-base, body, content, padding, desktop, x); 
+	}
+
+	.m-content--skin-light & {
+		background-color: array-get($m-config-base, body, content, bg-color, light);
+	}
+
+	.m-content--skin-light2 & {
+		background-color: array-get($m-config-base, body, content, bg-color, light2);
+	} 
+
+	//== Fix fluid flex box item hor overflow issue
+	.m-wrapper {
+		overflow: hidden;
+	}
+}
+
+body {
+	&.m-content--skin-light {
+		background-color: array-get($m-config-base, body, content, bg-color, light);
+	}
+
+	&.m-content--skin-light2 {
+		background-color: array-get($m-config-base, body, content, bg-color, light2);
+	}
+}
+
+//== Desktop Mode
+@include desktop {
+	//== Body
+	.m-body {	
+		// fixed header
+		.m-header--fixed & {	
+			@include transition(array-get($m-config-header, header, transition)); 		
+			padding-top: array-get($m-config-header, header, height, desktop, default) !important; 
+		}
+	}
+
+	//== Base container
+	.m-container {
+		&.m-container--fluid {
+			padding: array-get($m-config-base, body, container, padding, desktop, fluid);
+		}
+
+		&.m-container--responsive {
+			padding: array-get($m-config-base, body, container, padding, desktop, fixed);
+		}
+	}
+
+	//== Content wrapper
+	.m-body {	
+		.m-container {
+			padding: 0 !important;
+		}
+
+		.m-container {
+			&.m-container--fluid {
+				.m-wrapper {
+					padding: array-get($m-config-base, body, container, padding, desktop, fluid);
+				}
+			}
+
+			&.m-container--responsive {
+				.m-wrapper {
+					padding: array-get($m-config-base, body, container, padding, desktop, fixed);
+				}
+			}
+		}
+	}
+}
+
+// Minimal Desktop
+@include minimal-desktop {
+	//== Base container
+	.m-container {
+		&.m-container--fluid,
+		&.m-container--responsive {
+			padding: array-get($m-config-base, body, container, padding, minimal-desktop);
+		}
+	}
+
+	//== Content wrapper
+	.m-body {	
+		.m-container {
+			padding: 0 !important;
+		}
+
+		.m-container {
+			&.m-container--fluid,
+			&.m-container--responsive {
+				.m-wrapper {
+					padding: array-get($m-config-base, body, container, padding, minimal-desktop);
+				}
+			}
+		}
+	}
+}
+
+// Tablet & Mobile Mode
+@include tablet-and-mobile {
+	//== Body
+	.m-body {
+		// fixed header
+		.m-header--fixed-mobile & {
+			@include transition(array-get($m-config-header, header, transition));  
+			padding-top: array-get($m-config-header, header, height, mobile, default);   
+		}
+
+		// fixed and minimized header
+		.m-header--fixed-mobile.m-header--minimize & {
+			padding-top: array-get($m-config-header, header, fixed, minimize, height, mobile); 
+		}
+	}
+
+	//== Base container
+	.m-container {
+		&.m-container--fluid,
+		&.m-container--responsive {
+			padding: array-get($m-config-base, body, container, padding, mobile);
+		}
+	}
+
+	//== Content wrapper
+	.m-body {	
+		.m-container {
+			padding: 0 !important;
+		}
+
+		.m-container {
+			&.m-container--fluid,
+			&.m-container--responsive {
+				.m-wrapper {
+					padding: array-get($m-config-base, body, container, padding, mobile);
+				}
+			}
+		}
+	}
+}

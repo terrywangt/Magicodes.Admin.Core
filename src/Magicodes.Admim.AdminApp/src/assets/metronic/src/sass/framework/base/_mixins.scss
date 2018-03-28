@@ -303,10 +303,10 @@
 }
 
 //== Box Shadow
-@mixin shadow($shadow) {
-	-webkit-box-shadow: #{$shadow}; // iOS <4.3 & Android <4.1
-	-moz-box-shadow: #{$shadow};
-	box-shadow: #{$shadow};
+@mixin shadow($shadow, $important: '') {
+	-webkit-box-shadow: #{$shadow} #{$important}; // iOS <4.3 & Android <4.1
+	-moz-box-shadow: #{$shadow} #{$important};
+	box-shadow: #{$shadow} #{$important};
 }
 
 //== Attribute
@@ -339,6 +339,11 @@
     -ms-animation: #{$animation};
     -o-animation: #{$animation};
     animation: #{$animation};
+
+
+    @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+        animation: none !important;        
+    }
 }
 
 //== Animation FIll Mode
@@ -401,6 +406,13 @@ xl: 1200px
  	@media (min-width: #{map-get($m--layout-breakpoints, lg)} + 1px) and (max-width: #{map-get($m--layout-breakpoints, xl)}) {
     	@content;
   	}
+}
+
+//== Media Query - Min Desktop And Below Mode
+@mixin minimal-desktop-and-below {
+    @media (max-width: #{map-get($m--layout-breakpoints, xl)}) {
+        @content;
+    }
 }
 
 //== Media Query - Desktop Mode
@@ -590,17 +602,43 @@ xl: 1200px
 //== Close icon
 @mixin m-generate-close-icon($self:null) {
     @if $self == true {
-        @include la-icon-self('\f191');
+        @include la-icon-self( array-get($m--icon-codes, close) );
     } @else {
-        @include la-icon('\f191');
+        @include la-icon( array-get($m--icon-codes, close) );
     }
 }
 
 //== Arrow down icon
-@mixin m-generate-arrow-down-icon($self:null) {
-    @if $self == true {
-        @include la-icon-self('\f110');
-    } @else {
-        @include la-icon('\f110');
+@mixin m-generate-arrow-icon($dir, $self:null) {
+    @if $dir == down {
+        @if $self == true {
+            @include la-icon-self( array-get($m--icon-codes, down) );
+        } @else {
+            @include la-icon( array-get($m--icon-codes, down) );
+        }
+    }
+
+    @if $dir == up {
+        @if $self == true {
+            @include la-icon-self( array-get($m--icon-codes, up) );
+        } @else {
+            @include la-icon( array-get($m--icon-codes, up) );
+        }
+    }
+
+    @if $dir == left {
+        @if $self == true {
+            @include la-icon-self( array-get($m--icon-codes, left) );
+        } @else {
+            @include la-icon( array-get($m--icon-codes, left) );
+        }
+    }
+
+    @if $dir == right {
+        @if $self == true {
+            @include la-icon-self( array-get($m--icon-codes, right) );
+        } @else {
+            @include la-icon( array-get($m--icon-codes, right) );
+        }
     }
 }

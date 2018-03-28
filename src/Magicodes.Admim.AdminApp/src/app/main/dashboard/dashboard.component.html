@@ -1,4 +1,4 @@
-<div [@routerTransition]>
+<div [@routerTransition] id="TenantDashboard">
     <div class="m-subheader">
         <div class="d-flex align-items-center">
             <div class="mr-auto">
@@ -279,7 +279,43 @@
                     </div>
                     <div class="m-portlet__body">
                         <div id="region_statistics_content">
-                            <div id="worldmap" style="height: 320px"> </div>
+                            <div class="table-responsive">
+                                <!--begin::Table-->
+                                <table class="table">
+                                    <!--begin::Thead-->
+                                    <thead>
+                                        <tr>
+                                            <td class="m-widget11__label">#</td>
+                                            <td class="m-widget11__app">Country</td>
+                                            <td class="m-widget11__sales">Sales</td>
+                                            <td class="m-widget11__change">Change</td>
+                                            <td class="m-widget11__price">Avg Price</td>
+                                            <td class="m-widget11__total">Total</td>
+                                        </tr>
+                                    </thead>
+                                    <!--end::Thead-->
+                                    <!--begin::Tbody-->
+                                    <tbody>
+                                        <tr *ngFor="let stat of regionalStatsTable.stats; let index = index">
+                                            <td>
+                                                <label class="m-checkbox m-checkbox--solid m-checkbox--single m-checkbox--brand">
+                                                    <input type="checkbox"><span></span>
+                                                </label>
+                                            </td>
+                                            <td>{{stat.countryName}}</td>
+                                            <td>{{stat.sales | currency}}</td>
+                                            <td >
+                                                <div class="m-widget11__chart" style="height:50px; width: 100px">
+                                                    <iframe class="chartjs-hidden-iframe" tabindex="-1" style="display: block; overflow: hidden; border: 0px; margin: 0px; top: 0px; left: 0px; bottom: 0px; right: 0px; height: 100%; width: 100%; position: absolute; pointer-events: none; z-index: -1;"></iframe>
+                                                    <canvas class="m_chart_sales_by_region" style="display: block; width: 100px; height: 50px;" width="100" height="50"></canvas>
+                                                </div>
+                                            </td>
+                                            <td>{{stat.averagePrice | currency}}</td>
+                                            <td>{{stat.totalPrice | currency}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>

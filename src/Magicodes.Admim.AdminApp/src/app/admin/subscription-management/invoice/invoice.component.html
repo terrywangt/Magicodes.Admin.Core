@@ -1,62 +1,83 @@
 <div [@routerTransition]>
     <div class="m-content">
-        <div class="invoice-content-2">
-            <div class="row invoice-head">
-                <div class="col-md-7 col-7">
-                    <span style="font-size: 18px; color: gray; margin-right: 5px;">{{l('Invoice')}}</span> <span style="font-size: 18px; color: #000;">#{{invoiceInfo.invoiceNo}}</span><br />
-                    <span style="font-size: 18px; color: gray; margin-right: 5px;">{{l('Date')}}</span> <span style="font-size: 18px; color: #000;">{{invoiceInfo.invoiceDate | momentFormat:'YYYY-MM-DD'}}</span>
-                    <br />
-                    <br />
-                    <span class="bold uppercase">{{invoiceInfo.tenantLegalName}}</span>
-                    <span *ngFor="let addressLine of invoiceInfo.tenantAddress">
-                        <br />{{addressLine}}
-                    </span>
-                    <br />{{l("Tax/VatNo")}}: {{invoiceInfo.tenantTaxNo}}
-                </div>
-                <div class="col-md-5 col-5">
-                    <div class="company-address">
-                        <div class="invoice-logo">
-                            <img src="/assets/common/images/logo.png" class="img-responsive" alt="">
+
+        <div class="m-portlet">
+            <div class="m-portlet__body m-portlet__body--no-padding">
+
+                <div class="m-invoice-1">
+                    <div class="m-invoice__wrapper">
+                        <div class="m-invoice__head" [ngStyle]="{ 'background': 'url(' + appRootUrl() + 'assets/common/images/bg-6.jpg)', 'background-size': 'cover'}"
+                             style="background-image: url(/assets/common/images/bg-6.jpg);">
+                            <div class="m-invoice__container m-invoice__container--centered">
+                                <div class="m-invoice__logo">
+                                    <a href="#">
+                                        <h1>{{l('Invoice')}}</h1>
+                                    </a>
+                                    <a href="#">
+                                        <img [src]="companyLogo">
+                                    </a>
+                                </div>
+                                <span class="m-invoice__desc">
+                                    {{invoiceInfo.hostLegalName}}
+                                    <span *ngFor="let addressLine of invoiceInfo.hostAddress">
+                                        <br />{{addressLine}}
+                                    </span>
+                                </span>
+                                <div class="m-invoice__items">
+                                    <div class="m-invoice__item">
+                                        <span class="m-invoice__subtitle">{{l('Date')}}</span>
+                                        <span class="m-invoice__text">{{invoiceInfo.invoiceDate | momentFormat:'YYYY-MM-DD'}}</span>
+                                    </div>
+                                    <div class="m-invoice__item">
+                                        <span class="m-invoice__subtitle">{{l('Invoice')}}</span>
+                                        <span class="m-invoice__text">#{{invoiceInfo.invoiceNo}}</span>
+                                    </div>
+                                    <div class="m-invoice__item">
+                                        <span class="m-invoice__subtitle">{{l('InvoiceTo')}}</span>
+                                        <span class="m-invoice__text">
+                                            {{invoiceInfo.tenantLegalName}}
+                                            <span *ngFor="let addressLine of invoiceInfo.tenantAddress">
+                                                <br />{{addressLine}}
+                                            </span>
+                                            <br />{{l("Tax/VatNo")}}: {{invoiceInfo.tenantTaxNo}}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <span class="bold uppercase">{{invoiceInfo.hostLegalName}}</span>
-                        <span *ngFor="let addressLine of invoiceInfo.hostAddress">
-                            <br />{{addressLine}}
-                        </span>
+                        <div class="m-invoice__body m-invoice__body--centered">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th style="width: 50px;">#</th>
+                                        <th>{{l("Edition")}}</th>
+                                        <th style="width: 100px;">{{l("Amount")}}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>{{invoiceInfo.editionDisplayName}}</td>
+                                        <td>${{invoiceInfo.amount | number: '1.2-2'}}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="m-invoice__footer">
+                            <div class="m-invoice__container m-invoice__container--centered">
+                                <div class="m-invoice__content">
+                                    <button type="button" class="btn btn-primary d-print-none print-btn" onclick="javascript:window.print();">{{("Print")}}</button>
+                                </div>
+                                <div class="m-invoice__content">
+                                    <span>{{l("Total")}}</span>
+                                    <span class="m-invoice__price">${{invoiceInfo.amount | number: '1.2-2'}}</span>
+                                    <span></span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="row invoice-body">
-                <div class="col-12">
-                    <table class="table m-table m-table--head-bg-brand">
-                        <thead>
-                        <tr>
-                            <th style="width: 50px;">#</th>
-                            <th>{{l("Edition")}}</th>
-                            <th style="width: 100px;">{{l("Amount")}}</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>{{invoiceInfo.editionDisplayName}}</td>
-                            <td>${{invoiceInfo.amount | number: '1.2-2'}}</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="row invoice-subtotal">
-                <hr />
-                <div class="col-9">
-                    <h2 class="invoice-title text-uppercase" style="font-size: 35px; font-weight: 300; color: #000;">{{l("Total")}}</h2>
-                </div>
-                <div class="col-3">
-                    <p class="invoice-desc" style="font-size: 35px; font-weight: 300; color: #000; text-align: right;">${{invoiceInfo.amount | number: '1.2-2'}}</p>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    <button type="button" class="btn btn-success d-print-none print-btn" onclick="javascript:window.print();">{{("Print")}}</button>
                 </div>
             </div>
         </div>

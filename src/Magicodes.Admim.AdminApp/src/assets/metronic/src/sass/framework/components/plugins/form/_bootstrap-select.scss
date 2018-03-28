@@ -24,7 +24,7 @@
             }
 
             &:after {
-                @include m-generate-arrow-down-icon(true);   
+                @include m-generate-arrow-icon(down, true);   
                 border: 0;
                 top: 50%;
                 position: absolute;
@@ -125,6 +125,55 @@
             > .dropdown-toggle {
                 @include border-radius(0, '!important'); 
             }
+        }
+    }
+
+    //== Bootstrap group input
+    .input-group {
+        > .bootstrap-select.form-control {
+            width: auto;
+        }
+
+        > .bootstrap-select.btn-group {
+            &:first-child > .dropdown-toggle {
+                @include border-top-right-radius(0 !important);
+                @include border-bottom-right-radius(0 !important);
+            }
+
+            // the most right             
+            &:not(:first-child):last-child > .btn.dropdown-toggle {
+                @include border-top-left-radius(0 !important);
+                @include border-bottom-left-radius(0 !important);
+            }
+
+            &:first-child + .input-group-text,
+            &:not(:first-child) + .input-group-text {
+                border-left: 0;    
+            }
+
+            &:not(:first-child):not(:last-child) > .btn.dropdown-toggle {
+                @include border-top-left-radius(0 !important);
+                @include border-bottom-left-radius(0 !important);
+                @include border-top-right-radius(0 !important);
+                @include border-bottom-right-radius(0 !important);
+            }
+        }
+
+        //== Pill style
+        &.m-input-group--pill {
+            > .bootstrap-select.btn-group {
+                &:not(:first-child):last-child {
+                   .btn.dropdown-toggle {
+                        @include border-top-right-radius(array-get($m--forms, input, layout, self, size, default, pill-radius) !important);
+                        @include border-bottom-right-radius(array-get($m--forms, input, layout, self, size, default, pill-radius) !important); 
+                    }
+                }
+            }
+        }
+
+        .input-group-btn:not(:first-child) > .btn:first-child, 
+        .input-group-btn:not(:first-child) > .btn-group:first-child {
+            margin-left: 0;
         }
     }
 }
@@ -239,6 +288,10 @@
         .popover-title {
             background: get-color($skin, panel, '--');
             border: 0;
+        }
+
+        .dropdown-menu {
+            margin-top: 1px;
         }
     }
 

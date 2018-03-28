@@ -22,6 +22,10 @@ var FormWidgets = function () {
             format: 'yyyy.mm.dd hh:ii'
         });
 
+        $('#m_datetimepicker').change(function() {
+            validator.element($(this));
+        });
+
         // timepicker
         $('#m_timepicker').timepicker({
             minuteStep: 1,
@@ -75,11 +79,6 @@ var FormWidgets = function () {
         $('#m_typeahead').bind('typeahead:select', function(ev, suggestion) {
             validator.element($('#m_typeahead')); // validate element
         });
-
-        // summernote
-        $('#m_summernote').summernote({
-            height: 150, 
-        });
     }
     
     var initValidation = function () {
@@ -116,9 +115,6 @@ var FormWidgets = function () {
                     required: true
                 },
 
-                summernote: {
-                    required: true
-                },
                 markdown: {
                     required: true
                 }

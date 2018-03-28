@@ -95,6 +95,12 @@ var Dashboard = function() {
     //== Daily Sales chart.
     //** Based on Chartjs plugin - http://www.chartjs.org/
     var dailySales = function() {
+        var chartContainer = $('#m_chart_daily_sales');
+
+        if (chartContainer.length == 0) {
+            return;
+        }
+
         var chartData = {
             labels: ["Label 1", "Label 2", "Label 3", "Label 4", "Label 5", "Label 6", "Label 7", "Label 8", "Label 9", "Label 10", "Label 11", "Label 12", "Label 13", "Label 14", "Label 15", "Label 16"],
             datasets: [{
@@ -111,12 +117,6 @@ var Dashboard = function() {
                 ]
             }]
         };
-
-        var chartContainer = $('#m_chart_daily_sales');
-
-        if (chartContainer.length == 0) {
-            return;
-        }
 
         var chart = new Chart(chartContainer, {
             type: 'bar',
@@ -342,7 +342,7 @@ var Dashboard = function() {
 
     //== Sales By mUtillication Stats.
     //** Based on Chartjs plugin - http://www.chartjs.org/
-    var salesBymUtils = function() {
+    var salesByApps = function() {
         // Init chart instances
         _initSparklineChart($('#m_chart_sales_by_apps_1_1'), [10, 20, -5, 8, -20, -2, -4, 15, 5, 8], mUtil.getColor('accent'), 2);
         _initSparklineChart($('#m_chart_sales_by_apps_1_2'), [2, 16, 0, 12, 22, 5, -10, 5, 15, 2], mUtil.getColor('danger'), 2);
@@ -1344,9 +1344,9 @@ var Dashboard = function() {
                         url: 'inc/api/datatables/demos/default.php'
                     }
                 },
-                pageSize: 20,
+                pageSize: 10,
                 saveState: {
-                    cookie: true,
+                    cookie: false,
                     webstorage: true
                 },
                 serverPaging: true,
@@ -1649,7 +1649,7 @@ var Dashboard = function() {
             dailySales();
             profitShare();
             salesStats();
-            salesBymUtils();
+            salesByApps();
             latestUpdates();
             trendsStats();
             trendsStats2();

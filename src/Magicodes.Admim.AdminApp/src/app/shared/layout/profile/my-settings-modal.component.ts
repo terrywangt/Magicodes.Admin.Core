@@ -1,4 +1,4 @@
-import { Component, ViewChild, Injector, Output, EventEmitter, ElementRef } from '@angular/core';
+import { Component, ViewChild, Injector, Output, EventEmitter, ElementRef, AfterViewChecked } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { AppConsts } from '@shared/AppConsts';
@@ -11,7 +11,7 @@ import { SmsVerificationModalComponent } from './sms-verification-modal.componen
     selector: 'mySettingsModal',
     templateUrl: './my-settings-modal.component.html'
 })
-export class MySettingsModalComponent extends AppComponentBase {
+export class MySettingsModalComponent extends AppComponentBase implements AfterViewChecked {
 
 
     @ViewChild('nameInput') nameInput: ElementRef;
@@ -69,8 +69,8 @@ export class MySettingsModalComponent extends AppComponentBase {
     smsVerify(): void {
         this._profileService.sendVerificationSms()
             .subscribe(() => {
-                 this.smsVerificationModal.show();
-        });
+                this.smsVerificationModal.show();
+            });
     }
 
     changePhoneNumberToVerified(): void {

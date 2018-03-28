@@ -1,0 +1,377 @@
+//
+//** Header Settings
+//
+
+$bg-base-font-color: #C5AFD1;
+$bg-base-inverse-font-color: #b4b2cc;
+
+$m-config-header: (
+	//== Header
+	header: (
+		// header itself
+		self: (
+			padding: (
+				desktop: 0,
+				mobile: 0
+			),
+			fixed: (
+				zindex: 101,
+			),
+			height: (
+				desktop: (
+					top: (
+						default: 100px,
+						minimize: 70px
+					)
+				),
+				mobile: (
+					default: 70px,
+					minimize: 60px
+				)
+			),
+			transition: (
+				hide: all 0.3s ease 0.3s,
+				general: all 0.3s ease
+			)
+		),
+		top: (
+			bg-color: (
+				default: transparent,
+				fixed: #ffffff
+			),
+			shadow: (
+				fixed: 0px 4px 30px -4px rgba(0,0,0,0.07)
+			)
+		)			
+	),
+
+	//== Brand
+	brand: (
+		// brand itself
+		self: (
+			padding: (
+				desktop: 0px 30px 0px 0px,
+				mobile: 0px 20px
+			),
+			width: (
+				default: $m-aside-left-width,
+				minimize: $m-aside-left-width-minimize
+			)
+		),
+
+		// logo
+		logo: (
+			height: (
+				minimize: 36px
+			)
+		),
+
+		// brand tools
+		tools: (
+			// itself
+			self: (
+				// space between togglers and icons
+				space: (
+					mobile: 15px 
+				)
+			),
+
+			// toggler
+			toggler: (
+				width: 24px,
+				height: 24px,  
+				transition-duration: 0.4s,
+				thickness: 1px,
+				space: 6px, 
+				radius: 4px,
+				color: (
+					default: (
+						default: lighten($bg-base-inverse-font-color, 1%),
+						hover: lighten($bg-base-inverse-font-color, 10%),
+						active: lighten($bg-base-inverse-font-color, 10%),
+					),
+					fixed: (
+						default: #6c6e86,
+						hover: get-brand-color(),
+						active: get-brand-color()
+					)
+				)
+			),
+
+			// icon
+			icon: (
+				font-size: 1.3rem,
+				color: (
+					default: (
+						default: lighten($bg-base-inverse-font-color, 1%),
+						hover: lighten($bg-base-inverse-font-color, 10%),
+						active: lighten($bg-base-inverse-font-color, 10%),
+					),
+					fixed: (
+						default: #6c6e86,
+						hover: get-brand-color(),
+						active: get-brand-color()
+					)
+				)
+			)
+		)
+	),
+
+	//== Topbar
+	topbar: (
+		// Default mode
+		default: (		
+			// self
+			self: (
+				padding: (
+					desktop: 0 0 0 20px,
+					min-desktop: 0 10px,
+					mobile: 0 20px
+				),
+				transition-time: (
+					push: .6s
+				)
+			),
+
+			// nav bar
+			nav: (
+				// nav itself 
+				self: (
+					margin: (
+						desktop: 0 0 0 0,
+						min-desktop: 0 2px,
+						tablet-and-mobile: 0
+					)
+				),
+
+				// nav item
+				item: (
+					// self
+					self: (
+						height: 3.2rem,
+						padding: (
+							desktop: 0 5px,
+							min-desktop: 0 3px,
+							tablet-and-mobile: 0 4px
+						)
+					),
+
+					// item link
+					link: (
+						// link icon
+						icon: (
+							font-size: (
+								default: 1.5rem,
+								alternate: 1.2rem
+							),
+							align: center,
+							color:	(
+								default: (
+									defualt: $bg-base-font-color,
+									hover: $m-secondary-brand-color 
+								),
+								fixed: $bg-base-inverse-font-color
+							), 
+							border: (
+								default: rgba(lighten($bg-base-font-color, 3%), 0.3),
+								fixed: rgba($bg-base-inverse-font-color, 0.5)
+							),
+							bg-color: (
+								hover: #fff
+							)
+						),
+
+						// user link
+						user: (
+							// username
+							username: (
+								align: left,
+								font-size: 0.9rem,
+								font-weight: 400,
+								font-transform:	uppercase,
+								font-color:	(
+									default: (
+										default: lighten($bg-base-font-color, 1%),
+										active: get-brand-color(),
+										hover: get-brand-color(),
+										disabled: #eee
+									),
+									fixed: (
+										default: $bg-base-inverse-font-color,
+										active: get-brand-color(),
+										hover: get-brand-color(),
+										disabled: #eee
+									)
+								)
+							),
+
+							// userpic
+							userpic: (
+								max-width: (
+									desktop: 41px,
+									mobile: 31px
+								),
+								margin: 0 0 0 5px
+							)
+						),
+
+						// link badge
+						badge:	(
+							top: (
+								desktop: 8px,
+								mobile: 5px
+							),
+							margin-left: (
+								desktop: -2px,
+								mobile: -2px
+							)	
+						)
+					),
+				)
+			)
+		),
+
+		// Mobile toggle mode
+		toggle: (
+			transition: all 0.3s ease,
+			bg-color: #fff,
+			box-shadow: 0px 3px 12px 0px rgba(0, 0, 0, 0.1),
+			height: (
+				mobile: 60px
+			)					
+		)
+	),
+
+	//== search
+	search: (
+		// self
+		self: (
+			transition-time: 0.4s,
+			height: (
+				desktop: 3.2rem
+			),
+			width: (
+				desktop: (
+					expandable: (
+						initial: 160px,
+						expanded: 240px
+					),
+					default: 275px
+				)						
+			),
+			border-radius: 40px
+		),
+
+		// input
+		input: (
+			font-size: 1rem,
+			padding: (
+				desktop: 0.75rem 1.5rem 0.75rem 0.75rem,
+				mobile: 7px 10px 7px 20px
+			),
+			bg-color: (
+				desktop: (
+					default: transparent,
+					focus: transparent
+				),
+				mobile: #ffffff
+			),
+			border-color: (
+				desktop: (
+					default: rgba($bg-base-font-color, 0.25),
+					fixed: rgba($bg-base-inverse-font-color, 0.3)
+				),
+				mobile: #ffffff
+			),
+			font-color: (
+				desktop: (
+					default: lighten($bg-base-font-color, 5%),
+					fixed: lighten($bg-base-inverse-font-color, 1%)
+				),
+				mobile: #333333
+			),
+			placeholder-color: (
+				desktop: (
+					default: lighten($bg-base-font-color, 1%),
+					fixed: lighten($bg-base-inverse-font-color, 5%)
+				),
+				mobile: #666666
+			)
+		),
+
+		// icon
+		icon: (
+			// search icon
+			search: (
+				width: (
+					desktop: 30px,
+					mobile: 30px
+				),
+				padding: (
+					desktop: 0 0 0 1.25rem,
+					mobile: 0 0 0 20px
+				),
+				font-size: (
+					desktop: 1.3rem,
+					mobile: 1.6rem
+				),
+				font-color: (
+					desktop: (
+						default: lighten($bg-base-font-color, 1%),
+						fixed: lighten($bg-base-font-color, 1%)
+					),
+					mobile:  #bcc0cd
+				)
+			),
+
+			// cancel icon for desktop mode
+			cancel: (
+				width: (
+					desktop: 30px
+				),
+				padding: (
+					desktop: 0 1.25rem 0 0
+				),
+				font-size: (
+					desktop: 1.3rem
+				),
+				font-color: (
+					desktop: (
+						default: lighten($bg-base-font-color, 1%),
+						mobile: lighten($bg-base-font-color, 1%)
+					)
+				)
+			),
+			// close icon for mobile mode
+			close: (
+				width: (
+					mobile: 30px
+				),
+				padding: (
+					mobile: 0 35px 0 0
+				),
+				font-size: (
+					mobile: 1.3rem
+				),
+				font-color: (
+					mobile:  #bcc0cd,
+				)
+			)
+		),
+
+		// spinner 
+		spinner: (
+			color: (
+				desktop: (
+					default: lighten($bg-base-font-color, 1%),
+					fixed: lighten($bg-base-font-color, 1%)
+				),
+				mobile: #282a3c
+			),
+			right: (
+				desktop: 15px,
+				mobile: 10px
+			)
+		)
+	)
+);

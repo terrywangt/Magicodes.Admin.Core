@@ -1,4 +1,4 @@
-import { Component, ViewChild, Injector, Output, EventEmitter, ElementRef } from '@angular/core';
+import { Component, ViewChild, Injector, Output, EventEmitter, ElementRef, AfterViewChecked } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
 import { UserServiceProxy, ProfileServiceProxy, UserEditDto, CreateOrUpdateUserInput, OrganizationUnitDto, UserRoleDto, PasswordComplexitySetting } from '@shared/service-proxies/service-proxies';
 import { AppComponentBase } from '@shared/common/app-component-base';
@@ -15,7 +15,7 @@ import * as _ from 'lodash';
         }`
     ]
 })
-export class CreateOrEditUserModalComponent extends AppComponentBase {
+export class CreateOrEditUserModalComponent extends AppComponentBase implements AfterViewChecked {
 
     @ViewChild('nameInput') nameInput: ElementRef;
     @ViewChild('createOrEditModal') modal: ModalDirective;
@@ -118,14 +118,14 @@ export class CreateOrEditUserModalComponent extends AppComponentBase {
 
     getProfilePicture(profilePictureId: string): void {
         if (!profilePictureId) {
-            this.profilePicture = '/assets/common/images/default-profile-picture.png';
+            this.profilePicture = this.appRootUrl() + 'assets/common/images/default-profile-picture.png';
         } else {
             this._profileService.getProfilePictureById(profilePictureId).subscribe(result => {
 
                 if (result && result.profilePicture) {
                     this.profilePicture = 'data:image/jpeg;base64,' + result.profilePicture;
                 } else {
-                    this.profilePicture = '/assets/common/images/default-profile-picture.png';
+                    this.profilePicture = this.appRootUrl() + 'assets/common/images/default-profile-picture.png';
                 }
             });
         }
@@ -135,7 +135,7 @@ export class CreateOrEditUserModalComponent extends AppComponentBase {
         $(this.nameInput.nativeElement).focus();
 
         this.organizationUnitTree.data = <IOrganizationUnitsTreeComponentData>{
-            allOrganizationUnits : this.allOrganizationUnits,
+            allOrganizationUnits: this.allOrganizationUnits,
             selectedOrganizationUnits: this.memberedOrganizationUnits
         };
     }

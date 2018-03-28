@@ -15,10 +15,6 @@ var DefaultDatatableDemo = function () {
 					}
 				},
 				pageSize: 5,
-				saveState: {
-					cookie: true,
-					webstorage: true
-				},
 				serverPaging: true,
 				serverFiltering: true,
 				serverSorting: true
@@ -158,8 +154,8 @@ var DefaultDatatableDemo = function () {
 				title: "Actions",
 				sortable: false,
 				overflow: 'visible',
-				template: function (row) {
-					var dropup = (row.getDatatable().getPageSize() - row.getIndex()) <= 4 ? 'dropup' : '';
+				template: function (row, index, datatable) {
+					var dropup = (datatable.getPageSize() - index) <= 4 ? 'dropup' : '';
 
 					return '\
 						<div class="dropdown ' + dropup + '">\

@@ -1,0 +1,115 @@
+//
+//** Brand
+//
+
+@mixin m-build-brand-base($layout) {	
+	//== General Mode
+	.m-brand {
+		display:  none !important;
+	}
+
+	//== Desktop Mode
+	@include desktop {
+		.m-brand {
+			.m-aside-left & {
+				display: table !important;
+				width: 100%;
+			}
+
+			height: array-get($m-config-header, header, default, height, desktop);
+
+			&.m-brand--skin-light {
+				background: array-get($layout, desktop, self, bg-color, light);
+			}
+
+			&.m-brand--skin-dark {
+				background: array-get($layout, desktop, self, bg-color, dark);
+			}						
+
+			//== Logo
+			.m-brand__logo {
+				display: table-cell;
+				vertical-align: middle;
+				text-align: center;
+				line-height: 0;
+
+				img {
+					max-width: array-get($layout, desktop, logo, width);
+				}
+			}
+		}	
+	}
+
+	//== Mobile Mode
+	@include tablet-and-mobile {
+		.m-brand {		
+			width: 100%;	
+			position: relative;
+			background: array-get($layout, mobile, self, bg-color);
+			height: array-get($m-config-header, header, default, height, mobile) !important;
+			padding: array-get($layout, mobile, self, padding);
+			z-index: 2; 
+
+			.m-header & {
+				display: block !important;
+			}
+
+			//== Brand tools
+			.m-brand__tools {		
+				line-height: 0;
+				vertical-align: middle;
+				text-align: right;
+
+				//== Toggler
+				@include  m-build--toggler(m-brand__toggler, array-get($layout, mobile, tools, toggler)); 
+
+				.m-brand__toggler {
+					@include m-customize--toggler-color(m-brand__toggler, array-get($layout, mobile, tools, toggler, color));
+				}
+
+				.m-brand__icon {
+					display: inline-block;
+					line-height: 0;
+					vertical-align: middle;
+					cursor: pointer;
+					margin-left: array-get($layout, mobile, tools, self, space);
+
+					> i {
+						font-size: array-get($layout, mobile, tools, icon, font-size);
+						color: array-get($layout, mobile, tools, icon, color, default);
+					}
+
+					&:hover {
+						text-decoration: none;
+
+						> i {
+							color: array-get($layout, mobile, tools, icon, color, hover);
+						}
+					}
+
+					.flaticon-more {
+						position: relative;
+						top: 1px;
+					}
+				}
+			}
+
+			//== Brand logo
+			.m-brand__logo {
+				vertical-align: middle;
+				line-height: 0;
+
+				.m-brand__logo-wrapper {
+					display: inline-block;
+
+					img {
+						max-width: array-get($layout, mobile, logo, width);
+					}
+				}
+			}
+		}
+	}
+}
+
+//== Build Brand Base
+@include m-build-brand-base( $m-config-brand );

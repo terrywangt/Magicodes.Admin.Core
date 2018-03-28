@@ -1,0 +1,92 @@
+//
+//** Brand
+//
+
+@mixin m-build-brand-base() {	
+
+	//== Desktop Mode
+	@include desktop {
+		.m-brand {
+			vertical-align: middle;
+			line-height: 0;
+
+			&.m-brand--mobile {
+				display: none !important;
+			}
+		}	
+	}
+
+	//== Table & Mobile Mode
+	@include tablet-and-mobile {
+		.m-brand {
+			background: array-get($m-config-header, header, bg-color);	
+			padding: array-get($m-config-base, body, container, padding, mobile);
+			width: 100%;
+			position: relative;
+			height: array-get($m-config-header, header, height, mobile, default) !important;
+			z-index: 2; 
+
+			//== Responsive mode
+			&.m-brand--mobile {
+				display: table-cell !important;
+			}
+
+			&.m-brand--desktop {
+				display: none !important;
+			}
+
+			.m-brand__logo {
+				vertical-align: middle;
+				line-height: 0;
+
+				.m-brand__logo-wrapper {
+					display: inline-block;
+				}
+			}
+
+			//== Brand tool
+			.m-brand__tools {
+				line-height: 0;
+				vertical-align: middle;
+				text-align: right;
+
+				//== Toggler
+				@include  m-build--toggler(m-brand__toggler, array-get($m-config-header, brand, mobile,  tools, toggler));  
+
+				.m-brand__toggler {
+					@include m-customize--toggler-color(m-brand__toggler, array-get($m-config-header, brand, mobile,  tools, toggler, color));
+				}
+
+				//== Icon
+				.m-brand__icon {
+					display: inline-block;
+					line-height: 0;
+					vertical-align: middle;
+					cursor: pointer;
+					margin-left: array-get($m-config-header, brand, mobile,  tools, self, space, mobile);
+
+					> i {
+						font-size: array-get($m-config-header, brand, mobile,  tools, icon, font-size);
+						color: array-get($m-config-header, brand, mobile,  tools, icon, color, default);
+					}
+
+					.flaticon-more {
+						position: relative;
+						top: 1px;
+					}
+
+					&:hover {
+						text-decoration: none;
+
+						> i {
+							color: array-get($m-config-header, brand, mobile,  tools, icon, color, hover);
+						}
+					}
+				}
+			}			
+		}
+	}
+}
+
+//== Build Brand Base
+@include m-build-brand-base();

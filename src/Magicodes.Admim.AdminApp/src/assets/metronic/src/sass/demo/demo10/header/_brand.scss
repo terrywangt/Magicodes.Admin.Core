@@ -1,0 +1,204 @@
+//
+//** Brand
+//
+
+@mixin m-build-brand-base($layout) {	
+	//== General Mode
+	.m-brand {
+		@include transition(array-get($m-config-aside, aside-left, self, minimize, transition));
+		height: array-get($m-config-header, header, self, default, height, desktop);		
+		padding: array-get($layout, self, padding, desktop); 
+
+		//== Brand hidden mode
+		.m-brand--hidden & {
+			display: none;
+		}
+		
+		//== Brand logo
+		.m-brand__logo {
+			vertical-align: middle;
+			line-height: 0;
+
+			.m-brand__logo-wrapper {
+				display: inline-block;
+
+				img {
+					@include transition(array-get($m-config-header, header, self, transition, general));
+
+					&.m-brand__logo-desktop {
+						display: inline-block;
+					}
+
+					&.m-brand__logo-mobile {
+						display: none;
+					}
+				}
+
+				.m-header--minimize-on & {
+				}
+			}			
+		}
+
+		//== Brand tool
+		.m-brand__tools {
+			line-height: 0;
+			vertical-align: middle;
+			text-align: right;
+
+			//== Toggler
+			@include m-build--toggler(m-brand__toggler, array-get($layout, tools, toggler)); 
+
+			.m-brand__toggler {
+				@include m-customize--toggler-color(m-brand__toggler, array-get($layout, tools, toggler, color, default)); 
+			}
+
+			//== Icon
+			.m-brand__icon {
+				display: inline-block;
+				line-height: 0;
+				vertical-align: middle;
+				cursor: pointer;
+
+				> i {
+					color: array-get($layout, tools, icon, color, default, default);
+					font-size: array-get($layout, tools, icon, font-size);
+				}
+
+				&:hover {
+					text-decoration: none;
+
+					> i {
+						color: array-get($layout, tools, icon, color, default, hover);						
+					}
+				}
+			}
+
+			//== Dropdown
+			.m-dropdown {
+				margin-left: 40px;
+
+				.btn {
+					border-color: #E2E7ED;
+					padding: 0.75rem 1.5rem;
+					color: darken(#E2E7ED, 20%);
+
+					> span {
+						color: darken(#E2E7ED, 20%);
+						display: inline-block;
+						padding-right: 2rem; 
+					}
+				}
+
+				.btn:focus,
+				.btn:hover,
+				&.m-dropdown--open .btn {
+					@include shadow('none');
+					background: get-brand-color();
+					border-color: get-brand-color();
+						
+					> span {
+						color: get-brand-inverse-color();
+					}				
+				}
+			}
+		}	
+	}
+
+	//== Table & Mobile Mode
+	@include tablet-and-mobile {
+		.m-brand {
+			width: 100%;
+			position: relative;
+			height: array-get($m-config-header, header, self, height, mobile, default) !important;	
+			padding: array-get($layout, self, padding, mobile); 
+			background: array-get($m-config-header, header, top, bg-color);
+			z-index: 3; 
+
+			> .m-stack {
+				width: 100% !important;
+			}
+
+			//== Brand logo
+			.m-brand__logo {
+				.m-brand__logo-wrapper {
+					img {
+						&.m-brand__logo-desktop {
+							display: none;
+						}
+
+						&.m-brand__logo-mobile {
+							display: inline-block;
+						}
+					}
+				}			
+			}
+
+			//== Tools
+			.m-brand__tools {	
+				width: 100%;
+							
+				//== Icon
+				.m-brand__icon {
+					margin-left: array-get($layout, tools, self, space, mobile);
+
+					.flaticon-more {
+						position: relative;
+						top: 1px;
+					}
+				}
+
+				//== Dropdown
+				.m-dropdown {
+					margin-left: 20px;
+					margin-right: 10px;
+
+					.btn {
+						padding: 0.5 1rem 0.5 1rem;
+
+						> span {
+							padding-right: 0; 
+						}
+					}
+				}
+			}
+
+			//== Inverse mode
+			.m-header--fixed-mobile.m-header--minimize-on & {
+				.m-brand__tools {	
+					.m-brand__toggler {
+						@include m-customize--toggler-color(m-brand__toggler, array-get($layout, tools, toggler, color, fixed)); 
+					}
+
+					.m-brand__icon {
+						> i {
+							color: array-get($layout, tools, icon, color, fixed, default);
+						}
+
+						&:hover {
+							> i {
+								color: array-get($layout, tools, icon, color, fixed, hover);						
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	//== Mobile Mode
+	@include mobile {
+		.m-brand {
+			.m-brand__tools {	
+				//== Dropdown
+				.m-dropdown {
+					margin-left: 20px;
+					margin-right: 10px;
+				}
+			}
+		}
+	}
+}
+
+
+//== Build Brand Base
+@include m-build-brand-base( array-get($m-config-header, brand ) );

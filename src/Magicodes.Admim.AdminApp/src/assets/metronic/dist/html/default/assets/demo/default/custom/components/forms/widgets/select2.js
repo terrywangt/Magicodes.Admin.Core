@@ -140,6 +140,11 @@ var Select2 = function() {
             placeholder: "Add a tag",
             tags: true
         });
+
+        // disabled results
+        $('.m-select2-general').select2({
+            placeholder: "Select an option"
+        });
     }
 
     var modalDemos = function() {

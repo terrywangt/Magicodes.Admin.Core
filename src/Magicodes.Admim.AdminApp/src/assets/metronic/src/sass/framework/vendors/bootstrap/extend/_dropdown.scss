@@ -40,23 +40,57 @@
         }
     }
 
-    // dropdown toggle
+    //== Dropdown toggle
     .nav-link.dropdown-toggle,
     .btn.dropdown-toggle {
         &:after {
             text-align: center;
             display: inline;
             border: 0;
-            @include m-generate-arrow-down-icon(true);  
+            @include m-generate-arrow-icon(down, true);  
             font-size: 0.8rem;
             line-height: 0;
             vertical-align: middle;
             top: -0.1em;
             position: relative;
         }
+
+        &.dropdown-toggle-split {
+            &:after {
+                right: 1px;
+            }
+        }
     }
 
-    // dropdown element
+    //== Dropright 
+    .btn-group.dropright {
+        .nav-link.dropdown-toggle,
+        .btn.dropdown-toggle {
+            &:before {
+                display: none;
+            }
+
+            &:after {
+                @include m-generate-arrow-icon(right, true);  
+            }
+        }
+    }
+
+    //== Dropleft 
+    .btn-group.dropleft {
+        .nav-link.dropdown-toggle,
+        .btn.dropdown-toggle {
+            &:before {
+                display: none;
+            }
+
+            &:after {
+                @include m-generate-arrow-icon(left, true);  
+            }
+        }
+    }
+
+    //== Dropdown element
     .dropdown {
         // inline dropdown
         &.m-dropdown--inline {
@@ -72,7 +106,9 @@
 }
 
 //== Component Skin
-@mixin m-build-component--dropdown-menu-skin($skin) {
+@mixin m-build-component--dropdown-menu-skin() {
+    $skin: get-default-skin();
+
     // dropdown menu
     .dropdown-menu {
         border: 0;
@@ -106,5 +142,5 @@
 //== Component Base
 @include m-build-component--dropdown-menu-base();
 
-//== Component Skin - Light
-@include m-build-component--dropdown-menu-skin(light);
+//== Component Skin
+@include m-build-component--dropdown-menu-skin();

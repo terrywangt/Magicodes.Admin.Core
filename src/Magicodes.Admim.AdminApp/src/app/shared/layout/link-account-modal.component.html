@@ -16,17 +16,19 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label>{{l("TenancyName")}}</label>
-                        <input #tenancyNameInput type="text" name="TenancyName" class="form-control" [ngClass]="{'edited': linkUser.tenancyName}" [(ngModel)]="linkUser.tenancyName" maxlength="64">
+                        <input #tenancyNameInput="ngModel" type="text" name="TenancyName" class="form-control" [ngClass]="{'edited': linkUser.tenancyName}" [(ngModel)]="linkUser.tenancyName" maxlength="64">
                     </div>
 
                     <div class="form-group">
-                        <label>{{l("UserName")}}</label>
-                        <input class="form-control" type="text" name="UserName" [ngClass]="{'edited': linkUser.usernameOrEmailAddress}" [(ngModel)]="linkUser.usernameOrEmailAddress" required maxlength="256">
+                        <label>{{l("UserName")}} *</label>
+                        <input #usernameOrEmailAddressInput="ngModel" class="form-control" type="text" name="UserName" [ngClass]="{'edited': linkUser.usernameOrEmailAddress}" [(ngModel)]="linkUser.usernameOrEmailAddress" required maxlength="256">
+                        <validation-messages [formCtrl]="usernameOrEmailAddressInput"></validation-messages>
                     </div>
 
                     <div class="form-group">
-                        <label>{{l("Password")}}</label>
-                        <input type="password" [ngClass]="{'edited': linkUser.password}" name="Password" class="form-control" [(ngModel)]="linkUser.password" required maxlength="128">
+                        <label>{{l("Password")}} *</label>
+                        <input #passwordInput="ngModel" type="password" [ngClass]="{'edited': linkUser.password}" name="Password" class="form-control" [(ngModel)]="linkUser.password" required maxlength="128">
+                        <validation-messages [formCtrl]="passwordInput"></validation-messages>
                     </div>
                 </div>
 

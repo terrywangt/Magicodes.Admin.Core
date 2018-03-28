@@ -26,10 +26,6 @@ var DatatableRemoteAjaxDemo = function() {
           },
         },
         pageSize: 10,
-        saveState: {
-          cookie: true,
-          webstorage: true,
-        },
         serverPaging: true,
         serverFiltering: true,
         serverSorting: true,
@@ -37,10 +33,8 @@ var DatatableRemoteAjaxDemo = function() {
 
       // layout definition
       layout: {
-        theme: 'default', // datatable theme
-        class: '', // custom wrapper class
-        scroll: false, // enable/disable datatable scroll both horizontal and vertical when needed.
-        footer: false // display/hide footer
+        scroll: false,
+        footer: false
       },
 
       // column sorting
@@ -98,7 +92,6 @@ var DatatableRemoteAjaxDemo = function() {
         }, {
           field: 'ShipDate',
           title: 'Ship Date',
-          sortable: 'asc',
           type: 'date',
           format: 'MM/DD/YYYY',
         }, {
@@ -140,9 +133,8 @@ var DatatableRemoteAjaxDemo = function() {
           title: 'Actions',
           sortable: false,
           overflow: 'visible',
-          template: function(row) {
-            var dropup = (row.getDatatable().getPageSize() - row.getIndex()) <= 4 ? 'dropup' : '';
-
+          template: function (row, index, datatable) {
+            var dropup = (datatable.getPageSize() - index) <= 4 ? 'dropup' : '';
             return '\
 						<div class="dropdown ' + dropup + '">\
 							<a href="#" class="btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown">\
@@ -165,25 +157,13 @@ var DatatableRemoteAjaxDemo = function() {
         }],
     });
 
-    var query = datatable.getDataSourceQuery();
-
     $('#m_form_status').on('change', function() {
-      // shortcode to datatable.getDataSourceParam('query');
-      var query = datatable.getDataSourceQuery();
-      query.Status = $(this).val().toLowerCase();
-      // shortcode to datatable.setDataSourceParam('query', query);
-      datatable.setDataSourceQuery(query);
-      datatable.load();
-    }).val(typeof query.Status !== 'undefined' ? query.Status : '');
+      datatable.search($(this).val().toLowerCase(), 'Status');
+    });
 
     $('#m_form_type').on('change', function() {
-      // shortcode to datatable.getDataSourceParam('query');
-      var query = datatable.getDataSourceQuery();
-      query.Type = $(this).val().toLowerCase();
-      // shortcode to datatable.setDataSourceParam('query', query);
-      datatable.setDataSourceQuery(query);
-      datatable.load();
-    }).val(typeof query.Type !== 'undefined' ? query.Type : '');
+      datatable.search($(this).val().toLowerCase(), 'Type');
+    });
 
     $('#m_form_status, #m_form_type').selectpicker();
 

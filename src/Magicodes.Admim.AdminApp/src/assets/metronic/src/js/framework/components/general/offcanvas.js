@@ -78,25 +78,29 @@
              * Handles offcanvas click toggle
              */
             toggle: function() {
+                var el = $(this);
+
                 if (offcanvas.state == 'shown') {
-                    Plugin.hide();
+                    Plugin.hide(el);
                 } else {
-                    Plugin.show();
+                    Plugin.show(el);
                 }
             },
 
             /**
              * Handles offcanvas click toggle
              */
-            show: function() {
+            show: function(el) {
                 if (offcanvas.state == 'shown') {
                     return;
                 }
 
+                var target = el ? $(el) : $(offcanvas.toggleTarget);
+
                 Plugin.eventTrigger('beforeShow');
 
                 if (offcanvas.toggleState != '') {
-                    $(offcanvas.toggleTarget).addClass(offcanvas.toggleState);
+                    target.addClass(offcanvas.toggleState);
                 }
                 
                 $('body').addClass(offcanvas.classShown);
@@ -123,15 +127,17 @@
             /**
              * Handles offcanvas click toggle
              */
-            hide: function() {
+            hide: function(el) {
                 if (offcanvas.state == 'hidden') {
                     return;
                 }
 
+                var target = el ? $(el) : $(offcanvas.toggleTarget);
+                                
                 Plugin.eventTrigger('beforeHide');
 
                 if (offcanvas.toggleState != '') {
-                    $(offcanvas.toggleTarget).removeClass(offcanvas.toggleState);
+                    target.removeClass(offcanvas.toggleState);
                 }
 
                 $('body').removeClass(offcanvas.classShown)

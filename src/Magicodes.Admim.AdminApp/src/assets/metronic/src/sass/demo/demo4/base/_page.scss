@@ -1,7 +1,12 @@
 //== General Mode
-.m-page {	
-	// hide page when page loading is enabled
+.m-page {		
+	//== Page loading
+	.m-page--loading-enabled & {
+		@include animation(m-animate-fade-in .5s both);
+	}	
+
 	.m-page--loading & {
-		display: none;
+		@include opacity(0);		
+		@include animation(m-animate-fade-out .5s both);
 	}
 }	

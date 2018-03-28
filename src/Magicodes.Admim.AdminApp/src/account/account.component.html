@@ -6,7 +6,7 @@
                     <div class="m-login__wrapper">
                         <div class="m-login__logo">
                             <a (click)="goToHome()">
-                                <img *ngIf="!appSession.tenant || !appSession.tenant.logoId" src="/assets/common/images/logo.png" alt="logo" width="139" height="35" />
+                                <img *ngIf="!appSession.tenant || !appSession.tenant.logoId" [src]="appRootUrl() + 'assets/common/images/logo.png'" alt="logo" width="139" height="35" />
                                 <img *ngIf="appSession.tenant && appSession.tenant.logoId" [src]="remoteServiceBaseUrl + '/TenantCustomization/GetTenantLogo?skin=light&tenantId=' + appSession.tenant.id + '&id=' + appSession.tenant.logoId" alt="logo" width="168" height="33" />
                             </a>
                         </div>
@@ -24,10 +24,10 @@
         <div *ngIf="!useFullWidthLayout()" class="m-grid__item m-grid__item--fluid m-grid m-grid--center m-grid--hor m-grid__item--order-tablet-and-mobile-1 m-login__content" style="background-image: url(https://api.dujin.org/bing/1366.php)">
             <div class="m-grid__item m-grid__item--middle">
                 <h3 class="m-login__welcome">
-                        {{appSession.application.name}}
+                    {{appSession.application.name}}
                 </h3>
                 <p class="m-login__msg">
-                        {{l("LoginMsg")}}
+                    {{l("LoginMsg")}}
                 </p>
             </div>
         </div>

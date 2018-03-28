@@ -6,19 +6,20 @@
 @import "toggler/mixins";
 
 //== Datatable
-@import "datatable/default";
+@import "datatable/datatable";
 
 //== Navigation menu
 @import "nav/nav";
 @import "nav/grid";
 @import "nav/sticky";
-@import "nav/scroll-top";
+@import "nav/scroll-top"; 
  
 //== Dropdown
 @import "dropdown/mixins";
 @import "dropdown/dropdown";
 
 //== Tabs
+@import "tabs/base";
 @import "tabs/line";
 
 //== Typography
@@ -39,6 +40,8 @@
 @import "lists/search";
 @import "lists/timeline";
 @import "lists/settings";
+@import "lists/badge";
+@import "lists/pics";
 
 //== Cards
 @import "cards/user";
@@ -52,6 +55,8 @@
 
 //== Timeline
 @import "timeline/timeline-1";
+@import "timeline/timeline-2";
+@import "timeline/timeline-3";
 
 //== Widgets
 @import "widgets/widget1";
@@ -92,8 +97,18 @@
 @import "forms/input";
 @import "forms/switch";
 @import "forms/layout";
+@import "forms/option";
 
 //== Table
 @import "table/table";
 
- 
+//== Wizard
+@import "wizard/wizard-base";
+@import "wizard/wizard-1";
+@import "wizard/wizard-2";
+@import "wizard/wizard-3";
+@import "wizard/wizard-4";
+@import "wizard/wizard-5";
+
+//== Accordion
+@import "accordion/accordion";

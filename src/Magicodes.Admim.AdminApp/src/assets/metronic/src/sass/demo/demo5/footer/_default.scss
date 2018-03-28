@@ -78,6 +78,14 @@
 	    	.m-wrapper {
 	    		margin-bottom: array-get($m-config-footer, default, self, height);
 	    	}	
+
+	    	&.m-page--wide.m-aside-left--fixed {
+	    		.m-footer {
+	    			.m-footer__wrapper {
+	    				margin-left: array-get($m-config-aside, aside-left, self, default, width) - 30px;
+	    			}
+	    		}
+	    	}
 	    }
     }	
 

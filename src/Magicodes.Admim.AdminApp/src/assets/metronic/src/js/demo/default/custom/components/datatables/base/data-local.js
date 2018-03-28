@@ -43,8 +43,8 @@ var DatatableDataLocalDemo = function () {
 				title: "#",
 				width: 50,
 				sortable: false,
-				selector: false,
-				textAlign: 'center'
+				textAlign: 'center',
+        selector: {class: 'm-checkbox--solid m-checkbox--brand'}
 			}, {
 				field: "OrderID",
 				title: "Order ID"
@@ -103,8 +103,8 @@ var DatatableDataLocalDemo = function () {
 				title: "Actions",
 				sortable: false,
 				overflow: 'visible',
-				template: function (row) {
-					var dropup = (row.getDatatable().getPageSize() - row.getIndex()) <= 4 ? 'dropup' : '';
+				template: function (row, index, datatable) {
+					var dropup = (datatable.getPageSize() - index) <= 4 ? 'dropup' : '';
 
 					return '\
 						<div class="dropdown ' + dropup + '">\

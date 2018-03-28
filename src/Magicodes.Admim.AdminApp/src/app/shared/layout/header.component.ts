@@ -48,10 +48,16 @@ export class HeaderComponent extends AppComponentBase implements OnInit {
     languages: abp.localization.ILanguageInfo[];
     currentLanguage: abp.localization.ILanguageInfo;
     isImpersonatedLogin = false;
+    isMultiTenancyEnabled = false;
 
     shownLoginNameTitle = '';
     shownLoginName = '';
-    profilePicture = '/assets/common/images/default-profile-picture.png';
+
+    tenancyName = '';
+    userName = '';
+
+    profilePicture = AppConsts.appBaseUrl + '/assets/common/images/default-profile-picture.png';
+    defaultLogo = AppConsts.appBaseUrl + '/assets/common/images/app-logo-on-' + this.ui.getAsideSkin() + '.png';
     recentlyLinkedUsers: LinkedUserDto[];
     unreadChatMessageCount = 0;
 
@@ -62,7 +68,7 @@ export class HeaderComponent extends AppComponentBase implements OnInit {
     tenant: TenantLoginInfoDto = new TenantLoginInfoDto();
     subscriptionStartType = SubscriptionStartType;
     editionPaymentType: typeof EditionPaymentType = EditionPaymentType;
-    
+
     constructor(
         injector: Injector,
         private _abpSessionService: AbpSessionService,
@@ -85,6 +91,7 @@ export class HeaderComponent extends AppComponentBase implements OnInit {
     }
 
     ngOnInit() {
+        this.isMultiTenancyEnabled = this._abpMultiTenancyService.isEnabled;
         this._userNotificationHelper.settingsModal = this.notificationSettingsModal;
 
         this.languages = _.filter(this.localization.languages, l => (<any>l).isDisabled === false);
@@ -131,6 +138,9 @@ export class HeaderComponent extends AppComponentBase implements OnInit {
 
     getCurrentLoginInformations(): void {
         this.shownLoginName = this.appSession.getShownLoginName();
+        this.tenancyName = this.appSession.tenancyName;
+        this.userName = this.appSession.user.userName;
+
         this._sessionService.getCurrentLoginInformations()
             .subscribe((result: GetCurrentLoginInformationsOutput) => {
                 this.tenant = result.tenant;

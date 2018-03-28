@@ -13,6 +13,7 @@ import { UrlHelper } from 'shared/helpers/UrlHelper';
 })
 export class LoginComponent extends AppComponentBase implements OnInit {
     submitting = false;
+    isMultiTenancyEnabled: boolean = this.multiTenancy.isEnabled;
 
     constructor(
         injector: Injector,
@@ -26,6 +27,10 @@ export class LoginComponent extends AppComponentBase implements OnInit {
 
     get multiTenancySideIsTeanant(): boolean {
         return this._sessionService.tenantId > 0;
+    }
+
+    get isTenantSelfRegistrationAllowed(): boolean {
+        return this.setting.getBoolean('App.TenantManagement.AllowSelfRegistration');
     }
 
     get isSelfRegistrationAllowed(): boolean {

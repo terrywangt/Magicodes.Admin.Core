@@ -46,7 +46,7 @@ export class PasswordComplexityValidator implements Validator {
 
     // use upperCaseLetters
     const requireNonAlphanumeric = this.requireNonAlphanumeric;
-    if (requireNonAlphanumeric && givenPassword && /[0-9a-zA-Z]+$/.test(givenPassword)) {
+    if (requireNonAlphanumeric && givenPassword && /^[0-9a-zA-Z]+$/.test(givenPassword)) {
       validationResult = validationResult || {};
       validationResult.requireNonAlphanumeric = true;
     }

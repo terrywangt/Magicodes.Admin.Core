@@ -12,13 +12,17 @@
             margin: 40px 0;
         }
 
+        &.m-separator--xl {
+            margin: 60px 0;
+        }
+
         &.m-separator--sm {
-            margin: 10px 0;
+            margin: 20px 0;
         }
 
         &.m-separator--fit {
-            margin-left: -40px;
-            margin-right: -40px;
+            margin-left: -(array-get($m--portlet, layout, self, space));
+            margin-right: -(array-get($m--portlet, layout, self, space));
         }
     }
 }

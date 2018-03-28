@@ -2,7 +2,7 @@
 //** Global Helper Classes
 //
 
-@for $i from 1 through 10 {
+@for $i from 1 through 20 {
 	$num: $i * 5;
 
 	.m--margin-#{$num} {
@@ -46,13 +46,14 @@
 	}
 }
 
+
 .m--full-height {
 	height: 100%;
 }
 
 .m--valign-top {
 	vertical-align: top;
-}
+} 
 
 .m--space-5 {
 	display: block;
@@ -131,6 +132,12 @@
 	display: inline-block;
 }
 
+.m--icon-middle {
+	&:before {
+		vertical-align: middle;
+	}
+}
+
 .m--hide {
 	display: none !important;
 }
@@ -180,6 +187,11 @@
 			font-size: $size !important; 
 		}
 	}
+}
+
+//== Font Weights
+b, strong {
+    font-weight: bold;
 }
 
 //== State font color
@@ -331,27 +343,4 @@
 	.m--hidden-mobile {
 		display: none !important;
 	}
-}
-
-@each $breakpoint, $breakpoint-width in $m--layout-breakpoints {
-    .m--visible-#{$breakpoint},
-	.m--visible-#{$breakpoint}--inline-block {
-		display: none !important;
-	}
-}
-
-@each $breakpoint, $breakpoint-width in $m--layout-breakpoints {
-    @media (max-width: $breakpoint-width) {
-    	.m--visible-#{$breakpoint} {
-			display: block !important;
-		}
-
-		.m--visible-#{$breakpoint}--inline-block {
-			display: inline-block !important;
-		}
-
-		.m--hidden-#{$breakpoint} {
-			display: none !important;
-		}
-    }
 }

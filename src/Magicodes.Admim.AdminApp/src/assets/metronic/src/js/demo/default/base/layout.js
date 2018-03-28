@@ -150,14 +150,20 @@ var mLayout = function() {
 
     // handle sidebar toggle
     var initLeftAsideToggle = function() {
-        $('#m_aside_left_minimize_toggle').mToggle({
+        var asideLeftToggle = $('#m_aside_left_minimize_toggle').mToggle({
             target: 'body',
             targetState: 'm-brand--minimize m-aside-left--minimize',
             togglerState: 'm-brand__toggler--active'
-        }).on('toggle', function() {
+        }).on('toggle', function(toggle) {
             horMenu.pauseDropdownHover(800);
             asideMenu.pauseDropdownHover(800);
+
+            //== Remember state in cookie
+            Cookies.set('sidebar_toggle_state', toggle.getState());
         });
+
+        //== Example: minimize the left aside on page load
+        //== asideLeftToggle.toggleOn();
 
         $('#m_aside_left_hide_toggle').mToggle({
             target: 'body',
@@ -235,10 +241,21 @@ var mLayout = function() {
             initLeftAside();
             initLeftAsideMenu();            
             initLeftAsideToggle();
+
+            this.onLeftSidebarToggle(function(e) {
+              var datatables = $('.m-datatable');
+              $(datatables).each(function() {
+                $(this).mDatatable('redraw');
+              });
+            });
         },
 
         getAsideMenu: function() {
             return asideMenu;
+        },
+
+        onLeftSidebarToggle: function(func) {
+            $('#m_aside_left_minimize_toggle').mToggle().on('toggle', func);
         },
 
         closeMobileAsideMenuOffcanvas: function() {

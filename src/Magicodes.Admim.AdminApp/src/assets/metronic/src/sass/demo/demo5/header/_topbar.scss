@@ -98,6 +98,7 @@
                             font-weight: array-get($layout, default, nav, item, link, user, username, font-weight);
                             text-align: array-get($layout, default, nav, item, link, user, username, align);
                             color: array-get($layout, default, nav, item, link, user, username, font-color, desktop, default);
+                            padding-right: 10px;
                         }
 
                         &:hover {

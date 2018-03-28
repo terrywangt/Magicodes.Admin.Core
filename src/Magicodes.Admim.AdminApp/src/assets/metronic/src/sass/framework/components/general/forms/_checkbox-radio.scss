@@ -232,11 +232,11 @@
 
         &:after {
             border: solid $outline-tick-color;
-        }
-    }
 
-    > input:checked ~ span {
-        border: 1px solid $outline-border-checked-color; 
+            @if $type == radio {
+                background: $outline-tick-color;
+            }
+        }
     }
 
     > input:disabled ~ span {
@@ -247,6 +247,10 @@
 
     > input:checked ~ span {
         border: 1px solid $outline-border-checked-color; 
+    }
+
+    &.m-#{$type}--check-bold > input:checked ~ span {
+        border: 2px solid $outline-border-checked-color; 
     }
 
     > input:disabled ~ span {
@@ -261,6 +265,10 @@
 
             &:after {
                 border: solid $solid-tick-color;
+
+                @if $type == radio {
+                    background: $solid-tick-color;
+                }
             }
         }
 

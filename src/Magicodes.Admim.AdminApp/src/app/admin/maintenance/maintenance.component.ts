@@ -1,4 +1,4 @@
-import { Component, Injector, OnInit, AfterViewInit } from '@angular/core';
+import { Component, Injector, OnInit, AfterViewInit, AfterViewChecked } from '@angular/core';
 import { CachingServiceProxy, EntityDtoOfString, WebLogServiceProxy } from '@shared/service-proxies/service-proxies';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { FileDownloadService } from '@shared/utils/file-download.service';
@@ -10,7 +10,11 @@ import { appModuleAnimation } from '@shared/animations/routerTransition';
     styleUrls: ['./maintenance.component.less'],
     animations: [appModuleAnimation()]
 })
-export class MaintenanceComponent extends AppComponentBase implements OnInit, AfterViewInit {
+export class MaintenanceComponent extends AppComponentBase implements OnInit, AfterViewInit, AfterViewChecked {
+
+    loading = false;
+    caches: any = null;
+    logs: any = '';
 
     constructor(
         injector: Injector,
@@ -25,10 +29,6 @@ export class MaintenanceComponent extends AppComponentBase implements OnInit, Af
         $('tabset ul.nav').addClass('m-tabs-line');
         $('tabset ul.nav li a.nav-link').addClass('m-tabs__link');
     }
-
-    loading = false;
-    caches: any = null;
-    logs: any = '';
 
     getCaches(): void {
         const self = this;

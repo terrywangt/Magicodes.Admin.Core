@@ -228,6 +228,17 @@
                 margin: 0 auto;
                 left: array-get($layout, base, self, mobile-indent);
                 right: array-get($layout, base, self, mobile-indent);
+
+                .m-dropdown__header {
+                    .m-dropdown__header-title {
+                        font-size: get-font-size(regular, '++');
+                        font-weight: get-font-weight(bolder); 
+                    }
+
+                    .m-dropdown__header-subtitle {
+                        font-size: get-font-size(regular);
+                    }
+                }
             }
         }
     }

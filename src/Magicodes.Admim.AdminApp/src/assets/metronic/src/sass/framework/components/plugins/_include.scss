@@ -8,6 +8,7 @@
 @import "base/_jstree"; 
 @import "base/_bootstrap-notify";
 @import "base/_toastr"; 
+@import "base/_sweetalert2"; 
 
 //== Form Plugins
 @import "form/_bootstrap-maxlength"; 
@@ -33,3 +34,4 @@
 
 //== Misc Plugins
 @import "misc/_fullcalendar";
+@import "misc/_bootstrap-session-timeout";

@@ -2,7 +2,7 @@
   "runtime": "Default",
   "swaggerGenerator": {
     "fromSwagger": {
-      "url": "http://demo.api.xin-lai.com/swagger/v1/swagger.json",
+      "url": "http://localhost:22742/swagger/v1/swagger.json",
       "output": null
     }
   },
@@ -11,10 +11,10 @@
       "className": "{controller}ServiceProxy",
       "moduleName": "",
       "namespace": "",
-      "typeScriptVersion": 1.8,
+      "typeScriptVersion": 2.0,
       "template": "Angular",
       "promiseType": "Promise",
-      "httpClass": "Http",
+      "httpClass": "HttpClient",
       "injectionTokenType": "InjectionToken",
       "dateTimeType": "MomentJS",
       "nullValue": "Undefined",

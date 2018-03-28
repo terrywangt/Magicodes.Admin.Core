@@ -11,10 +11,10 @@ import { AppAuthService } from '@app/shared/common/auth/app-auth.service';
 
 export class AppPreBootstrap {
 
-    static run(callback: () => void, resolve: any, reject: any): void {
-        AppPreBootstrap.getApplicationConfig(() => {
+    static run(appRootUrl: string, callback: () => void, resolve: any, reject: any): void {
+        AppPreBootstrap.getApplicationConfig(appRootUrl, () => {
             if (UrlHelper.isInstallUrl(location.href)) {
-                LocalizedResourcesHelper.loadMetronicStyles("");
+                LocalizedResourcesHelper.loadLocalizedStlyes();
                 callback();
                 return;
             }
@@ -41,9 +41,10 @@ export class AppPreBootstrap {
         return platformBrowserDynamic().bootstrapModule(moduleType, compilerOptions);
     }
 
-    private static getApplicationConfig(callback: () => void) {
+    private static getApplicationConfig(appRootUrl: string, callback: () => void) {
+
         return abp.ajax({
-            url: '/assets/appconfig.json',
+            url: appRootUrl + 'assets/appconfig.json',
             method: 'GET',
             headers: {
                 'Abp.TenantId': abp.multiTenancy.getTenantIdCookie()
@@ -121,7 +122,7 @@ export class AppPreBootstrap {
         const cookieLangValue = abp.utils.getCookieValue('Abp.Localization.CultureName');
         const token = abp.auth.getToken();
 
-        var requestHeaders = {
+        let requestHeaders = {
             '.AspNetCore.Culture': ('c=' + cookieLangValue + '|uic=' + cookieLangValue),
             'Abp.TenantId': abp.multiTenancy.getTenantIdCookie()
         };

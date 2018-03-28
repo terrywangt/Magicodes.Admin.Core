@@ -6,8 +6,12 @@
 
 //== Component Base
 @mixin m-build-component--form-base() {
+    $space: 30px;
+
     .m-form  {
+        //== Form group
     	.m-form__group {
+            .form-control-label,
     		label {
     			font-weight: get-font-weight(bold);
                 font-size: get-font-size(regular);
@@ -21,6 +25,23 @@
             margin-bottom: 0;    		
             padding-top: 15px;
             padding-bottom: 15px;
+
+            &.m-form__group--md {
+                padding-top: 5px;
+                padding-bottom: 5px;
+            }
+
+            &.m-form__group--sm {
+                padding-top: 0px;
+                padding-bottom: 0px;
+            }
+
+            .m-form__control-static {
+                display: inline-block;
+                font-weight: get-font-weight(normal);
+                font-size: get-font-size(regular);
+                padding-top: array-get($m--forms, input, layout, self, size, default, padding, y); 
+            }
 
             &.m-form__group--first {
                 padding-top: 0;
@@ -69,6 +90,7 @@
             }
     	}        
 
+        //== Form control help
     	.m-form__help {
     		font-weight: get-font-weight(normal);
     		font-size: get-font-size(regular, '-');
@@ -79,6 +101,7 @@
             display: inline-block;
         }
 
+        //== Form section
         .m-form__section {
             margin: 40px 0 40px 0;
 
@@ -93,6 +116,7 @@
             }       
         }
 
+        //== Form separator
         .m-form__seperator {
             display: block;
             height: 0;
@@ -110,13 +134,20 @@
             }
         }
 
+        //== Form heading
         .m-form__heading {
             padding: 0;
-            margin: 0 0 10px 0;
+            margin: 0 0 15px 0;
             
             .m-form__heading-title {
                 font-weight: get-font-weight(bolder);
                 font-size: get-font-size(regular, '+++');
+
+                .m-form__heading-help-icon {
+                    line-height: 0;
+                    vertical-align: middle;
+                    padding-left: 5px;
+                }
             }
 
             .m-form__heading-sub {
@@ -124,14 +155,21 @@
                 padding: 0;
                 font-size: get-font-size(regular);
             }
+
+            &.m-form__heading--bordered,
+            &.m-form__heading--dashed {
+                padding: 0 0 15px 0;
+                margin: 0 0 15px 0;
+            }
         }
 
+        //== Form section
         .m-form__section {
             font-size: get-font-size(regular, '++');
             font-weight: get-font-weight(bolder);
         }
 
-        $space: 30px;
+        //== Form actions
         .m-form__actions {
             @include clearfix();
         	padding: $space;
@@ -143,6 +181,18 @@
             &.m-form__actions--paddingless-sides {
                 padding-left: 0;
                 padding-right: 0;
+            }
+        }
+
+        &.m-form--custom {
+            .m-form__actions {
+                padding: $space 0;
+                margin-top: $space;
+
+                &.m-form__actions--top {
+                    margin-top: 0; 
+                    margin-bottom: $space;
+                }
             }
         }
 
@@ -160,6 +210,7 @@
 
         // form labels right aligned option
         @include desktop {
+            .m-form__section.m-form__section--label-align-right,
             &.m-form--label-align-right {
                 .m-form__group {
                     > label {
@@ -196,17 +247,26 @@
         // Validation state
         .form-control-feedback {
             margin-top: 0.2rem;
+            font-size: get-font-size(regular, '-');
         }
     }
 }
 
 //== Component Skin
-@mixin m-build-component--form-skin($skin) {
-    @include component-skin(m-form, $skin) {
+@mixin m-build-component--form-skin() {
+    $skin: get-default-skin();
+
+    .m-form {
     	.m-form__group {
+            .form-control-label,
+            .col-form-label,
     		> label {
     			color: get-color($skin, regular, '+');
     		}
+
+            .m-form__control-static {
+                color: get-color($skin, regular, '-');
+            }
     	}
 
         &.m-form--group-seperator {
@@ -251,6 +311,14 @@
             .m-form__heading-sub {
                 color: get-color($skin, regular, '-');
             }
+
+            &.m-form__heading--bordered {
+                border-bottom: 1px solid get-color($skin, panel);
+            }
+
+            &.m-form__heading--dashed {
+                border-bottom: 1px dashed get-color($skin, panel);
+            }
         }
 
         .m-form__section {
@@ -280,7 +348,7 @@
 //== Component Skin
 @mixin m-build-component--form-validation-state($state, $color) {
     .has-#{$state} {
-        label:not(.m-checkbox):not(.m-radio),
+        label:not([class]),
         label.col-form-label,
         label.form-control-label {
             color: $color;
@@ -290,7 +358,7 @@
             color: $color;
         }
 
-        .input-group-addon,
+        .input-group-text,
         .form-control {
             border-color: array-get($m--forms, input, skins, light, default, border, default);
         }
@@ -301,8 +369,9 @@
     }
 
     .m-form.m-form--state {
-        .has-#{$state} {
-            .input-group-addon,
+        .has-#{$state} { 
+            .input-group .input-group-text,
+            .input-group .btn.btn-secondary,
             .form-control:focus,
             .form-control {
                 border-color: $color;
@@ -325,11 +394,8 @@
 //== Component Base
 @include m-build-component--form-base();
 
-//== Component Skin - Light
-@include m-build-component--form-skin(light);
-
-//== Component Skin - Dark
-@include m-build-component--form-skin(dark);
+//== Component Skin
+@include m-build-component--form-skin();
 
 //== Component States
 @include m-build-component--form-validation-state(success, array-get($m--state-colors, success, base));

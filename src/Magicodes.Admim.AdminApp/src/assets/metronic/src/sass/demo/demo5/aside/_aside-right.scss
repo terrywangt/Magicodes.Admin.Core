@@ -20,7 +20,10 @@
 // Tablet and Mobile mode
 @include tablet-and-mobile {
 	.m-aside-right {
+		border: 1px solid array-get($m-config-aside, aside-right, self, border-color);
 		width: 100%;	
 		padding: array-get($m-config-aside, aside-right, self, padding, mobile);
+		margin-bottom: 20px;
+		@include border-radius( 2px );
 	}
 }

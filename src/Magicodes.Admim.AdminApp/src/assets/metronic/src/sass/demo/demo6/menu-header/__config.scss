@@ -116,7 +116,9 @@ $m-config-menu-header: (
 							link: (
 								// link self
 								self: (
-									padding: 9px 30px
+									padding: 9px 30px,
+									padding-x: 30px,
+									height: 40px
 								),
 
 								// link icon
@@ -606,7 +608,7 @@ $m-config-menu-header: (
 						submenu: (
 							// submenu self
 							self: (
-								indent: 25px,
+								indent: 15px,
 								margin:	0
 							),
 
@@ -621,8 +623,9 @@ $m-config-menu-header: (
 								link: (
 									// link itself
 									self: (
-										height: 40px,		
-										padding: 0 30px
+										padding: 0 30px,
+										padding-x: 30px,
+										height: 40px
 									),					
 
 									// link icon
@@ -672,7 +675,7 @@ $m-config-menu-header: (
 							// submenu section
 							section: (
 								self: (
-									indent: 30px,
+									indent: 15px,
 									padding: 0 25px,
 									margin: 20px 0 0 0,
 									height: 40px

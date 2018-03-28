@@ -96,7 +96,9 @@ export class LoginService {
                     this.facebookLoginStatusChangeCallback(response);
                 }, { scope: 'email' });
             } else if (provider.name === ExternalLoginProvider.GOOGLE) {
-                gapi.auth2.getAuthInstance().signIn();
+                gapi.auth2.getAuthInstance().signIn().then(() => {
+                    this.googleLoginStatusChangeCallback(gapi.auth2.getAuthInstance().isSignedIn.get());
+                });
             } else if (provider.name === ExternalLoginProvider.MICROSOFT) {
                 WL.login({
                     scope: ['wl.signin', 'wl.basic', 'wl.emails']
@@ -225,7 +227,7 @@ export class LoginService {
                 FB.getLoginStatus(response => {
                     this.facebookLoginStatusChangeCallback(response);
                     if (response.status !== 'connected') {
-                        callback();     
+                        callback();
                     }
                 });
             });
@@ -237,14 +239,8 @@ export class LoginService {
                             clientId: loginProvider.clientId,
                             scope: 'openid profile email'
                         }).then(() => {
-                            gapi.auth2.getAuthInstance().isSignedIn.listen((isSignedIn) => {
-                                this.googleLoginStatusChangeCallback(isSignedIn);
-                            });
-
-                            this.googleLoginStatusChangeCallback(gapi.auth2.getAuthInstance().isSignedIn.get());
+                            callback();
                         });
-
-                        callback();
                     });
             });
         } else if (loginProvider.name === ExternalLoginProvider.MICROSOFT) {

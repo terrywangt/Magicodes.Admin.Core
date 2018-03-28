@@ -5,7 +5,7 @@ import { AppSessionService } from '@shared/common/session/app-session.service';
 import { appModuleAnimation } from '@shared/animations/routerTransition';
 
 @Component({
-    templateUrl: "./install.component.html",
+    templateUrl: './install.component.html',
     animations: [appModuleAnimation()]
 })
 export class InstallComponent extends AppComponentBase implements OnInit {
@@ -37,7 +37,7 @@ export class InstallComponent extends AppComponentBase implements OnInit {
         this._installSettingService.checkDatabase()
             .subscribe(result => {
                 if (result.isDatabaseExist) {
-                    window.location.href = "/";
+                    window.location.href = '/';
                 }
             });
 
@@ -60,7 +60,7 @@ export class InstallComponent extends AppComponentBase implements OnInit {
                 this.saving = false;
             })
             .subscribe(() => {
-                window.location.href = "/";
+                window.location.href = '/';
             });
     }
 }

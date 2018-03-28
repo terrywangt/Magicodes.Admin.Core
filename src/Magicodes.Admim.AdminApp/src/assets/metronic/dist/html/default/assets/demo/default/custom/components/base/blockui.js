@@ -4,7 +4,7 @@ var BlockUIDemo = function () {
     
     //== Private functions
 
-    // basic demo
+    //== Basic demo
     var demo1 = function () {
         // default
         $('#m_blockui_1_1').click(function() {

@@ -33,6 +33,10 @@
                     font-weight: get-font-weight(boldest); 
                 }
 
+                .progress {
+                    height: 0.5rem;
+                }
+
         		.m-widget25__progress-sub {  
                     display: inline-block;  
                     margin-top: 6px;                
@@ -61,16 +65,18 @@
 
             .m-widget25--progress {
                 margin: 10px auto 0;
-                padding-top: 20px;
-                
+                padding-top: 20px;               
+
                 .m-widget25__progress {  
                     padding-right: 10px;
                     display: block;
-                    width: 100%;
+                    width: 100%; 
+                    margin: 10px auto 0;
+                    padding-top: 20px;                    
                     
                     .m-widget25__progress-number {
                         font-size: 16px;
-                    }
+                    }                    
 
                     .m-widget25__progress-sub {  
                         margin-top: 6px;                

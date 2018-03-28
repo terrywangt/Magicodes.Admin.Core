@@ -1,0 +1,25 @@
+//
+//** Footer Settings
+//
+
+$m-config-footer: (			
+	self: (
+		height: 2rem,
+		padding: (
+			desktop: 1rem 0,
+			mobile: 0.5rem 0
+		)
+	),
+	copyright: (
+		color: rgba(#757893, 0.5),
+		font-size: 0.9rem,
+		font-weight: 400
+	),
+	nav: (
+		font-size: 0.9rem,
+		color: (
+			default: #757893,
+			hover: lighten(#757893, 10%)
+		)
+	)	
+);

@@ -271,20 +271,6 @@
             }
         }
 
-        //== full height portlet mode
-        &.m-portlet--full-height {
-            height: calc(100% - #{$space});
-
-            .m-portlet__body {
-                height: calc(100% - #{$space} - #{$space});
-            }
-        }
-
-        //== full height portlet mode
-        &.m-portlet--half-height {
-            height: calc(50% - #{$space});
-        }
-
         &.m-portlet--fit {
             position: relative;
         }
@@ -296,13 +282,14 @@
             }
         }
 
-        // semi bordered mode: remove header bottom border
+        //== Semi bordered mode: remove header bottom border
         &.m-portlet--bordered-semi {
             .m-portlet__body {
                 padding-top: $bordered-semi-portlet-body-padding-top;
             }
         }
 
+        //== Portlet space
         &.m-portlet--space {
             padding: 0 $space;
 
@@ -319,6 +306,11 @@
                     padding: $space 0;
                 }
             }
+        }
+
+        //== Apply portlet padding to inner element.
+        .m-portlet__padding-x  {  
+            padding: 0 $space;
         }
 
         //== Portlet tabs
@@ -405,6 +397,10 @@
                 @include border-bottom-left-radius(array-get($m--border-radius, general));
                 @include border-bottom-right-radius(array-get($m--border-radius, general));
             }
+        }
+
+        &.m-portlet--rounded-force {
+            overflow: hidden;
         }
 
         //== Responsive mode
@@ -557,6 +553,24 @@
                 } 
             }
         } 
+    }
+
+    @include desktop() {
+        .m-portlet  {
+            //== full height portlet mode
+            &.m-portlet--full-height {
+                height: calc(100% - #{$space});
+
+                .m-portlet__body {
+                    height: calc(100% - #{$space} - #{$space});
+                }
+            }
+
+            //== full height portlet mode
+            &.m-portlet--half-height {
+                height: calc(50% - #{$space});
+            }
+        }
     }
 
     //== fullscreen mode

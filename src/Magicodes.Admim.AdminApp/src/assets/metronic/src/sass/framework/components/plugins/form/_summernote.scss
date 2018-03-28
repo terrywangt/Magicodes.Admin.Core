@@ -13,6 +13,20 @@
     .note-editor {
         @include border-radius(array-get($m--border-radius, general));
 
+        .note-toolbar-wrapper {
+            position: relative;
+            z-index: 1;
+        }
+
+        .modal {
+            .modal-header {
+                .close {
+                    position: absolute;
+                    right: 25px; 
+                }
+            }
+        } 
+
         .panel-heading.note-toolbar {
             padding: 5px 10px 10px 10px;
             
@@ -74,6 +88,14 @@
         
             .note-statusbar {
                 background: get-color($skin, panel, '--');       
+            }
+        }
+    }
+
+    .note-editable {
+        .table.table-bordered {
+            th,td {
+                border: 1px solid get-color($skin, panel, '+');
             }
         }
     }

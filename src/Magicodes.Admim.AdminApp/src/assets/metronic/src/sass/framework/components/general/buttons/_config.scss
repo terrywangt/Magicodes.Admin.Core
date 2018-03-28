@@ -4,7 +4,12 @@
 
 $m--buttons: (
 	layout: (
-		// default bootstrap button paddings
+		//== Self
+		self: (
+			transition: 'color 0.15s ease-in-out, background-color 0.15s ease-in-out, background 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out'
+		),
+
+		//== Default bootstrap button paddings
 		default: (
 			default: (
 				self: (
@@ -51,12 +56,12 @@ $m--buttons: (
 						fontawesome: 1rem, 
 						metronic: 1.1rem
 					),
-					icon-only-size: 24px
+					icon-only-size: 30px
 				)
 			)
 		),
 
-		// custom button paddings and fonts
+		//== Custom button paddings and fonts
 		custom: (
 			default: (
 				self: (

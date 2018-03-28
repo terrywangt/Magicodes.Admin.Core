@@ -78,6 +78,10 @@ body {
 				@include border-radius( array-get($m-config-base, body, self, border-radius) );
 			}
 
+			.modal-open & {
+				z-index: auto !important;
+			}
+
 			// body wrapper
 			.m-wrapper {
 				.m-aside-left--enabled & {

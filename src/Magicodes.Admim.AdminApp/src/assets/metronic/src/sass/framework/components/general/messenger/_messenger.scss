@@ -5,11 +5,6 @@
 //== Component Base
 @mixin m-build-component--messenger-base() {
     .m-messenger {
-        // contacts
-        .m-messenger__contacts {
-
-        }
-
         // form
         .m-messenger__form {
             margin: 0 0 10px 0;
@@ -74,6 +69,10 @@
                 font-size: get-font-size(regular, '-');
                 font-weight: get-font-weight(bolder);
                 text-transform: uppercase;
+            }
+
+            .m-messenger__wrapper {
+                @include clearfix();
             }
 
             .m-messenger__message {
@@ -210,7 +209,8 @@
 }
 
 //== Component Skin
-@mixin m-build-component--messenger-skin($skin) {
+@mixin m-build-component--messenger-skin() {
+    $skin: get-default-skin();
 
     @include component-skin(m-messenger, $skin) {
         // contacts
@@ -262,7 +262,7 @@
                         background: get-color($skin, panel, '-');
 
                         .m-messenger__message-username {
-                            color: get-color($skin, regular, '---');
+                            color: get-color($skin, regular, '-');
                         }
 
                         .m-messenger__message-text {
@@ -280,15 +280,15 @@
                         background: get-brand-color();
 
                         .m-messenger__message-username {
-                            color: get-color(dark, regular, '--');
+                            color: darken(#fff, 6%);
                         }
 
                         .m-messenger__message-text {
-                            color: get-color(dark, regular);
+                            color: darken(#fff, 3%);
                         }
 
                         .m-messenger__message-typing {
-                            color: get-color(dark, regular, '--');
+                            color: darken(#fff, 6%);
                         }
                     }
                 }
@@ -326,7 +326,4 @@
 @include m-build-component--messenger-base();
 
 //== Build Component - Light Skin
-@include m-build-component--messenger-skin(light);
-
-//== Build Component - Dark Skin
-@include m-build-component--messenger-skin(dark);
+@include m-build-component--messenger-skin();

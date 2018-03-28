@@ -16,10 +16,6 @@ var DatatableColumnWidthDemo = function () {
 					}
 				},
 				pageSize: 10,
-				saveState: {
-					cookie: true,
-					webstorage: true
-				},
 				serverPaging: true,
 				serverFiltering: false,
 				serverSorting: true
@@ -73,9 +69,8 @@ var DatatableColumnWidthDemo = function () {
 				title: "Actions",
 				sortable: false,
 				overflow: 'visible',
-				template: function (row) {
-					var dropup = (row.getDatatable().getPageSize() - row.getIndex()) <= 4 ? 'dropup' : '';
-
+				template: function (row, index, datatable) {
+					var dropup = (datatable.getPageSize() - index) <= 4 ? 'dropup' : '';
 					return '<span>\
 						<a href="#" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="View details">\
 							<i class="la la-ellipsis-h"></i>\

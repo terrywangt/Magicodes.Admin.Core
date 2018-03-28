@@ -10,6 +10,7 @@ var BootstrapTimepicker = function () {
         // minimum setup
         $('#m_timepicker_2, #m_timepicker_2_modal').timepicker({
             minuteStep: 1,
+            defaultTime: '',
             showSeconds: true,
             showMeridian: false,
             snapToStep: true

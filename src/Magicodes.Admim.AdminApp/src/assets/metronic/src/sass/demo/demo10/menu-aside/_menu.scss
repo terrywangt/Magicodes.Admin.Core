@@ -1,0 +1,93 @@
+//
+//** Aside Menus
+// Build left aside menu
+
+@include m-generate--menu-ver( $m-config-menu-aside );
+
+@include desktop {
+
+	.m-aside-menu {
+		.m-menu__nav {
+			padding: 0 30px;
+
+			.m-menu__item {	
+				> .m-menu__link  {
+					padding-left: 0 !important;
+					padding-right: 0 !important;
+					border-bottom: 1px dashed tranparent;
+				}
+
+				&.m-menu__item--active {	
+					> .m-menu__link  {
+						height: 30px !important;
+						margin-bottom: 10px !important;
+						border-bottom: 1px dashed get-brand-color();
+					}
+				}
+			}
+
+			.m-menu__section {	
+				padding-left: 0 !important;
+				padding-right: 0 !important;
+			}
+
+			> .m-menu__item {
+				padding-left: 0;
+
+				> .m-menu__submenu > .m-menu__subnav > .m-menu__item {
+					padding-left: 10px;
+
+					> .m-menu__submenu > .m-menu__subnav > .m-menu__item {
+					    padding-left: 20px;
+					}
+
+					> .m-menu__submenu > .m-menu__subnav > .m-menu__item > .m-menu__submenu > .m-menu__item {
+					    padding-left: 30px;
+					}
+				}
+			}
+		}
+
+
+		&.m-aside-menu--dropdown {
+			.m-menu__nav {
+				.m-menu__item {	
+					&.m-menu__item--expanded[data-menu-submenu-toggle="hover"] {
+						> .m-menu__link  {
+							height: 30px !important;
+							margin-bottom: 10px !important;
+							border-bottom: 1px dashed get-brand-color();
+						}
+					}
+				}
+
+				.m-menu__item[data-menu-submenu-toggle='hover'] {
+					> .m-menu__submenu {
+						margin-left: $m-aside-left-width - 30px !important;
+
+						> .m-menu__subnav {
+							> .m-menu__item {
+								padding-left: 30px !important;
+								padding-right: 30px !important;
+
+								> .m-menu__submenu {
+									margin-left: $m-aside-left-width - 20px !important;
+								}
+							}
+						}
+					}
+				}
+			}
+		}		
+	}
+}
+
+@include tablet-and-mobile {
+	.m-aside-menu {
+		background: #fff;
+
+		.m-menu__nav { 
+			padding-top: 0;
+		}
+	}
+}

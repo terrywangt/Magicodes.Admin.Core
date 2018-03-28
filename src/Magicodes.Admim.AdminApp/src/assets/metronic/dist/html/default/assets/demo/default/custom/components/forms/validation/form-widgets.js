@@ -22,6 +22,10 @@ var FormWidgets = function () {
             format: 'yyyy.mm.dd hh:ii'
         });
 
+        $('#m_datetimepicker').change(function() {
+            validator.element($(this));
+        });
+
         // timepicker
         $('#m_timepicker').timepicker({
             minuteStep: 1,
@@ -65,7 +69,7 @@ var FormWidgets = function () {
         var countries = new Bloodhound({
             datumTokenizer: Bloodhound.tokenizers.whitespace,
             queryTokenizer: Bloodhound.tokenizers.whitespace,
-            prefetch: 'http://keenthemes.com/metronic/preview/inc/api/typeahead/countries.json'
+            prefetch: 'https://keenthemes.com/metronic/preview/inc/api/typeahead/countries.json'
         });
 
         $('#m_typeahead').typeahead(null, {
@@ -74,11 +78,6 @@ var FormWidgets = function () {
         });
         $('#m_typeahead').bind('typeahead:select', function(ev, suggestion) {
             validator.element($('#m_typeahead')); // validate element
-        });
-
-        // summernote
-        $('#m_summernote').summernote({
-            height: 150, 
         });
     }
     
@@ -116,9 +115,6 @@ var FormWidgets = function () {
                     required: true
                 },
 
-                summernote: {
-                    required: true
-                },
                 markdown: {
                     required: true
                 }

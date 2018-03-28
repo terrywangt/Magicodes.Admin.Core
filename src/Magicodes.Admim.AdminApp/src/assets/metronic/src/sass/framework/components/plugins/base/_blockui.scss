@@ -29,7 +29,7 @@
 @mixin m-build-component--blockui-skin($skin) {
     @include component-skin(m-blockui, $skin) {
         background: get-color($skin, box);
-        @include shadow(get-shadow($skin));
+        @include shadow(get-shadow($skin, '-'));
 
         &.m-blockui-no-shadow {
             @include shadow(none);

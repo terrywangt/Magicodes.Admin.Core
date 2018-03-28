@@ -7,19 +7,23 @@
         </div>
         <form #registerForm="ngForm" class="m-login__form" method="post" novalidate (ngSubmit)="save()">
             <div class="form-group m-form__group">
-                <input class="form-control" autoFocus type="text" placeholder="{{l('Name')}}" [(ngModel)]="model.name" name="Name" required maxlength="32" />
+                <input #nameInput="ngModel" class="form-control" autoFocus type="text" placeholder="{{l('Name')}} *" [(ngModel)]="model.name" name="Name" required maxlength="32" />
+                <validation-messages [formCtrl]="nameInput"></validation-messages>
             </div>
 
             <div class="form-group m-form__group">
-                <input class="form-control" type="text" placeholder="{{l('Surname')}}" [(ngModel)]="model.surname" name="Surname" required maxlength="32" />
+                <input #surnameInput="ngModel" class="form-control" type="text" placeholder="{{l('Surname')}} *" [(ngModel)]="model.surname" name="Surname" required maxlength="32" />
+                <validation-messages [formCtrl]="surnameInput"></validation-messages>
             </div>
 
             <div class="form-group m-form__group">
-                <input class="form-control" type="email" placeholder="{{l('EmailAddress')}}" [(ngModel)]="model.emailAddress" name="EmailAddress" required maxlength="256" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{1,})+$" />
+                <input #emailAddressInput="ngModel" class="form-control" type="email" placeholder="{{l('EmailAddress')}} *" [(ngModel)]="model.emailAddress" name="EmailAddress" required maxlength="256" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{1,})+$" />
+                <validation-messages [formCtrl]="emailAddressInput"></validation-messages>
             </div>
 
             <div class="form-group m-form__group">
-                <input class="form-control" type="text" autocomplete="off" placeholder="{{l('UserName')}}" name="UserName" [(ngModel)]="model.userName" required maxlength="32" />
+                <input #userNameInput="ngModel" class="form-control" type="text" autocomplete="off" placeholder="{{l('UserName')}} *" name="UserName" [(ngModel)]="model.userName" required maxlength="32" />
+                <validation-messages [formCtrl]="userNameInput"></validation-messages>
             </div>
             <div class="form-group m-form__group">
                 <input type="password" name="Password" class="form-control" [(ngModel)]="model.password" #Password="ngModel" placeholder="{{l('Password')}}" validateEqual="PasswordRepeat"
@@ -49,6 +53,7 @@
                     <li [hidden]="!PasswordRepeat.errors.requireUppercase">{{l("PasswordComplexity_RequireUppercase_Hint")}}</li>
                     <li [hidden]="!PasswordRepeat.errors.requireNonAlphanumeric">{{l("PasswordComplexity_RequireNonAlphanumeric_Hint")}}</li>
                     <li [hidden]="!PasswordRepeat.errors.requiredLength">{{l("PasswordComplexity_RequiredLength_Hint", passwordComplexitySetting.requiredLength)}}</li>
+                    <li [hidden]="PasswordRepeat.valid">{{l("PasswordsDontMatch")}}</li>
                 </ul>
             </div>
             <p *ngIf="useCaptcha" class="hint margin-top-20">

@@ -16,10 +16,6 @@ var DatatableTranslationDemo = function () {
 					}
 				},
 				pageSize: 10,
-				saveState: {
-					cookie: true,
-					webstorage: true
-				},
 				serverPaging: true,
 				serverFiltering: false,
 				serverSorting: true

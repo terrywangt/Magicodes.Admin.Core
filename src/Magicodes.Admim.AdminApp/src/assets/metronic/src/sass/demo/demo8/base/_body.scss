@@ -1,0 +1,73 @@
+//
+//** Body
+// Page body container
+
+//== General Mode
+
+body {	
+	background-size: cover;
+	background-attachment: fixed;
+	background-repeat: no-repeat;
+
+	@include tablet-and-mobile {
+		background-size: initial;
+	}
+}
+
+.m-body {	
+	overflow: hidden;  
+
+	.m-content {
+		padding: array-get($m-config-base, body, content, padding, desktop, y) array-get($m-config-base, body, content, padding, desktop, x) 0 array-get($m-config-base, body, content, padding, desktop, x);
+	}
+
+	//== Fix fluid flex box item hor overflow issue
+	.m-wrapper {
+		width: 100%;
+		background: array-get($m-config-base, body, wrapper, bg-color );
+	}
+}
+
+//== Desktop Mode
+@include desktop {
+	.m-body {	
+		// body wrapper
+		.m-wrapper {
+			padding: array-get($m-config-base, body, wrapper, padding, desktop );
+			@include border-bottom-left-radius( array-get($m-config-base, body, wrapper, border-radius) );
+			@include border-bottom-right-radius( array-get($m-config-base, body, wrapper, border-radius) );
+
+			.m-aside-left--enabled & {
+				@include shadow(array-get($m-config-base, body, wrapper, shadow));
+				padding-left: array-get($m-config-base, body, wrapper, space);
+				@include border-bottom-left-radius( 0 );
+			}
+
+			.m-aside-right--enabled & {
+				padding-right: array-get($m-config-base, body, wrapper, space);
+				@include border-bottom-right-radius( 0 );
+			}
+		}
+	}
+}
+
+// Tablet & Mobile Mode
+@include tablet-and-mobile {
+	.m-body {
+		// fixed header mode
+		.m-header--fixed-mobile & { 
+			padding-top: array-get($m-config-header, header, self, height, mobile, default) !important;  
+		}
+
+		// content wrapper
+		.m-wrapper {
+			@include border-radius( array-get($m-config-base, body, wrapper, border-radius) );
+			padding:	array-get($m-config-base, body, wrapper, padding, mobile );
+		}
+
+		// body content
+		.m-content {
+			padding: array-get($m-config-base, body, content, padding, mobile, y) array-get($m-config-base, body, content, padding, mobile, x);	
+		}
+	}
+}

@@ -5,9 +5,9 @@ import { AppComponentBase } from '@shared/common/app-component-base';
 import { appModuleAnimation } from '@shared/animations/routerTransition';
 import { AppTimezoneScope } from '@shared/AppEnums';
 import { AppSessionService } from '@shared/common/session/app-session.service';
-import { FileUploader, FileUploaderOptions } from '@node_modules/ng2-file-upload';
+import { FileUploader, FileUploaderOptions } from 'ng2-file-upload';
 import { TokenService } from '@abp/auth/token.service';
-import { IAjaxResponse } from '@abp/abpHttp';
+import { IAjaxResponse } from '@abp/abpHttpInterceptor';
 
 import * as moment from 'moment';
 
@@ -53,7 +53,7 @@ export class TenantSettingsComponent extends AppComponentBase implements OnInit,
         //Temporary fix for: https://github.com/valor-software/ngx-bootstrap/issues/1508
         $('tabset ul.nav').addClass('m-tabs-line');
         $('tabset ul.nav li a.nav-link').addClass('m-tabs__link');
-    };
+    }
 
     getSettings(): void {
         this.loading = true;

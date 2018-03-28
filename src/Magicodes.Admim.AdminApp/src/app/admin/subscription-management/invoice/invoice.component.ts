@@ -1,7 +1,8 @@
-import { Component, Injector, OnInit, ViewChild } from '@angular/core';
+import { Component, Injector, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { appModuleAnimation } from '@shared/animations/routerTransition';
+import { AppConsts } from '@shared/AppConsts';
 import {
     InvoiceDto,
     InvoiceServiceProxy
@@ -17,6 +18,7 @@ export class InvoiceComponent extends AppComponentBase implements OnInit {
 
     paymentId = 0;
     invoiceInfo: InvoiceDto = new InvoiceDto();
+    companyLogo = AppConsts.appBaseUrl + '/assets/common/images/logo.png';
 
     constructor(
         injector: Injector,

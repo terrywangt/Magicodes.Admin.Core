@@ -27,6 +27,11 @@ export class AppUrlService {
     getAppRootUrlOfTenant(tenancyName?: string): string {
         let baseUrl = this.ensureEndsWith(AppConsts.appBaseUrlFormat, '/');
 
+        //Add base href if it is not configured in appconfig.json
+        if (baseUrl.indexOf(AppConsts.appBaseHref) < 0) {
+            baseUrl = baseUrl + this.removeFromStart(AppConsts.appBaseHref, '/');
+        }
+
         if (baseUrl.indexOf(AppUrlService.tenancyNamePlaceHolder) < 0) {
             return baseUrl;
         }
@@ -56,6 +61,14 @@ export class AppUrlService {
     private removeFromEnd(str: string, c: string) {
         if (str.charAt(str.length - 1) === c) {
             str = str.substr(0, str.length - 1);
+        }
+
+        return str;
+    }
+
+    private removeFromStart(str: string, c: string) {
+        if (str.charAt(0) === c) {
+            str = str.substr(1, str.length - 1);
         }
 
         return str;

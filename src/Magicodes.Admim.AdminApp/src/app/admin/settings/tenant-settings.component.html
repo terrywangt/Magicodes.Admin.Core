@@ -80,7 +80,7 @@
                             </div>
                         </div>
                         <div *ngIf="!isMultiTenancyEnabled && settings.ldap.isModuleEnabled">
-                            <h5>{{l("LdapSettings")}}</h5>
+                            <h5 class="margin-top-20">{{l("LdapSettings")}}</h5>
                             <label for="Setting_LdapIsEnabled" class="m-checkbox">
                                 <input id="Setting_LdapIsEnabled" type="checkbox" name="LdapIsEnabled" [(ngModel)]="settings.ldap.isEnabled">
                                 {{l("EnableLdapAuthentication")}}

@@ -185,8 +185,10 @@
 }
 
 //== Component Skin
-@mixin m-build-component--switch-skin($config, $skin) {
-    @include component-skin(m-switch, $skin) {
+@mixin m-build-component--switch-skin() {
+    $skin: get-default-skin();
+
+    .m-switch {
         //== Panel bg
         input:empty ~ span:before {
             background-color: get-color($skin, panel);
@@ -285,8 +287,5 @@
 //== Component Base
 @include m-build-component--switch-base();
 
-//== Component Skin - Light
-@include m-build-component--switch-skin($m--forms, light);
-
-//== Component Skin - Dark
-@include m-build-component--switch-skin($m--forms, dark);
+//== Component Skin
+@include m-build-component--switch-skin();

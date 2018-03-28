@@ -12,9 +12,13 @@ import { FriendProfilePictureComponent } from './friend-profile-picture.componen
 import { MomentFormatPipe } from './moment-format.pipe';
 import { CurrencyInputDirective } from './currency-input.directive';
 import { NormalizeDropdownPositionDirective } from './normalize-dropdown-position.directive';
-
+import { ValidationMessagesComponent } from './validation-messages.component';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
+    imports: [
+        CommonModule
+    ],
     providers: [
         FileDownloadService,
         LocalStorageService
@@ -29,7 +33,8 @@ import { NormalizeDropdownPositionDirective } from './normalize-dropdown-positio
         FriendProfilePictureComponent,
         MomentFormatPipe,
         CurrencyInputDirective,
-        NormalizeDropdownPositionDirective
+        NormalizeDropdownPositionDirective,
+        ValidationMessagesComponent
     ],
     exports: [
         EqualValidator,
@@ -41,7 +46,8 @@ import { NormalizeDropdownPositionDirective } from './normalize-dropdown-positio
         FriendProfilePictureComponent,
         MomentFormatPipe,
         CurrencyInputDirective,
-        NormalizeDropdownPositionDirective
+        NormalizeDropdownPositionDirective,
+        ValidationMessagesComponent
     ]
 })
 export class UtilsModule { }

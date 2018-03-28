@@ -1,10 +1,10 @@
 /*!
  * JQVMap: jQuery Vector Map Library
  * @author JQVMap <me@peterschmalfeldt.com>
- * @version 1.5.1
+ * @version 1.5.0
  * @link http://jqvmap.com
  * @license https://github.com/manifestinteractive/jqvmap/blob/master/LICENSE
- * @builddate 2016/05/18
+ * @builddate 2016/03/15
  */
 
 var VectorCanvas = function (width, height, params) {

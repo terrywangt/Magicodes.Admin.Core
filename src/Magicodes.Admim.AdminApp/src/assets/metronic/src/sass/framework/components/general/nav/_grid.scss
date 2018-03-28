@@ -22,7 +22,7 @@
                 display: table-cell; 
                 vertical-align: middle;   
                 text-align: center;
-                padding: array-get($layout, item, self, padding);
+                padding: array-get($layout, item, self, padding, desktop);
 
                 &:hover {
                     text-decoration: none;
@@ -44,6 +44,18 @@
                     font-weight: get-font-weight(bolder);
                 }
             }
+        }
+    }
+
+    @include tablet-and-mobile {
+        .m-nav-grid {
+            // nav row
+            > .m-nav-grid__row {
+                // nav item 
+                > .m-nav-grid__item {
+                    padding: array-get($layout, item, self, padding, mobile); 
+                }
+            }  
         }
     }
 }

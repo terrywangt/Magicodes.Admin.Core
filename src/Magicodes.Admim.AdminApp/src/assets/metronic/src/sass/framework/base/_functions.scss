@@ -380,7 +380,7 @@
         $base: darken($base, 10%);
     }
 
-    @if $i == '+++' {
+    @if $i == '+++' { 
         $base: darken($base, 15%);
     }
 

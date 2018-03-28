@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Router } from '@angular/router';
+import { RouterModule, Router, NavigationEnd } from '@angular/router';
 import { UsersComponent } from './users/users.component';
 import { RolesComponent } from './roles/roles.component';
 import { AuditLogsComponent } from './audit-logs/audit-logs.component';
@@ -51,9 +51,15 @@ import { UiCustomizationComponent } from './ui-customization/ui-customization.co
 })
 export class AdminRoutingModule {
 
-    constructor(private router: Router) {
-        router.events.subscribe(() => {
+    constructor(
+        private router: Router
+    ) {
+        router.events.subscribe((event) => {
             this.hideOpenDataTableDropdownMenus();
+
+            if (event instanceof NavigationEnd) {
+                window.scroll(0, 0);
+            }
         });
     }
 

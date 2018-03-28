@@ -64,16 +64,19 @@
              */
             toggle: function() {
                 if (toggle.state == 'off') {
-                    Plugin.on();
+                    Plugin.toggleOn();
                 } else {
-                    Plugin.off();
+                    Plugin.toggleOff();
                 }
+                Plugin.eventTrigger('toggle');
+
+                return toggle;
             },
 
             /**
              * Handles toggle click toggle
              */
-            on: function() {
+            toggleOn: function() {
                 Plugin.eventTrigger('beforeOn');
                 
                 toggle.target.addClass(toggle.targetState);
@@ -92,7 +95,7 @@
             /**
              * Handles toggle click toggle
              */
-            off: function() {
+            toggleOff: function() {
                 Plugin.eventTrigger('beforeOff');
 
                 toggle.target.removeClass(toggle.targetState);
@@ -112,6 +115,7 @@
              * Trigger events
              */
             eventTrigger: function(name) {
+                toggle.trigger(name);
                 for (i = 0; i < toggle.events.length; i++) {
                     var event = toggle.events[i];
                     if (event.name == name) {
@@ -136,6 +140,8 @@
                 });
 
                 Plugin.sync();
+
+                return toggle;
             }
         };
 
@@ -149,27 +155,56 @@
          ** PUBLIC API METHODS
          ********************/
 
+
         /**
-         * Get subtoggle mode
+         * Get toggle state 
+         */
+        toggle.getState =  function () {
+            return toggle.state;
+        };
+
+        /**
+         * Toggle 
+         */
+        toggle.toggle =  function () {
+            return Plugin.toggle();
+        };
+
+        /**
+         * Toggle on 
+         */
+        toggle.toggleOn =  function () {
+            return Plugin.toggleOn();
+        };
+
+        /**
+         * Toggle off 
+         */
+        toggle.toggleOff =  function () {
+            return Plugin.toggleOff();
+        };
+
+        /**
+         * Attach event
+         * @returns {mToggle}
          */
         toggle.on =  function (name, handler) {
             return Plugin.addEvent(name, handler);
         };
 
         /**
-         * Set toggle content
+         * Attach event that will be fired once
          * @returns {mToggle}
          */
         toggle.one =  function (name, handler) {
             return Plugin.addEvent(name, handler, true);
-        };   
+        };     
 
         return toggle;
     };
 
     // default options
     $.fn.mToggle.defaults = {
-
         togglerState: '',
         targetState: ''
     }; 

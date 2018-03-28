@@ -1,0 +1,248 @@
+//
+//** Default Search
+//
+
+//== Search Base 
+@mixin m-build-header-search-base($layout) {
+	// base layout
+
+	.m-header-search {		
+		.m-header-search__form {
+			display: inline-block;
+			float: right;
+
+			// loader
+			&.m-loader {
+				&:before {
+					right: array-get($layout, spinner, right, desktop);
+				}
+
+				@include m-build-component--loader-customize-skin( array-get($layout, spinner, color, desktop, default) );
+			}
+		}
+
+		.m-header-search__wrapper {
+			display: table;
+			table-layout: fixed;	
+			text-align: right;	
+			@include border-radius(array-get($layout, self, border-radius));
+			background-color: array-get($layout, input, bg-color, desktop, default);
+			border: 1px solid array-get($layout, input, border-color, desktop, default);
+		}
+
+		.m-header-search__input-wrapper {
+			display: table-cell;
+			vertical-align: middle;
+		}
+
+		.m-header-search__input {
+			@include reset-input();
+			width: 100%;
+			font-size: array-get($layout, input, font-size);
+			padding: array-get($layout, input, padding, desktop);
+			display: block;
+			color: array-get($layout, input, font-color, desktop, default);			
+			@include input-placeholder(array-get($layout, input, placeholder-color, desktop, default));
+		}
+
+		.m-header-search__icon-search,
+		.m-header-search__icon-close, 
+		.m-header-search__icon-cancel {	
+			text-align: center;
+			display: table-cell;
+			vertical-align: middle;
+			line-height: 0 !important;
+			cursor: pointer;
+		}
+
+		.m-header-search__icon-search {			
+			width: array-get($layout, icon, search, width, desktop);
+			padding: array-get($layout, icon, search, padding, desktop);
+			
+			> i {
+				font-size: array-get($layout, icon, search, font-size, desktop);
+				color: array-get($layout, icon, search, font-color, desktop, default);
+			}
+		}
+
+		.m-header-search__icon-close {		
+			display: none;	
+			width: array-get($layout, icon, close, width, desktop);
+			padding: array-get($layout, icon, cancel, padding, desktop);
+
+			> i {
+				font-size: array-get($layout, icon, close, font-size, desktop, default);
+			}
+		}
+
+		// cancel icon
+		.m-header-search__icon-cancel {
+			visibility: hidden;
+			width: array-get($layout, icon, cancel, width, desktop);		
+			padding: array-get($layout, icon, cancel, padding, desktop);	 
+			
+			> i {
+				font-size: array-get($layout, icon, cancel, font-size, desktop);
+				color: array-get($layout, icon, cancel, font-color, desktop, default);
+			}			
+		}
+	}
+
+	@include desktop {
+		.m-header-search {
+			width: array-get($layout, self, width, desktop, default);
+
+			.m-header-search__form {
+				height: array-get($layout, self, height, desktop);
+			}
+
+			// expandable input
+			&.m-header-search--expandable {
+				width: array-get($layout, self, width, desktop, expandable, expanded);
+
+				$icons-width: array-get($layout, icon, search, width, desktop) + array-get($layout, icon, cancel, width, desktop);
+
+				.m-header-search__input {					
+					@include transition(width array-get($layout, self, transition-time)  ease-out);	
+					width: array-get($layout, self, width, desktop, expandable, initial) - $icons-width;
+					
+					&:focus {
+						@include transition(width array-get($layout, self, transition-time)  ease-out);	
+						width: array-get($layout, self, width, desktop, expandable, expanded) - $icons-width;
+					}
+				}
+			}
+		}
+
+		//== Fixed minimized header mode
+		.m-header--fixed.m-header--minimize-on {
+			.m-header-search {		
+				.m-header-search__form {
+					// loader
+					&.m-loader {
+						@include m-build-component--loader-customize-skin( array-get($layout, spinner, color, desktop, fixed) );
+					}
+				}
+
+				.m-header-search__wrapper {
+					background-color: array-get($layout, input, bg-color, desktop, fixed);
+					border: 1px solid array-get($layout, input, border-color, desktop, fixed);
+				}
+
+				.m-header-search__input {
+					color: array-get($layout, input, font-color, desktop, fixed);			
+					@include input-placeholder(array-get($layout, input, placeholder-color, desktop, fixed));
+				}
+
+				.m-header-search__icon-search {								
+					> i {
+						color: array-get($layout, icon, search, font-color, desktop, fixed);
+					}
+				}
+
+				// cancel icon
+				.m-header-search__icon-cancel {					
+					> i {
+						color: array-get($layout, icon, cancel, font-color, desktop, fixed);
+					}			
+				}
+			}
+		}
+	}  
+
+	@include tablet-and-mobile {
+		.m-header-search {		
+			display: none !important;
+
+			.m-topbar--on & {
+				background-color: array-get($m-config-header, topbar, toggle, bg-color); 
+           		@include shadow(array-get($m-config-header, topbar, toggle, box-shadow));
+                display: block !important;   
+            } 
+
+			.m-header-search__wrapper {
+				background-color: transparent;
+				border: 0;
+				float: none;
+				position: relative;
+				z-index: 1;
+				height: array-get($m-config-header, topbar, toggle, height, mobile);  
+			}
+
+			.m-header-search__input {	
+				background-color: transparent;
+				color: array-get($layout, input, font-color, mobile);
+				padding: array-get($layout, input, padding, mobile);
+				@include input-placeholder(array-get($layout, input, placeholder-color, mobile));
+			}
+
+			.m-header-search__form {
+				float: none;
+				
+				// loader
+				&.m-loader {
+					&:before {
+						right: array-get($layout, spinner, right, mobile);
+					}
+
+					@include m-build-component--loader-customize-skin( array-get($layout, spinner, color, mobile) );
+				}
+			}
+
+			.m-header-search__input-wrapper {
+				display: none;
+			}
+
+			.m-header-search__icon-search {
+				width: array-get($layout, icon, search, width, mobile);
+				padding: array-get($layout, icon, search, padding, mobile);
+				text-align: left;
+
+				> i {
+					font-size: array-get($layout, icon, search, font-size, mobile);
+					color: array-get($layout, icon, search, font-color, mobile);
+				}				
+			}
+
+			.m-header-search__icon-close {
+				display: none;
+				width: array-get($layout, icon, close, width, mobile);
+				padding: array-get($layout, icon, close, padding, mobile);				
+
+				> i {
+					font-size: array-get($layout, icon, close, font-size, mobile);
+					color: array-get($layout, icon, close, font-color, mobile);
+				}
+			}
+
+			.m-header-search__icon-cancel {
+				display: none !important;					
+			}
+
+			// search expanded mode
+			.m-header-search--mobile-expanded & {
+				width: 100%;
+				position: static;
+
+				.m-header-search__wrapper {
+					width: 100%;
+				}
+
+				.m-header-search__input-wrapper,
+				.m-header-search__icon-search,
+				.m-header-search__icon-close {
+					display: table-cell;
+				}
+			}	
+		}
+
+		.m-header-search--mobile-expanded {
+			.m-header-head  {
+				display: none !important;
+			}
+		}
+	}	
+}
+
+//== Build Search Base
+@include m-build-header-search-base( array-get($m-config-header, search ) );

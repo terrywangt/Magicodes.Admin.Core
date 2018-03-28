@@ -83,7 +83,10 @@ $m--nav: (
 		item: (
 			// self
 			self: (
-				padding: 50px 5px 50px 5px
+				padding: (
+					desktop: 3.3rem 0.75rem,
+					mobile: 1rem 0.5rem
+				)
 			),
 
 			// icon

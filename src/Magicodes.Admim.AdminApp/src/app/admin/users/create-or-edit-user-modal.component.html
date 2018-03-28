@@ -20,19 +20,22 @@
                                 </div>
                                 <div class="col-sm-9">
                                     <div class="form-group">
-                                        <label>{{l("Name")}}</label>
-                                        <input #nameInput class="form-control" type="text" name="Name" [(ngModel)]="user.name" required maxlength="32">
+                                        <label>{{l("Name")}} *</label>
+                                        <input #nameInput="ngModel" class="form-control" type="text" name="Name" [(ngModel)]="user.name" required maxlength="32">
+                                        <validation-messages [formCtrl]="nameInput"></validation-messages>
                                     </div>
 
                                     <div class="form-group">
-                                        <label>{{l("Surname")}}</label>
-                                        <input type="text" name="Surname" class="form-control" [(ngModel)]="user.surname" required maxlength="32">
+                                        <label>{{l("Surname")}} *</label>
+                                        <input #surnameInput="ngModel" type="text" name="Surname" class="form-control" [(ngModel)]="user.surname" required maxlength="32">
+                                        <validation-messages [formCtrl]="surnameInput"></validation-messages>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label>{{l("EmailAddress")}}</label>
-                                <input type="email" name="EmailAddress" class="form-control" [(ngModel)]="user.emailAddress" required maxlength="256" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
+                                <label>{{l("EmailAddress")}} *</label>
+                                <input #emailAddressInput="ngModel" type="email" name="EmailAddress" class="form-control" [(ngModel)]="user.emailAddress" required maxlength="256" email>
+                                <validation-messages [formCtrl]="emailAddressInput" [errorDefs]="[{email: l('InvalidEmailAddress')}]"></validation-messages>
                             </div>
 
                             <div class="form-group">
@@ -41,9 +44,10 @@
                             </div>
 
                             <div class="form-group">
-                                <label>{{l("UserName")}}</label>
-                                <input type="text" [disabled]="!canChangeUserName" name="UserName" class="form-control" [(ngModel)]="user.userName" required maxlength="32">
+                                <label>{{l("UserName")}} *</label>
+                                <input #userNameInput="ngModel" type="text" [disabled]="!canChangeUserName" name="UserName" class="form-control" [(ngModel)]="user.userName" required maxlength="32">
                                 <span class="help-block" *ngIf="!canChangeUserName">{{l("CanNotChangeAdminUserName")}}</span>
+                                <validation-messages [formCtrl]="userNameInput"></validation-messages>
                             </div>
 
                             <div class="m-checkbox-list">
@@ -87,6 +91,7 @@
                                     <li [hidden]="!userForm.controls['PasswordRepeat'].errors.requireUppercase">{{l("PasswordComplexity_RequireUppercase_Hint")}}</li>
                                     <li [hidden]="!userForm.controls['PasswordRepeat'].errors.requireNonAlphanumeric">{{l("PasswordComplexity_RequireNonAlphanumeric_Hint")}}</li>
                                     <li [hidden]="!userForm.controls['PasswordRepeat'].errors.requiredLength">{{l("PasswordComplexity_RequiredLength_Hint", passwordComplexitySetting.requiredLength)}}</li>
+                                    <li [hidden]="userForm.controls['PasswordRepeat'].valid">{{l("PasswordsDontMatch")}}</li>
                                 </ul>
                             </div>
                             <div class="m-checkbox-list">

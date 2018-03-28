@@ -69,7 +69,11 @@
 
                     var st = $(this).scrollTop();
 
-                    if (header.options.classic) {
+                    if (
+                        (mUtil.isInResponsiveRange('tablet-and-mobile') && header.options.classic && header.options.classic.mobile) ||
+                        (mUtil.isInResponsiveRange('desktop') && header.options.classic && header.options.classic.desktop)
+                        
+                        ) {
                         if (st > offset){ // down scroll mode
                             $("body").addClass(on);
                             $("body").removeClass(off);

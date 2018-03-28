@@ -1,6 +1,7 @@
 import { Component, ViewChild, Injector } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
 import { AppComponentBase } from '@shared/common/app-component-base';
+import { AppConsts } from '@shared/AppConsts';
 
 import { UserLoginServiceProxy, ProfileServiceProxy, UserLoginAttemptDto } from '@shared/service-proxies/service-proxies';
 
@@ -15,7 +16,8 @@ export class LoginAttemptsModalComponent extends AppComponentBase {
     @ViewChild('loginAttemptsModal') modal: ModalDirective;
 
     userLoginAttempts: UserLoginAttemptDto[];
-    profilePicture = '/assets/common/images/default-profile-picture.png';
+    profilePicture = AppConsts.appBaseUrl + '/assets/common/images/default-profile-picture.png';
+    defaultProfilePicture = AppConsts.appBaseUrl + '/assets/common/images/default-profile-picture.png';
 
     constructor(
         injector: Injector,

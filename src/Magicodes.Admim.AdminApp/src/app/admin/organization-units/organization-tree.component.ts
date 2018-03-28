@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { IBasicOrganizationUnitInfo } from './basic-organization-unit-info';
 import { IUserWithOrganizationUnit } from './user-with-organization-unit';
 import { IUsersWithOrganizationUnit } from './users-with-organization-unit';
+import { HtmlHelper } from '@shared/helpers/HtmlHelper';
 
 import * as _ from 'lodash';
 import { CreateOrEditUnitModalComponent } from './create-or-edit-unit-modal.component';
@@ -174,7 +175,7 @@ export class OrganizationTreeComponent extends AppComponentBase implements After
 
     private generateTextOnTree(ou: IOrganizationUnitOnTree | OrganizationUnitDto) {
         const itemClass = ou.memberCount > 0 ? ' ou-text-has-members' : ' ou-text-no-members';
-        return '<span title="' + ou.code + '" class="ou-text' + itemClass + '" data-ou-id="' + ou.id + '">' + ou.displayName + ' (<span class="ou-text-member-count">' + ou.memberCount + '</span>) <i class="fa fa-caret-down text-muted"></i></span>';
+        return '<span title="' + ou.code + '" class="ou-text' + itemClass + '" data-ou-id="' + ou.id + '">' + HtmlHelper.encodeText(ou.displayName) + ' (<span class="ou-text-member-count">' + ou.memberCount + '</span>) <i class="fa fa-caret-down text-muted"></i></span>';
     }
 
     private contextMenu(node: any, self: OrganizationTreeComponent) {

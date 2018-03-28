@@ -1,0 +1,67 @@
+//
+//** Footer
+//
+
+//== Footer Base
+@mixin m-build-footer-default-base() {
+    //== General mode
+    .m-footer {
+        height: array-get($m-config-footer, default, self, height);
+		min-height: array-get($m-config-footer, default, self, height);
+
+		.m-footer__copyright {
+			font-size: array-get($m-config-footer, default, copyright, font-size);
+			font-weight: array-get($m-config-footer, default, copyright, font-weight);
+			color: array-get($m-config-footer, default, copyright, color);
+		}
+
+		.m-footer__nav {
+    		.m-nav__item {    			
+    			&.m-nav__item--last {
+    				> .m-nav__link {
+    					> .m-nav__link-icon {
+    						width: auto;
+    					}
+    				}    					
+    			}
+    		}
+    	}
+    }
+
+    //== Minimal desktop
+    @include minimal-desktop {
+    	.m-footer {
+    		.m-footer__nav {
+    			.m-nav__item {
+    				padding: 0 0 0 10px;
+    			}
+    		}
+    	}
+    }
+
+    //== Mobile & tablet mode
+    @include tablet-and-mobile {
+        .m-footer {
+			height: auto;
+			padding: array-get($m-config-footer, default, self, padding, mobile);
+
+			.m-stack__item {
+				text-align: center;
+			}
+
+			.m-footer__copyright {
+				display: inline-block;
+				margin-bottom: 1rem;
+			}
+
+			.m-footer__nav {
+				text-align: center;
+				float: none;
+				margin: 0 auto;
+			}
+		}
+    }
+}
+
+//== Build Footer Base
+@include m-build-footer-default-base();

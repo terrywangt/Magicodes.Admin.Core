@@ -10,6 +10,7 @@ import { AbpMultiTenancyService } from '@abp/multi-tenancy/abp-multi-tenancy.ser
 import { AppSessionService } from '@shared/common/session/app-session.service';
 import { PrimengDatatableHelper } from 'shared/helpers/PrimengDatatableHelper';
 import { AppUiCustomizationService } from '@shared/common/ui/app-ui-customization.service';
+import { AppUrlService } from '@shared/common/nav/app-url.service';
 
 export abstract class AppComponentBase {
 
@@ -25,6 +26,7 @@ export abstract class AppComponentBase {
     appSession: AppSessionService;
     primengDatatableHelper: PrimengDatatableHelper;
     ui: AppUiCustomizationService;
+    appUrlService: AppUrlService;
 
     constructor(injector: Injector) {
         this.localization = injector.get(LocalizationService);
@@ -36,16 +38,19 @@ export abstract class AppComponentBase {
         this.multiTenancy = injector.get(AbpMultiTenancyService);
         this.appSession = injector.get(AppSessionService);
         this.ui = injector.get(AppUiCustomizationService);
+        this.appUrlService = injector.get(AppUrlService);
         this.primengDatatableHelper = new PrimengDatatableHelper();
     }
 
     l(key: string, ...args: any[]): string {
-        return this.ls(this.localizationSourceName, key, args);
+        args.unshift(key);
+        args.unshift(this.localizationSourceName);
+        return this.ls.apply(this, args);
     }
 
     ls(sourcename: string, key: string, ...args: any[]): string {
         let localizedText = this.localization.localize(key, sourcename);
-
+        
         if (!localizedText) {
             localizedText = key;
         }
@@ -54,9 +59,8 @@ export abstract class AppComponentBase {
             return localizedText;
         }
 
-        args[0].unshift(localizedText);
-
-        return abp.utils.formatString.apply(this, args[0]);
+        args.unshift(localizedText);
+        return abp.utils.formatString.apply(this, args);
     }
 
     isGranted(permissionName: string): boolean {
@@ -79,5 +83,9 @@ export abstract class AppComponentBase {
 
     s(key: string): string {
         return abp.setting.get(key);
+    }
+
+    appRootUrl(): string {
+        return this.appUrlService.appRootUrl;
     }
 }

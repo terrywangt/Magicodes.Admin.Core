@@ -1,5 +1,6 @@
 import * as rtlDetect from 'rtl-detect';
 import * as _ from 'lodash';
+import { AppConsts } from '@shared/AppConsts';
 
 export class LocalizedResourcesHelper {
 
@@ -9,7 +10,7 @@ export class LocalizedResourcesHelper {
         });
     }
 
-    private static loadLocalizedStlyes(): JQueryPromise<any> {
+    static loadLocalizedStlyes(): JQueryPromise<any> {
         const isRtl = rtlDetect.isRtlLang(abp.localization.currentLanguage.name);
         let cssPostfix = '';
 
@@ -18,15 +19,18 @@ export class LocalizedResourcesHelper {
             $('html').attr('dir', 'rtl');
         }
 
-        LocalizedResourcesHelper.loadMetronicStyles(cssPostfix);
+        if (abp.setting.get('App.UiManagement.Left.Position') === 'top') {
+            $('head').append($('<link rel="stylesheet" type="text/css" />').attr('href', AppConsts.appBaseUrl + '/assets/common/styles/metronic-customize-top-menu.css'));
+        }
+
+        $('head').append($('<link rel="stylesheet" type="text/css" />').attr('href', AppConsts.appBaseUrl + '/assets/metronic/dist/html/default/assets/demo/default/base/style.bundle' + cssPostfix + '.css'));
+        $('head').append($('<link rel="stylesheet" type="text/css" />').attr('href', AppConsts.appBaseUrl + '/assets/primeng/datatable/css/primeng.datatable' + cssPostfix + '.css'));
+
+        if (isRtl) {
+            $('head').append($('<link rel="stylesheet" type="text/css" />').attr('href', AppConsts.appBaseUrl + '/assets/common/styles/abp-zero-template-rtl.css'));
+        }
 
         return $.Deferred().resolve().promise();
-    }
-
-    public static loadMetronicStyles(cssPostfix: string) {
-        if (abp.setting.get('App.UiManagement.Left.Position') === 'top') {
-            $('head').append($('<link rel="stylesheet" type="text/css" />').attr('href', '/assets/common/styles/metronic-customize-top-menu.css'));
-        }
     }
 
     private static loadLocalizedScripts(): JQueryPromise<any> {
@@ -36,8 +40,8 @@ export class LocalizedResourcesHelper {
 
         const currentCulture = abp.localization.currentLanguage.name;
 
-        const bootstrapSelect = '/assets/localization/bootstrap-select/defaults-{0}.js';
-        const jqueryTimeago = '/assets/localization/jquery-timeago/jquery.timeago.{0}.js';
+        const bootstrapSelect = AppConsts.appBaseUrl + '/assets/localization/bootstrap-select/defaults-{0}.js';
+        const jqueryTimeago = AppConsts.appBaseUrl + '/assets/localization/jquery-timeago/jquery.timeago.{0}.js';
 
         return $.when(
             jQuery.getScript(abp.utils.formatString(bootstrapSelect, LocalizedResourcesHelper.findBootstrapSelectLocalization(currentCulture))),

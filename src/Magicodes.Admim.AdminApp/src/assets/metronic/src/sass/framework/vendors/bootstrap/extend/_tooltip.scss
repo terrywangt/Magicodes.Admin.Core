@@ -9,10 +9,17 @@
     .m-tooltip.tooltip {
         .tooltip-inner {
         	padding: 7px 20px 7px 20px;
-        	font-size: get-font-size(regular);
+        	font-size: get-font-size(regular); 
 
         	@include rounded {
         		@include border-radius(30px);
+        	}
+        }
+
+        &.m-tooltop--auto-width {
+        	.tooltip-inner {
+        		white-space:nowrap;
+  				max-width:none;
         	}
         }
 
@@ -22,12 +29,12 @@
 
         &.bs-tooltip-left .arrow::before, 
     	&.bs-tooltip-auto[x-placement^="left"] .arrow::before {
-    		right: 1px;
+    		left: -1px;
     	}
 
     	&.bs-tooltip-right .arrow::before, 
     	&.bs-tooltip-auto[x-placement^="right"] .arrow::before {
-    		left: 1px;
+    		right: -1px;
     	}
     }
 }
@@ -38,7 +45,7 @@
     	.tooltip-inner {
     		color: get-color($skin, regular, '-');	
 	        background: get-color($skin, box, '-');	
-	        @include shadow(get-shadow($skin, '+'));
+	        @include shadow(get-shadow($skin, '-'));
 	    }
 
 	    &.bs-tooltip-top {

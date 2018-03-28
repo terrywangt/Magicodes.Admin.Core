@@ -9,7 +9,8 @@
         <form #twoFactorForm="ngForm" class="m-login__form m-form verify-security-code-form" method="post" (ngSubmit)="submit()">
 
             <div class="form-group m-form__group">
-                <input autoFocus [(ngModel)]="code" class="form-control form-control-solid placeholder-no-fix input-ltr" type="password" autocomplete="off" placeholder="{{l('Code')}}" name="code" required maxlength="16" />
+                <input #passwordInput="ngModel" autoFocus [(ngModel)]="code" class="form-control form-control-solid placeholder-no-fix input-ltr" type="password" autocomplete="off" placeholder="{{l('Code')}} *" name="code" required maxlength="16" />
+                <validation-messages [formCtrl]="passwordInput"></validation-messages>
             </div>
 
             <div class="form-group margin-top-20">

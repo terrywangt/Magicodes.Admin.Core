@@ -16,8 +16,9 @@
                     <tabset class="tab-container tabbable-line">
                         <tab heading="{{l('RoleName')}}" customClass="m-tabs__item">
                             <div class="form-group">
-                                <label>{{l("RoleName")}}</label>
-                                <input #roleNameInput class="form-control" type="text" name="DisplayName" [(ngModel)]="role.displayName" required maxlength="64">
+                                <label>{{l("RoleName")}} *</label>
+                                <input #roleNameInput="ngModel" class="form-control" type="text" name="DisplayName" [(ngModel)]="role.displayName" required maxlength="64">
+                                <validation-messages [formCtrl]="roleNameInput"></validation-messages>
                             </div>
 
                             <div class="m-checkbox-list">

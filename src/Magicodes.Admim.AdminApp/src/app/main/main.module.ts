@@ -6,7 +6,7 @@ import { ModalModule, TabsModule, TooltipModule } from 'ngx-bootstrap';
 import { AppCommonModule } from '@app/shared/common/app-common.module';
 import { UtilsModule } from '@shared/utils/utils.module';
 import { MainRoutingModule } from './main-routing.module';
-import { CountoModule } from '@node_modules/angular2-counto';
+import { CountoModule } from 'angular2-counto';
 import { EasyPieChartModule } from 'ng2modules-easypiechart';
 
 @NgModule({

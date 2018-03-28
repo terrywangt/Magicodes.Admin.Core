@@ -52,7 +52,7 @@
 			flex: 0 0 auto;
 
 			&.m-grid__item--fluid {
-				flex: 1;
+				flex: 1 auto;  // 1/7/2018 added auto to fix the overflow issue in demo4
 			}
 		}
 

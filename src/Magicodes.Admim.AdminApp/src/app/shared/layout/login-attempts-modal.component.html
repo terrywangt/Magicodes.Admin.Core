@@ -19,7 +19,7 @@
                                     <div class="m-alert__icon">
                                         <!-- get image url -->
                                         <img *ngIf="profilePicture && userLoginAttempt.result == 'Success'" [src]="profilePicture" class="m--img-rounded m--marginless m--img-centered" width="50" height="50"><br />
-                                        <img *ngIf="!profilePicture || userLoginAttempt.result != 'Success'" src="/assets/common/images/default-profile-picture.png" class="m--img-rounded m--marginless m--img-centered" width="50" height="50"><br />
+                                        <img *ngIf="!profilePicture || userLoginAttempt.result != 'Success'" [src]="defaultProfilePicture" class="m--img-rounded m--marginless m--img-centered" width="50" height="50"><br />
                                         <span></span>
                                         <small class="label"> {{userLoginAttempt.result == "Success" ? l("Success") : l("Failed")}} </small>
                                     </div>

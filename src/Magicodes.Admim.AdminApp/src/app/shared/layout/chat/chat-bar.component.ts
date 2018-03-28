@@ -41,7 +41,7 @@ export class ChatBarComponent extends AppComponentBase implements OnInit, AfterV
 
     friends: ChatFriendDto[];
     currentUser: UserLoginInfoDto = this._appSessionService.user;
-    profilePicture = '/assets/common/images/default-profile-picture.png';
+    profilePicture = AppConsts.appBaseUrl + '/assets/common/images/default-profile-picture.png';
     chatMessage = '';
 
     tenantToTenantChatAllowed = false;
@@ -229,7 +229,7 @@ export class ChatBarComponent extends AppComponentBase implements OnInit, AfterV
 
     loadMessages(user: ChatFriendDto, callback: any): void {
         this.loadingPreviousUserMessages = true;
-        
+
         let minMessageId;
         if (user.messages && user.messages.length) {
             minMessageId = _.min(_.map(user.messages, m => m.id));
@@ -346,10 +346,18 @@ export class ChatBarComponent extends AppComponentBase implements OnInit, AfterV
 
     scrollToBottom(): void {
         setTimeout(() => {
-            const $scrollArea = $('.m-messenger-conversation .m-messenger__messages');
-            const scrollToVal = $scrollArea.prop('scrollHeight') + 'px';
-            $scrollArea.slimScroll({ scrollTo: scrollToVal });
+            this.scrollToBottomInternal();
         }, 100);
+    }
+
+    scrollToBottomInternal(): void {
+        DomHelper.waitUntilElementIsVisible('.m-messenger-conversation .m-messenger__messages', () => {
+            setTimeout(() => {
+                const $scrollArea = $('.m-messenger-conversation .m-messenger__messages');
+                const scrollToVal = $scrollArea.prop('scrollHeight') + 'px';
+                $scrollArea.slimScroll({ scrollTo: scrollToVal }); 
+            });
+        });
     }
 
     loadLastState(): void {
@@ -377,8 +385,8 @@ export class ChatBarComponent extends AppComponentBase implements OnInit, AfterV
 
     selectFriend(friend: ChatFriendDto): void {
         const chatUser = this.getFriendOrNull(friend.friendUserId, friend.friendTenantId);
-
         this.selectedUser = chatUser;
+
         if (!chatUser) {
             return;
         }
@@ -405,19 +413,19 @@ export class ChatBarComponent extends AppComponentBase implements OnInit, AfterV
         $('.m-messenger-conversation').show(() => {
             this.initConversationScrollbar();
         });
-        $('#m_quick_sidebar_back').removeClass("d-none");
+        $('#m_quick_sidebar_back').removeClass('d-none');
     }
 
     showFriendsPanel(): void {
         $('.m-messenger-friends').show();
         $('.m-messenger-conversation').hide();
-        $('#m_quick_sidebar_back').addClass("d-none");
+        $('#m_quick_sidebar_back').addClass('d-none');
     }
 
     initConversationScrollbar(): void {
-        var $messengerMessages = $('.m-messenger-conversation .m-messenger__messages');
-        var height = $('#m_quick_sidebar').outerHeight(true) - $(".selected-chat-user").outerHeight(true) - $('#ChatMessage').height() - 150;
-        
+        let $messengerMessages = $('.m-messenger-conversation .m-messenger__messages');
+        let height = $('#m_quick_sidebar').outerHeight(true) - $('.selected-chat-user').outerHeight(true) - $('#ChatMessage').height() - 150;
+
         $messengerMessages.slimScroll({ destroy: true });
         $messengerMessages.slimScroll({
             height: height
@@ -428,7 +436,7 @@ export class ChatBarComponent extends AppComponentBase implements OnInit, AfterV
         if (!this.chatMessage) {
             return;
         }
-        
+
         this.sendingMessage = true;
         const tenancyName = this._appSessionService.tenant ? this._appSessionService.tenant.tenancyName : null;
         this._chatSignalrService.sendMessage({

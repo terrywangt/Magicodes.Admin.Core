@@ -2,9 +2,9 @@ import { Component, ViewChild, Injector } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { AppConsts } from '@shared/AppConsts';
-import { FileUploader, FileUploaderOptions, Headers } from '@node_modules/ng2-file-upload';
+import { FileUploader, FileUploaderOptions, Headers } from 'ng2-file-upload';
 import { ProfileServiceProxy, UpdateProfilePictureInput } from '@shared/service-proxies/service-proxies';
-import { IAjaxResponse } from '@abp/abpHttp';
+import { IAjaxResponse } from '@abp/abpHttpInterceptor';
 import { TokenService } from '@abp/auth/token.service';
 
 @Component({
@@ -111,9 +111,9 @@ export class ChangeProfilePictureModalComponent extends AppComponentBase {
         if (self._$jcropApi) {
             resizeParams = self._$jcropApi.getSelection();
         }
-
-        const containerWidth = parseInt(self._$jcropApi.getContainerSize()[0]);
-        const containerHeight = self._$jcropApi.getContainerSize()[1];
+        
+        const containerWidth = Math.ceil(self._$jcropApi.getContainerSize()[0]);
+        const containerHeight = Math.ceil(self._$jcropApi.getContainerSize()[1]);
 
         let originalWidth = containerWidth;
         let originalHeight = containerHeight;

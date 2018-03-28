@@ -21,7 +21,7 @@
 
         .select2-selection--single .select2-selection__arrow,
         .select2-selection--multiple .select2-selection__arrow {
-            @include m-generate-arrow-down-icon();    
+            @include m-generate-arrow-icon(down);    
             border: 0;
             top: 50%;
             position: absolute;
@@ -79,7 +79,8 @@
             }
 
             .select2-search__field {
-                margin: 0.25rem;
+                font-weight: 300;
+                margin: 0.25rem 0.25rem 0.25rem 0;
             }
         }
 
@@ -153,6 +154,82 @@
         }
     }
 
+    //== Select2 with bootstrap group input
+    .input-group {
+        > .select2-hidden-accessible {
+            &:first-child + .select2-container {
+                > .selection {
+                    .select2-selection--single {
+                        @include border-top-right-radius(0);
+                        @include border-bottom-right-radius(0);
+                    }
+
+                    &,
+                    &.form-control {
+                        @include border-top-left-radius(0);
+                        @include border-bottom-right-radius(0);
+                        @include border-top-right-radius(0);
+                    }
+                }
+            }
+
+            // the most right 
+            &:not(:first-child) + .select2-container:last-child {
+                > .selection {
+                    .select2-selection--single {
+                        @include border-top-left-radius(0);
+                        @include border-bottom-left-radius(0);
+                    }
+
+                    .select2-selection {
+                        &,
+                        &.form-control {
+                            @include border-top-left-radius(0);
+                            @include border-bottom-left-radius(0);
+                        }
+                    }
+                }
+            }
+
+            &:first-child + .select2-container + .input-group-text,
+            &:not(:first-child) + .select2-container + .input-group-text {
+                border-left: 0;    
+            }
+
+            &:not(:first-child) + .select2-container:not(:last-child) {
+                > .selection {
+                    .select2-selection--single {
+                        @include border-top-left-radius(0);
+                        @include border-bottom-left-radius(0);
+                    }
+
+                    .select2-selection {
+                        &,
+                        &.form-control {
+                            @include border-top-left-radius(0);
+                            @include border-top-right-radius(0);
+                            @include border-bottom-right-radius(0);
+                        }
+                    }
+                }
+            }
+        }
+
+        //== Pill style
+        &.m-input-group--pill {
+            > .select2-hidden-accessible {
+                // the most right 
+                &:not(:first-child) + .select2-container:last-child {
+                    > .selection {
+                        .select2-selection--single {
+                            @include border-top-right-radius(array-get($m--forms, input, layout, self, size, default, pill-radius));
+                            @include border-bottom-right-radius(array-get($m--forms, input, layout, self, size, default, pill-radius)); 
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 //== Component Skin

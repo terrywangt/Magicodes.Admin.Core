@@ -3,7 +3,7 @@ import * as ngCommon from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpModule, JsonpModule } from '@angular/http';
 import { ModalModule, TooltipModule, TabsModule } from 'ngx-bootstrap';
-import { FileUploadModule } from '@node_modules/ng2-file-upload';
+import { FileUploadModule } from 'ng2-file-upload';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './shared/layout/header.component';

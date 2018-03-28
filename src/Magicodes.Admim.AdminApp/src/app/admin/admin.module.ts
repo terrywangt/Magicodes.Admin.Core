@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { ModalModule, TabsModule, TooltipModule, PopoverModule } from 'ngx-bootstrap';
-import { FileUploadModule } from '@node_modules/ng2-file-upload';
+import { FileUploadModule } from 'ng2-file-upload';
 
 import { AdminRoutingModule } from './admin-routing.module';
 import { UtilsModule } from '@shared/utils/utils.module';
@@ -24,11 +24,11 @@ import { CreateOrEditRoleModalComponent } from './roles/create-or-edit-role-moda
 import { AuditLogsComponent } from './audit-logs/audit-logs.component';
 import { AuditLogDetailModalComponent } from './audit-logs/audit-log-detail-modal.component';
 
-import { HostSettingsComponent } from './settings/host-settings.component'
-import { InstallComponent } from './install/install.component'
-import { MaintenanceComponent } from './maintenance/maintenance.component'
-import { EditionsComponent } from './editions/editions.component'
-import { CreateOrEditEditionModalComponent } from './editions/create-or-edit-edition-modal.component'
+import { HostSettingsComponent } from './settings/host-settings.component';
+import { InstallComponent } from './install/install.component';
+import { MaintenanceComponent } from './maintenance/maintenance.component';
+import { EditionsComponent } from './editions/editions.component';
+import { CreateOrEditEditionModalComponent } from './editions/create-or-edit-edition-modal.component';
 import { ImpersonationService } from './users/impersonation.service';
 import { LanguagesComponent } from './languages/languages.component';
 import { LanguageTextsComponent } from './languages/language-texts.component';

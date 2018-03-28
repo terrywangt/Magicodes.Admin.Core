@@ -4,7 +4,7 @@ var SessionTimeoutDemo = function () {
         $.sessionTimeout({
             title: 'Session Timeout Notification',
             message: 'Your session is about to expire.',
-            keepAliveUrl: 'http://keenthemes.com/metronic/preview/inc/api/session-timeout/keepalive.php',
+            keepAliveUrl: 'https://keenthemes.com/metronic/preview/inc/api/session-timeout/keepalive.php',
             redirUrl: '?p=page_user_lock_1',
             logoutUrl: '?p=page_user_login_1',
             warnAfter: 3000, //warn after 5 seconds

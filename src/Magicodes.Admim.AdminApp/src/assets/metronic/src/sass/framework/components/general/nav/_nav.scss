@@ -6,14 +6,17 @@
 
 //== Component Base
 @mixin m-build-component--nav-default-base($layout) {
+    //== Nav
     .m-nav  {
         padding:0;
         margin: 0; 
         list-style: none;
 
-        > .m-nav__item {
+        //== Nav item
+        .m-nav__item {
             display: block;
 
+            //== Nav link
             > .m-nav__link {
                 display: table;
                 table-layout: fixed;
@@ -29,6 +32,7 @@
                     text-decoration: none;
                 }
 
+                //== Nav text
                 .m-nav__link-text {         
                     display: table-cell;
                     height: 100%;
@@ -39,6 +43,7 @@
                     font-size: get-font-size(regular);
                 }
 
+                //== Nav title
                 .m-nav__link-title {                               
                     display: table-cell;
                     height: 100%;
@@ -54,6 +59,10 @@
                         padding: 0; 
                         vertical-align: middle; 
 
+                        .m-nav__link-text {
+                            padding-right: 0.8rem;
+                        }
+
                         // nav item link's icon part
                         > .m-nav__link-badge {
                             display: table-cell;
@@ -66,7 +75,17 @@
                     }                       
                 }
 
-                // nav item link's icon
+                //== Nav arrow
+                .m-nav__link-arrow {
+                    display: table-cell;
+                    height: 100%;
+                    vertical-align: middle;
+                    text-align: right;
+                    line-height: 0;                    
+                    @include la-icon( array-get($m--icon-codes, down) );
+                }
+
+                //== Nav icon
                 .m-nav__link-icon {
                     display: table-cell;
                     height: 100%;
@@ -77,13 +96,7 @@
                     line-height: 0;
                 }
 
-                &.m-nav__link--icon {
-                    .m-nav__link-icon {
-                        width: auto;
-                        text-align: center;
-                    }
-                }
-
+                //== Nav bullet
                 .m-nav__link-bullet {
                     display: table-cell;
                     vertical-align: middle;
@@ -112,16 +125,38 @@
                 }
             }
 
+            //== Nav submenu
+            > .m-nav__sub {                
+                padding-left: 2rem;                 
+            }
+
+            //== Submenu open state
+            > .m-nav__link {
+                .m-nav__link-arrow {
+                    @include la-icon( array-get($m--icon-codes, up) );
+                }                   
+
+                &.collapsed {
+                    .m-nav__link-arrow {
+                        @include la-icon( array-get($m--icon-codes, down) ); 
+                    }
+                }
+            }          
+             
+
+            //== Disabled item
             &.m-nav__item--disabled {
                 cursor: not-allowed;
             }
 
+            //== Last item
             &.m-nav__item--last {
                 padding-bottom: 0;
             }
         }
 
-        > .m-nav__section {
+        //= Nav section
+        .m-nav__section {
             display: table;
             width: 100%;
             vertical-align: middle;
@@ -150,23 +185,17 @@
                 vertical-align: middle;
                 font-size: get-font-size(icon);
             }
-        }
+ 
+        }       
 
-        > .m-nav__separator {
+        //== Nav separator
+        .m-nav__separator {
             height: 0;
-            overflow: hidden;
             margin: array-get($layout, separator, margin, default);
-
-            &.m-nav__separator--marginles {
-                margin: 0;
-            }
-
-            &.m-nav__separator--fit {
-                margin-left: array-get($layout, separator, fit-offset);
-                margin-right: array-get($layout, separator, fit-offset);
-            }
         }
+ 
 
+        //== Inline mode
         &.m-nav--inline {
             display: inline-block;
             width: auto;
@@ -225,18 +254,19 @@
             }
         }
 
+        //== Hoverable item bg
         &.m-nav--hover-bg {
-            > .m-nav__item {
+            .m-nav__item {
                 > .m-nav__link {
                     padding: array-get($layout, item, link, self, padding, hover-bg);
                 }
             }
 
-            > .m-nav__section {
+            .m-nav__section {
                 margin: array-get($layout, section, self, margin, hover-bg);
             }
 
-            > .m-nav__separator {
+            .m-nav__separator {
                 margin: array-get($layout, separator, margin, hover-bg);
 
                 &.m-nav__separator--fit {
@@ -245,19 +275,73 @@
                 }
             }
         }
+
+        //== Active item bg
+        &.m-nav--active-bg {
+            .m-nav__item {
+                > .m-nav__link {
+                    padding-left: 1.5rem;
+                    padding-right: 1.5rem;    
+                }   
+
+                > .m-nav__sub {
+                    padding-left: 1.75rem;   
+                }
+            }
+
+            &.m-nav--active-bg-padding-lg {
+                 .m-nav__item {
+                    > .m-nav__link {
+                        padding: 0.85rem 2rem;    
+                    }   
+
+                    > .m-nav__sub {
+                        padding-left: 2rem;   
+                    }
+                }
+            }
+        }
+
+        //== Large and bolf font
+        &.m-nav--font-lg {
+            .m-nav__item {
+                > .m-nav__link {
+                    .m-nav__link-text {
+                        font-size: get-font-size(regular, '+');
+                    }
+                }
+            }
+        }
+
+        &.m-nav--font-bold {
+            .m-nav__item {
+                > .m-nav__link {
+                    .m-nav__link-text {
+                        font-weight: get-font-weight(bold);
+                    }
+                }
+            }
+        }
     }
+     
 }
 
 //== Component Skin
 @mixin m-build-component--nav-default-skin($layout, $skin) {
-
-    @include component-skin(m-nav, $skin) {
-        > .m-nav__item {
+     //== Nav
+     @include component-skin(m-nav, $skin) {
+        //== Nav item
+        .m-nav__item {
+            //== Nav link
             > .m-nav__link {
                 .m-nav__link-text {                            
                     color: get-color($skin, regular, '-');   
-                    font-weight: get-font-weight(bold);   
-                }
+                    font-weight: get-font-weight(bold);
+                }                
+
+                .m-nav__link-arrow {
+                    color: get-color($skin, regular, '-');
+                } 
 
                 .m-nav__link-icon {
                     color: get-color($skin, icon, '+');
@@ -271,14 +355,14 @@
                         }
                     }
                 }
-            }
+            }              
 
-            &:hover,
+            &:hover:not(.m-nav__item--disabled),
             &.m-nav__item--active {
-                > .m-nav__heading,
                 > .m-nav__link {          
                     .m-nav__link-icon,         
-                    .m-nav__link-text {                                
+                    .m-nav__link-text, 
+                    .m-nav__link-arrow {                                
                         color: get-brand-color();
                     }
 
@@ -289,37 +373,16 @@
                                 background-color: get-brand-color();
                             }
                         }
-                    }
-                }
-            }
-
-            &.m-nav__item--disabled {
-                > .m-nav__heading,
-                > .m-nav__link {                               
-                    // nav item link's text part
-                    .m-nav__link-text {                                
-                        color: get-color($skin, muted);
-                    }
-
-                    // nav item link's icon part
-                    .m-nav__link-icon {
-                        color: get-color($skin, muted, '-');
-                    }
-
-                    // nav item link's bullet
-                    .m-nav__link-bullet {
-                        &.m-nav__link-bullet--line,
-                        &.m-nav__link-bullet--dot {                    
-                            > span {
-                                background-color: get-color($skin, muted);
-                            }
-                        }
-                    }
-                }
-            }   
+                    }     
+                } 
+            } 
         }
 
-        > .m-nav__section {
+        &.m-nav__item--disabled {
+            @include opacity(0.7);
+        }         
+
+        .m-nav__section {
             .m-nav__section-text {
                 color: get-brand-color();
             }
@@ -329,7 +392,7 @@
             }
         }
 
-        > .m-nav__separator {      
+        .m-nav__separator {      
             border-bottom: 1px solid get-color($skin, panel, '-'); 
 
             &.m-nav__separator--dashed {      
@@ -338,16 +401,61 @@
         }
 
         &.m-nav--hover-bg {
-            > .m-nav__item {
+            .m-nav__item {
                 &:hover,
                 &.m-nav__item--active {
-                    background-color: get-color($skin, panel, '--');
+                    > .m-nav__link {
+                        background-color: get-color($skin, panel, '--');
+                    }
+                }
+            }
+        }
+
+        &.m-nav--active-bg {
+            .m-nav__item {
+                &.m-nav__item--active {
+                    > .m-nav__link {
+                        @include border-radius(2rem);
+                        background-color: get-color($skin, panel, '--');
+                        
+                        .m-nav__link-text {
+                            color: get-brand-color(); 
+                        } 
+
+                        &.collapsed {                         
+                            background-color: #fff;
+
+                            .m-nav__link-text { 
+                                color: get-color($skin, regular, '---');
+                            }                                                                             
+                        }                        
+                    }                                                           
+                }
+
+                //== Metronic custom tab integration
+                > .m-nav__link.m-tabs__item--active {    
+                    @include border-radius(2rem);
+                    background-color: get-color($skin, panel, '--');    
+
+                    .m-nav__link-text {
+                        color: get-brand-color(); 
+                    }                               
+                }                                         
+            }
+        }
+
+        &.m-nav--font-bold {
+            .m-nav__item {
+                > .m-nav__link {
+                    .m-nav__link-text {       
+                        color: get-color($skin, regular, '---');                                                                                                 
+                    }                                                         
                 }
             }
         }
 
         &.m-nav--inline {
-            > .m-nav__separator { 
+            .m-nav__separator { 
                 border-bottom: 0;
             }            
         }

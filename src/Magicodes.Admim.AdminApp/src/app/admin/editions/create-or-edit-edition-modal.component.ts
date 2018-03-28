@@ -1,4 +1,4 @@
-import { Component, ViewChild, Injector, Output, EventEmitter, ElementRef } from '@angular/core';
+import { Component, ViewChild, Injector, Output, EventEmitter, ElementRef, AfterViewChecked } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
 import { EditionServiceProxy, CommonLookupServiceProxy, EditionEditDto, CreateOrUpdateEditionDto, ComboboxItemDto } from '@shared/service-proxies/service-proxies';
 import { AppComponentBase } from '@shared/common/app-component-base';
@@ -11,7 +11,7 @@ import * as _ from 'lodash';
     selector: 'createOrEditEditionModal',
     templateUrl: './create-or-edit-edition-modal.component.html'
 })
-export class CreateOrEditEditionModalComponent extends AppComponentBase {
+export class CreateOrEditEditionModalComponent extends AppComponentBase implements AfterViewChecked {
 
     @ViewChild('editionNameInput') editionNameInput: ElementRef;
     @ViewChild('createOrEditModal') modal: ModalDirective;

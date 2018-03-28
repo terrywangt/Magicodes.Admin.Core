@@ -1,0 +1,58 @@
+//== General Mode
+.m-page {		
+	//== Page loading
+	.m-page--loading-enabled & {
+		@include animation(m-animate-fade-in .5s both);
+	}	
+
+	.m-page--loading & {
+		@include opacity(0);		
+		@include animation(m-animate-fade-out .5s both);
+	}
+}	
+
+//== Desktop Mode
+@include desktop {
+	.m-page {	
+		// page container 
+		.m-page__container {
+			// wide layout mode
+			padding: 0 array-get($m-config-base, page, container, padding, wide, x, desktop);
+
+			// fluid layout mode
+			.m-page--fluid & {
+				padding: 0 array-get($m-config-base, page, container, padding, fluid, x, desktop);
+			}
+		}
+	}
+}
+
+//== Desktop Mode
+@include minimal-desktop {
+	.m-page {	
+		// page container 
+		.m-page__container {
+			// wide layout mode
+			padding: 0 array-get($m-config-base, page, container, padding, wide, x, minimal-desktop);
+
+			// fluid layout mode
+			.m-page--fluid & {
+				padding: 0 array-get($m-config-base, page, container, padding, fluid, x, minimal-desktop);
+			}
+		}
+	}
+}
+
+//== Desktop Mode
+@include tablet-and-mobile {
+	.m-page {	
+		// page container 
+		.m-page__container {
+			padding: 0 array-get($m-config-base, page, container, padding, wide, x, mobile);
+
+			.m-page--fluid & {
+				padding: 0 array-get($m-config-base, page, container, padding, fluid, x, mobile);
+			}
+		}
+	}
+}

@@ -10,7 +10,14 @@
                     <ng-template ngFor let-menuItem [ngForOf]="menu.items" let-mainMenuItemIndex="index">
                         <li *ngIf="showMenuItem(menuItem)" routerLinkActive="m-menu__item--active" class="m-menu__item m-menu__item--submenu" [ngClass]="{'m-menu__item--expanded m-menu__item--open': menuItem.items.length >  0}" aria-haspopup="true" data-menu-submenu-toggle="hover">
 
-                            <a [routerLink]="[menuItem.route]" *ngIf="!menuItem.items.length" class="m-menu__link m-menu__toggle">
+                            <a [routerLink]="[menuItem.route]" *ngIf="!menuItem.items.length && !menuItem.external" class="m-menu__link m-menu__toggle">
+                                <i class="m-menu__link-icon {{menuItem.icon}}"></i>
+                                <span class="m-menu__link-text">
+                                    <span class="title">{{l(menuItem.name)}}</span>
+                                </span>
+                            </a>
+
+                            <a [attr.href]="[menuItem.route]" *ngIf="!menuItem.items.length && menuItem.external" class="m-menu__link" target="_blank">
                                 <i class="m-menu__link-icon {{menuItem.icon}}"></i>
                                 <span class="m-menu__link-text">
                                     <span class="title">{{l(menuItem.name)}}</span>
@@ -29,7 +36,13 @@
                                 <ul class="m-menu__subnav">
                                     <ng-template ngFor let-childMenuItem [ngForOf]="menuItem.items" let-mainMenuItemIndex="index">
                                         <li *ngIf="showMenuItem(childMenuItem)" routerLinkActive="m-menu__item--active" class="m-menu__item m-menu__item--submenu" aria-haspopup="true" data-menu-submenu-toggle="hover">
-                                            <a [routerLink]="[childMenuItem.route]" *ngIf="!childMenuItem.items.length" class="m-menu__link m-menu__toggle">
+                                            <a [routerLink]="[childMenuItem.route]" *ngIf="!childMenuItem.items.length && !childMenuItem.external" class="m-menu__link m-menu__toggle">
+                                                <i class="m-menu__link-icon {{childMenuItem.icon}}"></i>
+                                                <span class="m-menu__link-text">
+                                                    <span class="title">{{l(childMenuItem.name)}}</span>
+                                                </span>
+                                            </a>
+                                            <a [attr.href]="[childMenuItem.route]" *ngIf="!childMenuItem.items.length && childMenuItem.external" class="m-menu__link" target="_blank">
                                                 <i class="m-menu__link-icon {{childMenuItem.icon}}"></i>
                                                 <span class="m-menu__link-text">
                                                     <span class="title">{{l(childMenuItem.name)}}</span>
@@ -47,7 +60,11 @@
                                                     <!-- Menu Level 3 -->
                                                     <ng-template ngFor let-childOfChildMenuItem [ngForOf]="childMenuItem.items" let-childOfChildMenuItemIndex="index">
                                                         <li *ngIf="showMenuItem(childOfChildMenuItem)" routerLinkActive="m-menu__item--active " class="m-menu__item m-menu__item--submenu m-menu__item--hover" aria-haspopup="true" data-menu-submenu-toggle="hover">
-                                                            <a [routerLink]="[childOfChildMenuItem.route]" *ngIf="!childOfChildMenuItem.items.length">
+                                                            <a [routerLink]="[childOfChildMenuItem.route]" *ngIf="!childOfChildMenuItem.items.length && !childOfChildMenuItem.external">
+                                                                <i class="m-menu__link-icon {{childOfChildMenuItem.icon}}"></i>
+                                                                <span class="title">{{l(childOfChildMenuItem.name)}}</span>
+                                                            </a>
+                                                            <a [attr.href]="[childOfChildMenuItem.route]" *ngIf="!childOfChildMenuItem.items.length && childOfChildMenuItem.external" target="_blank">
                                                                 <i class="m-menu__link-icon {{childOfChildMenuItem.icon}}"></i>
                                                                 <span class="title">{{l(childOfChildMenuItem.name)}}</span>
                                                             </a>
@@ -65,7 +82,13 @@
                                                                     <!-- Menu Level 4 -->
                                                                     <ng-template ngFor let-childOfChildOfChildMenuItem [ngForOf]="childOfChildMenuItem.items" let-childOfChildMenuItemIndex="index">
                                                                         <li *ngIf="showMenuItem(childOfChildOfChildMenuItem)" routerLinkActive="m-menu__item--active " class="m-menu__item m-menu__item--submenu">
-                                                                            <a [routerLink]="[childOfChildOfChildMenuItem.route]" class="m-menu__link">
+                                                                            <a [routerLink]="[childOfChildOfChildMenuItem.route]" *ngIf="!childOfChildOfChildMenuItem.external" class="m-menu__link">
+                                                                                <i class="m-menu__link-icon {{childOfChildOfChildMenuItem.icon}}"></i>
+                                                                                <span class="m-menu__link-text">
+                                                                                    <span class="title">{{l(childOfChildOfChildMenuItem.name)}}</span>
+                                                                                </span>
+                                                                            </a>
+                                                                            <a [attr.href]="[childOfChildOfChildMenuItem.route]" *ngIf="childOfChildOfChildMenuItem.external" class="m-menu__link" target="_blank">
                                                                                 <i class="m-menu__link-icon {{childOfChildOfChildMenuItem.icon}}"></i>
                                                                                 <span class="m-menu__link-text">
                                                                                     <span class="title">{{l(childOfChildOfChildMenuItem.name)}}</span>

@@ -55,7 +55,6 @@ export class AppRoutingModule {
             if (event instanceof NavigationEnd) {
                 $('meta[property=og\\:url]').attr('content', window.location.href);
             }
-            
         });
     }
 }

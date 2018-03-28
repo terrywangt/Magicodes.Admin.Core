@@ -24,7 +24,7 @@
     	//== Fixed footer
 	    .m-footer--fixed {
 	    	.m-footer {
-	    		z-index: array-get($m-config-footer, default, fixed, zindex);
+	    		z-index: array-get($m-config-footer, fixed, zindex);
 				position: fixed;
 				bottom: 0;
 				left: 0;

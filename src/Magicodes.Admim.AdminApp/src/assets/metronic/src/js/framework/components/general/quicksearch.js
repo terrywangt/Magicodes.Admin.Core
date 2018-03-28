@@ -142,23 +142,23 @@
              */ 
             handleCancelIconVisibility: function(status) {
                 if (qs.options.type == 'dropdown') {
-                    return;
+                    //return;
                 }
 
                 if (status == 'on') {
                     if (qs.input.val().length === 0) {                       
-                        qs.iconCancel.css('visibility', 'hidden');
-                        qs.iconClose.css('visibility', 'hidden');
+                        if (qs.iconCancel) qs.iconCancel.css('visibility', 'hidden');
+                        if (qs.iconClose) qs.iconClose.css('visibility', 'hidden');
                     } else {
                         clearTimeout(qs.cancelTimeout);
                         qs.cancelTimeout = setTimeout(function() {
-                            qs.iconCancel.css('visibility', 'visible');
-                            qs.iconClose.css('visibility', 'visible');
+                            if (qs.iconCancel) qs.iconCancel.css('visibility', 'visible');
+                            if (qs.iconClose) qs.iconClose.css('visibility', 'visible');
                         }, 500);                        
                     }
                 } else {
-                    qs.iconCancel.css('visibility', 'hidden');
-                    qs.iconClose.css('visibility', 'hidden');
+                    if (qs.iconCancel) qs.iconCancel.css('visibility', 'hidden');
+                    if (qs.iconClose) qs.iconClose.css('visibility', 'hidden');
                 }
             },
 

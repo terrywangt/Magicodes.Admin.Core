@@ -9,8 +9,17 @@ $m-pill-radius: 60px;
     // base button
     .btn {                
         font-family: array-get($m--font-families, regular);
+        @include shadow(none !important);
+
+        // icon
+        > i {
+            line-height: 0;
+            vertical-align: middle;
+        }
 
         // remove button default focus shadow
+        &:hover,
+        &.active,
         &:focus {
             @include shadow(none);
         }
@@ -305,20 +314,32 @@ $m-pill-radius: 60px;
         &.btn-outline-#{$name}.m-btn--air,
         &.btn-#{$name}.m-btn--air,
         &.m-btn--gradient-from-#{$name}.m-btn--air {
-            @include shadow(0px 5px 10px 2px rgba(array-get($color, base), 0.19));
+            @include shadow(0px 5px 10px 2px rgba(array-get($color, base), 0.19), !important);
 
             &.focus,
             &:focus,
             &:hover {
-                @include shadow(0px 5px 10px 2px rgba(array-get($color, base), 0.26));
+                @include shadow(0px 5px 10px 2px rgba(array-get($color, base), 0.36), !important);
             }   
+        }
+
+        &.btn-outline-#{$name} {
+            &.focus,
+            &:focus,
+            &:hover {
+                border-color: array-get($color, base);
+                background: array-get($color, base);
+                color: array-get($color, inverse);
+            } 
         }
     }  
 }
 
 //== Component Skin
-@mixin m-build-component--buttons-skin($skin) {
-    @include component-skin(btn, $skin) {  
+@mixin m-build-component--buttons-skin() {
+    $skin: get-default-skin();
+
+    .btn {  
         // standart buttons  
         &.btn-default,
         &.btn-secondary {
@@ -329,7 +350,7 @@ $m-pill-radius: 60px;
                 color: get-color($skin, regular, '-');
             }
 
-            &:hover,
+            &:hover:not(:disabled),
             &.active,
             &:active,
             &:focus,
@@ -348,13 +369,13 @@ $m-pill-radius: 60px;
         &.m-btn--air {
             &.btn-default,
             &.btn-secondary {
-                @include shadow( array-get($m--buttons, skins, $skin, air, box-shadow, default) );
+                @include shadow( array-get($m--buttons, skins, $skin, air, box-shadow, default), !important );
                 border-color: #ffffff !important;
                 
                 &.focus,
                 &:focus,
-                &:hover {
-                    @include shadow( array-get($m--buttons, skins, $skin, air, box-shadow, hover) );
+                &:hover:not(:disabled):not(.active) {
+                    @include shadow( array-get($m--buttons, skins, $skin, air, box-shadow, hover), !important );
                     background: get-brand-color() !important;
                     color: get-brand-inverse-color(inverse) !important;
                     border-color: get-brand-color() !important;
@@ -412,18 +433,40 @@ $m-pill-radius: 60px;
                         &:active,
                         &:focus,
                         .show > &.dropdown-toggle {
-                                    
+                            @include gradient-bg( darken(array-get($color, base), 6%), 135deg,  darken(array-get($color, base), 6%) 30%, darken(array-get($color2, base), 6%) 100% ); 
                         }     
                     }
                 }
+            }
+
+            &.btn-#{$name} {
+                color: array-get($color, inverse); 
+
+                &.active,
+                &.focus,
+                &:focus,
+                &:hover:not(:disabled) {
+                    color: array-get($color, inverse) !important; 
+                } 
+            }
+
+            &.btn-outline-#{$name} {
+                color: array-get($color, base);
+
+                &.active,
+                &.focus,
+                &:focus,
+                &:hover:not(:disabled) {
+                    color: array-get($color, inverse) !important; 
+                } 
             }
         }
     } 
 
     // air button group
-    @include component-skin(btn-group, $skin) {
+    .btn-group {
         &.m-btn-group--air {
-            @include shadow( array-get($m--buttons, skins, $skin, air, box-shadow, default) );
+            @include shadow( array-get($m--buttons, skins, $skin, air, box-shadow, default), !important );
             
             .btn-default,
             .btn-secondary {
@@ -431,9 +474,9 @@ $m-pill-radius: 60px;
                 
                 &.focus,
                 &:focus,
-                &:hover {
+                &:hover:not(:disabled) {
                     background: #ffffff !important;
-                    @include shadow( array-get($m--buttons, skins, $skin, air, box-shadow, default) );
+                    @include shadow( array-get($m--buttons, skins, $skin, air, box-shadow, default), !important );
                 }            
             }
         }
@@ -443,8 +486,5 @@ $m-pill-radius: 60px;
 //== Build Component Base
 @include m-build-component--buttons-base();
 
-//== Build Component - Light Skin
-@include m-build-component--buttons-skin(light);
-
-//== Build Component - Dark Skin
-@include m-build-component--buttons-skin(dark);
+//== Build Component Skin
+@include m-build-component--buttons-skin();

@@ -1,0 +1,87 @@
+//
+//** Header
+//
+
+//== Desktop Mode
+@include desktop {
+	//== Header
+	.m-header {
+		@include shadow( array-get($m-config-header, header, shadow) );	
+		background: array-get($m-config-header, header, bg-color);						
+		height: array-get($m-config-header, header, height, desktop, default);
+			
+		//== Fixed header mode
+		.m-header--fixed & {
+			@include fix-fixed-position-lags();
+			@include transition(array-get($m-config-header, header, transition));
+			z-index: array-get($m-config-header, header, zindex);
+			position: fixed;
+			top: 0;
+			left: 0;
+			right: 0;   
+		}
+
+		//== Minimize mode
+		.m-header--fixed.m-header--minimize-on & {	
+			@include transition( array-get($m-config-header, header, transition) );
+			height: array-get($m-config-header, header, height, desktop, minimize);			
+		}
+
+		.m-header--fixed.m-header--minimize-off & {
+			@include transition( array-get($m-config-header, header, transition) );
+			height: array-get($m-config-header, header, height, desktop, default);
+		}		
+	}
+}
+
+//== Mobile Mode
+@include tablet-and-mobile {
+	//== Base
+	.m-header {
+		@include shadow( array-get($m-config-header, header, shadow) );
+		padding: 0;		
+		height: array-get($m-config-header, header, height, mobile, default) !important;
+
+		// header nav
+		.m-header__nav {
+			top: -100%;
+			position: relative;
+		}
+
+		> .m-container {
+			padding: 0;
+
+			> .m-grid {
+				height: array-get($m-config-header, header, height, mobile, default);
+
+				> .m-grid__col {
+					height: array-get($m-config-header, header, height, mobile, default);
+				}
+			}
+		}
+
+		.m-header--fixed-mobile & {
+			@include fix-fixed-position-lags();
+			z-index: array-get($m-config-header, header, zindex);
+			position: fixed;
+			top: 0;
+			left: 0;
+			right: 0;   
+		}
+
+		// fixed header semi-hidable mode
+		.m-header--fixed-mobile.m-header--minimize-on & {	
+			height: array-get($m-config-header, header, height, mobile, minimize);			
+			@include transition(height 0.3s ease);									
+		}
+		
+		.m-header--fixed-mobile.m-header--minimize-off & {
+			height: array-get($m-config-header, header, height, mobile, default);
+		}
+	}
+
+	//== Left Aside Toggle
+	.m-aside-left-toggle {
+		display: none;
+	}
+}

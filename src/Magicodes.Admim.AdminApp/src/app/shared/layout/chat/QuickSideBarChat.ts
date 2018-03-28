@@ -5,9 +5,9 @@ import { Injectable } from '@angular/core';
 export class QuickSideBarChat {
 
     initOffcanvas(): void {
-        var $offCanvas = ($('#m_quick_sidebar') as any).mOffcanvas({
+        let $offCanvas = ($('#m_quick_sidebar') as any).mOffcanvas({
             class: 'm-quick-sidebar',
-            //overlay: false,  
+            //overlay: false,
             close: $('#m_quick_sidebar_close'),
             toggle: $('#m_quick_sidebar_toggle')
         });

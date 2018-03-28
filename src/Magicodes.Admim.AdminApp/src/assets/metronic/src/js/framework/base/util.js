@@ -31,7 +31,6 @@ var mUtil = function() {
     * delay to attach event handlers upon resize complete 
     */
     var _windowResizeHandler = function() {
-        var resize;
         var _runResizeHandlers = function() {
             // reinitialize other subscribed elements
             for (var i = 0; i < resizeHandlers.length; i++) {
@@ -40,13 +39,14 @@ var mUtil = function() {
             }
         };
 
-        jQuery(window).resize(function() {
-            if (resize) {
-                clearTimeout(resize);
-            }
-            resize = setTimeout(function() {
+        var timeout = false; // holder for timeout id
+        var delay = 250; // delay after event is "complete" to run callback
+
+        window.addEventListener('resize', function() {
+            clearTimeout(timeout);
+            timeout = setTimeout(function() {
                 _runResizeHandlers();
-            }, 250); // wait 50ms until window resize finishes.
+            }, delay); // wait 50ms until window resize finishes.
         });
     };
 
@@ -156,6 +156,8 @@ var mUtil = function() {
             } else if (mode == 'desktop-and-tablet' && breakpoint >= (this.getBreakpoint('md') + 1)) {
                 return true;
             } else if (mode == 'tablet-and-mobile' && breakpoint <= this.getBreakpoint('lg')) {
+                return true;
+            } else if (mode == 'minimal-desktop-and-below' && breakpoint <= this.getBreakpoint('xl')) {
                 return true;
             }
 

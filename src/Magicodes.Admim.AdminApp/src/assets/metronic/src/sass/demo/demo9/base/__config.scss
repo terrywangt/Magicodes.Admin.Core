@@ -1,0 +1,40 @@
+//
+//** Base Settings
+//
+
+$m-config-base: (
+	//== Loader
+	loader: (
+		self: (
+			bg-color: #fff,
+			zindex: 1000			
+		),
+		animation: (
+			speed: 1.2s,
+			delay: 1s
+		),
+		spinner: (
+			bg-color: #eee,
+			size: 30px
+		)		
+	),
+
+	//== page
+	body: (
+		bg-color: (
+			light: #ffffff,
+			light2: #f2f3f8
+		),
+		
+		container: (
+			padding: (
+				desktop: (
+					fluid: 0 80px,
+					fixed: 0 30px
+				),
+				minimal-desktop: 0 20px,
+				mobile: 0 20px	
+			)
+		)
+	)
+);

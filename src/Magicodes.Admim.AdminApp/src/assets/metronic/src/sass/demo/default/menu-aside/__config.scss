@@ -89,7 +89,7 @@ $m-config-menu-aside: (
 					submenu: (
 						// submenu self
 						self: (
-							indent: 25px,
+							indent: 15px,
 							margin:	0
 						),
 
@@ -105,7 +105,8 @@ $m-config-menu-aside: (
 								// link itself
 								self: (
 									height: 40px,		
-									padding: 0 30px
+									padding: 0 30px,
+									padding-x: 30px
 								),					
 
 								// link icon
@@ -155,7 +156,7 @@ $m-config-menu-aside: (
 						// submenu section
 						section: (
 							self: (
-								indent: 30px,
+								indent: 15px,
 								padding: 0 25px,
 								margin: 20px 0 0 0,
 								height: 40px
@@ -268,7 +269,8 @@ $m-config-menu-aside: (
 							link: (
 								// link itself
 								self: (
-									height: 40px,				
+									height: 40px,			
+									margin-bottom: 0px,	
 									padding: 0 30px 10px 30px
 								),					
 								// link text
@@ -310,6 +312,18 @@ $m-config-menu-aside: (
 							// submenu animation
 							animation: (
 								offset: 10px
+							),
+
+							// vertical offset
+							offset: (
+								root: (
+									default: -5px,
+									up: -10px
+								),
+								inner: (
+									default: -10px,
+									up: -10px
+								)								
 							)
 						),
 
@@ -397,31 +411,27 @@ $m-config-menu-aside: (
 						arrow: (
 							// classic triangle arrow
 							classic: (
-								dropdown: (
-									top: -10px
+								offset: (
+									default: 12px,
+									up: 20px
 								),
-								arrow: (
-									size: 10px,
-									top: 12px,
-									left: 0,
-									margin: 0
-								)
+								size: 10px,
+								left: 0,
+								margin: 0
 							),
 
 							// smooth triangle arrow
 							smooth: (
-								dropdown: (
-									top: -10px
+								offset: (
+									default: 10px,
+									up: 20px
 								),
-								arrow: (
-									top: 12px,
-									left: 1px,
-									margin: 0
-								)
+								left: 1px,
+								margin: 0
 							) 
 						)
 					)
-				),		
+				)
 			)		
 		),
 

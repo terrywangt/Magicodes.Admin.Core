@@ -1,0 +1,134 @@
+//
+//** Brand
+//
+
+@mixin m-build-brand-base($layout) {	
+	//== General Mode
+	.m-brand {
+		@include transition(array-get($m-config-aside, aside-left, self, minimize, transition));
+		height: array-get($m-config-header, header, self, default, height, desktop);		
+		//width: array-get($layout, self, width, default);	 
+		padding: array-get($layout, self, padding, desktop); 
+		//background: array-get($m-config-header, header, top, bg-color);
+
+		//== Brand hidden mode
+		.m-brand--hidden & {
+			display: none;
+		}
+		
+		//== Brand logo
+		.m-brand__logo {
+			vertical-align: middle;
+			line-height: 0;
+
+			.m-brand__logo-wrapper {
+				display: inline-block;
+
+				img {
+					@include transition(array-get($m-config-header, header, self, transition, general));
+				}
+
+				.m-brand__logo-inverse {
+					display: none;
+				}
+
+				.m-header--minimize-on & {
+					.m-brand__logo-default {
+						display: none;
+					}
+
+					.m-brand__logo-inverse {
+						display: inline-block;
+					}
+				}
+			}			
+		}
+
+		//== Brand tool
+		.m-brand__tools {
+			line-height: 0;
+			vertical-align: middle;
+			text-align: right;
+
+			//== Toggler
+			@include m-build--toggler(m-brand__toggler, array-get($layout, tools, toggler)); 
+			.m-brand__toggler {
+				@include m-customize--toggler-color(m-brand__toggler, array-get($layout, tools, toggler, color, default)); 
+			}
+
+			//== Icon
+			.m-brand__icon {
+				display: inline-block;
+				line-height: 0;
+				vertical-align: middle;
+				cursor: pointer;
+
+				> i {
+					color: array-get($layout, tools, icon, color, default, default);
+					font-size: array-get($layout, tools, icon, font-size);
+				}
+
+				&:hover {
+					text-decoration: none;
+
+					> i {
+						color: array-get($layout, tools, icon, color, default, hover);						
+					}
+				}
+			}
+		}	
+	}
+
+	//== Table & Mobile Mode
+	@include tablet-and-mobile {
+		.m-brand {
+			width: 100%;
+			position: relative;
+			height: array-get($m-config-header, header, self, height, mobile, default) !important;	
+			padding: array-get($layout, self, padding, mobile); 
+			z-index: 3; 
+
+			> .m-stack {
+				width: 100% !important;
+			}
+
+			.m-brand__tools {	
+				width: 100%;
+							
+				.m-brand__icon {
+					margin-left: array-get($layout, tools, self, space, mobile);
+
+					.flaticon-more {
+						position: relative;
+						top: 1px;
+					}
+				}
+			}
+
+			//== Inverse mode
+			.m-header--fixed-mobile.m-header--minimize-on & {
+				.m-brand__tools {	
+					.m-brand__toggler {
+						@include m-customize--toggler-color(m-brand__toggler, array-get($layout, tools, toggler, color, fixed)); 
+					}
+
+					.m-brand__icon {
+						> i {
+							color: array-get($layout, tools, icon, color, fixed, default);
+						}
+
+						&:hover {
+							> i {
+								color: array-get($layout, tools, icon, color, fixed, hover);						
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+
+//== Build Brand Base
+@include m-build-brand-base( array-get($m-config-header, brand ) );

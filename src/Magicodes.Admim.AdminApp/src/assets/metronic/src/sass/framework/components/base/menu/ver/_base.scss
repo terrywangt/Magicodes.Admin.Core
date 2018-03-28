@@ -8,10 +8,14 @@
 	@include m-populate--menu-ver-base( array-get($config, base), array-get($config, build, layout) );
 	
 	// dark skin
-	@include m-populate--menu-ver-skin( array-get($config, base), array-get($config, build, skins, dark), dark );
+	@if array-has($config, build, skins, dark) {	
+		@include m-populate--menu-ver-skin( array-get($config, base), array-get($config, build, skins, dark), dark );
+	}	
 	
 	// light skin
-	@include m-populate--menu-ver-skin( array-get($config, base), array-get($config, build, skins, light), light );
+	@if array-has($config, build, skins, light) {	
+		@include m-populate--menu-ver-skin( array-get($config, base), array-get($config, build, skins, light), light );
+	}
 }
 
 //== Base mixin generate dropdown vertical menu markup
@@ -20,10 +24,14 @@
 	@include m-populate--menu-ver-dropdown-base( array-get($config, base), array-get($config, build, layout) );
 	
 	// base dropdown submenu's dark skin
-	@include m-populate--menu-ver-dropdown-skin( array-get($config, base), array-get($config, build, skins, dark), dark );
+	@if array-has($config, build, skins, dark) {
+		@include m-populate--menu-ver-dropdown-skin( array-get($config, base), array-get($config, build, skins, dark), dark );
+	}
 
 	// base dropdown submenu's light skin
-	@include m-populate--menu-ver-dropdown-skin( array-get($config, base), array-get($config, build, skins, light), light );
+	@if array-has($config, build, skins, light) {
+		@include m-populate--menu-ver-dropdown-skin( array-get($config, base), array-get($config, build, skins, light), light );
+	}
 }
 
 //== Builds vertical menu markup for minimized sidebar mode
@@ -32,10 +40,14 @@
 	@include m-populate--menu-ver-minimize-base( array-get($config, base), array-get($config, build, layout) );
 
 	// base minimiz menu's dark skin
-	@include m-populate--menu-ver-minimize-skin( array-get($config, base), array-get($config, build, skins, dark), dark );
+	@if array-has($config, build, skins, dark) {
+		@include m-populate--menu-ver-minimize-skin( array-get($config, base), array-get($config, build, skins, dark), dark );
+	}
 
 	// base minimiz menu's light skin
-	@include m-populate--menu-ver-minimize-skin( array-get($config, base), array-get($config, build, skins, light), light );	
+	@if array-has($config, build, skins, light) {
+		@include m-populate--menu-ver-minimize-skin( array-get($config, base), array-get($config, build, skins, light), light );	
+	}
 }
 
 //== Generates Base Vetical Menu
@@ -54,7 +66,7 @@
 	}
 
 	// Base dropdown menu submenu mode
-	@if (array-get($config, build, layout, dropdown)) {
+	@if (array-has($config, build, layout, dropdown)) {
 		// Desktop only dropdown vertical menu
 		@include desktop {
 			@include  m-build--menu-ver-dropdown( $config );
@@ -83,7 +95,7 @@
 	}
 
 	// Base minimize menu mode
-	@if (array-get($config, build, layout, minimize)) {
+	@if (array-has($config, build, layout, minimize)) {
 		@include desktop {
 			.#{array-get($config, base, parent-class)}--minimize {
 				@include m-build--menu-ver-minimize( $config );

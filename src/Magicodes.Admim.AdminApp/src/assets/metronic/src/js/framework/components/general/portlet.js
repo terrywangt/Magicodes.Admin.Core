@@ -131,7 +131,7 @@
              */
             setupTooltips: function () {
                 if (portlet.options.tooltips) {
-                    var collapsed = element.hasClass('collapsed');
+                    var collapsed = element.hasClass('m-portlet--collapse') || element.hasClass('m-portlet--collapsed');
                     var fullscreenOn = $('body').hasClass('m-portlet--fullscreen') && element.hasClass('m-portlet--fullscreen');
 
                     var remove = element.find('> .m-portlet__head [data-portlet-tool=remove]');
@@ -217,31 +217,47 @@
             /**
              * Toggle
              */
-            toggle: function (mode) {
-                if (mode === 'collapse' || element.hasClass('m-portlet--collapse') || element.hasClass('m-portlet--collapsed')) {
-                    if (Plugin.eventTrigger('beforeExpand') === false) {
-                        return;
-                    } 
-
-                    element.removeClass('m-portlet--collapse');
-                    element.removeClass('m-portlet--collapsed');
-                    Plugin.setupTooltips();
-
-                    portlet.body.slideDown(portlet.options.bodyToggleSpeed, function(){                        
-                        Plugin.eventTrigger('afterExpand');                         
-                    });
+            toggle: function () {
+                if (element.hasClass('m-portlet--collapse') || element.hasClass('m-portlet--collapsed')) {
+                    Plugin.expand();                    
                 } else {
-                    if (Plugin.eventTrigger('beforeCollapse') === false) {
-                        return;
-                    } 
-
-                    element.addClass('m-portlet--collapse');
-                    Plugin.setupTooltips();
-
-                    portlet.body.slideUp(portlet.options.bodyToggleSpeed, function() {                        
-                        Plugin.eventTrigger('afterCollapse');    
-                    });
+                    Plugin.collapse();            
                 }                  
+            },
+
+            /**
+             * Collapse
+             */
+            collapse: function() {
+                if (Plugin.eventTrigger('beforeCollapse') === false) {
+                    return;
+                } 
+
+                portlet.body.slideUp(portlet.options.bodyToggleSpeed, function() {                        
+                    Plugin.eventTrigger('afterCollapse');    
+                });
+
+                element.addClass('m-portlet--collapse');
+
+                Plugin.setupTooltips();  
+            },
+
+            /**
+             * Expand
+             */
+            expand: function() {
+                if (Plugin.eventTrigger('beforeExpand') === false) {
+                    return;
+                } 
+
+                portlet.body.slideDown(portlet.options.bodyToggleSpeed, function(){                        
+                    Plugin.eventTrigger('afterExpand');                         
+                });
+
+                element.removeClass('m-portlet--collapse');
+                element.removeClass('m-portlet--collapsed');
+
+                Plugin.setupTooltips();
             },
 
             /**
@@ -347,11 +363,19 @@
         };
 
         /**
+         * Toggle portlet
+         * @returns {mPortlet}
+         */
+        portlet.toggle = function () {
+            return Plugin.toggle();
+        };
+
+        /**
          * Collapse portlet
          * @returns {mPortlet}
          */
         portlet.collapse = function () {
-            return Plugin.toggle('collapse');
+            return Plugin.collapse();
         };
 
         /**
@@ -359,7 +383,7 @@
          * @returns {mPortlet}
          */
         portlet.expand = function () {
-            return Plugin.toggle('expand');
+            return Plugin.expand();
         };
 
         /**

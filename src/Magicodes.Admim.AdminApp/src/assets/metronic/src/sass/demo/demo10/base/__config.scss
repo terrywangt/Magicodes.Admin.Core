@@ -1,0 +1,80 @@
+//
+//** Base Settings
+//
+
+$m-config-base: (
+	//== Loader
+	loader: (
+		self: (
+			bg-color: #fff,
+			zindex: 1000			
+		),
+		animation: (
+			speed: 1.2s,
+			delay: 1s
+		),
+		spinner: (
+			bg-color: #eee,
+			size: 30px
+		)		
+	),
+
+	//== page
+	page: (
+		container: (
+			padding: (
+				wide: (
+					x: (
+						desktop: 30px,
+						minimal-desktop: 20px,
+						mobile: 20px
+					)
+				),
+				fluid: (
+					x: (
+						desktop: 80px,
+						minimal-desktop: 20px,
+						mobile: 20px
+					)
+				)
+			)
+		)
+	),
+
+	//== body
+	body: (
+		self: (
+			bg-color: darken(#f8fcff, 1%),
+		),
+
+		wrapper: (
+			shadow: -27px 1px 94px -30px rgba(233,228,240,0.63),
+			space: 40px, // space between aside and wrapper			
+			border-radius: 6px,
+			padding: (
+				desktop: 30px,
+				mobile: 20px
+			),
+			bg-color: #fff,			 
+			margin: (
+				desktop: 0 0 1rem 0, 
+				mobile: 0 0 0.5rem 0
+			)
+		),
+
+		//== content
+		content: (
+			// content padding for general and mobile modes
+			padding: (
+				desktop: (
+					x: 0, 
+					y: 30px
+				),
+				mobile: (
+					x: 0,
+					y: 20px
+				)
+			)
+		)
+	)
+);

@@ -1,35 +1,59 @@
 jQuery.validator.setDefaults({
-	errorElement: 'div', //default input error message container
+    errorElement: 'div', //default input error message container
     errorClass: 'form-control-feedback', // default input error message class
     focusInvalid: false, // do not focus the last invalid input
     ignore: "",  // validate all fields including form hidden input
 
     errorPlacement: function(error, element) { // render error placement for each input type
-    	var group = $(element).closest('.form-group');
+        var group = $(element).closest('.m-form__group-sub').length > 0 ? $(element).closest('.m-form__group-sub') : $(element).closest('.m-form__group');
         var help = group.find('.m-form__help');
+
+        if (group.find('.form-control-feedback').length !== 0) {
+            return;
+        }
+
         if (help.length > 0) {
-            help.before(error); 
+            help.before(error);
         } else {
-            $(element).after(error);
+            if ($(element).closest('.input-group').length > 0) {
+                $(element).closest('.input-group').after(error);
+            } else {
+                if ($(element).is(':checkbox')) {
+                    $(element).closest('.m-checkbox').find('>span').after(error);
+                } else {
+                    $(element).after(error);
+                }                
+            }            
         }
     },
 
     highlight: function(element) { // hightlight error inputs
-    	$(element).closest('.form-group').addClass('has-danger'); // set error class to the control group
-        if ($(element).hasClass('form-control')) {
-        	//$(element).addClass('form-control-danger');
-        }
+        var group = $(element).closest('.m-form__group-sub').length > 0  ? $(element).closest('.m-form__group-sub') : $(element).closest('.m-form__group');
+
+        console.log('add' + group.attr('class'));
+
+        group.addClass('has-danger'); // set error class to the control groupx
     },
 
     unhighlight: function(element) { // revert the change done by hightlight
-        $(element).closest('.form-group').removeClass('has-danger'); // set error class to the control group
-        //$(element).removeClass('form-control-danger');
+        var group = $(element).closest('.m-form__group-sub').length > 0  ? $(element).closest('.m-form__group-sub') : $(element).closest('.m-form__group');
+
+        group.removeClass('has-danger'); // set error class to the control group
     },
 
     success: function(label, element) {
-    	$(label).closest('.form-group').addClass('has-success').removeClass('has-danger'); // set success class to the control group
-        $(label).closest('.form-group').find('.form-control-feedback').remove();
-        //$(element).removeClass('form-control-danger');
-        //$(element).addClass('form-control-success');
+        var group = $(label).closest('.m-form__group-sub').length > 0  ? $(label).closest('.m-form__group-sub') : $(label).closest('.m-form__group');
+
+        //group.addClass('has-success').removeClass('has-danger'); // set success class and hide error class
+        group.removeClass('has-danger'); // hide error class
+        group.find('.form-control-feedback').remove();
     }
 });
+
+jQuery.validator.addMethod("email", function(value, element) {
+    if (/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/.test(value)) {
+        return true;
+    } else {
+        return false;
+    }
+}, "Please enter a valid Email.");

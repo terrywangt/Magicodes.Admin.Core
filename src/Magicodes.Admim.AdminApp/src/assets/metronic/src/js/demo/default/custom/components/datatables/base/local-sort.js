@@ -16,10 +16,6 @@ var DatatableLocalSortDemo = function () {
 					}
 				},
 				pageSize: 10,
-				saveState: {
-					cookie: true,
-					webstorage: true
-				},
 				serverPaging: false,
 				serverFiltering: true,
 				serverSorting: false
@@ -134,9 +130,8 @@ var DatatableLocalSortDemo = function () {
 				title: "Actions",
 				sortable: false,
 				overflow: 'visible',
-				template: function (row) {
-					var dropup = (row.getDatatable().getPageSize() - row.getIndex()) <= 4 ? 'dropup' : '';
-
+				template: function (row, index, datatable) {
+					var dropup = (datatable.getPageSize() - index) <= 4 ? 'dropup' : '';
 					return '\
 						<div class="dropdown ' + dropup + '">\
 							<a href="#" class="btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown">\

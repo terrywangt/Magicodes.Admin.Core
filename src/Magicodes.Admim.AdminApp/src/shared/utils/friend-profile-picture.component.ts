@@ -1,5 +1,6 @@
 import { Component, ElementRef, Input, AfterViewInit } from '@angular/core';
 import { ProfileServiceProxy } from '@shared/service-proxies/service-proxies';
+import { AppConsts } from '@shared/AppConsts';
 
 @Component({
     selector: 'friend-profile-picture',
@@ -13,7 +14,7 @@ export class FriendProfilePictureComponent implements AfterViewInit {
     @Input() tenantId: number;
     @Input() cssClass = 'media-object';
 
-    profilePicture = '/assets/common/images/default-profile-picture.png';
+    profilePicture = AppConsts.appBaseUrl + '/assets/common/images/default-profile-picture.png';
 
     constructor(
         private _profileService: ProfileServiceProxy

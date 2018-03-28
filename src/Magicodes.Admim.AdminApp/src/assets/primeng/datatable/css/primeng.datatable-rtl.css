@@ -1,0 +1,188 @@
+﻿.primeng-datatable-container {
+  width: 100%;
+}
+.primeng-datatable-container .ui-datatable {
+  border: 1px solid #ececec !important;
+}
+.primeng-datatable-container .ui-datatable div.ui-chkbox-box {
+  color: #575962 !important;
+  display: inline-block !important;
+  position: relative !important;
+  cursor: pointer !important;
+  font-size: 1rem !important;
+  transition: all .3s !important;
+}
+.primeng-datatable-container .ui-datatable div.ui-chkbox-box.ui-state-active {
+  border: 1px solid #bdc3d4;
+  background-color: #fff;
+}
+.primeng-datatable-container .ui-datatable div.ui-chkbox-box span {
+  display: block;
+  border-radius: 3px;
+  background: 100% 0;
+  position: absolute;
+  top: 1px;
+  right: 0;
+  height: 18px;
+  width: 18px;
+}
+.primeng-datatable-container .ui-datatable div.ui-chkbox-box span.fa-check:before {
+  margin-right: -3px;
+  font-size: 12px !important;
+  top: -2px !important;
+  position: relative;
+}
+.primeng-datatable-container .ui-datatable th {
+  font-family: 'Poppins', 'Roboto';
+  border: none !important;
+  padding: 10px 18px !important;
+  text-align: right;
+}
+.primeng-datatable-container .ui-datatable th.ui-selection-column {
+  padding-right: 11.5px !important;
+}
+.primeng-datatable-container .ui-datatable th span {
+  font-weight: 700;
+}
+.primeng-datatable-container .ui-datatable td {
+  font-family: 'Poppins', 'Roboto';
+  border: none !important;
+  border-left: 1px solid #ececec !important;
+  padding: 8px 10px !important;
+}
+.primeng-datatable-container .ui-datatable table {
+  table-layout: fixed;
+}
+.primeng-datatable-container .ui-datatable table th,
+.primeng-datatable-container .ui-datatable table td {
+  overflow-wrap: break-word;
+}
+.primeng-datatable-container .ui-datatable table td .dropdown-menu li {
+  white-space: nowrap;
+}
+.primeng-datatable-container .ui-datatable table thead tr {
+  vertical-align: middle !important;
+}
+.primeng-datatable-container .ui-datatable table thead tr th {
+  background-color: #e6e6e6 !important;
+  font-size: 14px;
+  font-family: Poppins;
+  font-weight: 300;
+  line-height: 21px;
+  vertical-align: middle;
+}
+.primeng-datatable-container .ui-datatable table thead tr th.ui-state-active {
+  color: #000 !important;
+}
+.primeng-datatable-container .ui-datatable table thead tr th.ui-state-active span.ui-sortable-column-icon {
+  color: #5867dd !important;
+}
+.primeng-datatable-container .ui-datatable table tbody {
+  border: none !important;
+}
+.primeng-datatable-container .ui-datatable table tbody tr.ui-datatable-even {
+  background-color: #f4f3fb !important;
+}
+.primeng-datatable-container .ui-datatable table tbody tr.ui-widget-content {
+  border: none !important;
+}
+.primeng-datatable-container .ui-datatable table tbody tr.ui-datatable-even.ui-state-highlight {
+  color: #212529;
+}
+.primeng-datatable-container .primeng-paging-container {
+  padding: 6px;
+}
+.primeng-datatable-container .primeng-paging-container .ui-paginator {
+  text-align: left;
+  border: none !important;
+}
+.primeng-datatable-container .primeng-paging-container .ui-paginator span {
+  padding: 0px;
+}
+.primeng-datatable-container .primeng-paging-container .ui-paginator span a {
+  padding-top: 8px;
+  color: #5867dd;
+  cursor: pointer !important;
+  margin-left: 5px !important;
+}
+.primeng-datatable-container .primeng-paging-container .ui-paginator span a:last-child {
+  margin-left: 0px !important;
+}
+.primeng-datatable-container .primeng-paging-container .ui-paginator span a.ui-state-active {
+  background: #716aca;
+  color: #fff;
+}
+.primeng-datatable-container .primeng-paging-container .ui-paginator span a:hover {
+  background-color: #deddf3;
+}
+.primeng-datatable-container .primeng-paging-container .ui-paginator a {
+  display: inline-block;
+  cursor: pointer !important;
+  height: 2.25rem;
+  width: 2.25rem;
+  padding: 0;
+  padding-top: 8px;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  -o-border-radius: 50%;
+  border-radius: 50%;
+  position: relative;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  -ms-justify-content: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 1rem;
+  line-height: 1rem;
+  font-weight: 400;
+  background-color: #edecf8;
+  opacity: 1 !important;
+}
+.primeng-datatable-container .primeng-paging-container .ui-paginator a:hover {
+  background-color: #deddf3;
+}
+.primeng-datatable-container .primeng-paging-container .ui-paginator a.ui-paginator-first span.fa-step-backward:before {
+  content: "\f100" !important;
+}
+.primeng-datatable-container .primeng-paging-container .ui-paginator a.ui-paginator-prev span.fa-backward:before {
+  content: "\f104" !important;
+}
+.primeng-datatable-container .primeng-paging-container .ui-paginator a.ui-paginator-next span.fa-forward:before {
+  content: "\f105" !important;
+}
+.primeng-datatable-container .primeng-paging-container .ui-paginator a.ui-paginator-last span.fa-step-forward:before {
+  content: "\f101" !important;
+}
+.primeng-datatable-container .primeng-paging-container .ui-paginator a span {
+  color: #5867dd;
+}
+.primeng-datatable-container .primeng-paging-container .ui-paginator .ui-paginator-rpp-options {
+  float: right;
+  margin-right: 100px;
+}
+.primeng-datatable-container .total-records-count {
+  float: right;
+  position: relative;
+  bottom: 30px;
+}
+.primeng-datatable-container p-datatable[ng-reflect-paginator=false] .ui-datatable-footer {
+  text-align: right;
+  background: none !important;
+  border: 1px solid #fff;
+  border-top: 1px solid #ececec;
+  margin-right: -1px;
+  margin-bottom: -1px;
+  margin-left: -1px;
+}
+.primeng-datatable-container .ui-datatable-resizable {
+  padding-bottom: 0px !important;
+}
+.primeng-datatable-container .ui-datatable-loading-content {
+  display: none;
+}

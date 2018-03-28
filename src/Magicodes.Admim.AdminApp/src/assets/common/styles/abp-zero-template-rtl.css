@@ -1,0 +1,19 @@
+.langname:after{
+	content: "\200E‎" !important;
+}
+
+li.dropdown-language ul.dropdown-menu li a:after{
+	content: "\200E‎" !important;
+}
+
+.tenant-change-component:after {
+    content: "\200E‎" !important;
+}
+
+.ou-text:after {
+    content: "\200E‎" !important;
+}
+
+div.income-statistics label.m-btn--pill {
+    margin-left: 0px;
+}

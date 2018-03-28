@@ -237,7 +237,7 @@ var Treeview = function () {
                 "check_callback" : true,
                 'data' : {
                     'url' : function (node) {
-                      return 'http://keenthemes.com/metronic/preview/inc/api/jstree/ajax_data.php';
+                      return 'https://keenthemes.com/metronic/preview/inc/api/jstree/ajax_data.php';
                     },
                     'data' : function (node) {
                       return { 'parent' : node.id };

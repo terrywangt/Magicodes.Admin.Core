@@ -10,7 +10,8 @@
                 {{l("SendEmailActivationLink_Information")}}
             </p>
             <div class="form-group m-form__group">
-                <input [(ngModel)]="model.emailAddress" class="form-control form-control-solid placeholder-no-fix input-ltr" type="text" autocomplete="off" placeholder="{{l('EmailAddress')}}" name="emailAddress" required maxlength="256" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{1,})+$" />
+                <input #emailAddressInput="ngModel" [(ngModel)]="model.emailAddress" class="form-control form-control-solid placeholder-no-fix input-ltr" type="email" autocomplete="off" placeholder="{{l('EmailAddress')}} *" name="emailAddress" required maxlength="256" email/>
+                <validation-messages [formCtrl]="emailAddressInput" [errorDefs]="[{email: l('InvalidEmailAddress')}]"></validation-messages>
             </div>
 
             <div class="m-login__form-action">

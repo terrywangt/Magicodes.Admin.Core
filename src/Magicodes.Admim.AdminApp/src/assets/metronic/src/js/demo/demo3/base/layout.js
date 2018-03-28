@@ -130,10 +130,6 @@ var mLayout = function() {
                 initScrollableMenu(asideMenu);
             });
         }
-
-        //var item = $("a[href='?page=components/forms/validation/states']").parent('.m-menu__item');
-        //alert(item.length);
-        //menu.setActiveItem(item);
     }
 
     // handle vertical menu

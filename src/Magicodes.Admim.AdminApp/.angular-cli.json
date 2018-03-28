@@ -66,20 +66,13 @@
         "./assets/metronic/src/vendors/line-awesome/css/line-awesome.css",
         "./assets/metronic/src/vendors/flaticon/css/flaticon.css",
         "./assets/metronic/src/vendors/metronic/css/styles.css",
-        "./assets/metronic/dist/html/default/assets/demo/default/base/style.bundle.css",
-        "./assets/metronic/4x/datatables/datatables.min.css",
-        "./assets/metronic/4x/datatables/plugins/bootstrap/datatables.bootstrap.css",
-        "./assets/metronic/4x/css/invoice.css",
         "./assets/Jcrop/css/Jcrop.css",
 
-        "./assets/primeng/datatable/css/primeng.datatable.css",
         "./assets/primeng/file-upload/css/primeng.file-upload.css",
         "./assets/primeng/autocomplete/css/primeng.autocomplete.css",
 
         "./assets/common/styles/metronic-customize.less",
         "./assets/common/styles/metronic-customize-angular.less",
-
-        "./assets/metronic/4x/css/pricing.min.css",
 
         "../src/app/shared/core.less",
         "../src/app/shared/layout/layout.less",
@@ -145,8 +138,6 @@
         "../node_modules/waypoints/lib/jquery.waypoints.min.js",
         "../node_modules/jquery.flot.tooltip/js/jquery.flot.tooltip.min.js",
         "../node_modules/topojson/dist/topojson.min.js",
-        "../node_modules/d3/d3.js",
-        "../node_modules/datamaps/dist/datamaps.world.min.js",
         "../node_modules/easy-pie-chart/dist/easypiechart.js",
         "../node_modules/jquery.inputmask/dist/jquery.inputmask.bundle.js",
         "../node_modules/quill/dist/quill.js",

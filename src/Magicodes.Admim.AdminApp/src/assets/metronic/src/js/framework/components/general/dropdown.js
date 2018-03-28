@@ -548,6 +548,7 @@
             $(this).parent('.m-dropdown').mDropdown().toggle();   
         });
         $(document).on('mouseenter', '[data-dropdown-toggle="hover"]', function(e) { 
+             e.preventDefault();
             $(this).mDropdown().toggle();
         });
     }

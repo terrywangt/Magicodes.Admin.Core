@@ -97,7 +97,7 @@ var FormRepeater = function() {
         });
     }
 
-     var demo6 = function() {
+    var demo6 = function() {
         $('#m_repeater_6').repeater({            
             initEmpty: false,
            

@@ -9,10 +9,12 @@ var mApp = function() {
     */
     var initTooltip = function(el) {
         var skin = el.data('skin') ? 'm-tooltip--skin-' + el.data('skin') : '';
+        var width = el.data('width') == 'auto' ? 'm-tooltop--auto-width' : '';
+        var triggerValue = el.data('trigger') ? el.data('trigger') : 'hover';
             
         el.tooltip({
-            trigger: 'hover',
-            template: '<div class="m-tooltip ' + skin + ' tooltip" role="tooltip">\
+            trigger: triggerValue,
+            template: '<div class="m-tooltip ' + skin + ' ' + width + ' tooltip" role="tooltip">\
                 <div class="arrow"></div>\
                 <div class="tooltip-inner"></div>\
             </div>'
@@ -34,9 +36,10 @@ var mApp = function() {
     */
     var initPopover = function(el) {
         var skin = el.data('skin') ? 'm-popover--skin-' + el.data('skin') : '';
+        var triggerValue = el.data('trigger') ? el.data('trigger') : 'hover';
             
         el.popover({
-            trigger: 'hover',
+            trigger: triggerValue,
             template: '\
             <div class="m-popover ' + skin + ' popover" role="tooltip">\
                 <div class="arrow"></div>\
@@ -54,7 +57,18 @@ var mApp = function() {
         $('[data-toggle="m-popover"]').each(function() {
             initPopover($(this));
         });
-    }    
+    }
+
+    /**
+    * Initializes bootstrap file input
+    */
+    var initFileInput = function() {
+        // init bootstrap popover
+        $('.custom-file-input').on('change',function(){
+            var fileName = $(this).val();
+            $(this).next('.custom-file-label').addClass("selected").html(fileName);
+        });
+    }           
 
     /**
     * Initializes metronic portlet
@@ -124,10 +138,78 @@ var mApp = function() {
         $('body').on('click', '[data-close=alert]', function() {
             $(this).closest('.alert').hide();
         });
-    }        
+    }
+
+    /**
+    * Initializes Metronic custom tabs
+    */
+    var initCustomTabs = function() {
+        // init bootstrap popover
+        $('[data-tab-target]').each(function() {
+            if ($(this).data('tabs-initialized') == true ) {
+                return;
+            }
+
+            $(this).click(function(e) {
+                e.preventDefault();
+                
+                var tab = $(this);
+                var tabs = tab.closest('[data-tabs="true"]');
+                var contents = $( tabs.data('tabs-contents') );
+                var content = $( tab.data('tab-target') );
+
+                tabs.find('.m-tabs__item.m-tabs__item--active').removeClass('m-tabs__item--active');
+                tab.addClass('m-tabs__item--active');
+
+                contents.find('.m-tabs-content__item.m-tabs-content__item--active').removeClass('m-tabs-content__item--active');
+                content.addClass('m-tabs-content__item--active');         
+            });
+
+            $(this).data('tabs-initialized', true);
+        });
+    }
+
+    /**
+    * Initializes bootstrap collapse for Metronic's accordion feature
+    */
+    var initAccordions = function(el) {
+       
+    }
+
+	var hideTouchWarning = function() {
+		jQuery.event.special.touchstart = {
+			setup: function(_, ns, handle) {
+				if (typeof this === 'function')
+					if (ns.includes('noPreventDefault')) {
+						this.addEventListener('touchstart', handle, {passive: false});
+					} else {
+						this.addEventListener('touchstart', handle, {passive: true});
+					}
+			},
+		};
+		jQuery.event.special.touchmove = {
+			setup: function(_, ns, handle) {
+				if (typeof this === 'function')
+					if (ns.includes('noPreventDefault')) {
+						this.addEventListener('touchmove', handle, {passive: false});
+					} else {
+						this.addEventListener('touchmove', handle, {passive: true});
+					}
+			},
+		};
+		jQuery.event.special.wheel = {
+			setup: function(_, ns, handle) {
+				if (typeof this === 'function')
+					if (ns.includes('noPreventDefault')) {
+						this.addEventListener('wheel', handle, {passive: false});
+					} else {
+						this.addEventListener('wheel', handle, {passive: true});
+					}
+			},
+		};
+	};
 
     return {
-
         /**
         * Main class initializer
         */
@@ -139,11 +221,23 @@ var mApp = function() {
         * Initializes components
         */
         initComponents: function() {
+            hideTouchWarning();
             initScrollables();
             initTooltips();
             initPopovers();
             initAlerts();
             initPortlets();
+            initFileInput();
+            initAccordions();
+            initCustomTabs();
+        },
+
+
+        /**
+        * Init custom tabs
+        */
+        initCustomTabs: function() {
+            initCustomTabs();
         },
 
         /**
@@ -205,7 +299,9 @@ var mApp = function() {
         * @param {object} el jQuery element object
         * @param {number} offset Offset to element scroll position
         */
-        scrollTo: function(el, offset) {
+        scrollTo: function(target, offset) {
+            el = $(target);
+
             var pos = (el && el.length > 0) ? el.offset().top : 0;
             pos = pos + (offset ? offset : 0);
 
@@ -220,7 +316,7 @@ var mApp = function() {
         */
         // wrJangoer function to scroll(focus) to an element
         scrollToViewport: function(el) {
-            var elOffset = el.offset().top;
+            var elOffset = $(el).offset().top;
             var elHeight = el.height();
             var windowHeight = mUtil.getViewPort().height;
             var offset = elOffset - ((windowHeight / 2) - (elHeight / 2));
@@ -243,22 +339,24 @@ var mApp = function() {
         * @param {object} el jQuery element object
         * @param {object} options mCustomScrollbar plugin options(refer: http://manos.malihu.gr/jquery-custom-content-scroller/)
         */
-        initScroller: function(el, options) {
+        initScroller: function(el, options, doNotDestroy) {
             if (mUtil.isMobileDevice()) {
                 el.css('overflow', 'auto');
             } else {
-                el.mCustomScrollbar("destroy");
+                if (doNotDestroy !== true) {
+                     mApp.destroyScroller(el); 
+                }               
                 el.mCustomScrollbar({
                     scrollInertia: 0,
                     autoDraggerLength: true,
                     autoHideScrollbar: true,
                     autoExpandScrollbar: false,
                     alwaysShowScrollbar: 0,
-                    axis: el.data('axis') ? el.data('axis') : 'y', 
+                    axis: el.data('axis') ? el.data('axis') : 'y',
                     mouseWheel: {
                         scrollAmount: 120,
                         preventDefault: true
-                    },         
+                    },
                     setHeight: (options.height ? options.height : ''),
                     theme:"minimal-dark"
                 });
@@ -271,6 +369,7 @@ var mApp = function() {
         */
         destroyScroller: function(el) {
             el.mCustomScrollbar("destroy");
+            el.removeClass('mCS_destroyed');
         },
 
         /**
@@ -341,10 +440,11 @@ var mApp = function() {
             var el = $(target);
 
             options = $.extend(true, {
-                opacity: 0.1,
-                overlayColor: '',
+                opacity: 0.03,
+                overlayColor: '#000000',
                 state: 'brand',
-                type: 'spinner',
+                type: 'loader',
+                size: 'lg',
                 centerX: true,
                 centerY: true,
                 message: '',
@@ -394,7 +494,8 @@ var mApp = function() {
                 overlayCSS: {
                     backgroundColor: options.overlayColor,
                     opacity: options.opacity,
-                    cursor: 'wait'
+                    cursor: 'wait',
+                    zIndex: '10'
                 },
                 onUnblock: function() {
                     if (el) {
@@ -438,6 +539,31 @@ var mApp = function() {
         */
         unblockPage: function() {
             return mApp.unblock('body');
+        },
+
+        /**
+        * Enable loader progress for button and other elements
+        * @param {object} target jQuery element object
+        * @param {object} options
+        */
+        progress: function(target, options) {
+            var skin = (options && options.skin) ? options.skin : 'light';
+            var alignment = (options && options.alignment) ? options.alignment : 'right'; 
+            var size = (options && options.size) ? 'm-spinner--' + options.size : ''; 
+            var classes = 'm-loader ' + 'm-loader--' + skin + ' m-loader--' + alignment + ' m-loader--' + size;
+
+            mApp.unprogress(target);
+            
+            $(target).addClass(classes);
+            $(target).data('progress-classes', classes);
+        },
+
+        /**
+        * Disable loader progress for button and other elements
+        * @param {object} target jQuery element object
+        */
+        unprogress: function(target) {
+            $(target).removeClass($(target).data('progress-classes'));
         }
     };
 }();

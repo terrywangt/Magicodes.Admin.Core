@@ -6,10 +6,15 @@ var mQuickSidebar = function() {
     var topbarAsideContent = topbarAside.find('.m-quick-sidebar__content');
 
     var initMessages = function() {
-        var init = function() {
-            var messenger = $('#m_quick_sidebar_tabs_messenger');  
-            var messengerMessages = messenger.find('.m-messenger__messages');
+        var messenger = $('#m_quick_sidebar_tabs_messenger');  
 
+        if (messenger.length === 0) {
+            return;
+        }
+
+        var messengerMessages = messenger.find('.m-messenger__messages');
+
+        var init = function() {
             var height = topbarAside.outerHeight(true) - 
                 topbarAsideTabs.outerHeight(true) - 
                 messenger.find('.m-messenger__form').outerHeight(true) - 120;
@@ -26,9 +31,14 @@ var mQuickSidebar = function() {
     }
 
     var initSettings = function() { 
+        var settings = $('#m_quick_sidebar_tabs_settings');
+
+        if (settings.length === 0) {
+            return;
+        }
+
         // init dropdown tabbable content
         var init = function() {
-            var settings = $('#m_quick_sidebar_tabs_settings');
             var height = mUtil.getViewPort().height - topbarAsideTabs.outerHeight(true) - 60;
 
             // init settings scrollable content
@@ -44,8 +54,13 @@ var mQuickSidebar = function() {
 
     var initLogs = function() {
         // init dropdown tabbable content
+        var logs = $('#m_quick_sidebar_tabs_logs');
+
+        if (logs.length === 0) {
+            return;
+        }
+
         var init = function() {
-            var logs = $('#m_quick_sidebar_tabs_logs');
             var height = mUtil.getViewPort().height - topbarAsideTabs.outerHeight(true) - 60;
 
             // init settings scrollable content
@@ -68,7 +83,7 @@ var mQuickSidebar = function() {
     var initOffcanvas = function() {
         topbarAside.mOffcanvas({
             class: 'm-quick-sidebar',
-            //overlay: false,  
+            overlay: true,  
             close: topbarAsideClose,
             toggle: topbarAsideToggle
         });   
@@ -89,6 +104,10 @@ var mQuickSidebar = function() {
 
     return {     
         init: function() {  
+            if (topbarAside.length === 0) {
+                return;
+            }
+
             initOffcanvas(); 
         }
     };

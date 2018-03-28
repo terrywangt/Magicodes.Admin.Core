@@ -1,3 +1,5 @@
+//== Set defaults
+
 $.notifyDefaults({
 	template: '' +
 	'<div data-notify="container" class="alert alert-{0} m-alert" role="alert">' +

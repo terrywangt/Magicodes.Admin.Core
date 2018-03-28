@@ -61,11 +61,11 @@
                     width: array-get($config, form, icon, close, width);     
                     padding: array-get($config, form, icon, close, padding);  
                 }
+            }
 
-                &.m-spinner-4:before {
-                    top: array-get($config, form, spinner, top);  
-                    right: array-get($config, form, spinner, right);  
-                }
+            &.m-loader:before {
+                top: array-get($config, form, spinner, top);  
+                right: array-get($config, form, spinner, right);  
             }
         }     
 
@@ -185,7 +185,7 @@
 
         	// message
         	.m-list-search__result-message {
-        		color: get-color($skin, regular, '+');
+        		color: get-color($skin, regular, '--');
         	}
 
         	// category
@@ -202,7 +202,7 @@
 
         		// item text
         		.m-list-search__result-item-text {								
-    				color: get-color($skin, regular);
+    				color: get-color($skin, regular, '--');
     			}
 
     			// item hover

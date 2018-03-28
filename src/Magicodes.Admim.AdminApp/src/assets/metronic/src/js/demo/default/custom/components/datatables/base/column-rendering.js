@@ -16,10 +16,6 @@ var DatatableColumnRenderingDemo = function() {
           },
         },
         pageSize: 10, // display 20 records per page
-        saveState: {
-          cookie: true,
-          webstorage: true,
-        }, // save datatable state(pagination, filtering, sorting, etc) in cookie or browser webstorage
         serverPaging: true,
         serverFiltering: true,
         serverSorting: true,
@@ -30,7 +26,6 @@ var DatatableColumnRenderingDemo = function() {
         theme: 'default', // datatable theme
         class: '', // custom wrapper class
         scroll: false, // enable/disable datatable scroll both horizontal and vertical when needed.
-        height: 550, // datatable's body's fixed height
         footer: false // display/hide footer
       },
 
@@ -164,11 +159,8 @@ var DatatableColumnRenderingDemo = function() {
           title: 'Actions',
           sortable: false,
           overflow: 'visible',
-          template: function(data) {
-            var dropup = (data.getDatatable().getPageSize() -
-                data.getIndex()) <=
-            4 ? 'dropup' : '';
-
+          template: function (row, index, datatable) {
+            var dropup = (datatable.getPageSize() - index) <= 4 ? 'dropup' : '';
             return '\
 						<div class="dropdown ' + dropup + '">\
 							<a href="#" class="btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown">\

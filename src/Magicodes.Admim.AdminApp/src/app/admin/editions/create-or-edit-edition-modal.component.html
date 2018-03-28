@@ -16,8 +16,9 @@
                     <tabset class="tab-container tabbable-line">
                         <tab heading="{{l('EditionProperties')}}" customClass="m-tabs__item">
                             <div class="form-group">
-                                <label>{{l("EditionName")}}</label>
-                                <input #editionNameInput class="form-control" type="text" name="EditionDisplayName" [ngClass]="{'edited':edition.displayName}" [(ngModel)]="edition.displayName" required maxlength="64">
+                                <label>{{l("EditionName")}} *</label>
+                                <input #editionNameInput="ngModel" class="form-control" type="text" name="EditionDisplayName" [ngClass]="{'edited':edition.displayName}" [(ngModel)]="edition.displayName" required maxlength="64">
+                                <validation-messages [formCtrl]="editionNameInput"></validation-messages>
                             </div>
 
                             <label>{{l("SubscriptionPrice")}}</label>
@@ -37,7 +38,8 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>{{l("MonthlyPrice")}}</label>
-                                        <input type="text"
+                                        <input #monthlyPriceInput="ngModel"
+                                               type="text"
                                                name="MonthlyPrice"
                                                currencyInput
                                                class="form-control"
@@ -45,12 +47,14 @@
                                                [ngClass]="{'edited':edition.monthlyPrice}"
                                                [required]="!isFree"
                                                [(ngModel)]="edition.monthlyPrice" />
+                                        <validation-messages [formCtrl]="monthlyPriceInput"></validation-messages>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>{{l("AnnualPrice")}}</label>
-                                        <input type="text"
+                                        <input #annualPriceInput="ngModel"
+                                               type="text"
                                                name="AnnualPrice"
                                                currencyInput
                                                class="form-control"
@@ -58,6 +62,7 @@
                                                [ngClass]="{'edited':edition.annualPrice}"
                                                [required]="!isFree"
                                                [(ngModel)]="edition.annualPrice" />
+                                        <validation-messages [formCtrl]="annualPriceInput"></validation-messages>
                                     </div>
                                 </div>
                             </div>
@@ -71,11 +76,13 @@
                                 </div>
                                 <div class="form-group trial-day-count" *ngIf="isTrialActive">
                                     <label>{{l("TrialDayCount")}}</label>
-                                    <input class="form-control"
+                                    <input #trialDayCountInput="ngModel"
+                                           class="form-control"
                                            type="number" name="TrialDayCount"
                                            [required]="isTrialActive"
                                            [(ngModel)]="edition.trialDayCount"
                                            [ngClass]="{'edited':edition.trialDayCount}">
+                                    <validation-messages [formCtrl]="trialDayCountInput"></validation-messages>
                                 </div>
                                 <div class="m-checkbox-list">
                                     <label for="EditEdition_IsWaitingDayActive" class="m-checkbox">
@@ -86,11 +93,13 @@
                                 </div>
                                 <div class="form-group waiting-day-after-expire" *ngIf="isWaitingDayActive">
                                     <label>{{l("WaitingDayAfterExpire")}}</label>
-                                    <input class="form-control"
+                                    <input #waitingDayAfterExpireInput="ngModel"
+                                           class="form-control"
                                            type="number" name="WaitingDayAfterExpire"
                                            [required]="isWaitingDayActive"
                                            [(ngModel)]="edition.waitingDayAfterExpire"
                                            [ngClass]="{'edited':edition.waitingDayAfterExpire}">
+                                    <validation-messages [formCtrl]="waitingDayAfterExpireInput"></validation-messages>
                                 </div>
                                 <label>{{l("WhatWillDoneAfterSubscriptionExpiry")}}</label>
                                 <div class="m-radio-inline">

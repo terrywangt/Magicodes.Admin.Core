@@ -9,22 +9,26 @@
 
     	.m-section__heading {
             display: block;
-            margin: 0 0 10px 0;
+            margin: 0 0 20px 0;
             padding: 0;
             font-family: get-heading-font-family();
             font-weight: get-font-weight(bolder);
         }
 
-        h3.m-section__heading {
+        h4.m-section__heading {
             font-size: get-font-size(regular, '+');
         }
 
-        h2.m-section__heading {
+        h3.m-section__heading {
             font-size: get-font-size(regular, '++');
         }
 
-        h1.m-section__heading {
+        h2.m-section__heading {
             font-size: get-font-size(regular, '+++');
+        }
+
+        h1.m-section__heading {
+            font-size: get-font-size(regular, '++++');
         }
 
         .m-section__sub {

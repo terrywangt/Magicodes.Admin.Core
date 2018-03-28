@@ -1,4 +1,4 @@
-import { Component, ViewChild, Injector, Output, EventEmitter, ElementRef } from '@angular/core';
+import { Component, ViewChild, Injector, Output, EventEmitter, ElementRef, AfterViewChecked } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
 import { RoleServiceProxy, RoleEditDto, CreateOrUpdateRoleInput } from '@shared/service-proxies/service-proxies';
 import { AppComponentBase } from '@shared/common/app-component-base';
@@ -10,7 +10,7 @@ import * as _ from 'lodash';
     selector: 'createOrEditRoleModal',
     templateUrl: './create-or-edit-role-modal.component.html'
 })
-export class CreateOrEditRoleModalComponent extends AppComponentBase {
+export class CreateOrEditRoleModalComponent extends AppComponentBase implements AfterViewChecked {
 
     @ViewChild('roleNameInput') roleNameInput: ElementRef;
     @ViewChild('createOrEditModal') modal: ModalDirective;

@@ -1,0 +1,220 @@
+//
+//** Horizontal Menu
+// Build horizontal menu for desktop mode and aside/vertical menu for mobile mode
+
+//== Horizontal menu for desktop mode
+@include m-generate--menu-hor(array-get($m-config-menu-header, desktop, megamenu));
+
+//== Vertical menu for mobile mode
+@include m-generate--menu-ver(array-get($m-config-menu-header, tablet-and-mobile));
+
+@include desktop {
+	.m-header-menu-wrapper {
+		position: relative;
+		@include shadow( array-get( $m-config-menu-header, desktop, tabmenu, self, shadow) ) ;
+	}
+
+	.m-header-menu {
+		width: auto;
+		margin: 0 0 0 0;
+		height: $m-header-tabbed-menu-height;
+
+		.m-menu__nav {
+			width: auto;
+
+			> .m-menu__item {
+				//== Tabbed submenu
+				&.m-menu__item--tabs {
+					padding: array-get( $m-config-menu-header, desktop, tabmenu, tab, self, padding);	
+					@include border-top-left-radius( array-get($m-config-base, body, wrapper, border-radius) );
+					@include border-top-right-radius( array-get($m-config-base, body, wrapper, border-radius) );
+
+					//== Primary links
+					> .m-menu__link {
+						@include border-top-left-radius( array-get($m-config-base, body, wrapper, border-radius) );
+						@include border-top-right-radius( array-get($m-config-base, body, wrapper, border-radius) );
+
+						padding: array-get( $m-config-menu-header, desktop, tabmenu, tab, link, self, padding);
+						background: array-get( $m-config-menu-header, desktop, tabmenu, tab, link, self, bg-color, default);
+
+						> .m-menu__hor-arrow,
+						> .m-menu__ver-arrow {
+							display: none;
+						}
+
+						.m-menu__link-text {
+							font-family:  #{array-get( $m-config-menu-header, desktop, tabmenu, tab, link, text, font-family)};
+							font-weight:  array-get( $m-config-menu-header, desktop, tabmenu, tab, link, text, weight);
+							font-size: array-get( $m-config-menu-header, desktop, tabmenu, tab, link, text, size);
+							color: array-get( $m-config-menu-header, desktop, tabmenu, tab, link, text, color, default);
+							text-transform: array-get( $m-config-menu-header, desktop, tabmenu, tab, link, text, transform);
+						}
+
+						.m-menu__link-icon {
+							font-size: array-get( $m-config-menu-header, desktop, tabmenu, tab, link, icon, size);
+							color: array-get( $m-config-menu-header, desktop, tabmenu, tab, link, icon, color, default);
+						}
+
+						&:hover {
+							.m-menu__link-text {
+								color: array-get( $m-config-menu-header, desktop, tabmenu, tab, link, text, color, hover);
+							}
+
+							.m-menu__link-icon {
+								color: array-get( $m-config-menu-header, desktop, tabmenu, tab, link, icon, color, hover);
+							}	
+						}
+					}
+
+					&.m-menu__item--active {	
+						> .m-menu__link {
+							.m-menu__link-text {
+								color: array-get( $m-config-menu-header, desktop, tabmenu, tab, link, text, color, active);
+							}
+
+							.m-menu__link-icon {
+								color: array-get( $m-config-menu-header, desktop, tabmenu, tab, link, icon, color, active);
+							}
+						}
+					}
+
+					&.m-menu__item--active-tab,
+					&.m-menu__item--hover {
+						> .m-menu__link {
+							background: array-get( $m-config-menu-header, desktop, tabmenu, tab, link, self, bg-color, open);
+
+							.m-menu__link-text {
+								color: array-get( $m-config-menu-header, desktop, tabmenu, tab, link, text, color, open);
+							}
+
+							.m-menu__link-icon {
+								color: array-get( $m-config-menu-header, desktop, tabmenu, tab, link, icon, color, open);
+							}
+						}
+					}
+
+					//== Submenu
+					> .m-menu__submenu {
+						background: array-get( $m-config-menu-header, desktop, tabmenu, tabsubmenu, self, bg-color);
+						display: none;
+						height: $m-header-tabbed-menu-submenu-height;
+						top: $m-header-tabbed-menu-height;
+						padding: 0 !important;
+						position: absolute;
+						width: 100%;
+						@include animation(none);
+						@include border-top-right-radius( array-get($m-config-base, body, wrapper, border-radius) );
+						@include border-top-left-radius( 0 );
+
+						> .m-menu__arrow {
+							display: none !important;
+						}
+
+						> .m-menu__subnav {
+							padding: array-get( $m-config-menu-header, desktop, tabmenu, tabsubmenu, self, padding);
+							height: 100%;
+							display: table;
+							background: transparent;
+							@include shadow(none);
+							@include border-radius(0);
+
+							> .m-menu__item {
+								display: table-cell;
+								vertical-align: middle;
+								padding-right: 5px;
+								position: static;
+
+								&.m-menu__item--rel {
+									position: relative;
+								}
+
+								&.m-menu__item--actions {
+									position: absolute;
+									right: 0;
+									@include vertical-middle();
+								}
+
+								> .m-menu__link {
+									padding: array-get( $m-config-menu-header, desktop, tabmenu, tabsubmenu, link, self, padding);
+									width: auto;
+									height: auto;
+
+									.m-menu__link-text {
+										font-size: array-get( $m-config-menu-header, desktop, tabmenu, tabsubmenu, link, text, size);
+										font-weight: array-get( $m-config-menu-header, desktop, tabmenu, tabsubmenu, link, text, weight);
+										color: array-get( $m-config-menu-header, desktop, tabmenu, tabsubmenu, link, text, color, default);
+									}
+
+									.m-menu__link-icon {
+										font-size: array-get( $m-config-menu-header, desktop, tabmenu, tabsubmenu, link, icon, size);
+										color: array-get( $m-config-menu-header, desktop, tabmenu, tabsubmenu, link, icon, color, default);
+										padding-right: 0.75rem;
+									}
+
+									.m-menu__hor-arrow {
+										font-size: array-get( $m-config-menu-header, desktop, tabmenu, tabsubmenu, link, arrow, size);
+										color: array-get( $m-config-menu-header, desktop, tabmenu, tabsubmenu, link, arrow, color, default);
+									}
+								}
+
+								&:hover:not(.m-menu__item--actions),
+								&.m-menu__item--hover,
+								&.m-menu__item--active {
+									> .m-menu__link {
+										background: array-get( $m-config-menu-header, desktop, tabmenu, tabsubmenu, link, self, bg-color, active);
+										@include border-radius(3rem);
+
+										.m-menu__link-text {
+											color: array-get( $m-config-menu-header, desktop, tabmenu, tabsubmenu, link, text, color, active);
+										}
+
+										.m-menu__link-icon {
+											color: array-get( $m-config-menu-header, desktop, tabmenu, tabsubmenu, link, icon, color, active);
+										}
+
+										.m-menu__hor-arrow {
+											color: array-get( $m-config-menu-header, desktop, tabmenu, tabsubmenu, link, arrow, color, active);
+										}
+									}
+								}
+
+								//== More link
+								&.m-menu__item--more {
+									> .m-menu__link {
+										text-align: center;
+
+										.m-menu__link-text {
+											display: none;
+										}
+
+										.m-menu__link-icon {
+											padding-right: 0;
+											text-align: center;
+										}
+									}
+								}
+							}
+						}
+					}
+
+					&.m-menu__item--active-tab,
+					&.m-menu__item--hover {
+						> .m-menu__submenu {
+							display: block;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+@include tablet-and-mobile {
+	.m-header-menu {
+		display: none;
+
+		.m-aside-header-menu-mobile--offcanvas-on & {
+			display: block;
+		}
+	}
+}

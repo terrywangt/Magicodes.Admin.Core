@@ -1,4 +1,4 @@
-import { Component, Injector, OnInit, ViewChild } from '@angular/core';
+import { Component, Injector, OnInit, ViewChild, AfterViewChecked } from '@angular/core';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { appModuleAnimation } from '@shared/animations/routerTransition';
 import {
@@ -22,7 +22,7 @@ import { Paginator } from 'primeng/components/paginator/paginator';
     animations: [appModuleAnimation()]
 })
 
-export class SubscriptionManagementComponent extends AppComponentBase implements OnInit {
+export class SubscriptionManagementComponent extends AppComponentBase implements OnInit, AfterViewChecked {
 
     @ViewChild('dataTable') dataTable: DataTable;
     @ViewChild('paginator') paginator: Paginator;

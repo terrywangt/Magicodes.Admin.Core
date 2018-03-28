@@ -68,6 +68,10 @@
 			   		height: auto;
 				}
 
+				&.m-stack__item--fit {
+					line-height: 0;
+				}
+
 				&.m-stack__item--left {
 					text-align: left;	
 				}
@@ -106,6 +110,10 @@
 
 				&.m-stack__item--fluid {
 					width: 100%;
+				}
+
+				&.m-stack__item--fit {
+					line-height: 0;
 				}
 
 				&.m-stack__item--left {
@@ -171,7 +179,6 @@
 }
 
 //== Demo
-
 .m-stack--demo {
 	&.m-stack--ver .m-stack__item,
 	&.m-stack--hor .m-stack__demo-item {

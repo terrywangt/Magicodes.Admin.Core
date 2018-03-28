@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, Injector, ViewEncapsulation, OnDestroy, ElementRef, ViewChild } from '@angular/core';
+import { Component, AfterViewInit, Injector, ViewEncapsulation, ElementRef, ViewChild } from '@angular/core';
 import { TenantDashboardServiceProxy } from '@shared/service-proxies/service-proxies';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { appModuleAnimation } from '@shared/animations/routerTransition';
@@ -8,16 +8,17 @@ import * as _ from 'lodash';
 
 @Component({
     templateUrl: './dashboard.component.html',
+    styleUrls: ['./dashboard.component.less'],
     encapsulation: ViewEncapsulation.None,
     animations: [appModuleAnimation()]
 })
-export class DashboardComponent extends AppComponentBase implements AfterViewInit, OnDestroy {
+export class DashboardComponent extends AppComponentBase implements AfterViewInit {
 
     appSalesSummaryDateInterval = AppSalesSummaryDatePeriod;
     selectedSalesSummaryDatePeriod: any = AppSalesSummaryDatePeriod.Daily;
     dashboardHeaderStats: DashboardHeaderStats;
     salesSummaryChart: SalesSummaryChart;
-    regionalStatsWorldMap: RegionalStatsWorldMap;
+    regionalStatsTable: RegionalStatsTable;
     generalStatsPieChart: GeneralStatsPieChart;
     dailySalesLineChart: DailySalesLineChart;
     profitSharePieChart: ProfitSharePieChart;
@@ -31,7 +32,7 @@ export class DashboardComponent extends AppComponentBase implements AfterViewIni
         super(injector);
         this.dashboardHeaderStats = new DashboardHeaderStats();
         this.salesSummaryChart = new SalesSummaryChart(this._dashboardService, 'salesStatistics');
-        this.regionalStatsWorldMap = new RegionalStatsWorldMap(this._dashboardService, 'worldmap');
+        this.regionalStatsTable = new RegionalStatsTable(this._dashboardService);
         this.generalStatsPieChart = new GeneralStatsPieChart(this._dashboardService);
         this.dailySalesLineChart = new DailySalesLineChart(this._dashboardService, '#m_chart_daily_sales');
         this.profitSharePieChart = new ProfitSharePieChart(this._dashboardService, '#m_chart_profit_share');
@@ -55,12 +56,8 @@ export class DashboardComponent extends AppComponentBase implements AfterViewIni
 
     ngAfterViewInit(): void {
         this.getDashboardStatisticsData(AppSalesSummaryDatePeriod.Daily);
-        this.regionalStatsWorldMap.draw(true);
+        this.regionalStatsTable.init();
         this.memberActivityTable.init();
-    }
-
-    ngOnDestroy() {
-        this.regionalStatsWorldMap.dispose();
     }
 }
 
@@ -131,97 +128,124 @@ class SalesSummaryChart extends DashboardChartBase {
     }
 }
 
-class RegionalStatsWorldMap extends DashboardChartBase {
-    //World map => DataMaps: https://github.com/markmarkoh/datamaps/
+class RegionalStatsTable extends DashboardChartBase {
+    stats: Array<any>;
 
-    private _worldMap;
-    private colors: any = d3.scale.category10();
-    private refreshIntervalId: number;
-
-    worldMap = element => {
-        let instance: any;
-        let init = data => new Datamap({
-            element: document.getElementById(element),
-            projection: 'mercator',
-            fills: {
-                defaultFill: '#ABDDA4',
-                key: '#fa0fa0'
-            },
-            data: data,
-            done(datamap) {
-                const redraw = () => {
-                    datamap.svg.selectAll('g').attr('transform', 'translate(' + d3.event.translate + ')scale(' + d3.event.scale + ')');
-                };
-
-                datamap.svg.call(d3.behavior.zoom().on('zoom', redraw));
-            }
-        });
-
-        let redraw = () => {
-            this._dashboardService
-                .getWorldMap({})
-                .subscribe(result => {
-                    let mapData = {};
-                    for (let i = 0; i < result.countries.length; i++) {
-                        let country = result.countries[i];
-                        mapData[country.countryName] = this.colors(Math.random() * country.color);
-                    }
-
-                    instance.updateChoropleth(mapData);
-                });
-
-        };
-
-        let draw = data => {
-            if (!instance) {
-                instance = init(data);
-            } else {
-                instance.redraw();
-            }
-        };
-
-        return {
-            draw: draw,
-            redraw: redraw
-        };
-    }
-
-    constructor(private _dashboardService: TenantDashboardServiceProxy, private _containerElement) {
+    constructor(private _dashboardService: TenantDashboardServiceProxy) {
         super();
-        this._worldMap = this.worldMap(this._containerElement);
     }
 
-    draw(isAutoReload = false, reloadInterval = 3000) {
-        this._worldMap.draw({
-            USA: { fillKey: 'key' },
-            JPN: { fillKey: 'key' },
-            ITA: { fillKey: 'key' },
-            CRI: { fillKey: 'key' },
-            KOR: { fillKey: 'key' },
-            DEU: { fillKey: 'key' },
-            TUR: { fillKey: 'key' },
-            RUS: { fillKey: 'key' }
-        });
-
-        if (isAutoReload) {
-            this.reloadEvery(reloadInterval);
-        }
-
-        this.hideLoading();
+    init() {
+        this.reload();
     }
 
-    dispose() {
-        if (!this.refreshIntervalId) {
+    _initSparklineChart(src, data, color, border) {
+        if (src.length === 0) {
             return;
         }
 
-        clearInterval(this.refreshIntervalId);
+        let config = {
+            type: 'line',
+            data: {
+                labels: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October"],
+                datasets: [{
+                    label: "",
+                    borderColor: color,
+                    borderWidth: border,
+
+                    pointHoverRadius: 4,
+                    pointHoverBorderWidth: 12,
+                    pointBackgroundColor: Chart.helpers.color('#000000').alpha(0).rgbString(),
+                    pointBorderColor: Chart.helpers.color('#000000').alpha(0).rgbString(),
+                    pointHoverBackgroundColor: mUtil.getColor('danger'),
+                    pointHoverBorderColor: Chart.helpers.color('#000000').alpha(0.1).rgbString(),
+                    fill: false,
+                    data: data,
+                }]
+            },
+            options: {
+                title: {
+                    display: false,
+                },
+                tooltips: {
+                    enabled: false,
+                    intersect: false,
+                    mode: 'nearest',
+                    xPadding: 10,
+                    yPadding: 10,
+                    caretPadding: 10
+                },
+                legend: {
+                    display: false,
+                    labels: {
+                        usePointStyle: false
+                    }
+                },
+                responsive: true,
+                maintainAspectRatio: true,
+                hover: {
+                    mode: 'index'
+                },
+                scales: {
+                    xAxes: [{
+                        display: false,
+                        gridLines: false,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Month'
+                        }
+                    }],
+                    yAxes: [{
+                        display: false,
+                        gridLines: false,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Value'
+                        },
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                },
+
+                elements: {
+                    point: {
+                        radius: 4,
+                        borderWidth: 12
+                    },
+                },
+
+                layout: {
+                    padding: {
+                        left: 0,
+                        right: 10,
+                        top: 5,
+                        bottom: 0
+                    }
+                }
+            }
+        };
+
+        return new Chart(src, config);
     }
 
-    reloadEvery(milliseconds) {
-        this.refreshIntervalId = setInterval(() => {
-            this._worldMap.redraw();
-        }, milliseconds);
+    reload() {
+        let self = this;
+        this.showLoading();
+        this._dashboardService
+            .getRegionalStats({})
+            .subscribe(result => {
+                this.stats = result.stats;
+                this.hideLoading();
+                var colors = ['accent', 'danger', 'success', 'warning'];
+                setTimeout(() => {
+                    var $canvasItems = $('canvas.m_chart_sales_by_region');
+                    for (var i = 0; i < $canvasItems.length; i++) {
+                        var $canvas = $canvasItems[i];
+                        self._initSparklineChart($canvas, this.stats[i].change, mUtil.getColor(colors[i % 4]), 2);
+                    }
+                });
+            });
     }
 }
 
@@ -313,12 +337,12 @@ class DailySalesLineChart extends DashboardChartBase {
     }
 
     init(data) {
-        var dayLabels = [];
-        for (var day = 1; day <= data.length; day++) {
-            dayLabels.push("Day " + day);
+        let dayLabels = [];
+        for (let day = 1; day <= data.length; day++) {
+            dayLabels.push('Day ' + day);
         }
 
-        var chartData = {
+        let chartData = {
             labels: dayLabels,
             datasets: [{
                 //label: 'Dataset 1',
@@ -331,13 +355,13 @@ class DailySalesLineChart extends DashboardChartBase {
             }]
         };
 
-        var chartContainer = $(this._canvasId);
+        let chartContainer = $(this._canvasId);
 
         if (chartContainer.length === 0) {
             return;
         }
 
-        var chart = new Chart(chartContainer, {
+        let chart = new Chart(chartContainer, {
             type: 'bar',
             data: chartData,
             options: {
@@ -412,7 +436,7 @@ class ProfitSharePieChart extends DashboardChartBase {
             return;
         }
 
-        var chart = new Chartist.Pie(this._canvasId, {
+        let chart = new Chartist.Pie(this._canvasId, {
             series: [{
                 value: data[0],
                 className: 'custom',
@@ -445,7 +469,7 @@ class ProfitSharePieChart extends DashboardChartBase {
         chart.on('draw', (data) => {
             if (data.type === 'slice') {
                 // Get the total path length in order to use for dash array animation
-                var pathLength = data.element._node.getTotalLength();
+                let pathLength = data.element._node.getTotalLength();
 
                 // Set a dasharray that matches the path length as prerequisite to animate dashoffset
                 data.element.attr({
@@ -453,7 +477,7 @@ class ProfitSharePieChart extends DashboardChartBase {
                 });
 
                 // Create animation definition while also assigning an ID to the animation for later sync usage
-                var animationDefinition = {
+                let animationDefinition = {
                     'stroke-dashoffset': {
                         id: 'anim' + data.index,
                         dur: 1000,

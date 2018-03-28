@@ -19,8 +19,9 @@
                 <div class="modal-body">
 
                     <div class="form-group form-md-line-input form-md-floating-label no-hint">
-                        <label>{{l("Name")}}</label>
-                        <input #organizationUnitDisplayName class="form-control" type="text" name="displayName" [ngClass]="{'edited': organizationUnit.displayName}" [(ngModel)]="organizationUnit.displayName" required maxlength="128">
+                        <label>{{l("Name")}} *</label>
+                        <input #organizationUnitDisplayName="ngModel" class="form-control" type="text" name="displayName" [ngClass]="{'edited': organizationUnit.displayName}" [(ngModel)]="organizationUnit.displayName" required maxlength="128">
+                        <validation-messages [formCtrl]="organizationUnitDisplayName"></validation-messages>
                     </div>
 
                 </div>

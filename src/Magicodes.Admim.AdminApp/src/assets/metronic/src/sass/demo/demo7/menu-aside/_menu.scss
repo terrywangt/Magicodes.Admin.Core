@@ -1,0 +1,148 @@
+//
+//** Aside Menus
+// Build left aside menu
+
+@include m-generate--menu-ver( $m-config-menu-aside );
+
+$m-root-menu-item-height: 65px;
+$m-menu-bottom-offset: 30px;
+$m-menu-fullheight-submenu-width: 275px;
+$m-menu-item-submenu-indent: array-get($m-config-menu-aside, build, layout, default, item, submenu, self, indent);
+$m-menu-item-submenu-padding-x: array-get($m-config-menu-aside, build, layout, default, item, submenu, item, link, self, padding-x);
+
+
+//== Dekstop Mode
+
+@include desktop {
+	.m-aside-menu {
+		height: 100%;
+
+		.m-menu__nav {
+			height: 100%;
+
+			> .m-menu__item {
+				//== Bottom sitcky links
+				height: $m-root-menu-item-height;
+
+				> .m-menu__link {
+					height: auto;
+				}
+
+				@for $i from 1 through 5 {
+					&.m-menu__item--bottom-#{$i} {
+						position: absolute !important;
+						bottom: $m-menu-bottom-offset + ($i - 1) * $m-root-menu-item-height;
+					}
+				}
+
+				//== Full height dropdown menu
+				&.m-menu__item--hover.m-menu__item--submenu-fullheight:not([data-menu-submenu-mode='accordion']) {
+					> .m-menu__submenu {
+						//== Submenu animation
+					 	@include animation('m-aside-menu-submenu-fade-in .2s ease 1, m-aside-menu-submenu-move-up .2s ease 1');
+
+						width: $m-menu-fullheight-submenu-width;
+						position: fixed !important;
+						top: 0;
+						bottom: 0;
+						left: array-get($m-config-aside, aside-left, self, minimize, width);						
+						z-index: array-get($m-config-aside, aside-left, self, fixed, zindex) - 1;
+						margin-left: 0 !important;						
+
+						.m-aside-left--skin-dark & {
+							@include shadow( array-get($m-config-aside, aside-left, self, default, box-shadow, dark) ); 	
+							background: array-get($m-config-menu-aside, build, skins, dark, default, self, bg-color);
+							border-left: 1px solid lighten(array-get($m-config-menu-aside, build, skins, dark, default, self, bg-color), 8%);
+						}
+								
+						.m-aside-left--skin-light & {
+							@include shadow( array-get($m-config-aside, aside-left, self, default, box-shadow, light) ); 	
+							background: array-get($m-config-menu-aside, build, skins, light, default, self, bg-color);
+							border-left: 1px solid get-color(light, panel, '-');
+						}
+
+						> .m-menu__arrow {
+							display: none !important;
+						}
+
+						.m-menu__subnav {
+							padding-top: 30px;
+							@include border-radius(0);	
+							position: static;
+							width: auto;
+							top: 0;
+							bottom: 0;
+							margin-left: 0 !important;
+							background: tranparent;
+							@include shadow(none !important);
+						}
+
+						//== Fix submenu indent
+						.m-menu__subnav {
+							> .m-menu__section {
+						   		padding-left: 30px;
+							}
+
+							> .m-menu__item {
+								> .m-menu__submenu {
+									.m-menu__subnav {
+										padding: 0;
+
+										> .m-menu__item {
+											> .m-menu__link {
+												padding-left: $m-menu-item-submenu-padding-x + 1 * $m-menu-item-submenu-indent; 
+											}   
+
+											> .m-menu__submenu {
+												.m-menu__subnav {
+													padding: 0;
+														
+													> .m-menu__item {
+														> .m-menu__link {
+															padding-left: $m-menu-item-submenu-padding-x + 2 * $m-menu-item-submenu-indent; 
+														}
+
+														> .m-menu__submenu {
+															.m-menu__subnav {
+																padding: 0;
+																	
+																> .m-menu__item {
+																	> .m-menu__link {
+																		padding-left: $m-menu-item-submenu-padding-x + 3 * $m-menu-item-submenu-indent; 
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							} 
+						}
+					}
+				}
+			}
+		}
+	}
+
+	//== Fullheight dropdown menu overlay
+	.m-aside-menu-overlay {
+		position: fixed;
+		background: rgba(#000, 0.1);
+		display: none;
+		z-index: array-get($m-config-aside, aside-left, self, fixed, zindex) - 2;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		top: 0;
+		@include opacity(0);
+
+		.m-aside-menu-overlay--on & {
+			@include opacity(1);
+			display: block;
+			@include animation(m-animate-fade-in .2s linear);
+		}
+	}
+}

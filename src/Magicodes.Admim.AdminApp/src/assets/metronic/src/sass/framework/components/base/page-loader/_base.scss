@@ -1,11 +1,11 @@
 //
-//** Page block loader 
+//** Page loader - Base
 //
 //
 
 //== Mixins
 @mixin m-build-component--page-loader-base() {
-	.m-page-loader {
+	.m-page-loader.m-page-loader--base {
 		position: fixed;
 		top: 0;
 		bottom: 0;
@@ -38,8 +38,10 @@
 	}
 }
 
-@mixin m-build-component--page-loader-skin($skin) {
-    @include component-skin(m-page-loader, $skin) {
+@mixin m-build-component--page-loader-skin() {
+    $skin: get-default-skin();
+
+    .m-page-loader.m-page-loader--base {
         background: get-color($skin, box);
 
         &.m-page-loader--non-block {
@@ -52,6 +54,4 @@
 
 @include m-build-component--page-loader-base();
 
-@include m-build-component--page-loader-skin(light);
-
-@include m-build-component--page-loader-skin(dark);
+@include m-build-component--page-loader-skin();

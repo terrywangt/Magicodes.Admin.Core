@@ -1,0 +1,120 @@
+//
+//** Header
+//
+
+//== Desktop Mode
+@include desktop {	
+	.m-header {		
+		@include transition(height 0.3s ease);
+
+		.m-header__top {
+			@include shadow( array-get($m-config-header, header, top, shadow) );
+			background: array-get($m-config-header, header, top, bg-color);
+			padding: array-get($m-config-header, header, self, padding, desktop);
+			position: relative;
+			z-index: 3;			
+			height: array-get($m-config-header, header, self, height, desktop, top, default); 
+			@include fix-fixed-position-lags();
+		}
+
+		.m-header__bottom {
+			padding: array-get($m-config-header, header, self, padding, desktop);
+			position: relative;
+			z-index: 2;
+			height: $m-header-tabbed-menu-height + $m-header-tabbed-menu-submenu-height;
+		}
+
+		// fixed header mode
+		.m-header--fixed & {
+			.m-header__top {
+				@include fix-fixed-position-lags();
+				z-index: array-get($m-config-header, header, self, fixed, zindex);
+				position: fixed;
+				top: 0;
+				left: 0;
+				right: 0;   
+			}
+
+			.m-header__bottom {
+				margin-top: array-get($m-config-header, header, self, height, desktop, top, default) + 40px;
+			}
+		}
+
+		// fixed header semi-hidable mode
+		.m-header--fixed.m-header--minimize-on & {	
+			.m-header__top {
+				@include transition(height 0.3s ease);
+				height: array-get($m-config-header, header, self, height, desktop, top, minimize);			
+			}
+		}
+
+		.m-header--fixed.m-header--minimize-off & {
+			.m-header__top {
+				@include transition(height 0.3s ease);
+				height: array-get($m-config-header, header, self, height, desktop, top, default);
+			}
+		}
+	}
+}
+
+//== Mobile Mode
+@include tablet-and-mobile {
+	.m-header {		
+		@include shadow( array-get($m-config-header, header, top, shadow) );
+		background: array-get($m-config-header, header, top, bg-color);
+		height: array-get($m-config-header, header, self, height, mobile, default) !important;
+
+		.m-header__top {
+			.m-container {
+				padding: 0;
+			}
+		}
+
+		.m-header__bottom {
+			.m-container {
+				padding: 0;
+			}
+		}
+
+		.m-page__wrapper {
+			padding: 0;
+
+			.m-page--fluid & {
+				padding: 0;
+			}			
+		}
+
+		// header nav
+		.m-header__nav {
+			top: -100%;
+			position: relative;
+		}
+
+		> .m-container > .m-grid {
+			height: array-get($m-config-header, header, self, height, mobile, default);
+
+			> .m-grid__col {
+				height: array-get($m-config-header, header, self, height, mobile, default);
+			}
+		}
+
+		.m-header--fixed-mobile & {
+			@include fix-fixed-position-lags();
+			z-index: array-get($m-config-header, header, self, fixed, zindex);
+			position: fixed;
+			top: 0;
+			left: 0;
+			right: 0;   
+		}
+
+		// fixed header semi-hidable mode
+		.m-header--fixed-mobile.m-header--minimize-on & {	
+			height: array-get($m-config-header, header, self, height, mobile, minimize);			
+			@include transition(height 0.3s ease);									
+		}
+		
+		.m-header--fixed-mobile.m-header--minimize-off & {
+			height: array-get($m-config-header, header, self, height, mobile, default);
+		}
+	}
+}

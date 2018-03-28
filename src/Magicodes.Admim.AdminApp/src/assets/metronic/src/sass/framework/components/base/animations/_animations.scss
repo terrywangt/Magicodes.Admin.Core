@@ -60,6 +60,17 @@
     }
 }
 
+@include keyframes(m-animate-fade-out-up) {
+    from   { 
+        opacity: 1; 
+        @include transform(translateY(15px));
+    }
+
+    to { opacity: 0; 
+        @include transform(translateY(0px));    
+    }
+}
+
 @include keyframes(m-animate-blink) {
     50% {
         opacity: 0.0;

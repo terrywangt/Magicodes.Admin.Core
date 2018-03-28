@@ -24,6 +24,7 @@ $m--layout-breakpoints: (
     // Extra large screen / wide desktop
     xxl: 1400px,
 
+    // Super Extra large screen / wide desktop
     xxxl: 1600px
 )!default;
 
@@ -31,7 +32,7 @@ $m--layout-breakpoints: (
 $m--arrow-style: 'smooth'; // supported options: smooth, classic
 
 //== Default skin
-$m--default-skin: 'light'; // supported options: light, dark
+$m--default-skin: 'light'; // supported option: light. the dark option will be added in the future when a new demo with dark skin is released.
 
 //== Global rounded border mode
 $m--rounded: true;   // access to this value calling rounded() in SASS code
@@ -42,9 +43,23 @@ $m--btn-force-hover-pointer: true;
 //== Border Radius
 $m--border-radius: (
     general: 4px,
-    dropdown: 6px,
+    dropdown: 4px,
     scrollbar: 2px
 );
+
+//== Core icon codes(lineawesome icons: https://icons8.com/line-awesome)
+$m--icon-codes: (
+    close: '\f191',
+    down: '\f110',
+    up: '\f113',
+    left: '\f111',  
+    right: '\f112',
+    plus: '\f2c2',
+    minus: '\f28e'
+);
+
+//== Modal Z-index
+$m--modal-zindex: 1050;
 
 //== Transition
 $m--transition: (
@@ -66,7 +81,7 @@ $m--state-colors: (
     ),
     metal: (
         base: #c4c5d6,
-        inverse: #111111
+        inverse: #ffffff
     ),  
     light: (
         base: #ffffff,
@@ -288,7 +303,7 @@ $m--typography-colors: (
             lighten3: lighten(#9fa1b7, 15%), // access to this color value calling get-color function as get-color(dark, regular, +++) in SASS code
             lighten2: lighten(#9fa1b7, 10%), // access to this color value calling get-color function as get-color(dark, regular, ++) in SASS code
             lighten1: lighten(#9fa1b7, 5%), // access to this color value calling get-color function as get-color(dark, regular, +) in SASS code
-            base:     #9fa1b7,               // access to this color value calling get-color function as get-color(dark, regular) in SASS code
+            base:     #ffffff,               // access to this color value calling get-color function as get-color(dark, regular) in SASS code
             darken1:  darken(#9fa1b7, 5%),  // access to this color value calling get-color function as get-color(dark, regular, -) in SASS code
             darken2:  darken(#9fa1b7, 10%),  // access to this color value calling get-color function as get-color(dark, regular, --) in SASS code
             darken3:  darken(#9fa1b7, 15%),  // access to this color value calling get-color function as get-color(dark, regular, ---) in SASS code
@@ -374,8 +389,7 @@ $m--typography-colors: (
 )!default;  
  
 //== General box shadows
-$m--box-shadow-base-color: #c5c2cc;
-$m--box-shadow-base-color: #716aca; 
+$m--box-shadow-base-color: darken(#c5c2cc, 50%) !default; // purple shadow: #716ac  grey shadow: #c5c2cc
 
 $m--box-shadows: (
     light: (

@@ -19,7 +19,7 @@ export class AppComponent extends AppComponentBase implements OnInit, AfterViewI
     private router: Router;
 
     subscriptionStartType = SubscriptionStartType;
-    installationMode: boolean = true;
+    installationMode = true;
 
 
     public constructor(
@@ -59,7 +59,7 @@ export class AppComponent extends AppComponentBase implements OnInit, AfterViewI
         if (mApp.initialized) {
             return;
         }
-        
+
         mApp.init();
         mLayout.init();
         mApp.initialized = true;

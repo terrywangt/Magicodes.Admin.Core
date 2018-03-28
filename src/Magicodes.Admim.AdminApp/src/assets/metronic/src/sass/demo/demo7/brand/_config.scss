@@ -1,0 +1,69 @@
+//
+//** Brand Settings
+//
+
+$m-config-brand: (
+	//== Desktop version
+	desktop: (
+		//== Self
+		self: (
+			bg-color: (
+				light: #FAFAFC,
+				dark: darken(#2c2e3e, 5%)
+			),
+		),
+
+		//== Logo
+		logo: (
+			width: 60px
+		)
+	),
+
+	//== Mobile version
+	mobile: (
+		//== Self
+		self: (			
+			padding: 0px 25px,
+			bg-color: #FAFAFA
+		),
+
+		//== Logo
+		logo: (
+			width: 40px
+		),
+		
+		//== Brand tools
+		tools: (
+			//== Self
+			self: (
+				//== Space between togglers and icons
+				space: 10px
+			),
+			
+			//== Toggler
+			toggler: (
+				width: 26px,
+				height: 26px,  
+				transition-duration: 0.4s,
+				thickness: 1px,
+				space: 6px, 
+				radius: 0px,
+				color: (
+					default: #5d5f77,
+					hover: get-brand-color(),
+					active: get-brand-color()
+				)
+			),
+
+			//== Icon
+			icon: (
+				font-size: 1.4rem,
+				color: (
+					default: #5d5f77,
+					hover: lighten(#5d5f77, 20%),
+					active: lighten(#5d5f77, 20%)
+				)
+			)
+		)			
+	)	
+);

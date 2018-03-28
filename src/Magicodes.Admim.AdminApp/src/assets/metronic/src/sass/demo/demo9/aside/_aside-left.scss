@@ -1,0 +1,73 @@
+//
+//** Aside Left
+//
+
+@mixin m-build-aside-left-base($layout) {
+	//== Base markup
+	.m-aside-left {
+		@include transition(array-get($layout, self, minimize, transition));
+		width: array-get($layout, self, default, width);	
+
+		//== Aside Skins
+		&.m-aside-left--skin-dark {
+			background-color: array-get($layout, self, default, bg-color, dark); 		
+		}
+		
+		&.m-aside-left--skin-light {
+			background-color: array-get($layout, self, default, bg-color, light); 		
+		}
+	}
+
+	@include desktop {		
+		//== Aside Left Fixed Mode		
+		.m-aside-left--fixed {
+			//== Aside left
+			.m-aside-left {
+				@include fix-fixed-position-lags();	
+				overflow: visible;
+
+				.mCSB_scrollTools {
+					right: array-get($layout, self, fixed, scroller, right);
+				}
+
+				.mCustomScrollBox,
+				.mCSB_container {
+					overflow: visible !important;
+				}
+
+				//== Custome custom scroller
+				&.m-aside-left--skin-dark {					
+					@include m-component--scrollable-skin(array-get($layout, self, fixed, scroller, color, dark, default) , array-get($layout, self, fixed, scroller, color, dark, drag));
+				}
+
+				&.m-aside-left--skin-light {					
+					@include m-component--scrollable-skin(array-get($layout, self, fixed, scroller, color, light, default) , array-get($layout, self, fixed, scroller, color, light, drag));
+				}
+			}			
+		}	
+
+		//== Aside Left Toggle
+		.m-aside-left-toggler {
+			
+		}
+
+		@include m-build--toggler(m-aside-left-toggler, array-get($m-config-aside, aside-left, toggler));  
+
+		.m-aside-left-toggler {
+			@include m-customize--toggler-color(m-aside-left-toggler, array-get($m-config-aside, aside-left, toggler, color));
+		}
+	}
+
+	@include tablet-and-mobile {
+		//== Aside Left Toggle 
+		.m-aside-left-toggle {
+			display: none;
+		}
+	}
+}
+
+//== Build Aside Left Base
+@include m-build-aside-left-base( array-get($m-config-aside, aside-left) );
+
+//== Build Aside Left Offcanvas
+@include m-generate-component--offcanvas(m-aside-left, default, array-get($m-config-aside, aside-left, self, offcanvas, default) ); 

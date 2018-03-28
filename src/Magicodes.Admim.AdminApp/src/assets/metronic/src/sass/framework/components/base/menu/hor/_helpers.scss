@@ -24,6 +24,9 @@
 			vertical-align: middle;
 			text-align: array-get($item, link, bullet, self, align);
 			width: array-get($item, link, bullet, self, width);
+			@if array-has($item, link, bullet, padding) {
+				padding: array-get($item, link, bullet, padding);
+			}
 
 			> span {
 				vertical-align: middle;
@@ -51,6 +54,10 @@
 			font-weight: array-get($item, link, text, font-weight);	
 			font-size: array-get($item, link, text, font-size);
 			text-transform: array-get($item, link, text, font-transform);
+
+			@if array-has($item, link, text, padding) {
+				padding: array-get($item, link, text, padding);
+			}
 		}
 
 		// link badge
@@ -64,6 +71,10 @@
 			font-size: array-get($item, link, arrow, font-size);
 			width: array-get($item, link, arrow, width);
 			text-align: array-get($item, link, arrow, align);
+
+			@if array-has($item, link, arrow, padding) {
+				padding: array-get($item, link, arrow, padding);
+			}
 		}
 
 		// menu root level "here" arrow
@@ -228,6 +239,8 @@
 	@if smooth-arrow() {
 		.m-menu__nav.m-menu__nav--submenu-arrow {
 			// root submenu arrow
+			
+			> .m-menu__item.m-menu__item--submenu.m-menu__item--tabs > .m-menu__submenu > .m-menu__subnav > .m-menu__item.m-menu__item--submenu.m-menu__item--hover,
 			> .m-menu__item.m-menu__item--submenu.m-menu__item--hover {
 				> .m-menu__submenu {
 					padding-top: array-get($layout, smooth, offset, dropdown-root);   
@@ -282,6 +295,7 @@
 		.m-menu__nav.m-menu__nav--submenu-arrow {
 			// mega submenu arrow
 			> .m-menu__item {
+				&.m-menu__item--submenu > .m-menu__submenu.m-menu__item--tabs > .m-menu__subnav > .m-menu__item.m-menu__item--submenu.m-menu__item--hover,
 				&.m-menu__item--submenu.m-menu__item--hover {
 					> .m-menu__submenu {
 						padding-top: array-get($layout, classic, size);   
@@ -764,6 +778,23 @@
 				.m-menu__inner {
 					padding: 0;
 				}					
+
+				// tabs integration
+				&.m-menu__item--submenu.m-menu__item--tabs > .m-menu__submenu > .m-menu__subnav > .m-menu__item.m-menu__item--submenu {
+					> .m-menu__submenu {
+						top:100%;
+
+						&.m-menu__submenu--left {
+							right: 100%;
+							left: 0;
+						}
+
+						&.m-menu__submenu--right {								
+							left: 100%;		
+							right: 0;			
+						}
+					}
+				}
 			}	
 		}
 
@@ -850,6 +881,7 @@
 				}
 
 				// menu item hover
+				&.m-menu__item--active-tab,
 				&.m-menu__item--hover {
 					.m-menu__submenu {
 						display: block;
@@ -932,6 +964,7 @@
 
 		// submenu arrow
 		.m-menu__nav.m-menu__nav--submenu-arrow {
+			> .m-menu__item.m-menu__item--submenu.m-menu__item--active-tab,
 			> .m-menu__item.m-menu__item--submenu.m-menu__item--hover {
 				@if smooth-arrow() {
 					> .m-menu__submenu .m-menu__arrow {

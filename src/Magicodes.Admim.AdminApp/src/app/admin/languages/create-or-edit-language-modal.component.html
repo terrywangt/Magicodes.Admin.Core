@@ -24,6 +24,7 @@
                             <option value="">{{emptyText}}</option>
                             <option *ngFor="let languageName of languageNames" [value]="languageName.value">{{languageName.displayText}}</option>
                         </select>
+                        <validation-messages [formCtrl]="languageCombobox"></validation-messages>
                     </div>
                     <div class="form-group">
                         <select #iconCombobox

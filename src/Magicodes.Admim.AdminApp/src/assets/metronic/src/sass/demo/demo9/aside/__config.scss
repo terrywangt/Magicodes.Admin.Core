@@ -1,0 +1,170 @@
+//
+//** Asides Configs
+//
+
+$m-config-aside: (		
+	//== Left Aside
+	aside-left: (
+		//== Self
+		self: (
+			//== Default mode
+			default: (
+				width: $m-aside-left-width,
+
+				bg-color: (
+					dark: #2c2e3e,
+					light: #ffffff
+				),
+			),
+			
+			//== Offcanvas mode
+			offcanvas: (
+				// for tablet and mobile
+				default: (
+					zindex: 1001,
+					direction: left,
+					transition:	all .3s ease,
+					width: $m-aside-left-width,
+					close: (
+						layout: (
+							size: 25px,
+							font-size: 1.4rem
+						),
+						skins: (
+							dark: (
+								icon: (
+									default: #968ad4,
+									hover: #ffffff
+								),
+								bg: (
+									default: #323446,
+									hover: get-brand-color()
+								)
+							),
+							light: (
+								icon: (
+									default: lighten(#5e6383, 10%),
+									hover: #ffffff
+								),
+								bg: (
+									default: darken(#f8f8fb, 3%),
+									hover: get-brand-color()
+								)
+							)
+						)
+					)
+				)
+			),
+
+			//== Fixed mode
+			fixed: (
+				zindex: 100,
+				scroller: (
+					right: 5px,
+					color: (
+						dark:(
+							default: darken(#2c2e3e, 5%),
+							drag: darken(#2c2e3e, 8%)
+						),
+						light:(
+							default: darken(#f8f8fb, 3%),
+							drag: darken(#f8f8fb, 6%)
+						)
+					)
+				)
+			)					
+		),
+
+		//== Toggler
+		toggler: (
+			width: 26px,
+			height: 30px,  
+			transition-duration: 0.4s,
+			thickness: 2px,
+			space: 6px, 
+			radius: 1px,
+			color: (
+				default: get-brand-color(),
+				hover: get-brand-color(),
+				active: get-brand-color()
+			)
+		)
+	),
+
+	//== Right Aside
+	aside-right: (
+		//== Self
+		self: (
+			width: 230px,
+			shadow: (
+				desktop: -5px 0 30px -12px rgba(#000, 0.1),
+				mobile: get-shadow(light, '--'),
+			),
+			bg-color: #fff,
+			padding: (
+				desktop: 30px,
+				mobile: 30px 
+			),
+			margin: (
+				desktop: 30px,
+				mobile:  0 20px 20px 20px
+			)
+		)
+	),
+	
+	//== Horizontal Menu Sidebar For Mobile 
+	aside-header-menu-mobile: (
+		//== Self
+		self: (
+			//== Default mode
+			default: (
+				width: $m-aside-left-width,
+				bg-color: (
+					dark: #2c2e3e,
+					light: #ffffff
+				)
+			),
+			
+			//== Fixed mode
+			fixed: (
+				zindex: 100
+			),
+
+			//== Offcanvas mode
+			offcanvas: (
+				zindex: 1001,
+				direction: right,
+				transition:	all .3s ease,
+				width: $m-aside-left-width,
+				close: (
+					layout: (
+						size: 25px,
+						font-size: 1.4rem
+					),
+					skins: (
+						dark: (
+							icon: (
+								default: #968ad4,
+								hover: #ffffff
+							),
+							bg: (
+								default: #323446,
+								hover: get-brand-color()
+							)
+						),
+						light: (
+							icon: (
+								default: lighten(#5e6383, 10%),
+								hover: #ffffff
+							),
+							bg: (
+								default: darken(#f8f8fb, 3%),
+								hover: get-brand-color()
+							)
+						)
+					)
+				)
+			)
+		)
+	)
+);

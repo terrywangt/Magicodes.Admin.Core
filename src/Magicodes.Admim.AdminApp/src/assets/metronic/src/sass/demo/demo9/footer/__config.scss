@@ -1,0 +1,20 @@
+//
+//** Footer Settings
+//
+
+$m-config-footer: (			
+	default: (
+		self: (
+			padding: (
+				desktop: 7px 30px,
+				mobile: 7px 20px
+			),
+			height: 70px
+		),
+		copyright: (
+			color: #a9a9aa,
+			font-size: 0.9rem,
+			font-weight: 400
+		)				
+	)	
+);
