@@ -17,25 +17,26 @@ namespace Magicodes.Admin.Web.Startup
         {
             var authenticationBuilder = services.AddAuthentication();
 
+            //配置JwtBearer验证
             if (bool.Parse(configuration["Authentication:JwtBearer:IsEnabled"]))
             {
                 authenticationBuilder.AddJwtBearer(options =>
                 {
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        // The signing key must match!
+                        // 安全密钥
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration["Authentication:JwtBearer:SecurityKey"])),
 
-                        // Validate the JWT Issuer (iss) claim
+                        // JWT Issuer (iss) claim
                         ValidateIssuer = true,
                         ValidIssuer = configuration["Authentication:JwtBearer:Issuer"],
 
-                        // Validate the JWT Audience (aud) claim
+                        // JWT Audience (aud) claim
                         ValidateAudience = true,
                         ValidAudience = configuration["Authentication:JwtBearer:Audience"],
 
-                        // Validate the token expiry
+                        // 验证Token过期
                         ValidateLifetime = true,
 
                         // If you want to allow a certain amount of clock drift, set that here
@@ -46,15 +47,6 @@ namespace Magicodes.Admin.Web.Startup
                     {
                         OnMessageReceived = QueryStringTokenResolver
                     };
-                });
-            }
-
-            if (bool.Parse(configuration["IdentityServer:IsEnabled"]))
-            {
-                authenticationBuilder.AddIdentityServerAuthentication("IdentityBearer", options =>
-                {
-                    options.Authority = configuration["App:ServerRootAddress"];
-                    options.RequireHttpsMetadata = false;
                 });
             }
         }

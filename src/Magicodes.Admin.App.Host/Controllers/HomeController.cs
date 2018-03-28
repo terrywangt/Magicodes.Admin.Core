@@ -1,4 +1,5 @@
-﻿using Abp.Auditing;
+﻿using Abp.AspNetCore.Mvc.Controllers;
+using Abp.Auditing;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Magicodes.Admin.Web.Controllers
@@ -8,6 +9,7 @@ namespace Magicodes.Admin.Web.Controllers
         [DisableAuditing]
         public IActionResult Index()
         {
+            //跳转到接口文档
             return Redirect("/swagger");
         }
     }

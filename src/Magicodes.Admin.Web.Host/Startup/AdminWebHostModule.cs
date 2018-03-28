@@ -14,6 +14,9 @@ using Magicodes.Admin.Configuration;
 using Magicodes.Admin.EntityFrameworkCore;
 using Magicodes.Admin.MultiTenancy;
 using Abp.AspNetCore.Configuration;
+using Magicodes.Admin.Friendships;
+using Magicodes.Admin.Chat;
+using Abp.Dependency;
 
 namespace Magicodes.Admin.Web.Startup
 {
@@ -64,6 +67,10 @@ namespace Magicodes.Admin.Web.Startup
             }
 
             ConfigureExternalAuthProviders();
+
+            IocManager.RegisterIfNot<IChatCommunicator, NullChatCommunicator>();
+            //初始化聊天状态监视
+            IocManager.Resolve<ChatUserStateWatcher>().Initialize();
         }
 
         private void ConfigureExternalAuthProviders()

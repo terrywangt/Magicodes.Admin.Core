@@ -32,16 +32,6 @@ using Magicodes.Admin.Web.IdentityServer;
 using System.IO;
 using Abp.PlugIns;
 using Magicodes.SwaggerUI;
-#if FEATURE_SIGNALR
-using Abp.Owin;
-using Microsoft.AspNet.SignalR;
-using Microsoft.Owin.Cors;
-using Owin;
-using Owin.Security.AesDataProtectorProvider;
-using Abp.Web.SignalR;
-using Microsoft.AspNet.SignalR.Hubs;
-using Abp.AspNetZeroCore.Web.Owin;
-#endif
 
 namespace Magicodes.Admin.Web.Startup
 {
@@ -80,22 +70,19 @@ namespace Magicodes.Admin.Web.Startup
                 });
             });
 
-            IdentityRegistrar.Register(services);
+            //IdentityRegistrar.Register(services);
+
+            //配置JwtBearer验证
             AuthConfigurer.Configure(services, _appConfiguration);
 
-            //Identity server
-            if (bool.Parse(_appConfiguration["IdentityServer:IsEnabled"]))
-            {
-                IdentityServerRegistrar.Register(services, _appConfiguration);
-            }
 
             //添加自定义API文档生成(支持文档配置)
             services.AddCustomSwaggerGen(_appConfiguration, _hostingEnvironment);
 
-            //Configure Abp and Dependency Injection
-            return services.AddAbp<AdminWebHostModule>(options =>
+            //配置ABP以及相关模块依赖
+            return services.AddAbp<AppHostModule>(options =>
             {
-                //Configure Log4Net logging
+                //配置日志
                 options.IocManager.IocContainer.AddFacility<LoggingFacility>(
                     f => f.UseAbpLog4Net().WithConfig("log4net.config")
                 );
@@ -104,34 +91,27 @@ namespace Magicodes.Admin.Web.Startup
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            //Initializes ABP framework.
+            //初始化 ABP framework.
             app.UseAbp(options =>
             {
                 options.UseAbpRequestLocalization = false; //used below: UseAbpRequestLocalization
             });
 
-            app.UseCors(DefaultCorsPolicyName); //Enable CORS!
+            //启用跨域资源共享
+            app.UseCors(DefaultCorsPolicyName);
 
             app.UseAuthentication();
             app.UseJwtTokenMiddleware();
 
-            if (bool.Parse(_appConfiguration["IdentityServer:IsEnabled"]))
-            {
-                app.UseJwtTokenMiddleware("IdentityBearer");
-                app.UseIdentityServer();
-            }
-
             app.UseStaticFiles();
 
-            if (DatabaseCheckHelper.Exist(_appConfiguration["ConnectionStrings:Default"]))
-            {
-                app.UseAbpRequestLocalization();
-            }
+            //if (DatabaseCheckHelper.Exist(_appConfiguration["ConnectionStrings:Default"]))
+            //{
+            //    app.UseAbpRequestLocalization();
+            //}
 
-#if FEATURE_SIGNALR
-            //Integrate to OWIN
-            app.UseAppBuilder(ConfigureOwinServices);
-#endif
+            //启用自定义API文档(支持文档配置)
+            app.UseCustomSwaggerUI(_appConfiguration);
 
             app.UseMvc(routes =>
             {
@@ -142,33 +122,10 @@ namespace Magicodes.Admin.Web.Startup
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+
             });
 
-            //启用自定义API文档(支持文档配置)
-            app.UseCustomSwaggerUI(_appConfiguration);
+            
         }
-
-#if FEATURE_SIGNALR
-        private static void ConfigureOwinServices(IAppBuilder app)
-        {
-            GlobalHost.DependencyResolver.Register(typeof(IAssemblyLocator), () => new SignalRAssemblyLocator());
-            app.Properties["host.AppName"] = "Admin";
-
-            app.UseAbp();
-            app.UseAesDataProtectorProvider();
-
-            app.Map("/signalr", map =>
-            {
-                map.UseCors(CorsOptions.AllowAll);
-
-                var hubConfiguration = new HubConfiguration
-                {
-                    EnableJSONP = true
-                };
-
-                map.RunSignalR(hubConfiguration);
-            });
-        }
-#endif
     }
 }
