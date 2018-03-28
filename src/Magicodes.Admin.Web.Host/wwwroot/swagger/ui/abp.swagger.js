@@ -132,7 +132,7 @@
         modalUxInner.appendChild(modalUxHeader);
 
         var modalHeader = document.createElement('h3');
-        modalHeader.innerText = 'Authorize';
+        modalHeader.innerText = '登陆';
         modalUxHeader.appendChild(modalHeader);
 
         // -- -- -- -- modal-ux-content
@@ -148,9 +148,9 @@
         };
 
         //Inputs
-        createInput(modalUxContent, 'tenancyName', 'Tenancy Name (Leave empty for Host)');
-        createInput(modalUxContent, 'userName', 'Username or email address');
-        createInput(modalUxContent, 'password', 'Password', 'password');
+        createInput(modalUxContent, 'tenancyName', '租户名称（如果需要登陆系统平台请留空）');
+        createInput(modalUxContent, 'userName', '用户名或邮箱');
+        createInput(modalUxContent, 'password', '密码', 'password');
 
         //Buttons
         var authBtnWrapper = document.createElement('div');
@@ -160,7 +160,7 @@
         //Close button
         var closeButton = document.createElement('button');
         closeButton.className = 'btn modal-btn auth btn-done button';
-        closeButton.innerText = 'Close';
+        closeButton.innerText = '取消';
         closeButton.style.marginRight = '5px';
         closeButton.onclick = abp.swagger.closeAuthDialog;
         authBtnWrapper.appendChild(closeButton);
@@ -168,7 +168,7 @@
         //Authorize button
         var authorizeButton = document.createElement('button');
         authorizeButton.className = 'btn modal-btn auth authorize button';
-        authorizeButton.innerText = 'Login';
+        authorizeButton.innerText = '登陆';
         authorizeButton.onclick = function() {
             abp.swagger.login(loginCallback);
         };

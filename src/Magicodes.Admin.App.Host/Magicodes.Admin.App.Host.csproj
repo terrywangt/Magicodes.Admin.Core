@@ -57,4 +57,9 @@
   <ItemGroup>
     <EmbeddedResource Include="wwwroot\swagger\ui\index.html" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Update="wwwroot\swagger\ui\abp.swagger.js">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
 </Project>
