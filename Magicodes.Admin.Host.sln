@@ -34,6 +34,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "6.Test", "6.Test", "{014B9FF4-CA3A-4C1A-BFEA-8A6B9E72ED63}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0.Documents", "0.Documents", "{4FB3F191-AC0D-4D7F-959D-720E2D5DE350}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Magicodes.App.Tests", "test\Magicodes.App.Tests\Magicodes.App.Tests.csproj", "{AC27E8FC-37B4-4B5F-A3CA-01602C2E8764}"
 EndProject
