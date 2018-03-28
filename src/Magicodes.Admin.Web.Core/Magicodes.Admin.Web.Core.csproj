@@ -16,7 +16,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Abp.AspNetZeroCore.Web" Version="1.1.1" />
-    <PackageReference Include="Magicodes.SwaggerUI" Version="1.2.0" />
+    <PackageReference Include="Magicodes.SwaggerUI" Version="1.2.2" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="2.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="2.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="2.0.3" />
