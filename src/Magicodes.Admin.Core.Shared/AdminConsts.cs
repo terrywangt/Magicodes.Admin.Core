@@ -11,5 +11,7 @@
         public const int PaymentCacheDurationInMinutes = 30;
 
         public const string AdminMenuName = "AdminMenus";
+
+        public const string ApiPrefix = "api/";
     }
 }
