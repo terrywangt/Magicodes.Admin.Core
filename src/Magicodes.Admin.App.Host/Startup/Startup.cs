@@ -70,7 +70,7 @@ namespace Magicodes.Admin.Web.Startup
                 });
             });
 
-            //IdentityRegistrar.Register(services);
+            IdentityRegistrar.Register(services);
 
             //≈‰÷√JwtBearer—È÷§
             AuthConfigurer.Configure(services, _appConfiguration);
