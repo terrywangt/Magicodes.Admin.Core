@@ -121,3 +121,5 @@ src/Magicodes.Admin.Web.Mvc/Properties/PublishProfiles
 src/Magicodes.Admin.Web.Mvc/node_modules
 
 /build/outputs
+/tools/build/outputs/Host
+/tools/build/outputs

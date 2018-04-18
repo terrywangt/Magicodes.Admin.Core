@@ -2,7 +2,7 @@
 
 $version = Read-Host "请输入版本号"
 Write-Warning "版本号为：$version"
-$target=[io.Path]::Combine($target,"publish","Magicodes.Admin.Core_$version")
+$target=[io.Path]::Combine($rootDir,"publish","Magicodes.Admin.Core_$version")
 
 Write-Warning "目标目录为：$target"
 #创建目标目录
@@ -22,7 +22,9 @@ dir $root |
     Where-Object { 'Publish','res','Magicodes.Admin源码高级版授权合同.doc','Magicodes.Admin源码基础版授权合同.doc' -notcontains $_.Name}|
     ForEach-Object  {  
                             Write-Host $_.FullName;
-                            Copy-Item -Path  $_.FullName  -Destination $targetDir  -Recurse  -Force
+                            Copy-Item -Path  $_.FullName  -Destination $target  -Recurse  -Force -Exclude  'bin','obj'
                     }
+    Select-Object -Property Name
 
-
+$zipPath = [io.Path]::Combine($target,"Magicodes.Admin.Core_$version.zip");
+Compress-Archive -Path $target -DestinationPath $zipPath
