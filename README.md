@@ -16,6 +16,29 @@ http://demo.admin.xin-lai.com
 密码：123456abcD
 
 _注意：演示环境不一定是最新代码_
+### 主要优势
+* 支持跨平台
+* 依赖注入
+* 分布式支持
+* 支持Rest API
+* 提供强大的可定制化模板的代码生成
+* 单元测试支持
+* DDD领域驱动
+* Event Bus
+* 支持异步后台任务和服务
+* 接口文档生成以及配置
+* Docker支持
+* 支持ORM以及其他主流的数据访问组件
+* 第三方登陆、两次验证、单点登录支持
+* 导航、设置等支持
+* 权限可以控制到API级别
+* 支持GZIP动态压缩
+* 支持数据筛选器
+* 分布式缓存支持
+* 异常处理封装
+* 基于接口层级的审计日志封装
+* 多语言支持
+* 多租户支持
 
 ### 授权文档下载：
 1. [Magicodes.Admin源码基础版授权合同](Magicodes.Admin源码基础版授权合同.doc)
@@ -74,12 +97,6 @@ _注意：演示环境不一定是最新代码_
 1. APP接口文档生成
 2. 后台接口文档生成
 3. 支持接口隐藏配置
-
-### 插件库
-https://gitee.com/xl_wenqiang/Admin.Plus.Libs
-
-### 总体设计和规划（脑图）
-http://naotu.baidu.com/file/3fcc3a9e599bc3701e7c1d6f10c4d249?token=22ad815d330f7b51
 
 ### 官方博客
 http://www.cnblogs.com/codelove/
