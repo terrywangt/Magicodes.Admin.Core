@@ -19,12 +19,12 @@ if(![io.Directory]::Exists($target))
 
 $root = $rootDir.FullName;
 dir $root | 
-    Where-Object { 'Publish','res','Magicodes.Admin源码高级版授权合同.doc','Magicodes.Admin源码基础版授权合同.doc' -notcontains $_.Name}|
+    Where-Object { 'publish','res','Magicodes.Admin源码高级版授权合同.doc','Magicodes.Admin源码基础版授权合同.doc' -notcontains $_.Name}|
     ForEach-Object  {  
                             Write-Host $_.FullName;
                             Copy-Item -Path  $_.FullName  -Destination $target  -Recurse  -Force -Exclude  'bin','obj'
                     }
     Select-Object -Property Name
 
-$zipPath = [io.Path]::Combine($target,"Magicodes.Admin.Core_$version.zip");
+$zipPath = [io.Path]::Combine($rootDir,"publish","Magicodes.Admin.Core_$version.zip");
 Compress-Archive -Path $target -DestinationPath $zipPath

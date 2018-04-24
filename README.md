@@ -1,4 +1,5 @@
-# 说明
+# Magicodes.Admin.Core
+### 说明
 本框架在ABP和ASP.NET Zero的基础上进行了封装和完善，并且编写了相关的工具、生成模板，目前基于.NET Core 2.0+。
 
 目前本框架已经应用于团队的所有项目，在实际开发过程中还在不断地打磨。
@@ -9,27 +10,29 @@
 
 目前后台框架已做拆分，前后端分离。后台前端使用TypeScript+AngularJs，通过Web api接口实现后台业务。
 
-# Demo
+### Demo
 http://demo.admin.xin-lai.com
 账号：Admin
 密码：123456abcD
 
 _注意：演示环境不一定是最新代码_
 
-# 授权文档下载：
+### 授权文档下载：
 1. [Magicodes.Admin源码基础版授权合同](Magicodes.Admin源码基础版授权合同.doc)
 2. [Magicodes.Admin源码高级版授权合同](Magicodes.Admin源码高级版授权合同.doc)
 
-# 推荐开发环境
+### 推荐开发环境
 ![推荐开发环境](/documents/Magicodes.Admin推荐开发环境.png)
 
-# 开发文档
-框架更新太快，请稍后
+### 开发文档
+[1.框架介绍](documents/教程/1.框架介绍.md)
+[2.上手教程](documents/教程/2.上手教程)
+[3.数据模型设计与数据迁移](documents/教程/3.数据模型设计与数据迁移.md)
 
-# 生成服务
+### 生成服务
  高级版附送代码生成工具以及相关源代码。
 
- ### 后台前端生成
+ #### 后台前端生成
  1. 路由规则
  2. 组件注册
  3. 菜单项
@@ -55,41 +58,41 @@ _注意：演示环境不一定是最新代码_
 	4）查询（时间段以及关键字查询）
 6. 多语言
 
-### 后台服务生成
+#### 后台服务生成
 1. 语言配置
 2. 增删改查以及导出API
 3. Dto
 4. 权限Key以及配置
 
 
-### 接口定义生成以及单元测试和Postman文件生成
+#### 接口定义生成以及单元测试和Postman文件生成
 1. 接口定义和实现生成（入参Dto、出参Dto、验证、权限、分页、排序、要点以及API注释），支持枚举和子参数
 2. 接口单元测试、测试数据以及要点生成
 3. PostMan接口文件生成，支持分组、变量设置等
 
-### 接口文档生成与配置
+#### 接口文档生成与配置
 1. APP接口文档生成
 2. 后台接口文档生成
 3. 支持接口隐藏配置
 
-# 插件库
+### 插件库
 https://gitee.com/xl_wenqiang/Admin.Plus.Libs
 
-# 总体设计和规划（脑图）
+### 总体设计和规划（脑图）
 http://naotu.baidu.com/file/3fcc3a9e599bc3701e7c1d6f10c4d249?token=22ad815d330f7b51
 
-# 官方博客
+### 官方博客
 http://www.cnblogs.com/codelove/
 
-# 官方网址
+### 官方网址
 http://xin-lai.com
 
-# 其他开源库地址
+### 其他开源库地址
 https://github.com/xin-lai
 
-# 相关QQ群
+### 相关QQ群
     85318032（.NET 交流群1）
     490755124 （长沙.NET 交流群）
 
-# 小店地址
+### 小店地址
 https://shop113059108.taobao.com/
