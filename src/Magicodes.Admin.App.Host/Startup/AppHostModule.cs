@@ -13,7 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Magicodes.Admin.Configuration;
 using Magicodes.Admin.EntityFrameworkCore;
 using Magicodes.Admin.MultiTenancy;
-using Magicodes.Admin.App;
+//using Magicodes.Admin.App;
 using Abp.AspNetCore.Configuration;
 //using Magicodes.App.Application;
 
