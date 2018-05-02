@@ -43,7 +43,7 @@ namespace Magicodes.Admin.Web.Startup
             //配置后台动态web api
             Configuration.Modules.AbpAspNetCore()
                 .CreateControllersForAppServices(
-                    typeof(AdminApplicationModule).GetAssembly(), "admin"
+                    typeof(AdminApplicationModule).GetAssembly(), "app"
                 );
         }
 
