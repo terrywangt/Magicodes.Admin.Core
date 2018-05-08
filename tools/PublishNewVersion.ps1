@@ -1,4 +1,8 @@
-﻿$rootDir = [io.Directory]::GetParent([io.Directory]::GetCurrentDirectory());
+﻿function prompt { '心莱科技: ' + (get-location) + '> '}
+
+$invocation = (Get-Variable MyInvocation).Value
+$directorypath = Split-Path $invocation.MyCommand.Path
+$rootDir = [io.Directory]::GetParent($directorypath);
 
 $version = Read-Host "请输入版本号"
 Write-Warning "版本号为：$version"
