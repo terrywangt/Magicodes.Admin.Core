@@ -1,6 +1,8 @@
 {
-  "remoteServiceBaseUrl": "http://localhost:22742",
-  "appBaseUrl": "http://localhost:4200",
+  "serviceBaseUrl": "http://demo.api.xin-lai.com",
+  "testServiceBaseUrl": "http://demo.api.xin-lai.com",
+  "baseUrl": "http://demo.admin.xin-lai.com/",
+  "testBaseUrl": "http://localhost:4200",
   "localeMappings": [
     {
       "from": "pt-BR",
@@ -10,9 +12,9 @@
       "from": "zh-CN",
       "to": "zh"
     },
-	{
-		"from": "he-IL",
-		"to": "he"
-	}
+    {
+      "from": "he-IL",
+      "to": "he"
+    }
   ]
 }

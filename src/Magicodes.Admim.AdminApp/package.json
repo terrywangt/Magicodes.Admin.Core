@@ -5,12 +5,13 @@
   "angular-cli": {},
   "scripts": {
     "ng": "ng",
-	"publish": "ng build --prod",
+    "publish": "ng build --prod",
     "start": "ng serve --host 0.0.0.0 --port 4200",
     "hmr": "ng serve --host 0.0.0.0 --port 4200 4201 --hmr -e=hmr",
     "test": "ng test",
     "pree2e": "webdriver-manager update --standalone false --gecko false",
-    "e2e": "protractor"
+    "e2e": "protractor",
+    "prod": "node --max-old-space-size=16384 ./node_modules/@angular/cli/bin/ng  build -prod -aot"
   },
   "private": false,
   "dependencies": {

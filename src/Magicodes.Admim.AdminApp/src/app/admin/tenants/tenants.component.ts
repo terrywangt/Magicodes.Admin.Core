@@ -124,8 +124,22 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
     }
 
     showUserImpersonateLookUpModal(record: any): void {
-        this.impersonateUserLookupModal.tenantId = record.id;
-        this.impersonateUserLookupModal.show();
+        let input = new FindUsersInput();
+        input.filter = "admin";
+        input.maxResultCount = 10;
+        input.skipCount = 0;
+        input.tenantId = record.id;
+        this._commonLookupService.findUsers(input).subscribe(result => {
+            if (result.items.length == 0) {
+                this.notify.error(this.l('UserImpersonateErrorMessage'));
+                return;
+            }
+            this._impersonationService
+                .impersonate(
+                    parseInt(result.items[0].value),
+                    input.tenantId
+                );
+        });
     }
 
     unlockUser(record: any): void {
@@ -159,8 +173,8 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
     impersonateUser(item: NameValueDto): void {
         this._impersonationService
             .impersonate(
-            parseInt(item.value),
-            this.impersonateUserLookupModal.tenantId
+                parseInt(item.value),
+                this.impersonateUserLookupModal.tenantId
             );
     }
 }

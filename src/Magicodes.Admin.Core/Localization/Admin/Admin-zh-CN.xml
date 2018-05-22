@@ -603,5 +603,6 @@
     <text name="LegalName">抬头名称</text>
     <text name="Address">地址</text>
     <text name="LoginMsg">分布式后台快速开发框架</text>
+    <text name="UserImpersonateErrorMessage">租户权限已修改，无法切换！请尝试使用该租户账户独立登陆！</text>
   </texts>
 </localizationDictionary>

@@ -8,6 +8,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { Type, CompilerOptions, NgModuleRef } from '@angular/core';
 import { UtilsService } from '@abp/utils/utils.service';
 import { AppAuthService } from '@app/shared/common/auth/app-auth.service';
+import { environment } from '@env/environment';
 
 export class AppPreBootstrap {
 
@@ -50,20 +51,22 @@ export class AppPreBootstrap {
                 'Abp.TenantId': abp.multiTenancy.getTenantIdCookie()
             }
         }).done(result => {
+            let appBaseUrl = environment.production ? result.baseUrl : result.testBaseUrl;
+            let remoteServiceBaseUrl = environment.production ? result.serviceBaseUrl : result.testServiceBaseUrl;
 
             const subdomainTenancyNameFinder = new SubdomainTenancyNameFinder();
-            const tenancyName = subdomainTenancyNameFinder.getCurrentTenancyNameOrNull(result.appBaseUrl);
+            const tenancyName = subdomainTenancyNameFinder.getCurrentTenancyNameOrNull(appBaseUrl);
 
-            AppConsts.appBaseUrlFormat = result.appBaseUrl;
-            AppConsts.remoteServiceBaseUrlFormat = result.remoteServiceBaseUrl;
+            AppConsts.appBaseUrlFormat = appBaseUrl;
+            AppConsts.remoteServiceBaseUrlFormat = remoteServiceBaseUrl;
             AppConsts.localeMappings = result.localeMappings;
 
             if (tenancyName == null) {
-                AppConsts.appBaseUrl = result.appBaseUrl.replace(AppConsts.tenancyNamePlaceHolderInUrl + '.', '');
-                AppConsts.remoteServiceBaseUrl = result.remoteServiceBaseUrl.replace(AppConsts.tenancyNamePlaceHolderInUrl + '.', '');
+                AppConsts.appBaseUrl = appBaseUrl.replace(AppConsts.tenancyNamePlaceHolderInUrl + '.', '');
+                AppConsts.remoteServiceBaseUrl = remoteServiceBaseUrl.replace(AppConsts.tenancyNamePlaceHolderInUrl + '.', '');
             } else {
-                AppConsts.appBaseUrl = result.appBaseUrl.replace(AppConsts.tenancyNamePlaceHolderInUrl, tenancyName);
-                AppConsts.remoteServiceBaseUrl = result.remoteServiceBaseUrl.replace(AppConsts.tenancyNamePlaceHolderInUrl, tenancyName);
+                AppConsts.appBaseUrl = appBaseUrl.replace(AppConsts.tenancyNamePlaceHolderInUrl, tenancyName);
+                AppConsts.remoteServiceBaseUrl = remoteServiceBaseUrl.replace(AppConsts.tenancyNamePlaceHolderInUrl, tenancyName);
             }
 
             callback();
