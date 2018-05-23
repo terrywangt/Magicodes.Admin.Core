@@ -1,9 +1,9 @@
-﻿{
+{
   "runtime": "Default",
   "swaggerGenerator": {
     "fromSwagger": {
-      "url": "http://localhost:22742/swagger/v1/swagger.json",
-      "output": null
+        "url": "http://demo.api.xin-lai.com:22742/swagger/v1/swagger.json",
+        "output": null
     }
   },
   "codeGenerators": {
