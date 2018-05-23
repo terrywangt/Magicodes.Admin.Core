@@ -1,9 +1,9 @@
 import { Component, Injector } from '@angular/core';
 import { Router } from '@angular/router';
-import { AppComponentBase } from '@shared/common/app-component-base';
-import { AccountServiceProxy, SendPasswordResetCodeInput } from '@shared/service-proxies/service-proxies';
-import { AppUrlService } from '@shared/common/nav/app-url.service';
 import { accountModuleAnimation } from '@shared/animations/routerTransition';
+import { AppComponentBase } from '@shared/common/app-component-base';
+import { AppUrlService } from '@shared/common/nav/app-url.service';
+import { AccountServiceProxy, SendPasswordResetCodeInput } from '@shared/service-proxies/service-proxies';
 
 @Component({
     templateUrl: './forgot-password.component.html',

@@ -1,6 +1,6 @@
-import { Component, Injector, AfterViewChecked, OnInit } from '@angular/core';
-import { AppComponentBase } from '@shared/common/app-component-base';
+import { AfterViewChecked, Component, Injector, OnInit } from '@angular/core';
 import { appModuleAnimation } from '@shared/animations/routerTransition';
+import { AppComponentBase } from '@shared/common/app-component-base';
 import { UiCustomizationSettingsEditDto, UiCustomizationSettingsServiceProxy } from '@shared/service-proxies/service-proxies';
 
 @Component({

@@ -1,11 +1,11 @@
-import { Component,  Injector, ViewChild } from '@angular/core';
-import { RoleServiceProxy, RoleListDto } from '@shared/service-proxies/service-proxies';
 import { NotifyService } from '@abp/notify/notify.service';
-import { AppComponentBase } from '@shared/common/app-component-base';
-import { FileDownloadService } from '@shared/utils/file-download.service';
-import { CreateOrEditRoleModalComponent } from './create-or-edit-role-modal.component';
+import { Component, Injector, ViewChild } from '@angular/core';
 import { appModuleAnimation } from '@shared/animations/routerTransition';
-import { DataTable } from 'primeng/components/datatable/datatable';
+import { AppComponentBase } from '@shared/common/app-component-base';
+import { RoleListDto, RoleServiceProxy } from '@shared/service-proxies/service-proxies';
+import { FileDownloadService } from '@shared/utils/file-download.service';
+import { Table } from 'primeng/components/table/table';
+import { CreateOrEditRoleModalComponent } from './create-or-edit-role-modal.component';
 
 @Component({
     templateUrl: './roles.component.html',
@@ -14,7 +14,7 @@ import { DataTable } from 'primeng/components/datatable/datatable';
 export class RolesComponent extends AppComponentBase {
 
     @ViewChild('createOrEditRoleModal') createOrEditRoleModal: CreateOrEditRoleModalComponent;
-    @ViewChild('dataTable') dataTable: DataTable;
+    @ViewChild('dataTable') dataTable: Table;
 
 
     //Filters
@@ -30,13 +30,13 @@ export class RolesComponent extends AppComponentBase {
     }
 
     getRoles(): void {
-        this.primengDatatableHelper.showLoadingIndicator();
+        this.primengTableHelper.showLoadingIndicator();
         let permission = this.permission ? this.selectedPermission : undefined;
 
         this._roleService.getRoles(permission).subscribe(result => {
-            this.primengDatatableHelper.records = result.items;
-            this.primengDatatableHelper.totalRecordsCount = result.items.length;
-            this.primengDatatableHelper.hideLoadingIndicator();
+            this.primengTableHelper.records = result.items;
+            this.primengTableHelper.totalRecordsCount = result.items.length;
+            this.primengTableHelper.hideLoadingIndicator();
         });
     }
 

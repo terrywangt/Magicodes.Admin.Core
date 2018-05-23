@@ -45,7 +45,7 @@ namespace Magicodes.Admin.EntityFrameworkCore
             }
 
             //取消该注释将启用组织机构、角色、租户的数据变更历史记录
-            //Configuration.EntityHistory.Selectors.Add("AdminEntities", typeof(OrganizationUnit), typeof(Role), typeof(Tenant));
+            Configuration.EntityHistory.Selectors.Add("AdminEntities", typeof(OrganizationUnit), typeof(Role), typeof(Tenant));
         }
 
         public override void Initialize()

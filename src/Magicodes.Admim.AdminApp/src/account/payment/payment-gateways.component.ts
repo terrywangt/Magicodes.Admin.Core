@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
+import { EditionPaymentType, PaymentPeriodType } from '@shared/AppEnums';
 import { EditionSelectDto } from '@shared/service-proxies/service-proxies';
-import { PaymentPeriodType, EditionPaymentType } from '@shared/AppEnums';
 
 @Component({
     selector: 'paymentGateways',

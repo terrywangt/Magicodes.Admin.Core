@@ -1,9 +1,7 @@
-import { Component, ViewChild, Injector, Output, EventEmitter, ElementRef } from '@angular/core';
-import { ModalDirective } from 'ngx-bootstrap';
-import { LanguageServiceProxy, ApplicationLanguageEditDto, CreateOrUpdateLanguageInput, ComboboxItemDto } from '@shared/service-proxies/service-proxies';
+import { Component, ElementRef, EventEmitter, Injector, Output, ViewChild } from '@angular/core';
 import { AppComponentBase } from '@shared/common/app-component-base';
-
-import * as _ from 'lodash';
+import { ApplicationLanguageEditDto, ComboboxItemDto, CreateOrUpdateLanguageInput, LanguageServiceProxy } from '@shared/service-proxies/service-proxies';
+import { ModalDirective } from 'ngx-bootstrap';
 
 @Component({
     selector: 'createOrEditLanguageModal',

@@ -15,23 +15,23 @@
     <ProjectReference Include="..\Magicodes.Admin.EntityFrameworkCore\Magicodes.Admin.EntityFrameworkCore.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Abp.AspNetZeroCore.Web" Version="1.1.1" />
+    <PackageReference Include="Abp.AspNetZeroCore.Web" Version="1.1.2" />
     <PackageReference Include="Magicodes.SwaggerUI" Version="1.2.4" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="2.0.3" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="2.0.3" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="2.0.3" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="2.0.3" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="2.3.0" />
-    <PackageReference Include="Hangfire.SqlServer" Version="1.6.17" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="2.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="2.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="2.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="2.0.4" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="2.4.0" />
+    <PackageReference Include="Hangfire.SqlServer" Version="1.6.19" />
     <PackageReference Include="PaulMiami.AspNetCore.Mvc.Recaptcha" Version="1.2.1" />
     <PackageReference Include="System.ValueTuple" Version="4.4.0" />
     <PackageReference Include="System.Net.Http" Version="4.3.3" />
-    <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="2.4.0" />
+    <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="2.6.0" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Abp.ZeroCore.IdentityServer4" Version="3.5.0" />
-    <PackageReference Include="Abp.AspNetCore" Version="3.5.0" />
-    <PackageReference Include="Abp.HangFire.AspNetCore" Version="3.5.0" />
-    <PackageReference Include="Abp.RedisCache" Version="3.5.0" />
+    <PackageReference Include="Abp.ZeroCore.IdentityServer4" Version="3.6.1" />
+    <PackageReference Include="Abp.AspNetCore" Version="3.6.1" />
+    <PackageReference Include="Abp.HangFire.AspNetCore" Version="3.6.1" />
+    <PackageReference Include="Abp.RedisCache" Version="3.6.1" />
   </ItemGroup>
 </Project>

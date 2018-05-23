@@ -1,23 +1,14 @@
+import { TokenService } from '@abp/auth/token.service';
+import { LogService } from '@abp/log/log.service';
+import { MessageService } from '@abp/message/message.service';
+import { UtilsService } from '@abp/utils/utils.service';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import {
-    TokenAuthServiceProxy,
-    AuthenticateModel,
-    AuthenticateResultModel,
-    ExternalLoginProviderInfoModel,
-    ExternalAuthenticateModel,
-    ExternalAuthenticateResultModel
-} from '@shared/service-proxies/service-proxies';
-
-import { UrlHelper } from '@shared/helpers/UrlHelper';
 import { AppConsts } from '@shared/AppConsts';
-
-import { MessageService } from '@abp/message/message.service';
-import { LogService } from '@abp/log/log.service';
-import { TokenService } from '@abp/auth/token.service';
-import { UtilsService } from '@abp/utils/utils.service';
-
+import { UrlHelper } from '@shared/helpers/UrlHelper';
+import { AuthenticateModel, AuthenticateResultModel, ExternalAuthenticateModel, ExternalAuthenticateResultModel, ExternalLoginProviderInfoModel, TokenAuthServiceProxy } from '@shared/service-proxies/service-proxies';
 import * as _ from 'lodash';
+
 declare const FB: any; // Facebook API
 declare const gapi: any; // Facebook API
 declare const WL: any; // Microsoft API

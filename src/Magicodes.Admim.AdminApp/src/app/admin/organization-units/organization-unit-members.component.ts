@@ -1,13 +1,13 @@
-import { Component, Injector, ViewChild, OnInit, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
-import { AppComponentBase } from '@shared/common/app-component-base';
-import { IBasicOrganizationUnitInfo } from './basic-organization-unit-info';
-import { OrganizationUnitServiceProxy, OrganizationUnitUserListDto } from '@shared/service-proxies/service-proxies';
+import { ChangeDetectorRef, Component, EventEmitter, Injector, OnInit, Output, ViewChild } from '@angular/core';
 import { AddMemberModalComponent } from '@app/admin/organization-units/add-member-modal.component';
+import { AppComponentBase } from '@shared/common/app-component-base';
+import { OrganizationUnitServiceProxy, OrganizationUnitUserListDto } from '@shared/service-proxies/service-proxies';
+import { LazyLoadEvent } from 'primeng/components/common/lazyloadevent';
+import { Paginator } from 'primeng/components/paginator/paginator';
+import { Table } from 'primeng/components/table/table';
+import { IBasicOrganizationUnitInfo } from './basic-organization-unit-info';
 import { IUserWithOrganizationUnit } from './user-with-organization-unit';
 import { IUsersWithOrganizationUnit } from './users-with-organization-unit';
-import { DataTable } from 'primeng/components/datatable/datatable';
-import { Paginator } from 'primeng/components/paginator/paginator';
-import { LazyLoadEvent } from 'primeng/components/common/lazyloadevent';
 
 @Component({
     selector: 'organization-unit-members',
@@ -19,7 +19,7 @@ export class OrganizationUnitMembersComponent extends AppComponentBase implement
     @Output() membersAdded = new EventEmitter<IUsersWithOrganizationUnit>();
 
     @ViewChild('addMemberModal') addMemberModal: AddMemberModalComponent;
-    @ViewChild('dataTable') dataTable: DataTable;
+    @ViewChild('dataTable') dataTable: Table;
     @ViewChild('paginator') paginator: Paginator;
 
     private _organizationUnit: IBasicOrganizationUnitInfo = null;
@@ -57,22 +57,22 @@ export class OrganizationUnitMembersComponent extends AppComponentBase implement
             return;
         }
 
-        if (this.primengDatatableHelper.shouldResetPaging(event)) {
+        if (this.primengTableHelper.shouldResetPaging(event)) {
             this.paginator.changePage(0);
 
             return;
         }
 
-        this.primengDatatableHelper.showLoadingIndicator();
+        this.primengTableHelper.showLoadingIndicator();
         this._organizationUnitService.getOrganizationUnitUsers(
             this._organizationUnit.id,
-            this.primengDatatableHelper.getSorting(this.dataTable),
-            this.primengDatatableHelper.getMaxResultCount(this.paginator, event),
-            this.primengDatatableHelper.getSkipCount(this.paginator, event)
+            this.primengTableHelper.getSorting(this.dataTable),
+            this.primengTableHelper.getMaxResultCount(this.paginator, event),
+            this.primengTableHelper.getSkipCount(this.paginator, event)
         ).subscribe(result => {
-            this.primengDatatableHelper.totalRecordsCount = result.totalCount;
-            this.primengDatatableHelper.records = result.items;
-            this.primengDatatableHelper.hideLoadingIndicator();
+            this.primengTableHelper.totalRecordsCount = result.totalCount;
+            this.primengTableHelper.records = result.items;
+            this.primengTableHelper.hideLoadingIndicator();
         });
     }
 

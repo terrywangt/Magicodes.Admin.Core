@@ -1,8 +1,7 @@
-import { Injector } from '@angular/core';
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { ChatFriendDto } from './ChatFriendDto';
-import { AppConsts } from '@shared/AppConsts';
 import { AbpMultiTenancyService } from '@abp/multi-tenancy/abp-multi-tenancy.service';
+import { Component, EventEmitter, Injector, Input, Output } from '@angular/core';
+import { AppConsts } from '@shared/AppConsts';
+import { ChatFriendDto } from './ChatFriendDto';
 
 @Component({
     templateUrl: './chat-friend-list-item.component.html',

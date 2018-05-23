@@ -1,9 +1,9 @@
-import { Component, Injector, OnInit, AfterViewInit, AfterViewChecked } from '@angular/core';
-import { CachingServiceProxy, EntityDtoOfString, WebLogServiceProxy } from '@shared/service-proxies/service-proxies';
+import { AfterViewChecked, AfterViewInit, Component, Injector, OnInit } from '@angular/core';
+import { appModuleAnimation } from '@shared/animations/routerTransition';
 import { AppComponentBase } from '@shared/common/app-component-base';
+import { CachingServiceProxy, EntityDtoOfString, WebLogServiceProxy } from '@shared/service-proxies/service-proxies';
 import { FileDownloadService } from '@shared/utils/file-download.service';
 import * as _ from 'lodash';
-import { appModuleAnimation } from '@shared/animations/routerTransition';
 
 @Component({
     templateUrl: './maintenance.component.html',

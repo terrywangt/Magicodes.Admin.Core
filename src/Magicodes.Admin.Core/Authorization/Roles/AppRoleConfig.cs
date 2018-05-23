@@ -12,7 +12,8 @@ namespace Magicodes.Admin.Authorization.Roles
             roleManagementConfig.StaticRoles.Add(
                 new StaticRoleDefinition(
                     StaticRoleNames.Host.Admin,
-                    MultiTenancySides.Host)
+                    MultiTenancySides.Host,
+                    grantAllPermissionsByDefault: true)
                 );
 
             //Static tenant roles
@@ -20,7 +21,8 @@ namespace Magicodes.Admin.Authorization.Roles
             roleManagementConfig.StaticRoles.Add(
                 new StaticRoleDefinition(
                     StaticRoleNames.Tenants.Admin,
-                    MultiTenancySides.Tenant)
+                    MultiTenancySides.Tenant,
+                    grantAllPermissionsByDefault: true)
                 );
 
             roleManagementConfig.StaticRoles.Add(

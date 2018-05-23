@@ -1,14 +1,13 @@
-import { Component, Injector, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
-import { Router, ActivatedRoute, Params } from '@angular/router';
-import { LanguageServiceProxy } from '@shared/service-proxies/service-proxies';
-import { AppComponentBase } from '@shared/common/app-component-base';
-import { EditTextModalComponent } from './edit-text-modal.component';
+import { AfterViewInit, Component, ElementRef, Injector, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { appModuleAnimation } from '@shared/animations/routerTransition';
-
-import { DataTable } from 'primeng/components/datatable/datatable';
-import { Paginator } from 'primeng/components/paginator/paginator';
-import { LazyLoadEvent } from 'primeng/components/common/lazyloadevent';
+import { AppComponentBase } from '@shared/common/app-component-base';
+import { LanguageServiceProxy } from '@shared/service-proxies/service-proxies';
 import * as _ from 'lodash';
+import { LazyLoadEvent } from 'primeng/components/common/lazyloadevent';
+import { Paginator } from 'primeng/components/paginator/paginator';
+import { Table } from 'primeng/components/table/table';
+import { EditTextModalComponent } from './edit-text-modal.component';
 
 @Component({
     templateUrl: './language-texts.component.html',
@@ -23,7 +22,7 @@ export class LanguageTextsComponent extends AppComponentBase implements AfterVie
     @ViewChild('targetValueFilterCombobox') targetValueFilterCombobox: ElementRef;
     @ViewChild('textsTable') textsTable: ElementRef;
     @ViewChild('editTextModal') editTextModal: EditTextModalComponent;
-    @ViewChild('dataTable') dataTable: DataTable;
+    @ViewChild('dataTable') dataTable: Table;
     @ViewChild('paginator') paginator: Paginator;
 
     sourceNames: string[] = [];
@@ -59,21 +58,21 @@ export class LanguageTextsComponent extends AppComponentBase implements AfterVie
             return;
         }
 
-        this.primengDatatableHelper.showLoadingIndicator();
+        this.primengTableHelper.showLoadingIndicator();
 
         this._languageService.getLanguageTexts(
-            this.primengDatatableHelper.getMaxResultCount(this.paginator, event),
-            this.primengDatatableHelper.getSkipCount(this.paginator, event),
-            this.primengDatatableHelper.getSorting(this.dataTable),
+            this.primengTableHelper.getMaxResultCount(this.paginator, event),
+            this.primengTableHelper.getSkipCount(this.paginator, event),
+            this.primengTableHelper.getSorting(this.dataTable),
             this.sourceName,
             this.baseLanguageName,
             this.targetLanguageName,
             this.targetValueFilter,
             this.filterText
         ).subscribe(result => {
-            this.primengDatatableHelper.totalRecordsCount = result.totalCount;
-            this.primengDatatableHelper.records = result.items;
-            this.primengDatatableHelper.hideLoadingIndicator();
+            this.primengTableHelper.totalRecordsCount = result.totalCount;
+            this.primengTableHelper.records = result.items;
+            this.primengTableHelper.hideLoadingIndicator();
         });
     }
 
@@ -120,9 +119,9 @@ export class LanguageTextsComponent extends AppComponentBase implements AfterVie
     }
 
     refreshTextValueFromModal(): void {
-        for (let i = 0; i < this.primengDatatableHelper.records.length; i++) {
-            if (this.primengDatatableHelper.records[i].key === this.editTextModal.model.key) {
-                this.primengDatatableHelper.records[i].targetValue = this.editTextModal.model.value;
+        for (let i = 0; i < this.primengTableHelper.records.length; i++) {
+            if (this.primengTableHelper.records[i].key === this.editTextModal.model.key) {
+                this.primengTableHelper.records[i].targetValue = this.editTextModal.model.value;
                 return;
             }
         }

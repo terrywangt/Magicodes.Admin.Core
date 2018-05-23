@@ -18,7 +18,7 @@
 
         <div class="row m-login__form-sub">
             <div class="col m--align-left">
-                <label class="m-checkbox m-checkbox--focus">
+                <label class="m-checkbox m-checkbox--primary">
                     <input class="form-control" [(ngModel)]="loginService.rememberMe" type="checkbox" name="rememberMe" value="true" />{{l("RememberMe")}}
                     <span></span>
                 </label>
@@ -29,7 +29,7 @@
         </div>
 
         <div class="m-login__form-action">
-            <button type="submit" class="btn btn-focus m-btn m-btn--pill m-btn--custom m-btn--air" [disabled]="!loginForm.form.valid">{{l("LogIn")}}</button>
+            <button type="submit" class="btn btn-primary m-btn m-btn--pill m-btn--custom m-btn--air" [disabled]="!loginForm.form.valid">{{l("LogIn")}}</button>
         </div>
     </form>
 
@@ -47,14 +47,14 @@
     <div class="m-stack__item m-stack__item--center">
         <div class="m-login__account">
             <span *ngIf="isSelfRegistrationAllowed">
-                <a routerLink="/account/register" id="register-btn" class="m-link m-link--focus m-login__account-link">{{l("CreateAnAccount")}}</a>
+                <a routerLink="/account/register" id="register-btn" class="m-link m-link--primary m-login__account-link">{{l("CreateAnAccount")}}</a>
                 <span class="pipe-divider"> | </span>
             </span>
             <span *ngIf="!multiTenancySideIsTeanant && isTenantSelfRegistrationAllowed">
-                <a routerLink="/account/select-edition" id="register-btn" class="m-link m-link--focus m-login__account-link">{{l("NewTenant")}}</a>
+                <a routerLink="/account/select-edition" id="register-btn" class="m-link m-link--primary m-login__account-link">{{l("NewTenant")}}</a>
                 <span class="pipe-divider"> | </span>
             </span>
-            <a routerLink="/account/email-activation" id="email-activation-btn" class="m-link m-link--focus m-login__account-link">{{l("EmailActivation")}}</a>
+            <a routerLink="/account/email-activation" id="email-activation-btn" class="m-link m-link--primary m-login__account-link">{{l("EmailActivation")}}</a>
         </div>
     </div>
 </div>

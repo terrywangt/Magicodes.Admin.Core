@@ -1,8 +1,8 @@
-import { Component, OnInit, Injector } from '@angular/core';
-import { InstallServiceProxy, EmailSettingsEditDto, InstallDto, NameValue, HostBillingSettingsEditDto, CommonLookupServiceProxy } from '@shared/service-proxies/service-proxies';
+import { Component, Injector, OnInit } from '@angular/core';
+import { appModuleAnimation } from '@shared/animations/routerTransition';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { AppSessionService } from '@shared/common/session/app-session.service';
-import { appModuleAnimation } from '@shared/animations/routerTransition';
+import { CommonLookupServiceProxy, EmailSettingsEditDto, HostBillingSettingsEditDto, InstallDto, InstallServiceProxy, NameValue } from '@shared/service-proxies/service-proxies';
 
 @Component({
     templateUrl: './install.component.html',

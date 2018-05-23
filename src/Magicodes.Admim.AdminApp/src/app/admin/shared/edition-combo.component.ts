@@ -1,17 +1,6 @@
-import {
-    Component,
-    OnInit,
-    AfterViewInit,
-    ElementRef,
-    ViewChild,
-    Injector,
-    Input,
-    Output,
-    EventEmitter
-
-} from '@angular/core';
-import { EditionServiceProxy, ComboboxItemDto } from '@shared/service-proxies/service-proxies';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Injector, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { AppComponentBase } from '@shared/common/app-component-base';
+import { ComboboxItemDto, EditionServiceProxy } from '@shared/service-proxies/service-proxies';
 
 @Component({
     selector: 'edition-combo',

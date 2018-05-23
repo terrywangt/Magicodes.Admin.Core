@@ -67,9 +67,9 @@ div.user-notification-item.user-notification-item-unread .m-list-timeline__text 
 .subscription-info {
     clear: both;
     padding: 5px;
-    background-color: #fffced;
+    background-color: #fffced !important;
     font-size: 0.9em;
-    color: #755d2d;
+    color: #755d2d !important;
 }
 
 @media only screen and (max-device-width: 640px) {
@@ -137,6 +137,16 @@ ul.dropdown-menu {
     .dropdown-language {
         i.famfamfam-flags{
             margin-right:3px !important;
+        }
+    }
+}
+
+@media (min-width: 1400px) {
+    body.m-page--boxed {
+        .subscription-info {
+            width: 1340px;
+            margin-right: auto;
+            margin-left: auto;
         }
     }
 }

@@ -2,13 +2,13 @@
 <div id="m_quick_sidebar" class="m-quick-sidebar m-quick-sidebar--tabbed m-quick-sidebar--skin-light">
     <div class="m-quick-sidebar__content m--hide">
         <a href="javascript:;" id="m_quick_sidebar_back">
-            <i class="la la-arrow-circle-left"></i>
+            <i class="la la-arrow-circle-left" [attr.aria-label]="l('Back')"></i>
         </a>
         <a href="javascript:;" class="page-quick-sidebar-pinner" [ngClass]="{'pinned':pinned, 'unpinned':!pinned}" (click)="reversePinned()">
-            <i class="icon-pin"></i>
+            <i class="icon-pin" [attr.aria-label]="l('Pin')"></i>
         </a>
         <span id="m_quick_sidebar_close" class="m-quick-sidebar__close">
-            <i class="la la-close"></i>
+            <i class="la la-close" [attr.aria-label]="l('Close')"></i>
         </span>
         <div class="m-messenger m-messenger-friends m-messenger--skin-light">
             <div class="row">
@@ -60,7 +60,7 @@
                 <h6>{{getShownUserName(selectedUser.friendTenancyName,selectedUser.friendUserName)}}</h6>
                 <div class="actions">
                     <a class="btn btn-metal m-btn m-btn--icon m-btn--icon-only m-btn--pill m-btn--air" href="javascript:;" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" aria-expanded="false">
-                        <i class="fa fa-angle-down"></i>
+                        <i class="fa fa-angle-down" [attr.aria-label]="l('Expand')"></i>
                     </a>
                     <ul class="dropdown-menu pull-right">
                         <li *ngIf="selectedUser.state !== friendDtoState.Blocked">
@@ -120,7 +120,7 @@
                         </div>
                         <div class="m-messenger__form-tools">
                             <a id="chatDropdownToggle" href="javascript:;" class="m-messenger__form-attachment select-media" data-toggle="dropdown" tabindex="-1" aria-expanded="false">
-                                <i class="la la-paperclip"></i>
+                                <i class="la la-paperclip" [attr.aria-label]="l('Attach')"></i>
                             </a>
                             <ul class="dropdown-menu pull-right bottom-up" role="menu">
                                 <li>

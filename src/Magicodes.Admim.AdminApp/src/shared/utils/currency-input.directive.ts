@@ -1,4 +1,4 @@
-import { Directive, ElementRef, EventEmitter, Output, AfterViewInit, Renderer2 } from '@angular/core';
+import { AfterViewInit, Directive, ElementRef, EventEmitter, Output, Renderer2 } from '@angular/core';
 
 @Directive({ selector: '[currencyInput]' })
 export class CurrencyInputDirective implements AfterViewInit {

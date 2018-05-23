@@ -25,7 +25,8 @@ namespace Magicodes.Admin.Configuration
                 Layout = new UiCustomizationLayoutSettingsEditDto
                 {
                     LayoutType = await _settingManager.GetSettingValueAsync(AppSettings.UiManagement.LayoutType),
-                    ContentSkin = await _settingManager.GetSettingValueAsync(AppSettings.UiManagement.ContentSkin)
+                    ContentSkin = await _settingManager.GetSettingValueAsync(AppSettings.UiManagement.ContentSkin),
+                    Theme = await _settingManager.GetSettingValueAsync(AppSettings.UiManagement.Theme)
                 },
                 Header = new UiCustomizationHeaderSettingsEditDto
                 {
@@ -96,7 +97,8 @@ namespace Magicodes.Admin.Configuration
                 Layout = new UiCustomizationLayoutSettingsEditDto
                 {
                     LayoutType = await _settingManager.GetSettingValueForApplicationAsync(AppSettings.UiManagement.LayoutType),
-                    ContentSkin = await _settingManager.GetSettingValueForApplicationAsync(AppSettings.UiManagement.ContentSkin)
+                    ContentSkin = await _settingManager.GetSettingValueForApplicationAsync(AppSettings.UiManagement.ContentSkin),
+                    Theme = await _settingManager.GetSettingValueForApplicationAsync(AppSettings.UiManagement.Theme)
                 },
                 Header = new UiCustomizationHeaderSettingsEditDto
                 {
@@ -136,7 +138,8 @@ namespace Magicodes.Admin.Configuration
                 Layout = new UiCustomizationLayoutSettingsEditDto
                 {
                     LayoutType = await _settingManager.GetSettingValueForTenantAsync(AppSettings.UiManagement.LayoutType, tenantId),
-                    ContentSkin = await _settingManager.GetSettingValueForTenantAsync(AppSettings.UiManagement.ContentSkin, tenantId)
+                    ContentSkin = await _settingManager.GetSettingValueForTenantAsync(AppSettings.UiManagement.ContentSkin, tenantId),
+                    Theme = await _settingManager.GetSettingValueForTenantAsync(AppSettings.UiManagement.Theme, tenantId)
                 },
                 Header = new UiCustomizationHeaderSettingsEditDto
                 {
@@ -173,6 +176,7 @@ namespace Magicodes.Admin.Configuration
 
             await _settingManager.ChangeSettingForTenantAsync(tenantId, AppSettings.UiManagement.LayoutType, settings.Layout.LayoutType);
             await _settingManager.ChangeSettingForTenantAsync(tenantId, AppSettings.UiManagement.ContentSkin, settings.Layout.ContentSkin);
+            await _settingManager.ChangeSettingForTenantAsync(tenantId, AppSettings.UiManagement.Theme, settings.Layout.Theme);
 
             await _settingManager.ChangeSettingForTenantAsync(tenantId, AppSettings.UiManagement.Header.DesktopFixedHeader, settings.Header.DesktopFixedHeader.ToString());
             await _settingManager.ChangeSettingForTenantAsync(tenantId, AppSettings.UiManagement.Header.DesktopMinimizeMode, settings.Header.DesktopMinimizeMode);
@@ -199,6 +203,7 @@ namespace Magicodes.Admin.Configuration
         {
             await _settingManager.ChangeSettingForApplicationAsync(AppSettings.UiManagement.LayoutType, settings.Layout.LayoutType);
             await _settingManager.ChangeSettingForApplicationAsync(AppSettings.UiManagement.ContentSkin, settings.Layout.ContentSkin);
+            await _settingManager.ChangeSettingForApplicationAsync(AppSettings.UiManagement.Theme, settings.Layout.Theme);
 
             await _settingManager.ChangeSettingForApplicationAsync(AppSettings.UiManagement.Header.DesktopFixedHeader, settings.Header.DesktopFixedHeader.ToString());
             await _settingManager.ChangeSettingForApplicationAsync(AppSettings.UiManagement.Header.DesktopMinimizeMode, settings.Header.DesktopMinimizeMode);
@@ -227,6 +232,7 @@ namespace Magicodes.Admin.Configuration
 
             await _settingManager.ChangeSettingForUserAsync(userIdentifier, AppSettings.UiManagement.LayoutType, settings.Layout.LayoutType);
             await _settingManager.ChangeSettingForUserAsync(userIdentifier, AppSettings.UiManagement.ContentSkin, settings.Layout.ContentSkin);
+            await _settingManager.ChangeSettingForUserAsync(userIdentifier, AppSettings.UiManagement.Theme, settings.Layout.Theme);
 
             await _settingManager.ChangeSettingForUserAsync(userIdentifier, AppSettings.UiManagement.Header.DesktopFixedHeader, settings.Header.DesktopFixedHeader.ToString());
             await _settingManager.ChangeSettingForUserAsync(userIdentifier, AppSettings.UiManagement.Header.DesktopMinimizeMode, settings.Header.DesktopMinimizeMode);

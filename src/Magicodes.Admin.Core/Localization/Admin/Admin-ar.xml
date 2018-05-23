@@ -731,6 +731,7 @@
     <text name="UiCustomization_FixedFooter">هامش ثابت</text>
     <text name="UiCustomization_PushFooter">هامش مدفوع</text>
     <text name="UiCustomization_Header">قائم الرأس</text>
+    <text name="UiCustomization_Theme">التصميم</text>
     <text name="VisualSettings">إعدادات بصرية</text>
     <text name="SaveAsSystemDefault">حفظ كخيار افتراضي للنظام</text>
     <text name="UseSystemDefaults">استخدام الإعدادات الافتراضية للنظام</text>
@@ -764,5 +765,26 @@
     <text name="PleaseEnterAtLeastNCharacter">الرجاء إدخال {0} حرفا على الأقل.</text>
     <text name="PleaseEnterNoMoreThanNCharacter">الرجاء إدخال أكثر من {0} حرفا.</text>
     <text name="SelectTwoFactorProvider">اختر مزود التوثيق ذو العاملين</text>
+    <text name="InvoiceInfoIsMissingOrNotCompleted">معلومات الفاتورة غير متوفرة أو غير مكتملة</text>
+    <text name="InvoiceTo">فاتورة</text>
+    <text name="OperationLogs">سجلات التشغيل</text>
+    <text name="ChangeLogs">سجلات التحريرات</text>
+    <text name="Object">Object</text>
+    <text name="Property">Property</text>
+    <text name="OriginalValue">القيمة الأصلية</text>
+    <text name="NewValue">القيمة الجديدة</text>
+    <text name="Detail">تفاصيل</text>
+    <text name="CreatedAtByUser"><![CDATA[تم الإنشاء في <b> {0} </ b> بواسطة <b> {1} </ b>]]></text>
+    <text name="Magicodes.Admin.MultiTenancy.Tenant">العميل</text>
+    <text name="Abp.Organizations.OrganizationUnit">الوحدة التنظيمية</text>
+    <text name="Search">بحث</text>
+    <text name="Pin">تثبيت</text>
+    <text name="TopMenu">القائمة العلوية</text>
+    <text name="LeftMenu">القائمة الجانبية</text>
+    <text name="UserAccounts">حسابات المستخدمين</text>
+    <text name="Blue">أزرق</text>
+    <text name="Green">أخضر</text>
+    <text name="Pink">وردي</text>
+    <text name="Yellow">أصفر</text>
   </texts>
 </localizationDictionary>

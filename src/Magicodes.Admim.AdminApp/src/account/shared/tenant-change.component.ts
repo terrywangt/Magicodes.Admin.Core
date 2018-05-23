@@ -1,8 +1,8 @@
-import { Component, OnInit, Injector, ViewChild } from '@angular/core';
+import { Component, Injector, OnInit, ViewChild } from '@angular/core';
 import { AppComponentBase } from '@shared/common/app-component-base';
+import { AppSessionService } from '@shared/common/session/app-session.service';
 import { AccountServiceProxy } from '@shared/service-proxies/service-proxies';
 import { TenantChangeModalComponent } from './tenant-change-modal.component';
-import { AppSessionService } from '@shared/common/session/app-session.service';
 
 @Component({
     selector: 'tenant-change',

@@ -11,7 +11,7 @@
                         <span *ngIf="organizationUnit.id">{{l("Edit")}}: {{organizationUnit.displayName}}</span>
                         <span *ngIf="!organizationUnit.id">{{l("NewOrganizationUnit")}}</span>
                     </h5>
-                    <button type="button" class="close" (click)="close()" aria-label="Close">
+                    <button type="button" class="close" (click)="close()" [attr.aria-label]="l('Close')">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -19,8 +19,8 @@
                 <div class="modal-body">
 
                     <div class="form-group form-md-line-input form-md-floating-label no-hint">
-                        <label>{{l("Name")}} *</label>
-                        <input #organizationUnitDisplayName="ngModel" class="form-control" type="text" name="displayName" [ngClass]="{'edited': organizationUnit.displayName}" [(ngModel)]="organizationUnit.displayName" required maxlength="128">
+                        <label for="OrganizationUnitDisplayName">{{l("Name")}} *</label>
+                        <input id="OrganizationUnitDisplayName" #organizationUnitDisplayName="ngModel" class="form-control" type="text" name="displayName" [ngClass]="{'edited': organizationUnit.displayName}" [(ngModel)]="organizationUnit.displayName" required maxlength="128">
                         <validation-messages [formCtrl]="organizationUnitDisplayName"></validation-messages>
                     </div>
 

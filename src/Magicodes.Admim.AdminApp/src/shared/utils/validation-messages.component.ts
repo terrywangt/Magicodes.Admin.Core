@@ -1,11 +1,11 @@
-import { Component, ElementRef, Input, AfterViewInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input } from '@angular/core';
 import { AppLocalizationService } from '@app/shared/common/localization/app-localization.service';
 
 @Component({
     selector: '<validation-messages>',
     template: `<div class="has-danger" *ngIf="formCtrl.invalid && formCtrl.dirty">
                     <div *ngFor="let errorDef of errorDefs">
-                        <div *ngIf="getErrorDefinitionIsValid(errorDef)" class="form-control-feedback">
+                        <div *ngIf="getErrorDefinitionIsInValid(errorDef)" class="form-control-feedback">
                             {{getErrorDefinitionMessage(errorDef)}}
                         </div>
                     </div>
@@ -50,7 +50,7 @@ export class ValidationMessagesComponent implements AfterViewInit {
         });
     }
 
-    getErrorDefinitionIsValid(errorDef: any): boolean {
+    getErrorDefinitionIsInValid(errorDef: any): boolean {
         return !!this.formCtrl.errors[Object.keys(errorDef)[0]];
     }
 

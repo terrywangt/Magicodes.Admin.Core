@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ChatServiceProxy, ChatMessageDto } from '@shared/service-proxies/service-proxies';
-import {AppConsts} from 'shared/AppConsts';
+import { ChatMessageDto, ChatServiceProxy } from '@shared/service-proxies/service-proxies';
+import { AppConsts } from 'shared/AppConsts';
 
 @Component({
     selector: 'chat-message',

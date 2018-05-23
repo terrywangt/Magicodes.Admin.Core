@@ -1,14 +1,13 @@
-import { Component, Injector, AfterViewInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Injector, Output, ViewChild } from '@angular/core';
 import { AppComponentBase } from '@shared/common/app-component-base';
-import { OrganizationUnitServiceProxy, ListResultDtoOfOrganizationUnitDto, OrganizationUnitDto, MoveOrganizationUnitInput } from '@shared/service-proxies/service-proxies';
+import { HtmlHelper } from '@shared/helpers/HtmlHelper';
+import { ListResultDtoOfOrganizationUnitDto, MoveOrganizationUnitInput, OrganizationUnitDto, OrganizationUnitServiceProxy } from '@shared/service-proxies/service-proxies';
+import * as _ from 'lodash';
 import { Observable } from 'rxjs/Observable';
 import { IBasicOrganizationUnitInfo } from './basic-organization-unit-info';
+import { CreateOrEditUnitModalComponent } from './create-or-edit-unit-modal.component';
 import { IUserWithOrganizationUnit } from './user-with-organization-unit';
 import { IUsersWithOrganizationUnit } from './users-with-organization-unit';
-import { HtmlHelper } from '@shared/helpers/HtmlHelper';
-
-import * as _ from 'lodash';
-import { CreateOrEditUnitModalComponent } from './create-or-edit-unit-modal.component';
 
 export interface IOrganizationUnitOnTree extends IBasicOrganizationUnitInfo {
     id: number;

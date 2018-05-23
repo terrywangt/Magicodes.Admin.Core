@@ -1,13 +1,13 @@
-import { Component, ViewContainerRef, OnInit, AfterViewInit, Injector } from '@angular/core';
+import { AfterViewInit, Component, Injector, OnInit, ViewContainerRef } from '@angular/core';
 import { Router } from '@angular/router';
-import { ChatSignalrService } from 'app/shared/layout/chat/chat-signalr.service';
-import { SignalRHelper } from 'shared/helpers/SignalRHelper';
-import { AppComponentBase } from 'shared/common/app-component-base';
-import { AppSessionService } from '@shared/common/session/app-session.service';
-import { SubscriptionStartType } from '@shared/AppEnums';
 import { AppConsts } from '@shared/AppConsts';
+import { SubscriptionStartType } from '@shared/AppEnums';
+import { AppSessionService } from '@shared/common/session/app-session.service';
 import { UrlHelper } from '@shared/helpers/UrlHelper';
+import { ChatSignalrService } from 'app/shared/layout/chat/chat-signalr.service';
 import * as moment from 'moment';
+import { AppComponentBase } from 'shared/common/app-component-base';
+import { SignalRHelper } from 'shared/helpers/SignalRHelper';
 
 @Component({
     templateUrl: './app.component.html',

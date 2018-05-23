@@ -1,8 +1,8 @@
 import { Component, Injector, ViewChild } from '@angular/core';
-import { AppComponentBase } from '@shared/common/app-component-base';
-import { OrganizationUnitMembersComponent } from './organization-unit-members.component';
-import { OrganizationTreeComponent } from './organization-tree.component';
 import { appModuleAnimation } from '@shared/animations/routerTransition';
+import { AppComponentBase } from '@shared/common/app-component-base';
+import { OrganizationTreeComponent } from './organization-tree.component';
+import { OrganizationUnitMembersComponent } from './organization-unit-members.component';
 
 @Component({
     templateUrl: './organization-units.component.html',

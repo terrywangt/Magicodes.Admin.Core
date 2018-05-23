@@ -1,4 +1,4 @@
-import { RegisterTenantInput, EditionSelectDto } from '@shared/service-proxies/service-proxies';
+import { EditionSelectDto, RegisterTenantInput } from '@shared/service-proxies/service-proxies';
 
 export class RegisterTenantModel extends RegisterTenantInput {
     public passwordRepeat: string;

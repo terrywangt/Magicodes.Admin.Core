@@ -22,7 +22,7 @@
 
 
             <div class="m-login__form-action">
-                <button type="submit" class="btn btn-focus m-btn m-btn--pill m-btn--custom m-btn--air" [disabled]="!twoFactorForm.form.valid">{{l("Submit")}}</button>
+                <button type="submit" class="btn btn-primary m-btn m-btn--pill m-btn--custom m-btn--air" [disabled]="!twoFactorForm.form.valid">{{l("Submit")}}</button>
                 <span class="remaining-time-counter">{{l("RemainingTime")}}: {{l("SecondShort{0}", remainingSeconds)}}.</span>
             </div>
         </form>

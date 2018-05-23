@@ -1,19 +1,20 @@
 ﻿using System;
 using System.Diagnostics;
+using Abp.Configuration;
 using Abp.Dependency;
 using Abp.Domain.Repositories;
 using Abp.Threading.BackgroundWorkers;
 using Abp.Threading.Timers;
 using Abp.Timing;
 using Magicodes.Admin.Authorization.Users;
+using Magicodes.Admin.Configuration;
 
 namespace Magicodes.Admin.MultiTenancy
 {
     public class SubscriptionExpireEmailNotifierWorker : PeriodicBackgroundWorkerBase, ISingletonDependency
     {
         private const int CheckPeriodAsMilliseconds = 1 * 60 * 60 * 1000 * 24; //1 day
-        private const int SubscriptionRemainingDayCount = 3;
-
+        
         private readonly IRepository<Tenant> _tenantRepository;
         private readonly UserEmailer _userEmailer;
 
@@ -33,7 +34,8 @@ namespace Magicodes.Admin.MultiTenancy
 
         protected override void DoWork()
         {
-            var dateToCheckRemainingDayCount = Clock.Now.AddDays(SubscriptionRemainingDayCount).ToUniversalTime();
+            var subscriptionRemainingDayCount = Convert.ToInt32(SettingManager.GetSettingValueForApplication(AppSettings.TenantManagement.SubscriptionExpireNotifyDayCount));
+            var dateToCheckRemainingDayCount = Clock.Now.AddDays(subscriptionRemainingDayCount).ToUniversalTime();
 
             var subscriptionExpiredTenants = _tenantRepository.GetAllList(
                 tenant => tenant.SubscriptionEndDateUtc != null &&

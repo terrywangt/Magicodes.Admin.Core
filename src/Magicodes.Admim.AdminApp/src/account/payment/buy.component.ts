@@ -1,18 +1,9 @@
-import { Component, Injector, OnInit, ComponentFactoryResolver, ViewContainerRef, ViewEncapsulation } from '@angular/core';
-import { AppComponentBase } from '@shared/common/app-component-base';
-import { accountModuleAnimation } from '@shared/animations/routerTransition';
-
-import {
-    EditionSelectDto,
-    PaymentServiceProxy,
-    TenantRegistrationServiceProxy
-} from '@shared/service-proxies/service-proxies';
-import {
-    PaymentPeriodType,
-    SubscriptionPaymentGatewayType,
-    EditionPaymentType
-} from '@shared/AppEnums';
+import { Component, ComponentFactoryResolver, Injector, OnInit, ViewContainerRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { EditionPaymentType, PaymentPeriodType, SubscriptionPaymentGatewayType } from '@shared/AppEnums';
+import { accountModuleAnimation } from '@shared/animations/routerTransition';
+import { AppComponentBase } from '@shared/common/app-component-base';
+import { EditionSelectDto, PaymentServiceProxy, TenantRegistrationServiceProxy } from '@shared/service-proxies/service-proxies';
 
 @Component({
     templateUrl: './buy.component.html',

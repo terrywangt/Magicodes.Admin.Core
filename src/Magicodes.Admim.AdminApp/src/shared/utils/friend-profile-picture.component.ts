@@ -1,6 +1,6 @@
-import { Component, ElementRef, Input, AfterViewInit } from '@angular/core';
-import { ProfileServiceProxy } from '@shared/service-proxies/service-proxies';
+import { AfterViewInit, Component, Input } from '@angular/core';
 import { AppConsts } from '@shared/AppConsts';
+import { ProfileServiceProxy } from '@shared/service-proxies/service-proxies';
 
 @Component({
     selector: 'friend-profile-picture',

@@ -1,19 +1,9 @@
 import { Component, Injector, OnInit } from '@angular/core';
-import { AppComponentBase } from '@shared/common/app-component-base';
-import { accountModuleAnimation } from '@shared/animations/routerTransition';
-
-import {
-    EditionSelectDto,
-    PaymentServiceProxy,
-    TenantRegistrationServiceProxy,
-    PaymentInfoDto
-} from '@shared/service-proxies/service-proxies';
-import {
-    PaymentPeriodType,
-    SubscriptionPaymentGatewayType,
-    EditionPaymentType
-} from '@shared/AppEnums';
 import { ActivatedRoute } from '@angular/router';
+import { EditionPaymentType, PaymentPeriodType, SubscriptionPaymentGatewayType } from '@shared/AppEnums';
+import { accountModuleAnimation } from '@shared/animations/routerTransition';
+import { AppComponentBase } from '@shared/common/app-component-base';
+import { EditionSelectDto, PaymentInfoDto, PaymentServiceProxy, TenantRegistrationServiceProxy } from '@shared/service-proxies/service-proxies';
 
 @Component({
     templateUrl: './upgrade-or-extend.component.html',

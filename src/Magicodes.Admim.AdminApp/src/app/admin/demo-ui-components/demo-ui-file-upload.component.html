@@ -11,8 +11,9 @@
     <div class="m-portlet__body">
         <form role="form">
             <div class="form-group m-form__group">
-                <label class="control-label">Default file uploader</label>
+                <label for="DefaultFileUploadFileInput" class="control-label">Default file uploader</label>
                 <p-fileUpload multiple="multiple"
+                              id="DefaultFileUploadFileInput"
                               name="DefaultFileUploadFileInput[]"
                               [url]="uploadUrl"
                               accept="image/*"

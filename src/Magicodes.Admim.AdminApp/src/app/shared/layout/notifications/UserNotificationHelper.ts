@@ -1,10 +1,9 @@
 import { Injectable, Injector } from '@angular/core';
-import { NotificationServiceProxy, EntityDtoOfGuid } from '@shared/service-proxies/service-proxies';
 import { AppComponentBase } from '@shared/common/app-component-base';
-import { NotificationSettingsModalComponent } from './notification-settings-modal.component';
-
+import { EntityDtoOfGuid, NotificationServiceProxy } from '@shared/service-proxies/service-proxies';
 import * as moment from 'moment';
 import * as Push from 'push.js'; // if using ES6
+import { NotificationSettingsModalComponent } from './notification-settings-modal.component';
 
 export interface IFormattedUserNotification {
     userNotificationId: string;

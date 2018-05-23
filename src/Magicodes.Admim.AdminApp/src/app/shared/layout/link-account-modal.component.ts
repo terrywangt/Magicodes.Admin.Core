@@ -1,8 +1,8 @@
-import { Component, ViewChild, Injector, Output, EventEmitter, ElementRef } from '@angular/core';
-import { ModalDirective } from 'ngx-bootstrap';
-import { UserLinkServiceProxy, LinkToUserInput } from '@shared/service-proxies/service-proxies';
+import { Component, ElementRef, EventEmitter, Injector, Output, ViewChild } from '@angular/core';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { AppSessionService } from '@shared/common/session/app-session.service';
+import { LinkToUserInput, UserLinkServiceProxy } from '@shared/service-proxies/service-proxies';
+import { ModalDirective } from 'ngx-bootstrap';
 
 @Component({
     selector: 'linkAccountModal',

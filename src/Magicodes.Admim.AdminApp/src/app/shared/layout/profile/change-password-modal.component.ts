@@ -1,8 +1,7 @@
-import { Component, OnInit, ViewChild, Injector, ElementRef } from '@angular/core';
-import { ModalDirective } from 'ngx-bootstrap';
+import { Component, ElementRef, Injector, ViewChild } from '@angular/core';
 import { AppComponentBase } from '@shared/common/app-component-base';
-import { AppConsts } from '@shared/AppConsts';
-import { ProfileServiceProxy, ChangePasswordInput, PasswordComplexitySetting } from '@shared/service-proxies/service-proxies';
+import { ChangePasswordInput, PasswordComplexitySetting, ProfileServiceProxy } from '@shared/service-proxies/service-proxies';
+import { ModalDirective } from 'ngx-bootstrap';
 
 @Component({
     selector: 'changePasswordModal',

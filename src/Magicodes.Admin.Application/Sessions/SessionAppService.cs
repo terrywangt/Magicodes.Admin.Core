@@ -88,8 +88,7 @@ namespace Magicodes.Admin.Sessions
                 return null;
             }
 
-            return ObjectMapper
-                .Map<IEnumerable<SubscribableEdition>>(editions)
+            return editions.Cast<SubscribableEdition>()
                 .OrderByDescending(e => e.MonthlyPrice)
                 .FirstOrDefault();
         }

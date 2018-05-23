@@ -1,11 +1,11 @@
+import { AbpSessionService } from '@abp/session/abp-session.service';
 import { Component, Injector, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { SessionServiceProxy, UpdateUserSignInTokenOutput } from '@shared/service-proxies/service-proxies';
-import { AppComponentBase } from '@shared/common/app-component-base';
-import { LoginService, ExternalLoginProvider } from './login.service';
 import { accountModuleAnimation } from '@shared/animations/routerTransition';
-import { AbpSessionService } from '@abp/session/abp-session.service';
+import { AppComponentBase } from '@shared/common/app-component-base';
+import { SessionServiceProxy, UpdateUserSignInTokenOutput } from '@shared/service-proxies/service-proxies';
 import { UrlHelper } from 'shared/helpers/UrlHelper';
+import { ExternalLoginProvider, LoginService } from './login.service';
 
 @Component({
     templateUrl: './login.component.html',

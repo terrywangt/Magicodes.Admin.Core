@@ -1,21 +1,13 @@
-import { Component, Injector, OnInit, ViewChild, AfterViewChecked } from '@angular/core';
-import { AppComponentBase } from '@shared/common/app-component-base';
-import { appModuleAnimation } from '@shared/animations/routerTransition';
-import {
-    SessionServiceProxy,
-    UserLoginInfoDto,
-    TenantLoginInfoDto,
-    ApplicationInfoDto,
-    PaymentServiceProxy,
-    InvoiceServiceProxy,
-    CreateInvoiceDto
-} from '@shared/service-proxies/service-proxies';
-import { SubscriptionStartType, EditionPaymentType } from '@shared/AppEnums';
-import { AppSessionService } from '@shared/common/session/app-session.service';
-import { LazyLoadEvent } from 'primeng/components/common/lazyloadevent';
+import { AfterViewChecked, Component, Injector, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { DataTable } from 'primeng/components/datatable/datatable';
+import { EditionPaymentType, SubscriptionStartType } from '@shared/AppEnums';
+import { appModuleAnimation } from '@shared/animations/routerTransition';
+import { AppComponentBase } from '@shared/common/app-component-base';
+import { AppSessionService } from '@shared/common/session/app-session.service';
+import { ApplicationInfoDto, CreateInvoiceDto, InvoiceServiceProxy, PaymentServiceProxy, SessionServiceProxy, TenantLoginInfoDto, UserLoginInfoDto } from '@shared/service-proxies/service-proxies';
+import { LazyLoadEvent } from 'primeng/components/common/lazyloadevent';
 import { Paginator } from 'primeng/components/paginator/paginator';
+import { Table } from 'primeng/components/table/table';
 
 @Component({
     templateUrl: './subscription-management.component.html',
@@ -24,7 +16,7 @@ import { Paginator } from 'primeng/components/paginator/paginator';
 
 export class SubscriptionManagementComponent extends AppComponentBase implements OnInit, AfterViewChecked {
 
-    @ViewChild('dataTable') dataTable: DataTable;
+    @ViewChild('dataTable') dataTable: Table;
     @ViewChild('paginator') paginator: Paginator;
 
     loading: boolean;
@@ -80,22 +72,22 @@ export class SubscriptionManagementComponent extends AppComponentBase implements
     }
 
     getPaymentHistory(event?: LazyLoadEvent) {
-        if (this.primengDatatableHelper.shouldResetPaging(event)) {
+        if (this.primengTableHelper.shouldResetPaging(event)) {
             this.paginator.changePage(0);
 
             return;
         }
 
-        this.primengDatatableHelper.showLoadingIndicator();
+        this.primengTableHelper.showLoadingIndicator();
 
         this._paymentServiceProxy.getPaymentHistory(
-            this.primengDatatableHelper.getSorting(this.dataTable),
-            this.primengDatatableHelper.getMaxResultCount(this.paginator, event),
-            this.primengDatatableHelper.getSkipCount(this.paginator, event)
+            this.primengTableHelper.getSorting(this.dataTable),
+            this.primengTableHelper.getMaxResultCount(this.paginator, event),
+            this.primengTableHelper.getSkipCount(this.paginator, event)
         ).subscribe(result => {
-            this.primengDatatableHelper.totalRecordsCount = result.totalCount;
-            this.primengDatatableHelper.records = result.items;
-            this.primengDatatableHelper.hideLoadingIndicator();
+            this.primengTableHelper.totalRecordsCount = result.totalCount;
+            this.primengTableHelper.records = result.items;
+            this.primengTableHelper.hideLoadingIndicator();
         });
     }
 }

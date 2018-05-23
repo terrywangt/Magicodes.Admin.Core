@@ -6,7 +6,7 @@
                     <h5 class="modal-title">
                         <span>{{l("ChangeProfilePicture")}}</span>
                     </h5>
-                    <button type="button" class="close" aria-label="Close" (click)="close()">
+                    <button type="button" class="close" [attr.aria-label]="l('Close')" (click)="close()">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>

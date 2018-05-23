@@ -22,16 +22,45 @@
                 <tabset class="tab-container tabbable-line" *ngIf="settings">
                     <tab heading="{{l('UiCustomization_Layout')}}" customClass="m-tabs__item">
                         <form id="LayoutSettingsForm">
+                            <div class="m-radio-list m--margin-bottom-20">
+                                <label>{{l("UiCustomization_Theme")}}</label>
+                                <label class="m-radio" for="Theme_Default">
+                                    <input id="Theme_Default" name="Theme" [(ngModel)]="settings.layout.theme" value="default" type="radio" [checked]="settings.layout.theme === 'default'">
+                                    {{l("Default")}}
+                                    <span></span>
+                                </label>
+                                <label class="m-radio m-radio--solid m-radio--state-info" for="Theme_Blue">
+                                    <input id="Theme_Blue" name="Theme" [(ngModel)]="settings.layout.theme" value="blue" type="radio" [checked]="settings.layout.theme === 'blue'">
+                                    {{l("Blue")}}
+                                    <span></span>
+                                </label>
+                                <label class="m-radio m-radio--solid m-radio--state-success" for="Theme_Green">
+                                    <input id="Theme_Green" name="Theme" [(ngModel)]="settings.layout.theme" value="green" type="radio" [checked]="settings.layout.theme === 'green'">
+                                    {{l("Green")}}
+                                    <span></span>
+                                </label>
+                                <label class="m-radio m-radio--solid m-radio--state-danger" for="Theme_Pink">
+                                    <input id="Theme_Pink" name="Theme" [(ngModel)]="settings.layout.theme" value="pink" type="radio" [checked]="settings.layout.theme === 'pink'">
+                                    {{l("Pink")}}
+                                    <span></span>
+                                </label>
+                                <label class="m-radio m-radio--solid m-radio--state-warning" for="Theme_Yellow">
+                                    <input id="Theme_Yellow" name="Theme" [(ngModel)]="settings.layout.theme" value="yellow" type="radio" [checked]="settings.layout.theme === 'yellow'">
+                                    {{l("Yellow")}}
+                                    <span></span>
+                                </label>
+                            </div>
+
                             <div class="form-group m-form__group">
-                                <label>{{l("UiCustomization_LayoutType")}}</label>
-                                <select name="LayoutType" class="form-control" [(ngModel)]="settings.layout.layoutType">
+                                <label for="LayoutType">{{l("UiCustomization_LayoutType")}}</label>
+                                <select id="LayoutType" name="LayoutType" class="form-control" [(ngModel)]="settings.layout.layoutType">
                                     <option value="fluid">{{l("UiCustomization_Fluid")}}</option>
                                     <option value="boxed">{{l("UiCustomization_Boxed")}}</option>
                                 </select>
                             </div>
                             <div class="form-group m-form__group">
-                                <label>{{l("UiCustomization_ContentSkin")}}</label>
-                                <select name="ContentSkin" class="form-control" [(ngModel)]="settings.layout.contentSkin">
+                                <label for="ContentSkin">{{l("UiCustomization_ContentSkin")}}</label>
+                                <select id="ContentSkin" name="ContentSkin" class="form-control" [(ngModel)]="settings.layout.contentSkin">
                                     <option value="light2">{{l("UiCustomization_LightGrey")}}</option>
                                     <option value="light">{{l("UiCustomization_White")}}</option>
                                 </select>
@@ -41,8 +70,8 @@
                     <tab heading="{{l('UiCustomization_Header')}}" customClass="m-tabs__item">
                         <form id="HeaderSettingsForm">
                             <div class="form-group m-form__group">
-                                <label>{{l("UiCustomization_DropdownSkin")}}</label>
-                                <select name="DropdownSkin" class="form-control" [(ngModel)]="settings.header.dropdownSkin">
+                                <label for="DropdownSkin">{{l("UiCustomization_DropdownSkin")}}</label>
+                                <select id="DropdownSkin" name="DropdownSkin" class="form-control" [(ngModel)]="settings.header.dropdownSkin">
                                     <option value="light">{{l("UiCustomization_Light")}}</option>
                                     <option value="dark">{{l("UiCustomization_Dark")}}</option>
                                 </select>
@@ -56,15 +85,15 @@
                                 </label>
                             </div>
                             <div class="form-group m-form__group">
-                                <label>{{l("UiCustomization_DesktopMinimizeMode")}}</label>
-                                <select name="DesktopMinimizeMode" class="form-control" [(ngModel)]="settings.header.desktopMinimizeMode">
+                                <label for="DesktopMinimizeMode">{{l("UiCustomization_DesktopMinimizeMode")}}</label>
+                                <select id="DesktopMinimizeMode" name="DesktopMinimizeMode" class="form-control" [(ngModel)]="settings.header.desktopMinimizeMode">
                                     <option value="">{{l("UiCustomization_None")}}</option>
                                     <option value="hide">{{l("UiCustomization_Hide")}}</option>
                                 </select>
                             </div>
                             <div class="form-group m-form__group">
-                                <label>{{l("UiCustomization_DropdownSkinDesktop")}}</label>
-                                <select name="DropdownSkinDesktop" class="form-control" [(ngModel)]="settings.header.dropdownSkinDesktop">
+                                <label for="DropdownSkinDesktop">{{l("UiCustomization_DropdownSkinDesktop")}}</label>
+                                <select id="DropdownSkinDesktop" name="DropdownSkinDesktop" class="form-control" [(ngModel)]="settings.header.dropdownSkinDesktop">
                                     <option value="light">{{l("UiCustomization_Light")}}</option>
                                     <option value="dark">{{l("UiCustomization_Dark")}}</option>
                                 </select>
@@ -90,15 +119,15 @@
                     <tab heading="{{l('UiCustomization_Menu')}}" customClass="m-tabs__item">
                         <form id="MenuSettingsForm">
                             <div class="form-group m-form__group">
-                                <label>{{l("UiCustomization_MenuPosition")}}</label>
-                                <select name="Position" class="form-control" [(ngModel)]="settings.menu.position">
+                                <label for="Position">{{l("UiCustomization_MenuPosition")}}</label>
+                                <select id="Position" name="Position" class="form-control" [(ngModel)]="settings.menu.position">
                                     <option value="left">{{l("UiCustomization_Left")}}</option>
                                     <option value="top">{{l("UiCustomization_Top")}}</option>
                                 </select>
                             </div>
                             <div class="form-group m-form__group">
-                                <label>{{l("UiCustomization_MenuSkin")}}</label>
-                                <select name="AsideSkin" class="form-control" [(ngModel)]="settings.menu.asideSkin">
+                                <label for="AsideSkin">{{l("UiCustomization_MenuSkin")}}</label>
+                                <select id="AsideSkin" name="AsideSkin" class="form-control" [(ngModel)]="settings.menu.asideSkin">
                                     <option value="light">{{l("UiCustomization_Light")}}</option>
                                     <option value="dark">{{l("UiCustomization_Dark")}}</option>
                                 </select>
@@ -139,15 +168,15 @@
                                 </label>
                             </div>
                             <div class="form-group m-form__group" *ngIf="leftMenuPositionSelected()">
-                                <label>{{l("UiCustomization_SubmenuToggle")}}</label>
-                                <select name="SubmenuToggle" class="form-control" [(ngModel)]="settings.menu.submenuToggle">
+                                <label for="SubmenuToggle">{{l("UiCustomization_SubmenuToggle")}}</label>
+                                <select id="SubmenuToggle" name="SubmenuToggle" class="form-control" [(ngModel)]="settings.menu.submenuToggle">
                                     <option value="dropdown">{{l("UiCustomization_Dropdown")}}</option>
                                     <option value="accordion">{{l("UiCustomization_Accordion")}}</option>
                                 </select>
                             </div>
                             <div class="form-group m-form__group" *ngIf="leftMenuPositionSelected()">
-                                <label>{{l("UiCustomization_DropdownSubmenuSkin")}}</label>
-                                <select name="DropdownSubmenuSkin" class="form-control" [(ngModel)]="settings.menu.dropdownSubmenuSkin">
+                                <label for="DropdownSubmenuSkin">{{l("UiCustomization_DropdownSubmenuSkin")}}</label>
+                                <select id="DropdownSubmenuSkin" name="DropdownSubmenuSkin" class="form-control" [(ngModel)]="settings.menu.dropdownSubmenuSkin">
                                     <option value="inherit">{{l("UiCustomization_Inherit")}}</option>
                                     <option value="light">{{l("UiCustomization_Light")}}</option>
                                     <option value="dark">{{l("UiCustomization_Dark")}}</option>

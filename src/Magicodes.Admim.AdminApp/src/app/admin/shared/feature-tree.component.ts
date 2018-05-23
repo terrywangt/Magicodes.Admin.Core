@@ -1,7 +1,7 @@
-import { Component, OnInit, AfterViewInit, AfterViewChecked, ElementRef, ViewChild, Injector, Input, Output, EventEmitter } from '@angular/core';
-import { AppComponentBase } from '@shared/common/app-component-base';
-import { NameValueDto, FlatFeatureDto } from '@shared/service-proxies/service-proxies';
+import { AfterViewChecked, AfterViewInit, Component, ElementRef, Injector, OnInit } from '@angular/core';
 import { FeatureTreeEditModel } from '@app/admin/shared/feature-tree-edit.model';
+import { AppComponentBase } from '@shared/common/app-component-base';
+import { FlatFeatureDto, NameValueDto } from '@shared/service-proxies/service-proxies';
 import * as _ from 'lodash';
 
 @Component({

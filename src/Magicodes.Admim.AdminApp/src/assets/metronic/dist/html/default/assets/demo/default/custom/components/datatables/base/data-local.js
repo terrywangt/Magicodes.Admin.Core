@@ -44,7 +44,7 @@ var DatatableDataLocalDemo = function () {
 				width: 50,
 				sortable: false,
 				textAlign: 'center',
-        selector: {class: 'm-checkbox--solid m-checkbox--brand'}
+        		selector: {class: 'm-checkbox--solid m-checkbox--brand'}
 			}, {
 				field: "OrderID",
 				title: "Order ID"

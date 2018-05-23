@@ -1,19 +1,18 @@
-import { Component, Injector, ViewEncapsulation, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Http } from '@angular/http';
-import { UserServiceProxy, UserListDto, EntityDtoOfInt64 } from '@shared/service-proxies/service-proxies';
 import { NotifyService } from '@abp/notify/notify.service';
+import { Component, Injector, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Http } from '@angular/http';
+import { ActivatedRoute } from '@angular/router';
 import { AppConsts } from '@shared/AppConsts';
+import { appModuleAnimation } from '@shared/animations/routerTransition';
 import { AppComponentBase } from '@shared/common/app-component-base';
+import { EntityDtoOfInt64, TokenAuthServiceProxy, UserListDto, UserServiceProxy } from '@shared/service-proxies/service-proxies';
 import { FileDownloadService } from '@shared/utils/file-download.service';
-import { TokenAuthServiceProxy } from '@shared/service-proxies/service-proxies';
+import { LazyLoadEvent } from 'primeng/components/common/lazyloadevent';
+import { Paginator } from 'primeng/components/paginator/paginator';
+import { Table } from 'primeng/components/table/table';
 import { CreateOrEditUserModalComponent } from './create-or-edit-user-modal.component';
 import { EditUserPermissionsModalComponent } from './edit-user-permissions-modal.component';
 import { ImpersonationService } from './impersonation.service';
-import { appModuleAnimation } from '@shared/animations/routerTransition';
-import { DataTable } from 'primeng/components/datatable/datatable';
-import { Paginator } from 'primeng/components/paginator/paginator';
-import { LazyLoadEvent } from 'primeng/components/common/lazyloadevent';
 
 @Component({
     templateUrl: './users.component.html',
@@ -24,7 +23,7 @@ export class UsersComponent extends AppComponentBase {
 
     @ViewChild('createOrEditUserModal') createOrEditUserModal: CreateOrEditUserModalComponent;
     @ViewChild('editUserPermissionsModal') editUserPermissionsModal: EditUserPermissionsModalComponent;
-    @ViewChild('dataTable') dataTable: DataTable;
+    @ViewChild('dataTable') dataTable: Table;
     @ViewChild('paginator') paginator: Paginator;
 
     //Filters
@@ -48,25 +47,25 @@ export class UsersComponent extends AppComponentBase {
     }
 
     getUsers(event?: LazyLoadEvent) {
-        if (this.primengDatatableHelper.shouldResetPaging(event)) {
+        if (this.primengTableHelper.shouldResetPaging(event)) {
             this.paginator.changePage(0);
 
             return;
         }
 
-        this.primengDatatableHelper.showLoadingIndicator();
+        this.primengTableHelper.showLoadingIndicator();
 
         this._userServiceProxy.getUsers(
             this.filterText,
             this.permission ? this.selectedPermission : undefined,
             this.role,
-            this.primengDatatableHelper.getSorting(this.dataTable),
-            this.primengDatatableHelper.getMaxResultCount(this.paginator, event),
-            this.primengDatatableHelper.getSkipCount(this.paginator, event)
+            this.primengTableHelper.getSorting(this.dataTable),
+            this.primengTableHelper.getMaxResultCount(this.paginator, event),
+            this.primengTableHelper.getSkipCount(this.paginator, event)
         ).subscribe(result => {
-            this.primengDatatableHelper.totalRecordsCount = result.totalCount;
-            this.primengDatatableHelper.records = result.items;
-            this.primengDatatableHelper.hideLoadingIndicator();
+            this.primengTableHelper.totalRecordsCount = result.totalCount;
+            this.primengTableHelper.records = result.items;
+            this.primengTableHelper.hideLoadingIndicator();
         });
     }
 

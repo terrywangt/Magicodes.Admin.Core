@@ -1,11 +1,10 @@
 import { Component, Injector, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
-import { accountModuleAnimation } from '@shared/animations/routerTransition';
-import { TenantRegistrationServiceProxy, SubscriptionServiceProxy, EditionsSelectOutput, EditionSelectDto, FlatFeatureSelectDto, EditionWithFeaturesDto } from '@shared/service-proxies/service-proxies';
-import { AppComponentBase } from '@shared/common/app-component-base';
 import { EditionPaymentType, SubscriptionStartType } from '@shared/AppEnums';
+import { accountModuleAnimation } from '@shared/animations/routerTransition';
+import { AppComponentBase } from '@shared/common/app-component-base';
 import { AppSessionService } from '@shared/common/session/app-session.service';
-
+import { EditionSelectDto, EditionWithFeaturesDto, EditionsSelectOutput, FlatFeatureSelectDto, SubscriptionServiceProxy, TenantRegistrationServiceProxy } from '@shared/service-proxies/service-proxies';
 import * as _ from 'lodash';
 
 @Component({
@@ -21,6 +20,8 @@ export class SelectEditionComponent extends AppComponentBase implements OnInit {
     isSetted = false;
     editionPaymentType: typeof EditionPaymentType = EditionPaymentType;
     subscriptionStartType: typeof SubscriptionStartType = SubscriptionStartType;
+    /*you can change your edition icons order within editionIcons variable */
+    editionIcons: string[] = ["flaticon-open-box", "flaticon-rocket", "flaticon-gift", "flaticon-confetti", "flaticon-puzzle", "flaticon-app", "flaticon-coins", "flaticon-piggy-bank", "flaticon-bag", "flaticon-lifebuoy", "flaticon-technology-1", "flaticon-cogwheel-1", "flaticon-infinity", "flaticon-interface-5", "flaticon-squares-3", "flaticon-interface-6", "flaticon-mark", "flaticon-business", "flaticon-interface-7", "flaticon-list-2", "flaticon-bell", "flaticon-technology", "flaticon-squares-2", "flaticon-notes", "flaticon-profile", "flaticon-layers", "flaticon-interface-4", "flaticon-signs", "flaticon-menu-1", "flaticon-symbol"];
 
     constructor(
         injector: Injector,
@@ -96,7 +97,7 @@ export class SelectEditionComponent extends AppComponentBase implements OnInit {
                     this._router.navigate(['app/admin/subscription-management']);
                 });
         } else {
-            this._router.navigate(['/account/upgrade'], { queryParams: { upgradeEditionId: upgradeEdition.id, editionPaymentType: editionPaymentType }});
+            this._router.navigate(['/account/upgrade'], { queryParams: { upgradeEditionId: upgradeEdition.id, editionPaymentType: editionPaymentType } });
         }
     }
 

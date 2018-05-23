@@ -1,10 +1,10 @@
 import { Component, Injector, ViewChild } from '@angular/core';
-import { EditionServiceProxy, EditionListDto } from '@shared/service-proxies/service-proxies';
-import { AppComponentBase } from '@shared/common/app-component-base';
-import { CreateOrEditEditionModalComponent } from './create-or-edit-edition-modal.component';
 import { appModuleAnimation } from '@shared/animations/routerTransition';
-import { DataTable } from 'primeng/components/datatable/datatable';
+import { AppComponentBase } from '@shared/common/app-component-base';
+import { EditionListDto, EditionServiceProxy } from '@shared/service-proxies/service-proxies';
 import { Paginator } from 'primeng/components/paginator/paginator';
+import { Table } from 'primeng/components/table/table';
+import { CreateOrEditEditionModalComponent } from './create-or-edit-edition-modal.component';
 
 @Component({
     templateUrl: './editions.component.html',
@@ -13,7 +13,7 @@ import { Paginator } from 'primeng/components/paginator/paginator';
 export class EditionsComponent extends AppComponentBase  {
 
     @ViewChild('createOrEditEditionModal') createOrEditEditionModal: CreateOrEditEditionModalComponent;
-    @ViewChild('dataTable') dataTable: DataTable;
+    @ViewChild('dataTable') dataTable: Table;
     @ViewChild('paginator') paginator: Paginator;
 
     constructor(
@@ -24,11 +24,11 @@ export class EditionsComponent extends AppComponentBase  {
     }
 
     getEditions(): void {
-        this.primengDatatableHelper.showLoadingIndicator();
+        this.primengTableHelper.showLoadingIndicator();
         this._editionService.getEditions().subscribe(result => {
-            this.primengDatatableHelper.totalRecordsCount = result.items.length;
-            this.primengDatatableHelper.records = result.items;
-            this.primengDatatableHelper.hideLoadingIndicator();
+            this.primengTableHelper.totalRecordsCount = result.items.length;
+            this.primengTableHelper.records = result.items;
+            this.primengTableHelper.hideLoadingIndicator();
         });
     }
 

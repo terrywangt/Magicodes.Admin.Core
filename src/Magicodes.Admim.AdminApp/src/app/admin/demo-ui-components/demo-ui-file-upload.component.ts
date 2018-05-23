@@ -1,8 +1,8 @@
 import { Component, Injector } from '@angular/core';
-import { AppComponentBase } from '@shared/common/app-component-base';
-import { appModuleAnimation } from '@shared/animations/routerTransition';
-import { DemoUiComponentsServiceProxy } from '@shared/service-proxies/service-proxies';
 import { AppConsts } from '@shared/AppConsts';
+import { appModuleAnimation } from '@shared/animations/routerTransition';
+import { AppComponentBase } from '@shared/common/app-component-base';
+import { DemoUiComponentsServiceProxy } from '@shared/service-proxies/service-proxies';
 
 @Component({
     selector: 'demo-ui-file-upload',

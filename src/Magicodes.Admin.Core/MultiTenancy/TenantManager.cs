@@ -278,6 +278,7 @@ namespace Magicodes.Admin.MultiTenancy
             }
 
             tenant.IsActive = false;
+            tenant.IsInTrialPeriod = false;
 
             await UpdateAsync(tenant);
 

@@ -16,6 +16,8 @@ namespace Magicodes.Admin.Configuration.Dto
         public string LayoutType { get; set; }
 
         public string ContentSkin { get; set; }
+
+        public string Theme { get; set; }
     }
 
     public class UiCustomizationHeaderSettingsEditDto

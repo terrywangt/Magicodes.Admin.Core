@@ -1,6 +1,5 @@
-import { Directive, forwardRef, Attribute, Input } from '@angular/core';
-import { Validator, AbstractControl, NG_VALIDATORS } from '@angular/forms';
-
+import { Directive, Input, forwardRef } from '@angular/core';
+import { AbstractControl, NG_VALIDATORS, Validator } from '@angular/forms';
 
 @Directive({
     selector: '[minValue]',

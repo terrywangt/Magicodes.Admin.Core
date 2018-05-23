@@ -1,8 +1,7 @@
-import { Component, AfterViewInit, Injector, ViewChild, ElementRef } from '@angular/core';
-import { AppComponentBase } from '@shared/common/app-component-base';
+import { AfterViewInit, Component, ElementRef, Injector, ViewChild } from '@angular/core';
 import { appModuleAnimation } from '@shared/animations/routerTransition';
+import { AppComponentBase } from '@shared/common/app-component-base';
 import { DemoUiComponentsServiceProxy } from '@shared/service-proxies/service-proxies';
-
 import * as moment from 'moment';
 
 @Component({

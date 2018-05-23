@@ -1,9 +1,8 @@
-import { Component, ViewChild, Injector } from '@angular/core';
-import { ModalDirective } from 'ngx-bootstrap';
-import { AuditLogListDto } from '@shared/service-proxies/service-proxies';
+import { Component, Injector, ViewChild } from '@angular/core';
 import { AppComponentBase } from '@shared/common/app-component-base';
-
+import { AuditLogListDto } from '@shared/service-proxies/service-proxies';
 import * as moment from 'moment';
+import { ModalDirective } from 'ngx-bootstrap';
 
 @Component({
     selector: 'auditLogDetailModal',

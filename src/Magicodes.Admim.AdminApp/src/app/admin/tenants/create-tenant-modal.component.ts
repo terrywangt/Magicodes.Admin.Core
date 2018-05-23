@@ -1,10 +1,13 @@
-import { Component, ViewChild, Injector, Output, EventEmitter, ElementRef } from '@angular/core';
-import { ModalDirective } from 'ngx-bootstrap';
-import { TenantServiceProxy, ProfileServiceProxy, CreateTenantInput, CommonLookupServiceProxy, PasswordComplexitySetting } from '@shared/service-proxies/service-proxies';
+import { Component, ElementRef, EventEmitter, Injector, Output, ViewChild } from '@angular/core';
 import { AppComponentBase } from '@shared/common/app-component-base';
-
-import * as moment from 'moment';
+import { 
+    CommonLookupServiceProxy, CreateTenantInput, 
+    PasswordComplexitySetting, ProfileServiceProxy, 
+    TenantServiceProxy, SubscribableEditionComboboxItemDto } from 
+'@shared/service-proxies/service-proxies';
 import * as _ from 'lodash';
+import * as moment from 'moment';
+import { ModalDirective } from 'ngx-bootstrap';
 
 @Component({
     selector: 'createTenantModal',
@@ -22,7 +25,7 @@ export class CreateTenantModalComponent extends AppComponentBase {
     saving = false;
     setRandomPassword = true;
     useHostDb = true;
-    editions = [];
+    editions: SubscribableEditionComboboxItemDto[] = [];
     tenant: CreateTenantInput;
     passwordComplexitySetting: PasswordComplexitySetting = new PasswordComplexitySetting();
     isUnlimited = false;
@@ -67,7 +70,12 @@ export class CreateTenantModalComponent extends AppComponentBase {
         this._commonLookupService.getEditionsForCombobox(false)
             .subscribe((result) => {
                 this.editions = result.items;
-                this.editions.unshift({ value: 0, displayText: this.l('NotAssigned') });
+
+                var notAssignedItem = new SubscribableEditionComboboxItemDto();
+                notAssignedItem.value = "0";
+                notAssignedItem.displayText = this.l('NotAssigned');
+
+                this.editions.unshift(notAssignedItem);
 
                 this._commonLookupService.getDefaultEditionName().subscribe((getDefaultEditionResult) => {
                     let defaultEdition = _.filter(this.editions, { 'displayText': getDefaultEditionResult.name });
@@ -84,12 +92,14 @@ export class CreateTenantModalComponent extends AppComponentBase {
     }
 
     selectedEditionIsFree(): boolean {
-        let selectedEditions = _.filter(this.editions, { 'value': this.tenant.editionId });
+        let selectedEditions = _.filter(this.editions, { 'value': this.tenant.editionId })
+        .map(u => Object.assign(new SubscribableEditionComboboxItemDto(),u));
+        
         if (selectedEditions.length !== 1) {
             this.isSelectedEditionFree = true;
         }
 
-        let selectedEdition = selectedEditions[0];
+        var selectedEdition = selectedEditions[0];
         this.isSelectedEditionFree = selectedEdition.isFree;
         return this.isSelectedEditionFree;
     }

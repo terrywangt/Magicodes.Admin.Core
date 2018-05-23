@@ -1,14 +1,11 @@
-import { Component, OnInit, AfterViewInit, Injector, ElementRef, ViewChild, ViewEncapsulation } from '@angular/core';
-import {
-    HostDashboardServiceProxy,
-    HostDashboardData,
-} from '@shared/service-proxies/service-proxies';
-import { AppComponentBase } from '@shared/common/app-component-base';
-import { appModuleAnimation } from '@shared/animations/routerTransition';
-import * as moment from 'moment';
+import { AfterViewInit, Component, ElementRef, Injector, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { DateTimeService } from '@app/shared/common/timing/date-time.service';
 import { AppIncomeStatisticsDateInterval } from '@shared/AppEnums';
-import { DataTable } from 'primeng/components/datatable/datatable';
+import { appModuleAnimation } from '@shared/animations/routerTransition';
+import { AppComponentBase } from '@shared/common/app-component-base';
+import { HostDashboardData, HostDashboardServiceProxy } from '@shared/service-proxies/service-proxies';
+import * as moment from 'moment';
+import { Table } from 'primeng/components/table/table';
 
 @Component({
     templateUrl: './host-dashboard.component.html',
@@ -21,8 +18,8 @@ export class HostDashboardComponent extends AppComponentBase implements AfterVie
     @ViewChild('EditionStatisticsChart') editionStatisticsChart: ElementRef;
     @ViewChild('IncomeStatisticsChart') incomeStatisticsChart: ElementRef;
 
-    @ViewChild('RecentTenantsTable') recentTenantsTable: DataTable;
-    @ViewChild('ExpiringTenantsTable') expiringTenantsTable: DataTable;
+    @ViewChild('RecentTenantsTable') recentTenantsTable: Table;
+    @ViewChild('ExpiringTenantsTable') expiringTenantsTable: Table;
 
     loading = false;
     loadingIncomeStatistics = false;

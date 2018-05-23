@@ -10,7 +10,7 @@
                     <h5 class="modal-title">
                         <span>{{l("EditTenant")}}: {{tenant.tenancyName}}</span>
                     </h5>
-                    <button type="button" class="close" (click)="close()" aria-label="Close">
+                    <button type="button" class="close" (click)="close()" [attr.aria-label]="l('Close')">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -18,14 +18,14 @@
                 <div class="modal-body">
 
                     <div class="form-group">
-                        <label>{{l("Name")}} *</label>
-                        <input #nameInput="ngModel" type="text" name="Name" class="form-control" [ngClass]="{'edited':tenant.name}" [(ngModel)]="tenant.name" required maxlength="128">
+                        <label for="Name">{{l("Name")}} *</label>
+                        <input id="Name" #nameInput="ngModel" type="text" name="Name" class="form-control" [ngClass]="{'edited':tenant.name}" [(ngModel)]="tenant.name" required maxlength="128">
                         <validation-messages [formCtrl]="nameInput"></validation-messages>
                     </div>
 
                     <div class="form-group" *ngIf="currentConnectionString">
-                        <label>{{l("DatabaseConnectionString")}} *</label>
-                        <input #connectionStringInput="ngModel" type="text" name="ConnectionString" class="form-control" [(ngModel)]="tenant.connectionString" required maxlength="1024">
+                        <label for="DatabaseConnectionString">{{l("DatabaseConnectionString")}} *</label>
+                        <input id="DatabaseConnectionString" #connectionStringInput="ngModel" type="text" name="ConnectionString" class="form-control" [(ngModel)]="tenant.connectionString" required maxlength="1024">
                         <validation-messages [formCtrl]="connectionStringInput"></validation-messages>
                     </div>
 
@@ -49,8 +49,8 @@
                     </div>
 
                     <div [hidden]="isUnlimited || !isSubscriptionFieldsVisible" class="form-group" [ngClass]="{'has-error': !subscriptionEndDateUtcIsValid }">
-                        <label>{{l("SubscriptionEndDateUtc")}}</label>
-                        <input type="datetime" #SubscriptionEndDateUtc name="SubscriptionEndDateUtc" class="form-control"
+                        <label for="SubscriptionEndDateUtc">{{l("SubscriptionEndDateUtc")}}</label>
+                        <input id="SubscriptionEndDateUtc" type="datetime" #SubscriptionEndDateUtc name="SubscriptionEndDateUtc" class="form-control"
                                [ngClass]="{'edited':tenant.subscriptionEndDateUtc}"
                                [value]="formatSubscriptionEndDate(tenant.subscriptionEndDateUtc)"
                                [required]="!isUnlimited">

@@ -1,6 +1,6 @@
-import * as rtlDetect from 'rtl-detect';
-import * as _ from 'lodash';
 import { AppConsts } from '@shared/AppConsts';
+import * as _ from 'lodash';
+import * as rtlDetect from 'rtl-detect';
 
 export class LocalizedResourcesHelper {
 
@@ -13,18 +13,27 @@ export class LocalizedResourcesHelper {
     static loadLocalizedStlyes(): JQueryPromise<any> {
         const isRtl = rtlDetect.isRtlLang(abp.localization.currentLanguage.name);
         let cssPostfix = '';
+        let theme = abp.setting.get("App.UiManagement.Theme").toLocaleLowerCase();
 
         if (isRtl) {
             cssPostfix = '-rtl';
             $('html').attr('dir', 'rtl');
         }
 
+        $('head').append($('<link rel="stylesheet" type="text/css" />').attr('href', AppConsts.appBaseUrl + '/assets/metronic/dist/html/' + theme + '/assets/demo/' + theme + '/base/style.bundle' + cssPostfix + '.css'));
+        $('head').append($('<link rel="stylesheet" type="text/css" />').attr('href', AppConsts.appBaseUrl + '/assets/primeng/datatable/css/primeng.datatable' + cssPostfix + '.css'));
+        $('head').append($('<link rel="stylesheet" type="text/css" />').attr('href', AppConsts.appBaseUrl + '/assets/common/styles/themes/' + theme + '/primeng.datatable' + cssPostfix + '.css'));
+
+        $('head').append($('<link rel="stylesheet" type="text/css" />').attr('href', AppConsts.appBaseUrl + '/assets/common/styles/metronic-customize.css'));
+        $('head').append($('<link rel="stylesheet" type="text/css" />').attr('href', AppConsts.appBaseUrl + '/assets/common/styles/themes/' + theme + '/metronic-customize.css'));
+
+        $('head').append($('<link rel="stylesheet" type="text/css" />').attr('href', AppConsts.appBaseUrl + '/assets/common/styles/metronic-customize-angular.css'));
+        $('head').append($('<link rel="stylesheet" type="text/css" />').attr('href', AppConsts.appBaseUrl + '/assets/common/styles/themes/' + theme + '/metronic-customize-angular.css'));
+
         if (abp.setting.get('App.UiManagement.Left.Position') === 'top') {
             $('head').append($('<link rel="stylesheet" type="text/css" />').attr('href', AppConsts.appBaseUrl + '/assets/common/styles/metronic-customize-top-menu.css'));
+            $('head').append($('<link rel="stylesheet" type="text/css" />').attr('href', AppConsts.appBaseUrl + '/assets/common/styles/themes/' + theme + '/metronic-customize-top-menu.css'));
         }
-
-        $('head').append($('<link rel="stylesheet" type="text/css" />').attr('href', AppConsts.appBaseUrl + '/assets/metronic/dist/html/default/assets/demo/default/base/style.bundle' + cssPostfix + '.css'));
-        $('head').append($('<link rel="stylesheet" type="text/css" />').attr('href', AppConsts.appBaseUrl + '/assets/primeng/datatable/css/primeng.datatable' + cssPostfix + '.css'));
 
         if (isRtl) {
             $('head').append($('<link rel="stylesheet" type="text/css" />').attr('href', AppConsts.appBaseUrl + '/assets/common/styles/abp-zero-template-rtl.css'));

@@ -1,17 +1,4 @@
-import {
-    ChatMessageDtoReadState,
-    ChatMessageDtoSide,
-    FriendDtoState,
-    DefaultTimezoneScope,
-    UserNotificationState,
-    IsTenantAvailableOutputState,
-    IncomeStatisticsDateInterval,
-    RegisterTenantInputSubscriptionStartType,
-    CreatePaymentDtoEditionPaymentType,
-    CreatePaymentDtoPaymentPeriodType,
-    CreatePaymentDtoSubscriptionPaymentGatewayType,
-    SalesSummaryDatePeriod
-} from '@shared/service-proxies/service-proxies';
+import { ChatMessageDtoReadState, ChatMessageDtoSide, CreatePaymentDtoEditionPaymentType, CreatePaymentDtoPaymentPeriodType, CreatePaymentDtoSubscriptionPaymentGatewayType, DefaultTimezoneScope, FriendDtoState, IncomeStatisticsDateInterval, IsTenantAvailableOutputState, RegisterTenantInputSubscriptionStartType, SalesSummaryDatePeriod, UserNotificationState } from '@shared/service-proxies/service-proxies';
 
 export class AppChatMessageReadState {
     static Unread: number = ChatMessageDtoReadState._1;

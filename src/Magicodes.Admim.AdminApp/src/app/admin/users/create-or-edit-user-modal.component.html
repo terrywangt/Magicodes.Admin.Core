@@ -7,7 +7,7 @@
                         <span *ngIf="user.id">{{l("EditUser")}}: {{user.userName}}</span>
                         <span *ngIf="!user.id">{{l("CreateNewUser")}}</span>
                     </h4>
-                    <button type="button" class="close" (click)="close()" aria-label="Close">
+                    <button type="button" class="close" (click)="close()" [attr.aria-label]="l('Close')">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -20,32 +20,32 @@
                                 </div>
                                 <div class="col-sm-9">
                                     <div class="form-group">
-                                        <label>{{l("Name")}} *</label>
-                                        <input #nameInput="ngModel" class="form-control" type="text" name="Name" [(ngModel)]="user.name" required maxlength="32">
+                                        <label for="Name">{{l("Name")}} *</label>
+                                        <input id="Name" #nameInput="ngModel" class="form-control" type="text" name="Name" [(ngModel)]="user.name" required maxlength="32">
                                         <validation-messages [formCtrl]="nameInput"></validation-messages>
                                     </div>
 
                                     <div class="form-group">
-                                        <label>{{l("Surname")}} *</label>
-                                        <input #surnameInput="ngModel" type="text" name="Surname" class="form-control" [(ngModel)]="user.surname" required maxlength="32">
+                                        <label for="Surname">{{l("Surname")}} *</label>
+                                        <input id="Surname" #surnameInput="ngModel" type="text" name="Surname" class="form-control" [(ngModel)]="user.surname" required maxlength="32">
                                         <validation-messages [formCtrl]="surnameInput"></validation-messages>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label>{{l("EmailAddress")}} *</label>
-                                <input #emailAddressInput="ngModel" type="email" name="EmailAddress" class="form-control" [(ngModel)]="user.emailAddress" required maxlength="256" email>
+                                <label for="EmailAddress">{{l("EmailAddress")}} *</label>
+                                <input id="EmailAddress" #emailAddressInput="ngModel" type="email" name="EmailAddress" class="form-control" [(ngModel)]="user.emailAddress" required maxlength="256" email>
                                 <validation-messages [formCtrl]="emailAddressInput" [errorDefs]="[{email: l('InvalidEmailAddress')}]"></validation-messages>
                             </div>
 
                             <div class="form-group">
-                                <label>{{l("PhoneNumber")}}</label>
-                                <input type="text" name="PhoneNumber" class="form-control" [(ngModel)]="user.phoneNumber" maxlength="24">
+                                <label for="PhoneNumber">{{l("PhoneNumber")}}</label>
+                                <input id="PhoneNumber" type="text" name="PhoneNumber" class="form-control" [(ngModel)]="user.phoneNumber" maxlength="24">
                             </div>
 
                             <div class="form-group">
-                                <label>{{l("UserName")}} *</label>
-                                <input #userNameInput="ngModel" type="text" [disabled]="!canChangeUserName" name="UserName" class="form-control" [(ngModel)]="user.userName" required maxlength="32">
+                                <label for="UserName">{{l("UserName")}} *</label>
+                                <input id="UserName" #userNameInput="ngModel" type="text" [disabled]="!canChangeUserName" name="UserName" class="form-control" [(ngModel)]="user.userName" required maxlength="32">
                                 <span class="help-block" *ngIf="!canChangeUserName">{{l("CanNotChangeAdminUserName")}}</span>
                                 <validation-messages [formCtrl]="userNameInput"></validation-messages>
                             </div>
@@ -59,8 +59,8 @@
                             </div>
                             <div class="form-group" *ngIf="!setRandomPassword">
                                 <div class="right">
-                                    <label>{{l("Password")}}</label>
-                                    <input type="password" name="Password" #Password="ngModel" id="Password" class="form-control" [(ngModel)]="user.password" [required]="!user.id && !setRandomPassword" maxlength="32"
+                                    <label for="Password">{{l("Password")}}</label>
+                                    <input id="Password" type="password" name="Password" #Password="ngModel" id="Password" class="form-control" [(ngModel)]="user.password" [required]="!user.id && !setRandomPassword" maxlength="32"
                                            [requireDigit]="passwordComplexitySetting.requireDigit" [requireLowercase]="passwordComplexitySetting.requireLowercase"
                                            [requireUppercase]="passwordComplexitySetting.requireUppercase" [requireNonAlphanumeric]="passwordComplexitySetting.requireNonAlphanumeric" [requiredLength]="passwordComplexitySetting.requiredLength"
                                            validateEqual="PasswordRepeat" reverse="true">
@@ -77,8 +77,8 @@
                             </div>
                             <div class="form-group" *ngIf="!setRandomPassword">
                                 <div class="right">
-                                    <label>{{l("PasswordRepeat")}}</label>
-                                    <input type="password" name="PasswordRepeat" #PasswordRepeat="ngModel" class="form-control" [(ngModel)]="user.passwordRepeat" [required]="!user.id && !setRandomPassword" maxlength="32"
+                                    <label for="PasswordRepeat">{{l("PasswordRepeat")}}</label>
+                                    <input id="PasswordRepeat" type="password" name="PasswordRepeat" #PasswordRepeat="ngModel" class="form-control" [(ngModel)]="user.passwordRepeat" [required]="!user.id && !setRandomPassword" maxlength="32"
                                            [requireDigit]="passwordComplexitySetting.requireDigit" [requireLowercase]="passwordComplexitySetting.requireLowercase"
                                            [requireUppercase]="passwordComplexitySetting.requireUppercase" [requireNonAlphanumeric]="passwordComplexitySetting.requireNonAlphanumeric" [requiredLength]="passwordComplexitySetting.requiredLength"
                                            validateEqual="Password" reverse="false">

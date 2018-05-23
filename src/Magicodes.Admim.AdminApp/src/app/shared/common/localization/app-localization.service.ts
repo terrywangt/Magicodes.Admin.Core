@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
 import { LocalizationService } from '@abp/localization/localization.service';
+import { Injectable } from '@angular/core';
 import { AppConsts } from '@shared/AppConsts';
 
 @Injectable()

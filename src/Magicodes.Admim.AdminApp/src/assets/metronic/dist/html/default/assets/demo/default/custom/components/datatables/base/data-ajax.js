@@ -12,9 +12,7 @@ var DatatableRemoteAjaxDemo = function() {
         type: 'remote',
         source: {
           read: {
-            // sample GET method
-            method: 'GET',
-            url: 'https://keenthemes.com/metronic/preview/inc/api/datatables/demos/default.php',
+            url: 'inc/api/datatables/demos/default.php',
             map: function(raw) {
               // sample data mapping
               var dataSet = raw;
@@ -77,6 +75,7 @@ var DatatableRemoteAjaxDemo = function() {
         }, {
           field: 'ShipCountry',
           title: 'Ship Country',
+          attr: {nowrap: 'nowrap'},
           width: 150,
           template: function(row) {
             // callback function support for column rendering
@@ -158,11 +157,11 @@ var DatatableRemoteAjaxDemo = function() {
     });
 
     $('#m_form_status').on('change', function() {
-      datatable.search($(this).val().toLowerCase(), 'Status');
+      datatable.search($(this).val(), 'Status');
     });
 
     $('#m_form_type').on('change', function() {
-      datatable.search($(this).val().toLowerCase(), 'Type');
+      datatable.search($(this).val(), 'Type');
     });
 
     $('#m_form_status, #m_form_type').selectpicker();

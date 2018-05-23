@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Magicodes.Admin.Authorization.Users;
+using Abp.Authorization.Users;
 using Magicodes.Admin.Authorization.Users.Dto;
 using Shouldly;
 using Xunit;
@@ -17,7 +17,7 @@ namespace Magicodes.Admin.Tests.Authorization.Users
             //Assert
             output.TotalCount.ShouldBe(1);
             output.Items.Count.ShouldBe(1);
-            output.Items[0].UserName.ShouldBe(User.AdminUserName);
+            output.Items[0].UserName.ShouldBe(AbpUserBase.AdminUserName);
         }
 
         [Fact]
@@ -38,7 +38,7 @@ namespace Magicodes.Admin.Tests.Authorization.Users
             output.TotalCount.ShouldBe(4);
             output.Items.Count.ShouldBe(2);
             output.Items[0].UserName.ShouldBe("adams_d");
-            output.Items[1].UserName.ShouldBe(User.AdminUserName);
+            output.Items[1].UserName.ShouldBe(AbpUserBase.AdminUserName);
         }
 
         [Fact]
@@ -58,6 +58,17 @@ namespace Magicodes.Admin.Tests.Authorization.Users
             output.TotalCount.ShouldBe(1);
             output.Items.Count.ShouldBe(1);
             output.Items[0].UserName.ShouldBe("adams_d");
+
+            //Act
+            var output2 = await UserAppService.GetUsers(
+                new GetUsersInput
+                {
+                    Permission = "test.permission1"
+                });
+
+            //Assert
+            output2.TotalCount.ShouldBe(3);
+            output2.Items.Count.ShouldBe(3);
         }
     }
 }

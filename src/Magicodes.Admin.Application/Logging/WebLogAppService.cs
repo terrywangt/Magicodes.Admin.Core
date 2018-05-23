@@ -31,7 +31,7 @@ namespace Magicodes.Admin.Logging
                 return new GetLatestWebLogsOutput { LatestWebLogLines = new List<string>() };
             }
 
-            var lastLogFile = directory.GetFiles("*.txt", SearchOption.AllDirectories)
+            var lastLogFile = directory.GetFiles("*.*", SearchOption.AllDirectories)
                                         .OrderByDescending(f => f.LastWriteTime)
                                         .FirstOrDefault();
 

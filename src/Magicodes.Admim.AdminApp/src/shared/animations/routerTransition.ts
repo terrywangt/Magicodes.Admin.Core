@@ -1,4 +1,4 @@
-import { trigger, state, animate, style, transition } from '@angular/core';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 export function appModuleAnimation() {
     return slideFromBottom();

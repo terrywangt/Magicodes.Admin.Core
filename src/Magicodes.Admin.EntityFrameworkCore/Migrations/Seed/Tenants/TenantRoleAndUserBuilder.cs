@@ -41,26 +41,6 @@ namespace Magicodes.Admin.Migrations.Seed.Tenants
             {
                 adminRole = _context.Roles.Add(new Role(_tenantId, StaticRoleNames.Tenants.Admin, StaticRoleNames.Tenants.Admin) { IsStatic = true }).Entity;
                 _context.SaveChanges();
-
-                //Grant all permissions to admin role
-                var permissions = PermissionFinder
-                    .GetAllPermissions(new AppAuthorizationProvider(false))
-                    .Where(p => p.MultiTenancySides.HasFlag(MultiTenancySides.Tenant))
-                    .ToList();
-
-                foreach (var permission in permissions)
-                {
-                    _context.Permissions.Add(
-                        new RolePermissionSetting
-                        {
-                            TenantId = _tenantId,
-                            Name = permission.Name,
-                            IsGranted = true,
-                            RoleId = adminRole.Id
-                        });
-                }
-
-                _context.SaveChanges();
             }
 
             //User role

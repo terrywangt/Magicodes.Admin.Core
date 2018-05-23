@@ -20,6 +20,10 @@ declare var mLayout: any; // Related to Metronic
 declare var mUtil: any; // Related to Metronic
 
 interface JQuery {
+    mOffcanvas(...any): any;
+}
+
+interface JQuery {
     Jcrop(...any): any;
 }
 

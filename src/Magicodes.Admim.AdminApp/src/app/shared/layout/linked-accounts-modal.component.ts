@@ -1,13 +1,13 @@
-import { Component, ViewChild, Injector, Output, EventEmitter } from '@angular/core';
-import { ModalDirective } from 'ngx-bootstrap';
-import { AppComponentBase } from '@shared/common/app-component-base';
-import { UserLinkServiceProxy, LinkedUserDto, UnlinkUserInput } from '@shared/service-proxies/service-proxies';
-import { LinkAccountModalComponent } from './link-account-modal.component';
 import { AbpMultiTenancyService } from '@abp/multi-tenancy/abp-multi-tenancy.service';
+import { Component, EventEmitter, Injector, Output, ViewChild } from '@angular/core';
 import { LinkedAccountService } from '@app/shared/layout/linked-account.service';
-import { DataTable } from 'primeng/components/datatable/datatable';
-import { Paginator } from 'primeng/components/paginator/paginator';
+import { AppComponentBase } from '@shared/common/app-component-base';
+import { LinkedUserDto, UnlinkUserInput, UserLinkServiceProxy } from '@shared/service-proxies/service-proxies';
+import { ModalDirective } from 'ngx-bootstrap';
 import { LazyLoadEvent } from 'primeng/components/common/lazyloadevent';
+import { Paginator } from 'primeng/components/paginator/paginator';
+import { Table } from 'primeng/components/table/table';
+import { LinkAccountModalComponent } from './link-account-modal.component';
 
 @Component({
     selector: 'linkedAccountsModal',
@@ -17,7 +17,7 @@ export class LinkedAccountsModalComponent extends AppComponentBase {
 
     @ViewChild('linkedAccountsModal') modal: ModalDirective;
     @ViewChild('linkAccountModal') linkAccountModal: LinkAccountModalComponent;
-    @ViewChild('dataTable') dataTable: DataTable;
+    @ViewChild('dataTable') dataTable: Table;
     @ViewChild('paginator') paginator: Paginator;
 
     @Output() modalClose: EventEmitter<any> = new EventEmitter<any>();
@@ -34,16 +34,16 @@ export class LinkedAccountsModalComponent extends AppComponentBase {
     }
 
     getLinkedUsers(event?: LazyLoadEvent) {
-        this.primengDatatableHelper.showLoadingIndicator();
+        this.primengTableHelper.showLoadingIndicator();
 
         this._userLinkService.getLinkedUsers(
-            this.primengDatatableHelper.getMaxResultCount(this.paginator, event),
-            this.primengDatatableHelper.getSkipCount(this.paginator, event),
-            this.primengDatatableHelper.getSorting(this.dataTable))
+            this.primengTableHelper.getMaxResultCount(this.paginator, event),
+            this.primengTableHelper.getSkipCount(this.paginator, event),
+            this.primengTableHelper.getSorting(this.dataTable))
             .subscribe(result => {
-                this.primengDatatableHelper.totalRecordsCount = result.totalCount;
-                this.primengDatatableHelper.records = result.items;
-                this.primengDatatableHelper.hideLoadingIndicator();
+                this.primengTableHelper.totalRecordsCount = result.totalCount;
+                this.primengTableHelper.records = result.items;
+                this.primengTableHelper.hideLoadingIndicator();
             });
     }
 

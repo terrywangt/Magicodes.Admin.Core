@@ -1,18 +1,12 @@
-import { Component, ViewChild, Injector, Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Injector, Output, ViewChild } from '@angular/core';
 import { AppComponentBase } from '@shared/common/app-component-base';
-import { ModalDirective } from 'ngx-bootstrap';
-import {
-    NameValueDto,
-    UsersToOrganizationUnitInput,
-    OrganizationUnitServiceProxy,
-    FindOrganizationUnitUsersInput
-
-} from '@shared/service-proxies/service-proxies';
-import { DataTable } from 'primeng/components/datatable/datatable';
-import { Paginator } from 'primeng/components/paginator/paginator';
-import { LazyLoadEvent } from 'primeng/components/common/lazyloadevent';
-import { IUsersWithOrganizationUnit } from './users-with-organization-unit';
+import { FindOrganizationUnitUsersInput, NameValueDto, OrganizationUnitServiceProxy, UsersToOrganizationUnitInput } from '@shared/service-proxies/service-proxies';
 import * as _ from 'lodash';
+import { ModalDirective } from 'ngx-bootstrap';
+import { LazyLoadEvent } from 'primeng/components/common/lazyloadevent';
+import { Paginator } from 'primeng/components/paginator/paginator';
+import { Table } from 'primeng/components/table/table';
+import { IUsersWithOrganizationUnit } from './users-with-organization-unit';
 
 @Component({
     selector: 'addMemberModal',
@@ -25,7 +19,7 @@ export class AddMemberModalComponent extends AppComponentBase {
     @Output() membersAdded: EventEmitter<IUsersWithOrganizationUnit> = new EventEmitter<IUsersWithOrganizationUnit>();
 
     @ViewChild('modal') modal: ModalDirective;
-    @ViewChild('dataTable') dataTable: DataTable;
+    @ViewChild('dataTable') dataTable: Table;
     @ViewChild('paginator') paginator: Paginator;
 
     isShown = false;
@@ -68,26 +62,26 @@ export class AddMemberModalComponent extends AppComponentBase {
 
     getRecords(event?: LazyLoadEvent): void {
 
-        if (this.primengDatatableHelper.shouldResetPaging(event)) {
+        if (this.primengTableHelper.shouldResetPaging(event)) {
             this.paginator.changePage(0);
 
             return;
         }
 
-        this.primengDatatableHelper.showLoadingIndicator();
+        this.primengTableHelper.showLoadingIndicator();
 
         const input = new FindOrganizationUnitUsersInput();
         input.organizationUnitId = this.organizationUnitId;
         input.filter = this.filterText;
-        input.skipCount = this.primengDatatableHelper.getSkipCount(this.paginator, event);
-        input.maxResultCount = this.primengDatatableHelper.getMaxResultCount(this.paginator, event);
+        input.skipCount = this.primengTableHelper.getSkipCount(this.paginator, event);
+        input.maxResultCount = this.primengTableHelper.getMaxResultCount(this.paginator, event);
 
         this._organizationUnitService
             .findUsers(input)
             .subscribe(result => {
-                this.primengDatatableHelper.totalRecordsCount = result.totalCount;
-                this.primengDatatableHelper.records = result.items;
-                this.primengDatatableHelper.hideLoadingIndicator();
+                this.primengTableHelper.totalRecordsCount = result.totalCount;
+                this.primengTableHelper.records = result.items;
+                this.primengTableHelper.hideLoadingIndicator();
             });
     }
 

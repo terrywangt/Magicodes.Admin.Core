@@ -1,4 +1,4 @@
-import { Directive, ElementRef, AfterViewInit } from '@angular/core';
+import { AfterViewInit, Directive, ElementRef } from '@angular/core';
 
 @Directive({
     selector: '[jq-plugin]'

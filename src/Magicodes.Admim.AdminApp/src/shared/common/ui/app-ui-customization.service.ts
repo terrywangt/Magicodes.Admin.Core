@@ -3,6 +3,10 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class AppUiCustomizationService {
 
+    getTheme() {
+      return  this.getSetting("App.UiManagement.Theme");
+    }
+
     getContainerClass() {
         return this.getSetting('App.UiManagement.LayoutType') === 'boxed'
             ? 'm-container--responsive'

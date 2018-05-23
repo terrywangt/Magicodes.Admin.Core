@@ -1,10 +1,9 @@
-import { Component, Injector, OnInit, ViewEncapsulation } from '@angular/core';
-import { AppMenu } from './app-menu';
-
 import { PermissionCheckerService } from '@abp/auth/permission-checker.service';
+import { Component, Injector, OnInit, ViewEncapsulation } from '@angular/core';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { AppSessionService } from '@shared/common/session/app-session.service';
 import { AppUiCustomizationService } from '@shared/common/ui/app-ui-customization.service';
+import { AppMenu } from './app-menu';
 import { AppNavigationService } from './app-navigation.service';
 
 @Component({

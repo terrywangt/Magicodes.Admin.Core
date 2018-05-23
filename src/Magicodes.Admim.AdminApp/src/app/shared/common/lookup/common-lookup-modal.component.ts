@@ -1,12 +1,12 @@
-import { Component, ViewChild, Injector, Output, EventEmitter } from '@angular/core';
-import { AppComponentBase } from '@shared/common/app-component-base';
-import { ModalDirective } from 'ngx-bootstrap';
-import { Observable } from 'rxjs/Observable';
-import { PagedResultDtoOfNameValueDto, NameValueDto } from '@shared/service-proxies/service-proxies';
+import { Component, EventEmitter, Injector, Output, ViewChild } from '@angular/core';
 import { AppConsts } from '@shared/AppConsts';
-import { DataTable } from 'primeng/components/datatable/datatable';
-import { Paginator } from 'primeng/components/paginator/paginator';
+import { AppComponentBase } from '@shared/common/app-component-base';
+import { NameValueDto, PagedResultDtoOfNameValueDto } from '@shared/service-proxies/service-proxies';
+import { ModalDirective } from 'ngx-bootstrap';
 import { LazyLoadEvent } from 'primeng/components/common/lazyloadevent';
+import { Paginator } from 'primeng/components/paginator/paginator';
+import { Table } from 'primeng/components/table/table';
+import { Observable } from 'rxjs/Observable';
 
 export interface ICommonLookupModalOptions {
     title?: string;
@@ -36,7 +36,7 @@ export class CommonLookupModalComponent extends AppComponentBase {
     @Output() itemSelected: EventEmitter<NameValueDto> = new EventEmitter<NameValueDto>();
 
     @ViewChild('modal') modal: ModalDirective;
-    @ViewChild('dataTable') dataTable: DataTable;
+    @ViewChild('dataTable') dataTable: Table;
     @ViewChild('paginator') paginator: Paginator;
 
     options: ICommonLookupModalOptions;
@@ -98,22 +98,22 @@ export class CommonLookupModalComponent extends AppComponentBase {
     }
 
     getRecords(event?: LazyLoadEvent): void {
-        const maxResultCount = this.primengDatatableHelper.getMaxResultCount(this.paginator, event);
-        const skipCount = this.primengDatatableHelper.getSkipCount(this.paginator, event);
-        if (this.primengDatatableHelper.shouldResetPaging(event)) {
+        const maxResultCount = this.primengTableHelper.getMaxResultCount(this.paginator, event);
+        const skipCount = this.primengTableHelper.getSkipCount(this.paginator, event);
+        if (this.primengTableHelper.shouldResetPaging(event)) {
             this.paginator.changePage(0);
 
             return;
         }
 
-        this.primengDatatableHelper.showLoadingIndicator();
+        this.primengTableHelper.showLoadingIndicator();
 
         this.options
             .dataSource(skipCount, maxResultCount, this.filterText, this.tenantId)
             .subscribe(result => {
-                this.primengDatatableHelper.totalRecordsCount = result.totalCount;
-                this.primengDatatableHelper.records = result.items;
-                this.primengDatatableHelper.hideLoadingIndicator();
+                this.primengTableHelper.totalRecordsCount = result.totalCount;
+                this.primengTableHelper.records = result.items;
+                this.primengTableHelper.hideLoadingIndicator();
             });
     }
 

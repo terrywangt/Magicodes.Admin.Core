@@ -1,23 +1,17 @@
-import { Component, EventEmitter, Injector, ViewChild, OnInit, AfterViewInit, ViewEncapsulation, Output } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Injector, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
+import { CommonLookupModalComponent } from '@app/shared/common/lookup/common-lookup-modal.component';
+import { AppConsts } from '@shared/AppConsts';
+import { AppChatMessageReadState, AppChatSide, AppFriendshipState } from '@shared/AppEnums';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { AppSessionService } from '@shared/common/session/app-session.service';
-import { QuickSideBarChat } from 'app/shared/layout/chat/QuickSideBarChat';
 import { DomHelper } from '@shared/helpers/DomHelper';
-import {
-    FriendshipServiceProxy, ChatServiceProxy, CommonLookupServiceProxy, ProfileServiceProxy,
-    FriendDto, UserLoginInfoDto, BlockUserInput, UnblockUserInput, ChatMessageDto, ChatMessageDtoReadState,
-    MarkAllUnreadMessagesOfUserAsReadInput, NameValueDto, FindUsersInput, CreateFriendshipRequestInput,
-    CreateFriendshipRequestByUserNameInput, FriendDtoState, ChatMessageDtoSide
-} from '@shared/service-proxies/service-proxies';
-import { ChatFriendDto } from './ChatFriendDto';
-import { CommonLookupModalComponent } from '@app/shared/common/lookup/common-lookup-modal.component';
+import { BlockUserInput, ChatMessageDtoSide, ChatServiceProxy, CommonLookupServiceProxy, CreateFriendshipRequestByUserNameInput, CreateFriendshipRequestInput, FindUsersInput, FriendDto, FriendDtoState, FriendshipServiceProxy, MarkAllUnreadMessagesOfUserAsReadInput, NameValueDto, ProfileServiceProxy, UnblockUserInput, UserLoginInfoDto } from '@shared/service-proxies/service-proxies';
 import { LocalStorageService } from '@shared/utils/local-storage.service';
-import { ChatSignalrService } from './chat-signalr.service';
-import { AppChatMessageReadState, AppChatSide, AppFriendshipState } from '@shared/AppEnums';
-import { AppConsts } from '@shared/AppConsts';
-
-import * as moment from 'moment';
+import { QuickSideBarChat } from 'app/shared/layout/chat/QuickSideBarChat';
 import * as _ from 'lodash';
+import * as moment from 'moment';
+import { ChatFriendDto } from './ChatFriendDto';
+import { ChatSignalrService } from './chat-signalr.service';
 
 @Component({
     templateUrl: './chat-bar.component.html',
@@ -556,7 +550,7 @@ export class ChatBarComponent extends AppComponentBase implements OnInit, AfterV
 
         abp.event.on('app.chat.friendshipRequestReceived', (data, isOwnRequest) => {
             if (!isOwnRequest) {
-                abp.notify.info(abp.utils.formatString(this.l('UserSendYouAFriendshipRequest'), data.friendUserName));
+                abp.notify.info(this.l('UserSendYouAFriendshipRequest', data.friendUserName));
             }
 
             if (!_.filter(this.friends, f => f.friendUserId === data.friendUserId && f.friendTenantId === data.friendTenantId).length) {

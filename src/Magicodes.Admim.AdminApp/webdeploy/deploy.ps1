@@ -21,7 +21,10 @@ $target = [io.Path]::Combine($rootDir, "dist")
 #--------------------------------------------------------------------------------------------------------------------------------------------
 
 #----------------------------------------------------编译前端脚本----------------------------------------------------------------------------
-npm run prod
+npm run publish
+
+$webConfigPath = [io.Path]::Combine($rootDir, "web.config")
+Copy-Item -Path $webConfigPath -Destination $target -Force
 #--------------------------------------------------------------------------------------------------------------------------------------------
 
 #----------------------------------------------------设置参数----------------------------------------------------------------------------------
@@ -30,7 +33,12 @@ if (![String]::IsNullOrEmpty($configPath)) {
 
     $config = @{}
     $path = [io.Path]::Combine($directorypath, $configPath)
- 
+    if(![io.File]::Exists($path))
+    {
+        $host.UI.WriteErrorLine('配置文件不存在，请定义！')
+        return;
+    }
+
     $payload = Get-Content -Path $path |
         Where-Object { $_ -like '*=*' } |
         ForEach-Object {

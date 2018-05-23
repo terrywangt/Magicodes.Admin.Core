@@ -3,6 +3,7 @@ using Abp.Application.Features;
 using Abp.Auditing;
 using Abp.Authorization;
 using Abp.Authorization.Users;
+using Abp.EntityHistory;
 using Abp.Localization;
 using Abp.Notifications;
 using Abp.Organizations;
@@ -116,6 +117,7 @@ namespace Magicodes.Admin
 
             //AuditLog
             configuration.CreateMap<AuditLog, AuditLogListDto>();
+            configuration.CreateMap<EntityChange, EntityChangeListDto>();
 
             //Friendship
             configuration.CreateMap<Friendship, FriendDto>();

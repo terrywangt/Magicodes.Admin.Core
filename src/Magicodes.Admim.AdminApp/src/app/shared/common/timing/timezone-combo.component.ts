@@ -1,6 +1,6 @@
-import { Component, OnInit, ElementRef, ViewChild, Injector, Input, Output, EventEmitter } from '@angular/core';
-import { TimingServiceProxy, NameValueDto, DefaultTimezoneScope } from '@shared/service-proxies/service-proxies';
+import { Component, ElementRef, EventEmitter, Injector, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { AppComponentBase } from '@shared/common/app-component-base';
+import { DefaultTimezoneScope, NameValueDto, TimingServiceProxy } from '@shared/service-proxies/service-proxies';
 
 @Component({
     selector: 'timezone-combo',

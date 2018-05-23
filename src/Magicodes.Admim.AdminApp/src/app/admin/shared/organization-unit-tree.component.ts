@@ -1,7 +1,7 @@
-import { Component, AfterViewInit, ElementRef, Injector } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Injector } from '@angular/core';
 import { AppComponentBase } from '@shared/common/app-component-base';
-import { OrganizationUnitDto } from '@shared/service-proxies/service-proxies';
 import { HtmlHelper } from '@shared/helpers/HtmlHelper';
+import { OrganizationUnitDto } from '@shared/service-proxies/service-proxies';
 import * as _ from 'lodash';
 
 export interface IOrganizationUnitsTreeComponentData {

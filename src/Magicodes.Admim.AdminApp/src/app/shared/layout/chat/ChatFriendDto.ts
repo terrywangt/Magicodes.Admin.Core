@@ -1,4 +1,4 @@
-import { FriendDto, ChatMessageDto } from '@shared/service-proxies/service-proxies';
+import { ChatMessageDto, FriendDto } from '@shared/service-proxies/service-proxies';
 
 export class ChatFriendDto extends FriendDto {
     messages: ChatMessageDto[];

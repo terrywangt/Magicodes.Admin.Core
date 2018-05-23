@@ -1,11 +1,11 @@
 import { Component, Injector, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AccountServiceProxy, PasswordComplexitySetting, ProfileServiceProxy } from '@shared/service-proxies/service-proxies';
-import { AppComponentBase } from '@shared/common/app-component-base';
-import { LoginService } from '../login/login.service';
-import { accountModuleAnimation } from '@shared/animations/routerTransition';
-import { RegisterModel } from './register.model';
 import { AppConsts } from '@shared/AppConsts';
+import { accountModuleAnimation } from '@shared/animations/routerTransition';
+import { AppComponentBase } from '@shared/common/app-component-base';
+import { AccountServiceProxy, PasswordComplexitySetting, ProfileServiceProxy } from '@shared/service-proxies/service-proxies';
+import { LoginService } from '../login/login.service';
+import { RegisterModel } from './register.model';
 
 @Component({
     templateUrl: './register.component.html',

@@ -8,26 +8,26 @@
                     <h5 class="modal-title">
                         <span>{{l("LinkNewAccount")}}</span>
                     </h5>
-                    <button type="button" class="close" (click)="close()" aria-label="Close">
+                    <button type="button" class="close" (click)="close()" [attr.aria-label]="l('Close')">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
 
                 <div class="modal-body">
                     <div class="form-group">
-                        <label>{{l("TenancyName")}}</label>
-                        <input #tenancyNameInput="ngModel" type="text" name="TenancyName" class="form-control" [ngClass]="{'edited': linkUser.tenancyName}" [(ngModel)]="linkUser.tenancyName" maxlength="64">
+                        <label for="TenancyName">{{l("TenancyName")}}</label>
+                        <input id="TenancyName" #tenancyNameInput="ngModel" type="text" name="TenancyName" class="form-control" [ngClass]="{'edited': linkUser.tenancyName}" [(ngModel)]="linkUser.tenancyName" maxlength="64">
                     </div>
 
                     <div class="form-group">
-                        <label>{{l("UserName")}} *</label>
-                        <input #usernameOrEmailAddressInput="ngModel" class="form-control" type="text" name="UserName" [ngClass]="{'edited': linkUser.usernameOrEmailAddress}" [(ngModel)]="linkUser.usernameOrEmailAddress" required maxlength="256">
+                        <label for="UserName">{{l("UserName")}} *</label>
+                        <input id="UserName" #usernameOrEmailAddressInput="ngModel" class="form-control" type="text" name="UserName" [ngClass]="{'edited': linkUser.usernameOrEmailAddress}" [(ngModel)]="linkUser.usernameOrEmailAddress" required maxlength="256">
                         <validation-messages [formCtrl]="usernameOrEmailAddressInput"></validation-messages>
                     </div>
 
                     <div class="form-group">
-                        <label>{{l("Password")}} *</label>
-                        <input #passwordInput="ngModel" type="password" [ngClass]="{'edited': linkUser.password}" name="Password" class="form-control" [(ngModel)]="linkUser.password" required maxlength="128">
+                        <label for="Password">{{l("Password")}} *</label>
+                        <input id="Password" #passwordInput="ngModel" type="password" [ngClass]="{'edited': linkUser.password}" name="Password" class="form-control" [(ngModel)]="linkUser.password" required maxlength="128">
                         <validation-messages [formCtrl]="passwordInput"></validation-messages>
                     </div>
                 </div>

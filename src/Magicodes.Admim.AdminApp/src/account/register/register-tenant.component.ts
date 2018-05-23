@@ -1,24 +1,12 @@
-import { Component, Injector, OnInit, AfterViewInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { AfterViewInit, Component, Injector, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AppConsts } from '@shared/AppConsts';
-
-import {
-    TenantRegistrationServiceProxy,
-    RegisterTenantOutput,
-    PasswordComplexitySetting,
-    ProfileServiceProxy,
-    EditionSelectDto,
-    PaymentServiceProxy
-} from '@shared/service-proxies/service-proxies';
-import { AppComponentBase } from '@shared/common/app-component-base';
+import { PaymentPeriodType, SubscriptionPaymentGatewayType, SubscriptionStartType } from '@shared/AppEnums';
 import { accountModuleAnimation } from '@shared/animations/routerTransition';
-import { TenantRegistrationHelperService } from './tenant-registration-helper.service';
+import { AppComponentBase } from '@shared/common/app-component-base';
+import { EditionSelectDto, PasswordComplexitySetting, PaymentServiceProxy, ProfileServiceProxy, RegisterTenantOutput, TenantRegistrationServiceProxy } from '@shared/service-proxies/service-proxies';
 import { RegisterTenantModel } from './register-tenant.model';
-import {
-    SubscriptionStartType,
-    PaymentPeriodType,
-    SubscriptionPaymentGatewayType
-} from '@shared/AppEnums';
+import { TenantRegistrationHelperService } from './tenant-registration-helper.service';
 
 @Component({
     templateUrl: './register-tenant.component.html',

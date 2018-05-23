@@ -1,0 +1,415 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "abp-zero-template": {
+      "root": "",
+      "sourceRoot": "src",
+      "projectType": "application",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist",
+            "index": "src/index.html",
+            "main": "src/main.ts",
+            "tsConfig": "src/tsconfig.json",
+            "polyfills": "src/polyfills.ts",
+            "assets": [
+              "src/assets",
+              "src/favicon.ico",
+              {
+                "glob": "abp.signalr.js",
+                "input": "node_modules/abp-web-resources/Abp/Framework/scripts/libs",
+                "output": "/assets/abp"
+              },
+              {
+                "glob": "**.*",
+                "input": "node_modules/bootstrap-select/dist/js/i18n",
+                "output": "/assets/localization/bootstrap-select"
+              },
+              {
+                "glob": "**.*",
+                "input": "node_modules/timeago/locales",
+                "output": "/assets/localization/jquery-timeago"
+              }
+            ],
+            "styles": [
+              "node_modules/tether/dist/css/tether.css",
+              "node_modules/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css",
+              "node_modules/prismjs/themes/prism.css",
+              "node_modules/bootstrap-timepicker/css/bootstrap-timepicker.min.css",
+              "node_modules/bootstrap-daterangepicker/daterangepicker.css",
+              "node_modules/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.css",
+              "node_modules/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.css",
+              "node_modules/bootstrap-select/dist/css/bootstrap-select.css",
+              "node_modules/select2/dist/css/select2.css",
+              "node_modules/rangeslider.js/dist/rangeslider.css",
+              "node_modules/ion-rangeslider/css/ion.rangeSlider.css",
+              "node_modules/ion-rangeslider/css/ion.rangeSlider.skinFlat.css",
+              "node_modules/dropzone/dist/dropzone.css",
+              "node_modules/summernote/dist/summernote.css",
+              "node_modules/bootstrap-markdown/css/bootstrap-markdown.min.css",
+              "node_modules/animate.css/animate.min.css",
+              "node_modules/toastr/build/toastr.css",
+              "node_modules/jstree/dist/themes/default/style.css",
+              "node_modules/morris.js/morris.css",
+              "node_modules/chartist/dist/chartist.css",
+              "node_modules/socicon/css/socicon.css",
+              "node_modules/font-awesome/css/font-awesome.css",
+              "node_modules/quill/dist/quill.core.css",
+              "node_modules/quill/dist/quill.snow.css",
+              "node_modules/famfamfam-flags/dist/sprite/famfamfam-flags.css",
+              "node_modules/primeng/resources/primeng.min.css",
+              "node_modules/primeng/resources/themes/bootstrap/theme.css",
+              "node_modules/bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.min.css",
+              "src/assets/metronic/src/vendors/line-awesome/css/line-awesome.css",
+              "src/assets/metronic/src/vendors/flaticon/css/flaticon.css",
+              "src/assets/metronic/src/vendors/metronic/css/styles.css",
+              "src/assets/Jcrop/css/Jcrop.css",
+              "src/assets/primeng/file-upload/css/primeng.file-upload.css",
+              "src/assets/primeng/autocomplete/css/primeng.autocomplete.css",
+              "src/app/shared/core.less",
+              "src/app/shared/layout/layout.less",
+              "src/assets/fonts/fonts-poppins.css",
+              "src/assets/fonts/fonts-roboto.css",
+              "src/styles.css"
+            ],
+            "scripts": [
+              "node_modules/jquery/dist/jquery.js",
+              "node_modules/jquery-validation/dist/jquery.validate.js",
+              "node_modules/popper.js/dist/umd/popper.js",
+              "node_modules/bootstrap/dist/js/bootstrap.js",
+              "node_modules/bootstrap-hover-dropdown/bootstrap-hover-dropdown.js",
+              "node_modules/jquery-slimscroll/jquery.slimscroll.js",
+              "node_modules/js-cookie/src/js.cookie.js",
+              "node_modules/jquery.uniform/dist/js/jquery.uniform.standalone.js",
+              "node_modules/jquery-form/src/jquery.form.js",
+              "node_modules/timeago/jquery.timeago.js",
+              "node_modules/signalr/jquery.signalR.js",
+              "node_modules/localforage/dist/localforage.js",
+              "node_modules/morris.js/morris.js",
+              "node_modules/chartist/dist/chartist.js",
+              "node_modules/raphael/raphael.js",
+              "node_modules/jquery-sparkline/jquery.sparkline.js",
+              "node_modules/jstree/dist/jstree.js",
+              "node_modules/bootstrap-switch/dist/js/bootstrap-switch.js",
+              "node_modules/spin.js/spin.js",
+              "node_modules/spin.js/jquery.spin.js",
+              "node_modules/block-ui/jquery.blockUI.js",
+              "node_modules/sweetalert/dist/sweetalert.min.js",
+              "node_modules/toastr/toastr.js",
+              "node_modules/moment/min/moment-with-locales.js",
+              "node_modules/moment-timezone/builds/moment-timezone-with-data.js",
+              "node_modules/bootstrap-daterangepicker/daterangepicker.js",
+              "node_modules/bootstrap-select/dist/js/bootstrap-select.js",
+              "node_modules/underscore/underscore.js",
+              "node_modules/mustache/mustache.js",
+              "node_modules/tether/dist/js/tether.js",
+              "node_modules/push.js/bin/push.js",
+              "node_modules/js-url/url.js",
+              "node_modules/abp-web-resources/Abp/Framework/scripts/abp.js",
+              "node_modules/abp-web-resources/Abp/Framework/scripts/libs/abp.jquery.js",
+              "node_modules/abp-web-resources/Abp/Framework/scripts/libs/abp.toastr.js",
+              "node_modules/abp-web-resources/Abp/Framework/scripts/libs/abp.blockUI.js",
+              "node_modules/abp-web-resources/Abp/Framework/scripts/libs/abp.spin.js",
+              "node_modules/abp-web-resources/Abp/Framework/scripts/libs/abp.sweet-alert.js",
+              "node_modules/abp-web-resources/Abp/Framework/scripts/libs/abp.moment.js",
+              "node_modules/select2/dist/js/select2.js",
+              "node_modules/bootstrap-notify/bootstrap-notify.min.js",
+              "node_modules/chart.js/dist/Chart.bundle.min.js",
+              "node_modules/bootstrap-markdown/js/bootstrap-markdown.js",
+              "node_modules/bootstrap-timepicker/js/bootstrap-timepicker.min.js",
+              "node_modules/jquery-mousewheel/jquery.mousewheel.js",
+              "node_modules/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.js",
+              "node_modules/flot/jquery.flot.js",
+              "node_modules/flot/jquery.flot.pie.js",
+              "node_modules/flot/jquery.flot.resize.js",
+              "node_modules/flot/jquery.flot.categories.js",
+              "node_modules/flot/jquery.flot.time.js",
+              "node_modules/waypoints/lib/jquery.waypoints.min.js",
+              "node_modules/jquery.flot.tooltip/js/jquery.flot.tooltip.min.js",
+              "node_modules/topojson/dist/topojson.min.js",
+              "node_modules/easy-pie-chart/dist/easypiechart.js",
+              "node_modules/jquery.inputmask/dist/jquery.inputmask.bundle.js",
+              "node_modules/quill/dist/quill.js",
+              "node_modules/bootstrap4-datetimepicker/build/js/bootstrap-datetimepicker.min.js",
+              "src/assets/bootstrap4-datepicker/defaults.js",
+              "src/assets/Jcrop/js/jquery.color.js",
+              "src/assets/Jcrop/js/Jcrop.js",
+              "src/assets/metronic/src/js/framework/base/app.js",
+              "src/assets/metronic/src/js/framework/base/util.js",
+              "src/assets/metronic/src/js/framework/components/general/animate.js",
+              "src/assets/metronic/src/js/framework/components/general/datatable.js",
+              "src/assets/metronic/src/js/framework/components/general/dropdown.js",
+              "src/assets/metronic/src/js/framework/components/general/example.js",
+              "src/assets/metronic/src/js/framework/components/general/header.js",
+              "src/assets/metronic/src/js/framework/components/general/menu.js",
+              "src/assets/metronic/src/js/framework/components/general/messenger.js",
+              "src/assets/metronic/src/js/framework/components/general/offcanvas.js",
+              "src/assets/metronic/src/js/framework/components/general/portlet.js",
+              "src/assets/metronic/src/js/framework/components/general/quicksearch.js",
+              "src/assets/metronic/src/js/framework/components/general/scroll-top.js",
+              "src/assets/metronic/src/js/framework/components/general/toggle.js",
+              "src/assets/metronic/src/js/framework/components/plugins/base/bootstrap-notify.init.js",
+              "src/assets/metronic/src/js/framework/components/plugins/base/toastr.init.js",
+              "src/assets/metronic/src/js/framework/components/plugins/charts/chart.init.js",
+              "src/assets/metronic/src/js/framework/components/plugins/forms/bootstrap-daterangepicker.init.js",
+              "src/assets/metronic/src/js/framework/components/plugins/forms/bootstrap-markdown.init.js",
+              "src/assets/metronic/src/js/framework/components/plugins/forms/bootstrap-switch.init.js",
+              "src/assets/metronic/src/js/framework/components/plugins/forms/bootstrap-timepicker.init.js",
+              "src/assets/metronic/src/js/framework/components/plugins/forms/jquery-validation.init.js",
+              "src/assets/metronic/src/js/app/base/main.js",
+              "src/assets/metronic/src/js/demo/default/base/layout.js"
+            ]
+          },
+          "configurations": {
+            "hmr": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.hmr.ts"
+                }
+              ]
+            },
+            "production": {
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "abp-zero-template:build"
+          },
+          "configurations": {
+            "hmr": {
+              "browserTarget": "abp-zero-template:build:hmr"
+            },
+            "production": {
+              "browserTarget": "abp-zero-template:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "abp-zero-template:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "src/test.ts",
+            "karmaConfig": "./karma.conf.js",
+            "polyfills": "src/polyfills.ts",
+            "scripts": [
+              "node_modules/jquery/dist/jquery.js",
+              "node_modules/jquery-validation/dist/jquery.validate.js",
+              "node_modules/popper.js/dist/umd/popper.js",
+              "node_modules/bootstrap/dist/js/bootstrap.js",
+              "node_modules/bootstrap-hover-dropdown/bootstrap-hover-dropdown.js",
+              "node_modules/jquery-slimscroll/jquery.slimscroll.js",
+              "node_modules/js-cookie/src/js.cookie.js",
+              "node_modules/jquery.uniform/dist/js/jquery.uniform.standalone.js",
+              "node_modules/jquery-form/src/jquery.form.js",
+              "node_modules/timeago/jquery.timeago.js",
+              "node_modules/signalr/jquery.signalR.js",
+              "node_modules/localforage/dist/localforage.js",
+              "node_modules/morris.js/morris.js",
+              "node_modules/chartist/dist/chartist.js",
+              "node_modules/raphael/raphael.js",
+              "node_modules/jquery-sparkline/jquery.sparkline.js",
+              "node_modules/jstree/dist/jstree.js",
+              "node_modules/bootstrap-switch/dist/js/bootstrap-switch.js",
+              "node_modules/spin.js/spin.js",
+              "node_modules/spin.js/jquery.spin.js",
+              "node_modules/block-ui/jquery.blockUI.js",
+              "node_modules/sweetalert/dist/sweetalert.min.js",
+              "node_modules/toastr/toastr.js",
+              "node_modules/moment/min/moment-with-locales.js",
+              "node_modules/moment-timezone/builds/moment-timezone-with-data.js",
+              "node_modules/bootstrap-daterangepicker/daterangepicker.js",
+              "node_modules/bootstrap-select/dist/js/bootstrap-select.js",
+              "node_modules/underscore/underscore.js",
+              "node_modules/mustache/mustache.js",
+              "node_modules/tether/dist/js/tether.js",
+              "node_modules/push.js/bin/push.js",
+              "node_modules/js-url/url.js",
+              "node_modules/abp-web-resources/Abp/Framework/scripts/abp.js",
+              "node_modules/abp-web-resources/Abp/Framework/scripts/libs/abp.jquery.js",
+              "node_modules/abp-web-resources/Abp/Framework/scripts/libs/abp.toastr.js",
+              "node_modules/abp-web-resources/Abp/Framework/scripts/libs/abp.blockUI.js",
+              "node_modules/abp-web-resources/Abp/Framework/scripts/libs/abp.spin.js",
+              "node_modules/abp-web-resources/Abp/Framework/scripts/libs/abp.sweet-alert.js",
+              "node_modules/abp-web-resources/Abp/Framework/scripts/libs/abp.moment.js",
+              "node_modules/select2/dist/js/select2.js",
+              "node_modules/bootstrap-notify/bootstrap-notify.min.js",
+              "node_modules/chart.js/dist/Chart.bundle.min.js",
+              "node_modules/bootstrap-markdown/js/bootstrap-markdown.js",
+              "node_modules/bootstrap-timepicker/js/bootstrap-timepicker.min.js",
+              "node_modules/jquery-mousewheel/jquery.mousewheel.js",
+              "node_modules/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.js",
+              "node_modules/flot/jquery.flot.js",
+              "node_modules/flot/jquery.flot.pie.js",
+              "node_modules/flot/jquery.flot.resize.js",
+              "node_modules/flot/jquery.flot.categories.js",
+              "node_modules/flot/jquery.flot.time.js",
+              "node_modules/waypoints/lib/jquery.waypoints.min.js",
+              "node_modules/jquery.flot.tooltip/js/jquery.flot.tooltip.min.js",
+              "node_modules/topojson/dist/topojson.min.js",
+              "node_modules/easy-pie-chart/dist/easypiechart.js",
+              "node_modules/jquery.inputmask/dist/jquery.inputmask.bundle.js",
+              "node_modules/quill/dist/quill.js",
+              "node_modules/bootstrap4-datetimepicker/build/js/bootstrap-datetimepicker.min.js",
+              "src/assets/bootstrap4-datepicker/defaults.js",
+              "src/assets/Jcrop/js/jquery.color.js",
+              "src/assets/Jcrop/js/Jcrop.js",
+              "src/assets/metronic/src/js/framework/base/app.js",
+              "src/assets/metronic/src/js/framework/base/util.js",
+              "src/assets/metronic/src/js/framework/components/general/animate.js",
+              "src/assets/metronic/src/js/framework/components/general/datatable.js",
+              "src/assets/metronic/src/js/framework/components/general/dropdown.js",
+              "src/assets/metronic/src/js/framework/components/general/example.js",
+              "src/assets/metronic/src/js/framework/components/general/header.js",
+              "src/assets/metronic/src/js/framework/components/general/menu.js",
+              "src/assets/metronic/src/js/framework/components/general/messenger.js",
+              "src/assets/metronic/src/js/framework/components/general/offcanvas.js",
+              "src/assets/metronic/src/js/framework/components/general/portlet.js",
+              "src/assets/metronic/src/js/framework/components/general/quicksearch.js",
+              "src/assets/metronic/src/js/framework/components/general/scroll-top.js",
+              "src/assets/metronic/src/js/framework/components/general/toggle.js",
+              "src/assets/metronic/src/js/framework/components/plugins/base/bootstrap-notify.init.js",
+              "src/assets/metronic/src/js/framework/components/plugins/base/toastr.init.js",
+              "src/assets/metronic/src/js/framework/components/plugins/charts/chart.init.js",
+              "src/assets/metronic/src/js/framework/components/plugins/forms/bootstrap-daterangepicker.init.js",
+              "src/assets/metronic/src/js/framework/components/plugins/forms/bootstrap-markdown.init.js",
+              "src/assets/metronic/src/js/framework/components/plugins/forms/bootstrap-switch.init.js",
+              "src/assets/metronic/src/js/framework/components/plugins/forms/bootstrap-timepicker.init.js",
+              "src/assets/metronic/src/js/framework/components/plugins/forms/jquery-validation.init.js",
+              "src/assets/metronic/src/js/app/base/main.js",
+              "src/assets/metronic/src/js/demo/default/base/layout.js"
+            ],
+            "styles": [
+              "node_modules/tether/dist/css/tether.css",
+              "node_modules/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css",
+              "node_modules/prismjs/themes/prism.css",
+              "node_modules/bootstrap-timepicker/css/bootstrap-timepicker.min.css",
+              "node_modules/bootstrap-daterangepicker/daterangepicker.css",
+              "node_modules/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.css",
+              "node_modules/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.css",
+              "node_modules/bootstrap-select/dist/css/bootstrap-select.css",
+              "node_modules/select2/dist/css/select2.css",
+              "node_modules/rangeslider.js/dist/rangeslider.css",
+              "node_modules/ion-rangeslider/css/ion.rangeSlider.css",
+              "node_modules/ion-rangeslider/css/ion.rangeSlider.skinFlat.css",
+              "node_modules/dropzone/dist/dropzone.css",
+              "node_modules/summernote/dist/summernote.css",
+              "node_modules/bootstrap-markdown/css/bootstrap-markdown.min.css",
+              "node_modules/animate.css/animate.min.css",
+              "node_modules/toastr/build/toastr.css",
+              "node_modules/jstree/dist/themes/default/style.css",
+              "node_modules/morris.js/morris.css",
+              "node_modules/chartist/dist/chartist.css",
+              "node_modules/socicon/css/socicon.css",
+              "node_modules/font-awesome/css/font-awesome.css",
+              "node_modules/quill/dist/quill.core.css",
+              "node_modules/quill/dist/quill.snow.css",
+              "node_modules/famfamfam-flags/dist/sprite/famfamfam-flags.css",
+              "node_modules/primeng/resources/primeng.min.css",
+              "node_modules/primeng/resources/themes/bootstrap/theme.css",
+              "node_modules/bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.min.css",
+              "src/assets/metronic/src/vendors/line-awesome/css/line-awesome.css",
+              "src/assets/metronic/src/vendors/flaticon/css/flaticon.css",
+              "src/assets/metronic/src/vendors/metronic/css/styles.css",
+              "src/assets/Jcrop/css/Jcrop.css",
+              "src/assets/primeng/file-upload/css/primeng.file-upload.css",
+              "src/assets/primeng/autocomplete/css/primeng.autocomplete.css",
+              "src/app/shared/core.less",
+              "src/app/shared/layout/layout.less",
+              "src/assets/fonts/fonts-poppins.css",
+              "src/assets/fonts/fonts-roboto.css",
+              "src/styles.css"
+            ],
+            "assets": [
+              "src/assets",
+              "src/favicon.ico",
+              {
+                "glob": "abp.signalr.js",
+                "input": "node_modules/abp-web-resources/Abp/Framework/scripts/libs",
+                "output": "/assets/abp"
+              },
+              {
+                "glob": "**.*",
+                "input": "node_modules/bootstrap-select/dist/js/i18n",
+                "output": "/assets/localization/bootstrap-select"
+              },
+              {
+                "glob": "**.*",
+                "input": "node_modules/timeago/locales",
+                "output": "/assets/localization/jquery-timeago"
+              }
+            ]
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "src/tsconfig.json"
+            ],
+            "exclude": []
+          }
+        }
+      }
+    },
+    "abp-zero-template-e2e": {
+      "root": "",
+      "sourceRoot": "",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "./protractor.conf.js",
+            "devServerTarget": "abp-zero-template:serve"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "e2e/tsconfig.json"
+            ],
+            "exclude": []
+          }
+        }
+      }
+    }
+  },
+  "defaultProject": "abp-zero-template",
+  "schematics": {
+    "@schematics/angular:component": {
+      "prefix": "app",
+      "styleext": "css"
+    },
+    "@schematics/angular:directive": {
+      "prefix": "app"
+    }
+  }
+}

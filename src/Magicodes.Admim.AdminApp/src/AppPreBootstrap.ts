@@ -1,13 +1,12 @@
-import * as moment from 'moment';
-import { AppConsts } from '@shared/AppConsts';
-import { UrlHelper } from './shared/helpers/UrlHelper';
-import { LocalizedResourcesHelper } from './shared/helpers/LocalizedResourcesHelper';
-import * as _ from 'lodash';
-import { SubdomainTenancyNameFinder } from '@shared/helpers/SubdomainTenancyNameFinder';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { Type, CompilerOptions, NgModuleRef } from '@angular/core';
 import { UtilsService } from '@abp/utils/utils.service';
+import { CompilerOptions, NgModuleRef, Type } from '@angular/core';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { AppAuthService } from '@app/shared/common/auth/app-auth.service';
+import { AppConsts } from '@shared/AppConsts';
+import { SubdomainTenancyNameFinder } from '@shared/helpers/SubdomainTenancyNameFinder';
+import * as moment from 'moment';
+import { LocalizedResourcesHelper } from './shared/helpers/LocalizedResourcesHelper';
+import { UrlHelper } from './shared/helpers/UrlHelper';
 import { environment } from '@env/environment';
 
 export class AppPreBootstrap {
@@ -43,30 +42,28 @@ export class AppPreBootstrap {
     }
 
     private static getApplicationConfig(appRootUrl: string, callback: () => void) {
-
+        let configFileName = environment.production ? 'appconfig.pro.json' : 'appconfig.json';
         return abp.ajax({
-            url: appRootUrl + 'assets/appconfig.json',
+            url: appRootUrl + 'assets/' + configFileName,
             method: 'GET',
             headers: {
                 'Abp.TenantId': abp.multiTenancy.getTenantIdCookie()
             }
         }).done(result => {
-            let appBaseUrl = environment.production ? result.baseUrl : result.testBaseUrl;
-            let remoteServiceBaseUrl = environment.production ? result.serviceBaseUrl : result.testServiceBaseUrl;
 
             const subdomainTenancyNameFinder = new SubdomainTenancyNameFinder();
-            const tenancyName = subdomainTenancyNameFinder.getCurrentTenancyNameOrNull(appBaseUrl);
+            const tenancyName = subdomainTenancyNameFinder.getCurrentTenancyNameOrNull(result.appBaseUrl);
 
-            AppConsts.appBaseUrlFormat = appBaseUrl;
-            AppConsts.remoteServiceBaseUrlFormat = remoteServiceBaseUrl;
+            AppConsts.appBaseUrlFormat = result.appBaseUrl;
+            AppConsts.remoteServiceBaseUrlFormat = result.remoteServiceBaseUrl;
             AppConsts.localeMappings = result.localeMappings;
 
             if (tenancyName == null) {
-                AppConsts.appBaseUrl = appBaseUrl.replace(AppConsts.tenancyNamePlaceHolderInUrl + '.', '');
-                AppConsts.remoteServiceBaseUrl = remoteServiceBaseUrl.replace(AppConsts.tenancyNamePlaceHolderInUrl + '.', '');
+                AppConsts.appBaseUrl = result.appBaseUrl.replace(AppConsts.tenancyNamePlaceHolderInUrl + '.', '');
+                AppConsts.remoteServiceBaseUrl = result.remoteServiceBaseUrl.replace(AppConsts.tenancyNamePlaceHolderInUrl + '.', '');
             } else {
-                AppConsts.appBaseUrl = appBaseUrl.replace(AppConsts.tenancyNamePlaceHolderInUrl, tenancyName);
-                AppConsts.remoteServiceBaseUrl = remoteServiceBaseUrl.replace(AppConsts.tenancyNamePlaceHolderInUrl, tenancyName);
+                AppConsts.appBaseUrl = result.appBaseUrl.replace(AppConsts.tenancyNamePlaceHolderInUrl, tenancyName);
+                AppConsts.remoteServiceBaseUrl = result.remoteServiceBaseUrl.replace(AppConsts.tenancyNamePlaceHolderInUrl, tenancyName);
             }
 
             callback();

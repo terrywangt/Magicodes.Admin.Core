@@ -6,7 +6,7 @@
                     <h5 class="modal-title">
                         <span>{{l("MySettings")}}</span>
                     </h5>
-                    <button type="button" class="close" aria-label="Close" (click)="close()">
+                    <button type="button" class="close" [attr.aria-label]="l('Close')" (click)="close()">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -14,20 +14,20 @@
                     <tabset class="tab-container tabbable-line">
                         <tab heading="{{l('Profile')}}" customClass="m-tabs__item">
                             <div class="form-group">
-                                <label>{{l("Name")}} *</label>
-                                <input #nameInput="ngModel" class="form-control" type="text" name="Name" [(ngModel)]="user.name" required maxlength="32">
+                                <label for="Name">{{l("Name")}} *</label>
+                                <input id="Name" #nameInput="ngModel" class="form-control" type="text" name="Name" [(ngModel)]="user.name" required maxlength="32">
                                 <validation-messages [formCtrl]="nameInput"></validation-messages>
                             </div>
 
                             <div class="form-group">
-                                <label>{{l("Surname")}} *</label>
-                                <input #surnameInput="ngModel" type="text" name="Surname" class="form-control" [(ngModel)]="user.surname" required maxlength="32">
+                                <label for="Surname">{{l("Surname")}} *</label>
+                                <input id="Surname" #surnameInput="ngModel" type="text" name="Surname" class="form-control" [(ngModel)]="user.surname" required maxlength="32">
                                 <validation-messages [formCtrl]="surnameInput"></validation-messages>
                             </div>
 
                             <div class="form-group">
-                                <label>{{l("EmailAddress")}} *</label>
-                                <input #emailAddressInput="ngModel" type="email" name="EmailAddress" class="form-control" [(ngModel)]="user.emailAddress" required email maxlength="256">
+                                <label for="EmailAddress">{{l("EmailAddress")}} *</label>
+                                <input id="EmailAddress" #emailAddressInput="ngModel" type="email" name="EmailAddress" class="form-control" [(ngModel)]="user.emailAddress" required email maxlength="256">
                                 <validation-messages [formCtrl]="emailAddressInput" [errorDefs]="[{email: l('InvalidEmailAddress')}]"></validation-messages>
                             </div>
                             <div *ngIf="smsEnabled && !isPhoneNumberEmpty">
@@ -41,11 +41,11 @@
                                         </span>
 
                                         <span *ngIf="!isPhoneNumberConfirmed" id="SpanSmsVerificationVerified" style="display: none;" class="input-group-addon" tooltip="{{l('YourPhoneNumberIsVerified')}}">
-                                            <i class="la la-check m--font-success"></i>
+                                            <i class="la la-check m--font-success" [attr.aria-label]="l('Verified')"></i>
                                         </span>
 
                                         <span *ngIf="isPhoneNumberConfirmed" class="input-group-addon" tooltip="{{l('YourPhoneNumberIsVerified')}}">
-                                            <i class="la la-check m--font-success"></i>
+                                            <i class="la la-check m--font-success" [attr.aria-label]="l('Verified')"></i>
                                         </span>
                                     </div>
                                 </div>
@@ -53,21 +53,21 @@
 
                             <div *ngIf="!smsEnabled || isPhoneNumberEmpty">
                                 <div class="form-group">
-                                    <label>{{l("PhoneNumber")}}</label>
-                                    <input type="text" name="PhoneNumber" class="form-control" [(ngModel)]="user.phoneNumber" maxlength="24">
+                                    <label for="PhoneNumber">{{l("PhoneNumber")}}</label>
+                                    <input id="PhoneNumber" type="text" name="PhoneNumber" class="form-control" [(ngModel)]="user.phoneNumber" maxlength="24">
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <label>{{l("UserName")}} *</label>
-                                <input #userNameInput="ngModel" type="text" [disabled]="!canChangeUserName" class="form-control" [(ngModel)]="user.userName" name="UserName" required maxlength="32">
+                                <label for="UserName">{{l("UserName")}} *</label>
+                                <input id="UserName" #userNameInput="ngModel" type="text" [disabled]="!canChangeUserName" class="form-control" [(ngModel)]="user.userName" name="UserName" required maxlength="32">
                                 <span class="m-form__help" *ngIf="!canChangeUserName">{{l("CanNotChangeAdminUserName")}}</span>
                                 <validation-messages [formCtrl]="userNameInput"></validation-messages>
                             </div>
 
                             <div class="form-group" *ngIf="showTimezoneSelection">
-                                <label>{{l("Timezone")}}</label>
-                                <timezone-combo [(selectedTimeZone)]="user.timezone" defaultTimezoneScope="{{defaultTimezoneScope}}"></timezone-combo>
+                                <label for="Timezone">{{l("Timezone")}}</label>
+                                <timezone-combo id="Timezone" [(selectedTimeZone)]="user.timezone" defaultTimezoneScope="{{defaultTimezoneScope}}"></timezone-combo>
                             </div>
                         </tab>
                         <tab heading="{{l('TwoFactorLogin')}}" customClass="m-tabs__item">

@@ -1,6 +1,5 @@
-import { Directive, AfterViewInit, ElementRef, ViewChild, Injector, Input, Output, EventEmitter } from '@angular/core';
+import { AfterViewInit, Directive, ElementRef, EventEmitter, Injector, Input, Output } from '@angular/core';
 import { AppComponentBase } from '@shared/common/app-component-base';
-
 import * as moment from 'moment';
 
 @Directive({

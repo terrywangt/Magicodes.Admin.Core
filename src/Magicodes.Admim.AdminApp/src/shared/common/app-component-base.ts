@@ -1,16 +1,16 @@
-import { Injector } from '@angular/core';
-import { AppConsts } from '@shared/AppConsts';
-import { LocalizationService } from '@abp/localization/localization.service';
 import { PermissionCheckerService } from '@abp/auth/permission-checker.service';
 import { FeatureCheckerService } from '@abp/features/feature-checker.service';
-import { NotifyService } from '@abp/notify/notify.service';
-import { SettingService } from '@abp/settings/setting.service';
+import { LocalizationService } from '@abp/localization/localization.service';
 import { MessageService } from '@abp/message/message.service';
 import { AbpMultiTenancyService } from '@abp/multi-tenancy/abp-multi-tenancy.service';
-import { AppSessionService } from '@shared/common/session/app-session.service';
-import { PrimengDatatableHelper } from 'shared/helpers/PrimengDatatableHelper';
-import { AppUiCustomizationService } from '@shared/common/ui/app-ui-customization.service';
+import { NotifyService } from '@abp/notify/notify.service';
+import { SettingService } from '@abp/settings/setting.service';
+import { Injector } from '@angular/core';
+import { AppConsts } from '@shared/AppConsts';
 import { AppUrlService } from '@shared/common/nav/app-url.service';
+import { AppSessionService } from '@shared/common/session/app-session.service';
+import { AppUiCustomizationService } from '@shared/common/ui/app-ui-customization.service';
+import { PrimengTableHelper } from 'shared/helpers/PrimengTableHelper';
 
 export abstract class AppComponentBase {
 
@@ -24,7 +24,7 @@ export abstract class AppComponentBase {
     message: MessageService;
     multiTenancy: AbpMultiTenancyService;
     appSession: AppSessionService;
-    primengDatatableHelper: PrimengDatatableHelper;
+    primengTableHelper: PrimengTableHelper;
     ui: AppUiCustomizationService;
     appUrlService: AppUrlService;
 
@@ -39,7 +39,7 @@ export abstract class AppComponentBase {
         this.appSession = injector.get(AppSessionService);
         this.ui = injector.get(AppUiCustomizationService);
         this.appUrlService = injector.get(AppUrlService);
-        this.primengDatatableHelper = new PrimengDatatableHelper();
+        this.primengTableHelper = new PrimengTableHelper();
     }
 
     l(key: string, ...args: any[]): string {

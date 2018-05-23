@@ -94,16 +94,17 @@ namespace Magicodes.Admin.Authorization.Users
 
             if (!input.Permission.IsNullOrWhiteSpace())
             {
-                query = (from user in query
-                         join ur in _userRoleRepository.GetAll() on user.Id equals ur.UserId into urJoined
-                         from ur in urJoined.DefaultIfEmpty()
-                         join up in _userPermissionRepository.GetAll() on new { UserId = user.Id, Name = input.Permission } equals new { up.UserId, up.Name } into upJoined
-                         from up in upJoined.DefaultIfEmpty()
-                         join rp in _rolePermissionRepository.GetAll() on new { RoleId = ur.RoleId, Name = input.Permission } equals new { rp.RoleId, rp.Name } into rpJoined
-                         from rp in rpJoined.DefaultIfEmpty()
-                         where (up != null && up.IsGranted) || (up == null && rp != null)
-                         group user by user into userGrouped
-                         select userGrouped.Key);
+                query = from user in query
+                        join ur in _userRoleRepository.GetAll() on user.Id equals ur.UserId into urJoined
+                        from ur in urJoined.DefaultIfEmpty()
+                        join up in _userPermissionRepository.GetAll() on new { UserId = user.Id, Name = input.Permission } equals new { up.UserId, up.Name } into upJoined
+                        from up in upJoined.DefaultIfEmpty()
+                        join rp in _rolePermissionRepository.GetAll() on new { RoleId = ur == null ? 0 : ur.RoleId, Name = input.Permission } equals new { rp.RoleId, rp.Name } into rpJoined
+                        from rp in rpJoined.DefaultIfEmpty()
+                        where up != null && up.IsGranted || up == null && rp != null
+                        group user by user
+                        into userGrouped
+                        select userGrouped.Key;
             }
 
             var userCount = await query.CountAsync();
@@ -305,7 +306,7 @@ namespace Magicodes.Admin.Authorization.Users
             user.TenantId = AbpSession.TenantId;
 
             //Set password
-            if (input.SetRandomPassword|| input.User.Password.IsNullOrEmpty())
+            if (input.SetRandomPassword || input.User.Password.IsNullOrEmpty())
             {
                 input.User.Password = User.CreateRandomPassword();
             }

@@ -1,11 +1,8 @@
-import { Component, ViewChild, Injector } from '@angular/core';
-import { ModalDirective } from 'ngx-bootstrap';
-import { UserServiceProxy, GetUserPermissionsForEditOutput, UpdateUserPermissionsInput, EntityDtoOfInt64 } from '@shared/service-proxies/service-proxies';
+import { Component, Injector, ViewChild } from '@angular/core';
 import { AppComponentBase } from '@shared/common/app-component-base';
+import { EntityDtoOfInt64, UpdateUserPermissionsInput, UserServiceProxy } from '@shared/service-proxies/service-proxies';
+import { ModalDirective } from 'ngx-bootstrap';
 import { PermissionTreeComponent } from '../shared/permission-tree.component';
-import { PermissionTreeEditModel } from '@app/admin/shared/permission-tree-edit.model';
-
-import * as _ from 'lodash';
 
 @Component({
     selector: 'editUserPermissionsModal',

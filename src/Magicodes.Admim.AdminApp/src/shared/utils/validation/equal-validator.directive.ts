@@ -1,5 +1,5 @@
-import { Directive, forwardRef, Attribute } from '@angular/core';
-import { Validator, AbstractControl, NG_VALIDATORS } from '@angular/forms';
+import { Attribute, Directive, forwardRef } from '@angular/core';
+import { AbstractControl, NG_VALIDATORS, Validator } from '@angular/forms';
 
 //Got from: https://scotch.io/tutorials/how-to-implement-a-custom-validator-directive-confirm-password-in-angular-2
 
@@ -48,7 +48,7 @@ export class EqualValidator implements Validator {
                 }
             } else {
                 pairControl.setErrors({
-                    validateEqual: false
+                    validateEqual: true
                 });
             }
 
@@ -56,7 +56,7 @@ export class EqualValidator implements Validator {
         } else {
             if (value !== pairValue) {
                 return {
-                    validateEqual: false
+                    validateEqual: true
                 };
             }
         }

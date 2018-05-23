@@ -1,0 +1,34 @@
+<div bsModal #entityChangeDetailModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="entityChangeDetailModal"
+     aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div *ngIf="entityChange" class="modal-header">
+                <h4 class="modal-title">
+                    <span>{{l("Detail")}} - {{l(entityChange.entityTypeFullName)}}</span> <br />
+                    <small [innerHTML]="l('CreatedAtByUser', entityChange.changeTime, entityChange.userName)"></small>
+                </h4>
+            </div>
+            <div class="modal-body">
+                <table id="EntityPropertyChangesTable" class="display table table-striped table-bordered table-hover dt-responsive">
+                    <thead>
+                        <tr>
+                            <th>{{l("Property")}}</th>
+                            <th>{{l("OriginalValue")}}</th>
+                            <th>{{l("NewValue")}}</th>
+                        </tr>
+                        <tr *ngFor="let propertyChange of entityPropertyChanges">
+                            <td><strong>{{propertyChange.propertyName}}</strong></td>
+
+                            <td>{{getPropertyChangeValue(propertyChange.originalValue, propertyChange.propertyTypeFullName)}}</td>
+                            <td>{{getPropertyChangeValue(propertyChange.newValue, propertyChange.propertyTypeFullName)}}</td>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" (click)="close()">{{l("Close")}}</button>
+            </div>
+        </div>
+    </div>
+</div>

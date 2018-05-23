@@ -3,18 +3,36 @@
         <div class="m-portlet">
             <div class="m-portlet__body">
                 <div class="m-pricing-table-1__items row row-centered">
-                    <div class="m-pricing-table-1__item col-lg-3 col-centered" *ngFor="let editionWithFeatures of editionsSelectOutput.editionsWithFeatures">
+                    <div class="m-pricing-table-1__item col-lg-3 col-centered"
+                         *ngFor="let editionWithFeatures of editionsSelectOutput.editionsWithFeatures;  let i = index">
+
+
+                        <div class="m-pricing-table-1__visual">
+                            <div class="m-pricing-table-1__hexagon1"></div>
+                            <div class="m-pricing-table-1__hexagon2"></div>
+                            <span class="m-pricing-table-1__icon m--font-brand">
+                                <i class="fa {{editionIcons[i]}}"></i>
+                            </span>
+                        </div>
+
+
                         <span class="m-pricing-table-1__price">
                             {{editionWithFeatures.edition.displayName}}
                         </span>
+
                         <h2 class="m-pricing-table-1__subtitle" *ngIf="isFree(editionWithFeatures.edition)">
                             {{l("Free")}}
                         </h2>
+
                         <h2 class="m-pricing-table-1__subtitle" *ngIf="!isFree(editionWithFeatures.edition)">
+
                             <span class="m-pricing-table-1__label">$</span> {{editionWithFeatures.edition.monthlyPrice}} {{l("PerMonth")}} /
                             <span class="m-pricing-table-1__label">$</span>{{editionWithFeatures.edition.annualPrice}} {{l("PerYear")}}
+
                         </h2>
+
                         <span class="m-pricing-table-1__description">
+
                             <ng-container *ngFor="let feature of editionsSelectOutput.allFeatures">
                                 <!--Checbox Feature-->
                                 <ng-container *ngIf="isTrueFalseFeature(feature)">
@@ -31,24 +49,44 @@
                                 <!--Not Checbox Feature-->
                                 <br />
                             </ng-container>
+
                         </span>
+
                         <div class="m-pricing-table-1__btn">
-                            <button class="btn btn-warning m-btn m-btn--custom m-btn--pill m-btn--wide m-btn--uppercase m-btn--bolder m-btn--sm" (click)="upgrade(editionWithFeatures.edition, editionPaymentType.Upgrade)" *ngIf="isUserLoggedIn" [disabled]="!canUpgrade(editionWithFeatures.edition)">
+
+                            <button class="btn btn-warning m-btn m-btn--custom m-btn--pill m-btn--wide m-btn--uppercase m-btn--bolder m-btn--sm"
+                                    (click)="upgrade(editionWithFeatures.edition, editionPaymentType.Upgrade)"
+                                    *ngIf="isUserLoggedIn"
+                                    [disabled]="!canUpgrade(editionWithFeatures.edition)">
                                 {{l("Upgrade")}}
                             </button>
 
-                            <button class="btn btn-success m-btn m-btn--custom m-btn--pill m-btn--wide m-btn--uppercase m-btn--bolder m-btn--sm" [routerLink]="['/account/register-tenant']" [queryParams]="{editionId: editionWithFeatures.edition.id, subscriptionStartType: subscriptionStartType.Free}" href="#" *ngIf="!isUserLoggedIn && isFree(editionWithFeatures.edition)">
+                            <button class="btn btn-success m-btn m-btn--custom m-btn--pill m-btn--wide m-btn--uppercase m-btn--bolder m-btn--sm"
+                                    [routerLink]="['/account/register-tenant']"
+                                    [queryParams]="{editionId: editionWithFeatures.edition.id, subscriptionStartType: subscriptionStartType.Free}"
+                                    href="#"
+                                    *ngIf="!isUserLoggedIn && isFree(editionWithFeatures.edition)">
                                 {{l("Start")}}
                             </button>
 
-                            <button class="btn btn-warning m-btn m-btn--custom m-btn--pill m-btn--wide m-btn--uppercase m-btn--bolder m-btn--sm" [routerLink]="['/account/register-tenant']" [queryParams]="{editionId: editionWithFeatures.edition.id, subscriptionStartType: subscriptionStartType.Trial}" href="#" *ngIf="!isUserLoggedIn && !isFree(editionWithFeatures.edition) && editionWithFeatures.edition.trialDayCount">
+                            <button class="btn btn-warning m-btn m-btn--custom m-btn--pill m-btn--wide m-btn--uppercase m-btn--bolder m-btn--sm"
+                                    [routerLink]="['/account/register-tenant']"
+                                    [queryParams]="{editionId: editionWithFeatures.edition.id, subscriptionStartType: subscriptionStartType.Trial}"
+                                    href="#"
+                                    *ngIf="!isUserLoggedIn && !isFree(editionWithFeatures.edition) && editionWithFeatures.edition.trialDayCount">
                                 {{l("FreeTrial")}}
                             </button>
 
-                            <button class="btn btn-brand m-btn m-btn--custom m-btn--pill m-btn--wide m-btn--uppercase m-btn--bolder m-btn--sm" [routerLink]="['/account/buy']" [queryParams]="{editionId: editionWithFeatures.edition.id, editionPaymentType: editionPaymentType.NewRegistration, subscriptionStartType: subscriptionStartType.Paid}" href="#" *ngIf="!isUserLoggedIn && !isFree(editionWithFeatures.edition)">
+                            <button class="btn btn-brand m-btn m-btn--custom m-btn--pill m-btn--wide m-btn--uppercase m-btn--bolder m-btn--sm"
+                                    [routerLink]="['/account/buy']"
+                                    [queryParams]="{editionId: editionWithFeatures.edition.id, editionPaymentType: editionPaymentType.NewRegistration, subscriptionStartType: subscriptionStartType.Paid}"
+                                    href="#"
+                                    *ngIf="!isUserLoggedIn && !isFree(editionWithFeatures.edition)">
                                 {{l("BuyNow")}}
                             </button>
+
                         </div>
+
                     </div>
                 </div>
             </div>

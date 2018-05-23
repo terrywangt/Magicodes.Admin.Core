@@ -66,26 +66,6 @@ namespace Magicodes.Admin.Migrations.Seed.Host
                 _context.UserRoles.Add(new UserRole(null, adminUserForHost.Id, adminRoleForHost.Id));
                 _context.SaveChanges();
 
-                //Grant all permissions
-                var permissions = PermissionFinder
-                    .GetAllPermissions(new AppAuthorizationProvider(true))
-                    .Where(p => p.MultiTenancySides.HasFlag(MultiTenancySides.Host))
-                    .ToList();
-
-                foreach (var permission in permissions)
-                {
-                    _context.Permissions.Add(
-                        new RolePermissionSetting
-                        {
-                            TenantId = null,
-                            Name = permission.Name,
-                            IsGranted = true,
-                            RoleId = adminRoleForHost.Id
-                        });
-                }
-
-                _context.SaveChanges();
-
                 //User account of admin user
                 _context.UserAccounts.Add(new UserAccount
                 {

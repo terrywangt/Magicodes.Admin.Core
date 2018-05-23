@@ -20,7 +20,7 @@
                             </span>
                         </span>
                         <a href="javascript:;" class="btn btn-sm btn-brand m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill">
-                            <i class="la la-angle-down"></i>
+                            <i class="la la-angle-down" [attr.aria-label]="l('Expand')"></i>
                         </a>
                     </span>
                 </div>
@@ -247,18 +247,26 @@
                         </div>
                         <div class="m-portlet__body">
                             <div class="scroller chart m-scrollable" data-always-visible="1" data-rail-visible="0" data-scrollable="true">
-                                <div class="primeng-datatable-container expiring-tenants-table" [busyIf]="primengDatatableHelper.isLoading">
-                                    <p-dataTable #ExpiringTenantsTable
+                                <div class="primeng-datatable-container expiring-tenants-table" [busyIf]="primengTableHelper.isLoading">
+                                    <p-table #ExpiringTenantsTable
                                                  [value]="expiringTenantsData"
-                                                 rows="{{primengDatatableHelper.defaultRecordsCountPerPage}}"
+                                                 rows="{{primengTableHelper.defaultRecordsCountPerPage}}"
                                                  [paginator]="false"
                                                  [lazy]="false"
-                                                 emptyMessage="{{l('NoData')}}"
-                                                 [responsive]="primengDatatableHelper.isResponsive">
-
-                                        <p-column field="tenantName" header="{{l('TenantName')}}"></p-column>
-                                        <p-column field="remainingDayCount" header="{{l('RemainingDay')}}"></p-column>
-                                    </p-dataTable>
+                                                 [responsive]="primengTableHelper.isResponsive">
+                                        <ng-template pTemplate="header">
+                                            <tr>
+                                                <th>{{l('TenantName')}}</th>
+                                                <th>{{l('RemainingDay')}}</th>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="body" let-record="$implicit">
+                                            <tr>
+                                                <td>{{record.tenantName}}</td>
+                                                <td>{{record.remainingDayCount}}</td>
+                                            </tr>
+                                        </ng-template>
+                                    </p-table>
                                 </div>
                             </div>
                             <div class="scroller-footer">
@@ -289,22 +297,26 @@
                         </div>
                         <div class="m-portlet__body">
                             <div class="scroller chart m-scrollable" data-always-visible="1" data-rail-visible="0" data-scrollable="true">
-                                <div class="primeng-datatable-container recent-tenants-table" [busyIf]="primengDatatableHelper.isLoading">
-                                    <p-dataTable #RecentTenantsTable
+                                <div class="primeng-datatable-container recent-tenants-table" [busyIf]="primengTableHelper.isLoading">
+                                    <p-table #RecentTenantsTable
                                                  [value]="recentTenantsData"
-                                                 rows="{{primengDatatableHelper.defaultRecordsCountPerPage}}"
+                                                 rows="{{primengTableHelper.defaultRecordsCountPerPage}}"
                                                  [paginator]="false"
                                                  [lazy]="false"
-                                                 emptyMessage="{{l('NoData')}}"
-                                                 [responsive]="primengDatatableHelper.isResponsive">
-
-                                        <p-column field="name" header="{{l('TenantName')}}"></p-column>
-                                        <p-column field="creationTime" header="{{l('CreationTime')}}">
-                                            <ng-template let-record="rowData" pTemplate="body">
-                                                {{ record.creationTime | momentFormat:'L LT'}}
-                                            </ng-template>
-                                        </p-column>
-                                    </p-dataTable>
+                                                 [responsive]="primengTableHelper.isResponsive">
+                                        <ng-template pTemplate="header">
+                                            <tr>
+                                                <th>{{l('TenantName')}}</th>
+                                                <th>{{l('CreationTime')}}</th>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="body" let-record="$implicit">
+                                            <tr>
+                                                <td>{{record.name}}</td>
+                                                <td>{{ record.creationTime | momentFormat:'L LT'}}</td>
+                                            </tr>
+                                        </ng-template>
+                                    </p-table>
                                 </div>
                             </div>
                             <div class="scroller-footer">

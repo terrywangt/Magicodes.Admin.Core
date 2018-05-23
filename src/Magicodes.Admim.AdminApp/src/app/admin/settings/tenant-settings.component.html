@@ -21,8 +21,8 @@
                 <tabset class="tab-container" *ngIf="settings">
                     <tab heading="{{l('General')}}" *ngIf="showTimezoneSelection" [active]="activeTabIndex == 0" customClass="m-tabs__item">
                         <div class="form-group" *ngIf="showTimezoneSelection">
-                            <label>{{l("Timezone")}}</label>
-                            <timezone-combo [(selectedTimeZone)]="settings.general.timezone" defaultTimezoneScope="{{defaultTimezoneScope}}"></timezone-combo>
+                            <label for="Timezone">{{l("Timezone")}}</label>
+                            <timezone-combo id="Timezone" [(selectedTimeZone)]="settings.general.timezone" defaultTimezoneScope="{{defaultTimezoneScope}}"></timezone-combo>
                         </div>
                     </tab>
                     <tab *ngIf="true" heading="{{l('Appearance')}}" [active]="activeTabIndex == 1" customClass="m-tabs__item">
@@ -87,16 +87,16 @@
                                 <span></span>
                             </label>
                             <div class="form-group" [hidden]="!settings.ldap.isEnabled">
-                                <label>{{l("DomainName")}}</label>
-                                <input type="text" name="LdapDomainName" class="form-control" [(ngModel)]="settings.ldap.domain" maxlength="128">
+                                <label for="LdapDomainName">{{l("DomainName")}}</label>
+                                <input id="LdapDomainName" type="text" name="LdapDomainName" class="form-control" [(ngModel)]="settings.ldap.domain" maxlength="128">
                             </div>
                             <div class="form-group" [hidden]="!settings.ldap.isEnabled">
-                                <label>{{l("UserName")}}</label>
-                                <input type="text" name="LdapUserName" class="form-control" [(ngModel)]="settings.ldap.userName" maxlength="128">
+                                <label for="LdapUserName">{{l("UserName")}}</label>
+                                <input id="LdapUserName" type="text" name="LdapUserName" class="form-control" [(ngModel)]="settings.ldap.userName" maxlength="128">
                             </div>
                             <div class="form-group" [hidden]="!settings.ldap.isEnabled">
-                                <label>{{l("Password")}}</label>
-                                <input type="password" name="LdapPassword" class="form-control" [(ngModel)]="settings.ldap.password" maxlength="128">
+                                <label for="LdapPassword">{{l("Password")}}</label>
+                                <input id="LdapPassword" type="password" name="LdapPassword" class="form-control" [(ngModel)]="settings.ldap.password" maxlength="128">
                             </div>
                         </div>
                         <div>
@@ -176,12 +176,12 @@
                                 </div>
                             </div>
                             <div class="form-group" *ngIf="settings.security.userLockOut.isEnabled">
-                                <label>{{l("MaxFailedAccessAttemptsBeforeLockout")}}</label>
-                                <input type="number" name="MaxFailedAccessAttemptsBeforeLockout" class="form-control" [ngClass]="{'edited':settings.security.userLockOut.maxFailedAccessAttemptsBeforeLockout}" [(ngModel)]="settings.security.userLockOut.maxFailedAccessAttemptsBeforeLockout">
+                                <label for="MaxFailedAccessAttemptsBeforeLockout">{{l("MaxFailedAccessAttemptsBeforeLockout")}}</label>
+                                <input id="MaxFailedAccessAttemptsBeforeLockout" type="number" name="MaxFailedAccessAttemptsBeforeLockout" class="form-control" [ngClass]="{'edited':settings.security.userLockOut.maxFailedAccessAttemptsBeforeLockout}" [(ngModel)]="settings.security.userLockOut.maxFailedAccessAttemptsBeforeLockout">
                             </div>
                             <div class="form-group" *ngIf="settings.security.userLockOut.isEnabled">
-                                <label>{{l("DefaultAccountLockoutDurationAsSeconds")}}</label>
-                                <input type="number" name="DefaultAccountLockoutSeconds" class="form-control" [ngClass]="{'edited':settings.security.userLockOut.defaultAccountLockoutSeconds}" [(ngModel)]="settings.security.userLockOut.defaultAccountLockoutSeconds">
+                                <label for="DefaultAccountLockoutSeconds">{{l("DefaultAccountLockoutDurationAsSeconds")}}</label>
+                                <input id="DefaultAccountLockoutSeconds" type="number" name="DefaultAccountLockoutSeconds" class="form-control" [ngClass]="{'edited':settings.security.userLockOut.defaultAccountLockoutSeconds}" [(ngModel)]="settings.security.userLockOut.defaultAccountLockoutSeconds">
                             </div>
                         </div>
                         <div *ngIf="!isMultiTenancyEnabled || settings.security.twoFactorLogin.isEnabledForApplication">
@@ -218,20 +218,20 @@
                     </tab>
                     <tab heading="{{l('EmailSmtp')}}" *ngIf="!isMultiTenancyEnabled" customClass="m-tabs__item">
                         <div class="form-group">
-                            <label>{{l("DefaultFromAddress")}}</label>
-                            <input type="email" name="DefaultFromAddress" class="form-control" [ngClass]="{'edited':settings.email.defaultFromAddress}" [(ngModel)]="settings.email.defaultFromAddress" maxlength="128">
+                            <label for="DefaultFromAddress">{{l("DefaultFromAddress")}}</label>
+                            <input id="DefaultFromAddress" type="email" name="DefaultFromAddress" class="form-control" [ngClass]="{'edited':settings.email.defaultFromAddress}" [(ngModel)]="settings.email.defaultFromAddress" maxlength="128">
                         </div>
                         <div class="form-group">
-                            <label>{{l("DefaultFromDisplayName")}}</label>
-                            <input type="text" name="DefaultFromDisplayName" class="form-control" [ngClass]="{'edited':settings.email.defaultFromDisplayName}" [(ngModel)]="settings.email.defaultFromDisplayName" maxlength="128">
+                            <label for="DefaultFromDisplayName">{{l("DefaultFromDisplayName")}}</label>
+                            <input id="DefaultFromDisplayName" type="text" name="DefaultFromDisplayName" class="form-control" [ngClass]="{'edited':settings.email.defaultFromDisplayName}" [(ngModel)]="settings.email.defaultFromDisplayName" maxlength="128">
                         </div>
                         <div class="form-group">
-                            <label>{{l("SmtpHost")}}</label>
-                            <input type="text" name="SmtpHost" class="form-control" [ngClass]="{'edited':settings.email.smtpHost}" [(ngModel)]="settings.email.smtpHost" maxlength="64">
+                            <label for="SmtpHost">{{l("SmtpHost")}}</label>
+                            <input id="SmtpHost" type="text" name="SmtpHost" class="form-control" [ngClass]="{'edited':settings.email.smtpHost}" [(ngModel)]="settings.email.smtpHost" maxlength="64">
                         </div>
                         <div class="form-group">
-                            <label>{{l("SmtpPort")}}</label>
-                            <input type="number" name="SmtpPort" class="form-control" [ngClass]="{'edited':settings.email.smtpPort}" [(ngModel)]="settings.email.smtpPort" maxlength="5">
+                            <label for="SmtpPort">{{l("SmtpPort")}}</label>
+                            <input id="SmtpPort" type="number" name="SmtpPort" class="form-control" [ngClass]="{'edited':settings.email.smtpPort}" [(ngModel)]="settings.email.smtpPort" maxlength="5">
                         </div>
                         <div class="m-checkbox-list">
                             <label for="Settings_SmtpEnableSsl" class="m-checkbox">
@@ -246,16 +246,16 @@
                             </label>
                         </div>
                         <div class="form-group" [hidden]="settings.email.smtpUseDefaultCredentials">
-                            <label>{{l("DomainName")}}</label>
-                            <input type="text" name="SmtpDomainName" class="form-control" [ngClass]="{'edited':settings.email.smtpDomain}" [(ngModel)]="settings.email.smtpDomain" maxlength="128">
+                            <label for="SmtpDomainName">{{l("DomainName")}}</label>
+                            <input id="SmtpDomainName" type="text" name="SmtpDomainName" class="form-control" [ngClass]="{'edited':settings.email.smtpDomain}" [(ngModel)]="settings.email.smtpDomain" maxlength="128">
                         </div>
                         <div class="form-group" [hidden]="settings.email.smtpUseDefaultCredentials">
-                            <label>{{l("UserName")}}</label>
-                            <input type="text" name="SmtpUserName" class="form-control" [ngClass]="{'edited':settings.email.smtpUserName}" [(ngModel)]="settings.email.smtpUserName" maxlength="128">
+                            <label for="SmtpUserName">{{l("UserName")}}</label>
+                            <input id="SmtpUserName" type="text" name="SmtpUserName" class="form-control" [ngClass]="{'edited':settings.email.smtpUserName}" [(ngModel)]="settings.email.smtpUserName" maxlength="128">
                         </div>
                         <div class="form-group" *ngIf="!setRandomPassword" [hidden]="settings.email.smtpUseDefaultCredentials">
-                            <label>{{l("Password")}}</label>
-                            <input type="password" name="SmtpPassword" class="form-control" [ngClass]="{'edited':settings.email.smtpPassword}" [(ngModel)]="settings.email.smtpPassword" maxlength="128">
+                            <label for="SmtpPassword">{{l("Password")}}</label>
+                            <input id="SmtpPassword" type="password" name="SmtpPassword" class="form-control" [ngClass]="{'edited':settings.email.smtpPassword}" [(ngModel)]="settings.email.smtpPassword" maxlength="128">
                         </div>
                         <hr />
                         <h5>{{l("TestEmailSettingsHeader")}}</h5>
@@ -272,16 +272,16 @@
                         <!-- *ngIf="true" is a workaround for https://github.com/valor-software/ng2-bootstrap/issues/823 -->
                         <h5>{{l("InvoiceInformation")}}</h5>
                         <div class="form-group">
-                            <label>{{l("LegalName")}}</label>
-                            <input type="text" name="legalName" class="form-control" [ngClass]="{'edited':settings.billing.legalName}" [(ngModel)]="settings.billing.legalName" maxlength="64">
+                            <label for="LegalName">{{l("LegalName")}}</label>
+                            <input id="LegalName" type="text" name="legalName" class="form-control" [ngClass]="{'edited':settings.billing.legalName}" [(ngModel)]="settings.billing.legalName" maxlength="64">
                         </div>
                         <div class="form-group">
-                            <label>{{l("Address")}}</label>
-                            <textarea rows="5" name="address" class="form-control" [ngClass]="{'edited':settings.billing.address}" [(ngModel)]="settings.billing.address" maxlength="256"></textarea>
+                            <label for="Address">{{l("Address")}}</label>
+                            <textarea id="Address" rows="5" name="address" class="form-control" [ngClass]="{'edited':settings.billing.address}" [(ngModel)]="settings.billing.address" maxlength="256"></textarea>
                         </div>
                         <div class="form-group">
-                            <label>{{l("Tax/VatNo")}}</label>
-                            <input type="text" name="taxVatNo" class="form-control" [ngClass]="{'edited':settings.billing.taxVatNo}" [(ngModel)]="settings.billing.taxVatNo" maxlength="32">
+                            <label for="taxVatNo">{{l("Tax/VatNo")}}</label>
+                            <input id="taxVatNo" type="text" name="taxVatNo" class="form-control" [ngClass]="{'edited':settings.billing.taxVatNo}" [(ngModel)]="settings.billing.taxVatNo" maxlength="32">
                         </div>
                     </tab>
                 </tabset>

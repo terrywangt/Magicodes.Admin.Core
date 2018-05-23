@@ -1,5 +1,5 @@
-import { AppConsts } from '@shared/AppConsts';
 import { UtilsService } from '@abp/utils/utils.service';
+import { AppConsts } from '@shared/AppConsts';
 
 export class SignalRHelper {
     static initSignalR(callback: () => void): void {

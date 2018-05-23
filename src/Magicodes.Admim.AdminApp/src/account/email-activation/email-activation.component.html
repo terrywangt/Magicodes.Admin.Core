@@ -16,8 +16,8 @@
 
             <div class="m-login__form-action">
 
-                <button [disabled]="saving" routerLink="/account/login" type="button" class="btn btn-outline-focus  m-btn m-btn--pill m-btn--custom"><i class="fa fa-arrow-left"></i> {{l("Back")}}</button>
-                <button type="submit" class="btn btn-focus m-btn m-btn--pill m-btn--custom m-btn--air" [disabled]="!emailActivationForm.form.valid" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-check"></i> {{l("Submit")}}</button>
+                <button [disabled]="saving" routerLink="/account/login" type="button" class="btn btn-outline-primary  m-btn m-btn--pill m-btn--custom"><i class="fa fa-arrow-left"></i> {{l("Back")}}</button>
+                <button type="submit" class="btn btn-primary m-btn m-btn--pill m-btn--custom m-btn--air" [disabled]="!emailActivationForm.form.valid" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-check"></i> {{l("Submit")}}</button>
             </div>
         </form>
     </div>

@@ -1,11 +1,11 @@
-import { Component, ViewChild, Injector } from '@angular/core';
-import { ModalDirective } from 'ngx-bootstrap';
-import { AppComponentBase } from '@shared/common/app-component-base';
-import { AppConsts } from '@shared/AppConsts';
-import { FileUploader, FileUploaderOptions, Headers } from 'ng2-file-upload';
-import { ProfileServiceProxy, UpdateProfilePictureInput } from '@shared/service-proxies/service-proxies';
 import { IAjaxResponse } from '@abp/abpHttpInterceptor';
 import { TokenService } from '@abp/auth/token.service';
+import { Component, Injector, ViewChild } from '@angular/core';
+import { AppConsts } from '@shared/AppConsts';
+import { AppComponentBase } from '@shared/common/app-component-base';
+import { ProfileServiceProxy, UpdateProfilePictureInput } from '@shared/service-proxies/service-proxies';
+import { FileUploader, FileUploaderOptions } from 'ng2-file-upload';
+import { ModalDirective } from 'ngx-bootstrap';
 
 @Component({
     selector: 'changeProfilePictureModal',

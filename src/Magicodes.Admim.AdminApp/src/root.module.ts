@@ -1,31 +1,24 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgModule, Injector, APP_INITIALIZER, LOCALE_ID } from '@angular/core';
-import { registerLocaleData, PlatformLocation } from '@angular/common';
-
 import { AbpModule } from '@abp/abp.module';
 import { AbpHttpInterceptor } from '@abp/abpHttpInterceptor';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
-
-import { AppModule } from './app/app.module';
-import { CommonModule } from '@shared/common/common.module';
-import { ServiceProxyModule } from '@shared/service-proxies/service-proxy.module';
-import { RootRoutingModule } from './root-routing.module';
-
-import { AppConsts } from '@shared/AppConsts';
-import { AppSessionService } from '@shared/common/session/app-session.service';
-import { API_BASE_URL } from '@shared/service-proxies/service-proxies';
-
-import { RootComponent } from './root.component';
-import { AppPreBootstrap } from './AppPreBootstrap';
-
-import { UrlHelper } from '@shared/helpers/UrlHelper';
+import { PlatformLocation, registerLocaleData } from '@angular/common';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { APP_INITIALIZER, Injector, LOCALE_ID, NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppAuthService } from '@app/shared/common/auth/app-auth.service';
+import { AppConsts } from '@shared/AppConsts';
+import { CommonModule } from '@shared/common/common.module';
+import { AppSessionService } from '@shared/common/session/app-session.service';
 import { AppUiCustomizationService } from '@shared/common/ui/app-ui-customization.service';
-import { HttpClientModule } from '@angular/common/http';
+import { UrlHelper } from '@shared/helpers/UrlHelper';
+import { API_BASE_URL } from '@shared/service-proxies/service-proxies';
+import { ServiceProxyModule } from '@shared/service-proxies/service-proxy.module';
 import * as localForage from 'localforage';
-
 import * as _ from 'lodash';
+import { AppPreBootstrap } from './AppPreBootstrap';
+import { AppModule } from './app/app.module';
+import { RootRoutingModule } from './root-routing.module';
+import { RootComponent } from './root.component';
 
 export function appInitializerFactory(
     injector: Injector,
@@ -131,7 +124,12 @@ export function getCurrentLanguage(): string {
 }
 
 export function getBaseHref(platformLocation: PlatformLocation): string {
-    return platformLocation.getBaseHrefFromDOM();
+    var baseUrl = platformLocation.getBaseHrefFromDOM();
+    if (baseUrl) {
+        return baseUrl;
+    }
+
+    return '/';
 }
 
 function handleLogoutRequest(authService: AppAuthService) {

@@ -1,9 +1,9 @@
 import { Component, Injector, OnInit } from '@angular/core';
-import { Router, CanActivate } from '@angular/router';
-import { TokenAuthServiceProxy, SendTwoFactorAuthCodeModel } from '@shared/service-proxies/service-proxies';
-import { AppComponentBase } from '@shared/common/app-component-base';
-import { LoginService } from './login.service';
+import { CanActivate, Router } from '@angular/router';
 import { accountModuleAnimation } from '@shared/animations/routerTransition';
+import { AppComponentBase } from '@shared/common/app-component-base';
+import { SendTwoFactorAuthCodeModel, TokenAuthServiceProxy } from '@shared/service-proxies/service-proxies';
+import { LoginService } from './login.service';
 
 @Component({
     templateUrl: './send-two-factor-code.component.html',

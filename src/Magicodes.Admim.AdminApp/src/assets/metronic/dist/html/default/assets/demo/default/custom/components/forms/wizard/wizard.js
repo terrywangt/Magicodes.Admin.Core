@@ -9,14 +9,14 @@ var WizardDemo = function () {
     //== Private functions
     var initWizard = function () {
         //== Initialize form wizard
-        wizard = wizardEl.mWizard({
+        wizard = new mWizard('m_wizard', {
             startStep: 1
         });
 
         //== Validation before going to next page
         wizard.on('beforeNext', function(wizard) {
             if (validator.form() !== true) {
-                return false;  // don't go to the next step
+                wizard.stop();  // don't go to the next step
             }
         })
 

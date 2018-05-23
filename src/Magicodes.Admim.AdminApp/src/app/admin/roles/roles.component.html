@@ -32,78 +32,76 @@
                     </div>
                 </div>
                 <div class="row align-items-center">
-                    <!--<Primeng-Datatable-Start>-->
-                    <div class="primeng-datatable-container" [busyIf]="primengDatatableHelper.isLoading">
-                        <p-dataTable #dataTable
-                                     (onLazyLoad)="getRoles()"
-                                     [value]="primengDatatableHelper.records"
-                                     rows="{{primengDatatableHelper.defaultRecordsCountPerPage}}"
-                                     [paginator]="false"
-                                     [lazy]="true"
-                                     emptyMessage="{{l('NoData')}}"
-                                     [responsive]="primengDatatableHelper.isResponsive">
-                            <p-footer>
-                                {{l('TotalRecordsCount', primengDatatableHelper.totalRecordsCount)}}
-                            </p-footer>
+                    <!--<Primeng-TurboTable-Start>-->
+                    <div class="primeng-datatable-container" [busyIf]="primengTableHelper.isLoading">
+                        <p-table #dataTable
+                                 (onLazyLoad)="getRoles()"
+                                 [value]="primengTableHelper.records"
+                                 rows="{{primengTableHelper.defaultRecordsCountPerPage}}"
+                                 [paginator]="false"
+                                 [lazy]="true"
+                                 [responsive]="primengTableHelper.isResponsive">
 
-                            <p-column field=""
-                                      header="{{l('Actions')}}"
-                                      [sortable]="false"
-                                      [style]="{'width':'130px','text-align':'center'}"
-                                      [hidden]="!isGrantedAny('Pages.Administration.Roles.Edit', 'Pages.Administration.Roles.Delete')">
-                                <ng-template let-record="rowData" pTemplate="body">
-                                    <div class="btn-group dropdown">
-                                        <button class="dropdown-toggle btn btn-brand btn-sm dropdown-toggle btn-primary"
-                                                data-toggle="dropdown"
-                                                aria-haspopup="true"
-                                                aria-expanded="false">
-                                            <i class="fa fa-cog"></i><span class="caret"></span> {{l("Actions")}}
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <li>
-                                                <a *ngIf="permission.isGranted('Pages.Administration.Roles.Edit')"
-                                                   (click)="createOrEditRoleModal.show(record.id)">{{l('Edit')}}</a>
-                                            </li>
-                                            <li>
-                                                <a *ngIf="!record.isStatic && permission.isGranted('Pages.Administration.Roles.Delete')"
-                                                   (click)="deleteRole(record)">{{l('Delete')}}</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </ng-template>
-                            </p-column>
-                            <p-column field="displayName" header="{{l('RoleName')}}" [sortable]="false">
-                                <ng-template let-record="rowData" pTemplate="body">
-                                    <span>
-                                        {{record.displayName}}
-                                        <span *ngIf="record.isStatic"
-                                              class="m-badge m-badge--brand m-badge--wide"
-                                              data-toggle="tooltip"
-                                              title="{{l('StaticRole_Tooltip')}}"
-                                              data-placement="top">
-                                            {{l('Static')}}
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th style="width: 130px" [hidden]="!isGrantedAny('Pages.Administration.Roles.Edit', 'Pages.Administration.Roles.Delete')">{{l('Actions')}}</th>
+                                    <th>{{l('RoleName')}}</th>
+                                    <th>{{l('CreationTime')}}</th>
+                                </tr>
+                            </ng-template>
+
+                            <ng-template pTemplate="body" let-record="$implicit">
+                                <tr>
+                                    <td [hidden]="!isGrantedAny('Pages.Administration.Roles.Edit', 'Pages.Administration.Roles.Delete')">
+                                        <div class="btn-group dropdown">
+                                            <button class="dropdown-toggle btn btn-brand btn-sm dropdown-toggle btn-primary"
+                                                    data-toggle="dropdown"
+                                                    aria-haspopup="true"
+                                                    aria-expanded="false">
+                                                <i class="fa fa-cog"></i><span class="caret"></span> {{l("Actions")}}
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <a *ngIf="permission.isGranted('Pages.Administration.Roles.Edit')"
+                                                       (click)="createOrEditRoleModal.show(record.id)">{{l('Edit')}}</a>
+                                                </li>
+                                                <li>
+                                                    <a *ngIf="!record.isStatic && permission.isGranted('Pages.Administration.Roles.Delete')"
+                                                       (click)="deleteRole(record)">{{l('Delete')}}</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span>
+                                            {{record.displayName}}
+                                            <span *ngIf="record.isStatic"
+                                                  class="m-badge m-badge--brand m-badge--wide"
+                                                  data-toggle="tooltip"
+                                                  title="{{l('StaticRole_Tooltip')}}"
+                                                  data-placement="top">
+                                                {{l('Static')}}
+                                            </span>
+                                            <span *ngIf="record.isDefault"
+                                                  class="m-badge m-badge--metal m-badge--wide"
+                                                  data-toggle="tooltip"
+                                                  title="{{l('DefaultRole_Description')}}"
+                                                  data-placement="top">
+                                                {{l('Default')}}
+                                            </span>
                                         </span>
-                                        <span *ngIf="record.isDefault"
-                                              class="m-badge m-badge--metal m-badge--wide"
-                                              data-toggle="tooltip"
-                                              title="{{l('DefaultRole_Description')}}"
-                                              data-placement="top">
-                                            {{l('Default')}}
-                                        </span>
-                                    </span>
-                                </ng-template>
-                            </p-column>
-
-                            <p-column field="creationTime" header="{{l('CreationTime')}}" [sortable]="false">
-                                <ng-template let-record="rowData" pTemplate="body">
-                                    {{record.creationTime | momentFormat:'L'}}
-                                </ng-template>
-                            </p-column>
-
-                        </p-dataTable>
-
+                                    </td>
+                                    <td>
+                                        {{record.creationTime | momentFormat:'L'}}
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                        <div class="ui-table-footer">
+                            {{l('TotalRecordsCount', primengTableHelper.totalRecordsCount)}}
+                        </div>
                     </div>
-                    <!--<Primeng-Datatable-End>-->
+                    <!--<Primeng-TurboTable-End>-->
                 </div>
             </div>
         </div>

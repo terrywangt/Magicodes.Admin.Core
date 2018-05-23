@@ -1,22 +1,22 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Router, NavigationEnd } from '@angular/router';
-import { UsersComponent } from './users/users.component';
-import { RolesComponent } from './roles/roles.component';
+import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { AuditLogsComponent } from './audit-logs/audit-logs.component';
-import { HostSettingsComponent } from './settings/host-settings.component';
-import { InstallComponent } from './install/install.component';
-import { TenantSettingsComponent } from './settings/tenant-settings.component';
-import { MaintenanceComponent } from './maintenance/maintenance.component';
-import { EditionsComponent } from './editions/editions.component';
-import { LanguagesComponent } from './languages/languages.component';
-import { LanguageTextsComponent } from './languages/language-texts.component';
-import { TenantsComponent } from './tenants/tenants.component';
-import { OrganizationUnitsComponent } from './organization-units/organization-units.component';
 import { HostDashboardComponent } from './dashboard/host-dashboard.component';
-import { SubscriptionManagementComponent } from './subscription-management/subscription-management.component';
-import { InvoiceComponent } from './subscription-management/invoice/invoice.component';
 import { DemoUiComponentsComponent } from './demo-ui-components/demo-ui-components.component';
+import { EditionsComponent } from './editions/editions.component';
+import { InstallComponent } from './install/install.component';
+import { LanguageTextsComponent } from './languages/language-texts.component';
+import { LanguagesComponent } from './languages/languages.component';
+import { MaintenanceComponent } from './maintenance/maintenance.component';
+import { OrganizationUnitsComponent } from './organization-units/organization-units.component';
+import { RolesComponent } from './roles/roles.component';
+import { HostSettingsComponent } from './settings/host-settings.component';
+import { TenantSettingsComponent } from './settings/tenant-settings.component';
+import { InvoiceComponent } from './subscription-management/invoice/invoice.component';
+import { SubscriptionManagementComponent } from './subscription-management/subscription-management.component';
+import { TenantsComponent } from './tenants/tenants.component';
 import { UiCustomizationComponent } from './ui-customization/ui-customization.component';
+import { UsersComponent } from './users/users.component';
 
 @NgModule({
     imports: [

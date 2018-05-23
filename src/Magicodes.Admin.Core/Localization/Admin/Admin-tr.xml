@@ -729,6 +729,7 @@
         <text name="UiCustomization_Footer">Alt bilgi</text>
         <text name="UiCustomization_FixedFooter">Sabit alt bilgi</text>
         <text name="UiCustomization_Header">Başlık çubuğu</text>
+        <text name="UiCustomization_Theme">Tema</text>
         <text name="VisualSettings">Görsel Ayarlar</text>
         <text name="SaveAsSystemDefault">Sistem varsayılanı olarak kaydet</text>
         <text name="UseSystemDefaults">Varsayılanı kullan</text>
@@ -764,5 +765,24 @@
         <text name="SelectTwoFactorProvider">İki faktörlü kimlik doğrulama sağlayıcısı</text>
         <text name="InvoiceInfoIsMissingOrNotCompleted">Fatura bilgiler eksik veya tamamlanmamış</text>
         <text name="InvoiceTo">Sayın</text>
+        <text name="OperationLogs">İşlem logları</text>
+        <text name="ChangeLogs">Değişiklik logları</text>
+        <text name="Object">Nesne</text>
+        <text name="Property">Alan</text>
+        <text name="OriginalValue">Orijinal değer</text>
+        <text name="NewValue">Yeni değer</text>
+        <text name="Detail">Detay</text>
+        <text name="CreatedAtByUser"><![CDATA[<b>{1}</b> tarafından <b>{0}</b> tarihinde oluşturuldu]]></text>
+        <text name="Magicodes.Admin.MultiTenancy.Tenant">Müşteri</text>
+        <text name="Abp.Organizations.OrganizationUnit">Organizasyon birimi</text>
+        <text name="Search">Bul</text>
+        <text name="Pin">Pin</text>
+        <text name="TopMenu">Üst menü</text>
+        <text name="LeftMenu">Sol menü</text>
+        <text name="UserAccounts">Kullanıcı hesapları</text>
+        <text name="Blue">Mavi</text>
+        <text name="Green">Yeşil</text>
+        <text name="Pink">Pembe</text>
+        <text name="Yellow">Sarı</text>
     </texts>
 </localizationDictionary>

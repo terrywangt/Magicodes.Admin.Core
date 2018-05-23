@@ -36,7 +36,7 @@
                             <!-- end::Responsive Header Menu Toggler-->
                             <!-- BEGIN: Topbar Toggler -->
                             <a id="m_aside_header_topbar_mobile_toggle" href="javascript:;" class="m-brand__icon m--visible-tablet-and-mobile-inline-block">
-                                <i class="flaticon-more"></i>
+                                <i class="flaticon-more" [attr.aria-label]="l('Expand')"></i>
                             </a>
                             <!-- BEGIN: Topbar Toggler -->
                         </div>
@@ -46,18 +46,26 @@
                 <div class="m-stack__item m-stack__item--fluid m-header-head d-print-none" id="m_header_nav">
                     <!-- BEGIN: Topbar -->
                     <div id="m_header_topbar" class="m-topbar  m-stack m-stack--ver m-stack--general">
-                        <div class="m-stack__item m-topbar__nav-wrapper">
-                            <ul class="m-topbar__nav m-nav m-nav--inline">
+                        <nav class="m-stack__item m-topbar__nav-wrapper" [attr.aria-label]="l('TopMenu')">
+                            <ul class="m-topbar__nav m-nav m-nav--inline"
+                                aria-label="TopMenu"
+                                role="menubar">
                                 <li *ngIf="languages.length" class="m-nav__item m-dropdown m-dropdown--large m-dropdown--arrow m-dropdown--align-center m-dropdown--mobile-full-width m-dropdown--skin-light m-list-search m-list-search--skin-light m-dropdown--open dropdown-language">
-                                    <a href="javascript:;" class="m-nav__link m-dropdown__toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                                    <a href="javascript:;" class="m-nav__link m-dropdown__toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"
+                                       role="menuitem"
+                                       aria-haspopup="true"
+                                       aria-expanded="false"
+                                       tabindex="-1">
                                         <i [class]="currentLanguage.icon"></i>
                                         <span class="m-menu__link-text langname">
                                             {{currentLanguage.displayName}}
                                         </span>
                                         <i class="fa fa-angle-down"></i>
                                     </a>
-                                    <ul class="dropdown-menu">
-                                        <li *ngFor="let language of languages">
+                                    <ul class="dropdown-menu"
+                                        [attr.aria-label]="l('Languages')"
+                                        role="menu">
+                                        <li *ngFor="let language of languages" role="none">
                                             <a href="javascript:;" (click)="changeLanguage(language.name)">
                                                 <i [class]="language.icon"></i> {{language.displayName}}
                                             </a>
@@ -68,7 +76,11 @@
                                 <li headerNotifications class="m-nav__item m-topbar__notifications m-topbar__notifications--img m-dropdown m-dropdown--large m-dropdown--header-bg-fill m-dropdown--arrow m-dropdown--align-center 	m-dropdown--mobile-full-width" data-dropdown-toggle="click" data-dropdown-persistent="true" id="header_notification_bar"></li>
 
                                 <li class="m-nav__item m-topbar__user-profile m-topbar__user-profile--img  m-dropdown m-dropdown--medium m-dropdown--arrow m-dropdown--header-bg-fill m-dropdown--align-right m-dropdown--mobile-full-width m-dropdown--skin-light" data-dropdown-toggle="click">
-                                    <a href="javascript:;" class="m-nav__link m-dropdown__toggle">
+                                    <a href="javascript:;" class="m-nav__link m-dropdown__toggle"
+                                       role="menuitem"
+                                       aria-haspopup="true"
+                                       aria-expanded="false"
+                                       tabindex="0">
                                         <span class="m-topbar__username m--font-primary">
                                             <i *ngIf="isImpersonatedLogin" class="fa fa-reply m--font-danger"></i>
                                             <span *ngIf="isMultiTenancyEnabled" class="tenancy-name">{{tenancyName}}\</span>{{userName}}
@@ -80,7 +92,7 @@
                                     <div class="m-dropdown__wrapper">
                                         <span class="m-dropdown__arrow m-dropdown__arrow--right m-dropdown__arrow--adjust"></span>
                                         <div class="m-dropdown__inner">
-                                            <div class="m-dropdown__header m--align-center"  [ngStyle]="{ 'background': 'url(' + appRootUrl() + 'assets/common/images/user_profile_bg.png)', 'background-size': 'cover'}">
+                                            <div class="m-dropdown__header m--align-center"  [ngStyle]="{ 'background': 'url(' + appRootUrl() + 'assets/metronic/dist/html/' + ui.getTheme() + '/assets/demo/' + ui.getTheme() + '/media/img/misc/user_profile_bg.jpg)', 'background-size': 'cover'}">
                                                 <div class="m-card-user m-card-user--skin-dark">
                                                     <div class="m-card-user__pic">
                                                         <img alt="" class="header-profile-picture m--img-rounded m--marginless m--img-centered" [src]="profilePicture" />
@@ -93,10 +105,16 @@
                                                 </div>
                                             </div>
                                             <div class="m-dropdown__body">
-                                                <div class="m-dropdown__content">
-                                                    <ul class="m-nav m-nav--skin-light">
-                                                        <li *ngIf="isImpersonatedLogin" class="m-nav__item">
-                                                            <a href="javascript:;" class="m-nav__link" (click)="backToMyAccount()">
+                                                <nav class="m-dropdown__content" [attr.aria-label]="l('UserAccount')">
+                                                    <ul class="m-nav m-nav--skin-light"
+                                                        [attr.aria-label]="l('UserAccount')"
+                                                        role="menu">
+                                                        <li *ngIf="isImpersonatedLogin" class="m-nav__item" role="none">
+                                                            <a href="javascript:;" class="m-nav__link" (click)="backToMyAccount()"
+                                                               role="menuitem"
+                                                               aria-haspopup="true"
+                                                               aria-expanded="false"
+                                                               tabindex="-1">
                                                                 <i class="m-nav__link-icon fa fa-reply m--font-danger"></i>
                                                                 <span class="m-nav__link-title">
                                                                     <span class="m-nav__link-wrap">
@@ -107,9 +125,13 @@
                                                                 </span>
                                                             </a>
                                                         </li>
-                                                        <li *ngIf="isImpersonatedLogin" class="m-nav__separator m-nav__separator--fit"></li>
-                                                        <li class="m-nav__item">
-                                                            <a href="javascript:;" class="m-nav__link" (click)="showLinkedAccounts()">
+                                                        <li *ngIf="isImpersonatedLogin" class="m-nav__separator m-nav__separator--fit" role="none"></li>
+                                                        <li class="m-nav__item" role="none">
+                                                            <a href="javascript:;" class="m-nav__link" (click)="showLinkedAccounts()"
+                                                               role="menuitem"
+                                                               aria-haspopup="true"
+                                                               aria-expanded="false"
+                                                               tabindex="-1">
                                                                 <i class="m-nav__link-icon flaticon-user-settings"></i>
                                                                 <span class="m-nav__link-title">
                                                                     <span class="m-nav__link-wrap">
@@ -119,9 +141,15 @@
                                                                     </span>
                                                                 </span>
                                                             </a>
-                                                            <ul id="RecentlyUsedLinkedUsers" class="m-nav linked-accounts" *ngIf="recentlyLinkedUsers">
-                                                                <li *ngFor="let linkedUser of recentlyLinkedUsers" class="m-nav__item">
-                                                                    <a href="javascript:;" (click)="switchToLinkedUser(linkedUser)" class="m-nav__link">
+                                                            <ul id="RecentlyUsedLinkedUsers" class="m-nav linked-accounts" *ngIf="recentlyLinkedUsers"
+                                                                [attr.aria-label]="l('LinkedAccounts')"
+                                                                role="menu">
+                                                                <li *ngFor="let linkedUser of recentlyLinkedUsers" class="m-nav__item" role="none">
+                                                                    <a href="javascript:;" (click)="switchToLinkedUser(linkedUser)" class="m-nav__link"
+                                                                       role="menuitem"
+                                                                       aria-haspopup="true"
+                                                                       aria-expanded="false"
+                                                                       tabindex="-1">
                                                                         <span class="m-nav__link-bullet m-nav__link-bullet--dot">
                                                                             <span></span>
                                                                         </span>
@@ -132,9 +160,13 @@
                                                                 </li>
                                                             </ul>
                                                         </li>
-                                                        <li class="m-nav__separator m-nav__separator--fit"></li>
-                                                        <li class="m-nav__item">
-                                                            <a href="javascript:;" class="m-nav__link" (click)="changePassword()">
+                                                        <li class="m-nav__separator m-nav__separator--fit" role="none"></li>
+                                                        <li class="m-nav__item" role="none">
+                                                            <a href="javascript:;" class="m-nav__link" (click)="changePassword()"
+                                                               role="menuitem"
+                                                               aria-haspopup="true"
+                                                               aria-expanded="false"
+                                                               tabindex="-1">
                                                                 <i class="m-nav__link-icon flaticon-more-v6"></i>
                                                                 <span class="m-nav__link-title">
                                                                     <span class="m-nav__link-wrap">
@@ -145,8 +177,12 @@
                                                                 </span>
                                                             </a>
                                                         </li>
-                                                        <li class="m-nav__item">
-                                                            <a href="javascript:;" class="m-nav__link" (click)="showLoginAttempts()">
+                                                        <li class="m-nav__item" role="none">
+                                                            <a href="javascript:;" class="m-nav__link" (click)="showLoginAttempts()"
+                                                               role="menuitem"
+                                                               aria-haspopup="true"
+                                                               aria-expanded="false"
+                                                               tabindex="-1">
                                                                 <i class="m-nav__link-icon flaticon-list"></i>
                                                                 <span class="m-nav__link-title">
                                                                     <span class="m-nav__link-wrap">
@@ -157,8 +193,12 @@
                                                                 </span>
                                                             </a>
                                                         </li>
-                                                        <li class="m-nav__item">
-                                                            <a href="javascript:;" class="m-nav__link" (click)="changeProfilePicture()">
+                                                        <li class="m-nav__item" role="none">
+                                                            <a href="javascript:;" class="m-nav__link" (click)="changeProfilePicture()"
+                                                               role="menuitem"
+                                                               aria-haspopup="true"
+                                                               aria-expanded="false"
+                                                               tabindex="-1">
                                                                 <i class="m-nav__link-icon flaticon-profile-1"></i>
                                                                 <span class="m-nav__link-title">
                                                                     <span class="m-nav__link-wrap">
@@ -169,8 +209,12 @@
                                                                 </span>
                                                             </a>
                                                         </li>
-                                                        <li class="m-nav__item">
-                                                            <a href="javascript:;" class="m-nav__link" (click)="changeMySettings()">
+                                                        <li class="m-nav__item" role="none">
+                                                            <a href="javascript:;" class="m-nav__link" (click)="changeMySettings()"
+                                                               role="menuitem"
+                                                               aria-haspopup="true"
+                                                               aria-expanded="false"
+                                                               tabindex="-1">
                                                                 <i class="m-nav__link-icon flaticon-cogwheel"></i>
                                                                 <span class="m-nav__link-title">
                                                                     <span class="m-nav__link-wrap">
@@ -181,8 +225,12 @@
                                                                 </span>
                                                             </a>
                                                         </li>
-                                                        <li class="m-nav__item" *ngIf="!isGranted('Pages.Administration.UiCustomization')">
-                                                            <a routerLink="admin/ui-customization" class="m-nav__link">
+                                                        <li class="m-nav__item" *ngIf="!isGranted('Pages.Administration.UiCustomization')" role="none">
+                                                            <a routerLink="admin/ui-customization" class="m-nav__link"
+                                                               role="menuitem"
+                                                               aria-haspopup="true"
+                                                               aria-expanded="false"
+                                                               tabindex="-1">
                                                                 <i class="m-nav__link-icon flaticon-medical"></i>
                                                                 <span class="m-nav__link-title">
                                                                     <span class="m-nav__link-wrap">
@@ -193,25 +241,37 @@
                                                                 </span>
                                                             </a>
                                                         </li>
-                                                        <li class="m-nav__separator m-nav__separator--fit"></li>
-                                                        <li class="m-nav__item">
-                                                            <a href="javascript:;" (click)="logout()" class="btn m-btn--pill btn-secondary m-btn m-btn--custom m-btn--label-brand m-btn--bolder">{{l("Logout")}}</a>
+                                                        <li class="m-nav__separator m-nav__separator--fit" role="none"></li>
+                                                        <li class="m-nav__item" role="none">
+                                                            <a href="javascript:;" (click)="logout()" class="btn m-btn--pill btn-secondary m-btn m-btn--custom m-btn--label-brand m-btn--bolder"
+                                                               role="menuitem"
+                                                               aria-haspopup="true"
+                                                               aria-expanded="false"
+                                                               tabindex="-1">{{l("Logout")}}</a>
                                                         </li>
                                                     </ul>
-                                                </div>
+                                                </nav>
                                             </div>
                                         </div>
                                     </div>
                                 </li>
                                 <li *ngIf="chatEnabled && !chatConnected" class="m-nav__item m-topbar__notifications m-topbar__notifications--img m-dropdown m-dropdown--large m-dropdown--header-bg-fill m-dropdown--arrow m-dropdown--align-center 	m-dropdown--mobile-full-width">
-                                    <a href="javascript:;" class="m-nav__link">
+                                    <a href="javascript:;" class="m-nav__link"
+                                       role="menuitem"
+                                       aria-haspopup="true"
+                                       aria-expanded="false"
+                                       tabindex="-1">
                                         <span class="m-nav__link-icon">
                                             <img *ngIf="!chatConnected" src="./assets/common/images/loading.gif" style="width: 23px;" tooltip="{{l('ChatIsConnecting')}}" placement="left" />
                                         </span>
                                     </a>
                                 </li>
                                 <li [hidden]="!chatEnabled || !chatConnected" id="m_quick_sidebar_toggle" class="m-nav__item m-topbar__notifications m-topbar__notifications--img m-dropdown m-dropdown--large m-dropdown--header-bg-fill m-dropdown--arrow m-dropdown--align-center 	m-dropdown--mobile-full-width">
-                                    <a href="javascript:;" class="m-nav__link m-dropdown__toggle">
+                                    <a href="javascript:;" class="m-nav__link m-dropdown__toggle"
+                                       role="menuitem"
+                                       aria-haspopup="true"
+                                       aria-expanded="false"
+                                       tabindex="-1">
                                         <span class="m-nav__link-icon">
                                             <i class="flaticon-chat"></i>
                                         </span>
@@ -219,7 +279,7 @@
                                     </a>
                                 </li>
                             </ul>
-                        </div>
+                        </nav>
                     </div>
                     <!-- END: Topbar -->
                 </div>

@@ -21,7 +21,7 @@
                 </div>
             </div>
         </div>
-        <div *ngIf="!useFullWidthLayout()" class="m-grid__item m-grid__item--fluid m-grid m-grid--center m-grid--hor m-grid__item--order-tablet-and-mobile-1 m-login__content" style="background-image: url(https://api.dujin.org/bing/1366.php)">
+        <div *ngIf="!useFullWidthLayout()" class="m-grid__item m-grid__item--fluid m-grid m-grid--center m-grid--hor m-grid__item--order-tablet-and-mobile-1 m-login__content" [style.background-image]="getBgUrl()">
             <div class="m-grid__item m-grid__item--middle">
                 <h3 class="m-login__welcome">
                     {{appSession.application.name}}

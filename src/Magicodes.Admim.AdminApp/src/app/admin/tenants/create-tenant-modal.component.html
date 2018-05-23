@@ -9,7 +9,7 @@
                     <h5 class="modal-title">
                         <span>{{l("CreateNewTenant")}}</span>
                     </h5>
-                    <button type="button" class="close" (click)="close()" aria-label="Close">
+                    <button type="button" class="close" (click)="close()" [attr.aria-label]="l('Close')">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -17,8 +17,8 @@
                 <div class="modal-body">
 
                     <div class="form-group">
-                        <label>{{l("TenancyName")}} *</label>
-                        <input #tenancyNameInput="ngModel" class="form-control" type="text" [ngClass]="{'edited':tenant.tenancyName}" name="tenancyName" [(ngModel)]="tenant.tenancyName" #tenancyName="ngModel" required maxlength="64" pattern="^[a-zA-Z][a-zA-Z0-9_-]{1,}$">
+                        <label for="TenancyName">{{l("TenancyName")}} *</label>
+                        <input id="TenancyName" #tenancyNameInput="ngModel" class="form-control" type="text" [ngClass]="{'edited':tenant.tenancyName}" name="tenancyName" [(ngModel)]="tenant.tenancyName" #tenancyName="ngModel" required maxlength="64" pattern="^[a-zA-Z][a-zA-Z0-9_-]{1,}$">
                         <validation-messages [formCtrl]="tenancyNameInput"></validation-messages>
                     </div>
                     <div>
@@ -26,8 +26,8 @@
                     </div>
 
                     <div class="form-group">
-                        <label>{{l("Name")}} *</label>
-                        <input #nameInput="ngModel" type="text" name="Name" class="form-control" [ngClass]="{'edited':tenant.name}" [(ngModel)]="tenant.name" required maxlength="128">
+                        <label for="Name">{{l("Name")}} *</label>
+                        <input id="Name" #nameInput="ngModel" type="text" name="Name" class="form-control" [ngClass]="{'edited':tenant.name}" [(ngModel)]="tenant.name" required maxlength="128">
                         <validation-messages [formCtrl]="nameInput"></validation-messages>
                     </div>
 
@@ -40,14 +40,14 @@
                     </div>
 
                     <div class="form-group" *ngIf="!useHostDb">
-                        <label>{{l("DatabaseConnectionString")}} *</label>
-                        <input #connectionStringInput="ngModel" type="text" name="ConnectionString" class="form-control" [(ngModel)]="tenant.connectionString" [ngClass]="{'edited':tenant.connectionString}" required maxlength="1024">
+                        <label for="DatabaseConnectionString">{{l("DatabaseConnectionString")}} *</label>
+                        <input id="DatabaseConnectionString" #connectionStringInput="ngModel" type="text" name="ConnectionString" class="form-control" [(ngModel)]="tenant.connectionString" [ngClass]="{'edited':tenant.connectionString}" required maxlength="1024">
                         <validation-messages [formCtrl]="connectionStringInput"></validation-messages>
                     </div>
 
                     <div class="form-group">
-                        <label>{{l("AdminEmailAddress")}} *</label>
-                        <input #adminEmailAddressInput="ngModel" type="email" name="AdminEmailAddress" class="form-control" [(ngModel)]="tenant.adminEmailAddress" [ngClass]="{'edited':tenant.adminEmailAddress}" required pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{1,})+$" maxlength="256">
+                        <label for="AdminEmailAddress">{{l("AdminEmailAddress")}} *</label>
+                        <input id="AdminEmailAddress" #adminEmailAddressInput="ngModel" type="email" name="AdminEmailAddress" class="form-control" [(ngModel)]="tenant.adminEmailAddress" [ngClass]="{'edited':tenant.adminEmailAddress}" required pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{1,})+$" maxlength="256">
                         <validation-messages [formCtrl]="adminEmailAddressInput" [errorDefs]="[{pattern: l('InvalidEmailAddress')}]"></validation-messages>
                     </div>
 
@@ -60,8 +60,8 @@
                     </div>
 
                     <div class="form-group" *ngIf="!setRandomPassword">
-                        <label>{{l("AdminPassword")}}</label>
-                        <input type="password" name="adminPassword" class="form-control" id="adminPassword"
+                        <label for="AdminPassword">{{l("AdminPassword")}}</label>
+                        <input id="AdminPassword" type="password" name="adminPassword" class="form-control" id="adminPassword"
                                [(ngModel)]="tenant.adminPassword" [ngClass]="{'edited':tenant.adminPassword}" [required]="!setRandomPassword"
                                #adminPassword="ngModel" validateEqual="adminPasswordRepeat" reverse="true" maxlength="32" [requireDigit]="passwordComplexitySetting.requireDigit" [requireLowercase]="passwordComplexitySetting.requireLowercase"
                                [requireUppercase]="passwordComplexitySetting.requireUppercase" [requireNonAlphanumeric]="passwordComplexitySetting.requireNonAlphanumeric" [requiredLength]="passwordComplexitySetting.requiredLength">
@@ -78,8 +78,8 @@
                     </div>
 
                     <div class="form-group" *ngIf="!setRandomPassword">
-                        <label>{{l("AdminPasswordRepeat")}}</label>
-                        <input type="password" name="adminPasswordRepeat" class="form-control"
+                        <label for="AdminPasswordRepeat">{{l("AdminPasswordRepeat")}}</label>
+                        <input id="AdminPasswordRepeat" type="password" name="adminPasswordRepeat" class="form-control"
                                [(ngModel)]="tenant.adminPasswordRepeat" [ngClass]="{'edited':tenant.adminPasswordRepeat}" [required]="!setRandomPassword"
                                #adminPasswordRepeat="ngModel" [requireDigit]="passwordComplexitySetting.requireDigit" [requireLowercase]="passwordComplexitySetting.requireLowercase"
                                [requireUppercase]="passwordComplexitySetting.requireUppercase" [requireNonAlphanumeric]="passwordComplexitySetting.requireNonAlphanumeric" [requiredLength]="passwordComplexitySetting.requiredLength"
@@ -114,8 +114,8 @@
                     </div>
 
                     <div [hidden]="isUnlimited || !isSubscriptionFieldsVisible" class="form-group" [ngClass]="{'has-error': !subscriptionEndDateIsValid()}">
-                        <label>{{l("SubscriptionEndDate")}}</label>
-                        <input type="text" #SubscriptionEndDateUtc name="SubscriptionEndDateUtc" class="form-control">
+                        <label for="SubscriptionEndDate">{{l("SubscriptionEndDate")}}</label>
+                        <input id="SubscriptionEndDate" type="text" #SubscriptionEndDateUtc name="SubscriptionEndDateUtc" class="form-control">
                     </div>
 
                     <div [hidden]="!isSubscriptionFieldsVisible" class="m-checkbox-list">

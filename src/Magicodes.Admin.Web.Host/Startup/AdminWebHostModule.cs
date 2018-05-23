@@ -45,6 +45,8 @@ namespace Magicodes.Admin.Web.Startup
                 .CreateControllersForAppServices(
                     typeof(AdminApplicationModule).GetAssembly(), "app"
                 );
+
+            Configuration.EntityHistory.IsEnabled = true;
         }
 
         public override void Initialize()

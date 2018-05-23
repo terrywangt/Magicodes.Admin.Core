@@ -1,10 +1,9 @@
-import { Component, AfterViewInit, Injector, ViewEncapsulation, ElementRef, ViewChild } from '@angular/core';
-import { TenantDashboardServiceProxy } from '@shared/service-proxies/service-proxies';
-import { AppComponentBase } from '@shared/common/app-component-base';
-import { appModuleAnimation } from '@shared/animations/routerTransition';
+import { AfterViewInit, Component, Injector, ViewEncapsulation } from '@angular/core';
 import { AppSalesSummaryDatePeriod } from '@shared/AppEnums';
+import { appModuleAnimation } from '@shared/animations/routerTransition';
+import { AppComponentBase } from '@shared/common/app-component-base';
+import { TenantDashboardServiceProxy } from '@shared/service-proxies/service-proxies';
 declare let d3, Datamap: any;
-import * as _ from 'lodash';
 
 @Component({
     templateUrl: './dashboard.component.html',

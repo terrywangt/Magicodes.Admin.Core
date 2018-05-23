@@ -1,4 +1,4 @@
-import { Directive, ElementRef, AfterViewInit } from '@angular/core';
+import { AfterViewInit, Directive, ElementRef } from '@angular/core';
 import * as Tether from 'tether';
 
 @Directive({
@@ -19,7 +19,8 @@ export class NormalizeDropdownPositionDirective implements AfterViewInit {
                 const $dropdownMenu = $this.find('.dropdown-menu');
 
                 $dropdownMenu.css({
-                    'display': 'block'
+                    'display': 'block',
+                    'z-index':'99999'
                 });
 
                 $this.data('_tether', new Tether({

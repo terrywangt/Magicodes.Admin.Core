@@ -1,11 +1,11 @@
-import { Component, Injector, OnInit, OnDestroy } from '@angular/core';
-import { Router, CanActivate } from '@angular/router';
-import { AppComponentBase } from '@shared/common/app-component-base';
-import { LoginService } from './login.service';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/timer';
-import { Subscription } from 'rxjs/Subscription';
+import { Component, Injector, OnDestroy, OnInit } from '@angular/core';
+import { CanActivate, Router } from '@angular/router';
 import { accountModuleAnimation } from '@shared/animations/routerTransition';
+import { AppComponentBase } from '@shared/common/app-component-base';
+import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
+import 'rxjs/add/observable/timer';
+import { LoginService } from './login.service';
 
 @Component({
     templateUrl: './validate-two-factor-code.component.html',

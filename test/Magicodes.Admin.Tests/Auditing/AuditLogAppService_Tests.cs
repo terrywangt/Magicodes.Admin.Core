@@ -1,5 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Abp.Auditing;
+using Abp.Authorization.Users;
+using Abp.EntityHistory;
 using Abp.Timing;
 using Magicodes.Admin.Auditing;
 using Magicodes.Admin.Auditing.Dto;
@@ -57,13 +62,46 @@ namespace Magicodes.Admin.Tests.Auditing
             });
 
             output.TotalCount.ShouldBe(2);
-            
+
             output.Items[0].ServiceName.ShouldBe("ServiceName-Test-2");
             output.Items[0].UserName.ShouldBe(null);
 
             output.Items[1].ServiceName.ShouldBe("ServiceName-Test-1");
-            
-            output.Items[1].UserName.ShouldBe(User.AdminUserName, StringCompareShould.IgnoreCase);
+
+            output.Items[1].UserName.ShouldBe(AbpUserBase.AdminUserName, StringCompareShould.IgnoreCase);
+        }
+
+        [Fact]
+        public async Task Should_Get_Entity_Changes()
+        {
+            LoginAsHostAdmin();
+
+            //Arrange
+            UsingDbContext(
+                context =>
+                {
+                    var aTenant = context.Tenants.FirstOrDefault();
+
+                    aTenant.Name = "changed name";
+
+                    var aUser = context.Users.FirstOrDefault(u => u.TenantId == null);
+
+                    if (aUser != null)
+                    {
+                        aUser.Name = "changed name";
+                    }
+
+                    context.SaveChanges();
+                });
+
+            //Act
+            var entityChangeList = await _auditLogAppService.GetEntityChanges(new GetEntityChangeInput
+            {
+                StartDate = Clock.Now.AddMinutes(-10),
+                EndDate = Clock.Now.AddMinutes(10)
+            });
+
+            entityChangeList.TotalCount.ShouldBe(2);
         }
     }
 }

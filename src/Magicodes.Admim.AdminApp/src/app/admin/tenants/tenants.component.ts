@@ -1,17 +1,17 @@
-import { Component, OnInit, Injector, ViewEncapsulation, ViewChild } from '@angular/core';
+import { Component, Injector, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { TenantServiceProxy, TenantListDto, NameValueDto, CommonLookupServiceProxy, FindUsersInput, EntityDtoOfInt64 } from '@shared/service-proxies/service-proxies';
+import { ImpersonationService } from '@app/admin/users/impersonation.service';
+import { CommonLookupModalComponent } from '@app/shared/common/lookup/common-lookup-modal.component';
+import { appModuleAnimation } from '@shared/animations/routerTransition';
 import { AppComponentBase } from '@shared/common/app-component-base';
+import { CommonLookupServiceProxy, EntityDtoOfInt64, FindUsersInput, NameValueDto, TenantListDto, TenantServiceProxy } from '@shared/service-proxies/service-proxies';
+import * as moment from 'moment';
+import { LazyLoadEvent } from 'primeng/components/common/lazyloadevent';
+import { Paginator } from 'primeng/components/paginator/paginator';
+import { Table } from 'primeng/components/table/table';
 import { CreateTenantModalComponent } from './create-tenant-modal.component';
 import { EditTenantModalComponent } from './edit-tenant-modal.component';
 import { TenantFeaturesModalComponent } from './tenant-features-modal.component';
-import { CommonLookupModalComponent } from '@app/shared/common/lookup/common-lookup-modal.component';
-import { ImpersonationService } from '@app/admin/users/impersonation.service';
-import { appModuleAnimation } from '@shared/animations/routerTransition';
-import * as moment from 'moment';
-import { DataTable } from 'primeng/components/datatable/datatable';
-import { Paginator } from 'primeng/components/paginator/paginator';
-import { LazyLoadEvent } from 'primeng/components/common/lazyloadevent';
 
 @Component({
     templateUrl: './tenants.component.html',
@@ -24,7 +24,7 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
     @ViewChild('createTenantModal') createTenantModal: CreateTenantModalComponent;
     @ViewChild('editTenantModal') editTenantModal: EditTenantModalComponent;
     @ViewChild('tenantFeaturesModal') tenantFeaturesModal: TenantFeaturesModalComponent;
-    @ViewChild('dataTable') dataTable: DataTable;
+    @ViewChild('dataTable') dataTable: Table;
     @ViewChild('paginator') paginator: Paginator;
 
     private _$tenantsTable: JQuery;
@@ -97,13 +97,13 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
     }
 
     getTenants(event?: LazyLoadEvent) {
-        if (this.primengDatatableHelper.shouldResetPaging(event)) {
+        if (this.primengTableHelper.shouldResetPaging(event)) {
             this.paginator.changePage(0);
 
             return;
         }
 
-        this.primengDatatableHelper.showLoadingIndicator();
+        this.primengTableHelper.showLoadingIndicator();
 
         this._tenantService.getTenants(
             this.filters.filterText,
@@ -113,17 +113,19 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
             this.filters.creationDateRangeActive ? this.filters.creationDateEnd : undefined,
             this.filters.selectedEditionId,
             this.filters.selectedEditionId !== undefined && (this.filters.selectedEditionId + '') !== '-1',
-            this.primengDatatableHelper.getSorting(this.dataTable),
-            this.primengDatatableHelper.getMaxResultCount(this.paginator, event),
-            this.primengDatatableHelper.getSkipCount(this.paginator, event)
+            this.primengTableHelper.getSorting(this.dataTable),
+            this.primengTableHelper.getMaxResultCount(this.paginator, event),
+            this.primengTableHelper.getSkipCount(this.paginator, event)
         ).subscribe(result => {
-            this.primengDatatableHelper.totalRecordsCount = result.totalCount;
-            this.primengDatatableHelper.records = result.items;
-            this.primengDatatableHelper.hideLoadingIndicator();
+            this.primengTableHelper.totalRecordsCount = result.totalCount;
+            this.primengTableHelper.records = result.items;
+            this.primengTableHelper.hideLoadingIndicator();
         });
     }
 
     showUserImpersonateLookUpModal(record: any): void {
+        //this.impersonateUserLookupModal.tenantId = record.id;
+        //this.impersonateUserLookupModal.show();
         let input = new FindUsersInput();
         input.filter = "admin";
         input.maxResultCount = 10;
@@ -136,8 +138,8 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
             }
             this._impersonationService
                 .impersonate(
-                    parseInt(result.items[0].value),
-                    input.tenantId
+                parseInt(result.items[0].value),
+                input.tenantId
                 );
         });
     }
@@ -173,8 +175,8 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
     impersonateUser(item: NameValueDto): void {
         this._impersonationService
             .impersonate(
-                parseInt(item.value),
-                this.impersonateUserLookupModal.tenantId
+            parseInt(item.value),
+            this.impersonateUserLookupModal.tenantId
             );
     }
 }

@@ -1,7 +1,7 @@
-import { Component, OnInit, Injector, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, Injector, OnInit, ViewEncapsulation } from '@angular/core';
 import { AppComponentBase } from '@shared/common/app-component-base';
-import { NotificationServiceProxy, GetNotificationsOutput, UserNotification } from '@shared/service-proxies/service-proxies';
-import { UserNotificationHelper, IFormattedUserNotification } from './UserNotificationHelper';
+import { NotificationServiceProxy, UserNotification } from '@shared/service-proxies/service-proxies';
+import { IFormattedUserNotification, UserNotificationHelper } from './UserNotificationHelper';
 
 @Component({
     templateUrl: './header-notifications.component.html',
