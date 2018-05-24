@@ -34,8 +34,7 @@ if (![String]::IsNullOrEmpty($configPath)) {
 
     $config = @{}
     $path = [io.Path]::Combine($directorypath, $configPath)
-    if(![io.File]::Exists($path))
-    {
+    if (![io.File]::Exists($path)) {
         $host.UI.WriteErrorLine('配置文件不存在，请定义！')
         return;
     }
