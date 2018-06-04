@@ -7,7 +7,8 @@ param(
     $deployUrl = "",
     $userName = "",
     $password = "",
-    $configPath = "deploy.config" 
+    $configPath = "deploy.config",
+    $siteUrl = "" 
 )
 
 function prompt { '心莱科技: ' + (get-location) + '> '}
@@ -53,6 +54,9 @@ if (![String]::IsNullOrEmpty($configPath)) {
     if (![String]::IsNullOrEmpty($config.deployUrl)) {
         $deployUrl = $config.deployUrl;
     }
+    if (![String]::IsNullOrEmpty($config.siteUrl)) {
+        $siteUrl = $config.siteUrl;
+    }
 }
 if (!$deployUrl.Contains("?")) {
     $deployUrl = $deployUrl + "?site=" + $siteName;
@@ -77,3 +81,8 @@ $cmdString = """" + $msdeployPath + """" + " -source:contentPath=$target -verb:s
 Write-Host 'cmd：' $cmdString
 cmd /c $cmdString
 #--------------------------------------------------------------------------------------------------------------------------------------------
+
+#发布完成后，使用默认浏览器打开目标地址
+if (![String]::IsNullOrEmpty($siteUrl)) {
+    Start-Process -FilePath $siteUrl
+}

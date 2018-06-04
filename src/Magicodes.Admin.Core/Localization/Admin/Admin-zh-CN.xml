@@ -668,5 +668,10 @@
     <text name="UiCustomization_Footer">底部</text>
     <text name="UiCustomization_FixedFooter">固定底部</text>
     <text name="UiCustomizationHeaderInfo">管理和设置自定义布局、颜色和背景等</text>
+
+    <!--2018-6-4-->
+    <text name="ThisFieldIsRequired">请填写此项内容</text>
+    <text name="PasswordComplexity_RequiredLength_Hint">为了您的账号安全，请输入数字、字母和特殊符号组成的长度超过6位的密码</text>
+    <text name="PasswordsDontMatch">两次密码不一致</text>
   </texts>
 </localizationDictionary>
