@@ -250,7 +250,7 @@
     <text name="Languages" value="语言列表" />
     <text name="LanguagesHeaderInfo" value="管理语言包的文本头信息" />
     <text name="CreateNewLanguage" value="创建新的语言" />
-    <text name="Code" value="代码" />
+    <text name="Code" value="编码" />
     <text name="CreatingNewLanguage" value="正在创建新的语言" />
     <text name="EditingLanguage" value="正在编辑语言" />
     <text name="DeletingLanguages" value="正在删除语言" />
@@ -673,5 +673,17 @@
     <text name="ThisFieldIsRequired">请填写此项内容</text>
     <text name="PasswordComplexity_RequiredLength_Hint">为了您的账号安全，请输入数字、字母和特殊符号组成的长度超过6位的密码</text>
     <text name="PasswordsDontMatch">两次密码不一致</text>
+
+    <!--2018-6-5-->
+    <text name="Create" value="创建" />
+    <text name="CreateNew" value="创建" />
+    <text name="DeleteWarningMessage" value="确定删除此项？" />
+    <text name="Import" value="导入" />
+    <text name="Filter" value="搜索关键字" />
+    <text name="CreateDateRange" value="创建日期范围" />
+    <text name="UpdateDateRange" value="修改日期范围" />
+    <text name="NoData" value="没有数据" />
+    <text name="NoDataToExport" value="没有数据可供导出！" />
+    <text name="Manager" value="管理" />
   </texts>
 </localizationDictionary>
