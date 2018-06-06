@@ -4,7 +4,7 @@
     /// Defines string constants for application's permission names.
     /// <see cref="AppAuthorizationProvider"/> for permission definitions.
     /// </summary>
-    public static class AppPermissions
+    public static partial class AppPermissions
     {
         //COMMON PERMISSIONS (FOR BOTH OF TENANTS AND HOST)
 

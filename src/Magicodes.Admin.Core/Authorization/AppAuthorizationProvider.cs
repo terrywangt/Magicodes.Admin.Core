@@ -10,7 +10,7 @@ namespace Magicodes.Admin.Authorization
     /// Defines permissions for the application.
     /// See <see cref="AppPermissions"/> for all permission names.
     /// </summary>
-    public class AppAuthorizationProvider : AuthorizationProvider
+    public partial class AppAuthorizationProvider : AuthorizationProvider
     {
         private readonly bool _isMultiTenancyEnabled;
 
@@ -84,6 +84,8 @@ namespace Magicodes.Admin.Authorization
             administration.CreateChildPermission(AppPermissions.Pages_Administration_Host_Maintenance, L("Maintenance"), multiTenancySides: _isMultiTenancyEnabled ? MultiTenancySides.Host : MultiTenancySides.Tenant);
             administration.CreateChildPermission(AppPermissions.Pages_Administration_HangfireDashboard, L("HangfireDashboard"), multiTenancySides: _isMultiTenancyEnabled ? MultiTenancySides.Host : MultiTenancySides.Tenant);
             administration.CreateChildPermission(AppPermissions.Pages_Administration_Host_Dashboard, L("Dashboard"), multiTenancySides: MultiTenancySides.Host);
+
+            SetCustomPermissions(pages);
         }
 
         private static ILocalizableString L(string name)
