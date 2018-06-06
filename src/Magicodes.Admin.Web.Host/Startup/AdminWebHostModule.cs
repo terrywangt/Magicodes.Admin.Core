@@ -17,6 +17,7 @@ using Abp.AspNetCore.Configuration;
 using Magicodes.Admin.Friendships;
 using Magicodes.Admin.Chat;
 using Abp.Dependency;
+using Magicodes.Admin.Application.App;
 
 namespace Magicodes.Admin.Web.Startup
 {
@@ -46,6 +47,12 @@ namespace Magicodes.Admin.Web.Startup
                     typeof(AdminApplicationModule).GetAssembly(), "app"
                 );
 
+            Configuration.Modules.AbpAspNetCore()
+                .CreateControllersForAppServices(
+                    typeof(AdminAppModule).GetAssembly(), "app"
+                );
+
+            //启用实体数据历史
             Configuration.EntityHistory.IsEnabled = true;
         }
 

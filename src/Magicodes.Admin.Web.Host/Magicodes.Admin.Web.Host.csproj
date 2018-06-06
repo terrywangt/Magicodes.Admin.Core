@@ -36,6 +36,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Magicodes.Admin.Application.App\Magicodes.Admin.Application.App.csproj" />
     <ProjectReference Include="..\Magicodes.Admin.Web.Core\Magicodes.Admin.Web.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
