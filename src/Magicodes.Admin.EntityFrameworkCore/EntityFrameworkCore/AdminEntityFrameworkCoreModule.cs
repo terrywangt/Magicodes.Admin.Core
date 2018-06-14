@@ -1,17 +1,15 @@
-﻿using System;
-using Abp;
+﻿using Abp;
 using Abp.Dependency;
 using Abp.EntityFrameworkCore.Configuration;
 using Abp.Extensions;
 using Abp.IdentityServer4;
 using Abp.Modules;
-using Abp.Organizations;
 using Abp.Reflection.Extensions;
 using Abp.Zero.EntityFrameworkCore;
-using Magicodes.Admin.Authorization.Roles;
 using Magicodes.Admin.Configuration;
+using Magicodes.Admin.EntityHistory;
 using Magicodes.Admin.Migrations.Seed;
-using Magicodes.Admin.MultiTenancy;
+using System;
 
 namespace Magicodes.Admin.EntityFrameworkCore
 {
@@ -44,8 +42,9 @@ namespace Magicodes.Admin.EntityFrameworkCore
                 });
             }
 
-            //取消该注释将启用组织机构、角色、租户的数据变更历史记录
-            Configuration.EntityHistory.Selectors.Add("AdminEntities", typeof(OrganizationUnit), typeof(Role), typeof(Tenant));
+            //启用实体历史
+            Configuration.EntityHistory.Selectors.Add("AdminEntities", EntityHistoryHelper.TrackedTypes);
+            Configuration.CustomConfigProviders.Add(new EntityHistoryConfigProvider(Configuration));
         }
 
         public override void Initialize()
@@ -56,17 +55,17 @@ namespace Magicodes.Admin.EntityFrameworkCore
         public override void PostInitialize()
         {
             var configurationAccessor = IocManager.Resolve<IAppConfigurationAccessor>();
-            if (!SkipDbSeed && DatabaseCheckHelper.Exist(configurationAccessor.Configuration["ConnectionStrings:Default"]))
-            {
-                //系统启动时自动执行迁移
-                if (Convert.ToBoolean(configurationAccessor.Configuration["Database:AutoMigrate"] ?? "true") && !configurationAccessor.Configuration["ConnectionStrings:Default"].IsNullOrEmpty())
+            using (var scope = IocManager.CreateScope())
+            { 
+                if (!SkipDbSeed && scope.Resolve<DatabaseCheckHelper>().Exist(configurationAccessor.Configuration["ConnectionStrings:Default"]))
                 {
-                    using (var migrateExecuter = IocManager.ResolveAsDisposable<MultiTenantMigrateExecuter>())
+                    //系统启动时自动执行迁移
+                    if (Convert.ToBoolean(configurationAccessor.Configuration["Database:AutoMigrate"] ?? "true") && !configurationAccessor.Configuration["ConnectionStrings:Default"].IsNullOrEmpty())
                     {
-                        migrateExecuter.Object.Run();
+                        scope.Resolve<MultiTenantMigrateExecuter>().Run();
                     }
+                    SeedHelper.SeedHostDb(IocManager);
                 }
-                SeedHelper.SeedHostDb(IocManager);
             }
         }
     }

@@ -1,12 +1,27 @@
-﻿using System.Data.Common;
-using System.Data.SqlClient;
+﻿using System;
+using Abp.Dependency;
+using Abp.Domain.Uow;
+using Abp.EntityFrameworkCore;
 using Abp.Extensions;
+using Microsoft.EntityFrameworkCore;
 
 namespace Magicodes.Admin.EntityFrameworkCore
 {
-    public static class DatabaseCheckHelper
+    public class DatabaseCheckHelper : ITransientDependency
     {
-        public static bool Exist(string connectionString)
+        private readonly IDbContextProvider<AdminDbContext> _dbContextProvider;
+        private readonly IUnitOfWorkManager _unitOfWorkManager;
+
+        public DatabaseCheckHelper(
+            IDbContextProvider<AdminDbContext> dbContextProvider,
+            IUnitOfWorkManager unitOfWorkManager
+        )
+        {
+            _dbContextProvider = dbContextProvider;
+            _unitOfWorkManager = unitOfWorkManager;
+        }
+
+        public bool Exist(string connectionString)
         {
             if (connectionString.IsNullOrEmpty())
             {
@@ -14,19 +29,20 @@ namespace Magicodes.Admin.EntityFrameworkCore
                 return true;
             }
 
-            using (DbConnection connection = new SqlConnection(connectionString))
+            try
             {
-                try
+                using (var uow =_unitOfWorkManager.Begin())
                 {
-                    connection.Open();
+                    _dbContextProvider.GetDbContext().Database.OpenConnection();
+                    uow.Complete();
                 }
-                catch
-                {
-                    return false;
-                }
-
-                return true;
             }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

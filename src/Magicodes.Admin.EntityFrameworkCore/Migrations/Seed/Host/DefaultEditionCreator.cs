@@ -33,14 +33,12 @@ namespace Magicodes.Admin.Migrations.Seed.Host
                 /* Add desired features to the standard edition, if wanted... */
             }
 
-#if FEATURE_SIGNALR
             if (defaultEdition.Id > 0)
             {
                 CreateFeatureIfNotExists(defaultEdition.Id, AppFeatures.ChatFeature, true);
                 CreateFeatureIfNotExists(defaultEdition.Id, AppFeatures.TenantToTenantChatFeature, true);
                 CreateFeatureIfNotExists(defaultEdition.Id, AppFeatures.TenantToHostChatFeature, true);
             }
-#endif
         }
 
         private void CreateFeatureIfNotExists(int editionId, string featureName, bool isEnabled)
