@@ -33,9 +33,8 @@ namespace Magicodes.Admin.Configuration
                     DesktopFixedHeader = await _settingManager.GetSettingValueAsync<bool>(AppSettings.UiManagement.Header.DesktopFixedHeader),
                     DesktopMinimizeMode = await _settingManager.GetSettingValueAsync(AppSettings.UiManagement.Header.DesktopMinimizeMode),
                     MobileFixedHeader = await _settingManager.GetSettingValueAsync<bool>(AppSettings.UiManagement.Header.MobileFixedHeader),
-                    DropdownSkinDesktop = await _settingManager.GetSettingValueAsync(AppSettings.UiManagement.Header.DropdownSkinDesktop),
-                    DisplaySubmenuArrowDesktop = await _settingManager.GetSettingValueAsync<bool>(AppSettings.UiManagement.Header.DisplaySubmenuArrowDesktop),
-                    DropdownSkin = await _settingManager.GetSettingValueAsync(AppSettings.UiManagement.Header.DropdownSkin)
+                    HeaderSkin = await _settingManager.GetSettingValueAsync(AppSettings.UiManagement.Header.Skin),
+                    DisplaySubmenuArrowDesktop = await _settingManager.GetSettingValueAsync<bool>(AppSettings.UiManagement.Header.DisplaySubmenuArrowDesktop)
                 },
                 Menu = new UiCustomizationMenuSettingsEditDto
                 {
@@ -105,9 +104,8 @@ namespace Magicodes.Admin.Configuration
                     DesktopFixedHeader = await _settingManager.GetSettingValueForApplicationAsync<bool>(AppSettings.UiManagement.Header.DesktopFixedHeader),
                     DesktopMinimizeMode = await _settingManager.GetSettingValueForApplicationAsync(AppSettings.UiManagement.Header.DesktopMinimizeMode),
                     MobileFixedHeader = await _settingManager.GetSettingValueForApplicationAsync<bool>(AppSettings.UiManagement.Header.MobileFixedHeader),
-                    DropdownSkinDesktop = await _settingManager.GetSettingValueForApplicationAsync(AppSettings.UiManagement.Header.DropdownSkinDesktop),
-                    DisplaySubmenuArrowDesktop = await _settingManager.GetSettingValueForApplicationAsync<bool>(AppSettings.UiManagement.Header.DisplaySubmenuArrowDesktop),
-                    DropdownSkin = await _settingManager.GetSettingValueForApplicationAsync(AppSettings.UiManagement.Header.DropdownSkin)
+                    HeaderSkin = await _settingManager.GetSettingValueForApplicationAsync(AppSettings.UiManagement.Header.Skin),
+                    DisplaySubmenuArrowDesktop = await _settingManager.GetSettingValueForApplicationAsync<bool>(AppSettings.UiManagement.Header.DisplaySubmenuArrowDesktop)
                 },
                 Menu = new UiCustomizationMenuSettingsEditDto
                 {
@@ -146,9 +144,8 @@ namespace Magicodes.Admin.Configuration
                     DesktopFixedHeader = await _settingManager.GetSettingValueForTenantAsync<bool>(AppSettings.UiManagement.Header.DesktopFixedHeader, tenantId),
                     DesktopMinimizeMode = await _settingManager.GetSettingValueForTenantAsync(AppSettings.UiManagement.Header.DesktopMinimizeMode, tenantId),
                     MobileFixedHeader = await _settingManager.GetSettingValueForTenantAsync<bool>(AppSettings.UiManagement.Header.MobileFixedHeader, tenantId),
-                    DropdownSkinDesktop = await _settingManager.GetSettingValueForTenantAsync(AppSettings.UiManagement.Header.DropdownSkinDesktop, tenantId),
-                    DisplaySubmenuArrowDesktop = await _settingManager.GetSettingValueForTenantAsync<bool>(AppSettings.UiManagement.Header.DisplaySubmenuArrowDesktop, tenantId),
-                    DropdownSkin = await _settingManager.GetSettingValueForTenantAsync(AppSettings.UiManagement.Header.DropdownSkin, tenantId)
+                    HeaderSkin = await _settingManager.GetSettingValueForTenantAsync(AppSettings.UiManagement.Header.Skin, tenantId),
+                    DisplaySubmenuArrowDesktop = await _settingManager.GetSettingValueForTenantAsync<bool>(AppSettings.UiManagement.Header.DisplaySubmenuArrowDesktop, tenantId)
                 },
                 Menu = new UiCustomizationMenuSettingsEditDto
                 {
@@ -181,9 +178,8 @@ namespace Magicodes.Admin.Configuration
             await _settingManager.ChangeSettingForTenantAsync(tenantId, AppSettings.UiManagement.Header.DesktopFixedHeader, settings.Header.DesktopFixedHeader.ToString());
             await _settingManager.ChangeSettingForTenantAsync(tenantId, AppSettings.UiManagement.Header.DesktopMinimizeMode, settings.Header.DesktopMinimizeMode);
             await _settingManager.ChangeSettingForTenantAsync(tenantId, AppSettings.UiManagement.Header.MobileFixedHeader, settings.Header.MobileFixedHeader.ToString());
-            await _settingManager.ChangeSettingForTenantAsync(tenantId, AppSettings.UiManagement.Header.DropdownSkinDesktop, settings.Header.DropdownSkinDesktop);
+            await _settingManager.ChangeSettingForTenantAsync(tenantId, AppSettings.UiManagement.Header.Skin, settings.Header.HeaderSkin);
             await _settingManager.ChangeSettingForTenantAsync(tenantId, AppSettings.UiManagement.Header.DisplaySubmenuArrowDesktop, settings.Header.DisplaySubmenuArrowDesktop.ToString());
-            await _settingManager.ChangeSettingForTenantAsync(tenantId, AppSettings.UiManagement.Header.DropdownSkin, settings.Header.DropdownSkin);
 
             await _settingManager.ChangeSettingForTenantAsync(tenantId, AppSettings.UiManagement.LeftAside.Position, settings.Menu.Position);
             await _settingManager.ChangeSettingForTenantAsync(tenantId, AppSettings.UiManagement.LeftAside.AsideSkin, settings.Menu.AsideSkin);
@@ -208,9 +204,8 @@ namespace Magicodes.Admin.Configuration
             await _settingManager.ChangeSettingForApplicationAsync(AppSettings.UiManagement.Header.DesktopFixedHeader, settings.Header.DesktopFixedHeader.ToString());
             await _settingManager.ChangeSettingForApplicationAsync(AppSettings.UiManagement.Header.DesktopMinimizeMode, settings.Header.DesktopMinimizeMode);
             await _settingManager.ChangeSettingForApplicationAsync(AppSettings.UiManagement.Header.MobileFixedHeader, settings.Header.MobileFixedHeader.ToString());
-            await _settingManager.ChangeSettingForApplicationAsync(AppSettings.UiManagement.Header.DropdownSkinDesktop, settings.Header.DropdownSkinDesktop);
+            await _settingManager.ChangeSettingForApplicationAsync(AppSettings.UiManagement.Header.Skin, settings.Header.HeaderSkin);
             await _settingManager.ChangeSettingForApplicationAsync(AppSettings.UiManagement.Header.DisplaySubmenuArrowDesktop, settings.Header.DisplaySubmenuArrowDesktop.ToString());
-            await _settingManager.ChangeSettingForApplicationAsync(AppSettings.UiManagement.Header.DropdownSkin, settings.Header.DropdownSkin);
 
             await _settingManager.ChangeSettingForApplicationAsync(AppSettings.UiManagement.LeftAside.Position, settings.Menu.Position);
             await _settingManager.ChangeSettingForApplicationAsync(AppSettings.UiManagement.LeftAside.AsideSkin, settings.Menu.AsideSkin);
@@ -237,9 +232,8 @@ namespace Magicodes.Admin.Configuration
             await _settingManager.ChangeSettingForUserAsync(userIdentifier, AppSettings.UiManagement.Header.DesktopFixedHeader, settings.Header.DesktopFixedHeader.ToString());
             await _settingManager.ChangeSettingForUserAsync(userIdentifier, AppSettings.UiManagement.Header.DesktopMinimizeMode, settings.Header.DesktopMinimizeMode);
             await _settingManager.ChangeSettingForUserAsync(userIdentifier, AppSettings.UiManagement.Header.MobileFixedHeader, settings.Header.MobileFixedHeader.ToString());
-            await _settingManager.ChangeSettingForUserAsync(userIdentifier, AppSettings.UiManagement.Header.DropdownSkinDesktop, settings.Header.DropdownSkinDesktop);
+            await _settingManager.ChangeSettingForUserAsync(userIdentifier, AppSettings.UiManagement.Header.Skin, settings.Header.HeaderSkin);
             await _settingManager.ChangeSettingForUserAsync(userIdentifier, AppSettings.UiManagement.Header.DisplaySubmenuArrowDesktop, settings.Header.DisplaySubmenuArrowDesktop.ToString());
-            await _settingManager.ChangeSettingForUserAsync(userIdentifier, AppSettings.UiManagement.Header.DropdownSkin, settings.Header.DropdownSkin);
 
             await _settingManager.ChangeSettingForUserAsync(userIdentifier, AppSettings.UiManagement.LeftAside.Position, settings.Menu.Position);
             await _settingManager.ChangeSettingForUserAsync(userIdentifier, AppSettings.UiManagement.LeftAside.AsideSkin, settings.Menu.AsideSkin);

@@ -8,6 +8,8 @@ namespace Magicodes.Admin.Authorization.Accounts
     {
         Task<IsTenantAvailableOutput> IsTenantAvailable(IsTenantAvailableInput input);
 
+        Task<int?> ResolveTenantId(ResolveTenantIdInput input);
+
         Task<RegisterOutput> Register(RegisterInput input);
 
         Task SendPasswordResetCode(SendPasswordResetCodeInput input);

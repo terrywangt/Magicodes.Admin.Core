@@ -29,11 +29,7 @@ namespace Magicodes.Admin.Sessions
                 {
                     Version = configuration["CustomInfo:Version"] ?? AppVersionHelper.Version,
                     ReleaseDate = releaseDate,
-                    Name = configuration["CustomInfo:Name"] ?? "Magicodes.Admin",
-                    Features = new Dictionary<string, bool>
-                    {
-                        {"SignalR", SignalRFeature.IsAvailable}
-                    }
+                    Name = configuration["CustomInfo:Name"] ?? "Magicodes.Admin"
                 }
             };
 

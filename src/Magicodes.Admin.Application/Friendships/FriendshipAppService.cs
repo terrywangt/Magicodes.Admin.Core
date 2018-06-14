@@ -16,14 +16,14 @@ namespace Magicodes.Admin.Friendships
     public class FriendshipAppService : AdminAppServiceBase, IFriendshipAppService
     {
         private readonly IFriendshipManager _friendshipManager;
-        private readonly IOnlineClientManager _onlineClientManager;
+        private readonly IOnlineClientManager<ChatChannel> _onlineClientManager;
         private readonly IChatCommunicator _chatCommunicator;
         private readonly ITenantCache _tenantCache;
         private readonly IChatFeatureChecker _chatFeatureChecker;
 
         public FriendshipAppService(
             IFriendshipManager friendshipManager,
-            IOnlineClientManager onlineClientManager,
+            IOnlineClientManager<ChatChannel> onlineClientManager,
             IChatCommunicator chatCommunicator,
             ITenantCache tenantCache, 
             IChatFeatureChecker chatFeatureChecker)
@@ -67,14 +67,14 @@ namespace Magicodes.Admin.Friendships
             if (clients.Any())
             {
                 var isFriendOnline = _onlineClientManager.IsOnline(sourceFriendship.ToUserIdentifier());
-                _chatCommunicator.SendFriendshipRequestToClient(clients, targetFriendship, false, isFriendOnline);
+                await _chatCommunicator.SendFriendshipRequestToClient(clients, targetFriendship, false, isFriendOnline);
             }
 
             var senderClients = _onlineClientManager.GetAllByUserId(userIdentifier);
             if (senderClients.Any())
             {
                 var isFriendOnline = _onlineClientManager.IsOnline(targetFriendship.ToUserIdentifier());
-                _chatCommunicator.SendFriendshipRequestToClient(senderClients, sourceFriendship, true, isFriendOnline);
+                await _chatCommunicator.SendFriendshipRequestToClient(senderClients, sourceFriendship, true, isFriendOnline);
             }
 
             var sourceFriendshipRequest = ObjectMapper.Map<FriendDto>(sourceFriendship);
@@ -102,7 +102,7 @@ namespace Magicodes.Admin.Friendships
             var clients = _onlineClientManager.GetAllByUserId(userIdentifier);
             if (clients.Any())
             {
-                _chatCommunicator.SendUserStateChangeToClients(clients, friendIdentifier, FriendshipState.Blocked);
+                await _chatCommunicator.SendUserStateChangeToClients(clients, friendIdentifier, FriendshipState.Blocked);
             }
         }
 
@@ -115,7 +115,7 @@ namespace Magicodes.Admin.Friendships
             var clients = _onlineClientManager.GetAllByUserId(userIdentifier);
             if (clients.Any())
             {
-                _chatCommunicator.SendUserStateChangeToClients(clients, friendIdentifier, FriendshipState.Accepted);
+                await _chatCommunicator.SendUserStateChangeToClients(clients, friendIdentifier, FriendshipState.Accepted);
             }
         }
 
@@ -128,7 +128,7 @@ namespace Magicodes.Admin.Friendships
             var clients = _onlineClientManager.GetAllByUserId(userIdentifier);
             if (clients.Any())
             {
-                _chatCommunicator.SendUserStateChangeToClients(clients, friendIdentifier, FriendshipState.Blocked);
+                await _chatCommunicator.SendUserStateChangeToClients(clients, friendIdentifier, FriendshipState.Blocked);
             }
         }
 

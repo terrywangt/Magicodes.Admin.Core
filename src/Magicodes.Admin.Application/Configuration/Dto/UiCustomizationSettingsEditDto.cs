@@ -28,11 +28,9 @@ namespace Magicodes.Admin.Configuration.Dto
 
         public bool MobileFixedHeader { get; set; }
 
-        public string DropdownSkinDesktop { get; set; }
+        public string HeaderSkin { get; set; }
 
         public bool DisplaySubmenuArrowDesktop { get; set; }
-
-        public string DropdownSkin { get; set; }
     }
 
     public class UiCustomizationMenuSettingsEditDto

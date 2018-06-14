@@ -31,7 +31,7 @@ namespace Magicodes.Admin.Editions
 
         public async Task<ListResultDto<EditionListDto>> GetEditions()
         {
-            var editions = ObjectMapper.Map<List<SubscribableEdition>>(await _editionManager.Editions.ToListAsync())
+            var editions = (await _editionManager.Editions.Cast<SubscribableEdition>().ToListAsync())
                 .OrderBy(e => e.MonthlyPrice);
             return new ListResultDto<EditionListDto>(
                 ObjectMapper.Map<List<EditionListDto>>(editions)
@@ -92,7 +92,7 @@ namespace Magicodes.Admin.Editions
         public async Task<List<SubscribableEditionComboboxItemDto>> GetEditionComboboxItems(int? selectedEditionId = null, bool addAllItem = false, bool onlyFreeItems = false)
         {
             var editions = await _editionManager.Editions.ToListAsync();
-            var subscribableEditions = ObjectMapper.Map<List<SubscribableEdition>>(editions)
+            var subscribableEditions = editions.Cast<SubscribableEdition>()
                 .WhereIf(onlyFreeItems, e => e.IsFree)
                 .OrderBy(e => e.MonthlyPrice);
 
@@ -131,7 +131,7 @@ namespace Magicodes.Admin.Editions
 
             if (edition.ExpiringEditionId.HasValue)
             {
-                var expiringEdition = ObjectMapper.Map<SubscribableEdition>(await _editionManager.GetByIdAsync(edition.ExpiringEditionId.Value));
+                var expiringEdition = (SubscribableEdition)await _editionManager.GetByIdAsync(edition.ExpiringEditionId.Value);
                 if (!expiringEdition.IsFree)
                 {
                     throw new UserFriendlyException(L("ExpiringEditionMustBeAFreeEdition"));
@@ -151,7 +151,7 @@ namespace Magicodes.Admin.Editions
             {
                 var edition = await _editionManager.GetByIdAsync(input.Edition.Id.Value);
 
-                var existingSubscribableEdition = ObjectMapper.Map<SubscribableEdition>(edition);
+                var existingSubscribableEdition = (SubscribableEdition)edition;
                 var updatingSubscribableEdition = ObjectMapper.Map<SubscribableEdition>(input.Edition);
                 if (existingSubscribableEdition.IsFree &&
                     !updatingSubscribableEdition.IsFree &&

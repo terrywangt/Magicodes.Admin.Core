@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Abp.Application.Services.Dto;
 using Abp.Auditing;
 using Abp.Authorization;
+using Abp.Configuration.Startup;
 using Abp.Domain.Repositories;
 using Abp.EntityHistory;
 using Abp.Extensions;
@@ -15,6 +16,7 @@ using Magicodes.Admin.Auditing.Exporting;
 using Magicodes.Admin.Authorization;
 using Magicodes.Admin.Authorization.Users;
 using Magicodes.Admin.Dto;
+using EntityHistoryHelper = Magicodes.Admin.EntityHistory.EntityHistoryHelper;
 
 namespace Magicodes.Admin.Auditing
 {
@@ -29,6 +31,7 @@ namespace Magicodes.Admin.Auditing
         private readonly IRepository<User, long> _userRepository;
         private readonly IAuditLogListExcelExporter _auditLogListExcelExporter;
         private readonly INamespaceStripper _namespaceStripper;
+        private readonly IAbpStartupConfiguration _abpStartupConfiguration;
 
         public AuditLogAppService(
             IRepository<AuditLog, long> auditLogRepository,
@@ -37,7 +40,8 @@ namespace Magicodes.Admin.Auditing
             INamespaceStripper namespaceStripper,
             IRepository<EntityChange, long> entityChangeRepository,
             IRepository<EntityChangeSet, long> entityChangeSetRepository,
-            IRepository<EntityPropertyChange, long> entityPropertyChangeRepository)
+            IRepository<EntityPropertyChange, long> entityPropertyChangeRepository,
+            IAbpStartupConfiguration abpStartupConfiguration)
         {
             _auditLogRepository = auditLogRepository;
             _userRepository = userRepository;
@@ -46,6 +50,7 @@ namespace Magicodes.Admin.Auditing
             _entityChangeRepository = entityChangeRepository;
             _entityChangeSetRepository = entityChangeSetRepository;
             _entityPropertyChangeRepository = entityPropertyChangeRepository;
+            _abpStartupConfiguration = abpStartupConfiguration;
         }
 
         #region audit logs
@@ -112,18 +117,28 @@ namespace Magicodes.Admin.Auditing
         #endregion
 
         #region entity changes 
-
         public List<NameValueDto> GetEntityHistoryObjectTypes()
         {
             var entityHistoryObjectTypes = new List<NameValueDto>();
+            var entityHistoryConfig = _abpStartupConfiguration.GetCustomConfig();
 
             if (AbpSession.TenantId == null)
             {
-                entityHistoryObjectTypes.Add(new NameValueDto(L("Magicodes.Admin.MultiTenancy.Tenant"), "Magicodes.Admin.MultiTenancy.Tenant"));
+                entityHistoryConfig = entityHistoryConfig
+                    .Where(c => EntityHistoryHelper.HostSideTrackedTypes.Contains(c.Value))
+                    .ToDictionary(key => key.Key, value => value.Value);
+            }
+            else
+            {
+                entityHistoryConfig = entityHistoryConfig
+                    .Where(c => EntityHistoryHelper.TenantSideTrackedTypes.Contains(c.Value))
+                    .ToDictionary(key => key.Key, value => value.Value);
             }
 
-            entityHistoryObjectTypes.Add(new NameValueDto(L("Magicodes.Admin.MultiTenancy.Role"), "Magicodes.Admin.MultiTenancy.Role"));
-            entityHistoryObjectTypes.Add(new NameValueDto(L("Abp.Organizations.OrganizationUnit"), "Abp.Organizations.OrganizationUnit"));
+            foreach (var config in entityHistoryConfig)
+            {
+                entityHistoryObjectTypes.Add(new NameValueDto(config.Key, config.Value.ToString()));
+            }
 
             return entityHistoryObjectTypes;
         }
@@ -193,7 +208,6 @@ namespace Magicodes.Admin.Auditing
 
             return query;
         }
-
         #endregion
     }
 }

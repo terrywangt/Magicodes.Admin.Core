@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
+using System.Web;
 using Abp.Authorization;
 using Abp.Configuration;
 using Abp.Extensions;
+using Abp.Runtime.Security;
 using Abp.Runtime.Session;
 using Abp.UI;
 using Abp.Zero.Configuration;
@@ -64,6 +66,25 @@ namespace Magicodes.Admin.Authorization.Accounts
             }
 
             return new IsTenantAvailableOutput(TenantAvailabilityState.Available, tenant.Id, _webUrlService.GetServerRootAddress(input.TenancyName));
+        }
+
+        public Task<int?> ResolveTenantId(ResolveTenantIdInput input)
+        {
+            if (string.IsNullOrEmpty(input.c))
+            {
+                return Task.FromResult(AbpSession.TenantId);
+            }
+
+            var parameters = SimpleStringCipher.Instance.Decrypt(input.c);
+            var query = HttpUtility.ParseQueryString(parameters);
+
+            if (query["tenantId"] == null)
+            {
+                throw new Exception("Couldn't find tenant inforamtion !");
+            }
+
+            var tenantId = Convert.ToInt32(query["tenantId"]) as int?;
+            return Task.FromResult(tenantId);
         }
 
         public async Task<RegisterOutput> Register(RegisterInput input)

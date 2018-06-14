@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Abp.Application.Services.Dto;
 using Abp.Configuration;
 using Magicodes.Admin.Timing.Dto;
+using TimeZoneConverter;
 
 namespace Magicodes.Admin.Timing
 {
@@ -42,8 +43,7 @@ namespace Magicodes.Admin.Timing
         private async Task<List<NameValueDto>> GetTimezoneInfos(SettingScopes defaultTimezoneScope)
         {
             var defaultTimezoneId = await _timeZoneService.GetDefaultTimezoneAsync(defaultTimezoneScope, AbpSession.TenantId);
-            var defaultTimezone = _timeZoneService.FindTimeZoneById(defaultTimezoneId);
-            var defaultTimezoneName = $"{L("Default")} [{defaultTimezone.DisplayName}]";
+            var defaultTimezoneName = $"{L("Default")} [{defaultTimezoneId}]";
 
             var timeZones = _timeZoneService.GetWindowsTimezones();
 

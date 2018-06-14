@@ -20,13 +20,13 @@ namespace Magicodes.Admin.Chat
     {
         private readonly IRepository<ChatMessage, long> _chatMessageRepository;
         private readonly IUserFriendsCache _userFriendsCache;
-        private readonly IOnlineClientManager _onlineClientManager;
+        private readonly IOnlineClientManager<ChatChannel> _onlineClientManager;
         private readonly IChatCommunicator _chatCommunicator;
 
         public ChatAppService(
             IRepository<ChatMessage, long> chatMessageRepository,
             IUserFriendsCache userFriendsCache,
-            IOnlineClientManager onlineClientManager,
+            IOnlineClientManager<ChatChannel> onlineClientManager,
             IChatCommunicator chatCommunicator)
         {
             _chatMessageRepository = chatMessageRepository;
@@ -128,13 +128,13 @@ namespace Magicodes.Admin.Chat
             var onlineUserClients = _onlineClientManager.GetAllByUserId(userIdentifier);
             if (onlineUserClients.Any())
             {
-                _chatCommunicator.SendAllUnreadMessagesOfUserReadToClients(onlineUserClients, friendIdentifier);
+                await _chatCommunicator.SendAllUnreadMessagesOfUserReadToClients(onlineUserClients, friendIdentifier);
             }
 
             var onlineFriendClients = _onlineClientManager.GetAllByUserId(friendIdentifier);
             if (onlineFriendClients.Any())
             {
-                _chatCommunicator.SendReadStateChangeToClients(onlineFriendClients, userIdentifier);
+                await _chatCommunicator.SendReadStateChangeToClients(onlineFriendClients, userIdentifier);
             }
         }
     }

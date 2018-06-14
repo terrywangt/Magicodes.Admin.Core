@@ -33,14 +33,17 @@ namespace Magicodes.Admin.Install
         private readonly AbpZeroDbMigrator<AdminDbContext> _migrator;
         private readonly LogInManager _logInManager;
         private readonly SignInManager _signInManager;
+        private readonly DatabaseCheckHelper _databaseCheckHelper;
 
         public InstallAppService(AbpZeroDbMigrator migrator,
             LogInManager logInManager,
-            SignInManager signInManager)
+            SignInManager signInManager, 
+            DatabaseCheckHelper databaseCheckHelper)
         {
             _migrator = migrator;
             _logInManager = logInManager;
             _signInManager = signInManager;
+            _databaseCheckHelper = databaseCheckHelper;
         }
 
         public async Task Setup(InstallDto input)
@@ -105,7 +108,7 @@ namespace Magicodes.Admin.Install
                 return false;
             }
 
-            return DatabaseCheckHelper.Exist(connectionString);
+            return _databaseCheckHelper.Exist(connectionString);
         }
 
         private string GetConnectionString()

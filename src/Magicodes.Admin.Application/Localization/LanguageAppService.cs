@@ -10,6 +10,7 @@ using Abp.Authorization;
 using Abp.Domain.Repositories;
 using Abp.Extensions;
 using Abp.Localization;
+using Abp.MultiTenancy;
 using Abp.UI;
 using Magicodes.Admin.Authorization;
 using Magicodes.Admin.Localization.Dto;
@@ -188,6 +189,11 @@ namespace Magicodes.Admin.Localization
         [AbpAuthorize(AppPermissions.Pages_Administration_Languages_Create)]
         protected virtual async Task CreateLanguageAsync(CreateOrUpdateLanguageInput input)
         {
+            if (AbpSession.MultiTenancySide != MultiTenancySides.Host)
+            {
+                throw new UserFriendlyException(L("TenantsCannotCreateLanguage"));
+            }
+
             var culture = CultureHelper.GetCultureInfoByChecking(input.Language.Name);
 
             await CheckLanguageIfAlreadyExists(culture.Name);
