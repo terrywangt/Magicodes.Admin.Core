@@ -17,24 +17,19 @@
     <EmbeddedResource Include="Localization\Admin\*.xml;Emailing\EmailTemplates\default.html" Exclude="bin\**;obj\**;**\*.xproj;packages\**;@(EmbeddedResource)" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.0.2" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.0.2" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="2.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="2.1.0" />
     <PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="3.3.0" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
     <PackageReference Include="TimeZoneConverter" Version="2.4.1" />
-    <PackageReference Include="Abp.AspNetZeroCore" Version="1.1.2" />
+    <PackageReference Include="Abp.AspNetZeroCore" Version="1.1.3" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Abp.ZeroCore.IdentityServer4.EntityFrameworkCore" Version="3.6.1" />
-    <PackageReference Include="Abp.AutoMapper" Version="3.6.1" />
-    <PackageReference Include="Abp.MailKit" Version="3.6.1" />
-    <PackageReference Include="Abp.Zero.Ldap" Version="3.6.1" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="System.ComponentModel.Annotations" Version="4.4.1" />
-  </ItemGroup>
-  <ItemGroup>
-    <DotNetCliToolReference Include="Microsoft.Extensions.SecretManager.Tools" Version="2.0.0" />
+    <PackageReference Include="Abp.ZeroCore.IdentityServer4.EntityFrameworkCore" Version="3.7.2" />
+    <PackageReference Include="Abp.AutoMapper" Version="3.7.2" />
+    <PackageReference Include="Abp.MailKit" Version="3.7.2" />
+    <PackageReference Include="Abp.Zero.Ldap" Version="3.7.2" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Magicodes.Admin.Core.Shared\Magicodes.Admin.Core.Shared.csproj" />

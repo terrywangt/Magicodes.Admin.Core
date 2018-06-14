@@ -707,7 +707,6 @@
         <text name="UiCustomization_Hide">Hide</text>
         <text name="UiCustomization_MobileFixedHeader">Fixed header</text>
         <text name="UiCustomization_DisplayHeaderMenu">Display header menu</text>
-        <text name="UiCustomization_DropdownSkinDesktop">Skin</text>
         <text name="UiCustomization_Light">Light</text>
         <text name="UiCustomization_Dark">Dark</text>
         <text name="UiCustomization_DisplaySubmenuArrowDesktop">Display submenu arrow</text>
@@ -786,5 +785,7 @@
         <text name="Green">Green</text>
         <text name="Pink">Pink</text>
         <text name="Yellow">Yellow</text>
+        <text name="UiCustomization_HeaderSkin">Skin</text>
+        <text name="TenantsCannotCreateLanguage">Tenants cannot create language.</text>
     </texts>
 </localizationDictionary>

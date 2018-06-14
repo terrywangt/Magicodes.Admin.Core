@@ -2,6 +2,7 @@
 using Abp;
 using Abp.Dependency;
 using Abp.RealTime;
+using Abp.Threading;
 using Magicodes.Admin.Chat;
 using Magicodes.Admin.Friendships.Cache;
 
@@ -11,12 +12,12 @@ namespace Magicodes.Admin.Friendships
     {
         private readonly IChatCommunicator _chatCommunicator;
         private readonly IUserFriendsCache _userFriendsCache;
-        private readonly IOnlineClientManager _onlineClientManager;
+        private readonly IOnlineClientManager<ChatChannel> _onlineClientManager;
 
         public ChatUserStateWatcher(
             IChatCommunicator chatCommunicator,
             IUserFriendsCache userFriendsCache,
-            IOnlineClientManager onlineClientManager)
+            IOnlineClientManager<ChatChannel> onlineClientManager)
         {
             _chatCommunicator = chatCommunicator;
             _userFriendsCache = userFriendsCache;
@@ -42,7 +43,7 @@ namespace Magicodes.Admin.Friendships
         private void NotifyUserConnectionStateChange(UserIdentifier user, bool isConnected)
         {
             var cacheItem = _userFriendsCache.GetCacheItem(user);
-           
+
             foreach (var friend in cacheItem.Friends)
             {
                 var friendUserClients = _onlineClientManager.GetAllByUserId(new UserIdentifier(friend.FriendTenantId, friend.FriendUserId));
@@ -51,7 +52,7 @@ namespace Magicodes.Admin.Friendships
                     continue;
                 }
 
-                _chatCommunicator.SendUserConnectionChangeToClients(friendUserClients, user, isConnected);
+                AsyncHelper.RunSync(() => _chatCommunicator.SendUserConnectionChangeToClients(friendUserClients, user, isConnected));
             }
         }
     }

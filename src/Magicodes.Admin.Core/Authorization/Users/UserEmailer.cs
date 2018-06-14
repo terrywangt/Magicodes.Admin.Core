@@ -16,6 +16,8 @@ using Magicodes.Admin.Emailing;
 using Magicodes.Admin.Localization;
 using Magicodes.Admin.MultiTenancy;
 using System.Net.Mail;
+using System.Web;
+using Abp.Runtime.Security;
 
 namespace Magicodes.Admin.Authorization.Users
 {
@@ -75,6 +77,8 @@ namespace Magicodes.Admin.Authorization.Users
             {
                 link = link.Replace("{tenantId}", user.TenantId.ToString());
             }
+
+            link = EncryptQueryParameters(link);
 
             var tenancyName = GetTenancyNameOrNull(user.TenantId);
             var emailTemplate = GetTitleAndSubTitle(user.TenantId, L("EmailActivation_Title"), L("EmailActivation_SubTitle"));
@@ -136,6 +140,8 @@ namespace Magicodes.Admin.Authorization.Users
                 {
                     link = link.Replace("{tenantId}", user.TenantId.ToString());
                 }
+
+                link = EncryptQueryParameters(link);
 
                 mailMessage.AppendLine("<br />");
                 mailMessage.AppendLine(L("PasswordResetEmail_ClickTheLinkBelowToResetYourPassword") + "<br /><br />");
@@ -321,6 +327,26 @@ namespace Magicodes.Admin.Authorization.Users
                 Body = emailTemplate.ToString(),
                 IsBodyHtml = true
             });
+        }
+
+        /// <summary>
+        /// Returns link with encrypted parameters
+        /// </summary>
+        /// <param name="link"></param>
+        /// <param name="encrptedParameterName"></param>
+        /// <returns></returns>
+        private string EncryptQueryParameters(string link, string encrptedParameterName = "c")
+        {
+            if (!link.Contains("?"))
+            {
+                return link;
+            }
+
+            var uri = new Uri(link);
+            var basePath = link.Substring(0, link.IndexOf('?'));
+            var query = uri.Query.TrimStart('?');
+
+            return basePath + "?" + encrptedParameterName + "=" + HttpUtility.UrlEncode(SimpleStringCipher.Instance.Encrypt(query));
         }
     }
 }

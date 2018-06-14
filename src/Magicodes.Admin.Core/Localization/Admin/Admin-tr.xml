@@ -706,7 +706,6 @@
         <text name="UiCustomization_Hide">Gizle</text>
         <text name="UiCustomization_MobileFixedHeader">Mobil sabit başlık</text>
         <text name="UiCustomization_DisplayHeaderMenu">Üstbilgi menüsünü görüntüle</text>
-        <text name="UiCustomization_DropdownSkinDesktop">Dropdown görünümü (Masaüstü)</text>
         <text name="UiCustomization_Light">Açık</text>
         <text name="UiCustomization_Dark">Koyu</text>
         <text name="UiCustomization_DisplaySubmenuArrowDesktop">Alt menü okunu göster (masaüstü)</text>
@@ -784,5 +783,7 @@
         <text name="Green">Yeşil</text>
         <text name="Pink">Pembe</text>
         <text name="Yellow">Sarı</text>
+        <text name="UiCustomization_HeaderSkin">Başlık rengi</text>
+        <text name="TenantsCannotCreateLanguage">Müşteriler dil oluşturamaz.</text>
     </texts>
 </localizationDictionary>

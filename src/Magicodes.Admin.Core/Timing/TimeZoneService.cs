@@ -57,11 +57,11 @@ namespace Magicodes.Admin.Timing
 
         public List<NameValueDto> GetWindowsTimezones()
         {
-            return TimezoneHelper.GetWindowsTimeZoneInfos().OrderBy(tz => tz.BaseUtcOffset)
+            return TZConvert.KnownWindowsTimeZoneIds.OrderBy(tz => tz)
                 .Select(tz => new NameValueDto
                 {
-                    Value = tz.Id,
-                    Name = tz.DisplayName
+                    Value = tz,
+                    Name = tz
                 }).ToList();
         }
     }

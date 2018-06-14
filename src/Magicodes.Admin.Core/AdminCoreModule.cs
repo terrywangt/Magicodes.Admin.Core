@@ -13,9 +13,7 @@ using Abp.Net.Mail.Smtp;
 using Abp.Zero;
 using Abp.Zero.Configuration;
 using Abp.Zero.Ldap;
-using Abp.Zero.Ldap.Configuration;
 using Castle.MicroKernel.Registration;
-using Magicodes.Admin.Authorization.Ldap;
 using Magicodes.Admin.Authorization.Roles;
 using Magicodes.Admin.Authorization.Users;
 using Magicodes.Admin.Chat;
@@ -106,9 +104,9 @@ namespace Magicodes.Admin
 
         public override void PostInitialize()
         {
-            //IocManager.RegisterIfNot<IChatCommunicator, NullChatCommunicator>();
+            IocManager.RegisterIfNot<IChatCommunicator, NullChatCommunicator>();
 
-            //IocManager.Resolve<ChatUserStateWatcher>().Initialize();
+            IocManager.Resolve<ChatUserStateWatcher>().Initialize();
             IocManager.Resolve<AppTimes>().StartupTime = Clock.Now;
         }
     }

@@ -25,10 +25,10 @@ namespace Magicodes.Admin.Identity
                 .AddAbpEditionManager<EditionManager>()
                 .AddAbpUserStore<UserStore>()
                 .AddAbpRoleStore<RoleStore>()
+                .AddAbpSignInManager<SignInManager>()
                 .AddAbpUserClaimsPrincipalFactory<UserClaimsPrincipalFactory>()
                 .AddAbpSecurityStampValidator<SecurityStampValidator>()
                 .AddPermissionChecker<PermissionChecker>()
-                .AddAbpSignInManager<SignInManager>()
                 .AddDefaultTokenProviders();
         }
     }

@@ -23,9 +23,8 @@ namespace Magicodes.Admin.Configuration
                 public const string DesktopFixedHeader = "App.UiManagement.Header.DesktopFixedHeader";
                 public const string DesktopMinimizeMode = "App.UiManagement.Header.DesktopMinimizeMode";
                 public const string MobileFixedHeader = "App.UiManagement.Header.MobileFixedHeader"; 
-                public const string DropdownSkinDesktop = "App.UiManagement.Header.DropdownSkin_Desktop"; 
+                public const string Skin = "App.UiManagement.Header.Skin"; 
                 public const string DisplaySubmenuArrowDesktop = "App.UiManagement.Header.DisplaySubmenuArrow_Desktop"; 
-                public const string DropdownSkin = "App.UiManagement.Header.DropdownSkin"; 
             }
 
             public static class LeftAside

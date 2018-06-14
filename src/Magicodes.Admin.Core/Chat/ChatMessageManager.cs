@@ -19,7 +19,7 @@ namespace Magicodes.Admin.Chat
     {
         private readonly IFriendshipManager _friendshipManager;
         private readonly IChatCommunicator _chatCommunicator;
-        private readonly IOnlineClientManager _onlineClientManager;
+        private readonly IOnlineClientManager<ChatChannel> _onlineClientManager;
         private readonly UserManager _userManager;
         private readonly ITenantCache _tenantCache;
         private readonly IUserFriendsCache _userFriendsCache;
@@ -30,7 +30,7 @@ namespace Magicodes.Admin.Chat
         public ChatMessageManager(
             IFriendshipManager friendshipManager,
             IChatCommunicator chatCommunicator,
-            IOnlineClientManager onlineClientManager,
+            IOnlineClientManager<ChatChannel> onlineClientManager,
             UserManager userManager,
             ITenantCache tenantCache,
             IUserFriendsCache userFriendsCache,
@@ -144,7 +144,7 @@ namespace Magicodes.Admin.Chat
 
             Save(sentMessage);
 
-            _chatCommunicator.SendMessageToClient(
+            await _chatCommunicator.SendMessageToClient(
                 _onlineClientManager.GetAllByUserId(senderIdentifier),
                 sentMessage
                 );
@@ -194,7 +194,7 @@ namespace Magicodes.Admin.Chat
             var clients = _onlineClientManager.GetAllByUserId(receiverIdentifier);
             if (clients.Any())
             {
-                _chatCommunicator.SendMessageToClient(clients, sentMessage);
+                await _chatCommunicator.SendMessageToClient(clients, sentMessage);
             }
             else if (GetUnreadMessageCount(senderIdentifier, receiverIdentifier) == 1)
             {

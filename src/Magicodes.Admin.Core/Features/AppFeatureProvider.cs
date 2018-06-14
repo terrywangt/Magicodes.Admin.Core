@@ -50,8 +50,6 @@ namespace Magicodes.Admin.Features
 
             #endregion
 
-#if FEATURE_SIGNALR
-
             var chatFeature = context.Create(
                 AppFeatures.ChatFeature,
                 defaultValue: "false",
@@ -72,8 +70,6 @@ namespace Magicodes.Admin.Features
                 displayName: L("TenantToHostChatFeature"),
                 inputType: new CheckboxInputType()
             );
-
-#endif
         }
 
         private static ILocalizableString L(string name)

@@ -707,7 +707,6 @@
     <text name="UiCustomization_Hide">مخفي</text>
     <text name="UiCustomization_MobileFixedHeader">رأس ثابت</text>
     <text name="UiCustomization_DisplayHeaderMenu">عرض رأس الصفحة</text>
-    <text name="UiCustomization_DropdownSkinDesktop">التصميم</text>
     <text name="UiCustomization_Light">فاتح</text>
     <text name="UiCustomization_Dark">داكن</text>
     <text name="UiCustomization_DisplaySubmenuArrowDesktop">عرض سهم القائمة الفرعية</text>
@@ -786,5 +785,7 @@
     <text name="Green">أخضر</text>
     <text name="Pink">وردي</text>
     <text name="Yellow">أصفر</text>
+    <text name="UiCustomization_HeaderSkin">التصميم</text>
+    <text name="TenantsCannotCreateLanguage">العملاء لايمكنهم إنشاء لغة.</text>
   </texts>
 </localizationDictionary>

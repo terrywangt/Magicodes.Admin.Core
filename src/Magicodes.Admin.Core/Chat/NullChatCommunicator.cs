@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Abp;
 using Abp.RealTime;
 using Magicodes.Admin.Friendships;
@@ -7,34 +8,34 @@ namespace Magicodes.Admin.Chat
 {
     public class NullChatCommunicator : IChatCommunicator
     {
-        public void SendMessageToClient(IReadOnlyList<IOnlineClient> clients, ChatMessage message)
+        public async Task SendMessageToClient(IReadOnlyList<IOnlineClient> clients, ChatMessage message)
         {
-            
+            await Task.CompletedTask;
         }
 
-        public void SendFriendshipRequestToClient(IReadOnlyList<IOnlineClient> clients, Friendship friend, bool isOwnRequest, bool isFriendOnline)
+        public async Task SendFriendshipRequestToClient(IReadOnlyList<IOnlineClient> clients, Friendship friend, bool isOwnRequest, bool isFriendOnline)
         {
-            
+            await Task.CompletedTask;
         }
 
-        public void SendUserConnectionChangeToClients(IReadOnlyList<IOnlineClient> clients, UserIdentifier user, bool isConnected)
+        public async Task SendUserConnectionChangeToClients(IReadOnlyList<IOnlineClient> clients, UserIdentifier user, bool isConnected)
         {
-            
+            await Task.CompletedTask;
         }
 
-        public void SendUserStateChangeToClients(IReadOnlyList<IOnlineClient> clients, UserIdentifier user, FriendshipState newState)
+        public async Task SendUserStateChangeToClients(IReadOnlyList<IOnlineClient> clients, UserIdentifier user, FriendshipState newState)
         {
-            
+            await Task.CompletedTask;
         }
 
-        public void SendAllUnreadMessagesOfUserReadToClients(IReadOnlyList<IOnlineClient> clients, UserIdentifier user)
+        public async Task SendAllUnreadMessagesOfUserReadToClients(IReadOnlyList<IOnlineClient> clients, UserIdentifier user)
         {
-            
+            await Task.CompletedTask;
         }
 
-        public void SendReadStateChangeToClients(IReadOnlyList<IOnlineClient> clients, UserIdentifier user)
+        public async Task SendReadStateChangeToClients(IReadOnlyList<IOnlineClient> clients, UserIdentifier user)
         {
-
+            await Task.CompletedTask;
         }
     }
 }
