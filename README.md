@@ -10,6 +10,8 @@
 
 目前后台框架已做拆分，前后端分离。后台前端使用TypeScript+AngularJs，通过Web api接口实现后台业务。
 
+已升级到到.NET 2.1，请先下载SDK：https://www.microsoft.com/net/download/windows
+
 ### Demo
 http://demo.admin.xin-lai.com
 账号：Admin

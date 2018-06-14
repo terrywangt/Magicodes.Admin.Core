@@ -1,30 +1,20 @@
-﻿#if FEATURE_SIGNALR
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using Abp;
-using Abp.Dependency;
+using Abp.AspNetCore.SignalR.Hubs;
+using Abp.Auditing;
 using Abp.Localization;
+using Abp.RealTime;
 using Abp.Runtime.Session;
 using Abp.UI;
 using Castle.Core.Logging;
 using Castle.Windsor;
-using Microsoft.AspNet.SignalR;
 using Magicodes.Admin.Chat;
 
 namespace Magicodes.Admin.Web.Chat.SignalR
 {
-    public class ChatHub : Hub, ITransientDependency
+    public class ChatHub : OnlineClientHubBase
     {
-        /// <summary>
-        /// Reference to the logger.
-        /// </summary>
-        public ILogger Logger { get; set; }
-
-        /// <summary>
-        /// Reference to the session.
-        /// </summary>
-        public IAbpSession AbpSession { get; set; }
-
         private readonly IChatMessageManager _chatMessageManager;
         private readonly ILocalizationManager _localizationManager;
         private readonly IWindsorContainer _windsorContainer;
@@ -35,8 +25,10 @@ namespace Magicodes.Admin.Web.Chat.SignalR
         /// </summary>
         public ChatHub(
             IChatMessageManager chatMessageManager,
-            ILocalizationManager localizationManager, 
-            IWindsorContainer windsorContainer)
+            ILocalizationManager localizationManager,
+            IWindsorContainer windsorContainer,
+            IOnlineClientManager<ChatChannel> onlineClientManager,
+            IClientInfoProvider clientInfoProvider) : base(onlineClientManager, clientInfoProvider)
         {
             _chatMessageManager = chatMessageManager;
             _localizationManager = localizationManager;
@@ -70,6 +62,11 @@ namespace Magicodes.Admin.Web.Chat.SignalR
             }
         }
 
+        public void Register()
+        {
+            Logger.Debug("A client is registered: " + Context.ConnectionId);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (_isCallByRelease)
@@ -85,4 +82,3 @@ namespace Magicodes.Admin.Web.Chat.SignalR
         }
     }
 }
-#endif

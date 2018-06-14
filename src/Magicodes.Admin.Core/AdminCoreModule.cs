@@ -104,9 +104,6 @@ namespace Magicodes.Admin
 
         public override void PostInitialize()
         {
-            IocManager.RegisterIfNot<IChatCommunicator, NullChatCommunicator>();
-
-            IocManager.Resolve<ChatUserStateWatcher>().Initialize();
             IocManager.Resolve<AppTimes>().StartupTime = Clock.Now;
         }
     }

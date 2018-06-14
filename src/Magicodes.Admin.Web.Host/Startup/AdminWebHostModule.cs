@@ -4,6 +4,7 @@ using Abp.AspNetZeroCore.Web.Authentication.External.Facebook;
 using Abp.AspNetZeroCore.Web.Authentication.External.Google;
 using Abp.AspNetZeroCore.Web.Authentication.External.Microsoft;
 using Abp.Configuration.Startup;
+using Abp.Dependency;
 using Abp.Modules;
 using Abp.Reflection.Extensions;
 using Abp.Threading.BackgroundWorkers;
@@ -40,7 +41,7 @@ namespace Magicodes.Admin.Web.Startup
         {
             Configuration.Modules.AbpWebCommon().MultiTenancy.DomainFormat = _appConfiguration["App:ServerRootAddress"] ?? "http://localhost:22742/";
             Configuration.Modules.AspNetZero().LicenseCode = _appConfiguration["AbpZeroLicenseCode"];
-
+            
             //配置后台动态web api
             Configuration.Modules.AbpAspNetCore()
                 .CreateControllersForAppServices(
@@ -63,9 +64,12 @@ namespace Magicodes.Admin.Web.Startup
 
         public override void PostInitialize()
         {
-            if (!DatabaseCheckHelper.Exist(_appConfiguration["ConnectionStrings:Default"]))
+            using (var scope = IocManager.CreateScope())
             {
-                return;
+                if (!scope.Resolve<DatabaseCheckHelper>().Exist(_appConfiguration["ConnectionStrings:Default"]))
+                {
+                    return;
+                }
             }
 
             if (IocManager.Resolve<IMultiTenancyConfig>().IsEnabled)
@@ -74,8 +78,9 @@ namespace Magicodes.Admin.Web.Startup
                 workManager.Add(IocManager.Resolve<SubscriptionExpirationCheckWorker>());
                 workManager.Add(IocManager.Resolve<SubscriptionExpireEmailNotifierWorker>());
             }
-
+            
             ConfigureExternalAuthProviders();
+
 
             IocManager.RegisterIfNot<IChatCommunicator, NullChatCommunicator>();
             //初始化聊天状态监视
@@ -86,7 +91,7 @@ namespace Magicodes.Admin.Web.Startup
         {
             var externalAuthConfiguration = IocManager.Resolve<ExternalAuthConfiguration>();
 
-            if (_appConfiguration["Authentication:Facebook:IsEnabled"] != null && bool.Parse(_appConfiguration["Authentication:Facebook:IsEnabled"]))
+            if (bool.Parse(_appConfiguration["Authentication:Facebook:IsEnabled"]))
             {
                 externalAuthConfiguration.Providers.Add(
                     new ExternalLoginProviderInfo(
@@ -98,7 +103,7 @@ namespace Magicodes.Admin.Web.Startup
                 );
             }
 
-            if (_appConfiguration["Authentication:Google:IsEnabled"] != null && bool.Parse(_appConfiguration["Authentication:Google:IsEnabled"]))
+            if (bool.Parse(_appConfiguration["Authentication:Google:IsEnabled"]))
             {
                 externalAuthConfiguration.Providers.Add(
                     new ExternalLoginProviderInfo(
@@ -111,7 +116,7 @@ namespace Magicodes.Admin.Web.Startup
             }
 
             //not implemented yet. Will be implemented with https://github.com/aspnetzero/aspnet-zero-angular/issues/5
-            if (_appConfiguration["Authentication:Microsoft:IsEnabled"] != null && bool.Parse(_appConfiguration["Authentication:Microsoft:IsEnabled"]))
+            if (bool.Parse(_appConfiguration["Authentication:Microsoft:IsEnabled"]))
             {
                 externalAuthConfiguration.Providers.Add(
                     new ExternalLoginProviderInfo(

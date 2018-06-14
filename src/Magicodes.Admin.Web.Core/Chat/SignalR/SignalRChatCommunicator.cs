@@ -1,12 +1,11 @@
-﻿#if FEATURE_SIGNALR
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Abp;
-using Abp.AutoMapper;
 using Abp.Dependency;
 using Abp.ObjectMapping;
 using Abp.RealTime;
 using Castle.Core.Logging;
-using Microsoft.AspNet.SignalR;
+using Microsoft.AspNetCore.SignalR;
 using Magicodes.Admin.Chat;
 using Magicodes.Admin.Chat.Dto;
 using Magicodes.Admin.Friendships;
@@ -23,15 +22,18 @@ namespace Magicodes.Admin.Web.Chat.SignalR
 
         private readonly IObjectMapper _objectMapper;
 
-        private static IHubContext ChatHub => GlobalHost.ConnectionManager.GetHubContext<ChatHub>();
+        private readonly IHubContext<ChatHub> _chatHub;
 
-        public SignalRChatCommunicator(IObjectMapper objectMapper)
+        public SignalRChatCommunicator(
+            IObjectMapper objectMapper,
+            IHubContext<ChatHub> chatHub)
         {
             _objectMapper = objectMapper;
+            _chatHub = chatHub;
             Logger = NullLogger.Instance;
         }
 
-        public void SendMessageToClient(IReadOnlyList<IOnlineClient> clients, ChatMessage message)
+        public async Task SendMessageToClient(IReadOnlyList<IOnlineClient> clients, ChatMessage message)
         {
             foreach (var client in clients)
             {
@@ -41,11 +43,11 @@ namespace Magicodes.Admin.Web.Chat.SignalR
                     return;
                 }
 
-                signalRClient.getChatMessage(_objectMapper.Map<ChatMessageDto>(message));
+                await signalRClient.SendAsync("getChatMessage", _objectMapper.Map<ChatMessageDto>(message));
             }
         }
 
-        public void SendFriendshipRequestToClient(IReadOnlyList<IOnlineClient> clients, Friendship friendship, bool isOwnRequest, bool isFriendOnline)
+        public async Task SendFriendshipRequestToClient(IReadOnlyList<IOnlineClient> clients, Friendship friendship, bool isOwnRequest, bool isFriendOnline)
         {
             foreach (var client in clients)
             {
@@ -58,11 +60,11 @@ namespace Magicodes.Admin.Web.Chat.SignalR
                 var friendshipRequest = _objectMapper.Map<FriendDto>(friendship);
                 friendshipRequest.IsOnline = isFriendOnline;
 
-                signalRClient.getFriendshipRequest(friendshipRequest, isOwnRequest);
+                await signalRClient.SendAsync("getFriendshipRequest", friendshipRequest, isOwnRequest);
             }
         }
 
-        public void SendUserConnectionChangeToClients(IReadOnlyList<IOnlineClient> clients, UserIdentifier user, bool isConnected)
+        public async Task SendUserConnectionChangeToClients(IReadOnlyList<IOnlineClient> clients, UserIdentifier user, bool isConnected)
         {
             foreach (var client in clients)
             {
@@ -72,11 +74,11 @@ namespace Magicodes.Admin.Web.Chat.SignalR
                     continue;
                 }
 
-                signalRClient.getUserConnectNotification(user, isConnected);
+                await signalRClient.SendAsync("getUserConnectNotification", user, isConnected);
             }
         }
 
-        public void SendUserStateChangeToClients(IReadOnlyList<IOnlineClient> clients, UserIdentifier user, FriendshipState newState)
+        public async Task SendUserStateChangeToClients(IReadOnlyList<IOnlineClient> clients, UserIdentifier user, FriendshipState newState)
         {
             foreach (var client in clients)
             {
@@ -86,11 +88,11 @@ namespace Magicodes.Admin.Web.Chat.SignalR
                     continue;
                 }
 
-                signalRClient.getUserStateChange(user, newState);
+                await signalRClient.SendAsync("getUserStateChange", user, newState);
             }
         }
 
-        public void SendAllUnreadMessagesOfUserReadToClients(IReadOnlyList<IOnlineClient> clients, UserIdentifier user)
+        public async Task SendAllUnreadMessagesOfUserReadToClients(IReadOnlyList<IOnlineClient> clients, UserIdentifier user)
         {
             foreach (var client in clients)
             {
@@ -100,11 +102,11 @@ namespace Magicodes.Admin.Web.Chat.SignalR
                     continue;
                 }
 
-                signalRClient.getallUnreadMessagesOfUserRead(user);
+                await signalRClient.SendAsync("getallUnreadMessagesOfUserRead", user);
             }
         }
 
-        public void SendReadStateChangeToClients(IReadOnlyList<IOnlineClient> clients, UserIdentifier user)
+        public async Task SendReadStateChangeToClients(IReadOnlyList<IOnlineClient> clients, UserIdentifier user)
         {
             foreach (var client in clients)
             {
@@ -114,13 +116,13 @@ namespace Magicodes.Admin.Web.Chat.SignalR
                     continue;
                 }
 
-                signalRClient.getReadStateChange(user);
+                await signalRClient.SendAsync("getReadStateChange", user);
             }
         }
 
-        private dynamic GetSignalRClientOrNull(IOnlineClient client)
+        private IClientProxy GetSignalRClientOrNull(IOnlineClient client)
         {
-            var signalRClient = ChatHub.Clients.Client(client.ConnectionId);
+            var signalRClient = _chatHub.Clients.Client(client.ConnectionId);
             if (signalRClient == null)
             {
                 Logger.Debug("Can not get chat user " + client.UserId + " from SignalR hub!");
@@ -131,4 +133,3 @@ namespace Magicodes.Admin.Web.Chat.SignalR
         }
     }
 }
-#endif

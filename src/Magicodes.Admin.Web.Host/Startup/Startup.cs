@@ -1,12 +1,30 @@
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Reflection;
 using Abp.AspNetCore;
+using Abp.AspNetCore.Configuration;
+using Abp.AspNetCore.Mvc.Extensions;
+using Abp.AspNetCore.Mvc.Results;
+using Abp.AspNetCore.SignalR.Hubs;
 using Abp.AspNetZeroCore.Web.Authentication.JwtBearer;
+using Abp.Authorization;
 using Abp.Castle.Logging.Log4Net;
 using Abp.Dependency;
+using Abp.Domain.Entities;
+using Abp.Events.Bus;
+using Abp.Events.Bus.Exceptions;
 using Abp.Extensions;
 using Abp.Hangfire;
+using Abp.PlugIns;
+using Abp.Reflection.Extensions;
+using Abp.Runtime.Validation;
 using Abp.Timing;
+using Abp.Web.Models;
+using AutoMapper.Internal;
+using Castle.Core.Logging;
 using Castle.Facilities.Logging;
 using Hangfire;
 using Microsoft.AspNetCore.Builder;
@@ -14,9 +32,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Cors.Internal;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Magicodes.Admin.Authorization;
 using Magicodes.Admin.Authorization.Roles;
 using Magicodes.Admin.Authorization.Users;
@@ -26,22 +44,13 @@ using Magicodes.Admin.Identity;
 using Magicodes.Admin.Install;
 using Magicodes.Admin.MultiTenancy;
 using Magicodes.Admin.Web.Authentication.JwtBearer;
+using Magicodes.Admin.Web.Chat.SignalR;
 using PaulMiami.AspNetCore.Mvc.Recaptcha;
 using Swashbuckle.AspNetCore.Swagger;
 using Magicodes.Admin.Web.IdentityServer;
-using System.IO;
-using Abp.PlugIns;
+using ILogger = Microsoft.Extensions.Logging.ILogger;
+using ILoggerFactory = Microsoft.Extensions.Logging.ILoggerFactory;
 using Magicodes.SwaggerUI;
-#if FEATURE_SIGNALR
-using Abp.Owin;
-using Microsoft.AspNet.SignalR;
-using Microsoft.Owin.Cors;
-using Owin;
-using Owin.Security.AesDataProtectorProvider;
-using Abp.Web.SignalR;
-using Microsoft.AspNet.SignalR.Hubs;
-using Abp.AspNetZeroCore.Web.Owin;
-#endif
 
 namespace Magicodes.Admin.Web.Startup
 {
@@ -54,8 +63,8 @@ namespace Magicodes.Admin.Web.Startup
 
         public Startup(IHostingEnvironment env)
         {
-            _appConfiguration = env.GetAppConfiguration();
             _hostingEnvironment = env;
+            _appConfiguration = env.GetAppConfiguration();
         }
 
         public IServiceProvider ConfigureServices(IServiceCollection services)
@@ -64,7 +73,9 @@ namespace Magicodes.Admin.Web.Startup
             services.AddMvc(options =>
             {
                 options.Filters.Add(new CorsAuthorizationFilterFactory(DefaultCorsPolicyName));
-            });
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1); ;
+
+            services.AddSignalR(options => { options.EnableDetailedErrors = true; });
 
             //Configure CORS for angular2 UI
             services.AddCors(options =>
@@ -73,10 +84,16 @@ namespace Magicodes.Admin.Web.Startup
                 {
                     //App:CorsOrigins in appsettings.json can contain more than one address with splitted by comma.
                     builder
-                        //.WithOrigins(_appConfiguration["App:CorsOrigins"].Split(",", StringSplitOptions.RemoveEmptyEntries).Select(o => o.RemovePostFix("/")).ToArray())
-                        .AllowAnyOrigin() //TODO: Will be replaced by above when Microsoft releases microsoft.aspnetcore.cors 2.0 - https://github.com/aspnet/CORS/pull/94
+                        .WithOrigins(
+                            // App:CorsOrigins in appsettings.json can contain more than one address separated by comma.
+                            _appConfiguration["App:CorsOrigins"]
+                                .Split(",", StringSplitOptions.RemoveEmptyEntries)
+                                .Select(o => o.RemovePostFix("/"))
+                                .ToArray()
+                        )
                         .AllowAnyHeader()
-                        .AllowAnyMethod();
+                        .AllowAnyMethod()
+                        .AllowCredentials();
                 });
             });
 
@@ -118,12 +135,7 @@ namespace Magicodes.Admin.Web.Startup
                     f => f.UseAbpLog4Net().WithConfig("log4net.config")
                 );
 
-                //设置插件目录
-                var plusPath = Path.Combine(_hostingEnvironment.WebRootPath, "PlugIns");
-                if (!Directory.Exists(plusPath))
-                    Directory.CreateDirectory(plusPath);
-
-                options.PlugInSources.AddFolder(plusPath);
+                options.PlugInSources.AddFolder(Path.Combine(_hostingEnvironment.WebRootPath, "Plugins"), SearchOption.AllDirectories);
             });
         }
 
@@ -148,15 +160,20 @@ namespace Magicodes.Admin.Web.Startup
 
             app.UseStaticFiles();
 
-            if (DatabaseCheckHelper.Exist(_appConfiguration["ConnectionStrings:Default"]))
+            using (var scope = app.ApplicationServices.CreateScope())
             {
-                app.UseAbpRequestLocalization();
+                if (scope.ServiceProvider.GetService<DatabaseCheckHelper>().Exist(_appConfiguration["ConnectionStrings:Default"]))
+                {
+                    app.UseAbpRequestLocalization();
+                }
             }
 
-#if FEATURE_SIGNALR
-            //Integrate to OWIN
-            app.UseAppBuilder(ConfigureOwinServices);
-#endif
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<AbpCommonHub>("/signalr");
+                routes.MapHub<ChatHub>("/signalr-chat");
+            });
+
             //仅在后台服务启用
             if (!_appConfiguration["Abp:Hangfire:IsEnabled"].IsNullOrEmpty() && Convert.ToBoolean(_appConfiguration["Abp:Hangfire:IsEnabled"]) && !_appConfiguration["Abp:Hangfire:DashboardEnabled"].IsNullOrEmpty() && Convert.ToBoolean(_appConfiguration["Abp:Hangfire:DashboardEnabled"]))
             {
@@ -182,28 +199,5 @@ namespace Magicodes.Admin.Web.Startup
             //启用自定义API文档(支持文档配置)
             app.UseCustomSwaggerUI(_appConfiguration);
         }
-
-#if FEATURE_SIGNALR
-        private static void ConfigureOwinServices(IAppBuilder app)
-        {
-            GlobalHost.DependencyResolver.Register(typeof(IAssemblyLocator), () => new SignalRAssemblyLocator());
-            app.Properties["host.AppName"] = "Admin";
-
-            app.UseAbp();
-            app.UseAesDataProtectorProvider();
-
-            app.Map("/signalr", map =>
-            {
-                map.UseCors(CorsOptions.AllowAll);
-
-                var hubConfiguration = new HubConfiguration
-                {
-                    EnableJSONP = true
-                };
-
-                map.RunSignalR(hubConfiguration);
-            });
-        }
-#endif
     }
 }

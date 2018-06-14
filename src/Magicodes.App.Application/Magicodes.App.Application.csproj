@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
     <AssemblyName>Magicodes.App.Application</AssemblyName>
     <PackageId>Magicodes.App.Application</PackageId>
@@ -18,7 +18,7 @@
     <ProjectReference Include="..\Magicodes.Admin.Core\Magicodes.Admin.Core.csproj" />
     <ProjectReference Include="..\Magicodes.Admin.EntityFrameworkCore\Magicodes.Admin.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\Magicodes.Admin.Web.Core\Magicodes.Admin.Web.Core.csproj" />
-    <PackageReference Include="Abp.AspNetCore" Version="3.6.1" />
+    <PackageReference Include="Abp.AspNetCore" Version="3.7.2" />
   </ItemGroup>
   <PropertyGroup>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>

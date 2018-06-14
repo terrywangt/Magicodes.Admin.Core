@@ -32,6 +32,9 @@
     <PackageReference Include="Abp.Zero.Ldap" Version="3.7.2" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Update="NETStandard.Library" Version="2.0.3" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Magicodes.Admin.Core.Shared\Magicodes.Admin.Core.Shared.csproj" />
   </ItemGroup>
 </Project>

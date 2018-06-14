@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Magicodes.Admin.Web.Controllers
 {
-    public class HomeController : AdminControllerBase
+    public class HomeController : AbpController
     {
         [DisableAuditing]
         public IActionResult Index()

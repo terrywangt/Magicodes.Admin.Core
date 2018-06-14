@@ -54,6 +54,8 @@ namespace Magicodes.Admin.Web.Startup
                 authenticationBuilder.AddIdentityServerAuthentication("IdentityBearer", options =>
                 {
                     options.Authority = configuration["App:ServerRootAddress"];
+                    options.ApiName = configuration["IdentityServer:ApiName"];
+                    options.ApiSecret = configuration["IdentityServer:ApiSecret"];
                     options.RequireHttpsMetadata = false;
                 });
             }
