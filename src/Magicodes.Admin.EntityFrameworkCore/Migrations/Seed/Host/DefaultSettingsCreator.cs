@@ -23,7 +23,7 @@ namespace Magicodes.Admin.Migrations.Seed.Host
             AddSettingIfNotExists(EmailSettingNames.DefaultFromDisplayName, "mydomain.com mailer");
 
             //Languages
-            AddSettingIfNotExists(LocalizationSettingNames.DefaultLanguage, "zh-Hans");
+            AddSettingIfNotExists(LocalizationSettingNames.DefaultLanguage, "zh-CN");
         }
 
         private void AddSettingIfNotExists(string name, string value, int? tenantId = null)

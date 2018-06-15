@@ -25,7 +25,7 @@ namespace Magicodes.Admin.Migrations.Seed.Host
                 new ApplicationLanguage(tenantId, "pt-BR", "Português (Brasil)", "famfamfam-flags br"),
                 new ApplicationLanguage(tenantId, "tr", "Türkçe", "famfamfam-flags tr"),
                 new ApplicationLanguage(tenantId, "ru", "Pусский", "famfamfam-flags ru"),
-                new ApplicationLanguage(tenantId, "zh-Hans", "简体中文", "famfamfam-flags cn"),
+                new ApplicationLanguage(tenantId, "zh-CN", "简体中文", "famfamfam-flags cn"),
                 new ApplicationLanguage(tenantId, "es-MX", "Español (México)", "famfamfam-flags mx"),
                 new ApplicationLanguage(tenantId, "es", "Español (Spanish)", "famfamfam-flags es"),
                 new ApplicationLanguage(tenantId, "vi", "Tiếng Việt", "famfamfam-flags vi")

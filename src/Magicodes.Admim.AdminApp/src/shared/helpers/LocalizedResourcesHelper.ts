@@ -22,7 +22,7 @@ export class LocalizedResourcesHelper {
     }
 
     static loadLocalizedStylesForTheme(theme: string, isRtl: boolean): JQueryPromise<any> {
-        let cssPostfix = isRtl ? '-rtl':'';
+        let cssPostfix = isRtl ? '-rtl' : '';
 
         $('head').append($('<link rel="stylesheet" type="text/css" />').attr('href', AppConsts.appBaseUrl + '/assets/metronic/dist/html/' + theme + '/assets/demo/' + theme + '/base/style.bundle' + cssPostfix + '.css'));
         $('head').append($('<link rel="stylesheet" type="text/css" />').attr('href', AppConsts.appBaseUrl + '/assets/primeng/datatable/css/primeng.datatable' + cssPostfix + '.css'));
@@ -124,7 +124,7 @@ export class LocalizedResourcesHelper {
             'sv_SE',
             'tr_TR',
             'ua_UA',
-            'zh_CN',
+            'zh-CN',
             'zh_TW'];
 
         const mappedCulture = LocalizedResourcesHelper.mapCultureForBootstrapSelect(currentCulture);
