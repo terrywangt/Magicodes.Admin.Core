@@ -1,5 +1,6 @@
 ﻿using Abp;
 using Abp.Dependency;
+using Abp.Domain.Entities.Auditing;
 using Abp.EntityFrameworkCore.Configuration;
 using Abp.Extensions;
 using Abp.IdentityServer4;
@@ -43,7 +44,13 @@ namespace Magicodes.Admin.EntityFrameworkCore
             }
 
             //启用实体历史
-            Configuration.EntityHistory.Selectors.Add("AdminEntities", EntityHistoryHelper.TrackedTypes);
+            Configuration.EntityHistory.Selectors.Add(
+                new NamedTypeSelector(
+                    "FullAuditedEntities",
+                    type => typeof(IFullAudited).IsAssignableFrom(type)
+                )
+            );
+            //Configuration.EntityHistory.Selectors.Add("AdminEntities", EntityHistoryHelper.TrackedTypes);
             Configuration.CustomConfigProviders.Add(new EntityHistoryConfigProvider(Configuration));
         }
 

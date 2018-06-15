@@ -91,7 +91,7 @@ namespace Magicodes.Admin.Web.Startup
         {
             var externalAuthConfiguration = IocManager.Resolve<ExternalAuthConfiguration>();
 
-            if (bool.Parse(_appConfiguration["Authentication:Facebook:IsEnabled"]))
+            if (_appConfiguration["Authentication:Facebook:IsEnabled"] != null && bool.Parse(_appConfiguration["Authentication:Facebook:IsEnabled"]))
             {
                 externalAuthConfiguration.Providers.Add(
                     new ExternalLoginProviderInfo(
@@ -103,7 +103,7 @@ namespace Magicodes.Admin.Web.Startup
                 );
             }
 
-            if (bool.Parse(_appConfiguration["Authentication:Google:IsEnabled"]))
+            if (_appConfiguration["Authentication:Google:IsEnabled"] != null && bool.Parse(_appConfiguration["Authentication:Google:IsEnabled"]))
             {
                 externalAuthConfiguration.Providers.Add(
                     new ExternalLoginProviderInfo(
@@ -116,7 +116,7 @@ namespace Magicodes.Admin.Web.Startup
             }
 
             //not implemented yet. Will be implemented with https://github.com/aspnetzero/aspnet-zero-angular/issues/5
-            if (bool.Parse(_appConfiguration["Authentication:Microsoft:IsEnabled"]))
+            if (_appConfiguration["Authentication:Microsoft:IsEnabled"] != null && bool.Parse(_appConfiguration["Authentication:Microsoft:IsEnabled"]))
             {
                 externalAuthConfiguration.Providers.Add(
                     new ExternalLoginProviderInfo(
