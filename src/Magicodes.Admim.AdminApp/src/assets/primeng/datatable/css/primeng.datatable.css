@@ -147,3 +147,8 @@
 .primeng-datatable-container .ui-table-scrollable-header {
   border: 0;
 }
+.primeng-datatable-container .primeng-no-data {
+  border: 1px solid #f4f5f8;
+  padding: 10px;
+  text-align: center;
+}

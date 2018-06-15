@@ -7,14 +7,14 @@ import { SubdomainTenancyNameFinder } from '@shared/helpers/SubdomainTenancyName
 import * as moment from 'moment';
 import { LocalizedResourcesHelper } from './shared/helpers/LocalizedResourcesHelper';
 import { UrlHelper } from './shared/helpers/UrlHelper';
-import { environment } from '@env/environment';
+import { environment } from './environments/environment';
 
 export class AppPreBootstrap {
 
     static run(appRootUrl: string, callback: () => void, resolve: any, reject: any): void {
         AppPreBootstrap.getApplicationConfig(appRootUrl, () => {
             if (UrlHelper.isInstallUrl(location.href)) {
-                LocalizedResourcesHelper.loadLocalizedStlyes();
+                LocalizedResourcesHelper.loadLocalizedStylesForTheme("default", false);
                 callback();
                 return;
             }
@@ -42,9 +42,9 @@ export class AppPreBootstrap {
     }
 
     private static getApplicationConfig(appRootUrl: string, callback: () => void) {
-        let configFileName = environment.production ? 'appconfig.pro.json' : 'appconfig.json';
+
         return abp.ajax({
-            url: appRootUrl + 'assets/' + configFileName,
+            url: appRootUrl + 'assets/' + environment.appConfig,
             method: 'GET',
             headers: {
                 'Abp.TenantId': abp.multiTenancy.getTenantIdCookie()

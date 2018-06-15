@@ -2,6 +2,7 @@ import { Component, ElementRef, Injector, ViewChild } from '@angular/core';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { ChangePasswordInput, PasswordComplexitySetting, ProfileServiceProxy } from '@shared/service-proxies/service-proxies';
 import { ModalDirective } from 'ngx-bootstrap';
+import { finalize } from 'rxjs/operators';
 
 @Component({
     selector: 'changePasswordModal',
@@ -55,7 +56,7 @@ export class ChangePasswordModalComponent extends AppComponentBase {
 
         this.saving = true;
         this._profileService.changePassword(input)
-            .finally(() => { this.saving = false; })
+            .pipe(finalize(() => { this.saving = false; }))
             .subscribe(() => {
                 this.notify.info(this.l('YourPasswordHasChangedSuccessfully'));
                 this.close();

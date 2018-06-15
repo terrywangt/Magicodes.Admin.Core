@@ -4,6 +4,7 @@ import { AppComponentBase } from '@shared/common/app-component-base';
 import { CachingServiceProxy, EntityDtoOfString, WebLogServiceProxy } from '@shared/service-proxies/service-proxies';
 import { FileDownloadService } from '@shared/utils/file-download.service';
 import * as _ from 'lodash';
+import { finalize } from 'rxjs/operators';
 
 @Component({
     templateUrl: './maintenance.component.html',
@@ -34,9 +35,7 @@ export class MaintenanceComponent extends AppComponentBase implements OnInit, Af
         const self = this;
         self.loading = true;
         self._cacheService.getAllCaches()
-            .finally(() => {
-                self.loading = false;
-            })
+            .pipe(finalize(() => { self.loading = false; }))
             .subscribe((result) => {
                 self.caches = result.items;
             });

@@ -125,17 +125,15 @@ td label.m-checkbox span {
   right: -4px;
 }
 .m-pricing-table-1 .m-pricing-table-1__items .m-pricing-table-1__item .m-pricing-table-1__price {
-  margin-top: 8px;
   margin-bottom: 0.571rem;
 }
 .m-pricing-table-1 .m-pricing-table-1__items .m-pricing-table-1__item:nth-child(1) .m-pricing-table-1__price {
-  margin-top: 8px;
   font-size: 3rem;
 }
 .m-pricing-table-1 .m-pricing-table-1__items .m-pricing-table-1__item .m-pricing-table-1__description {
   display: table;
   margin: 0 auto;
-  text-align: left;
+  text-align: center;
   padding-left: 10px;
 }
 .m-pricing-table-1 .m-pricing-table-1__items .m-pricing-table-1__item .m-pricing-table-1__description .la {

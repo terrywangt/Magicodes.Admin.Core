@@ -90,7 +90,6 @@
                                     <ul class="m-menu__subnav"
                                         [attr.aria-label]="l(menuItem.name)"
                                         role="menu">
-                                        >
                                         <!-- Menu Level 3 -->
                                         <ng-template ngFor let-childOfChildMenuItem [ngForOf]="childMenuItem.items" let-childOfChildMenuItemIndex="index">
                                             <li *ngIf="showMenuItem(childOfChildMenuItem)" routerLinkActive="m-menu__item--active " class="m-menu__item m-menu__item--submenu"

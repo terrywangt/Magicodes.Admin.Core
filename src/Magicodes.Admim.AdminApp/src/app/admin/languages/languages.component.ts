@@ -6,6 +6,7 @@ import { ApplicationLanguageListDto, LanguageServiceProxy, SetDefaultLanguageInp
 import { Paginator } from 'primeng/components/paginator/paginator';
 import { Table } from 'primeng/components/table/table';
 import { CreateOrEditLanguageModalComponent } from './create-or-edit-language-modal.component';
+import { AbpSessionService } from '@abp/session/abp-session.service';
 
 @Component({
     templateUrl: './languages.component.html',
@@ -25,6 +26,7 @@ export class LanguagesComponent extends AppComponentBase {
     constructor(
         injector: Injector,
         private _languageService: LanguageServiceProxy,
+        private _sessionService: AbpSessionService,
         private _router: Router
     ) {
         super(injector);
@@ -57,6 +59,7 @@ export class LanguagesComponent extends AppComponentBase {
     deleteLanguage(language: ApplicationLanguageListDto): void {
         this.message.confirm(
             this.l('LanguageDeleteWarningMessage', language.displayName),
+            this.l('AreYouSure'),
             isConfirmed => {
                 if (isConfirmed) {
                     this._languageService.deleteLanguage(language.id).subscribe(() => {
@@ -66,5 +69,9 @@ export class LanguagesComponent extends AppComponentBase {
                 }
             }
         );
+    }
+
+    get multiTenancySideIsHost(): boolean {
+        return !this._sessionService.tenantId;
     }
 }

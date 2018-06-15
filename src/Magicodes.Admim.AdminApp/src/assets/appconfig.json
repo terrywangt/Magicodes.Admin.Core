@@ -7,12 +7,12 @@
       "to": "pt"
     },
     {
-      "from": "zh-CN",
+      "from": "zh-Hans",
       "to": "zh"
     },
-	{
-		"from": "he-IL",
-		"to": "he"
-	}
+    {
+      "from": "he-IL",
+      "to": "he"
+    }
   ]
 }

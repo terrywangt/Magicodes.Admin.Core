@@ -20,7 +20,7 @@
                 <div class="modal-footer">
                     <button [disabled]="saving" [buttonBusy]="resettingPermissions" [busyText]="l('SavingWithThreeDot')" type="button" class="btn btn-default pull-left" (click)="resetPermissions()" [tooltip]="l('ResetPermissionsTooltip')" placement="top"><span>{{l("ResetSpecialPermissions")}}</span></button>
                     <button [disabled]="saving || resettingPermissions" type="button" class="btn btn-default" (click)="close()">{{l("Cancel")}}</button>
-                    <button type="submit" class="btn btn-primary blue" [disabled]="!userForm.form.valid || resettingPermissions" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                    <button type="submit" class="btn btn-primary" [disabled]="!userForm.form.valid || resettingPermissions" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
                 </div>
             </form>
         </div>

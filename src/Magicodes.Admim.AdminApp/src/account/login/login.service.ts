@@ -8,6 +8,7 @@ import { AppConsts } from '@shared/AppConsts';
 import { UrlHelper } from '@shared/helpers/UrlHelper';
 import { AuthenticateModel, AuthenticateResultModel, ExternalAuthenticateModel, ExternalAuthenticateResultModel, ExternalLoginProviderInfoModel, TokenAuthServiceProxy } from '@shared/service-proxies/service-proxies';
 import * as _ from 'lodash';
+import { finalize } from 'rxjs/operators';
 
 declare const FB: any; // Facebook API
 declare const gapi: any; // Facebook API
@@ -74,7 +75,7 @@ export class LoginService {
 
         this._tokenAuthService
             .authenticate(this.authenticateModel)
-            .finally(finallyCallback)
+            .pipe(finalize(finallyCallback))
             .subscribe((result: AuthenticateResultModel) => {
                 this.processAuthenticateResult(result, redirectUrl);
             });

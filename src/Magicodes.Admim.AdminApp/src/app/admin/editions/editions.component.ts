@@ -39,6 +39,7 @@ export class EditionsComponent extends AppComponentBase  {
     deleteEdition(edition: EditionListDto): void {
         this.message.confirm(
             this.l('EditionDeleteWarningMessage', edition.displayName),
+            this.l('AreYouSure'),
             isConfirmed => {
                 if (isConfirmed) {
                     this._editionService.deleteEdition(edition.id).subscribe(() => {

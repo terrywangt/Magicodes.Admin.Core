@@ -3,6 +3,7 @@ import { appModuleAnimation } from '@shared/animations/routerTransition';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { AppSessionService } from '@shared/common/session/app-session.service';
 import { CommonLookupServiceProxy, EmailSettingsEditDto, HostBillingSettingsEditDto, InstallDto, InstallServiceProxy, NameValue } from '@shared/service-proxies/service-proxies';
+import { finalize } from 'rxjs/operators';
 
 @Component({
     templateUrl: './install.component.html',
@@ -56,9 +57,7 @@ export class InstallComponent extends AppComponentBase implements OnInit {
     saveAll(): void {
         this.saving = true;
         this._installSettingService.setup(this.setupSettings)
-            .finally(() => {
-                this.saving = false;
-            })
+            .pipe(finalize(() => { this.saving = false; }))
             .subscribe(() => {
                 window.location.href = '/';
             });

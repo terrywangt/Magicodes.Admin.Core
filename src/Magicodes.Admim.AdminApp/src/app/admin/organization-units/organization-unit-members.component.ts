@@ -91,6 +91,7 @@ export class OrganizationUnitMembersComponent extends AppComponentBase implement
     removeMember(user: OrganizationUnitUserListDto): void {
         this.message.confirm(
             this.l('RemoveUserFromOuWarningMessage', user.userName, this.organizationUnit.displayName),
+            this.l('AreYouSure'),
             isConfirmed => {
                 if (isConfirmed) {
                     this._organizationUnitService

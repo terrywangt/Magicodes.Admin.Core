@@ -8,6 +8,7 @@ import { AppComponentBase } from '@shared/common/app-component-base';
 import { AppSessionService } from '@shared/common/session/app-session.service';
 import { DefaultTimezoneScope, SendTestEmailInput, TenantSettingsEditDto, TenantSettingsServiceProxy } from '@shared/service-proxies/service-proxies';
 import { FileUploader, FileUploaderOptions } from 'ng2-file-upload';
+import { finalize } from 'rxjs/operators';
 
 @Component({
     templateUrl: './tenant-settings.component.html',
@@ -56,9 +57,7 @@ export class TenantSettingsComponent extends AppComponentBase implements OnInit,
     getSettings(): void {
         this.loading = true;
         this._tenantSettingsService.getAllSettings()
-            .finally(() => {
-                this.loading = false;
-            })
+            .pipe(finalize(() => { this.loading = false; }))
             .subscribe((result: TenantSettingsEditDto) => {
                 this.settings = result;
                 if (this.settings.general) {

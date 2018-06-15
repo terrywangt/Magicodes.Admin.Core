@@ -1,13 +1,15 @@
 import { Component, ElementRef, EventEmitter, Injector, Output, ViewChild } from '@angular/core';
 import { AppComponentBase } from '@shared/common/app-component-base';
-import { 
-    CommonLookupServiceProxy, CreateTenantInput, 
-    PasswordComplexitySetting, ProfileServiceProxy, 
-    TenantServiceProxy, SubscribableEditionComboboxItemDto } from 
-'@shared/service-proxies/service-proxies';
+import {
+    CommonLookupServiceProxy, CreateTenantInput,
+    PasswordComplexitySetting, ProfileServiceProxy,
+    TenantServiceProxy, SubscribableEditionComboboxItemDto
+} from
+    '@shared/service-proxies/service-proxies';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { ModalDirective } from 'ngx-bootstrap';
+import { finalize } from 'rxjs/operators';
 
 @Component({
     selector: 'createTenantModal',
@@ -93,8 +95,8 @@ export class CreateTenantModalComponent extends AppComponentBase {
 
     selectedEditionIsFree(): boolean {
         let selectedEditions = _.filter(this.editions, { 'value': this.tenant.editionId })
-        .map(u => Object.assign(new SubscribableEditionComboboxItemDto(),u));
-        
+            .map(u => Object.assign(new SubscribableEditionComboboxItemDto(), u));
+
         if (selectedEditions.length !== 1) {
             this.isSelectedEditionFree = true;
         }
@@ -140,7 +142,7 @@ export class CreateTenantModalComponent extends AppComponentBase {
         }
 
         this._tenantService.createTenant(this.tenant)
-            .finally(() => this.saving = false)
+            .pipe(finalize(() => this.saving = false))
             .subscribe(() => {
                 this.notify.info(this.l('SavedSuccessfully'));
                 this.close();
@@ -159,10 +161,16 @@ export class CreateTenantModalComponent extends AppComponentBase {
     }
 
     toggleSubscriptionFields() {
-        if (this.tenant.editionId > 0) {
-            this.isSubscriptionFieldsVisible = true;
-        } else {
+        if (this.tenant.editionId <= 0 || this.isSelectedEditionFree) {
             this.isSubscriptionFieldsVisible = false;
+
+            if (this.isSelectedEditionFree) {
+                this.isUnlimited = true;
+            } else {
+                this.isUnlimited = false;
+            }
+        } else {
+            this.isSubscriptionFieldsVisible = true;
         }
     }
 }

@@ -1,10 +1,4 @@
-<a href="javascript:;" class="m-nav__link m-dropdown__toggle" *ngIf="unreadNotificationCount" id="m_topbar_notification_icon">
-    <span class="m-nav__link-badge m-badge m-badge--dot m-badge--dot-small" [ngClass]="{'m-badge--danger':unreadNotificationCount}"></span>
-    <span class="m-nav__link-icon">
-        <i class="flaticon-music-2" [attr.aria-label]="l('Notifications')"></i>
-    </span>
-</a>
-<a href="javascript:;" class="m-nav__link m-dropdown__toggle" *ngIf="!unreadNotificationCount" id="m_topbar_notification_icon_not">
+<a href="javascript:;" class="m-nav__link m-dropdown__toggle" id="m_topbar_notification_icon_not">
     <span class="m-nav__link-badge m-badge m-badge--dot m-badge--dot-small" [ngClass]="{'m-badge--danger':unreadNotificationCount}"></span>
     <span class="m-nav__link-icon">
         <i class="flaticon-music-2" [attr.aria-label]="l('Notifications')"></i>

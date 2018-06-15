@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Injector, Outpu
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { CreateOrganizationUnitInput, OrganizationUnitDto, OrganizationUnitServiceProxy, UpdateOrganizationUnitInput } from '@shared/service-proxies/service-proxies';
 import { ModalDirective } from 'ngx-bootstrap';
+import { finalize } from 'rxjs/operators';
 
 export interface IOrganizationUnitOnEdit {
     id?: number;
@@ -61,7 +62,7 @@ export class CreateOrEditUnitModalComponent extends AppComponentBase {
         this.saving = true;
         this._organizationUnitService
             .createOrganizationUnit(createInput)
-            .finally(() => this.saving = false)
+            .pipe(finalize(() => this.saving = false))
             .subscribe((result: OrganizationUnitDto) => {
                 this.notify.info(this.l('SavedSuccessfully'));
                 this.close();
@@ -77,7 +78,7 @@ export class CreateOrEditUnitModalComponent extends AppComponentBase {
         this.saving = true;
         this._organizationUnitService
             .updateOrganizationUnit(updateInput)
-            .finally(() => this.saving = false)
+            .pipe(finalize(() => this.saving = false))
             .subscribe((result: OrganizationUnitDto) => {
                 this.notify.info(this.l('SavedSuccessfully'));
                 this.close();

@@ -2,6 +2,7 @@ import { Component, ElementRef, EventEmitter, Injector, Output, ViewChild } from
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { ProfileServiceProxy, VerifySmsCodeInputDto } from '@shared/service-proxies/service-proxies';
 import { ModalDirective } from 'ngx-bootstrap';
+import { finalize } from 'rxjs/operators';
 
 @Component({
     selector: 'smsVerificationModal',
@@ -37,7 +38,7 @@ export class SmsVerificationModalComponent extends AppComponentBase {
     save(): void {
         this.saving = true;
         this._profileService.verifySmsCode(this.verifyCode)
-            .finally(() => { this.saving = false; })
+            .pipe(finalize(() => { this.saving = false; }))
             .subscribe(() => {
                 this.close();
                 this.modalSave.emit(null);

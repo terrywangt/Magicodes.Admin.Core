@@ -112,6 +112,7 @@ export class UsersComponent extends AppComponentBase {
 
         this.message.confirm(
             this.l('UserDeleteWarningMessage', user.userName),
+            this.l('AreYouSure'),
             (isConfirmed) => {
                 if (isConfirmed) {
                     this._userServiceProxy.deleteUser(user.id)

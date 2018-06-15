@@ -125,11 +125,11 @@ export class PermissionTreeComponent extends AppComponentBase implements OnInit,
             if (data.node.state.selected) {
                 selectNodeAndAllParents(self._$tree.jstree('get_parent', data.node));
 
-                childrenNodes = $.makeArray(self._$tree.jstree('get_children_dom', data.node));
+                childrenNodes = $.makeArray(self._$tree.jstree('get_node', data.node).children);
                 self._$tree.jstree('select_node', childrenNodes);
 
             } else {
-                childrenNodes = $.makeArray(self._$tree.jstree('get_children_dom', data.node));
+                childrenNodes = $.makeArray(self._$tree.jstree('get_node', data.node).children);
                 self._$tree.jstree('deselect_node', childrenNodes);
             }
 

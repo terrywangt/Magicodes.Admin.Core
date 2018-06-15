@@ -7,7 +7,7 @@
                         <div class="m-login__logo">
                             <a (click)="goToHome()">
                                 <img *ngIf="!appSession.tenant || !appSession.tenant.logoId" [src]="appRootUrl() + 'assets/common/images/logo.png'" alt="logo" width="139" height="35" />
-                                <img *ngIf="appSession.tenant && appSession.tenant.logoId" [src]="remoteServiceBaseUrl + '/TenantCustomization/GetTenantLogo?skin=light&tenantId=' + appSession.tenant.id + '&id=' + appSession.tenant.logoId" alt="logo" width="168" height="33" />
+                                <img *ngIf="appSession.tenant && appSession.tenant.logoId" [src]="remoteServiceBaseUrl + '/TenantCustomization/GetTenantLogo?skin=light&tenantId=' + appSession.tenant.id + '&id=' + appSession.tenant.logoId" alt="logo" width="139" height="35" />
                             </a>
                         </div>
                         <div *ngIf="showTenantChange()" class="content tenant-change-box">

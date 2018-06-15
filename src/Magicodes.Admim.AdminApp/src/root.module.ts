@@ -71,7 +71,7 @@ export function appInitializerFactory(
 
                         if (shouldLoadLocale()) {
                             let angularLocale = convertAbpLocaleToAngularLocale(abp.localization.currentLanguage.name);
-                            System.import(`@angular/common/locales/${angularLocale}.js`)
+                            import(`@angular/common/locales/${angularLocale}.js`)
                                 .then(module => {
                                     registerLocaleData(module.default);
                                     resolve(result);

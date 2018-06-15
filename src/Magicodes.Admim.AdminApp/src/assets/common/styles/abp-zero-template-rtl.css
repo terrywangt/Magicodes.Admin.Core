@@ -17,3 +17,13 @@ li.dropdown-language ul.dropdown-menu li a:after{
 div.income-statistics label.m-btn--pill {
     margin-left: 0px;
 }
+
+span.m-menu__arrow {
+    right: 58px !important;
+}
+
+nav.m-menu__submenu--right span.m-menu__arrow {
+    transform: rotate(180deg) !important;
+    width: 40px !important;
+    right: 0 !important;
+}

@@ -20,7 +20,7 @@
               "src/assets",
               "src/favicon.ico",
               {
-                "glob": "abp.signalr.js",
+                "glob": "abp.signalr-client.js",
                 "input": "node_modules/abp-web-resources/Abp/Framework/scripts/libs",
                 "output": "/assets/abp"
               },
@@ -87,7 +87,7 @@
               "node_modules/jquery.uniform/dist/js/jquery.uniform.standalone.js",
               "node_modules/jquery-form/src/jquery.form.js",
               "node_modules/timeago/jquery.timeago.js",
-              "node_modules/signalr/jquery.signalR.js",
+              "node_modules/@aspnet/signalr/dist/browser/signalr.min.js",
               "node_modules/localforage/dist/localforage.js",
               "node_modules/morris.js/morris.js",
               "node_modules/chartist/dist/chartist.js",
@@ -229,7 +229,7 @@
               "node_modules/jquery.uniform/dist/js/jquery.uniform.standalone.js",
               "node_modules/jquery-form/src/jquery.form.js",
               "node_modules/timeago/jquery.timeago.js",
-              "node_modules/signalr/jquery.signalR.js",
+              "node_modules/@aspnet/signalr/dist/browser/signalr.min.js",
               "node_modules/localforage/dist/localforage.js",
               "node_modules/morris.js/morris.js",
               "node_modules/chartist/dist/chartist.js",
@@ -350,7 +350,7 @@
               "src/assets",
               "src/favicon.ico",
               {
-                "glob": "abp.signalr.js",
+                "glob": "abp.signalr-client.js",
                 "input": "node_modules/abp-web-resources/Abp/Framework/scripts/libs",
                 "output": "/assets/abp"
               },

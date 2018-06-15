@@ -4,6 +4,7 @@ import { CommonLookupServiceProxy, SubscribableEditionComboboxItemDto, TenantEdi
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { ModalDirective } from 'ngx-bootstrap';
+import { finalize } from 'rxjs/operators';
 
 @Component({
     selector: 'editTenantModal',
@@ -117,7 +118,7 @@ export class EditTenantModalComponent extends AppComponentBase {
         }
 
         this._tenantService.updateTenant(this.tenant)
-            .finally(() => this.saving = false)
+            .pipe(finalize(() => this.saving = false))
             .subscribe(() => {
                 this.notify.info(this.l('SavedSuccessfully'));
                 this.close();

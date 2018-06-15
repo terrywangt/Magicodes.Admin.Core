@@ -4,15 +4,19 @@ import { AppConsts } from '@shared/AppConsts';
 export class SignalRHelper {
     static initSignalR(callback: () => void): void {
 
-        jQuery.getScript(AppConsts.remoteServiceBaseUrl + '/signalr/hubs', () => {
+        var encryptedAuthToken = new UtilsService().getCookieValue(AppConsts.authorization.encrptedAuthTokenName);
 
-            $.connection.hub.url = AppConsts.remoteServiceBaseUrl + '/signalr';
+        abp.signalr = {
+            autoConnect: true,
+            connect: undefined,
+            hubs: undefined,
+            qs: AppConsts.authorization.encrptedAuthTokenName + "=" + encodeURIComponent(encryptedAuthToken),
+            remoteServiceBaseUrl: AppConsts.remoteServiceBaseUrl,
+            startConnection: undefined,
+            url: '/signalr'
+        };
 
-            const encryptedAuthToken = new UtilsService().getCookieValue(AppConsts.authorization.encrptedAuthTokenName);
-            $.connection.hub.qs = AppConsts.authorization.encrptedAuthTokenName + '=' + encodeURIComponent(encryptedAuthToken);
-
-            jQuery.getScript(AppConsts.appBaseUrl + '/assets/abp/abp.signalr.js');
-
+        jQuery.getScript(AppConsts.appBaseUrl + '/assets/abp/abp.signalr-client.js', () => {
             callback();
         });
     }

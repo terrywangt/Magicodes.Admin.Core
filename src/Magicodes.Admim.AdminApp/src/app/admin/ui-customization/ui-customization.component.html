@@ -10,9 +10,9 @@
                 </span>
             </div>
             <div class="col-sm-12 col-md-6 text-right">
-                <button *ngIf="isGranted('Pages.Administration.UiCustomization')" (click)="updateDefaultUiManagementSettings()" class="btn btn-primary blue"><i class="fa fa-floppy-o"></i> {{l("SaveAsSystemDefault")}}</button>
-                <button *ngIf="!isGranted('Pages.Administration.UiCustomization')" (click)="updateUiManagementSettings()" class="btn btn-primary blue"><i class="fa fa-floppy-o"></i> {{l("Save")}}</button>
-                <button *ngIf="!isGranted('Pages.Administration.UiCustomization')" (click)="useSystemDefaultSettings()" class="btn btn-metal blue"> {{l("UseSystemDefaults")}}</button>
+                <button *ngIf="isGranted('Pages.Administration.UiCustomization')" (click)="updateDefaultUiManagementSettings()" class="btn btn-primary"><i class="fa fa-floppy-o"></i> {{l("SaveAsSystemDefault")}}</button>
+                <button *ngIf="!isGranted('Pages.Administration.UiCustomization')" (click)="updateUiManagementSettings()" class="btn btn-primary"><i class="fa fa-floppy-o"></i> {{l("Save")}}</button>
+                <button *ngIf="!isGranted('Pages.Administration.UiCustomization')" (click)="useSystemDefaultSettings()" class="btn btn-metal"> {{l("UseSystemDefaults")}}</button>
             </div>
         </div>
     </div>
@@ -69,13 +69,6 @@
                     </tab>
                     <tab heading="{{l('UiCustomization_Header')}}" customClass="m-tabs__item">
                         <form id="HeaderSettingsForm">
-                            <div class="form-group m-form__group">
-                                <label for="DropdownSkin">{{l("UiCustomization_DropdownSkin")}}</label>
-                                <select id="DropdownSkin" name="DropdownSkin" class="form-control" [(ngModel)]="settings.header.dropdownSkin">
-                                    <option value="light">{{l("UiCustomization_Light")}}</option>
-                                    <option value="dark">{{l("UiCustomization_Dark")}}</option>
-                                </select>
-                            </div>
                             <h5>{{l('UiCustomization_Desktop')}}</h5>
                             <div class="form-group m-form__group">
                                 <label class="m-checkbox col-lg-12">
@@ -92,8 +85,8 @@
                                 </select>
                             </div>
                             <div class="form-group m-form__group">
-                                <label for="DropdownSkinDesktop">{{l("UiCustomization_DropdownSkinDesktop")}}</label>
-                                <select id="DropdownSkinDesktop" name="DropdownSkinDesktop" class="form-control" [(ngModel)]="settings.header.dropdownSkinDesktop">
+                                <label for="HeaderSkin">{{l("UiCustomization_HeaderSkin")}}</label>
+                                <select id="HeaderSkin" name="HeaderSkin" class="form-control" [(ngModel)]="settings.header.headerSkin">
                                     <option value="light">{{l("UiCustomization_Light")}}</option>
                                     <option value="dark">{{l("UiCustomization_Dark")}}</option>
                                 </select>

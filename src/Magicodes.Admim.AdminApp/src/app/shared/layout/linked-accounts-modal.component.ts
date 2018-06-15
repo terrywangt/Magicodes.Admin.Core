@@ -58,6 +58,7 @@ export class LinkedAccountsModalComponent extends AppComponentBase {
     deleteLinkedUser(linkedUser: LinkedUserDto): void {
         this.message.confirm(
             this.l('LinkedUserDeleteWarningMessage', linkedUser.username),
+            this.l('AreYouSure'),
             isConfirmed => {
                 if (isConfirmed) {
                     const unlinkUserInput = new UnlinkUserInput();

@@ -138,11 +138,11 @@ export class OrganizationUnitsTreeComponent extends AppComponentBase implements 
             if (data.node.state.selected) {
                 selectNodeAndAllParents(this._$tree.jstree('get_parent', data.node));
 
-                childrenNodes = $.makeArray(this._$tree.jstree('get_children_dom', data.node));
+                childrenNodes = $.makeArray(this._$tree.jstree('get_node', data.node).children);
                 this._$tree.jstree('select_node', childrenNodes);
 
             } else {
-                childrenNodes = $.makeArray(this._$tree.jstree('get_children_dom', data.node));
+                childrenNodes = $.makeArray(this._$tree.jstree('get_node', data.node).children);
                 this._$tree.jstree('deselect_node', childrenNodes);
             }
 

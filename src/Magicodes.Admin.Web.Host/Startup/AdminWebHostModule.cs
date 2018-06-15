@@ -53,8 +53,6 @@ namespace Magicodes.Admin.Web.Startup
                     typeof(AdminAppModule).GetAssembly(), "app"
                 );
 
-            //启用实体数据历史
-            Configuration.EntityHistory.IsEnabled = true;
         }
 
         public override void Initialize()

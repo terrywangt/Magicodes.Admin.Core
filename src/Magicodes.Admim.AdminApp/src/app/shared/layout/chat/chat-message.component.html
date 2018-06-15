@@ -10,6 +10,5 @@
     <i class="fa fa-link"></i>
     {{chatMessage}}
 </a>
-<span *ngIf="chatMessageType === 'text'">
-    {{chatMessage}}
+<span *ngIf="chatMessageType === 'text'" [innerHTML]="chatMessage">
 </span>

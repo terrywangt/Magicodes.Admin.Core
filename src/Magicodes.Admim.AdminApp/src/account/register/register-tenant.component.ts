@@ -7,6 +7,7 @@ import { AppComponentBase } from '@shared/common/app-component-base';
 import { EditionSelectDto, PasswordComplexitySetting, PaymentServiceProxy, ProfileServiceProxy, RegisterTenantOutput, TenantRegistrationServiceProxy } from '@shared/service-proxies/service-proxies';
 import { RegisterTenantModel } from './register-tenant.model';
 import { TenantRegistrationHelperService } from './tenant-registration-helper.service';
+import { finalize } from 'rxjs/operators';
 
 @Component({
     templateUrl: './register-tenant.component.html',
@@ -77,7 +78,7 @@ export class RegisterTenantComponent extends AppComponentBase implements OnInit,
 
         this.saving = true;
         this._tenantRegistrationService.registerTenant(this.model)
-            .finally(() => { this.saving = false; })
+            .pipe(finalize(() => { this.saving = false; }))
             .subscribe((result: RegisterTenantOutput) => {
                 this.notify.success(this.l('SuccessfullyRegistered'));
 

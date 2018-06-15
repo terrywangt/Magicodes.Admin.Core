@@ -49,11 +49,15 @@
                                         <p-tableCheckbox [value]="record"></p-tableCheckbox>
                                     </td>
                                     <td>
+                                        <span class="ui-column-title">{{l('Name')}}</span>
                                         {{record.name}}
                                     </td>
                                 </tr>
                             </ng-template>
                         </p-table>
+                        <div class="primeng-no-data" *ngIf="primengTableHelper.totalRecordsCount == 0">
+                            {{l('NoData')}}
+                        </div>
                         <div class="primeng-paging-container">
                             <p-paginator rows="{{primengTableHelper.defaultRecordsCountPerPage}}"
                                          #paginator

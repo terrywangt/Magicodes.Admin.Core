@@ -6,6 +6,7 @@ import { AppSessionService } from '@shared/common/session/app-session.service';
 import { CurrentUserProfileEditDto, DefaultTimezoneScope, ProfileServiceProxy, UpdateGoogleAuthenticatorKeyOutput } from '@shared/service-proxies/service-proxies';
 import { ModalDirective } from 'ngx-bootstrap';
 import { SmsVerificationModalComponent } from './sms-verification-modal.component';
+import { finalize } from 'rxjs/operators';
 
 @Component({
     selector: 'mySettingsModal',
@@ -89,7 +90,7 @@ export class MySettingsModalComponent extends AppComponentBase implements AfterV
     save(): void {
         this.saving = true;
         this._profileService.updateCurrentUserProfile(this.user)
-            .finally(() => { this.saving = false; })
+            .pipe(finalize(() => { this.saving = false; }))
             .subscribe(() => {
                 this._appSessionService.user.name = this.user.name;
                 this._appSessionService.user.surname = this.user.surname;

@@ -43,15 +43,15 @@ namespace Magicodes.Admin.EntityFrameworkCore
                 });
             }
 
-            //启用实体历史
-            Configuration.EntityHistory.Selectors.Add(
-                new NamedTypeSelector(
-                    "FullAuditedEntities",
-                    type => typeof(IFullAudited).IsAssignableFrom(type)
-                )
-            );
+            ////启用实体历史
+            //Configuration.EntityHistory.Selectors.Add(
+            //    new NamedTypeSelector(
+            //        "FullAuditedEntities",
+            //        type => typeof(IFullAudited).IsAssignableFrom(type)
+            //    )
+            //);
             //Configuration.EntityHistory.Selectors.Add("AdminEntities", EntityHistoryHelper.TrackedTypes);
-            Configuration.CustomConfigProviders.Add(new EntityHistoryConfigProvider(Configuration));
+            //Configuration.CustomConfigProviders.Add(new EntityHistoryConfigProvider(Configuration));
         }
 
         public override void Initialize()

@@ -6,6 +6,7 @@ import { AppComponentBase } from '@shared/common/app-component-base';
 import { ProfileServiceProxy, UpdateProfilePictureInput } from '@shared/service-proxies/service-proxies';
 import { FileUploader, FileUploaderOptions } from 'ng2-file-upload';
 import { ModalDirective } from 'ngx-bootstrap';
+import { finalize } from 'rxjs/operators';
 
 @Component({
     selector: 'changeProfilePictureModal',
@@ -135,7 +136,7 @@ export class ChangeProfilePictureModalComponent extends AppComponentBase {
 
         this.saving = true;
         self._profileService.updateProfilePicture(input)
-            .finally(() => { this.saving = false; })
+            .pipe(finalize(() => { this.saving = false; }))
             .subscribe(() => {
                 const self = this;
                 self._$jcropApi.destroy();

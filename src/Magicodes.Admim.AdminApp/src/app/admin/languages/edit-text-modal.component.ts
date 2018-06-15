@@ -3,6 +3,7 @@ import { AppComponentBase } from '@shared/common/app-component-base';
 import { LanguageServiceProxy, UpdateLanguageTextInput } from '@shared/service-proxies/service-proxies';
 import * as _ from 'lodash';
 import { ModalDirective } from 'ngx-bootstrap';
+import { finalize } from 'rxjs/operators';
 
 @Component({
     selector: 'editTextModal',
@@ -53,7 +54,7 @@ export class EditTextModalComponent extends AppComponentBase {
     save(): void {
         this.saving = true;
         this._languageService.updateLanguageText(this.model)
-            .finally(() => this.saving = false)
+            .pipe(finalize(() => this.saving = false))
             .subscribe(() => {
                 this.notify.info(this.l('SavedSuccessfully'));
                 this.close();

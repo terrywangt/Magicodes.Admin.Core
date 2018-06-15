@@ -48,6 +48,7 @@ export class RolesComponent extends AppComponentBase {
         let self = this;
         self.message.confirm(
             self.l('RoleDeleteWarningMessage', role.displayName),
+            this.l('AreYouSure'),
             isConfirmed => {
                 if (isConfirmed) {
                     this._roleService.deleteRole(role.id).subscribe(() => {

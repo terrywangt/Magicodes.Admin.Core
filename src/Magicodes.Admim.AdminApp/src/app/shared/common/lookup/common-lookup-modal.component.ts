@@ -6,7 +6,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { LazyLoadEvent } from 'primeng/components/common/lazyloadevent';
 import { Paginator } from 'primeng/components/paginator/paginator';
 import { Table } from 'primeng/components/table/table';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 export interface ICommonLookupModalOptions {
     title?: string;

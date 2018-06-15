@@ -15,5 +15,5 @@ import 'core-js/es6/set';
 import 'core-js/es6/string';
 import 'core-js/es6/symbol';
 import 'core-js/es7/reflect';
-import 'rxjs/add/operator/finally';
+import { finalize } from 'rxjs/operators';
 import 'zone.js/dist/zone';

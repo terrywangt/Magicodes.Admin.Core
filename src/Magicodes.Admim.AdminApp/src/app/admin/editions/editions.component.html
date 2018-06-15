@@ -3,14 +3,14 @@
         <div class="d-flex align-items-center">
             <div class="mr-auto col-xs-6 ">
                 <h3 class="m-subheader__title m-subheader__title--separator">
-                    <span>{{l("Editions")}}</span>
+                    <span>{{("Editions")}}</span>
                 </h3>
                 <span class="m-section__sub">
                     {{l("EditionsHeaderInfo")}}
                 </span>
             </div>
             <div class="col-xs-6 text-right">
-                <button *ngIf="permission.isGranted('Pages.Editions.Create')" class="btn btn-primary blue" (click)="createEdition()"><i class="fa fa-plus"></i> {{l("CreateNewEdition")}}</button>
+                <button *ngIf="permission.isGranted('Pages.Editions.Create')" class="btn btn-primary" (click)="createEdition()"><i class="fa fa-plus"></i> {{l("CreateNewEdition")}}</button>
             </div>
         </div>
     </div>
@@ -65,14 +65,19 @@
                                         </div>
                                     </td>
                                     <td>
+                                        <span class="ui-column-title">{{l('EditionName')}}</span>
                                         {{record.displayName}}
                                     </td>
                                     <td>
+                                        <span class="ui-column-title">{{l('CreationTime')}}</span>
                                         {{record.creationTime | momentFormat:'L'}}
                                     </td>
                                 </tr>
                             </ng-template>
                         </p-table>
+                        <div class="primeng-no-data" *ngIf="primengTableHelper.totalRecordsCount == 0">
+                            {{l('NoData')}}
+                        </div>
                         <div class="ui-table-footer">
                             {{l('TotalRecordsCount', primengTableHelper.totalRecordsCount)}}
                         </div>

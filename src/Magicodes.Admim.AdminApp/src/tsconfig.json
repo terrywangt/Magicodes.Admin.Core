@@ -3,12 +3,9 @@
     "declaration": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "lib": [
-      "es6",
-      "dom"
-    ],
+    "lib": [ "es6", "dom" ],
     "mapRoot": "./",
-    "module": "es6",
+    "module": "esnext",
     "skipLibCheck": true,
     "moduleResolution": "node",
     "outDir": "../dist/out-tsc",
@@ -19,27 +16,12 @@
     ],
     "baseUrl": ".",
     "paths": {
-      "@abp/*": [
-        "../node_modules/abp-ng2-module/dist/src/*"
-      ],
-      "@app/*": [
-        "./app/*"
-      ],
-      "@shared/*": [
-        "./shared/*"
-      ],
-      "@node_modules/*": [
-        "../node_modules/*"
-      ],
-      "@angular/*": [
-        "../node_modules/@angular/*"
-      ],
-      "@env/*": [
-        "./environments/*"
-      ]
+      "@abp/*": [ "../node_modules/abp-ng2-module/dist/src/*" ],
+      "@app/*": [ "./app/*" ],
+      "@shared/*": [ "./shared/*" ],
+      "@node_modules/*": [ "../node_modules/*" ],
+      "@angular/*": [ "../node_modules/@angular/*" ]
     }
   },
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": [ "node_modules" ]
 }

@@ -14,6 +14,10 @@ export class AppUiCustomizationService {
     }
 
     getAsideSkin() {
+        if (this.topMenuUsed()) {
+            return this.getSetting('App.UiManagement.Header.Skin');
+        }
+
         return this.getSetting('App.UiManagement.Left.AsideSkin');
     }
 
@@ -38,7 +42,7 @@ export class AppUiCustomizationService {
             (this.getSetting('App.UiManagement.ContentSkin') !== '' ? ('m-content--skin-' + this.getSetting('App.UiManagement.ContentSkin')) : '') + ' ' +
             'm-header--' + (this.getSetting('App.UiManagement.Header.DesktopFixedHeader') === 'true' ? 'fixed' : 'static') + ' ' +
             (this.getSetting('App.UiManagement.Header.MobileFixedHeader') === 'true' ? 'm-header--fixed-mobile' : '') + ' ' +
-            ((this.getSetting('App.UiManagement.Left.FixedAside') === 'true' && this.getSetting('App.UiManagement.Menu.IsTopMenuUsed') === 'false') ? 'm-aside-left--fixed' : '') + ' ' +
+            ((this.getSetting('App.UiManagement.Left.FixedAside') === 'true' && !this.topMenuUsed() ? 'm-aside-left--fixed' : '')) + ' ' +
             (this.getSetting('App.UiManagement.Left.DefaultMinimizedAside') === 'true' ? 'm-aside-left--minimize m-brand--minimize' : '') + ' ' +
             (this.getSetting('App.UiManagement.Left.DefaultHiddenAside') === 'true' || this.getSetting('App.UiManagement.Left.Position') === 'top' ? 'm-aside-left--hide' : '') + ' ' +
             'm-aside-left--enabled' + ' ' +
@@ -55,8 +59,8 @@ export class AppUiCustomizationService {
         return 'm--skin-';
     }
 
-    getHeaderClass() {
-        return '';
+    getHeaderSkin() {
+        return this.getSetting('App.UiManagement.Header.Skin');
     }
 
     //User navigation menu

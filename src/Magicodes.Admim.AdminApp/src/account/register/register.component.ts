@@ -3,9 +3,10 @@ import { Router } from '@angular/router';
 import { AppConsts } from '@shared/AppConsts';
 import { accountModuleAnimation } from '@shared/animations/routerTransition';
 import { AppComponentBase } from '@shared/common/app-component-base';
-import { AccountServiceProxy, PasswordComplexitySetting, ProfileServiceProxy } from '@shared/service-proxies/service-proxies';
+import { AccountServiceProxy, PasswordComplexitySetting, ProfileServiceProxy, RegisterOutput } from '@shared/service-proxies/service-proxies';
 import { LoginService } from '../login/login.service';
 import { RegisterModel } from './register.model';
+import { finalize } from 'rxjs/operators';
 
 @Component({
     templateUrl: './register.component.html',
@@ -53,8 +54,8 @@ export class RegisterComponent extends AppComponentBase implements OnInit {
 
         this.saving = true;
         this._accountService.register(this.model)
-            .finally(() => { this.saving = false; })
-            .subscribe((result) => {
+            .pipe(finalize(() => { this.saving = false; }))
+            .subscribe((result: RegisterOutput) => {
                 if (!result.canLogin) {
                     this.notify.success(this.l('SuccessfullyRegistered'));
                     this._router.navigate(['account/login']);

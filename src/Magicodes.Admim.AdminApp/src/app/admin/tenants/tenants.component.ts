@@ -161,6 +161,7 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
     deleteTenant(tenant: TenantListDto): void {
         this.message.confirm(
             this.l('TenantDeleteWarningMessage', tenant.tenancyName),
+            this.l('AreYouSure'),
             isConfirmed => {
                 if (isConfirmed) {
                     this._tenantService.deleteTenant(tenant.id).subscribe(() => {

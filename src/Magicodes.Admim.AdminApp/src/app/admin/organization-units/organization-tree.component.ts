@@ -3,7 +3,8 @@ import { AppComponentBase } from '@shared/common/app-component-base';
 import { HtmlHelper } from '@shared/helpers/HtmlHelper';
 import { ListResultDtoOfOrganizationUnitDto, MoveOrganizationUnitInput, OrganizationUnitDto, OrganizationUnitServiceProxy } from '@shared/service-proxies/service-proxies';
 import * as _ from 'lodash';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { IBasicOrganizationUnitInfo } from './basic-organization-unit-info';
 import { CreateOrEditUnitModalComponent } from './create-or-edit-unit-modal.component';
 import { IUserWithOrganizationUnit } from './user-with-organization-unit';
@@ -87,16 +88,17 @@ export class OrganizationTreeComponent extends AppComponentBase implements After
 
                     this.message.confirm(
                         this.l('OrganizationUnitMoveConfirmMessage', data.node.original.displayName, parentNodeName),
+                        this.l('AreYouSure'),
                         isConfirmed => {
                             if (isConfirmed) {
                                 const input = new MoveOrganizationUnitInput();
                                 input.id = data.node.id;
                                 input.newParentId = (!data.parent || data.parent === '#') ? undefined : data.parent;
                                 this._organizationUnitService.moveOrganizationUnit(input)
-                                    .catch(error => {
+                                    .pipe(catchError(error => {
                                         this._$tree.jstree('refresh'); //rollback
                                         return Observable.throw(error);
-                                    })
+                                    }))
                                     .subscribe(() => {
                                         this.notify.success(this.l('SuccessfullyMoved'));
                                         this.reload();
@@ -209,6 +211,7 @@ export class OrganizationTreeComponent extends AppComponentBase implements After
 
                     this.message.confirm(
                         this.l('OrganizationUnitDeleteWarningMessage', node.original.displayName),
+                        this.l('AreYouSure'),
                         isConfirmed => {
                             if (isConfirmed) {
                                 this._organizationUnitService.deleteOrganizationUnit(node.id).subscribe(() => {

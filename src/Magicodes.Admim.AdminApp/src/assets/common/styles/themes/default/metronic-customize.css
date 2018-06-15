@@ -123,3 +123,6 @@ div.btn-group label.btn-secondary.active {
 .form-control[readonly] {
   background-color: #f3f3f3 !important;
 }
+.m-header-head.m-brand--skin-dark {
+  background-color: #282a3c;
+}
