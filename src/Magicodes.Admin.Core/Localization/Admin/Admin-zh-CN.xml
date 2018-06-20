@@ -685,5 +685,6 @@
     <text name="NoData" value="没有数据" />
     <text name="NoDataToExport" value="没有数据可供导出！" />
     <text name="Manager" value="管理" />
+    <text name="CurrentUserDidNotLoginToTheApplication" value="当前用户没有登陆，请登陆后再试！" />
   </texts>
 </localizationDictionary>

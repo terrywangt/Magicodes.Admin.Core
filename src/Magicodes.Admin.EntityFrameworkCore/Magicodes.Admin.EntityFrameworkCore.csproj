@@ -15,5 +15,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Magicodes.Admin.Core\Magicodes.Admin.Core.csproj" />
+    <ProjectReference Include="..\Magicodes.App.Core\Magicodes.App.Core.csproj" />
   </ItemGroup>
 </Project>

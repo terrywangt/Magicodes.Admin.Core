@@ -18,6 +18,7 @@
     <ProjectReference Include="..\Magicodes.Admin.Core\Magicodes.Admin.Core.csproj" />
     <ProjectReference Include="..\Magicodes.Admin.EntityFrameworkCore\Magicodes.Admin.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\Magicodes.Admin.Web.Core\Magicodes.Admin.Web.Core.csproj" />
+    <ProjectReference Include="..\Magicodes.App.Core\Magicodes.App.Core.csproj" />
     <PackageReference Include="Abp.AspNetCore" Version="3.7.2" />
   </ItemGroup>
   <PropertyGroup>

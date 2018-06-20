@@ -15,6 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Magicodes.Admin.Application\Magicodes.Admin.Application.csproj" />
     <ProjectReference Include="..\..\src\Magicodes.Admin.EntityFrameworkCore\Magicodes.Admin.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\..\src\Magicodes.App.Application\Magicodes.App.Application.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="GenFu" Version="1.4.22" />
