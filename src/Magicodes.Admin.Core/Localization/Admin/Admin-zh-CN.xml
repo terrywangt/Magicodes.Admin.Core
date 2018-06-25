@@ -686,5 +686,11 @@
     <text name="NoDataToExport" value="没有数据可供导出！" />
     <text name="Manager" value="管理" />
     <text name="CurrentUserDidNotLoginToTheApplication" value="当前用户没有登陆，请登陆后再试！" />
+
+    <!--2018-6-11-->
+    <text name="ExportData" value="导出数据" />
+    
+    <!--2018-6-25-->
+    <text name="SuccessfulOperation" value="操作成功！" />
   </texts>
 </localizationDictionary>
