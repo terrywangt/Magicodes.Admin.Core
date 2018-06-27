@@ -692,5 +692,14 @@
     
     <!--2018-6-25-->
     <text name="SuccessfulOperation" value="操作成功！" />
+
+    <!--2018-6-26-->
+    <text name="RecycleBin" value="回收站" />
+    <text name="Restore" value="恢复" />
+    <text name="RestoreWarningMessage" value="由于此数据已删除，恢复之后可能会存在风险，确定要恢复此数据么？" />
+    <text name="SuccessfullyRestore" value="数据恢复成功！" />
+    <!--2018-6-27-->
+    <text name="EmptyTextTip" value="请选择一项..." />
+    <text name="EndTimeShouldGreaterThanStartTime" value="结束时间必须大于开始时间！" />
   </texts>
 </localizationDictionary>
