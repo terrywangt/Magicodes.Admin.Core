@@ -701,5 +701,6 @@
     <!--2018-6-27-->
     <text name="EmptyTextTip" value="请选择一项..." />
     <text name="EndTimeShouldGreaterThanStartTime" value="结束时间必须大于开始时间！" />
+    <text name="DragAndDropSortTip" value="请拖拽此项进行排序！" />
   </texts>
 </localizationDictionary>

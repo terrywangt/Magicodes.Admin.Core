@@ -1,8 +1,11 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Abp.Application.Services;
 using Abp.Authorization;
+using Abp.Domain.Entities;
+using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
 using Abp.Events.Bus;
 using Abp.Extensions;
@@ -13,6 +16,7 @@ using Abp.Threading;
 using Abp.Timing;
 using Magicodes.Admin;
 using Magicodes.Admin.Authorization.Users;
+using Magicodes.Admin.Dto;
 using Magicodes.Admin.MultiTenancy;
 using Magicodes.App;
 using Microsoft.AspNetCore.Identity;
@@ -151,6 +155,45 @@ namespace Magicodes.Admin.Application.App
                 ext = ".tmp";
             }
             return Path.Combine(AppFolders.TempFileDownloadFolder, $"{fileName}{ext}");
+        }
+
+        /// <summary>
+        /// 拖拽排序支持
+        /// </summary>
+        /// <typeparam name="TEntity">实体</typeparam>
+        /// <typeparam name="TPrimaryKey">主键类型</typeparam>
+        /// <param name="repository">仓储</param>
+        /// <param name="input">输入参数</param>
+        /// <returns></returns>
+        protected async Task MoveTo<TEntity, TPrimaryKey>(IRepository<TEntity, TPrimaryKey> repository, MoveToInputDto<TPrimaryKey> input) where TEntity : class, IEntity<TPrimaryKey>, ISortNo
+        {
+            var sourceItem = await repository.GetAsync(input.SourceId);
+            var targetItem = await repository.GetAsync(input.TargetId);
+            switch (input.MoveToPosition)
+            {
+                case MoveToPositions.Up:
+                    {
+                        var list = repository.GetAll().Where(p => p.SortNo <= targetItem.SortNo);
+                        foreach (var item in list)
+                        {
+                            item.SortNo--;
+                        }
+                    }
+                    sourceItem.SortNo = targetItem.SortNo - 1;
+                    break;
+                case MoveToPositions.Down:
+                    {
+                        var list = repository.GetAll().Where(p => p.SortNo > targetItem.SortNo);
+                        foreach (var item in list)
+                        {
+                            item.SortNo++;
+                        }
+                    }
+                    sourceItem.SortNo = targetItem.SortNo + 1;
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }
