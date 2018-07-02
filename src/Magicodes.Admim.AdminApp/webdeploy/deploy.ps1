@@ -22,7 +22,7 @@ $target = [io.Path]::Combine($rootDir, "dist")
 #--------------------------------------------------------------------------------------------------------------------------------------------
 
 #----------------------------------------------------编译前端脚本----------------------------------------------------------------------------
-npm run publish
+#npm run publish
 
 $webConfigPath = [io.Path]::Combine($rootDir, "web.config")
 Copy-Item -Path $webConfigPath -Destination $target -Force
