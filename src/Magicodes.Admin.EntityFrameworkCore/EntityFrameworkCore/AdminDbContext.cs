@@ -13,7 +13,7 @@ using Magicodes.Admin.Storage;
 
 namespace Magicodes.Admin.EntityFrameworkCore
 {
-    public class AdminDbContext : AbpZeroDbContext<Tenant, Role, User, AdminDbContext>, IAbpPersistedGrantDbContext
+    public partial class AdminDbContext : AbpZeroDbContext<Tenant, Role, User, AdminDbContext>, IAbpPersistedGrantDbContext
     {
         /* Define an IDbSet for each entity of the application */
 
