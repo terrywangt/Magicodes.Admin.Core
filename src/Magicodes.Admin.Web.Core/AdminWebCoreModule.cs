@@ -29,7 +29,6 @@ using Magicodes.Admin.Web.Configuration;
 namespace Magicodes.Admin.Web
 {
     [DependsOn(
-        typeof(AdminApplicationModule),
         typeof(AdminEntityFrameworkCoreModule),
         typeof(AbpAspNetZeroCoreWebModule),
         typeof(AbpAspNetCoreSignalRModule),
@@ -56,11 +55,6 @@ namespace Magicodes.Admin.Web
 
             //Use database for language management
             Configuration.Modules.Zero().LanguageManagement.EnableDbLocalization();
-
-            Configuration.Modules.AbpAspNetCore()
-                .CreateControllersForAppServices(
-                    typeof(AdminApplicationModule).GetAssembly()
-                );
 
             Configuration.Caching.Configure(TwoFactorCodeCacheItem.CacheName, cache =>
             {

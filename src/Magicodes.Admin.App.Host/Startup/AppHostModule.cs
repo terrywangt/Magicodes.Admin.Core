@@ -15,14 +15,16 @@ using Magicodes.Admin.EntityFrameworkCore;
 using Magicodes.Admin.MultiTenancy;
 //using Magicodes.Admin.App;
 using Abp.AspNetCore.Configuration;
+using Magicodes.App.Application;
+
 //using Magicodes.App.Application;
 
 namespace Magicodes.Admin.Web.Startup
 {
     [DependsOn(
         typeof(AdminWebCoreModule),
-        typeof(AdminCoreModule)
-    //,typeof(AppApplicationModule)
+        typeof(AdminCoreModule), 
+        typeof(AppApplicationModule)
     )]
     public class AppHostModule : AbpModule
     {
@@ -41,11 +43,11 @@ namespace Magicodes.Admin.Web.Startup
             Configuration.Modules.AbpWebCommon().MultiTenancy.DomainFormat = _appConfiguration["App:ServerRootAddress"] ?? "http://localhost:22742/";
             Configuration.Modules.AspNetZero().LicenseCode = _appConfiguration["AbpZeroLicenseCode"];
 
-            ////配置App动态web api
-            //Configuration.Modules.AbpAspNetCore()
-            //    .CreateControllersForAppServices(
-            //        typeof(AppApplicationModule).GetAssembly(), "app"
-            //    );
+            //配置App动态web api
+            Configuration.Modules.AbpAspNetCore()
+                .CreateControllersForAppServices(
+                    typeof(AppApplicationModule).GetAssembly(), "app"
+                );
         }
 
         public override void Initialize()

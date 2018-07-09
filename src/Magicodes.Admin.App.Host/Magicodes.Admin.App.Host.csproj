@@ -36,6 +36,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Magicodes.Admin.Web.Core\Magicodes.Admin.Web.Core.csproj" />
+    <ProjectReference Include="..\Magicodes.App.Application\Magicodes.App.Application.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="2.1.0" />

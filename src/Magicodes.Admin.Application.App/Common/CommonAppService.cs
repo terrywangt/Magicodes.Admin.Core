@@ -29,7 +29,7 @@ namespace Magicodes.Admin.Application.App.Common
                 list.Add(new GetEnumValuesListDto()
                 {
                     DisplayName = L(names[index]),
-                    Value = (int)value
+                    Value = Convert.ToInt32(value)
                 });
                 index++;
             }
