@@ -77,18 +77,6 @@ namespace Magicodes.Admin.Application.App
         }
 
         /// <summary>
-        /// 检查是否允许审核
-        /// </summary>
-        /// <param name="auditModel"></param>
-        //protected void CheckAllowAudit(IAudited auditModel)
-        //{
-        //    if (auditModel.AuditStatus != AuditStatus.待审核)
-        //    {
-        //        throw new UserFriendlyException("该项已被审核，无法重新审核！");
-        //    }
-        //}
-
-        /// <summary>
         /// 设置创建模型默认属性
         /// </summary>
         /// <typeparam name="Tkey"></typeparam>
@@ -149,10 +137,6 @@ namespace Magicodes.Admin.Application.App
             if (fileName.IsNullOrEmpty())
             {
                 fileName = Guid.NewGuid().ToString("N");
-            }
-            if (ext.IsNullOrEmpty())
-            {
-                ext = ".tmp";
             }
             return Path.Combine(AppFolders.TempFileDownloadFolder, $"{fileName}{ext}");
         }
