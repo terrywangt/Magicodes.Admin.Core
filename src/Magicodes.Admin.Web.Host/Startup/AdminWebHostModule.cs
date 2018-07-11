@@ -23,6 +23,7 @@ using Magicodes.Admin.Application.App;
 namespace Magicodes.Admin.Web.Startup
 {
     [DependsOn(
+        typeof(AdminApplicationModule),
         typeof(AdminWebCoreModule)
     )]
     public class AdminWebHostModule : AbpModule
@@ -41,7 +42,12 @@ namespace Magicodes.Admin.Web.Startup
         {
             Configuration.Modules.AbpWebCommon().MultiTenancy.DomainFormat = _appConfiguration["App:ServerRootAddress"] ?? "http://localhost:22742/";
             Configuration.Modules.AspNetZero().LicenseCode = _appConfiguration["AbpZeroLicenseCode"];
-            
+
+            Configuration.Modules.AbpAspNetCore()
+                .CreateControllersForAppServices(
+                    typeof(AdminApplicationModule).GetAssembly()
+                );
+
             //配置后台动态web api
             Configuration.Modules.AbpAspNetCore()
                 .CreateControllersForAppServices(

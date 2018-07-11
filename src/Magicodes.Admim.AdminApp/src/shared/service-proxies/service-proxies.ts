@@ -1362,6 +1362,78 @@ export class ChatServiceProxy {
 }
 
 @Injectable()
+export class CommonServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    /**
+     * @return Success
+     */
+    getEnumValuesList(fullName: string): Observable<GetEnumValuesListDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/Common/GetEnumValuesList?";
+        if (fullName === undefined || fullName === null)
+            throw new Error("The parameter 'fullName' must be defined and cannot be null.");
+        else
+            url_ += "FullName=" + encodeURIComponent("" + fullName) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetEnumValuesList(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetEnumValuesList(<any>response_);
+                } catch (e) {
+                    return <Observable<GetEnumValuesListDto[]>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<GetEnumValuesListDto[]>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetEnumValuesList(response: HttpResponseBase): Observable<GetEnumValuesListDto[]> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData200 && resultData200.constructor === Array) {
+                result200 = [];
+                for (let item of resultData200)
+                    result200.push(GetEnumValuesListDto.fromJS(item));
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<GetEnumValuesListDto[]>(<any>null);
+    }
+}
+
+@Injectable()
 export class CommonLookupServiceProxy {
     private http: HttpClient;
     private baseUrl: string;
@@ -9908,6 +9980,46 @@ export class MarkAllUnreadMessagesOfUserAsReadInput implements IMarkAllUnreadMes
 export interface IMarkAllUnreadMessagesOfUserAsReadInput {
     tenantId: number | undefined;
     userId: number | undefined;
+}
+
+export class GetEnumValuesListDto implements IGetEnumValuesListDto {
+    displayName!: string | undefined;
+    value!: number | undefined;
+
+    constructor(data?: IGetEnumValuesListDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.displayName = data["displayName"];
+            this.value = data["value"];
+        }
+    }
+
+    static fromJS(data: any): GetEnumValuesListDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetEnumValuesListDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["displayName"] = this.displayName;
+        data["value"] = this.value;
+        return data; 
+    }
+}
+
+export interface IGetEnumValuesListDto {
+    displayName: string | undefined;
+    value: number | undefined;
 }
 
 export class ListResultDtoOfSubscribableEditionComboboxItemDto implements IListResultDtoOfSubscribableEditionComboboxItemDto {
