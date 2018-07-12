@@ -40,6 +40,8 @@
     <ProjectReference Include="..\Magicodes.Admin.Application.App\Magicodes.Admin.Application.App.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Magicodes.Storage.Core" Version="2.0.1" />
+    <PackageReference Include="Magicodes.Storage.Local.Core" Version="2.0.2" />
     <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="2.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics" Version="2.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.1.0" />
