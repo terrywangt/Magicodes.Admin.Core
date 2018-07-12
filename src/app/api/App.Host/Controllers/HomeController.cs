@@ -1,4 +1,8 @@
-﻿namespace App.Host.Controllers
+﻿using Abp.AspNetCore.Mvc.Controllers;
+using Abp.Auditing;
+using Microsoft.AspNetCore.Mvc;
+
+namespace App.Host.Controllers
 {
     public class HomeController : AbpController
     {

@@ -1,4 +1,7 @@
-﻿namespace App.Host.Startup
+﻿using System.IO;
+using Microsoft.AspNetCore.Hosting;
+
+namespace App.Host.Startup
 {
     public class Program
     {

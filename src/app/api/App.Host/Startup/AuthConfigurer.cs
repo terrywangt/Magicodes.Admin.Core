@@ -4,7 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Abp.Runtime.Security;
 using Magicodes.Admin;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;

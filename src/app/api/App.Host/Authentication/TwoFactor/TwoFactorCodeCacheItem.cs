@@ -1,4 +1,6 @@
-﻿namespace App.Host.Authentication.TwoFactor
+﻿using System;
+
+namespace App.Host.Authentication.TwoFactor
 {
     [Serializable]
     public class TwoFactorCodeCacheItem

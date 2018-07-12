@@ -1,3 +1,18 @@
+using System;
+using Abp.AspNetCore;
+using Abp.AspNetZeroCore.Web.Authentication.JwtBearer;
+using Abp.Castle.Logging.Log4Net;
+using Castle.Facilities.Logging;
+using Magicodes.Admin.Configuration;
+using Magicodes.Admin.Identity;
+using Magicodes.SwaggerUI;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Cors.Internal;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+
 namespace App.Host.Startup
 {
     public class Startup

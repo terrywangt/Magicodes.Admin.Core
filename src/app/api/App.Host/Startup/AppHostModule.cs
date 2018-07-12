@@ -2,6 +2,7 @@
 using System.Text;
 using Abp.AspNetCore.Configuration;
 using Abp.AspNetZeroCore;
+using Abp.AspNetZeroCore.Web;
 using Abp.Configuration.Startup;
 using Abp.Modules;
 using Abp.Reflection.Extensions;
@@ -11,6 +12,7 @@ using App.Host.Authentication.TwoFactor;
 using App.Host.Configuration;
 using Magicodes.Admin;
 using Magicodes.Admin.Configuration;
+using Magicodes.Admin.EntityFrameworkCore;
 using Magicodes.Admin.Web;
 using Magicodes.App.Application;
 using Microsoft.AspNetCore.Hosting;
@@ -24,7 +26,8 @@ using Microsoft.IdentityModel.Tokens;
 namespace App.Host.Startup
 {
     [DependsOn(
-        typeof(AdminWebCoreModule),
+        typeof(AdminEntityFrameworkCoreModule),
+        typeof(AbpAspNetZeroCoreWebModule),
         typeof(AdminCoreModule), 
         typeof(AppApplicationModule)
     )]
@@ -42,7 +45,7 @@ namespace App.Host.Startup
 
         public override void PreInitialize()
         {
-            Configuration.Modules.AbpWebCommon().MultiTenancy.DomainFormat = _appConfiguration["App:ServerRootAddress"] ?? "http://localhost:22742/";
+            //Configuration.Modules.AbpWebCommon().MultiTenancy.DomainFormat = _appConfiguration["App:ServerRootAddress"] ?? "http://localhost:22742/";
             Configuration.Modules.AspNetZero().LicenseCode = _appConfiguration["AbpZeroLicenseCode"];
 
             //配置App动态web api
