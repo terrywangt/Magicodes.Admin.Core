@@ -19,15 +19,13 @@ using Magicodes.Admin;
 using Castle.Core.Logging;
 using Magicodes.App.Tests.Logging;
 using Magicodes.Admin.Url;
-using Magicodes.Admin.Security.Recaptcha;
-using Magicodes.App.Tests.Url;
 using System.Threading.Tasks;
+using Magicodes.App.Application;
 
 namespace Magicodes.App.Tests
 {
     [DependsOn(
-	//替换为APP模块
-        //typeof(AppApisModule),
+	    typeof(AppApplicationModule),
         typeof(AdminEntityFrameworkCoreModule),
         typeof(AbpTestBaseModule))]
     public class AppTestModule : AbpModule
@@ -53,9 +51,8 @@ namespace Magicodes.App.Tests
             RegisterFakeService<AbpZeroDbMigrator>();
 
             IocManager.Register<ILogger, TestLogger>();
-            IocManager.Register<IAppUrlService, FakeAppUrlService>();
-            IocManager.Register<IWebUrlService, FakeWebUrlService>();
-            IocManager.Register<IRecaptchaValidator, FakeRecaptchaValidator>();
+            //IocManager.Register<IAppUrlService, FakeAppUrlService>();
+            //IocManager.Register<IWebUrlService, FakeWebUrlService>();
 
             Configuration.ReplaceService<IAppConfigurationAccessor, TestAppConfigurationAccessor>();
             Configuration.ReplaceService<IEmailSender, NullEmailSender>(DependencyLifeStyle.Transient);
@@ -81,14 +78,6 @@ namespace Magicodes.App.Tests
         private static IConfigurationRoot GetConfiguration()
         {
             return AppConfigurations.Get(Directory.GetCurrentDirectory(), addUserSecrets: true);
-        }
-    }
-
-    public class FakeRecaptchaValidator : IRecaptchaValidator
-    {
-        public Task ValidateAsync(string captchaResponse)
-        {
-            return Task.CompletedTask;
         }
     }
 }

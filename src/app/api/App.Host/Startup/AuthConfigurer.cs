@@ -1,4 +1,15 @@
-﻿namespace App.Host.Startup
+﻿using System;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Abp.Runtime.Security;
+using Magicodes.Admin;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
+
+namespace App.Host.Startup
 {
     public static class AuthConfigurer
     {

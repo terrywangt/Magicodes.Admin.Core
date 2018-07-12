@@ -1,5 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
-  <Import Project="..\..\..\common.props"></Import>
+  <Import Project="..\..\..\..\common.props"></Import>
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
@@ -54,8 +54,9 @@
     <EmbeddedResource Include="wwwroot\swagger\ui\index.html" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Magicodes.App.Application\Magicodes.App.Application.csproj" />
+    <ProjectReference Include="..\App.Application\App.Application.csproj" />
   </ItemGroup>
+  
   <ItemGroup>
     <Content Update="wwwroot\swagger\ui\abp.swagger.js">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>

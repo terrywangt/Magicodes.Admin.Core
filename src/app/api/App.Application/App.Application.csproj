@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
@@ -13,17 +13,17 @@
     <RootNamespace>Magicodes.App.Application</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Magicodes.Admin.Application.Shared\Magicodes.Admin.Application.Shared.csproj" />
-    <ProjectReference Include="..\Magicodes.Admin.Application\Magicodes.Admin.Application.csproj" />
-    <ProjectReference Include="..\Magicodes.Admin.Core\Magicodes.Admin.Core.csproj" />
-    <ProjectReference Include="..\Magicodes.Admin.EntityFrameworkCore\Magicodes.Admin.EntityFrameworkCore.csproj" />
-    <ProjectReference Include="..\Magicodes.Admin.Web.Core\Magicodes.Admin.Web.Core.csproj" />
-    <ProjectReference Include="..\Magicodes.App.Core\Magicodes.App.Core.csproj" />
     <PackageReference Include="Abp.AspNetCore" Version="3.7.2" />
   </ItemGroup>
   <PropertyGroup>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\application\Application.Shared\Application.Shared.csproj" />
+    <ProjectReference Include="..\..\..\core\Magicodes.Admin.Core.Custom\Magicodes.Admin.Core.Custom.csproj" />
+    <ProjectReference Include="..\..\..\core\Magicodes.Admin.Core\Magicodes.Admin.Core.csproj" />
+    <ProjectReference Include="..\..\..\data\Magicodes.Admin.EntityFrameworkCore\Magicodes.Admin.EntityFrameworkCore.csproj" />
+  </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Transactions" />
   </ItemGroup>

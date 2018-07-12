@@ -1,5 +1,5 @@
-<Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="..\..\common.props"></Import>
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\..\..\common.props"></Import>
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
@@ -13,11 +13,6 @@
     <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Magicodes.Admin.Application\Magicodes.Admin.Application.csproj" />
-    <ProjectReference Include="..\..\src\Magicodes.Admin.EntityFrameworkCore\Magicodes.Admin.EntityFrameworkCore.csproj" />
-    <ProjectReference Include="..\..\src\Magicodes.App.Application\App.Application.csproj" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="GenFu" Version="1.4.22" />
     <PackageReference Include="Microsoft.Data.Sqlite" Version="2.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.1.0" />
@@ -28,6 +23,10 @@
     <PackageReference Include="Shouldly" Version="3.0.0" />
     <PackageReference Include="NSubstitute" Version="3.1.0" />
     <PackageReference Include="Abp.TestBase" Version="3.7.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\data\Magicodes.Admin.EntityFrameworkCore\Magicodes.Admin.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\App.Application\App.Application.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
