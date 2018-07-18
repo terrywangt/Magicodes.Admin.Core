@@ -1,4 +1,4 @@
-﻿namespace Magicodes.App.Core.Attachments
+﻿namespace Magicodes.Admin.Core.Custom.Attachments
 {
     /// <summary>
     /// 附件类型

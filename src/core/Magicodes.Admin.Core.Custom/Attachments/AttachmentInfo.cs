@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Magicodes.App.Core.Attachments
+namespace Magicodes.Admin.Core.Custom.Attachments
 {
     /// <summary>
     /// 附件信息

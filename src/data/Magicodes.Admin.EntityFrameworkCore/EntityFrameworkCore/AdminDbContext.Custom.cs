@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Magicodes.App.Core.Attachments;
+using Magicodes.Admin.Core.Custom.Attachments;
 using Microsoft.EntityFrameworkCore;
 
 namespace Magicodes.Admin.EntityFrameworkCore

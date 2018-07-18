@@ -3,9 +3,8 @@ using Abp.AutoMapper;
 using Abp.Modules;
 using Abp.Reflection.Extensions;
 using Abp.Zero;
-using Magicodes.Admin;
 
-namespace Magicodes.App.Core
+namespace Magicodes.Admin.Core.Custom
 {
     [DependsOn(
         typeof(AbpZeroCoreModule),

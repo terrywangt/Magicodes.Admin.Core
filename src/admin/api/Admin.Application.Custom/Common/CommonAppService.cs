@@ -1,9 +1,9 @@
 ﻿using Abp.Reflection.Extensions;
 using Magicodes.Admin.Application.App.Common.Dto;
-using Magicodes.App.Core;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Magicodes.Admin.Core.Custom;
 
 namespace Magicodes.Admin.Application.App.Common
 {

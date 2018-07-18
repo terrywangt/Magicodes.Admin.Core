@@ -16,9 +16,9 @@ using Abp.Threading;
 using Abp.Timing;
 using Magicodes.Admin;
 using Magicodes.Admin.Authorization.Users;
+using Magicodes.Admin.Core.Custom;
 using Magicodes.Admin.Dto;
 using Magicodes.Admin.MultiTenancy;
-using Magicodes.App;
 using Microsoft.AspNetCore.Identity;
 
 namespace Magicodes.Admin.Application.App

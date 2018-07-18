@@ -2,10 +2,10 @@
 using Abp.Dependency;
 using Abp.Modules;
 using Magicodes.Admin.Authorization;
-using Magicodes.App.Core;
 using Magicodes.ExporterAndImporter.Core;
 using System;
 using System.Reflection;
+using Magicodes.Admin.Core.Custom;
 
 namespace Magicodes.Admin.Application.App
 {

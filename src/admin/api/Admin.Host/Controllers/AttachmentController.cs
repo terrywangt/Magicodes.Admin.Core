@@ -14,7 +14,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using Magicodes.App.Core.Attachments;
+using Magicodes.Admin.Core.Custom.Attachments;
 
 namespace Magicodes.Admin.Web.Controllers
 {
