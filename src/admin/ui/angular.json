@@ -39,6 +39,7 @@
               "node_modules/tether/dist/css/tether.css",
               "node_modules/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css",
               "node_modules/prismjs/themes/prism.css",
+              "node_modules/primeicons/primeicons.css",
               "node_modules/bootstrap-timepicker/css/bootstrap-timepicker.min.css",
               "node_modules/bootstrap-daterangepicker/daterangepicker.css",
               "node_modules/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.css",
