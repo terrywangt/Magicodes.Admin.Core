@@ -30,14 +30,14 @@ namespace Magicodes.Admin.Web
                 directoryInfo = directoryInfo.Parent;
             }
 
-            var webHostFolder = Path.Combine(directoryInfo.FullName, $"src{Path.DirectorySeparatorChar}Magicodes.Admin.Web.Host");
+            var webHostFolder = Path.Combine(directoryInfo.FullName, $"src{Path.DirectorySeparatorChar}admin{Path.DirectorySeparatorChar}api{Path.DirectorySeparatorChar}Admin.Host");
             if (Directory.Exists(webHostFolder))
             {
                 return webHostFolder;
             }
             else
             {
-                webHostFolder = Path.Combine(directoryInfo.FullName, $"src{Path.DirectorySeparatorChar}Magicodes.Admin.App.Host");
+                webHostFolder = Path.Combine(directoryInfo.FullName, $"src{Path.DirectorySeparatorChar}app{Path.DirectorySeparatorChar}api{Path.DirectorySeparatorChar}App.Host");
                 if (Directory.Exists(webHostFolder))
                 {
                     return webHostFolder;
