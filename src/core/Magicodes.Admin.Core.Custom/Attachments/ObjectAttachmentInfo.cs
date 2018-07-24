@@ -20,7 +20,7 @@ namespace Magicodes.Admin.Core.Custom.Attachments
         /// <summary>
         /// 附件信息
         /// </summary>
-        public  virtual AttachmentInfo AttachmentInfo { get; set; }
+        public virtual AttachmentInfo AttachmentInfo { get; set; }
 
         /// <summary>
         /// 对象类型
