@@ -15,19 +15,20 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using Magicodes.Admin.Core.Custom.Attachments;
+using Magicodes.Unity;
 
 namespace Magicodes.Admin.Web.Controllers
 {
     public class AttachmentController : AbpController
     {
         private readonly IRepository<AttachmentInfo, long> _attachmentInfoRepository;
+        private readonly IStorageManager _storageManager;
 
-        public AttachmentController(IRepository<AttachmentInfo, long> attachmentInfoRepository)
+        public AttachmentController(IRepository<AttachmentInfo, long> attachmentInfoRepository, IStorageManager storageManager)
         {
             this._attachmentInfoRepository = attachmentInfoRepository;
+            _storageManager = storageManager;
         }
-
-        public static IStorageProvider StorageProvider { get; set; }
 
         [HttpPost]
         [DisableAuditing]
@@ -58,8 +59,8 @@ namespace Magicodes.Admin.Web.Controllers
                         using (var stream = item.OpenReadStream())
                         {
                             var tempFileName = Guid.NewGuid().ToString("N") + Path.GetExtension(item.FileName);
-                            await StorageProvider.SaveBlobStream((AbpSession.TenantId ?? 0).ToString(), tempFileName, stream);
-                            var blobInfo = await StorageProvider.GetBlobFileInfo((AbpSession.TenantId ?? 0).ToString(), tempFileName);
+                            await _storageManager.StorageProvider.SaveBlobStream((AbpSession.TenantId ?? 0).ToString(), tempFileName, stream);
+                            var blobInfo = await _storageManager.StorageProvider.GetBlobFileInfo((AbpSession.TenantId ?? 0).ToString(), tempFileName);
                             var attachmentType = AttachmentTypes.File;
                             if (blobInfo.ContentType.StartsWith("video/"))
                             {

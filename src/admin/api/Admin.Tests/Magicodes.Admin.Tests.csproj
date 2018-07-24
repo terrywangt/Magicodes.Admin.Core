@@ -26,7 +26,10 @@
     <PackageReference Include="Abp.TestBase" Version="3.7.2" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\application\Application.Shared\Application.Shared.csproj" />
     <ProjectReference Include="..\..\..\data\Magicodes.Admin.EntityFrameworkCore\Magicodes.Admin.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\Admin.Application.Custom\Admin.Application.Custom.csproj" />
+    <ProjectReference Include="..\Admin.Application\Admin.Application.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />

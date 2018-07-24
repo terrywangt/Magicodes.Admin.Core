@@ -17,14 +17,15 @@ using Magicodes.Admin.MultiTenancy;
 using Abp.AspNetCore.Configuration;
 using Magicodes.Admin.Friendships;
 using Magicodes.Admin.Chat;
-using Abp.Dependency;
 using Magicodes.Admin.Application.App;
+using Magicodes.Unity;
 
 namespace Magicodes.Admin.Web.Startup
 {
     [DependsOn(
         typeof(AdminApplicationModule),
-        typeof(AdminWebCoreModule)
+        typeof(AdminWebCoreModule),
+        typeof(UnityModule)
     )]
     public class AdminWebHostModule : AbpModule
     {
@@ -43,10 +44,10 @@ namespace Magicodes.Admin.Web.Startup
             Configuration.Modules.AbpWebCommon().MultiTenancy.DomainFormat = _appConfiguration["App:ServerRootAddress"] ?? "http://localhost:22742/";
             Configuration.Modules.AspNetZero().LicenseCode = _appConfiguration["AbpZeroLicenseCode"];
 
-            Configuration.Modules.AbpAspNetCore()
-                .CreateControllersForAppServices(
-                    typeof(AdminApplicationModule).GetAssembly()
-                );
+            //Configuration.Modules.AbpAspNetCore()
+            //    .CreateControllersForAppServices(
+            //        typeof(AdminApplicationModule).GetAssembly()
+            //    );
 
             //配置后台动态web api
             Configuration.Modules.AbpAspNetCore()

@@ -70,27 +70,6 @@ namespace Magicodes.Admin.Web.Startup
 
             //启用自定义API文档(支持文档配置)
             app.UseCustomSwaggerUI(_appConfiguration);
-
-            #region 配置存储程序
-            switch (_appConfiguration["StorageProvider:Type"])
-            {
-                case "LocalStorageProvider":
-                {
-                    var rootPath = _appConfiguration["StorageProvider:LocalStorageProvider:RootPath"];
-                    if (!rootPath.Contains(":"))
-                    {
-                        rootPath = Path.Combine(_hostingEnvironment.WebRootPath, rootPath);
-                    }
-
-                    if (!Directory.Exists(rootPath)) Directory.CreateDirectory(rootPath);
-
-                    AttachmentController.StorageProvider = new LocalStorageProvider(rootPath, _appConfiguration["StorageProvider:LocalStorageProvider:RootUrl"]);
-                    break;
-                }
-                default:
-                    break;
-            }
-            #endregion
         }
     }
 }
