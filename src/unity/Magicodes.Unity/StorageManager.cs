@@ -12,10 +12,8 @@ using Microsoft.Extensions.Configuration;
 
 namespace Magicodes.Unity
 {
-    /// <summary>
-    /// 存储管理程序
-    /// </summary>
-    public class StorageManager : ISingletonDependency, IShouldInitialize, IStorageManager
+    /// <inheritdoc />
+    public class StorageManager : IStorageManager
     {
         private readonly IAppConfigurationAccessor _appConfiguration;
         private readonly IHostingEnvironment _env;
@@ -26,7 +24,13 @@ namespace Magicodes.Unity
             _env = env;
         }
 
+        /// <inheritdoc />
         public IStorageProvider StorageProvider { get; set; }
+
+
+        /// <summary>
+        /// 根据配置初始化存储提供程序
+        /// </summary>
         public void Initialize()
         {
             #region 配置存储程序
