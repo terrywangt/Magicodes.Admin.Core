@@ -702,5 +702,8 @@
     <text name="EmptyTextTip" value="请选择一项..." />
     <text name="EndTimeShouldGreaterThanStartTime" value="结束时间必须大于开始时间！" />
     <text name="DragAndDropSortTip" value="请拖拽此项进行排序！" />
+    <!--2018-7-25-->
+    <text name="OrdinaryTable" value="普通表格" />
+    <text name="TreeTable" value="树状表格" />
   </texts>
 </localizationDictionary>
