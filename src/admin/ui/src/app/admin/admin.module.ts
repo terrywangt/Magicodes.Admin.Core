@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+﻿import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AppCommonModule } from '@app/shared/common/app-common.module';
@@ -8,7 +8,13 @@ import { FileUploadModule } from 'ng2-file-upload';
 import { ModalModule, PopoverModule, TabsModule, TooltipModule } from 'ngx-bootstrap';
 import { AutoCompleteModule, EditorModule, FileUploadModule as PrimeNgFileUploadModule, InputMaskModule, PaginatorModule } from 'primeng/primeng';
 import { TableModule } from 'primeng/table';
+import { LightboxModule } from 'primeng/lightbox';
+import { OverlayPanelModule } from 'primeng/overlayPanel';
+import { InputSwitchModule } from 'primeng/inputswitch';
+import { TreeTableModule } from 'primeng/treetable';
+import { DropdownModule } from 'primeng/dropdown';
 import { AdminRoutingModule } from './admin-routing.module';
+import { AuditLogComponent } from './components/auditLog/audit-log.component';
 import { AuditLogDetailModalComponent } from './audit-logs/audit-log-detail-modal.component';
 import { AuditLogsComponent } from './audit-logs/audit-logs.component';
 import { EntityChangeDetailModalComponent } from './audit-logs/entity-change-detail-modal.component';
@@ -41,6 +47,11 @@ import { OrganizationUnitsTreeComponent } from './shared/organization-unit-tree.
 import { PermissionComboComponent } from './shared/permission-combo.component';
 import { PermissionTreeComponent } from './shared/permission-tree.component';
 import { RoleComboComponent } from './shared/role-combo.component';
+import { EnumComboComponent } from './components/enum-combo/enum-combo.component';
+import { DataComboComponent } from './components/data-combo/data-combo.component';
+import { FileUploadComponent } from './components/fileUpload/file-upload.component';
+import { FileUploadModalComponent } from './components/fileUploadModal/fileUploadModal.component';
+import { ObjectImageListComponent } from './components/object-imageList/object-imageList.component';
 import { InvoiceComponent } from './subscription-management/invoice/invoice.component';
 import { SubscriptionManagementComponent } from './subscription-management/subscription-management.component';
 import { CreateTenantModalComponent } from './tenants/create-tenant-modal.component';
@@ -52,6 +63,15 @@ import { CreateOrEditUserModalComponent } from './users/create-or-edit-user-moda
 import { EditUserPermissionsModalComponent } from './users/edit-user-permissions-modal.component';
 import { ImpersonationService } from './users/impersonation.service';
 import { UsersComponent } from './users/users.component';
+import { ArticleInfoArticleTagInfoComponent } from './articleInfos/articleTagInfo.component';
+import { ArticleInfoArticleTagInfoCreateOrEditModalComponent } from './articleInfos/create-or-edit-articleTagInfo-modal.component';
+import { ArticleInfosComponent } from './articleInfos/articleInfo.component';
+import { CreateOrEditArticleInfoModalComponent } from './articleInfos/create-or-edit-articleInfo-modal.component';
+import { ArticleSourceInfosComponent } from './articleSourceInfos/articleSourceInfo.component';
+import { CreateOrEditArticleSourceInfoModalComponent } from './articleSourceInfos/create-or-edit-articleSourceInfo-modal.component';
+import { ColumnInfosComponent } from './columnInfos/columnInfo.component';
+import { CreateOrEditColumnInfoModalComponent } from './columnInfos/create-or-edit-columnInfo-modal.component';
+
 
 @NgModule({
     imports: [
@@ -66,16 +86,26 @@ import { UsersComponent } from './users/users.component';
         UtilsModule,
         AppCommonModule,
         TableModule,
+        LightboxModule,
         PaginatorModule,
         PrimeNgFileUploadModule,
         AutoCompleteModule,
         EditorModule,
-        InputMaskModule
+        InputMaskModule,
+        OverlayPanelModule,
+        InputSwitchModule,
+        TreeTableModule,
+        DropdownModule
     ],
     declarations: [
         UsersComponent,
         PermissionComboComponent,
         RoleComboComponent,
+        EnumComboComponent,
+        DataComboComponent,
+        FileUploadComponent,
+        FileUploadModalComponent,
+        ObjectImageListComponent,
         CreateOrEditUserModalComponent,
         EditUserPermissionsModalComponent,
         PermissionTreeComponent,
@@ -84,6 +114,7 @@ import { UsersComponent } from './users/users.component';
         RolesComponent,
         CreateOrEditRoleModalComponent,
         AuditLogsComponent,
+        AuditLogComponent,
         AuditLogDetailModalComponent,
         EntityChangeDetailModalComponent,
         HostSettingsComponent,
@@ -116,7 +147,21 @@ import { UsersComponent } from './users/users.component';
         DemoUiFileUploadComponent,
         DemoUiInputMaskComponent,
         DemoUiEditorComponent,
-        UiCustomizationComponent
+        UiCustomizationComponent,
+        ArticleInfoArticleTagInfoComponent,
+        ArticleInfoArticleTagInfoCreateOrEditModalComponent,
+
+
+        ArticleInfosComponent,
+        CreateOrEditArticleInfoModalComponent,
+
+
+        ArticleSourceInfosComponent,
+        CreateOrEditArticleSourceInfoModalComponent,
+
+
+        ColumnInfosComponent,
+        CreateOrEditColumnInfoModalComponent
     ],
     exports: [
         AddMemberModalComponent

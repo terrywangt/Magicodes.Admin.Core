@@ -15,9 +15,9 @@ using Magicodes.Admin.Configuration;
 using Magicodes.Admin.EntityFrameworkCore;
 using Magicodes.Admin.MultiTenancy;
 using Abp.AspNetCore.Configuration;
+using Admin.Application.Custom;
 using Magicodes.Admin.Friendships;
 using Magicodes.Admin.Chat;
-using Magicodes.Admin.Application.App;
 using Magicodes.Unity;
 
 namespace Magicodes.Admin.Web.Startup
@@ -25,6 +25,7 @@ namespace Magicodes.Admin.Web.Startup
     [DependsOn(
         typeof(AdminApplicationModule),
         typeof(AdminWebCoreModule),
+        typeof(AdminAppModule),
         typeof(UnityModule)
     )]
     public class AdminWebHostModule : AbpModule

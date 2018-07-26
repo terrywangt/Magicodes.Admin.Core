@@ -1,4 +1,4 @@
-import { AbpHttpInterceptor } from '@abp/abpHttpInterceptor';
+﻿import { AbpHttpInterceptor } from '@abp/abpHttpInterceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import * as ApiServiceProxies from './service-proxies';
@@ -38,6 +38,19 @@ import * as ApiServiceProxies from './service-proxies';
         ApiServiceProxies.SubscriptionServiceProxy,
         ApiServiceProxies.InstallServiceProxy,
         ApiServiceProxies.UiCustomizationSettingsServiceProxy,
+        /**
+         * 公用组件服务
+         */
+        ApiServiceProxies.CommonServiceProxy,
+        ApiServiceProxies.ArticleInfoArticleTagInfoServiceProxy,
+		ApiServiceProxies.ArticleInfoServiceProxy,
+		ApiServiceProxies.ArticleSourceInfoServiceProxy,
+		ApiServiceProxies.ColumnInfoServiceProxy,
+
+
+
+
+
         { provide: HTTP_INTERCEPTORS, useClass: AbpHttpInterceptor, multi: true }
     ]
 })

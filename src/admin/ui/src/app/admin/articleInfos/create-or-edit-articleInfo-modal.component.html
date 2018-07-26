@@ -1,0 +1,173 @@
+﻿<div bsModal #createOrEditModal="bs-modal" (onShown)="onShown()" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createOrEditModal"
+     aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+
+        <div class="modal-content">
+            <form *ngIf="active" #articleInfoForm="ngForm" novalidate (ngSubmit)="save()">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <span *ngIf="formModel.id">{{l("Edit")}}</span>
+                        <span *ngIf="!formModel.id">{{l("Create")}}</span>
+                    </h5>
+                    <button type="button" class="close" (click)="close()" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <tabset class="tab-container tabbable-line">
+                        <tab heading="{{l('文章基础信息')}}" customClass="m-tabs__item">
+                            <div class="row">
+					<div class="form-group form-md-line-input form-md-floating-label no-hint col-xl-6">
+						<label>{{l("Title")}} *</label>
+						<input autofocus class="form-control" type="text" name="Title" 
+						[ngClass]="{'edited': formModel.title}" 
+						[(ngModel)]="formModel.title" 
+						[required]="true"
+                        
+						maxlength="50"
+						minlength=""
+						>
+					</div>
+					<div class="form-group form-md-line-input form-md-floating-label no-hint col-xl-6">
+						<label>{{l("Publisher")}} *</label>
+						<input  class="form-control" type="text" name="Publisher" 
+						[ngClass]="{'edited': formModel.publisher}" 
+						[(ngModel)]="formModel.publisher" 
+						[required]="true"
+                        
+						maxlength="20"
+						minlength=""
+						>
+					</div>
+					<div class="form-group form-md-line-input form-md-floating-label no-hint col-xl-6">
+						<label>{{l("ColumnInfo")}} *</label>
+						<data-combo *ngIf="columnInfoComboItemDtoList" [(selectedValue)]="formModel.columnInfoId" [values]="columnInfoComboItemDtoList"></data-combo>
+					</div>
+					<div class="form-group form-md-line-input form-md-floating-label no-hint col-xl-6">
+						<label>{{l("ArticleSourceInfo")}} </label>
+						<data-combo *ngIf="articleSourceInfoComboItemDtoList" [(selectedValue)]="formModel.articleSourceInfoId" [values]="articleSourceInfoComboItemDtoList"></data-combo>
+					</div>
+					<div class="form-group form-md-line-input form-md-floating-label no-hint col-xl-6">
+					   <label>{{l("ReleaseTime")}} </label>
+                       <input  type="datetime" #ReleaseTimeDatePicker name="ReleaseTimeDatePicker" class="form-control"
+					   [required]="false"
+					   [ngClass]="{'edited': formModel.releaseTime}"
+					   >
+                    </div>
+				    <div class="form-group form-md-line-input form-md-floating-label no-hint col-xl-12">
+					    <label>{{l("Content")}} *</label>
+					    <p-editor  [(ngModel)]="formModel.content" name="Content" [style]="{'height':'300px'}" [required]="true"></p-editor>
+                    </div>
+					<div class="form-group form-md-line-input form-md-floating-label no-hint col-xl-6" style="margin-top: 35px;">
+                         <label class="m-checkbox">
+                             <input  id="EditArticleInfo_IsActive" type="checkbox" name="IsActive" 
+							 [(ngModel)]="formModel.isActive"
+							 [required]="false"
+							 >
+                             {{l("IsActive")}} 
+                             <span></span>
+                         </label>                         
+                    </div>
+					<div class="form-group form-md-line-input form-md-floating-label no-hint col-xl-6" style="margin-top: 35px;">
+                         <label class="m-checkbox">
+                             <input  id="EditArticleInfo_IsNeedAuthorizeAccess" type="checkbox" name="IsNeedAuthorizeAccess" 
+							 [(ngModel)]="formModel.isNeedAuthorizeAccess"
+							 [required]="false"
+							 >
+                             {{l("IsNeedAuthorizeAccess")}} 
+                             <span></span>
+                         </label>                         
+                    </div>
+					<div class="form-group form-md-line-input form-md-floating-label no-hint col-xl-6">
+						<label>{{l("ArticleTagInfos")}} </label>
+						<input  class="form-control" type="text" name="ArticleTagInfos" 
+						[ngClass]="{'edited': formModel.articleTagInfos}" 
+						[(ngModel)]="formModel.articleTagInfos" 
+						[required]="false"
+                        
+						maxlength=""
+						minlength=""
+						>
+					</div>
+					<div class="form-group form-md-line-input form-md-floating-label no-hint col-xl-6">
+						<label>{{l("RecommendedType")}} *</label>
+						<enum-combo [(selectedValue)]="formModel.recommendedType" fullName="Magicodes.Admin.Core.Custom.Contents.RecommendedTypes"></enum-combo>
+					</div>
+                            </div>
+                        </tab>
+                        <tab heading="{{l('SEO')}}" customClass="m-tabs__item">
+                            <div class="row">
+					<div class="form-group form-md-line-input form-md-floating-label no-hint col-xl-12">
+						<label>{{l("SeoTitle")}} </label>
+						<input autofocus class="form-control" type="text" name="SeoTitle" 
+						[ngClass]="{'edited': formModel.seoTitle}" 
+						[(ngModel)]="formModel.seoTitle" 
+						[required]="false"
+                        
+						maxlength="50"
+						minlength=""
+						>
+					</div>
+					<div class="form-group form-md-line-input form-md-floating-label no-hint col-xl-12">
+						<label>{{l("KeyWords")}} </label>
+						<textarea  class="form-control" name="KeyWords" 
+						[ngClass]="{'edited': formModel.keyWords}" 
+						[(ngModel)]="formModel.keyWords" 
+						[required]="false"
+						maxlength="200"
+						minlength=""
+						[style]="{'height':'300px'}"
+						>
+						</textarea>
+					</div>
+					<div class="form-group form-md-line-input form-md-floating-label no-hint col-xl-12">
+						<label>{{l("Introduction")}} </label>
+						<textarea  class="form-control" name="Introduction" 
+						[ngClass]="{'edited': formModel.introduction}" 
+						[(ngModel)]="formModel.introduction" 
+						[required]="false"
+						maxlength="200"
+						minlength=""
+						[style]="{'height':'300px'}"
+						>
+						</textarea>
+					</div>
+					<div class="form-group form-md-line-input form-md-floating-label no-hint col-xl-12">
+						<label>{{l("StaticPageUrl")}} </label>
+						<input  class="form-control" type="text" name="StaticPageUrl" 
+						[ngClass]="{'edited': formModel.staticPageUrl}" 
+						[(ngModel)]="formModel.staticPageUrl" 
+						[required]="false"
+                        
+						maxlength="200"
+						minlength=""
+						>
+					</div>
+                            </div>
+                        </tab>
+                        <tab heading="{{l('扩展信息')}}" customClass="m-tabs__item">
+                            <div class="row">
+					<div class="form-group form-md-line-input form-md-floating-label no-hint col-xl-12">
+						<label>{{l("Url")}} </label>
+						<input autofocus class="form-control" type="url" name="Url" 
+						[ngClass]="{'edited': formModel.url}" 
+						[(ngModel)]="formModel.url" 
+						[required]="false"
+                        
+						maxlength="255"
+						minlength=""
+						>
+					</div>
+                            </div>
+                        </tab>
+                    </tabset>
+				</div>
+				<div class="modal-footer">
+                    <button type="button" [disabled]="saving" class="btn btn-secondary" (click)="close()">{{l("Cancel")}}</button>
+                    <button type="submit" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')" [disabled]="!articleInfoForm.form.valid" class="btn btn-primary"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

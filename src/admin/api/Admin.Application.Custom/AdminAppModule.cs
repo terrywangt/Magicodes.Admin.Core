@@ -1,13 +1,13 @@
-﻿using Abp.AutoMapper;
+﻿using System.Reflection;
+using Abp.AutoMapper;
 using Abp.Dependency;
 using Abp.Modules;
-using Magicodes.Admin.Authorization;
-using Magicodes.ExporterAndImporter.Core;
-using System;
-using System.Reflection;
+using Admin.Application.Custom.Contents.Dto;
 using Magicodes.Admin.Core.Custom;
+using Magicodes.Admin.Core.Custom.Contents;
+using Magicodes.ExporterAndImporter.Core;
 
-namespace Magicodes.Admin.Application.App
+namespace Admin.Application.Custom
 {
     [DependsOn(
        typeof(AppCoreModule),
@@ -17,13 +17,19 @@ namespace Magicodes.Admin.Application.App
     {
         public override void PreInitialize()
         {
-            Configuration.Modules.AbpAutoMapper();
+            Configuration.Modules.AbpAutoMapper().Configurators.Add(config =>
+            {
+                config.CreateMap<ArticleInfo, ArticleInfoListDto>()
+                    .ForMember(dto => dto.ColumnInfo, options => options.MapFrom(p => p.ColumnInfo.Title))
+                    .ForMember(dto => dto.ArticleSourceInfo, options => options.MapFrom(p => p.ArticleSourceInfo.Name));
+
+            });
         }
 
         public override void Initialize()
         {
             IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
-            IocManager.Register<IExporter, ExporterAndImporter.Excel.ExcelExporter>(DependencyLifeStyle.Transient);
+            IocManager.Register<IExporter, Magicodes.ExporterAndImporter.Excel.ExcelExporter>(DependencyLifeStyle.Transient);
         }
     }
 }

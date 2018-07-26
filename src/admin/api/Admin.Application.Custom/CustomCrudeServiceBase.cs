@@ -13,11 +13,12 @@ using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
 using Abp.Extensions;
 using Abp.UI;
+using Magicodes.Admin;
 using Magicodes.Admin.Dto;
 using Magicodes.ExporterAndImporter.Core;
 using Microsoft.EntityFrameworkCore;
 
-namespace Magicodes.Admin.Application.App
+namespace Admin.Application.Custom
 {
     /// <summary>
     /// 自定义增删查改导出服务基类

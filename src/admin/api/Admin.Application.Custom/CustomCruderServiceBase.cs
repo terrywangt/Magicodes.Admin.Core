@@ -8,7 +8,7 @@ using Abp.Domain.Uow;
 using Abp.Runtime.Session;
 using Abp.Timing;
 
-namespace Magicodes.Admin.Application.App
+namespace Admin.Application.Custom
 {
     /// <summary>
     /// 自定义增删查改恢复导出服务基类

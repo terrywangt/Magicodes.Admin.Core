@@ -1,0 +1,28 @@
+<div bsModal #fileUploadModal="bs-modal" (onShown)="onShown()" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="fileUploadModal"
+    aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+
+        <div class="modal-content">
+            <form *ngIf="active" #fileUploadForm="ngForm">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <span>文件管理</span>
+                    </h5>
+                    <button type="button" class="close" (click)="close()" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body row">
+                    <div class="form-group form-md-line-input form-md-floating-label no-hint col-xl-12">
+                        <p-lightbox [images]="images"></p-lightbox>
+                    </div>
+                    <div class="form-group form-md-line-input form-md-floating-label no-hint col-xl-12">
+                        <file-upload [(input)]="input"></file-upload>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

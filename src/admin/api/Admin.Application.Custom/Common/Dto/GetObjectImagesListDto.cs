@@ -1,0 +1,27 @@
+﻿using Abp.AutoMapper;
+using Magicodes.Admin.Core.Custom.Attachments;
+
+namespace Admin.Application.Custom.Common.Dto
+{
+    /// <summary>
+    /// 图片显示Dto
+    /// </summary>
+    [AutoMapFrom(typeof(AttachmentInfo))]
+    public class GetObjectImagesListDto : IImagesDto
+    {
+        /// <summary>
+        ///名称
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// 文件大小
+        /// </summary>
+        public long FileLength { get; set; }
+
+        /// <summary>
+        /// 网络路径
+        /// </summary>
+        public string Url { get; set; }
+    }
+}

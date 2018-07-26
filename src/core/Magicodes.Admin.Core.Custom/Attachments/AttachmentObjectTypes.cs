@@ -5,6 +5,9 @@
     /// </summary>
     public enum AttachmentObjectTypes
     {
-        
+        /// <summary>
+        /// 文章
+        /// </summary>
+        ArticleInfo = 0
     }
 }

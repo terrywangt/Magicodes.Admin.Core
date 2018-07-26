@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+﻿import { NgModule } from '@angular/core';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { AuditLogsComponent } from './audit-logs/audit-logs.component';
 import { HostDashboardComponent } from './dashboard/host-dashboard.component';
@@ -17,6 +17,9 @@ import { SubscriptionManagementComponent } from './subscription-management/subsc
 import { TenantsComponent } from './tenants/tenants.component';
 import { UiCustomizationComponent } from './ui-customization/ui-customization.component';
 import { UsersComponent } from './users/users.component';
+import { ArticleInfosComponent } from './articleInfos/articleInfo.component';
+import { ArticleSourceInfosComponent } from './articleSourceInfos/articleSourceInfo.component';
+import { ColumnInfosComponent } from './columnInfos/columnInfo.component';
 
 @NgModule({
     imports: [
@@ -40,7 +43,10 @@ import { UsersComponent } from './users/users.component';
                     { path: 'hostDashboard', component: HostDashboardComponent, data: { permission: 'Pages.Administration.Host.Dashboard' } },
                     { path: 'demo-ui-components', component: DemoUiComponentsComponent, data: { permission: 'Pages.DemoUiComponents' } },
                     { path: 'install', component: InstallComponent },
-                    { path: 'ui-customization', component: UiCustomizationComponent }
+                    { path: 'ui-customization', component: UiCustomizationComponent },
+					{ path: 'articleInfo', component: ArticleInfosComponent},
+					{ path: 'articleSourceInfo', component: ArticleSourceInfosComponent},
+					{ path: 'columnInfo', component: ColumnInfosComponent}
                 ]
             }
         ])

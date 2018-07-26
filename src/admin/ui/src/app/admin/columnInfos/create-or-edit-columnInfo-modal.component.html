@@ -1,0 +1,116 @@
+﻿<div bsModal #createOrEditModal="bs-modal" (onShown)="onShown()" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createOrEditModal"
+     aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+
+        <div class="modal-content">
+            <form *ngIf="active" #columnInfoForm="ngForm" novalidate (ngSubmit)="save()">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <span *ngIf="formModel.id">{{l("Edit")}}</span>
+                        <span *ngIf="!formModel.id">{{l("Create")}}</span>
+                    </h5>
+                    <button type="button" class="close" (click)="close()" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="row">
+					<div class="form-group form-md-line-input form-md-floating-label no-hint col-xl-12">
+						<label>{{l("Title")}} *</label>
+						<input autofocus class="form-control" type="text" name="Title" 
+						[ngClass]="{'edited': formModel.title}" 
+						[(ngModel)]="formModel.title" 
+						[required]="true"
+                        
+						maxlength="50"
+						minlength=""
+						>
+					</div>
+					<div class="form-group form-md-line-input form-md-floating-label no-hint col-xl-12">
+						<label>{{l("SortNo")}} </label>
+						<input  class="form-control" type="number" name="SortNo" 
+						[ngClass]="{'edited': formModel.sortNo}" 
+						[(ngModel)]="formModel.sortNo" 
+						[required]="false"
+                        
+						maxlength=""
+						minlength=""
+						>
+					</div>
+					<div class="form-group form-md-line-input form-md-floating-label no-hint col-xl-12" style="margin-top: 35px;">
+                         <label class="m-checkbox">
+                             <input  id="EditColumnInfo_IsActive" type="checkbox" name="IsActive" 
+							 [(ngModel)]="formModel.isActive"
+							 [required]="false"
+							 >
+                             {{l("IsActive")}} 
+                             <span></span>
+                         </label>                         
+                    </div>
+					<div class="form-group form-md-line-input form-md-floating-label no-hint col-xl-12" style="margin-top: 35px;">
+                         <label class="m-checkbox">
+                             <input  id="EditColumnInfo_IsNeedAuthorizeAccess" type="checkbox" name="IsNeedAuthorizeAccess" 
+							 [(ngModel)]="formModel.isNeedAuthorizeAccess"
+							 [required]="false"
+							 >
+                             {{l("IsNeedAuthorizeAccess")}} 
+                             <span></span>
+                         </label>                         
+                    </div>
+					<div class="form-group form-md-line-input form-md-floating-label no-hint col-xl-12">
+						<label>{{l("Description")}} </label>
+						<textarea  class="form-control" name="Description" 
+						[ngClass]="{'edited': formModel.description}" 
+						[(ngModel)]="formModel.description" 
+						[required]="false"
+						maxlength="500"
+						minlength=""
+						[style]="{'height':'300px'}"
+						>
+						</textarea>
+					</div>
+					<div class="form-group form-md-line-input form-md-floating-label no-hint col-xl-12">
+						<label>{{l("Introduction")}} </label>
+						<textarea  class="form-control" name="Introduction" 
+						[ngClass]="{'edited': formModel.introduction}" 
+						[(ngModel)]="formModel.introduction" 
+						[required]="false"
+						maxlength="200"
+						minlength=""
+						[style]="{'height':'300px'}"
+						>
+						</textarea>
+					</div>
+					<div class="form-group form-md-line-input form-md-floating-label no-hint col-xl-12">
+						<label>{{l("IconCls")}} </label>
+						<input  class="form-control" type="text" name="IconCls" 
+						[ngClass]="{'edited': formModel.iconCls}" 
+						[(ngModel)]="formModel.iconCls" 
+						[required]="false"
+                        
+						maxlength="20"
+						minlength=""
+						>
+					</div>
+					<div class="form-group form-md-line-input form-md-floating-label no-hint col-xl-12">
+						<label>{{l("Url")}} </label>
+						<input  class="form-control" type="url" name="Url" 
+						[ngClass]="{'edited': formModel.url}" 
+						[(ngModel)]="formModel.url" 
+						[required]="false"
+                        
+						maxlength="255"
+						minlength=""
+						>
+					</div>
+                    </div>
+				</div>
+				<div class="modal-footer">
+                    <button type="button" [disabled]="saving" class="btn btn-secondary" (click)="close()">{{l("Cancel")}}</button>
+                    <button type="submit" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')" [disabled]="!columnInfoForm.form.valid" class="btn btn-primary"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

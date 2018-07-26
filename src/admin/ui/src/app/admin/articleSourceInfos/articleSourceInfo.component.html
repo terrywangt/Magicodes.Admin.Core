@@ -1,0 +1,153 @@
+﻿<div [@routerTransition]>
+    <div class="m-subheader ">
+        <div class="d-flex align-items-center">
+            <div class="mr-auto col-xs-6">
+                <h3 class="m-subheader__title m-subheader__title--separator">
+                    <span>{{l("ArticleSourceInfo")}}</span>
+                </h3>
+            </div>
+            <div class="col-sm-6 text-right">
+                <audit-log serviceName="ArticleSourceInfoAppService" objectName="Magicodes.Admin.Core.Custom.Contents.ArticleSourceInfo"></audit-log>
+                <button type="button" class="btn btn-success" (click)="exportToExcel()">
+                    <i class="fa fa-file-excel-o"></i> {{l("ExportToExcel")}}
+                </button>
+                <button class="btn btn-primary blue" (click)="createArticleSourceInfo()">
+                    <i class="fa fa-plus"></i>{{l("Create")}}
+                </button>
+                <button type="button" class="btn btn-metal" (click)="getArticleSourceInfos()">
+                    <i class="fa fa-refresh"></i> {{l("Refresh")}}
+                </button>
+                <button type="button" class="btn default" (click)="getRecycleData()">
+                    <i class="fa fa-recycle"></i> {{model.isOnlyGetRecycleData?l('Close'):l('RecycleBin')}}
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="m-content">
+        <div class="m-portlet m-portlet--mobile">
+            <div class="m-portlet__body">
+                <div class="m-form m-form--label-align-right">
+                    <form (submit)="getArticleSourceInfos()" autocomplete="off">
+                        <div class="form-body">
+                            <div class="row m--margin-bottom-10">
+                                <label>{{l("Filter")}}</label>
+                                <div class="input-group">
+                                    <input [(ngModel)]="model.filterText" name="Filter" class="form-control" placeholder="{{l('SearchWithThreeDot')}}"
+                                        type="text">
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="advancedFiltersAreShown" class="row">
+                            <div class="col-xl-6">
+                                <div class="m-checkbox-list">
+                                    <label class="m-checkbox">
+                                        <input type="checkbox" [(ngModel)]="model.creationDateRangeActive" id="model_CreateDateRange" name="CreateDateRange" value="true"> {{l('CreateDateRange')}}
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <date-range-picker name="CreateDateRange" [isDisabled]="!model.createDateRange" [(startDate)]="model.creationDateStart" [(endDate)]="model.creationDateEnd" [allowFutureDate]="true">
+                                </date-range-picker>
+                            </div>
+                            <div class="col-xl-6">
+                                <div class="m-checkbox-list">
+                                    <label class="m-checkbox">
+                                        <input type="checkbox" [(ngModel)]="model.subscriptionEndDateRangeActive" id="model_updateDateRange" name="UpdateDateRange" value="true"> {{l('UpdateDateRange')}}
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <date-range-picker name="UpdateDateRange" [isDisabled]="!model.updateDateRange" [(startDate)]="model.subscriptionEndDateStart" [(endDate)]="model.subscriptionEndDateEnd" [allowFutureDate]="false">
+                                </date-range-picker>
+							</div>
+                        </div>
+                        <div class="row m--margin-bottom-10">
+                            <div class="col-sm-6">
+                                <span class="clickable-item text-muted" *ngIf="!advancedFiltersAreShown" (click)="advancedFiltersAreShown=!advancedFiltersAreShown">
+                                    <i class="fa fa-angle-down"></i> {{l("ShowAdvancedFilters")}}
+                                </span>
+                                <span class="clickable-item text-muted" *ngIf="advancedFiltersAreShown" (click)="advancedFiltersAreShown=!advancedFiltersAreShown">
+                                    <i class="fa fa-angle-up"></i> {{l("HideAdvancedFilters")}}
+                                </span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="row align-items-center">
+                    <!--<Primeng-Datatable-Start>-->
+                    <div class="primeng-datatable-container" [busyIf]="primengTableHelper.isLoading">
+						<p-table #dataTable
+                                 (onLazyLoad)="getArticleSourceInfos($event)"
+                                 [value]="primengTableHelper.records"
+                                 rows="{{primengTableHelper.defaultRecordsCountPerPage}}"
+                                 [paginator]="false"
+                                 [lazy]="true"
+                                 [responsive]="primengTableHelper.isResponsive" 
+								 [scrollable]="true"                                 
+                                 [style]="{width:'100%'}" >
+							<ng-template pTemplate="header">
+                                <tr>
+                                    
+								    <th style="width:130px">{{l('Actions')}}</th>
+									<th pSortableColumn="name" style="width:200px">{{l('Name')}}
+									    <p-sortIcon field="name"></p-sortIcon>
+								    </th>
+									<th pSortableColumn="creationTime" style="width:200px">{{l('CreationTime')}}
+									    <p-sortIcon field="creationTime"></p-sortIcon>
+								    </th>
+								</tr>
+							</ng-template>
+
+							<ng-template pTemplate="body" let-record="$implicit" >
+                                <tr >
+                                    
+                                    <td style="width: 130px">
+                                        <div class="btn-group dropdown" normalizePosition>
+                                            <button class="dropdown-toggle btn btn-sm btn-primary"
+                                                    data-toggle="dropdown"
+                                                    aria-haspopup="true"
+                                                    aria-expanded="false">
+                                                <i class="fa fa-cog"></i><span class="caret"></span> {{l("Actions")}}
+                                            </button>
+                                            <ul class="dropdown-menu" *ngIf="!record.isDeleted">
+                                                <li>
+                                                    <a (click)="editArticleSourceInfo(record.id)">{{l('Edit')}}</a>
+                                                </li>
+                                                <li>
+                                                    <a (click)="deleteArticleSourceInfo(record.id)">{{l('Delete')}}</a>
+                                                </li>
+                                            </ul>
+                                            <ul class="dropdown-menu" *ngIf="record.isDeleted">
+                                                <li>
+                                                    <a (click)="restore(record.id)">{{l('Restore')}}</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+									<td style="width:200px">{{record.name}}</td>
+									<td style="width:200px">
+										{{ record.creationTime ? (record.creationTime | momentFormat:'L LT') : '-'}}
+									</td>
+								</tr>
+                            </ng-template>
+						</p-table>
+
+						<div class="primeng-paging-container">
+                            <p-paginator rows="{{primengTableHelper.defaultRecordsCountPerPage}}"
+                                         #paginator
+                                         (onPageChange)="getArticleSourceInfos($event)"
+                                         [totalRecords]="primengTableHelper.totalRecordsCount"
+                                         [rowsPerPageOptions]="primengTableHelper.predefinedRecordsCountPerPage">
+                            </p-paginator>
+                            <span class="total-records-count">
+                                {{l('TotalRecordsCount', primengTableHelper.totalRecordsCount)}}
+                            </span>
+                        </div>
+					</div>
+					<!--<Primeng-TurboTable-End>-->
+				</div>
+            </div>
+        </div>
+    </div>
+
+    <createOrEditArticleSourceInfoModal #createOrEditArticleSourceInfoModal (modalSave)="getArticleSourceInfos()"></createOrEditArticleSourceInfoModal>
+</div>
