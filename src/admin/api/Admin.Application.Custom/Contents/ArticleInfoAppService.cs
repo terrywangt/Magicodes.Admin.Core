@@ -22,10 +22,12 @@ using Magicodes.ExporterAndImporter.Core;
 using Abp.AspNetZeroCore.Net;
 using Magicodes.Admin.Dto;
 using Abp.Domain.Uow;
-using Admin.Application.Custom;
 using Magicodes.Admin.Core.Custom.Attachments;
-using Magicodes.Unity;
 
+using Magicodes.Admin.Core.Custom.Contents;
+using Magicodes.Admin.Core.Custom.Contents;
+using Magicodes.Unity;
+    
 namespace Admin.Application.Custom.Contents
 {
     /// <summary>
@@ -34,55 +36,57 @@ namespace Admin.Application.Custom.Contents
     [AbpAuthorize(AppPermissions.Pages_ArticleInfo)]
     public partial class ArticleInfoAppService : AppServiceBase, IArticleInfoAppService
     {
-        private readonly IRepository<ArticleInfo, long> _articleInfoRepository;
-        private readonly IRepository<ColumnInfo, long> _columnInfoRepository;
-        private readonly IRepository<ArticleSourceInfo, long> _articleSourceInfoRepository;
-        private readonly IRepository<ObjectAttachmentInfo, long> _objectAttachmentRepository;
-        private readonly EditorHelper _editorHelper;
-        private readonly IExporter _excelExporter;
 
-        /// <summary>
-        /// 
-        /// </summary>
+        private readonly IRepository<ArticleInfo, long> _articleInfoRepository;
+	    private readonly IExporter _excelExporter;
+            private readonly IRepository<ColumnInfo, long> _columnInfoRepository;
+            private readonly IRepository<ArticleSourceInfo, long> _articleSourceInfoRepository;
+            private readonly EditorHelper _editorHelper;
+    		private readonly IRepository<ObjectAttachmentInfo, long> _objectAttachmentRepository;
+    
+		/// <summary>
+		/// 
+		/// </summary>
         public ArticleInfoAppService(
-            IRepository<ArticleInfo, long> articleInfoRepository
+            IRepository<ArticleInfo, long> articleInfoRepository 
             , IExporter excelExporter
             , IRepository<ColumnInfo, long> columnInfoRepository
             , IRepository<ArticleSourceInfo, long> articleSourceInfoRepository
-            , IRepository<ObjectAttachmentInfo, long> objectAttachmentRepository
             , EditorHelper editorHelper
-            ) : base()
+    		, IRepository<ObjectAttachmentInfo, long> objectAttachmentRepository
+                ) : base()
         {
             _articleInfoRepository = articleInfoRepository;
-            _excelExporter = excelExporter;
-
+			_excelExporter = excelExporter;
+			
             _columnInfoRepository = columnInfoRepository;
-
+			
             _articleSourceInfoRepository = articleSourceInfoRepository;
-            _objectAttachmentRepository = objectAttachmentRepository;
             _editorHelper = editorHelper;
+            _objectAttachmentRepository = objectAttachmentRepository;
+    
         }
 
-        /// <summary>
-        /// 获取文章列表
-        /// </summary>
+		/// <summary>
+		/// 获取文章列表
+		/// </summary>
         public async Task<PagedResultDto<ArticleInfoListDto>> GetArticleInfos(GetArticleInfosInput input)
         {
             async Task<PagedResultDto<ArticleInfoListDto>> getListFunc(bool isLoadSoftDeleteData)
             {
                 var query = CreateArticleInfosQuery(input);
-
-                //仅加载已删除的数据
-                if (isLoadSoftDeleteData)
-                    query = query.Where(p => p.IsDeleted);
-
-                var resultCount = await query.CountAsync();
+                
+								//仅加载已删除的数据
+				if (isLoadSoftDeleteData)
+                query = query.Where(p => p.IsDeleted);
+				
+				var resultCount = await query.CountAsync();
                 var results = await query
                     .OrderBy(input.Sorting)
                     .PageBy(input)
                     .ToListAsync();
 
-                return new PagedResultDto<ArticleInfoListDto>(resultCount, results.MapTo<List<ArticleInfoListDto>>());
+				return new PagedResultDto<ArticleInfoListDto>(resultCount, results.MapTo<List<ArticleInfoListDto>>());
             }
 
             //是否仅加载回收站数据
@@ -96,10 +100,10 @@ namespace Admin.Application.Custom.Contents
             return await getListFunc(false);
         }
 
-        /// <summary>
-        /// 导出文章
-        /// </summary>
-        public async Task<FileDto> GetArticleInfosToExcel(GetArticleInfosInput input)
+		/// <summary>
+		/// 导出文章
+		/// </summary>
+		public async Task<FileDto> GetArticleInfosToExcel(GetArticleInfosInput input)
         {
             async Task<List<ArticleInfoExportDto>> getListFunc(bool isLoadSoftDeleteData)
             {
@@ -116,7 +120,7 @@ namespace Admin.Application.Custom.Contents
 
             List<ArticleInfoExportDto> exportData = null;
 
-            //是否仅加载回收站数据
+			            //是否仅加载回收站数据
             if (input.IsOnlyGetRecycleData)
             {
                 using (UnitOfWorkManager.Current.DisableFilter(AbpDataFilters.SoftDelete))
@@ -124,45 +128,45 @@ namespace Admin.Application.Custom.Contents
                     exportData = await getListFunc(true);
                 }
             }
-
+			
             exportData = await getListFunc(false);
-            var fileDto = new FileDto(L("ArticleInfo") + L("ExportData") + ".xlsx", MimeTypeNames.ApplicationVndOpenxmlformatsOfficedocumentSpreadsheetmlSheet);
+            var fileDto = new FileDto(L("ArticleInfo") +L("ExportData")+ ".xlsx", MimeTypeNames.ApplicationVndOpenxmlformatsOfficedocumentSpreadsheetmlSheet);
             var filePath = GetTempFilePath(fileName: fileDto.FileToken);
             await _excelExporter.Export(filePath, exportData);
             return fileDto;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
         private IQueryable<ArticleInfo> CreateArticleInfosQuery(GetArticleInfosInput input)
         {
             var query = _articleInfoRepository.GetAllIncluding(p => p.ColumnInfo, p => p.ArticleSourceInfo);
-
-            //关键字搜索
-            query = query
-                    .WhereIf(
+			
+			//关键字搜索
+			query = query
+					.WhereIf(
                     !input.Filter.IsNullOrEmpty(),
-                    p => p.Title.Contains(input.Filter) || p.Publisher.Contains(input.Filter) || p.Content.Contains(input.Filter) || p.SeoTitle.Contains(input.Filter) || p.KeyWords.Contains(input.Filter) || p.Introduction.Contains(input.Filter) || p.StaticPageUrl.Contains(input.Filter) || p.Url.Contains(input.Filter));
-
-
-            //创建时间范围搜索
-            query = query
+					p => p.Title.Contains(input.Filter) || p.Publisher.Contains(input.Filter) || p.Content.Contains(input.Filter) || p.SeoTitle.Contains(input.Filter) || p.KeyWords.Contains(input.Filter) || p.Introduction.Contains(input.Filter) || p.StaticPageUrl.Contains(input.Filter) || p.Url.Contains(input.Filter));
+			
+			
+			//创建时间范围搜索
+			query = query
                 .WhereIf(input.CreationDateStart.HasValue, t => t.CreationTime >= input.CreationDateStart.Value)
                 .WhereIf(input.CreationDateEnd.HasValue, t => t.CreationTime <= input.CreationDateEnd.Value);
-
-
-            //修改时间范围搜索
-            query = query
+			
+			
+			//修改时间范围搜索
+			query = query
                 .WhereIf(input.ModificationTimeStart.HasValue, t => t.LastModificationTime >= input.ModificationTimeStart.Value)
                 .WhereIf(input.ModificationTimeEnd.HasValue, t => t.LastModificationTime <= input.ModificationTimeEnd.Value);
-
+			
             return query;
         }
 
-        /// <summary>
-        /// 获取文章
-        /// </summary>
+		/// <summary>
+		/// 获取文章
+		/// </summary>
         [AbpAuthorize(AppPermissions.Pages_ArticleInfo_Create, AppPermissions.Pages_ArticleInfo_Edit)]
         public async Task<GetArticleInfoForEditOutput> GetArticleInfoForEdit(NullableIdDto<long> input)
         {
@@ -174,10 +178,7 @@ namespace Admin.Application.Custom.Contents
             }
             else
             {
-                editDto = new ArticleInfoEditDto()
-                {
-                    IsActive = true
-                };
+                editDto = new ArticleInfoEditDto();
 
             }
             return new GetArticleInfoForEditOutput
@@ -186,17 +187,17 @@ namespace Admin.Application.Custom.Contents
             };
         }
 
-        /// <summary>
-        /// 创建或者编辑文章
-        /// </summary>
+		/// <summary>
+		/// 创建或者编辑文章
+		/// </summary>
         [AbpAuthorize(AppPermissions.Pages_ArticleInfo_Create, AppPermissions.Pages_ArticleInfo_Edit)]
         public async Task CreateOrUpdateArticleInfo(CreateOrUpdateArticleInfoDto input)
         {
+            //处理Html图片
             if (!string.IsNullOrWhiteSpace(input.ArticleInfo.Content))
             {
                 input.ArticleInfo.Content = await _editorHelper.ConvertBase64ImagesForContent(input.ArticleInfo.Content);
             }
-
             if (!input.ArticleInfo.Id.HasValue)
             {
                 await CreateArticleInfoAsync(input);
@@ -207,9 +208,9 @@ namespace Admin.Application.Custom.Contents
             }
         }
 
-        /// <summary>
-        /// 删除文章
-        /// </summary>
+		/// <summary>
+		/// 删除文章
+		/// </summary>
         [AbpAuthorize(AppPermissions.Pages_ArticleInfo_Delete)]
         public async Task DeleteArticleInfo(EntityDto<long> input)
         {
@@ -217,7 +218,7 @@ namespace Admin.Application.Custom.Contents
             articleInfo.IsDeleted = true;
             articleInfo.DeleterUserId = AbpSession.GetUserId();
             articleInfo.DeletionTime = Clock.Now;
-
+            
         }
 
         /// <summary>
@@ -253,7 +254,7 @@ namespace Admin.Application.Custom.Contents
                 TenantId = AbpSession.TenantId
             };
             await _articleInfoRepository.InsertAsync(articleInfo);
-
+             
         }
 
         /// <summary>
@@ -308,9 +309,9 @@ namespace Admin.Application.Custom.Contents
 
 
 
-        /// <summary>
-        /// 获取选择列表
-        /// </summary>
+		/// <summary>
+		/// 获取选择列表
+		/// </summary>
         //TODO：long类型暂时写死后期要反射得到
         public async Task<List<GetDataComboItemDto<long>>> GetColumnInfoDataComboItems()
         {
@@ -327,9 +328,9 @@ namespace Admin.Application.Custom.Contents
 
 
 
-        /// <summary>
-        /// 获取选择列表
-        /// </summary>
+		/// <summary>
+		/// 获取选择列表
+		/// </summary>
         //TODO：long类型暂时写死后期要反射得到
         public async Task<List<GetDataComboItemDto<long>>> GetArticleSourceInfoDataComboItems()
         {
@@ -344,29 +345,29 @@ namespace Admin.Application.Custom.Contents
             }).ToList();
         }
 
-        /// <summary>
+		/// <summary>
         /// IsActive开关服务
         /// </summary>
         /// <param name="input">开关输入参数</param>
         /// <returns></returns>
-        [AbpAuthorize(AppPermissions.Pages_ArticleInfo_Edit)]
+		[AbpAuthorize(AppPermissions.Pages_ArticleInfo_Edit)]
         public async Task UpdateIsActiveSwitchAsync(SwitchEntityInputDto<long> input)
-        {
+		{
             var articleInfo = await _articleInfoRepository.GetAsync(input.Id);
-            articleInfo.IsActive = input.SwitchValue;
-        }
+			articleInfo.IsActive = input.SwitchValue;
+		}
 
-        /// <summary>
+		/// <summary>
         /// IsNeedAuthorizeAccess开关服务
         /// </summary>
         /// <param name="input">开关输入参数</param>
         /// <returns></returns>
-        [AbpAuthorize(AppPermissions.Pages_ArticleInfo_Edit)]
+		[AbpAuthorize(AppPermissions.Pages_ArticleInfo_Edit)]
         public async Task UpdateIsNeedAuthorizeAccessSwitchAsync(SwitchEntityInputDto<long> input)
-        {
+		{
             var articleInfo = await _articleInfoRepository.GetAsync(input.Id);
-            articleInfo.IsNeedAuthorizeAccess = input.SwitchValue;
-        }
+			articleInfo.IsNeedAuthorizeAccess = input.SwitchValue;
+		}
 
 
     }

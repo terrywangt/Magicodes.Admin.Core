@@ -23,6 +23,8 @@ using Abp.AspNetZeroCore.Net;
 using Magicodes.Admin.Dto;
 using Abp.Domain.Uow;
 
+using Magicodes.Admin.Core.Custom.Contents;
+
 namespace Admin.Application.Custom.Contents
 {
     /// <summary>

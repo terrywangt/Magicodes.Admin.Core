@@ -33,7 +33,7 @@ namespace Admin.Application.Custom.Contents
     {
 
 		/// <summary>
-        /// 获取区域信息列表
+        /// 获取栏目 TreeTable列表
         /// </summary>
         public async Task<TreeTableOutputDto<ColumnInfo>> GetChildrenColumnInfos(GetChildrenColumnInfosInput input)
         {           

@@ -22,7 +22,6 @@ using Magicodes.ExporterAndImporter.Core;
 using Abp.AspNetZeroCore.Net;
 using Magicodes.Admin.Dto;
 using Abp.Domain.Uow;
-using Admin.Application.Custom;
 using Magicodes.Admin.Core.Custom.Attachments;
 
 
@@ -34,22 +33,24 @@ namespace Admin.Application.Custom.Contents
     [AbpAuthorize(AppPermissions.Pages_ColumnInfo)]
     public partial class ColumnInfoAppService : AppServiceBase, IColumnInfoAppService
     {
-        private readonly IRepository<ColumnInfo, long> _columnInfoRepository;
-		private readonly IRepository<ObjectAttachmentInfo, long> _objectAttachmentRepository;
-		private readonly IExporter _excelExporter;
 
+        private readonly IRepository<ColumnInfo, long> _columnInfoRepository;
+	    private readonly IExporter _excelExporter;
+    		private readonly IRepository<ObjectAttachmentInfo, long> _objectAttachmentRepository;
+    
 		/// <summary>
 		/// 
 		/// </summary>
         public ColumnInfoAppService(
             IRepository<ColumnInfo, long> columnInfoRepository 
             , IExporter excelExporter
-			, IRepository<ObjectAttachmentInfo, long> objectAttachmentRepository
-            ) : base()
+		, IRepository<ObjectAttachmentInfo, long> objectAttachmentRepository
+                ) : base()
         {
             _columnInfoRepository = columnInfoRepository;
 			_excelExporter = excelExporter;
-			_objectAttachmentRepository = objectAttachmentRepository;
+        _objectAttachmentRepository = objectAttachmentRepository;
+    
         }
 
 		/// <summary>

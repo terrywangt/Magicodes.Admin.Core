@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Abp.Domain.Entities;
 
@@ -61,6 +62,7 @@ namespace Magicodes.Admin.Core.Custom.Contents
         /// 是否启用
         /// </summary>
         [Display(Name = "是否启用")]
+        [DefaultValue(true)]
         public bool IsActive { get; set; }
 
         /// <summary>

@@ -22,7 +22,6 @@ using Magicodes.ExporterAndImporter.Core;
 using Abp.AspNetZeroCore.Net;
 using Magicodes.Admin.Dto;
 using Abp.Domain.Uow;
-using Admin.Application.Custom;
 
 
 namespace Admin.Application.Custom.Contents
@@ -33,9 +32,10 @@ namespace Admin.Application.Custom.Contents
     [AbpAuthorize(AppPermissions.Pages_ArticleSourceInfo)]
     public partial class ArticleSourceInfoAppService : AppServiceBase, IArticleSourceInfoAppService
     {
-        private readonly IRepository<ArticleSourceInfo, long> _articleSourceInfoRepository;
-		private readonly IExporter _excelExporter;
 
+        private readonly IRepository<ArticleSourceInfo, long> _articleSourceInfoRepository;
+	    private readonly IExporter _excelExporter;
+    
 		/// <summary>
 		/// 
 		/// </summary>
@@ -46,6 +46,7 @@ namespace Admin.Application.Custom.Contents
         {
             _articleSourceInfoRepository = articleSourceInfoRepository;
 			_excelExporter = excelExporter;
+
         }
 
 		/// <summary>
