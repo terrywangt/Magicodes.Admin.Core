@@ -42,7 +42,7 @@ namespace Admin.Application.Custom.Contents.Dto
 		/// 是否启用
 		/// </summary>
 		
-        public bool IsActive { get; set; }
+        public bool IsActive { get; set; } = true ;
 		/// <summary>
 		/// 授权访问
 		/// </summary>

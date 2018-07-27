@@ -50,14 +50,11 @@ export class CreateOrEditArticleInfoModalComponent extends AppComponentBase {
         this.formModel = new ArticleInfoEditDto();
         this.active = true;
         this._changeDetector.detectChanges();
-        if (id) {
-            this.formModel.id = id;
-            this._articleInfoService.getArticleInfoForEdit(id).subscribe(result => {
-                this.formModel = result.articleInfo;     
-                this.modal.show();               
-            });
-        }else
-		    this.modal.show();        
+        this.formModel.id = id;
+        this._articleInfoService.getArticleInfoForEdit(id).subscribe(result => {
+            this.formModel = result.articleInfo;     
+            this.modal.show();               
+        });
     }
 
     save(): void {

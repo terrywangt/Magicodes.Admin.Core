@@ -21,7 +21,7 @@
                     <i class="fa fa-recycle"></i> {{model.isOnlyGetRecycleData?l('Close'):l('RecycleBin')}}
                 </button>
 				<button type="button" class="btn default" (click)="showOrdinaryTable()">
-                    <i class="fa fa-table"></i> {{l('OrdinaryTable')}}
+                    <i class="fa fa-table"></i> {{isShowTreeTable?l('OrdinaryTable'):l('TreeTable')}}
                 </button>
             </div>
         </div>
@@ -91,12 +91,12 @@
                     </form>
                 </div>
 
-				<!--<Primeng-Datatable-Start>-->
+				<!--<Primeng-TreeTable-Start>-->
 				<div class="row align-items-center" *ngIf="isShowTreeTable">
-                    <div class="primeng-datatable-container" [busyIf]="loading">
-                        <p-treeTable #treeTable [value]="list" [paginator]="false" [lazy]="false" [loading]="loading" (onNodeExpand)="onNodeExpand($event)">
-                            <ng-template pTemplate="header" let-columns>
-                                <tr>
+                    <div class="primeng-datatable-container">
+                        <p-treeTable [value]="list" [paginator]="false" [lazy]="false" [loading]="loading" (onNodeExpand)="onNodeExpand($event)">
+							<ng-template pTemplate="header" let-columns>
+								<tr>
                                     <th style="width:110px"></th>
                                     <th style="width:130px">{{l('Actions')}}</th>
 								    <th [ttSortableColumn]="title" style="width:200px">{{l('Title')}}
@@ -120,8 +120,7 @@
 								    </th>
                                 </tr>
                             </ng-template>
-
-							<ng-template pTemplate="body" let-rowNode let-rowData="rowData">
+                            <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
                                 <tr>
                                     <td style="width: 110px">
                                         <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
@@ -166,11 +165,11 @@
 										{{ rowData.creationTime ? (rowData.creationTime | momentFormat:'L LT') : '-'}}
 									</td>
                                 </tr>
-							</ng-template>
-                          </p-treeTable>
-					</div>					
-				</div>
-				<!--<Primeng-TurboTable-End>-->
+                            </ng-template>
+                        </p-treeTable>
+                    </div>
+                </div>
+				<!--<Primeng-TreeTable-End>-->
 
 				<div class="row align-items-center" *ngIf="!isShowTreeTable">
                     <!--<Primeng-Datatable-Start>-->

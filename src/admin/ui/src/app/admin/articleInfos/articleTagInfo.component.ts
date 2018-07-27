@@ -93,6 +93,9 @@ export class ArticleInfoArticleTagInfoComponent extends AppComponentBase{
         }
     }
 
+	onShown(): void {		
+    }
+
 	ngOnInit(): void {
 		const self = this;
         self.model.filterText = self._activatedRoute.snapshot.queryParams['filterText'] || '';

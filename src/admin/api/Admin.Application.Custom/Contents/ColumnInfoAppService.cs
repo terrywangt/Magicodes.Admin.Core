@@ -116,7 +116,7 @@ namespace Admin.Application.Custom.Contents
             }
 			
             exportData = await getListFunc(false);
-            var fileDto = new FileDto(L("ColumnInfo") +L("ExportData")+ ".xlsx", MimeTypeNames.ApplicationVndOpenxmlformatsOfficedocumentSpreadsheetmlSheet);
+            var fileDto = new FileDto(L("ColumnInfo") + L("ExportData") + ".xlsx", MimeTypeNames.ApplicationVndOpenxmlformatsOfficedocumentSpreadsheetmlSheet);
             var filePath = GetTempFilePath(fileName: fileDto.FileToken);
             await _excelExporter.Export(filePath, exportData);
             return fileDto;

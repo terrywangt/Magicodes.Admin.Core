@@ -34,14 +34,11 @@ export class CreateOrEditArticleSourceInfoModalComponent extends AppComponentBas
         this.formModel = new ArticleSourceInfoEditDto();
         this.active = true;
         this._changeDetector.detectChanges();
-        if (id) {
-            this.formModel.id = id;
-            this._articleSourceInfoService.getArticleSourceInfoForEdit(id).subscribe(result => {
-                this.formModel = result.articleSourceInfo;     
-                this.modal.show();               
-            });
-        }else
-		    this.modal.show();        
+        this.formModel.id = id;
+        this._articleSourceInfoService.getArticleSourceInfoForEdit(id).subscribe(result => {
+            this.formModel = result.articleSourceInfo;     
+            this.modal.show();               
+        });
     }
 
     save(): void {
