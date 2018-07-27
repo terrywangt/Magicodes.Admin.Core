@@ -572,6 +572,1444 @@ export class AccountServiceProxy {
 }
 
 @Injectable()
+export class ArticleInfoServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    /**
+     * 获取文章列表
+     * @isOnlyGetRecycleData (optional) 是否仅获取回收站数据
+     * @creationDateStart (optional) 创建开始时间
+     * @creationDateEnd (optional) 创建结束时间
+     * @modificationTimeStart (optional) 修改开始时间
+     * @modificationTimeEnd (optional) 修改结束时间
+     * @filter (optional) 关键字
+     * @sorting (optional) 
+     * @maxResultCount (optional) 
+     * @skipCount (optional) 
+     * @return Success
+     */
+    getArticleInfos(isOnlyGetRecycleData: boolean | null | undefined, creationDateStart: moment.Moment | null | undefined, creationDateEnd: moment.Moment | null | undefined, modificationTimeStart: moment.Moment | null | undefined, modificationTimeEnd: moment.Moment | null | undefined, filter: string | null | undefined, sorting: string | null | undefined, maxResultCount: number | null | undefined, skipCount: number | null | undefined): Observable<PagedResultDtoOfArticleInfoListDto> {
+        let url_ = this.baseUrl + "/api/services/app/ArticleInfo/GetArticleInfos?";
+        if (isOnlyGetRecycleData !== undefined)
+            url_ += "IsOnlyGetRecycleData=" + encodeURIComponent("" + isOnlyGetRecycleData) + "&"; 
+        if (creationDateStart !== undefined)
+            url_ += "CreationDateStart=" + encodeURIComponent(creationDateStart ? "" + creationDateStart.toJSON() : "") + "&"; 
+        if (creationDateEnd !== undefined)
+            url_ += "CreationDateEnd=" + encodeURIComponent(creationDateEnd ? "" + creationDateEnd.toJSON() : "") + "&"; 
+        if (modificationTimeStart !== undefined)
+            url_ += "ModificationTimeStart=" + encodeURIComponent(modificationTimeStart ? "" + modificationTimeStart.toJSON() : "") + "&"; 
+        if (modificationTimeEnd !== undefined)
+            url_ += "ModificationTimeEnd=" + encodeURIComponent(modificationTimeEnd ? "" + modificationTimeEnd.toJSON() : "") + "&"; 
+        if (filter !== undefined)
+            url_ += "Filter=" + encodeURIComponent("" + filter) + "&"; 
+        if (sorting !== undefined)
+            url_ += "Sorting=" + encodeURIComponent("" + sorting) + "&"; 
+        if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&"; 
+        if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetArticleInfos(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetArticleInfos(<any>response_);
+                } catch (e) {
+                    return <Observable<PagedResultDtoOfArticleInfoListDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<PagedResultDtoOfArticleInfoListDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetArticleInfos(response: HttpResponseBase): Observable<PagedResultDtoOfArticleInfoListDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? PagedResultDtoOfArticleInfoListDto.fromJS(resultData200) : new PagedResultDtoOfArticleInfoListDto();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<PagedResultDtoOfArticleInfoListDto>(<any>null);
+    }
+
+    /**
+     * 导出文章
+     * @isOnlyGetRecycleData (optional) 是否仅获取回收站数据
+     * @creationDateStart (optional) 创建开始时间
+     * @creationDateEnd (optional) 创建结束时间
+     * @modificationTimeStart (optional) 修改开始时间
+     * @modificationTimeEnd (optional) 修改结束时间
+     * @filter (optional) 关键字
+     * @sorting (optional) 
+     * @maxResultCount (optional) 
+     * @skipCount (optional) 
+     * @return Success
+     */
+    getArticleInfosToExcel(isOnlyGetRecycleData: boolean | null | undefined, creationDateStart: moment.Moment | null | undefined, creationDateEnd: moment.Moment | null | undefined, modificationTimeStart: moment.Moment | null | undefined, modificationTimeEnd: moment.Moment | null | undefined, filter: string | null | undefined, sorting: string | null | undefined, maxResultCount: number | null | undefined, skipCount: number | null | undefined): Observable<FileDto> {
+        let url_ = this.baseUrl + "/api/services/app/ArticleInfo/GetArticleInfosToExcel?";
+        if (isOnlyGetRecycleData !== undefined)
+            url_ += "IsOnlyGetRecycleData=" + encodeURIComponent("" + isOnlyGetRecycleData) + "&"; 
+        if (creationDateStart !== undefined)
+            url_ += "CreationDateStart=" + encodeURIComponent(creationDateStart ? "" + creationDateStart.toJSON() : "") + "&"; 
+        if (creationDateEnd !== undefined)
+            url_ += "CreationDateEnd=" + encodeURIComponent(creationDateEnd ? "" + creationDateEnd.toJSON() : "") + "&"; 
+        if (modificationTimeStart !== undefined)
+            url_ += "ModificationTimeStart=" + encodeURIComponent(modificationTimeStart ? "" + modificationTimeStart.toJSON() : "") + "&"; 
+        if (modificationTimeEnd !== undefined)
+            url_ += "ModificationTimeEnd=" + encodeURIComponent(modificationTimeEnd ? "" + modificationTimeEnd.toJSON() : "") + "&"; 
+        if (filter !== undefined)
+            url_ += "Filter=" + encodeURIComponent("" + filter) + "&"; 
+        if (sorting !== undefined)
+            url_ += "Sorting=" + encodeURIComponent("" + sorting) + "&"; 
+        if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&"; 
+        if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetArticleInfosToExcel(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetArticleInfosToExcel(<any>response_);
+                } catch (e) {
+                    return <Observable<FileDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<FileDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetArticleInfosToExcel(response: HttpResponseBase): Observable<FileDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? FileDto.fromJS(resultData200) : new FileDto();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<FileDto>(<any>null);
+    }
+
+    /**
+     * 获取文章
+     * @id (optional) 
+     * @return Success
+     */
+    getArticleInfoForEdit(id: number | null | undefined): Observable<GetArticleInfoForEditOutput> {
+        let url_ = this.baseUrl + "/api/services/app/ArticleInfo/GetArticleInfoForEdit?";
+        if (id !== undefined)
+            url_ += "Id=" + encodeURIComponent("" + id) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetArticleInfoForEdit(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetArticleInfoForEdit(<any>response_);
+                } catch (e) {
+                    return <Observable<GetArticleInfoForEditOutput>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<GetArticleInfoForEditOutput>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetArticleInfoForEdit(response: HttpResponseBase): Observable<GetArticleInfoForEditOutput> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? GetArticleInfoForEditOutput.fromJS(resultData200) : new GetArticleInfoForEditOutput();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<GetArticleInfoForEditOutput>(<any>null);
+    }
+
+    /**
+     * 创建或者编辑文章
+     * @input (optional) 
+     * @return Success
+     */
+    createOrUpdateArticleInfo(input: CreateOrUpdateArticleInfoDto | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/ArticleInfo/CreateOrUpdateArticleInfo";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(input);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreateOrUpdateArticleInfo(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreateOrUpdateArticleInfo(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processCreateOrUpdateArticleInfo(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+
+    /**
+     * 删除文章
+     * @id (optional) 
+     * @return Success
+     */
+    deleteArticleInfo(id: number | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/ArticleInfo/DeleteArticleInfo?";
+        if (id !== undefined)
+            url_ += "Id=" + encodeURIComponent("" + id) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDeleteArticleInfo(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDeleteArticleInfo(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processDeleteArticleInfo(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+
+    /**
+     * 恢复
+     * @id (optional) 
+     * @return Success
+     */
+    restoreArticleInfo(id: number | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/ArticleInfo/RestoreArticleInfo?";
+        if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processRestoreArticleInfo(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processRestoreArticleInfo(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processRestoreArticleInfo(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+
+    /**
+     * 获取选择列表
+     * @return Success
+     */
+    getColumnInfoDataComboItems(): Observable<GetDataComboItemDtoOfInt64[]> {
+        let url_ = this.baseUrl + "/api/services/app/ArticleInfo/GetColumnInfoDataComboItems";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetColumnInfoDataComboItems(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetColumnInfoDataComboItems(<any>response_);
+                } catch (e) {
+                    return <Observable<GetDataComboItemDtoOfInt64[]>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<GetDataComboItemDtoOfInt64[]>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetColumnInfoDataComboItems(response: HttpResponseBase): Observable<GetDataComboItemDtoOfInt64[]> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData200 && resultData200.constructor === Array) {
+                result200 = [];
+                for (let item of resultData200)
+                    result200.push(GetDataComboItemDtoOfInt64.fromJS(item));
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<GetDataComboItemDtoOfInt64[]>(<any>null);
+    }
+
+    /**
+     * 获取选择列表
+     * @return Success
+     */
+    getArticleSourceInfoDataComboItems(): Observable<GetDataComboItemDtoOfInt64[]> {
+        let url_ = this.baseUrl + "/api/services/app/ArticleInfo/GetArticleSourceInfoDataComboItems";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetArticleSourceInfoDataComboItems(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetArticleSourceInfoDataComboItems(<any>response_);
+                } catch (e) {
+                    return <Observable<GetDataComboItemDtoOfInt64[]>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<GetDataComboItemDtoOfInt64[]>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetArticleSourceInfoDataComboItems(response: HttpResponseBase): Observable<GetDataComboItemDtoOfInt64[]> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData200 && resultData200.constructor === Array) {
+                result200 = [];
+                for (let item of resultData200)
+                    result200.push(GetDataComboItemDtoOfInt64.fromJS(item));
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<GetDataComboItemDtoOfInt64[]>(<any>null);
+    }
+
+    /**
+     * IsActive开关服务
+     * @input (optional) 开关输入参数
+     * @return Success
+     */
+    updateIsActiveSwitchAsync(input: SwitchEntityInputDtoOfInt64 | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/ArticleInfo/UpdateIsActiveSwitchAsync";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(input);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdateIsActiveSwitchAsync(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdateIsActiveSwitchAsync(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processUpdateIsActiveSwitchAsync(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+
+    /**
+     * IsNeedAuthorizeAccess开关服务
+     * @input (optional) 开关输入参数
+     * @return Success
+     */
+    updateIsNeedAuthorizeAccessSwitchAsync(input: SwitchEntityInputDtoOfInt64 | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/ArticleInfo/UpdateIsNeedAuthorizeAccessSwitchAsync";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(input);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdateIsNeedAuthorizeAccessSwitchAsync(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdateIsNeedAuthorizeAccessSwitchAsync(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processUpdateIsNeedAuthorizeAccessSwitchAsync(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+}
+
+@Injectable()
+export class ArticleInfoArticleTagInfoServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    /**
+     * 获取列表
+     * @articleInfoId (optional) 
+     * @isOnlyGetRecycleData (optional) 是否仅获取回收站数据
+     * @creationDateStart (optional) 创建开始时间
+     * @creationDateEnd (optional) 创建结束时间
+     * @modificationTimeStart (optional) 修改开始时间
+     * @modificationTimeEnd (optional) 修改结束时间
+     * @filter (optional) 关键字
+     * @sorting (optional) 
+     * @maxResultCount (optional) 
+     * @skipCount (optional) 
+     * @return Success
+     */
+    getArticleTagInfos(articleInfoId: number | null | undefined, isOnlyGetRecycleData: boolean | null | undefined, creationDateStart: moment.Moment | null | undefined, creationDateEnd: moment.Moment | null | undefined, modificationTimeStart: moment.Moment | null | undefined, modificationTimeEnd: moment.Moment | null | undefined, filter: string | null | undefined, sorting: string | null | undefined, maxResultCount: number | null | undefined, skipCount: number | null | undefined): Observable<PagedResultDtoOfArticleTagInfoListDto> {
+        let url_ = this.baseUrl + "/api/services/app/ArticleInfoArticleTagInfo/GetArticleTagInfos?";
+        if (articleInfoId !== undefined)
+            url_ += "ArticleInfoId=" + encodeURIComponent("" + articleInfoId) + "&"; 
+        if (isOnlyGetRecycleData !== undefined)
+            url_ += "IsOnlyGetRecycleData=" + encodeURIComponent("" + isOnlyGetRecycleData) + "&"; 
+        if (creationDateStart !== undefined)
+            url_ += "CreationDateStart=" + encodeURIComponent(creationDateStart ? "" + creationDateStart.toJSON() : "") + "&"; 
+        if (creationDateEnd !== undefined)
+            url_ += "CreationDateEnd=" + encodeURIComponent(creationDateEnd ? "" + creationDateEnd.toJSON() : "") + "&"; 
+        if (modificationTimeStart !== undefined)
+            url_ += "ModificationTimeStart=" + encodeURIComponent(modificationTimeStart ? "" + modificationTimeStart.toJSON() : "") + "&"; 
+        if (modificationTimeEnd !== undefined)
+            url_ += "ModificationTimeEnd=" + encodeURIComponent(modificationTimeEnd ? "" + modificationTimeEnd.toJSON() : "") + "&"; 
+        if (filter !== undefined)
+            url_ += "Filter=" + encodeURIComponent("" + filter) + "&"; 
+        if (sorting !== undefined)
+            url_ += "Sorting=" + encodeURIComponent("" + sorting) + "&"; 
+        if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&"; 
+        if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetArticleTagInfos(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetArticleTagInfos(<any>response_);
+                } catch (e) {
+                    return <Observable<PagedResultDtoOfArticleTagInfoListDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<PagedResultDtoOfArticleTagInfoListDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetArticleTagInfos(response: HttpResponseBase): Observable<PagedResultDtoOfArticleTagInfoListDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? PagedResultDtoOfArticleTagInfoListDto.fromJS(resultData200) : new PagedResultDtoOfArticleTagInfoListDto();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<PagedResultDtoOfArticleTagInfoListDto>(<any>null);
+    }
+
+    /**
+     * 导出
+     * @articleInfoId (optional) 
+     * @isOnlyGetRecycleData (optional) 是否仅获取回收站数据
+     * @creationDateStart (optional) 创建开始时间
+     * @creationDateEnd (optional) 创建结束时间
+     * @modificationTimeStart (optional) 修改开始时间
+     * @modificationTimeEnd (optional) 修改结束时间
+     * @filter (optional) 关键字
+     * @sorting (optional) 
+     * @maxResultCount (optional) 
+     * @skipCount (optional) 
+     * @return Success
+     */
+    getArticleTagInfosToExcel(articleInfoId: number | null | undefined, isOnlyGetRecycleData: boolean | null | undefined, creationDateStart: moment.Moment | null | undefined, creationDateEnd: moment.Moment | null | undefined, modificationTimeStart: moment.Moment | null | undefined, modificationTimeEnd: moment.Moment | null | undefined, filter: string | null | undefined, sorting: string | null | undefined, maxResultCount: number | null | undefined, skipCount: number | null | undefined): Observable<FileDto> {
+        let url_ = this.baseUrl + "/api/services/app/ArticleInfoArticleTagInfo/GetArticleTagInfosToExcel?";
+        if (articleInfoId !== undefined)
+            url_ += "ArticleInfoId=" + encodeURIComponent("" + articleInfoId) + "&"; 
+        if (isOnlyGetRecycleData !== undefined)
+            url_ += "IsOnlyGetRecycleData=" + encodeURIComponent("" + isOnlyGetRecycleData) + "&"; 
+        if (creationDateStart !== undefined)
+            url_ += "CreationDateStart=" + encodeURIComponent(creationDateStart ? "" + creationDateStart.toJSON() : "") + "&"; 
+        if (creationDateEnd !== undefined)
+            url_ += "CreationDateEnd=" + encodeURIComponent(creationDateEnd ? "" + creationDateEnd.toJSON() : "") + "&"; 
+        if (modificationTimeStart !== undefined)
+            url_ += "ModificationTimeStart=" + encodeURIComponent(modificationTimeStart ? "" + modificationTimeStart.toJSON() : "") + "&"; 
+        if (modificationTimeEnd !== undefined)
+            url_ += "ModificationTimeEnd=" + encodeURIComponent(modificationTimeEnd ? "" + modificationTimeEnd.toJSON() : "") + "&"; 
+        if (filter !== undefined)
+            url_ += "Filter=" + encodeURIComponent("" + filter) + "&"; 
+        if (sorting !== undefined)
+            url_ += "Sorting=" + encodeURIComponent("" + sorting) + "&"; 
+        if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&"; 
+        if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetArticleTagInfosToExcel(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetArticleTagInfosToExcel(<any>response_);
+                } catch (e) {
+                    return <Observable<FileDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<FileDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetArticleTagInfosToExcel(response: HttpResponseBase): Observable<FileDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? FileDto.fromJS(resultData200) : new FileDto();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<FileDto>(<any>null);
+    }
+
+    /**
+     * 获取
+     * @id (optional) 
+     * @return Success
+     */
+    getArticleTagInfoForEdit(id: number | null | undefined): Observable<GetArticleTagInfoForEditOutput> {
+        let url_ = this.baseUrl + "/api/services/app/ArticleInfoArticleTagInfo/GetArticleTagInfoForEdit?";
+        if (id !== undefined)
+            url_ += "Id=" + encodeURIComponent("" + id) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetArticleTagInfoForEdit(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetArticleTagInfoForEdit(<any>response_);
+                } catch (e) {
+                    return <Observable<GetArticleTagInfoForEditOutput>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<GetArticleTagInfoForEditOutput>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetArticleTagInfoForEdit(response: HttpResponseBase): Observable<GetArticleTagInfoForEditOutput> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? GetArticleTagInfoForEditOutput.fromJS(resultData200) : new GetArticleTagInfoForEditOutput();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<GetArticleTagInfoForEditOutput>(<any>null);
+    }
+
+    /**
+     * 创建或者编辑
+     * @input (optional) 
+     * @return Success
+     */
+    createOrUpdateArticleTagInfo(input: CreateOrUpdateArticleInfoArticleTagInfoDto | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/ArticleInfoArticleTagInfo/CreateOrUpdateArticleTagInfo";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(input);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreateOrUpdateArticleTagInfo(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreateOrUpdateArticleTagInfo(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processCreateOrUpdateArticleTagInfo(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+
+    /**
+     * 删除
+     * @id (optional) 
+     * @return Success
+     */
+    deleteArticleTagInfo(id: number | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/ArticleInfoArticleTagInfo/DeleteArticleTagInfo?";
+        if (id !== undefined)
+            url_ += "Id=" + encodeURIComponent("" + id) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDeleteArticleTagInfo(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDeleteArticleTagInfo(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processDeleteArticleTagInfo(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+
+    /**
+     * 恢复
+     * @id (optional) 
+     * @return Success
+     */
+    restoreArticleTagInfo(id: number | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/ArticleInfoArticleTagInfo/RestoreArticleTagInfo?";
+        if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processRestoreArticleTagInfo(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processRestoreArticleTagInfo(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processRestoreArticleTagInfo(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+
+    /**
+     * 获取选择列表
+     * @return Success
+     */
+    getArticleInfoDataComboItems(): Observable<GetDataComboItemDtoOfInt64[]> {
+        let url_ = this.baseUrl + "/api/services/app/ArticleInfoArticleTagInfo/GetArticleInfoDataComboItems";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetArticleInfoDataComboItems(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetArticleInfoDataComboItems(<any>response_);
+                } catch (e) {
+                    return <Observable<GetDataComboItemDtoOfInt64[]>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<GetDataComboItemDtoOfInt64[]>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetArticleInfoDataComboItems(response: HttpResponseBase): Observable<GetDataComboItemDtoOfInt64[]> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData200 && resultData200.constructor === Array) {
+                result200 = [];
+                for (let item of resultData200)
+                    result200.push(GetDataComboItemDtoOfInt64.fromJS(item));
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<GetDataComboItemDtoOfInt64[]>(<any>null);
+    }
+}
+
+@Injectable()
+export class ArticleSourceInfoServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    /**
+     * 获取文章来源列表
+     * @isOnlyGetRecycleData (optional) 是否仅获取回收站数据
+     * @creationDateStart (optional) 创建开始时间
+     * @creationDateEnd (optional) 创建结束时间
+     * @modificationTimeStart (optional) 修改开始时间
+     * @modificationTimeEnd (optional) 修改结束时间
+     * @filter (optional) 关键字
+     * @sorting (optional) 
+     * @maxResultCount (optional) 
+     * @skipCount (optional) 
+     * @return Success
+     */
+    getArticleSourceInfos(isOnlyGetRecycleData: boolean | null | undefined, creationDateStart: moment.Moment | null | undefined, creationDateEnd: moment.Moment | null | undefined, modificationTimeStart: moment.Moment | null | undefined, modificationTimeEnd: moment.Moment | null | undefined, filter: string | null | undefined, sorting: string | null | undefined, maxResultCount: number | null | undefined, skipCount: number | null | undefined): Observable<PagedResultDtoOfArticleSourceInfoListDto> {
+        let url_ = this.baseUrl + "/api/services/app/ArticleSourceInfo/GetArticleSourceInfos?";
+        if (isOnlyGetRecycleData !== undefined)
+            url_ += "IsOnlyGetRecycleData=" + encodeURIComponent("" + isOnlyGetRecycleData) + "&"; 
+        if (creationDateStart !== undefined)
+            url_ += "CreationDateStart=" + encodeURIComponent(creationDateStart ? "" + creationDateStart.toJSON() : "") + "&"; 
+        if (creationDateEnd !== undefined)
+            url_ += "CreationDateEnd=" + encodeURIComponent(creationDateEnd ? "" + creationDateEnd.toJSON() : "") + "&"; 
+        if (modificationTimeStart !== undefined)
+            url_ += "ModificationTimeStart=" + encodeURIComponent(modificationTimeStart ? "" + modificationTimeStart.toJSON() : "") + "&"; 
+        if (modificationTimeEnd !== undefined)
+            url_ += "ModificationTimeEnd=" + encodeURIComponent(modificationTimeEnd ? "" + modificationTimeEnd.toJSON() : "") + "&"; 
+        if (filter !== undefined)
+            url_ += "Filter=" + encodeURIComponent("" + filter) + "&"; 
+        if (sorting !== undefined)
+            url_ += "Sorting=" + encodeURIComponent("" + sorting) + "&"; 
+        if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&"; 
+        if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetArticleSourceInfos(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetArticleSourceInfos(<any>response_);
+                } catch (e) {
+                    return <Observable<PagedResultDtoOfArticleSourceInfoListDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<PagedResultDtoOfArticleSourceInfoListDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetArticleSourceInfos(response: HttpResponseBase): Observable<PagedResultDtoOfArticleSourceInfoListDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? PagedResultDtoOfArticleSourceInfoListDto.fromJS(resultData200) : new PagedResultDtoOfArticleSourceInfoListDto();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<PagedResultDtoOfArticleSourceInfoListDto>(<any>null);
+    }
+
+    /**
+     * 导出文章来源
+     * @isOnlyGetRecycleData (optional) 是否仅获取回收站数据
+     * @creationDateStart (optional) 创建开始时间
+     * @creationDateEnd (optional) 创建结束时间
+     * @modificationTimeStart (optional) 修改开始时间
+     * @modificationTimeEnd (optional) 修改结束时间
+     * @filter (optional) 关键字
+     * @sorting (optional) 
+     * @maxResultCount (optional) 
+     * @skipCount (optional) 
+     * @return Success
+     */
+    getArticleSourceInfosToExcel(isOnlyGetRecycleData: boolean | null | undefined, creationDateStart: moment.Moment | null | undefined, creationDateEnd: moment.Moment | null | undefined, modificationTimeStart: moment.Moment | null | undefined, modificationTimeEnd: moment.Moment | null | undefined, filter: string | null | undefined, sorting: string | null | undefined, maxResultCount: number | null | undefined, skipCount: number | null | undefined): Observable<FileDto> {
+        let url_ = this.baseUrl + "/api/services/app/ArticleSourceInfo/GetArticleSourceInfosToExcel?";
+        if (isOnlyGetRecycleData !== undefined)
+            url_ += "IsOnlyGetRecycleData=" + encodeURIComponent("" + isOnlyGetRecycleData) + "&"; 
+        if (creationDateStart !== undefined)
+            url_ += "CreationDateStart=" + encodeURIComponent(creationDateStart ? "" + creationDateStart.toJSON() : "") + "&"; 
+        if (creationDateEnd !== undefined)
+            url_ += "CreationDateEnd=" + encodeURIComponent(creationDateEnd ? "" + creationDateEnd.toJSON() : "") + "&"; 
+        if (modificationTimeStart !== undefined)
+            url_ += "ModificationTimeStart=" + encodeURIComponent(modificationTimeStart ? "" + modificationTimeStart.toJSON() : "") + "&"; 
+        if (modificationTimeEnd !== undefined)
+            url_ += "ModificationTimeEnd=" + encodeURIComponent(modificationTimeEnd ? "" + modificationTimeEnd.toJSON() : "") + "&"; 
+        if (filter !== undefined)
+            url_ += "Filter=" + encodeURIComponent("" + filter) + "&"; 
+        if (sorting !== undefined)
+            url_ += "Sorting=" + encodeURIComponent("" + sorting) + "&"; 
+        if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&"; 
+        if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetArticleSourceInfosToExcel(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetArticleSourceInfosToExcel(<any>response_);
+                } catch (e) {
+                    return <Observable<FileDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<FileDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetArticleSourceInfosToExcel(response: HttpResponseBase): Observable<FileDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? FileDto.fromJS(resultData200) : new FileDto();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<FileDto>(<any>null);
+    }
+
+    /**
+     * 获取文章来源
+     * @id (optional) 
+     * @return Success
+     */
+    getArticleSourceInfoForEdit(id: number | null | undefined): Observable<GetArticleSourceInfoForEditOutput> {
+        let url_ = this.baseUrl + "/api/services/app/ArticleSourceInfo/GetArticleSourceInfoForEdit?";
+        if (id !== undefined)
+            url_ += "Id=" + encodeURIComponent("" + id) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetArticleSourceInfoForEdit(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetArticleSourceInfoForEdit(<any>response_);
+                } catch (e) {
+                    return <Observable<GetArticleSourceInfoForEditOutput>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<GetArticleSourceInfoForEditOutput>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetArticleSourceInfoForEdit(response: HttpResponseBase): Observable<GetArticleSourceInfoForEditOutput> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? GetArticleSourceInfoForEditOutput.fromJS(resultData200) : new GetArticleSourceInfoForEditOutput();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<GetArticleSourceInfoForEditOutput>(<any>null);
+    }
+
+    /**
+     * 创建或者编辑文章来源
+     * @input (optional) 
+     * @return Success
+     */
+    createOrUpdateArticleSourceInfo(input: CreateOrUpdateArticleSourceInfoDto | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/ArticleSourceInfo/CreateOrUpdateArticleSourceInfo";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(input);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreateOrUpdateArticleSourceInfo(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreateOrUpdateArticleSourceInfo(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processCreateOrUpdateArticleSourceInfo(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+
+    /**
+     * 删除文章来源
+     * @id (optional) 
+     * @return Success
+     */
+    deleteArticleSourceInfo(id: number | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/ArticleSourceInfo/DeleteArticleSourceInfo?";
+        if (id !== undefined)
+            url_ += "Id=" + encodeURIComponent("" + id) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDeleteArticleSourceInfo(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDeleteArticleSourceInfo(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processDeleteArticleSourceInfo(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+
+    /**
+     * 恢复
+     * @id (optional) 
+     * @return Success
+     */
+    restoreArticleSourceInfo(id: number | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/ArticleSourceInfo/RestoreArticleSourceInfo?";
+        if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processRestoreArticleSourceInfo(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processRestoreArticleSourceInfo(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processRestoreArticleSourceInfo(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+}
+
+@Injectable()
 export class AuditLogServiceProxy {
     private http: HttpClient;
     private baseUrl: string;
@@ -1941,6 +3379,29 @@ export class ColumnInfoServiceProxy {
         }));
     }
 
+    protected processGetChildrenColumnInfos(response: HttpResponseBase): Observable<TreeTableOutputDtoOfColumnInfo> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? TreeTableOutputDtoOfColumnInfo.fromJS(resultData200) : new TreeTableOutputDtoOfColumnInfo();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<TreeTableOutputDtoOfColumnInfo>(<any>null);
+    }
+}
+
 @Injectable()
 export class CommonServiceProxy {
     private http: HttpClient;
@@ -1953,6 +3414,8 @@ export class CommonServiceProxy {
     }
 
     /**
+     * 获取枚举值列表
+     * @fullName 类型全名
      * @return Success
      */
     getEnumValuesList(fullName: string): Observable<GetEnumValuesListDto[]> {
@@ -2010,6 +3473,174 @@ export class CommonServiceProxy {
             }));
         }
         return _observableOf<GetEnumValuesListDto[]>(<any>null);
+    }
+
+    /**
+     * 获取对象图片列表
+     * @objectType (optional) 对象类型
+     * @objectId (optional) 对象Id
+     * @return Success
+     */
+    getObjectImages(objectType: string | null | undefined, objectId: number | null | undefined): Observable<GetObjectImagesListDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/Common/GetObjectImages?";
+        if (objectType !== undefined)
+            url_ += "ObjectType=" + encodeURIComponent("" + objectType) + "&"; 
+        if (objectId !== undefined)
+            url_ += "ObjectId=" + encodeURIComponent("" + objectId) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetObjectImages(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetObjectImages(<any>response_);
+                } catch (e) {
+                    return <Observable<GetObjectImagesListDto[]>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<GetObjectImagesListDto[]>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetObjectImages(response: HttpResponseBase): Observable<GetObjectImagesListDto[]> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData200 && resultData200.constructor === Array) {
+                result200 = [];
+                for (let item of resultData200)
+                    result200.push(GetObjectImagesListDto.fromJS(item));
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<GetObjectImagesListDto[]>(<any>null);
+    }
+
+    /**
+     * 移除对象附件
+     * @ids (optional) 主键Id数组
+     * @return Success
+     */
+    removeObjectAttachments(ids: number[] | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/Common/RemoveObjectAttachments?";
+        if (ids !== undefined)
+            ids && ids.forEach(item => { url_ += "Ids=" + encodeURIComponent("" + item) + "&"; });
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processRemoveObjectAttachments(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processRemoveObjectAttachments(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processRemoveObjectAttachments(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+
+    /**
+     * 添加附件关联
+     * @input (optional) 
+     * @return Success
+     */
+    addObjectAttachmentInfos(input: AddObjectAttachmentInfosInput | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/Common/AddObjectAttachmentInfos";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(input);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processAddObjectAttachmentInfos(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processAddObjectAttachmentInfos(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processAddObjectAttachmentInfos(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
     }
 }
 
@@ -9778,6 +11409,989 @@ export interface ISwitchToLinkedAccountOutput {
     tenancyName: string | undefined;
 }
 
+export class PagedResultDtoOfArticleInfoListDto implements IPagedResultDtoOfArticleInfoListDto {
+    totalCount!: number | undefined;
+    items!: ArticleInfoListDto[] | undefined;
+
+    constructor(data?: IPagedResultDtoOfArticleInfoListDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.totalCount = data["totalCount"];
+            if (data["items"] && data["items"].constructor === Array) {
+                this.items = [];
+                for (let item of data["items"])
+                    this.items.push(ArticleInfoListDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): PagedResultDtoOfArticleInfoListDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PagedResultDtoOfArticleInfoListDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["totalCount"] = this.totalCount;
+        if (this.items && this.items.constructor === Array) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IPagedResultDtoOfArticleInfoListDto {
+    totalCount: number | undefined;
+    items: ArticleInfoListDto[] | undefined;
+}
+
+/** 文章列表Dto */
+export class ArticleInfoListDto implements IArticleInfoListDto {
+    /** 标题 */
+    title!: string | undefined;
+    /** 发布人（机构） */
+    publisher!: string | undefined;
+    /** 栏目信息
+<code>
+请配置AutoMap：
+.ForMember(dto =&gt; dto.ColumnInfo, options =&gt; options.MapFrom(p =&gt; p.ColumnInfo.Title))
+</code> */
+    columnInfo!: string | undefined;
+    /** 文章来源
+<code>
+请配置AutoMap：
+.ForMember(dto =&gt; dto.ArticleSourceInfo, options =&gt; options.MapFrom(p =&gt; p.ArticleSourceInfo.Name))
+</code> */
+    articleSourceInfo!: string | undefined;
+    /** 发布时间 */
+    releaseTime!: moment.Moment | undefined;
+    /** 是否启用 */
+    isActive!: boolean | undefined;
+    /** 授权访问 */
+    isNeedAuthorizeAccess!: boolean | undefined;
+    /** 标题 */
+    seoTitle!: string | undefined;
+    /** 静态页路径 */
+    staticPageUrl!: string | undefined;
+    /** 图片URL */
+    imageUrl!: string | undefined;
+    /** 链接 */
+    url!: string | undefined;
+    /** 推荐类型 */
+    recommendedType!: ArticleInfoListDtoRecommendedType | undefined;
+    /** 访问数 */
+    viewCount!: number | undefined;
+    /** 创建时间 */
+    creationTime!: moment.Moment | undefined;
+    /** 是否已删除 */
+    isDeleted!: boolean | undefined;
+    id!: number | undefined;
+
+    constructor(data?: IArticleInfoListDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.title = data["title"];
+            this.publisher = data["publisher"];
+            this.columnInfo = data["columnInfo"];
+            this.articleSourceInfo = data["articleSourceInfo"];
+            this.releaseTime = data["releaseTime"] ? moment(data["releaseTime"].toString()) : <any>undefined;
+            this.isActive = data["isActive"];
+            this.isNeedAuthorizeAccess = data["isNeedAuthorizeAccess"];
+            this.seoTitle = data["seoTitle"];
+            this.staticPageUrl = data["staticPageUrl"];
+            this.imageUrl = data["imageUrl"];
+            this.url = data["url"];
+            this.recommendedType = data["recommendedType"];
+            this.viewCount = data["viewCount"];
+            this.creationTime = data["creationTime"] ? moment(data["creationTime"].toString()) : <any>undefined;
+            this.isDeleted = data["isDeleted"];
+            this.id = data["id"];
+        }
+    }
+
+    static fromJS(data: any): ArticleInfoListDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ArticleInfoListDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["title"] = this.title;
+        data["publisher"] = this.publisher;
+        data["columnInfo"] = this.columnInfo;
+        data["articleSourceInfo"] = this.articleSourceInfo;
+        data["releaseTime"] = this.releaseTime ? this.releaseTime.toISOString() : <any>undefined;
+        data["isActive"] = this.isActive;
+        data["isNeedAuthorizeAccess"] = this.isNeedAuthorizeAccess;
+        data["seoTitle"] = this.seoTitle;
+        data["staticPageUrl"] = this.staticPageUrl;
+        data["imageUrl"] = this.imageUrl;
+        data["url"] = this.url;
+        data["recommendedType"] = this.recommendedType;
+        data["viewCount"] = this.viewCount;
+        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
+        data["isDeleted"] = this.isDeleted;
+        data["id"] = this.id;
+        return data; 
+    }
+}
+
+/** 文章列表Dto */
+export interface IArticleInfoListDto {
+    /** 标题 */
+    title: string | undefined;
+    /** 发布人（机构） */
+    publisher: string | undefined;
+    /** 栏目信息
+<code>
+请配置AutoMap：
+.ForMember(dto =&gt; dto.ColumnInfo, options =&gt; options.MapFrom(p =&gt; p.ColumnInfo.Title))
+</code> */
+    columnInfo: string | undefined;
+    /** 文章来源
+<code>
+请配置AutoMap：
+.ForMember(dto =&gt; dto.ArticleSourceInfo, options =&gt; options.MapFrom(p =&gt; p.ArticleSourceInfo.Name))
+</code> */
+    articleSourceInfo: string | undefined;
+    /** 发布时间 */
+    releaseTime: moment.Moment | undefined;
+    /** 是否启用 */
+    isActive: boolean | undefined;
+    /** 授权访问 */
+    isNeedAuthorizeAccess: boolean | undefined;
+    /** 标题 */
+    seoTitle: string | undefined;
+    /** 静态页路径 */
+    staticPageUrl: string | undefined;
+    /** 图片URL */
+    imageUrl: string | undefined;
+    /** 链接 */
+    url: string | undefined;
+    /** 推荐类型 */
+    recommendedType: ArticleInfoListDtoRecommendedType | undefined;
+    /** 访问数 */
+    viewCount: number | undefined;
+    /** 创建时间 */
+    creationTime: moment.Moment | undefined;
+    /** 是否已删除 */
+    isDeleted: boolean | undefined;
+    id: number | undefined;
+}
+
+export class FileDto implements IFileDto {
+    fileName!: string;
+    fileType!: string;
+    fileToken!: string;
+
+    constructor(data?: IFileDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.fileName = data["fileName"];
+            this.fileType = data["fileType"];
+            this.fileToken = data["fileToken"];
+        }
+    }
+
+    static fromJS(data: any): FileDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new FileDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["fileName"] = this.fileName;
+        data["fileType"] = this.fileType;
+        data["fileToken"] = this.fileToken;
+        return data; 
+    }
+}
+
+export interface IFileDto {
+    fileName: string;
+    fileType: string;
+    fileToken: string;
+}
+
+/** 文章���༭���ģ�� */
+export class GetArticleInfoForEditOutput implements IGetArticleInfoForEditOutput {
+    articleInfo!: ArticleInfoEditDto | undefined;
+
+    constructor(data?: IGetArticleInfoForEditOutput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.articleInfo = data["articleInfo"] ? ArticleInfoEditDto.fromJS(data["articleInfo"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetArticleInfoForEditOutput {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetArticleInfoForEditOutput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["articleInfo"] = this.articleInfo ? this.articleInfo.toJSON() : <any>undefined;
+        return data; 
+    }
+}
+
+/** 文章���༭���ģ�� */
+export interface IGetArticleInfoForEditOutput {
+    articleInfo: ArticleInfoEditDto | undefined;
+}
+
+/** 文章编辑Dto */
+export class ArticleInfoEditDto implements IArticleInfoEditDto {
+    /** 标题 */
+    title!: string;
+    /** 发布人（机构） */
+    publisher!: string;
+    columnInfoId!: number | undefined;
+    articleSourceInfoId!: number | undefined;
+    /** 发布时间 */
+    releaseTime!: moment.Moment | undefined;
+    /** 内容 */
+    content!: string;
+    /** 是否启用 */
+    isActive!: boolean | undefined;
+    /** 授权访问 */
+    isNeedAuthorizeAccess!: boolean | undefined;
+    /** 标题 */
+    seoTitle!: string | undefined;
+    /** 关键字（多个以逗号隔开） */
+    keyWords!: string | undefined;
+    /** 简介 */
+    introduction!: string | undefined;
+    /** 静态页路径 */
+    staticPageUrl!: string | undefined;
+    /** 链接 */
+    url!: string | undefined;
+    /** 推荐类型 */
+    recommendedType!: ArticleInfoEditDtoRecommendedType;
+    id!: number | undefined;
+
+    constructor(data?: IArticleInfoEditDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.title = data["title"];
+            this.publisher = data["publisher"];
+            this.columnInfoId = data["columnInfoId"];
+            this.articleSourceInfoId = data["articleSourceInfoId"];
+            this.releaseTime = data["releaseTime"] ? moment(data["releaseTime"].toString()) : <any>undefined;
+            this.content = data["content"];
+            this.isActive = data["isActive"];
+            this.isNeedAuthorizeAccess = data["isNeedAuthorizeAccess"];
+            this.seoTitle = data["seoTitle"];
+            this.keyWords = data["keyWords"];
+            this.introduction = data["introduction"];
+            this.staticPageUrl = data["staticPageUrl"];
+            this.url = data["url"];
+            this.recommendedType = data["recommendedType"];
+            this.id = data["id"];
+        }
+    }
+
+    static fromJS(data: any): ArticleInfoEditDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ArticleInfoEditDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["title"] = this.title;
+        data["publisher"] = this.publisher;
+        data["columnInfoId"] = this.columnInfoId;
+        data["articleSourceInfoId"] = this.articleSourceInfoId;
+        data["releaseTime"] = this.releaseTime ? this.releaseTime.toISOString() : <any>undefined;
+        data["content"] = this.content;
+        data["isActive"] = this.isActive;
+        data["isNeedAuthorizeAccess"] = this.isNeedAuthorizeAccess;
+        data["seoTitle"] = this.seoTitle;
+        data["keyWords"] = this.keyWords;
+        data["introduction"] = this.introduction;
+        data["staticPageUrl"] = this.staticPageUrl;
+        data["url"] = this.url;
+        data["recommendedType"] = this.recommendedType;
+        data["id"] = this.id;
+        return data; 
+    }
+}
+
+/** 文章编辑Dto */
+export interface IArticleInfoEditDto {
+    /** 标题 */
+    title: string;
+    /** 发布人（机构） */
+    publisher: string;
+    columnInfoId: number | undefined;
+    articleSourceInfoId: number | undefined;
+    /** 发布时间 */
+    releaseTime: moment.Moment | undefined;
+    /** 内容 */
+    content: string;
+    /** 是否启用 */
+    isActive: boolean | undefined;
+    /** 授权访问 */
+    isNeedAuthorizeAccess: boolean | undefined;
+    /** 标题 */
+    seoTitle: string | undefined;
+    /** 关键字（多个以逗号隔开） */
+    keyWords: string | undefined;
+    /** 简介 */
+    introduction: string | undefined;
+    /** 静态页路径 */
+    staticPageUrl: string | undefined;
+    /** 链接 */
+    url: string | undefined;
+    /** 推荐类型 */
+    recommendedType: ArticleInfoEditDtoRecommendedType;
+    id: number | undefined;
+}
+
+/** 文章创建或者编辑Dto */
+export class CreateOrUpdateArticleInfoDto implements ICreateOrUpdateArticleInfoDto {
+    articleInfo!: ArticleInfoEditDto;
+
+    constructor(data?: ICreateOrUpdateArticleInfoDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.articleInfo = new ArticleInfoEditDto();
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.articleInfo = data["articleInfo"] ? ArticleInfoEditDto.fromJS(data["articleInfo"]) : new ArticleInfoEditDto();
+        }
+    }
+
+    static fromJS(data: any): CreateOrUpdateArticleInfoDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateOrUpdateArticleInfoDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["articleInfo"] = this.articleInfo ? this.articleInfo.toJSON() : <any>undefined;
+        return data; 
+    }
+}
+
+/** 文章创建或者编辑Dto */
+export interface ICreateOrUpdateArticleInfoDto {
+    articleInfo: ArticleInfoEditDto;
+}
+
+export class GetDataComboItemDtoOfInt64 implements IGetDataComboItemDtoOfInt64 {
+    displayName!: string | undefined;
+    value!: number | undefined;
+
+    constructor(data?: IGetDataComboItemDtoOfInt64) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.displayName = data["displayName"];
+            this.value = data["value"];
+        }
+    }
+
+    static fromJS(data: any): GetDataComboItemDtoOfInt64 {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetDataComboItemDtoOfInt64();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["displayName"] = this.displayName;
+        data["value"] = this.value;
+        return data; 
+    }
+}
+
+export interface IGetDataComboItemDtoOfInt64 {
+    displayName: string | undefined;
+    value: number | undefined;
+}
+
+export class SwitchEntityInputDtoOfInt64 implements ISwitchEntityInputDtoOfInt64 {
+    switchValue!: boolean | undefined;
+    id!: number | undefined;
+
+    constructor(data?: ISwitchEntityInputDtoOfInt64) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.switchValue = data["switchValue"];
+            this.id = data["id"];
+        }
+    }
+
+    static fromJS(data: any): SwitchEntityInputDtoOfInt64 {
+        data = typeof data === 'object' ? data : {};
+        let result = new SwitchEntityInputDtoOfInt64();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["switchValue"] = this.switchValue;
+        data["id"] = this.id;
+        return data; 
+    }
+}
+
+export interface ISwitchEntityInputDtoOfInt64 {
+    switchValue: boolean | undefined;
+    id: number | undefined;
+}
+
+export class PagedResultDtoOfArticleTagInfoListDto implements IPagedResultDtoOfArticleTagInfoListDto {
+    totalCount!: number | undefined;
+    items!: ArticleTagInfoListDto[] | undefined;
+
+    constructor(data?: IPagedResultDtoOfArticleTagInfoListDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.totalCount = data["totalCount"];
+            if (data["items"] && data["items"].constructor === Array) {
+                this.items = [];
+                for (let item of data["items"])
+                    this.items.push(ArticleTagInfoListDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): PagedResultDtoOfArticleTagInfoListDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PagedResultDtoOfArticleTagInfoListDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["totalCount"] = this.totalCount;
+        if (this.items && this.items.constructor === Array) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IPagedResultDtoOfArticleTagInfoListDto {
+    totalCount: number | undefined;
+    items: ArticleTagInfoListDto[] | undefined;
+}
+
+/** 列表Dto */
+export class ArticleTagInfoListDto implements IArticleTagInfoListDto {
+    /** <code>
+            请配置AutoMap：
+            .ForMember(dto =&gt; dto.ArticleInfo, options =&gt; options.MapFrom(p =&gt; p.ArticleInfo.Title))
+            </code> */
+    articleInfo!: string | undefined;
+    /** 名称 */
+    name!: string | undefined;
+    /** 创建时间 */
+    creationTime!: moment.Moment | undefined;
+    /** 是否已删除 */
+    isDeleted!: boolean | undefined;
+    id!: number | undefined;
+
+    constructor(data?: IArticleTagInfoListDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.articleInfo = data["articleInfo"];
+            this.name = data["name"];
+            this.creationTime = data["creationTime"] ? moment(data["creationTime"].toString()) : <any>undefined;
+            this.isDeleted = data["isDeleted"];
+            this.id = data["id"];
+        }
+    }
+
+    static fromJS(data: any): ArticleTagInfoListDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ArticleTagInfoListDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["articleInfo"] = this.articleInfo;
+        data["name"] = this.name;
+        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
+        data["isDeleted"] = this.isDeleted;
+        data["id"] = this.id;
+        return data; 
+    }
+}
+
+/** 列表Dto */
+export interface IArticleTagInfoListDto {
+    /** <code>
+            请配置AutoMap：
+            .ForMember(dto =&gt; dto.ArticleInfo, options =&gt; options.MapFrom(p =&gt; p.ArticleInfo.Title))
+            </code> */
+    articleInfo: string | undefined;
+    /** 名称 */
+    name: string | undefined;
+    /** 创建时间 */
+    creationTime: moment.Moment | undefined;
+    /** 是否已删除 */
+    isDeleted: boolean | undefined;
+    id: number | undefined;
+}
+
+/** ���༭���ģ�� */
+export class GetArticleTagInfoForEditOutput implements IGetArticleTagInfoForEditOutput {
+    articleTagInfo!: ArticleTagInfoEditDto | undefined;
+
+    constructor(data?: IGetArticleTagInfoForEditOutput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.articleTagInfo = data["articleTagInfo"] ? ArticleTagInfoEditDto.fromJS(data["articleTagInfo"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetArticleTagInfoForEditOutput {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetArticleTagInfoForEditOutput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["articleTagInfo"] = this.articleTagInfo ? this.articleTagInfo.toJSON() : <any>undefined;
+        return data; 
+    }
+}
+
+/** ���༭���ģ�� */
+export interface IGetArticleTagInfoForEditOutput {
+    articleTagInfo: ArticleTagInfoEditDto | undefined;
+}
+
+/** 编辑Dto */
+export class ArticleTagInfoEditDto implements IArticleTagInfoEditDto {
+    articleInfoId!: number | undefined;
+    /** 名称 */
+    name!: string;
+    id!: number | undefined;
+
+    constructor(data?: IArticleTagInfoEditDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.articleInfoId = data["articleInfoId"];
+            this.name = data["name"];
+            this.id = data["id"];
+        }
+    }
+
+    static fromJS(data: any): ArticleTagInfoEditDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ArticleTagInfoEditDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["articleInfoId"] = this.articleInfoId;
+        data["name"] = this.name;
+        data["id"] = this.id;
+        return data; 
+    }
+}
+
+/** 编辑Dto */
+export interface IArticleTagInfoEditDto {
+    articleInfoId: number | undefined;
+    /** 名称 */
+    name: string;
+    id: number | undefined;
+}
+
+/** 创建或者编辑Dto */
+export class CreateOrUpdateArticleInfoArticleTagInfoDto implements ICreateOrUpdateArticleInfoArticleTagInfoDto {
+    articleTagInfo!: ArticleTagInfoEditDto;
+
+    constructor(data?: ICreateOrUpdateArticleInfoArticleTagInfoDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.articleTagInfo = new ArticleTagInfoEditDto();
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.articleTagInfo = data["articleTagInfo"] ? ArticleTagInfoEditDto.fromJS(data["articleTagInfo"]) : new ArticleTagInfoEditDto();
+        }
+    }
+
+    static fromJS(data: any): CreateOrUpdateArticleInfoArticleTagInfoDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateOrUpdateArticleInfoArticleTagInfoDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["articleTagInfo"] = this.articleTagInfo ? this.articleTagInfo.toJSON() : <any>undefined;
+        return data; 
+    }
+}
+
+/** 创建或者编辑Dto */
+export interface ICreateOrUpdateArticleInfoArticleTagInfoDto {
+    articleTagInfo: ArticleTagInfoEditDto;
+}
+
+export class PagedResultDtoOfArticleSourceInfoListDto implements IPagedResultDtoOfArticleSourceInfoListDto {
+    totalCount!: number | undefined;
+    items!: ArticleSourceInfoListDto[] | undefined;
+
+    constructor(data?: IPagedResultDtoOfArticleSourceInfoListDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.totalCount = data["totalCount"];
+            if (data["items"] && data["items"].constructor === Array) {
+                this.items = [];
+                for (let item of data["items"])
+                    this.items.push(ArticleSourceInfoListDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): PagedResultDtoOfArticleSourceInfoListDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PagedResultDtoOfArticleSourceInfoListDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["totalCount"] = this.totalCount;
+        if (this.items && this.items.constructor === Array) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IPagedResultDtoOfArticleSourceInfoListDto {
+    totalCount: number | undefined;
+    items: ArticleSourceInfoListDto[] | undefined;
+}
+
+/** 文章来源列表Dto */
+export class ArticleSourceInfoListDto implements IArticleSourceInfoListDto {
+    /** 名称 */
+    name!: string | undefined;
+    /** 创建时间 */
+    creationTime!: moment.Moment | undefined;
+    /** 是否已删除 */
+    isDeleted!: boolean | undefined;
+    id!: number | undefined;
+
+    constructor(data?: IArticleSourceInfoListDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.name = data["name"];
+            this.creationTime = data["creationTime"] ? moment(data["creationTime"].toString()) : <any>undefined;
+            this.isDeleted = data["isDeleted"];
+            this.id = data["id"];
+        }
+    }
+
+    static fromJS(data: any): ArticleSourceInfoListDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ArticleSourceInfoListDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
+        data["isDeleted"] = this.isDeleted;
+        data["id"] = this.id;
+        return data; 
+    }
+}
+
+/** 文章来源列表Dto */
+export interface IArticleSourceInfoListDto {
+    /** 名称 */
+    name: string | undefined;
+    /** 创建时间 */
+    creationTime: moment.Moment | undefined;
+    /** 是否已删除 */
+    isDeleted: boolean | undefined;
+    id: number | undefined;
+}
+
+/** 文章来源���༭���ģ�� */
+export class GetArticleSourceInfoForEditOutput implements IGetArticleSourceInfoForEditOutput {
+    articleSourceInfo!: ArticleSourceInfoEditDto | undefined;
+
+    constructor(data?: IGetArticleSourceInfoForEditOutput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.articleSourceInfo = data["articleSourceInfo"] ? ArticleSourceInfoEditDto.fromJS(data["articleSourceInfo"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetArticleSourceInfoForEditOutput {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetArticleSourceInfoForEditOutput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["articleSourceInfo"] = this.articleSourceInfo ? this.articleSourceInfo.toJSON() : <any>undefined;
+        return data; 
+    }
+}
+
+/** 文章来源���༭���ģ�� */
+export interface IGetArticleSourceInfoForEditOutput {
+    articleSourceInfo: ArticleSourceInfoEditDto | undefined;
+}
+
+/** 文章来源编辑Dto */
+export class ArticleSourceInfoEditDto implements IArticleSourceInfoEditDto {
+    /** 名称 */
+    name!: string;
+    id!: number | undefined;
+
+    constructor(data?: IArticleSourceInfoEditDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.name = data["name"];
+            this.id = data["id"];
+        }
+    }
+
+    static fromJS(data: any): ArticleSourceInfoEditDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ArticleSourceInfoEditDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["id"] = this.id;
+        return data; 
+    }
+}
+
+/** 文章来源编辑Dto */
+export interface IArticleSourceInfoEditDto {
+    /** 名称 */
+    name: string;
+    id: number | undefined;
+}
+
+/** 文章来源创建或者编辑Dto */
+export class CreateOrUpdateArticleSourceInfoDto implements ICreateOrUpdateArticleSourceInfoDto {
+    articleSourceInfo!: ArticleSourceInfoEditDto;
+
+    constructor(data?: ICreateOrUpdateArticleSourceInfoDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.articleSourceInfo = new ArticleSourceInfoEditDto();
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.articleSourceInfo = data["articleSourceInfo"] ? ArticleSourceInfoEditDto.fromJS(data["articleSourceInfo"]) : new ArticleSourceInfoEditDto();
+        }
+    }
+
+    static fromJS(data: any): CreateOrUpdateArticleSourceInfoDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateOrUpdateArticleSourceInfoDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["articleSourceInfo"] = this.articleSourceInfo ? this.articleSourceInfo.toJSON() : <any>undefined;
+        return data; 
+    }
+}
+
+/** 文章来源创建或者编辑Dto */
+export interface ICreateOrUpdateArticleSourceInfoDto {
+    articleSourceInfo: ArticleSourceInfoEditDto;
+}
+
 export class PagedResultDtoOfAuditLogListDto implements IPagedResultDtoOfAuditLogListDto {
     totalCount!: number | undefined;
     items!: AuditLogListDto[] | undefined;
@@ -9916,50 +12530,6 @@ export interface IAuditLogListDto {
     exception: string | undefined;
     customData: string | undefined;
     id: number | undefined;
-}
-
-export class FileDto implements IFileDto {
-    fileName!: string;
-    fileType!: string;
-    fileToken!: string;
-
-    constructor(data?: IFileDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.fileName = data["fileName"];
-            this.fileType = data["fileType"];
-            this.fileToken = data["fileToken"];
-        }
-    }
-
-    static fromJS(data: any): FileDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new FileDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["fileName"] = this.fileName;
-        data["fileType"] = this.fileType;
-        data["fileToken"] = this.fileToken;
-        return data; 
-    }
-}
-
-export interface IFileDto {
-    fileName: string;
-    fileType: string;
-    fileToken: string;
 }
 
 export class NameValueDto implements INameValueDto {
@@ -10562,6 +13132,83 @@ export interface IMarkAllUnreadMessagesOfUserAsReadInput {
     userId: number | undefined;
 }
 
+export class PagedResultDtoOfColumnInfoListDto implements IPagedResultDtoOfColumnInfoListDto {
+    totalCount!: number | undefined;
+    items!: ColumnInfoListDto[] | undefined;
+
+    constructor(data?: IPagedResultDtoOfColumnInfoListDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.totalCount = data["totalCount"];
+            if (data["items"] && data["items"].constructor === Array) {
+                this.items = [];
+                for (let item of data["items"])
+                    this.items.push(ColumnInfoListDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): PagedResultDtoOfColumnInfoListDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PagedResultDtoOfColumnInfoListDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["totalCount"] = this.totalCount;
+        if (this.items && this.items.constructor === Array) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IPagedResultDtoOfColumnInfoListDto {
+    totalCount: number | undefined;
+    items: ColumnInfoListDto[] | undefined;
+}
+
+/** 栏目列表Dto */
+export class ColumnInfoListDto implements IColumnInfoListDto {
+    /** 标题 */
+    title!: string | undefined;
+    /** 是否启用 */
+    isActive!: boolean | undefined;
+    /** 授权访问 */
+    isNeedAuthorizeAccess!: boolean | undefined;
+    /** 小图标 */
+    iconCls!: string | undefined;
+    /** 图片URL */
+    imageUrl!: string | undefined;
+    /** 链接 */
+    url!: string | undefined;
+    /** 创建时间 */
+    creationTime!: moment.Moment | undefined;
+    /** 是否已删除 */
+    isDeleted!: boolean | undefined;
+    id!: number | undefined;
+
+    constructor(data?: IColumnInfoListDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
     init(data?: any) {
         if (data) {
             this.title = data["title"];
@@ -11071,7 +13718,9 @@ export interface IColumnInfo {
 
 /** 获取枚举值 */
 export class GetEnumValuesListDto implements IGetEnumValuesListDto {
+    /** 显示名（会进行语言处理） */
     displayName!: string | undefined;
+    /** 值 */
     value!: number | undefined;
 
     constructor(data?: IGetEnumValuesListDto) {
@@ -11105,8 +13754,11 @@ export class GetEnumValuesListDto implements IGetEnumValuesListDto {
     }
 }
 
+/** 获取枚举值 */
 export interface IGetEnumValuesListDto {
+    /** 显示名（会进行语言处理） */
     displayName: string | undefined;
+    /** 值 */
     value: number | undefined;
 }
 
@@ -19484,6 +22136,20 @@ export enum IsTenantAvailableOutputState {
     _3 = 3, 
 }
 
+export enum ArticleInfoListDtoRecommendedType {
+    _0 = 0, 
+    _1 = 1, 
+    _2 = 2, 
+    _3 = 3, 
+}
+
+export enum ArticleInfoEditDtoRecommendedType {
+    _0 = 0, 
+    _1 = 1, 
+    _2 = 2, 
+    _3 = 3, 
+}
+
 export enum EntityChangeListDtoChangeType {
     _0 = 0, 
     _1 = 1, 
@@ -19508,6 +22174,11 @@ export enum ChatMessageDtoReadState {
 export enum ChatMessageDtoReceiverReadState {
     _1 = 1, 
     _2 = 2, 
+}
+
+export enum MoveToInputDtoOfInt64MoveToPosition {
+    _0 = 0, 
+    _1 = 1, 
 }
 
 export enum UserNotificationState {

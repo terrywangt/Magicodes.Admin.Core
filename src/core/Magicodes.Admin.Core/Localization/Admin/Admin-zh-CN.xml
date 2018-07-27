@@ -689,7 +689,7 @@
 
     <!--2018-6-11-->
     <text name="ExportData" value="导出数据" />
-    
+
     <!--2018-6-25-->
     <text name="SuccessfulOperation" value="操作成功！" />
 
@@ -702,6 +702,47 @@
     <text name="EmptyTextTip" value="请选择一项..." />
     <text name="EndTimeShouldGreaterThanStartTime" value="结束时间必须大于开始时间！" />
     <text name="DragAndDropSortTip" value="请拖拽此项进行排序！" />
+
+    <!--2018-7-25-->
+    <text name="Choose" value="选择" />
+    <text name="Upload" value="上传" />
+    <text name="Contents" value="内容管理" />
+    <text name="PictureManage" value="图片管理" />
+    <text name="Top" value="置顶" />
+    <text name="Hot" value="热门" />
+    <text name="Recommend" value="推荐" />
+    <text name="Common" value="普通" />
+
+    <!--生成，请勿修改-->
+    <text name="ArticleInfo" value="文章" />
+    <text name="Title" value="标题" />
+    <text name="Publisher" value="发布人（机构）" />
+    <text name="Content" value="内容" />
+    <text name="IsActive" value="是否启用" />
+    <text name="IsNeedAuthorizeAccess" value="授权访问" />
+    <text name="ColumnInfo" value="栏目信息" />
+    <text name="ArticleSourceInfo" value="文章来源" />
+    <text name="ReleaseTime" value="发布时间" />
+    <text name="SeoTitle" value="标题" />
+    <text name="KeyWords" value="关键字（多个以逗号隔开）" />
+    <text name="Introduction" value="简介" />
+    <text name="StaticPageUrl" value="静态页路径" />
+    <text name="Cover" value="封面" />
+    <text name="ArticleTagInfos" value="标签" />
+    <text name="Url" value="链接" />
+    <text name="RecommendedType" value="推荐类型" />
+    <text name="ViewCount" value="访问数" />
+    <text name="CreatorUserId" value="创建者UserId" />
+    <text name="LastModifierUserId" value="最后修改者UserId" />
+    <text name="DeleterUserId" value="删除者UserId" />
+    <text name="DeletionTime" value="删除时间" />
+    <text name="IsDeleted" value="是否删除" />
+    <text name="TenantId" value="租户Id" />
+    <text name="Id" value="Id" />
+    <text name="Description" value="描述" />
+    <text name="SortNo" value="排序号" />
+    <text name="ParentId" value="父级Id" />
+    <text name="IconCls" value="小图标" />
     <!--2018-7-25-->
     <text name="OrdinaryTable" value="普通表格" />
     <text name="TreeTable" value="树状表格" />

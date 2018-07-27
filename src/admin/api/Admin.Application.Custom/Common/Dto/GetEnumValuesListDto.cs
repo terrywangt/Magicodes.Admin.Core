@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Magicodes.Admin.Application.App.Common.Dto
+﻿namespace Admin.Application.Custom.Common.Dto
 {
     /// <summary>
     /// 获取枚举值

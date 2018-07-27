@@ -1,10 +1,8 @@
-﻿using Abp.Application.Services;
-using Magicodes.Admin.Application.App.Common.Dto;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using Abp.Application.Services;
+using Admin.Application.Custom.Common.Dto;
 
-namespace Magicodes.Admin.Application.App.Common
+namespace Admin.Application.Custom.Common
 {
     /// <summary>
     /// 通用服务

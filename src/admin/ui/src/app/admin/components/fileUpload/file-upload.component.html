@@ -1,0 +1,7 @@
+<p-fileUpload multiple="multiple" id="DefaultFileUploadFileInput" name="DefaultFileUploadFileInput[]" [url]="uploadUrl" accept="image/*" maxFileSize="1000000" (onUpload)="onUpload($event)" (onBeforeSend)="onBeforeSend($event)" chooseLabel="{{l('Choose')}}" uploadLabel="{{l('Upload')}}" cancelLabel="{{l('Cancel')}}">
+    <ng-template pTemplate="content">
+        <ul *ngIf="uploadedFiles.length">
+            <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes</li>
+        </ul>
+    </ng-template>
+</p-fileUpload>

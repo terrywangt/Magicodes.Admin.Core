@@ -8,6 +8,62 @@ namespace Magicodes.Admin.Authorization
     /// </summary>
     public partial class AppPermissions
     {
-        //TODO:自定义权限Key（自动生成并覆盖）
-    }
+
+		#region ArticleTagInfos【文章标签】
+
+        public const string Pages_ArticleInfo_ArticleTagInfo = "Pages.ArticleInfo.ArticleTagInfo";
+
+		public const string Pages_ArticleInfo_ArticleTagInfo_Create = "Pages_ArticleInfo_ArticleTagInfo.Create";
+							   
+		public const string Pages_ArticleInfo_ArticleTagInfo_Edit = "Pages_ArticleInfo_ArticleTagInfo.Edit";	
+							   
+		public const string Pages_ArticleInfo_ArticleTagInfo_Delete = "Pages_ArticleInfo_ArticleTagInfo.Delete";
+							   					
+        public const string Pages_ArticleInfo_ArticleTagInfo_Restore = "Pages_ArticleInfo_ArticleTagInfo.Restore";
+
+        #endregion
+
+        #region ArticleInfo【文章】
+
+        public const string Pages_ArticleInfo = "Pages.ArticleInfo";
+
+		public const string Pages_ArticleInfo_Create = "Pages.ArticleInfo.Create";
+	
+		public const string Pages_ArticleInfo_Edit = "Pages.ArticleInfo.Edit";	
+
+		public const string Pages_ArticleInfo_Delete = "Pages.ArticleInfo.Delete";
+
+        public const string Pages_ArticleInfo_Restore = "Pages.ArticleInfo.Restore";
+
+        #endregion
+		
+        #region ArticleSourceInfo【文章来源】
+
+        public const string Pages_ArticleSourceInfo = "Pages.ArticleSourceInfo";
+
+		public const string Pages_ArticleSourceInfo_Create = "Pages.ArticleSourceInfo.Create";
+	
+		public const string Pages_ArticleSourceInfo_Edit = "Pages.ArticleSourceInfo.Edit";	
+
+		public const string Pages_ArticleSourceInfo_Delete = "Pages.ArticleSourceInfo.Delete";
+
+        public const string Pages_ArticleSourceInfo_Restore = "Pages.ArticleSourceInfo.Restore";
+
+        #endregion
+		
+        #region ColumnInfo【栏目】
+
+        public const string Pages_ColumnInfo = "Pages.ColumnInfo";
+
+		public const string Pages_ColumnInfo_Create = "Pages.ColumnInfo.Create";
+	
+		public const string Pages_ColumnInfo_Edit = "Pages.ColumnInfo.Edit";	
+
+		public const string Pages_ColumnInfo_Delete = "Pages.ColumnInfo.Delete";
+
+        public const string Pages_ColumnInfo_Restore = "Pages.ColumnInfo.Restore";
+
+        #endregion
+		
+	}
 }

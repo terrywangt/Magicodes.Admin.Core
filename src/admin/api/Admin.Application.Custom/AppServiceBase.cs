@@ -21,7 +21,7 @@ using Magicodes.Admin.Dto;
 using Magicodes.Admin.MultiTenancy;
 using Microsoft.AspNetCore.Identity;
 
-namespace Magicodes.Admin.Application.App
+namespace Admin.Application.Custom
 {
     [AbpAuthorize]
     public abstract class AppServiceBase : ApplicationService
