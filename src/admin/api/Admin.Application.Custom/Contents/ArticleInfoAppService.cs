@@ -130,7 +130,7 @@ namespace Admin.Application.Custom.Contents
             }
 			
             exportData = await getListFunc(false);
-            var fileDto = new FileDto(L("ArticleInfo") +L("ExportData")+ ".xlsx", MimeTypeNames.ApplicationVndOpenxmlformatsOfficedocumentSpreadsheetmlSheet);
+            var fileDto = new FileDto(L("ArticleInfo") + L("ExportData") + ".xlsx", MimeTypeNames.ApplicationVndOpenxmlformatsOfficedocumentSpreadsheetmlSheet);
             var filePath = GetTempFilePath(fileName: fileDto.FileToken);
             await _excelExporter.Export(filePath, exportData);
             return fileDto;
@@ -198,6 +198,7 @@ namespace Admin.Application.Custom.Contents
             {
                 input.ArticleInfo.Content = await _editorHelper.ConvertBase64ImagesForContent(input.ArticleInfo.Content);
             }
+
             if (!input.ArticleInfo.Id.HasValue)
             {
                 await CreateArticleInfoAsync(input);
