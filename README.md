@@ -11,11 +11,11 @@
 加群 85318032 获取最新动态和文档。
 
 ### 推荐架构
-本框架已广泛应用于前后端业务，包括移动业务。推荐架构如下：
-后台UI：Angular
-后台服务：ABP
-移动端服务：ABP
-移动端UI：Angular+Ionic（已完成实践，后续会封装主体框架和模板合并进来）
+本框架已广泛应用于前后端业务，包括移动业务。推荐结构如下：
+* 后台UI：Angular
+* 后台服务：ASP.NET Core
+* 移动端服务：ASP.NET Core
+* 移动端UI：Angular+Ionic（已完成实践，后续会封装主体框架和模板合并进来）
 
 ### Demo
 http://demo.admin.xin-lai.com

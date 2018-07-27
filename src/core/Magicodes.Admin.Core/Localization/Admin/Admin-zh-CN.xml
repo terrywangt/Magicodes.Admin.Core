@@ -712,6 +712,8 @@
     <text name="Hot" value="热门" />
     <text name="Recommend" value="推荐" />
     <text name="Common" value="普通" />
+    <text name="OrdinaryTable" value="普通表格" />
+    <text name="TreeTable" value="树状表格" />
 
     <!--生成，请勿修改-->
     <text name="ArticleInfo" value="文章" />
@@ -743,8 +745,6 @@
     <text name="SortNo" value="排序号" />
     <text name="ParentId" value="父级Id" />
     <text name="IconCls" value="小图标" />
-    <!--2018-7-25-->
-    <text name="OrdinaryTable" value="普通表格" />
-    <text name="TreeTable" value="树状表格" />
+   
   </texts>
 </localizationDictionary>

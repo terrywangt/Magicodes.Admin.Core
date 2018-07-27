@@ -313,7 +313,6 @@ namespace Admin.Application.Custom.Contents
 		/// <summary>
 		/// 获取选择列表
 		/// </summary>
-        //TODO：long类型暂时写死后期要反射得到
         public async Task<List<GetDataComboItemDto<long>>> GetColumnInfoDataComboItems()
         {
             var list = await _columnInfoRepository.GetAll()
@@ -332,7 +331,6 @@ namespace Admin.Application.Custom.Contents
 		/// <summary>
 		/// 获取选择列表
 		/// </summary>
-        //TODO：long类型暂时写死后期要反射得到
         public async Task<List<GetDataComboItemDto<long>>> GetArticleSourceInfoDataComboItems()
         {
             var list = await _articleSourceInfoRepository.GetAll()
