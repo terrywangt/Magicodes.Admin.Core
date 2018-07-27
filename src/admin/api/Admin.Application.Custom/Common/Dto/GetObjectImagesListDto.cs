@@ -9,6 +9,7 @@ namespace Admin.Application.Custom.Common.Dto
     [AutoMapFrom(typeof(AttachmentInfo))]
     public class GetObjectImagesListDto : IImagesDto
     {
+        public long Id { get; set; }
         /// <summary>
         ///名称
         /// </summary>

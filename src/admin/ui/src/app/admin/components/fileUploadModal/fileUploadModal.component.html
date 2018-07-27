@@ -15,7 +15,12 @@
 
                 <div class="modal-body row">
                     <div class="form-group form-md-line-input form-md-floating-label no-hint col-xl-12">
-                        <p-lightbox [images]="images"></p-lightbox>
+                        <p-lightbox type="content">
+                            <a *ngFor="let item of images" [href]="item.source">
+                                <span class="pi pi-times" (click)="remove(item,$event)"></span>
+                                <img [src]="item.thumbnail" [alt]="item.title">
+                            </a>
+                        </p-lightbox>
                     </div>
                     <div class="form-group form-md-line-input form-md-floating-label no-hint col-xl-12">
                         <file-upload [(input)]="input"></file-upload>

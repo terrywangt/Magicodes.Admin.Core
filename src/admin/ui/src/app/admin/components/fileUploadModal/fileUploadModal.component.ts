@@ -45,7 +45,7 @@ export class FileUploadModalComponent extends AppComponentBase {
             .pipe()
             .subscribe((result) => {
                 result.forEach(element => {
-                    this.images.push({ source: element.url, thumbnail: element.url, title: element.name });
+                    this.images.push({ source: element.url, thumbnail: element.url, title: element.name, data: element });
                 });
             });
     }
@@ -53,5 +53,20 @@ export class FileUploadModalComponent extends AppComponentBase {
     close(): void {
         this.modal.hide();
         this.active = false;
+    }
+    remove(item, event: Event) {
+        event.stopPropagation();
+        event.preventDefault();
+        let ids = [];
+        ids.push(item.data.id);
+        this._commonService.removeObjectAttachments(ids)
+            .pipe()
+            .subscribe(() => {
+                this.images.forEach((element, index) => {
+                    if (element.data.id === item.data.id) {
+                        this.images.splice(index, 1);
+                    }
+                });
+            });
     }
 }

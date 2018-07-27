@@ -3343,7 +3343,7 @@ export class ColumnInfoServiceProxy {
     }
 
     /**
-     * 获取区域信息列表
+     * 获取栏目 TreeTable列表
      * @parentId (optional) 父级Id
      * @isOnlyGetRecycleData (optional) 是否仅获取回收站数据
      * @return Success
@@ -13614,13 +13614,16 @@ export class ColumnInfo implements IColumnInfo {
                     (<any>this)[property] = (<any>data)[property];
             }
         }
+        if (!data) {
+            this.isActive = true;
+        }
     }
 
     init(data?: any) {
         if (data) {
             this.title = data["title"];
             this.sortNo = data["sortNo"];
-            this.isActive = data["isActive"];
+            this.isActive = data["isActive"] !== undefined ? data["isActive"] : true;
             this.isNeedAuthorizeAccess = data["isNeedAuthorizeAccess"];
             this.description = data["description"];
             this.introduction = data["introduction"];
@@ -13761,6 +13764,7 @@ export interface IGetEnumValuesListDto {
 
 /** 图片显示Dto */
 export class GetObjectImagesListDto implements IGetObjectImagesListDto {
+    id!: number | undefined;
     /** 名称 */
     name!: string | undefined;
     /** 文件大小 */
@@ -13779,6 +13783,7 @@ export class GetObjectImagesListDto implements IGetObjectImagesListDto {
 
     init(data?: any) {
         if (data) {
+            this.id = data["id"];
             this.name = data["name"];
             this.fileLength = data["fileLength"];
             this.url = data["url"];
@@ -13794,6 +13799,7 @@ export class GetObjectImagesListDto implements IGetObjectImagesListDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
         data["name"] = this.name;
         data["fileLength"] = this.fileLength;
         data["url"] = this.url;
@@ -13803,6 +13809,7 @@ export class GetObjectImagesListDto implements IGetObjectImagesListDto {
 
 /** 图片显示Dto */
 export interface IGetObjectImagesListDto {
+    id: number | undefined;
     /** 名称 */
     name: string | undefined;
     /** 文件大小 */
