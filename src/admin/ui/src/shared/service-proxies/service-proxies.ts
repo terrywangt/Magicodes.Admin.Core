@@ -1362,6 +1362,586 @@ export class ChatServiceProxy {
 }
 
 @Injectable()
+export class ColumnInfoServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    /**
+     * 获取栏目列表
+     * @isOnlyGetRecycleData (optional) 是否仅获取回收站数据
+     * @creationDateStart (optional) 创建开始时间
+     * @creationDateEnd (optional) 创建结束时间
+     * @modificationTimeStart (optional) 修改开始时间
+     * @modificationTimeEnd (optional) 修改结束时间
+     * @filter (optional) 关键字
+     * @sorting (optional) 
+     * @maxResultCount (optional) 
+     * @skipCount (optional) 
+     * @return Success
+     */
+    getColumnInfos(isOnlyGetRecycleData: boolean | null | undefined, creationDateStart: moment.Moment | null | undefined, creationDateEnd: moment.Moment | null | undefined, modificationTimeStart: moment.Moment | null | undefined, modificationTimeEnd: moment.Moment | null | undefined, filter: string | null | undefined, sorting: string | null | undefined, maxResultCount: number | null | undefined, skipCount: number | null | undefined): Observable<PagedResultDtoOfColumnInfoListDto> {
+        let url_ = this.baseUrl + "/api/services/app/ColumnInfo/GetColumnInfos?";
+        if (isOnlyGetRecycleData !== undefined)
+            url_ += "IsOnlyGetRecycleData=" + encodeURIComponent("" + isOnlyGetRecycleData) + "&"; 
+        if (creationDateStart !== undefined)
+            url_ += "CreationDateStart=" + encodeURIComponent(creationDateStart ? "" + creationDateStart.toJSON() : "") + "&"; 
+        if (creationDateEnd !== undefined)
+            url_ += "CreationDateEnd=" + encodeURIComponent(creationDateEnd ? "" + creationDateEnd.toJSON() : "") + "&"; 
+        if (modificationTimeStart !== undefined)
+            url_ += "ModificationTimeStart=" + encodeURIComponent(modificationTimeStart ? "" + modificationTimeStart.toJSON() : "") + "&"; 
+        if (modificationTimeEnd !== undefined)
+            url_ += "ModificationTimeEnd=" + encodeURIComponent(modificationTimeEnd ? "" + modificationTimeEnd.toJSON() : "") + "&"; 
+        if (filter !== undefined)
+            url_ += "Filter=" + encodeURIComponent("" + filter) + "&"; 
+        if (sorting !== undefined)
+            url_ += "Sorting=" + encodeURIComponent("" + sorting) + "&"; 
+        if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&"; 
+        if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetColumnInfos(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetColumnInfos(<any>response_);
+                } catch (e) {
+                    return <Observable<PagedResultDtoOfColumnInfoListDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<PagedResultDtoOfColumnInfoListDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetColumnInfos(response: HttpResponseBase): Observable<PagedResultDtoOfColumnInfoListDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? PagedResultDtoOfColumnInfoListDto.fromJS(resultData200) : new PagedResultDtoOfColumnInfoListDto();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<PagedResultDtoOfColumnInfoListDto>(<any>null);
+    }
+
+    /**
+     * 导出栏目
+     * @isOnlyGetRecycleData (optional) 是否仅获取回收站数据
+     * @creationDateStart (optional) 创建开始时间
+     * @creationDateEnd (optional) 创建结束时间
+     * @modificationTimeStart (optional) 修改开始时间
+     * @modificationTimeEnd (optional) 修改结束时间
+     * @filter (optional) 关键字
+     * @sorting (optional) 
+     * @maxResultCount (optional) 
+     * @skipCount (optional) 
+     * @return Success
+     */
+    getColumnInfosToExcel(isOnlyGetRecycleData: boolean | null | undefined, creationDateStart: moment.Moment | null | undefined, creationDateEnd: moment.Moment | null | undefined, modificationTimeStart: moment.Moment | null | undefined, modificationTimeEnd: moment.Moment | null | undefined, filter: string | null | undefined, sorting: string | null | undefined, maxResultCount: number | null | undefined, skipCount: number | null | undefined): Observable<FileDto> {
+        let url_ = this.baseUrl + "/api/services/app/ColumnInfo/GetColumnInfosToExcel?";
+        if (isOnlyGetRecycleData !== undefined)
+            url_ += "IsOnlyGetRecycleData=" + encodeURIComponent("" + isOnlyGetRecycleData) + "&"; 
+        if (creationDateStart !== undefined)
+            url_ += "CreationDateStart=" + encodeURIComponent(creationDateStart ? "" + creationDateStart.toJSON() : "") + "&"; 
+        if (creationDateEnd !== undefined)
+            url_ += "CreationDateEnd=" + encodeURIComponent(creationDateEnd ? "" + creationDateEnd.toJSON() : "") + "&"; 
+        if (modificationTimeStart !== undefined)
+            url_ += "ModificationTimeStart=" + encodeURIComponent(modificationTimeStart ? "" + modificationTimeStart.toJSON() : "") + "&"; 
+        if (modificationTimeEnd !== undefined)
+            url_ += "ModificationTimeEnd=" + encodeURIComponent(modificationTimeEnd ? "" + modificationTimeEnd.toJSON() : "") + "&"; 
+        if (filter !== undefined)
+            url_ += "Filter=" + encodeURIComponent("" + filter) + "&"; 
+        if (sorting !== undefined)
+            url_ += "Sorting=" + encodeURIComponent("" + sorting) + "&"; 
+        if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&"; 
+        if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetColumnInfosToExcel(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetColumnInfosToExcel(<any>response_);
+                } catch (e) {
+                    return <Observable<FileDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<FileDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetColumnInfosToExcel(response: HttpResponseBase): Observable<FileDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? FileDto.fromJS(resultData200) : new FileDto();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<FileDto>(<any>null);
+    }
+
+    /**
+     * 获取栏目
+     * @id (optional) 
+     * @return Success
+     */
+    getColumnInfoForEdit(id: number | null | undefined): Observable<GetColumnInfoForEditOutput> {
+        let url_ = this.baseUrl + "/api/services/app/ColumnInfo/GetColumnInfoForEdit?";
+        if (id !== undefined)
+            url_ += "Id=" + encodeURIComponent("" + id) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetColumnInfoForEdit(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetColumnInfoForEdit(<any>response_);
+                } catch (e) {
+                    return <Observable<GetColumnInfoForEditOutput>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<GetColumnInfoForEditOutput>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetColumnInfoForEdit(response: HttpResponseBase): Observable<GetColumnInfoForEditOutput> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? GetColumnInfoForEditOutput.fromJS(resultData200) : new GetColumnInfoForEditOutput();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<GetColumnInfoForEditOutput>(<any>null);
+    }
+
+    /**
+     * 创建或者编辑栏目
+     * @input (optional) 
+     * @return Success
+     */
+    createOrUpdateColumnInfo(input: CreateOrUpdateColumnInfoDto | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/ColumnInfo/CreateOrUpdateColumnInfo";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(input);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreateOrUpdateColumnInfo(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreateOrUpdateColumnInfo(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processCreateOrUpdateColumnInfo(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+
+    /**
+     * 删除栏目
+     * @id (optional) 
+     * @return Success
+     */
+    deleteColumnInfo(id: number | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/ColumnInfo/DeleteColumnInfo?";
+        if (id !== undefined)
+            url_ += "Id=" + encodeURIComponent("" + id) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDeleteColumnInfo(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDeleteColumnInfo(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processDeleteColumnInfo(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+
+    /**
+     * 恢复
+     * @id (optional) 
+     * @return Success
+     */
+    restoreColumnInfo(id: number | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/ColumnInfo/RestoreColumnInfo?";
+        if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processRestoreColumnInfo(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processRestoreColumnInfo(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processRestoreColumnInfo(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+
+    /**
+     * 拖拽排序
+     * @input (optional) 输入参数
+     * @return Success
+     */
+    moveTo(input: MoveToInputDtoOfInt64 | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/ColumnInfo/MoveTo";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(input);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processMoveTo(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processMoveTo(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processMoveTo(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+
+    /**
+     * IsActive开关服务
+     * @input (optional) 开关输入参数
+     * @return Success
+     */
+    updateIsActiveSwitchAsync(input: SwitchEntityInputDtoOfInt64 | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/ColumnInfo/UpdateIsActiveSwitchAsync";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(input);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdateIsActiveSwitchAsync(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdateIsActiveSwitchAsync(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processUpdateIsActiveSwitchAsync(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+
+    /**
+     * IsNeedAuthorizeAccess开关服务
+     * @input (optional) 开关输入参数
+     * @return Success
+     */
+    updateIsNeedAuthorizeAccessSwitchAsync(input: SwitchEntityInputDtoOfInt64 | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/ColumnInfo/UpdateIsNeedAuthorizeAccessSwitchAsync";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(input);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdateIsNeedAuthorizeAccessSwitchAsync(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdateIsNeedAuthorizeAccessSwitchAsync(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processUpdateIsNeedAuthorizeAccessSwitchAsync(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+
+    /**
+     * 获取栏目 TreeTable列表
+     * @parentId (optional) 父级Id
+     * @isOnlyGetRecycleData (optional) 是否仅获取回收站数据
+     * @return Success
+     */
+    getChildrenColumnInfos(parentId: number | null | undefined, isOnlyGetRecycleData: boolean | null | undefined): Observable<TreeTableOutputDtoOfColumnInfo> {
+        let url_ = this.baseUrl + "/api/services/app/ColumnInfo/GetChildrenColumnInfos?";
+        if (parentId !== undefined)
+            url_ += "ParentId=" + encodeURIComponent("" + parentId) + "&"; 
+        if (isOnlyGetRecycleData !== undefined)
+            url_ += "IsOnlyGetRecycleData=" + encodeURIComponent("" + isOnlyGetRecycleData) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetChildrenColumnInfos(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetChildrenColumnInfos(<any>response_);
+                } catch (e) {
+                    return <Observable<TreeTableOutputDtoOfColumnInfo>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<TreeTableOutputDtoOfColumnInfo>><any>_observableThrow(response_);
+        }));
+    }
+
+@Injectable()
 export class CommonServiceProxy {
     private http: HttpClient;
     private baseUrl: string;
@@ -9982,6 +10562,514 @@ export interface IMarkAllUnreadMessagesOfUserAsReadInput {
     userId: number | undefined;
 }
 
+    init(data?: any) {
+        if (data) {
+            this.title = data["title"];
+            this.isActive = data["isActive"];
+            this.isNeedAuthorizeAccess = data["isNeedAuthorizeAccess"];
+            this.iconCls = data["iconCls"];
+            this.imageUrl = data["imageUrl"];
+            this.url = data["url"];
+            this.creationTime = data["creationTime"] ? moment(data["creationTime"].toString()) : <any>undefined;
+            this.isDeleted = data["isDeleted"];
+            this.id = data["id"];
+        }
+    }
+
+    static fromJS(data: any): ColumnInfoListDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ColumnInfoListDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["title"] = this.title;
+        data["isActive"] = this.isActive;
+        data["isNeedAuthorizeAccess"] = this.isNeedAuthorizeAccess;
+        data["iconCls"] = this.iconCls;
+        data["imageUrl"] = this.imageUrl;
+        data["url"] = this.url;
+        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
+        data["isDeleted"] = this.isDeleted;
+        data["id"] = this.id;
+        return data; 
+    }
+}
+
+/** 栏目列表Dto */
+export interface IColumnInfoListDto {
+    /** 标题 */
+    title: string | undefined;
+    /** 是否启用 */
+    isActive: boolean | undefined;
+    /** 授权访问 */
+    isNeedAuthorizeAccess: boolean | undefined;
+    /** 小图标 */
+    iconCls: string | undefined;
+    /** 图片URL */
+    imageUrl: string | undefined;
+    /** 链接 */
+    url: string | undefined;
+    /** 创建时间 */
+    creationTime: moment.Moment | undefined;
+    /** 是否已删除 */
+    isDeleted: boolean | undefined;
+    id: number | undefined;
+}
+
+/** 栏目���༭���ģ�� */
+export class GetColumnInfoForEditOutput implements IGetColumnInfoForEditOutput {
+    columnInfo!: ColumnInfoEditDto | undefined;
+
+    constructor(data?: IGetColumnInfoForEditOutput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.columnInfo = data["columnInfo"] ? ColumnInfoEditDto.fromJS(data["columnInfo"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetColumnInfoForEditOutput {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetColumnInfoForEditOutput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["columnInfo"] = this.columnInfo ? this.columnInfo.toJSON() : <any>undefined;
+        return data; 
+    }
+}
+
+/** 栏目���༭���ģ�� */
+export interface IGetColumnInfoForEditOutput {
+    columnInfo: ColumnInfoEditDto | undefined;
+}
+
+/** 栏目编辑Dto */
+export class ColumnInfoEditDto implements IColumnInfoEditDto {
+    /** 标题 */
+    title!: string;
+    /** 排序号 */
+    sortNo!: number | undefined;
+    /** 是否启用 */
+    isActive!: boolean | undefined;
+    /** 授权访问 */
+    isNeedAuthorizeAccess!: boolean | undefined;
+    /** 描述 */
+    description!: string | undefined;
+    /** 简介 */
+    introduction!: string | undefined;
+    /** 小图标 */
+    iconCls!: string | undefined;
+    /** 链接 */
+    url!: string | undefined;
+    id!: number | undefined;
+
+    constructor(data?: IColumnInfoEditDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.title = data["title"];
+            this.sortNo = data["sortNo"];
+            this.isActive = data["isActive"];
+            this.isNeedAuthorizeAccess = data["isNeedAuthorizeAccess"];
+            this.description = data["description"];
+            this.introduction = data["introduction"];
+            this.iconCls = data["iconCls"];
+            this.url = data["url"];
+            this.id = data["id"];
+        }
+    }
+
+    static fromJS(data: any): ColumnInfoEditDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ColumnInfoEditDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["title"] = this.title;
+        data["sortNo"] = this.sortNo;
+        data["isActive"] = this.isActive;
+        data["isNeedAuthorizeAccess"] = this.isNeedAuthorizeAccess;
+        data["description"] = this.description;
+        data["introduction"] = this.introduction;
+        data["iconCls"] = this.iconCls;
+        data["url"] = this.url;
+        data["id"] = this.id;
+        return data; 
+    }
+}
+
+/** 栏目编辑Dto */
+export interface IColumnInfoEditDto {
+    /** 标题 */
+    title: string;
+    /** 排序号 */
+    sortNo: number | undefined;
+    /** 是否启用 */
+    isActive: boolean | undefined;
+    /** 授权访问 */
+    isNeedAuthorizeAccess: boolean | undefined;
+    /** 描述 */
+    description: string | undefined;
+    /** 简介 */
+    introduction: string | undefined;
+    /** 小图标 */
+    iconCls: string | undefined;
+    /** 链接 */
+    url: string | undefined;
+    id: number | undefined;
+}
+
+/** 栏目创建或者编辑Dto */
+export class CreateOrUpdateColumnInfoDto implements ICreateOrUpdateColumnInfoDto {
+    columnInfo!: ColumnInfoEditDto;
+
+    constructor(data?: ICreateOrUpdateColumnInfoDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.columnInfo = new ColumnInfoEditDto();
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.columnInfo = data["columnInfo"] ? ColumnInfoEditDto.fromJS(data["columnInfo"]) : new ColumnInfoEditDto();
+        }
+    }
+
+    static fromJS(data: any): CreateOrUpdateColumnInfoDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateOrUpdateColumnInfoDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["columnInfo"] = this.columnInfo ? this.columnInfo.toJSON() : <any>undefined;
+        return data; 
+    }
+}
+
+/** 栏目创建或者编辑Dto */
+export interface ICreateOrUpdateColumnInfoDto {
+    columnInfo: ColumnInfoEditDto;
+}
+
+export class MoveToInputDtoOfInt64 implements IMoveToInputDtoOfInt64 {
+    sourceId!: number | undefined;
+    targetId!: number | undefined;
+    moveToPosition!: MoveToInputDtoOfInt64MoveToPosition | undefined;
+
+    constructor(data?: IMoveToInputDtoOfInt64) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.sourceId = data["sourceId"];
+            this.targetId = data["targetId"];
+            this.moveToPosition = data["moveToPosition"];
+        }
+    }
+
+    static fromJS(data: any): MoveToInputDtoOfInt64 {
+        data = typeof data === 'object' ? data : {};
+        let result = new MoveToInputDtoOfInt64();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["sourceId"] = this.sourceId;
+        data["targetId"] = this.targetId;
+        data["moveToPosition"] = this.moveToPosition;
+        return data; 
+    }
+}
+
+export interface IMoveToInputDtoOfInt64 {
+    sourceId: number | undefined;
+    targetId: number | undefined;
+    moveToPosition: MoveToInputDtoOfInt64MoveToPosition | undefined;
+}
+
+export class TreeTableOutputDtoOfColumnInfo implements ITreeTableOutputDtoOfColumnInfo {
+    data!: TreeTableRowDtoOfColumnInfo[] | undefined;
+
+    constructor(data?: ITreeTableOutputDtoOfColumnInfo) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            if (data["data"] && data["data"].constructor === Array) {
+                this.data = [];
+                for (let item of data["data"])
+                    this.data.push(TreeTableRowDtoOfColumnInfo.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): TreeTableOutputDtoOfColumnInfo {
+        data = typeof data === 'object' ? data : {};
+        let result = new TreeTableOutputDtoOfColumnInfo();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (this.data && this.data.constructor === Array) {
+            data["data"] = [];
+            for (let item of this.data)
+                data["data"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface ITreeTableOutputDtoOfColumnInfo {
+    data: TreeTableRowDtoOfColumnInfo[] | undefined;
+}
+
+export class TreeTableRowDtoOfColumnInfo implements ITreeTableRowDtoOfColumnInfo {
+    data!: ColumnInfo | undefined;
+    children!: TreeTableRowDtoOfColumnInfo[] | undefined;
+
+    constructor(data?: ITreeTableRowDtoOfColumnInfo) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.data = data["data"] ? ColumnInfo.fromJS(data["data"]) : <any>undefined;
+            if (data["children"] && data["children"].constructor === Array) {
+                this.children = [];
+                for (let item of data["children"])
+                    this.children.push(TreeTableRowDtoOfColumnInfo.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): TreeTableRowDtoOfColumnInfo {
+        data = typeof data === 'object' ? data : {};
+        let result = new TreeTableRowDtoOfColumnInfo();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["data"] = this.data ? this.data.toJSON() : <any>undefined;
+        if (this.children && this.children.constructor === Array) {
+            data["children"] = [];
+            for (let item of this.children)
+                data["children"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface ITreeTableRowDtoOfColumnInfo {
+    data: ColumnInfo | undefined;
+    children: TreeTableRowDtoOfColumnInfo[] | undefined;
+}
+
+/** 栏目 */
+export class ColumnInfo implements IColumnInfo {
+    /** 标题 */
+    title!: string;
+    /** 排序号 */
+    sortNo!: number | undefined;
+    /** 是否启用 */
+    isActive!: boolean | undefined;
+    /** 授权访问 */
+    isNeedAuthorizeAccess!: boolean | undefined;
+    /** 描述 */
+    description!: string | undefined;
+    /** 简介 */
+    introduction!: string | undefined;
+    /** 父级Id */
+    parentId!: number | undefined;
+    /** 小图标 */
+    iconCls!: string | undefined;
+    /** 封面 */
+    cover!: number | undefined;
+    /** 链接 */
+    url!: string | undefined;
+    /** 创建者UserId */
+    creatorUserId!: number | undefined;
+    /** 创建时间 */
+    creationTime!: moment.Moment | undefined;
+    /** 最后修改者UserId */
+    lastModifierUserId!: number | undefined;
+    /** 最后修改时间 */
+    lastModificationTime!: moment.Moment | undefined;
+    /** 删除者UserId */
+    deleterUserId!: number | undefined;
+    /** 删除时间 */
+    deletionTime!: moment.Moment | undefined;
+    /** 是否删除 */
+    isDeleted!: boolean | undefined;
+    /** 租户Id */
+    tenantId!: number | undefined;
+    id!: number | undefined;
+
+    constructor(data?: IColumnInfo) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.isActive = true;
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.title = data["title"];
+            this.sortNo = data["sortNo"];
+            this.isActive = data["isActive"] !== undefined ? data["isActive"] : true;
+            this.isNeedAuthorizeAccess = data["isNeedAuthorizeAccess"];
+            this.description = data["description"];
+            this.introduction = data["introduction"];
+            this.parentId = data["parentId"];
+            this.iconCls = data["iconCls"];
+            this.cover = data["cover"];
+            this.url = data["url"];
+            this.creatorUserId = data["creatorUserId"];
+            this.creationTime = data["creationTime"] ? moment(data["creationTime"].toString()) : <any>undefined;
+            this.lastModifierUserId = data["lastModifierUserId"];
+            this.lastModificationTime = data["lastModificationTime"] ? moment(data["lastModificationTime"].toString()) : <any>undefined;
+            this.deleterUserId = data["deleterUserId"];
+            this.deletionTime = data["deletionTime"] ? moment(data["deletionTime"].toString()) : <any>undefined;
+            this.isDeleted = data["isDeleted"];
+            this.tenantId = data["tenantId"];
+            this.id = data["id"];
+        }
+    }
+
+    static fromJS(data: any): ColumnInfo {
+        data = typeof data === 'object' ? data : {};
+        let result = new ColumnInfo();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["title"] = this.title;
+        data["sortNo"] = this.sortNo;
+        data["isActive"] = this.isActive;
+        data["isNeedAuthorizeAccess"] = this.isNeedAuthorizeAccess;
+        data["description"] = this.description;
+        data["introduction"] = this.introduction;
+        data["parentId"] = this.parentId;
+        data["iconCls"] = this.iconCls;
+        data["cover"] = this.cover;
+        data["url"] = this.url;
+        data["creatorUserId"] = this.creatorUserId;
+        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
+        data["lastModifierUserId"] = this.lastModifierUserId;
+        data["lastModificationTime"] = this.lastModificationTime ? this.lastModificationTime.toISOString() : <any>undefined;
+        data["deleterUserId"] = this.deleterUserId;
+        data["deletionTime"] = this.deletionTime ? this.deletionTime.toISOString() : <any>undefined;
+        data["isDeleted"] = this.isDeleted;
+        data["tenantId"] = this.tenantId;
+        data["id"] = this.id;
+        return data; 
+    }
+}
+
+/** 栏目 */
+export interface IColumnInfo {
+    /** 标题 */
+    title: string;
+    /** 排序号 */
+    sortNo: number | undefined;
+    /** 是否启用 */
+    isActive: boolean | undefined;
+    /** 授权访问 */
+    isNeedAuthorizeAccess: boolean | undefined;
+    /** 描述 */
+    description: string | undefined;
+    /** 简介 */
+    introduction: string | undefined;
+    /** 父级Id */
+    parentId: number | undefined;
+    /** 小图标 */
+    iconCls: string | undefined;
+    /** 封面 */
+    cover: number | undefined;
+    /** 链接 */
+    url: string | undefined;
+    /** 创建者UserId */
+    creatorUserId: number | undefined;
+    /** 创建时间 */
+    creationTime: moment.Moment | undefined;
+    /** 最后修改者UserId */
+    lastModifierUserId: number | undefined;
+    /** 最后修改时间 */
+    lastModificationTime: moment.Moment | undefined;
+    /** 删除者UserId */
+    deleterUserId: number | undefined;
+    /** 删除时间 */
+    deletionTime: moment.Moment | undefined;
+    /** 是否删除 */
+    isDeleted: boolean | undefined;
+    /** 租户Id */
+    tenantId: number | undefined;
+    id: number | undefined;
+}
+
+/** 获取枚举值 */
 export class GetEnumValuesListDto implements IGetEnumValuesListDto {
     displayName!: string | undefined;
     value!: number | undefined;
@@ -10020,6 +11108,122 @@ export class GetEnumValuesListDto implements IGetEnumValuesListDto {
 export interface IGetEnumValuesListDto {
     displayName: string | undefined;
     value: number | undefined;
+}
+
+/** 图片显示Dto */
+export class GetObjectImagesListDto implements IGetObjectImagesListDto {
+    id!: number | undefined;
+    /** 名称 */
+    name!: string | undefined;
+    /** 文件大小 */
+    fileLength!: number | undefined;
+    /** 网络路径 */
+    url!: string | undefined;
+
+    constructor(data?: IGetObjectImagesListDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.id = data["id"];
+            this.name = data["name"];
+            this.fileLength = data["fileLength"];
+            this.url = data["url"];
+        }
+    }
+
+    static fromJS(data: any): GetObjectImagesListDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetObjectImagesListDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["fileLength"] = this.fileLength;
+        data["url"] = this.url;
+        return data; 
+    }
+}
+
+/** 图片显示Dto */
+export interface IGetObjectImagesListDto {
+    id: number | undefined;
+    /** 名称 */
+    name: string | undefined;
+    /** 文件大小 */
+    fileLength: number | undefined;
+    /** 网络路径 */
+    url: string | undefined;
+}
+
+/** 更新附件绑定关系 */
+export class AddObjectAttachmentInfosInput implements IAddObjectAttachmentInfosInput {
+    /** 对象类型 */
+    objectType!: string | undefined;
+    /** 对象Id */
+    objectId!: number | undefined;
+    /** 附件Id */
+    attachmentInfoIds!: number[] | undefined;
+
+    constructor(data?: IAddObjectAttachmentInfosInput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.objectType = data["objectType"];
+            this.objectId = data["objectId"];
+            if (data["attachmentInfoIds"] && data["attachmentInfoIds"].constructor === Array) {
+                this.attachmentInfoIds = [];
+                for (let item of data["attachmentInfoIds"])
+                    this.attachmentInfoIds.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): AddObjectAttachmentInfosInput {
+        data = typeof data === 'object' ? data : {};
+        let result = new AddObjectAttachmentInfosInput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["objectType"] = this.objectType;
+        data["objectId"] = this.objectId;
+        if (this.attachmentInfoIds && this.attachmentInfoIds.constructor === Array) {
+            data["attachmentInfoIds"] = [];
+            for (let item of this.attachmentInfoIds)
+                data["attachmentInfoIds"].push(item);
+        }
+        return data; 
+    }
+}
+
+/** 更新附件绑定关系 */
+export interface IAddObjectAttachmentInfosInput {
+    /** 对象类型 */
+    objectType: string | undefined;
+    /** 对象Id */
+    objectId: number | undefined;
+    /** 附件Id */
+    attachmentInfoIds: number[] | undefined;
 }
 
 export class ListResultDtoOfSubscribableEditionComboboxItemDto implements IListResultDtoOfSubscribableEditionComboboxItemDto {
