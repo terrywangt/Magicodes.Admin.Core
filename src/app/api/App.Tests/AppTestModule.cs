@@ -8,24 +8,25 @@ using Abp.Modules;
 using Abp.Net.Mail;
 using Abp.TestBase;
 using Abp.Zero.Configuration;
-using Castle.MicroKernel.Registration;
-using Microsoft.Extensions.Configuration;
-using Magicodes.Admin.Configuration;
-using Magicodes.Admin.EntityFrameworkCore;
-using Magicodes.Admin.Tests.DependencyInjection;
-using NSubstitute;
-using Magicodes.App.Tests.Configuration;
-using Magicodes.Admin;
+using App.Tests.Configuration;
+using App.Tests.DependencyInjection;
+using App.Tests.Logging;
+using App.Tests.Url;
 using Castle.Core.Logging;
-using Magicodes.App.Tests.Logging;
+using Castle.MicroKernel.Registration;
+using Magicodes.Admin.Configuration;
+using Magicodes.Admin.Core.Custom;
+using Magicodes.Admin.EntityFrameworkCore;
 using Magicodes.Admin.Url;
-using System.Threading.Tasks;
 using Magicodes.App.Application;
+using Microsoft.Extensions.Configuration;
+using NSubstitute;
 
-namespace Magicodes.App.Tests
+namespace App.Tests
 {
     [DependsOn(
-	    typeof(AppApplicationModule),
+        typeof(AppCoreModule),
+        typeof(AppApplicationModule),
         typeof(AdminEntityFrameworkCoreModule),
         typeof(AbpTestBaseModule))]
     public class AppTestModule : AbpModule
@@ -44,15 +45,15 @@ namespace Magicodes.App.Tests
 
             //Disable static mapper usage since it breaks unit tests (see https://github.com/aspnetboilerplate/aspnetboilerplate/issues/2052)
             Configuration.Modules.AbpAutoMapper().UseStaticMapper = false;
-            
+
             //Use database for language management
             Configuration.Modules.Zero().LanguageManagement.EnableDbLocalization();
 
             RegisterFakeService<AbpZeroDbMigrator>();
 
             IocManager.Register<ILogger, TestLogger>();
-            //IocManager.Register<IAppUrlService, FakeAppUrlService>();
-            //IocManager.Register<IWebUrlService, FakeWebUrlService>();
+            
+            IocManager.Register<IWebUrlService, FakeWebUrlService>();
 
             Configuration.ReplaceService<IAppConfigurationAccessor, TestAppConfigurationAccessor>();
             Configuration.ReplaceService<IEmailSender, NullEmailSender>(DependencyLifeStyle.Transient);

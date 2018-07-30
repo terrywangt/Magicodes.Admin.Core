@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Abp.Domain.Entities;
 
@@ -27,6 +28,28 @@ namespace Magicodes.Admin.Core.Custom.Contents
         [MaxLength(20)]
         public string Publisher { get; set; }
 
+        public long ColumnInfoId { get; set; }
+
+        /// <summary>
+        /// 栏目信息
+        /// </summary>
+        [Display(Name = "栏目信息")]
+        public virtual ColumnInfo ColumnInfo { get; set; }
+
+        public long? ArticleSourceInfoId { get; set; }
+
+        /// <summary>
+        /// 文章来源
+        /// </summary>
+        [Display(Name = "文章来源")]
+        public virtual ArticleSourceInfo ArticleSourceInfo { get; set; }
+
+        /// <summary>
+        /// 发布时间
+        /// </summary>
+        [Display(Name = "发布时间")]
+        public DateTime? ReleaseTime { get; set; }
+
         /// <summary>
         /// 内容
         /// </summary>
@@ -39,6 +62,7 @@ namespace Magicodes.Admin.Core.Custom.Contents
         /// 是否启用
         /// </summary>
         [Display(Name = "是否启用")]
+        [DefaultValue(true)]
         public bool IsActive { get; set; }
 
         /// <summary>
@@ -46,26 +70,6 @@ namespace Magicodes.Admin.Core.Custom.Contents
         /// </summary>
         [Display(Name = "授权访问")]
         public bool IsNeedAuthorizeAccess { get; set; }
-
-        public long ColumnInfoId { get; set; }
-
-        /// <summary>
-        /// 栏目信息
-        /// </summary>
-        public virtual ColumnInfo ColumnInfo { get; set; }
-
-        public long? ArticleSourceInfoId { get; set; }
-
-        /// <summary>
-        /// 文章来源
-        /// </summary>
-        public virtual ArticleSourceInfo ArticleSourceInfo { get; set; }
-
-        /// <summary>
-        /// 发布时间
-        /// </summary>
-        [Display(Name = "发布时间")]
-        public DateTime? ReleaseTime { get; set; }
 
         #region SEO
         /// <summary>
@@ -103,11 +107,13 @@ namespace Magicodes.Admin.Core.Custom.Contents
         /// 封面
         /// </summary>
         [DataType(DataType.ImageUrl)]
+        [Display(Name = "封面")]
         public long? Cover { get; set; }
 
         /// <summary>
         /// 标签
         /// </summary>
+        [Display(Name = "标签")]
         public virtual ICollection<ArticleTagInfo> ArticleTagInfos { get; set; }
 
         /// <summary>
@@ -127,7 +133,7 @@ namespace Magicodes.Admin.Core.Custom.Contents
         /// <summary>
         /// 访问数
         /// </summary>
-        [Display(Name = "访问数")]
+        [Display(Name = "访问数", Prompt = "ignore[form]")]
         public long ViewCount { get; set; }
     }
 }

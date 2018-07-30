@@ -1,13 +1,13 @@
 ﻿using Abp.Dependency;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor.MsDependencyInjection;
+using Magicodes.Admin.EntityFrameworkCore;
+using Magicodes.Admin.Identity;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Magicodes.Admin.EntityFrameworkCore;
-using Magicodes.Admin.Identity;
 
-namespace Magicodes.Admin.Tests.DependencyInjection
+namespace App.Tests.DependencyInjection
 {
     public static class ServiceCollectionRegistrar
     {

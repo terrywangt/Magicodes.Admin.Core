@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace Magicodes.Admin.Application.App.Common.Dto
+namespace Admin.Application.Custom.Common.Dto
 {
     /// <summary>
     /// 获取枚举值列表

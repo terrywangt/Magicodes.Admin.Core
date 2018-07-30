@@ -5,6 +5,14 @@
     /// </summary>
     public enum AttachmentObjectTypes
     {
-        
+        /// <summary>
+        /// 文章
+        /// </summary>
+        ArticleInfo = 0,
+
+        /// <summary>
+        /// 栏目
+        /// </summary>
+        ColumnInfo = 1
     }
 }

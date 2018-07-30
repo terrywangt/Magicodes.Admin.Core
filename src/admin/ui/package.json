@@ -6,12 +6,12 @@
   "scripts": {
     "ng": "ng",
     "publish": "ng build --prod",
-    "start": "ng serve --host 0.0.0.0 --port 4200",
+    "start": "ng serve --host 0.0.0.0 --port 4200 -o",
     "hmr": "ng serve --host 0.0.0.0 --port 4200 --hmr",
     "test": "ng test",
     "pree2e": "webdriver-manager update --standalone false --gecko false",
     "e2e": "protractor",
-    "prod": "node --max-old-space-size=16384 ./node_modules/@angular/cli/bin/ng  build -prod -aot",
+    "prod": "node --max-old-space-size=16384 ./node_modules/@angular/cli/bin/ng  build --prod --aot",
     "deploy": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./webdeploy/deploy.ps1",
     "nswag": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./nswag/refresh.ps1"
   },
@@ -95,7 +95,8 @@
     "ngx-bootstrap": "^3.0.0",
     "pace-progress": "^1.0.2",
     "popper.js": "^1.12.5",
-    "primeng": "^6.0.1",
+    "primeicons": "^1.0.0-beta.9",
+    "primeng": "^6.0.0",
     "prismjs": "^1.8.1",
     "push.js": "1.0.4",
     "quill": "^1.3.0",
@@ -157,5 +158,9 @@
     "ts-node": "~3.3.0",
     "tslint": "~5.7.0",
     "typescript": "2.7.2"
-  }
+  },
+  "description": "See documentation: https://www.aspnetzero.com/Documents/Getting-Started-Angular",
+  "main": "karma.conf.js",
+  "keywords": [],
+  "author": ""
 }

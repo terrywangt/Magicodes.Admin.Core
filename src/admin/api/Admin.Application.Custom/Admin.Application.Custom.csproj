@@ -17,6 +17,7 @@
     <ProjectReference Include="..\..\..\application\Application.Shared\Application.Shared.csproj" />
     <ProjectReference Include="..\..\..\core\Magicodes.Admin.Core.Custom\Magicodes.Admin.Core.Custom.csproj" />
     <ProjectReference Include="..\..\..\core\Magicodes.Admin.Core\Magicodes.Admin.Core.csproj" />
+    <ProjectReference Include="..\..\..\unity\Magicodes.Unity\Magicodes.Unity.csproj" />
   </ItemGroup>
 
 </Project>

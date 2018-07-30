@@ -1,10 +1,9 @@
-﻿using Abp.Dependency;
-using Abp.Reflection.Extensions;
-using Microsoft.Extensions.Configuration;
+﻿using System.IO;
+using Abp.Dependency;
 using Magicodes.Admin.Configuration;
-using System.IO;
+using Microsoft.Extensions.Configuration;
 
-namespace Magicodes.App.Tests.Configuration
+namespace App.Tests.Configuration
 {
     public class TestAppConfigurationAccessor : IAppConfigurationAccessor, ISingletonDependency
     {

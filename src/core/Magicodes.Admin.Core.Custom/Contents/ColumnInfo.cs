@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 using Abp.Domain.Entities;
@@ -21,14 +22,6 @@ namespace Magicodes.Admin.Core.Custom.Contents
         public string Title { get; set; }
 
         /// <summary>
-        /// 描述
-        /// </summary>
-        [Display(Name = "描述")]
-        [MaxLength(500)]
-        [DataType(DataType.MultilineText)]
-        public string Description { get; set; }
-
-        /// <summary>
         /// 排序号
         /// </summary>
         [Display(Name = "排序号")]
@@ -38,7 +31,22 @@ namespace Magicodes.Admin.Core.Custom.Contents
         /// 是否启用
         /// </summary>
         [Display(Name = "是否启用")]
+        [DefaultValue(true)]
         public bool IsActive { get; set; }
+
+        /// <summary>
+        /// 授权访问
+        /// </summary>
+        [Display(Name = "授权访问")]
+        public bool IsNeedAuthorizeAccess { get; set; }
+
+        /// <summary>
+        /// 描述
+        /// </summary>
+        [Display(Name = "描述")]
+        [MaxLength(500)]
+        [DataType(DataType.MultilineText)]
+        public string Description { get; set; }
 
         /// <summary>
         /// 简介
@@ -51,13 +59,8 @@ namespace Magicodes.Admin.Core.Custom.Contents
         /// <summary>
         /// 父级Id
         /// </summary>
+        [Display(Name = "父级Id")]
         public long ParentId { get; set; }
-
-        /// <summary>
-        /// 授权访问
-        /// </summary>
-        [Display(Name = "授权访问")]
-        public bool IsNeedAuthorizeAccess { get; set; }
 
         /// <summary>
         /// 小图标
@@ -70,6 +73,7 @@ namespace Magicodes.Admin.Core.Custom.Contents
         /// 封面
         /// </summary>
         [DataType(DataType.ImageUrl)]
+        [Display(Name = "封面")]
         public long? Cover { get; set; }
 
         /// <summary>
