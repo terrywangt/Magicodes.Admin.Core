@@ -705,5 +705,7 @@
     <!--2018-7-25-->
     <text name="OrdinaryTable" value="普通表格" />
     <text name="TreeTable" value="树状表格" />
+    <text name="Choose" value="选择" />
+    <text name="Upload" value="上传" />
   </texts>
 </localizationDictionary>
