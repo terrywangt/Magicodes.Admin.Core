@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Abp;
@@ -8,17 +7,16 @@ using Abp.Events.Bus;
 using Abp.Events.Bus.Entities;
 using Abp.Runtime.Session;
 using Abp.TestBase;
-using Abp.Timing;
-using Microsoft.EntityFrameworkCore;
+using Castle.Core.Logging;
+using GenFu;
 using Magicodes.Admin.Authorization.Roles;
 using Magicodes.Admin.Authorization.Users;
+using Magicodes.Admin.Dto;
 using Magicodes.Admin.EntityFrameworkCore;
 using Magicodes.Admin.MultiTenancy;
-using Magicodes.Admin.Dto;
-using GenFu;
-using Castle.Core.Logging;
+using Microsoft.EntityFrameworkCore;
 
-namespace Magicodes.App.Tests
+namespace App.Tests
 {
     /// <summary>
     /// This is base class for all our test classes.

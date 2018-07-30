@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 using Magicodes.Admin.Core.Custom.Attachments;
+using Magicodes.Admin.Core.Custom.Authorization;
 using Magicodes.Admin.Core.Custom.Contents;
+using Magicodes.Admin.Core.Custom.LogInfos;
 using Microsoft.EntityFrameworkCore;
 
 namespace Magicodes.Admin.EntityFrameworkCore
@@ -20,5 +22,9 @@ namespace Magicodes.Admin.EntityFrameworkCore
         public virtual DbSet<ArticleTagInfo> ArticleTagInfos { get; set; }
 
         public virtual DbSet<ColumnInfo> ColumnInfos { get; set; }
+
+        public virtual DbSet<SmsCodeLog> SmsCodeLogs { get; set; }
+
+        public virtual DbSet<AppUserOpenId> AppUserOpenIds { get; set; }
     }
 }
