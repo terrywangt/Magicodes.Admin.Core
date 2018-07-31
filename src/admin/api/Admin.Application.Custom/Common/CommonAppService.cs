@@ -70,7 +70,8 @@ namespace Admin.Application.Custom.Common
         /// <returns></returns>
         public async Task RemoveObjectAttachments(RemoveObjectAttachmentsInput input)
         {
-            await _objectAttachmentInfoRepository.DeleteAsync(p => input.Ids.Contains(p.Id));
+            var objectType = Enum.Parse<AttachmentObjectTypes>(input.ObjectType);
+            await _objectAttachmentInfoRepository.DeleteAsync(p => input.Ids.Contains(p.AttachmentInfoId) && p.ObjectType == objectType);
         }
 
         /// <summary>

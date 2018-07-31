@@ -53,6 +53,7 @@ export class FileUploadModalComponent extends AppComponentBase {
     close(): void {
         this.modal.hide();
         this.active = false;
+        this.modalSave.emit(true);
     }
     remove(item, event: Event) {
         event.stopPropagation();
