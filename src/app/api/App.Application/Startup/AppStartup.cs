@@ -82,11 +82,19 @@ namespace Magicodes.App.Application.Startup
             #endregion
 
             #region 支付回调配置
-            void PayAction(string code)
+            void PayAction(string key, JObject data)
             {
                 //校验返回的订单金额是否与商户侧的订单金额一致
                 //重复处理判断
                 //TODO:支付逻辑
+                switch (key)
+                {
+                    case "订单支付":
+                    {
+                      
+                        break;
+                    }
+                }
             }
 
             //支付回调设置
@@ -100,45 +108,23 @@ namespace Magicodes.App.Application.Startup
                         case "wechat":
                             {
                                 var api = new WeChatPayApi();
-                                var output = api.PayNotifyHandler(input.Request.Body);
-                                
-                                //TODO:签名校验
-                                if (output.IsSuccess())
+                                return api.PayNotifyHandler(input.Request.Body, (output) =>
                                 {
-                                    var resultLog = output.ToJsonString();
-                                    logger.Info("微信支付处理成功: " + resultLog);
-
                                     //获取微信支付自定义数据
                                     if (string.IsNullOrWhiteSpace(output.Attach))
                                         throw new UserFriendlyException("自定义参数不允许为空！");
                                     var data = JsonConvert.DeserializeObject<JObject>(output.Attach);
                                     var key = data["key"].ToString();
+                                    PayAction(key, data);
 
-                                    switch (key)
-                                    {
-                                        case "订单支付":
-                                            {
-                                                var orderId = Convert.ToInt64(data["code"]);
-                                                PayAction(orderId.ToString());
-                                                break;
-                                            }
-                                    }
-
-                                    return Task.FromResult("<xml><return_code><![CDATA[SUCCESS]]></return_code></xml>");
-                                }
-
-                                //此处编写失败处理逻辑
-                                var failLog = output.ToJsonString();
-                                logger.Error("微信支付处理失败: " + failLog);
-                                return Task.FromResult(
-                                    "<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[回调处理失败]]></return_msg></xml>");
+                                });
                             }
                         case "alipay":
                             {
                                 //TODO:签名校验
                                 var ordercode = input.Request.Form["out_trade_no"];
                                 var charset = input.Request.Form["charset"];
-                                PayAction(ordercode);
+                                //PayAction(ordercode);
                                 return Task.FromResult("success");
                             }
                         default:
