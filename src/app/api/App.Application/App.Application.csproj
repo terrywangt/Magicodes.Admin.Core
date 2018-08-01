@@ -23,6 +23,7 @@
     <ProjectReference Include="..\..\..\core\Magicodes.Admin.Core.Custom\Magicodes.Admin.Core.Custom.csproj" />
     <ProjectReference Include="..\..\..\core\Magicodes.Admin.Core\Magicodes.Admin.Core.csproj" />
     <ProjectReference Include="..\..\..\data\Magicodes.Admin.EntityFrameworkCore\Magicodes.Admin.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\..\..\unity\Magicodes.Unity\Magicodes.Unity.csproj" />
     <PackageReference Include="Magicodes.Pay.WeChat" Version="1.0.0" />
     <PackageReference Include="Magicodes.PayNotify" Version="0.0.5" />
     <PackageReference Include="Magicodes.Sms.Aliyun" Version="7.0.0" />

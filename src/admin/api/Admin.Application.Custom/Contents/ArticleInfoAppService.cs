@@ -27,7 +27,8 @@ using Magicodes.Admin.Core.Custom.Attachments;
 using Magicodes.Admin.Core.Custom.Contents;
 using Magicodes.Admin.Core.Custom.Contents;
 using Magicodes.Unity;
-    
+using Magicodes.Unity.Editor;
+
 namespace Admin.Application.Custom.Contents
 {
     /// <summary>

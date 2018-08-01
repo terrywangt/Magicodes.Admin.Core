@@ -16,6 +16,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Magicodes.Admin.Core.Custom.Attachments;
 using Magicodes.Unity;
+using Magicodes.Unity.Storage;
 
 namespace Magicodes.Admin.Web.Controllers
 {

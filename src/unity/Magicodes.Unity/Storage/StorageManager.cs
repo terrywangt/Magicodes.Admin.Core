@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using Abp;
-using Abp.Dependency;
+﻿using System.IO;
 using Magicodes.Admin.Configuration;
 using Magicodes.Storage.Core;
 using Magicodes.Storage.Local.Core;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 
-namespace Magicodes.Unity
+namespace Magicodes.Unity.Storage
 {
     /// <inheritdoc />
     public class StorageManager : IStorageManager

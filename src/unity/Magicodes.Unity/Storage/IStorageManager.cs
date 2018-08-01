@@ -2,7 +2,7 @@
 using Abp.Dependency;
 using Magicodes.Storage.Core;
 
-namespace Magicodes.Unity
+namespace Magicodes.Unity.Storage
 {
     /// <summary>
     /// 存储管理程序

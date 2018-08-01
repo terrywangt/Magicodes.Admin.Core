@@ -26,5 +26,7 @@ namespace Magicodes.Admin.EntityFrameworkCore
         public virtual DbSet<SmsCodeLog> SmsCodeLogs { get; set; }
 
         public virtual DbSet<AppUserOpenId> AppUserOpenIds { get; set; }
+
+        public virtual DbSet<TransactionLog> TransactionLogs { get; set; }
     }
 }

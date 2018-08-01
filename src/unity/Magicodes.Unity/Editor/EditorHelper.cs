@@ -1,17 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Abp;
 using Abp.Dependency;
 using Abp.Domain.Repositories;
 using Abp.Runtime.Session;
 using Abp.Timing;
 using Magicodes.Admin.Core.Custom.Attachments;
+using Magicodes.Unity.Storage;
 
-namespace Magicodes.Unity
+namespace Magicodes.Unity.Editor
 {
     /// <summary>
     /// 编辑器辅助类
