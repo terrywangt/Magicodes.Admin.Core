@@ -121,3 +121,6 @@ src/Magicodes.Admin.Web.Host/wwwroot/Temp/Downloads
 /tools/build/outputs
 /src/Magicodes.Admim.AdminApp/webdeploy/deploy.config
 /src/admin/api/Admin.Host/wwwroot/Files/0
+
+/src/app/ui/App/platforms
+/src/app/ui/App/plugins

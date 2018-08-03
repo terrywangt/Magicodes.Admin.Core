@@ -1,0 +1,20 @@
+<ion-header no-shadow>
+  <ion-navbar>
+    <ion-title>登录</ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content white padding>
+  <ion-list class="login">
+    <ion-row>
+      <ion-col col-12>
+        <ion-input class="login-input" type="tel" placeholder="请输入手机号"></ion-input>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col col-12>
+        <ion-input class="login-input" type="number" placeholder="请输入验证码"></ion-input>
+      </ion-col>
+    </ion-row>
+  </ion-list>
+  <button ion-button block (click)="login()">登录</button>
+</ion-content>

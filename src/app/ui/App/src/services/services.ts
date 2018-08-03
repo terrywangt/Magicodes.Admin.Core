@@ -1,0 +1,11 @@
+export { RequestService } from './request.service';
+export { DialogService } from './dialog.service';
+export { AuthInterceptor } from './authInterceptor.service';
+export { LoadingService } from './loading.service';
+export { DeviceService } from './device.service';
+export { SessionService } from './session.service';
+export { MessageService } from './message.service';
+export { NativeService } from './native.service';
+export { StorageService } from './storage.service';
+export { PayService } from './pay.service';
+export  * from './service-proxies';
