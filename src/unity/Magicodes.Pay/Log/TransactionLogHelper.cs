@@ -1,4 +1,21 @@
-﻿using System;
+﻿// ======================================================================
+//   
+//           Copyright (C) 2018-2020 湖南心莱信息科技有限公司    
+//           All rights reserved
+//   
+//           filename : TransactionLogHelper.cs
+//           description :
+//   
+//           created by 雪雁 at  2018-08-06 14:21
+//           Mail: wenqiang.li@xin-lai.com
+//           QQ群：85318032（技术交流）
+//           Blog：http://www.cnblogs.com/codelove/
+//           GitHub：https://github.com/xin-lai
+//           Home：http://xin-lai.com
+//   
+// ======================================================================
+
+using System;
 using System.Threading.Tasks;
 using System.Transactions;
 using Abp.Dependency;
@@ -11,16 +28,14 @@ namespace Magicodes.Pay.Log
 {
     public class TransactionLogHelper : ITransientDependency
     {
-        public ILogger Logger { get; set; }
-        public IAbpSession AbpSession { get; set; }
+        private readonly ITransactionLogProvider _transactionLogProvider;
 
         private readonly ITransactionLogStore _transactionLogStore;
 
         private readonly IUnitOfWorkManager _unitOfWorkManager;
 
-        private readonly ITransactionLogProvider _transactionLogProvider;
-
-        public TransactionLogHelper(ITransactionLogProvider transactionLogProvider, IUnitOfWorkManager unitOfWorkManager, ITransactionLogStore transactionLogStore)
+        public TransactionLogHelper(ITransactionLogProvider transactionLogProvider,
+            IUnitOfWorkManager unitOfWorkManager, ITransactionLogStore transactionLogStore)
         {
             _transactionLogProvider = transactionLogProvider;
             _unitOfWorkManager = unitOfWorkManager;
@@ -30,14 +45,17 @@ namespace Magicodes.Pay.Log
             Logger = NullLogger.Instance;
         }
 
+        public ILogger Logger { get; set; }
+        public IAbpSession AbpSession { get; set; }
+
         /// <summary>
-        /// 创建交易日志
+        ///     创建交易日志
         /// </summary>
         /// <param name="transactionInfo"></param>
         /// <returns></returns>
         public TransactionLog CreaTransactionLog(TransactionInfo transactionInfo)
         {
-            var log = new TransactionLog()
+            var log = new TransactionLog
             {
                 TenantId = AbpSession.TenantId,
                 CreatorUserId = AbpSession.UserId,
@@ -57,11 +75,12 @@ namespace Magicodes.Pay.Log
             {
                 Logger.Warn(ex.ToString(), ex);
             }
+
             return log;
         }
 
         /// <summary>
-        /// 保存交易日志
+        ///     保存交易日志
         /// </summary>
         /// <param name="transactionLog"></param>
         public void Save(TransactionLog transactionLog)
@@ -74,7 +93,7 @@ namespace Magicodes.Pay.Log
         }
 
         /// <summary>
-        /// 提交交易日志
+        ///     提交交易日志
         /// </summary>
         /// <param name="transactionLog"></param>
         /// <returns></returns>
@@ -86,7 +105,5 @@ namespace Magicodes.Pay.Log
                 await uow.CompleteAsync();
             }
         }
-
-
     }
 }

@@ -3,10 +3,10 @@
 //           Copyright (C) 2018-2020 湖南心莱信息科技有限公司    
 //           All rights reserved
 //   
-//           filename : AppStartup.cs
+//           filename : PayStartup.cs
 //           description :
 //   
-//           created by 雪雁 at  2018-08-06 10:20
+//           created by 雪雁 at  2018-08-06 14:21
 //           Mail: wenqiang.li@xin-lai.com
 //           QQ群：85318032（技术交流）
 //           Blog：http://www.cnblogs.com/codelove/

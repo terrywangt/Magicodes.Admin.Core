@@ -20,7 +20,9 @@ using Abp.Dependency;
 using Abp.Modules;
 using Magicodes.Admin;
 using Magicodes.Admin.Configuration;
+using Magicodes.Alipay;
 using Magicodes.Pay.Startup;
+using Magicodes.Pay.WeChat;
 using Magicodes.PayNotify;
 
 namespace Magicodes.Pay
@@ -45,6 +47,10 @@ namespace Magicodes.Pay
             PayStartup.Config(Logger, IocManager, appConfiguration);
             //注册支付回调控制器
             IocManager.Register<PayNotifyController>(DependencyLifeStyle.Transient);
+            //注册微信支付API
+            IocManager.Register<WeChatPayApi>(DependencyLifeStyle.Transient);
+            //注册支付宝支付API
+            IocManager.Register<IAlipayAppService, AlipayAppService>(DependencyLifeStyle.Transient);
         }
     }
 }

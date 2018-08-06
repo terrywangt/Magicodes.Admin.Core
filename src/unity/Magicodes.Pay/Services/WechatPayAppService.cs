@@ -3,10 +3,10 @@
 //           Copyright (C) 2018-2020 湖南心莱信息科技有限公司    
 //           All rights reserved
 //   
-//           filename : WeChatPayConfig.cs
+//           filename : WechatPayAppService.cs
 //           description :
 //   
-//           created by 雪雁 at  2018-08-06 14:21
+//           created by 雪雁 at  2018-08-06 14:51
 //           Mail: wenqiang.li@xin-lai.com
 //           QQ群：85318032（技术交流）
 //           Blog：http://www.cnblogs.com/codelove/
@@ -15,15 +15,9 @@
 //   
 // ======================================================================
 
-using Magicodes.Pay.WeChat.Config;
-
-namespace Magicodes.Pay.Startup
+namespace Magicodes.Pay.Services
 {
-    public class WeChatPayConfig : IWeChatPayConfig
+    public class WechatPayAppService
     {
-        public string PayAppId { get; set; }
-        public string MchId { get; set; }
-        public string PayNotifyUrl { get; set; }
-        public string TenPayKey { get; set; }
     }
 }
