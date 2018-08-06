@@ -79,9 +79,33 @@ namespace Magicodes.Admin.Core.Custom.Contents
         /// <summary>
         /// 链接
         /// </summary>
-        [Display(Name = "链接")]
+        [Display(Name = "链接", GroupName = "扩展信息")]
         [DataType(DataType.Url)]
         [MaxLength(255)]
         public string Url { get; set; }
+
+        #region SEO
+        /// <summary>
+        /// 标题
+        /// </summary>
+        [Display(Name = "标题", GroupName = "SEO")]
+        [MaxLength(50)]
+        public string SeoTitle { get; set; }
+
+        /// <summary>
+        /// 关键字
+        /// </summary>
+        [Display(Name = "关键字（多个以逗号隔开）", GroupName = "SEO")]
+        [MaxLength(200)]
+        [DataType(DataType.MultilineText)]
+        public string KeyWords { get; set; }
+
+        /// <summary>
+        /// 别名
+        /// </summary>
+        [Display(Name = "别名", GroupName = "SEO")]
+        [MaxLength(200)]
+        public string Alias { get; set; }
+        #endregion
     }
 }
