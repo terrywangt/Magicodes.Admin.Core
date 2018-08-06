@@ -33,11 +33,15 @@ namespace Magicodes.Admin.EntityFrameworkCore
             {
                 using (var uow =_unitOfWorkManager.Begin())
                 {
-                    _dbContextProvider.GetDbContext().Database.OpenConnection();
-                    uow.Complete();
+                    // Switching to host is necessary for single tenant mode.
+                    using (_unitOfWorkManager.Current.SetTenantId(null))
+                    {
+                        _dbContextProvider.GetDbContext().Database.OpenConnection();
+                        uow.Complete();
+                    }
                 }
             }
-            catch (Exception ex)
+            catch
             {
                 return false;
             }
