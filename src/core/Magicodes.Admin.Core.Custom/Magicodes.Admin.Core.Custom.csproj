@@ -5,7 +5,6 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
-    <PackageReference Include="Abp" Version="3.7.2" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Magicodes.Admin.Core\Magicodes.Admin.Core.csproj" />
