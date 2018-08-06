@@ -3,10 +3,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Abp.Authorization;
 using Abp.Domain.Repositories;
+using Abp.Domain.Uow;
 using Abp.UI;
 using Magicodes.Admin.Core.Custom.LogInfos;
 using Magicodes.App.Application.SmSCode.Dto;
 using Magicodes.Sms.Aliyun;
+using Magicodes.Sms.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Magicodes.App.Application.SmSCode
@@ -21,16 +23,17 @@ namespace Magicodes.App.Application.SmSCode
         #region 依赖注入字段
 
         private readonly IRepository<SmsCodeLog, long> _smsCodeLogRepository;
+        private readonly ISmsAppService _smsAppService;
 
         #endregion
 
         #region 构造函数注入
 
         public SmSCodeAppService(
-            IRepository<SmsCodeLog, long> smsCodeLogRepository
-        )
+            IRepository<SmsCodeLog, long> smsCodeLogRepository, ISmsAppService smsAppService)
         {
             _smsCodeLogRepository = smsCodeLogRepository;
+            _smsAppService = smsAppService;
         }
 
         #endregion
@@ -42,6 +45,7 @@ namespace Magicodes.App.Application.SmSCode
         /// <returns></returns>
         [AbpAllowAnonymous]
         [HttpPost]
+        [UnitOfWork(isTransactional: false)]
         public async Task CreateSmsCode(CreateSmsCodeInput input)
         {
             //---------------请结合以下内容编写实现（勿删）---------------
@@ -72,8 +76,8 @@ namespace Magicodes.App.Application.SmSCode
                 SmsCode = code,
                 SmsCodeType = codeType
             };
-            //暂时写死使用阿里云
-            var smsService = new AliyunSmsService();
+            
+            var smsService = _smsAppService.SmsService;
             var result = await smsService.SendCodeAsync(input.Phone, code);
             if (!result.Success) throw new UserFriendlyException(result.ErrorMessage);
             await _smsCodeLogRepository.InsertAsync(smsCodeLog);

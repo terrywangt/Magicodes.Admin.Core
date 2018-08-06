@@ -16,8 +16,8 @@ namespace App.Tests.SmSCode
             smSCodeAppService = Resolve<ISmSCodeAppService>();
         }
 
-        [Theory(DisplayName = "请求发送短信验证码",Skip = "已通过，在逻辑未变的情况下没必要再次验证")]
-        [InlineData("", (CreateSmsCodeInput.SmsCodeTypeEnum)0)]
+        [Theory(DisplayName = "请求发送短信验证码")]
+        //[InlineData("", (CreateSmsCodeInput.SmsCodeTypeEnum)0)]
         [InlineData("13671974358", (CreateSmsCodeInput.SmsCodeTypeEnum)0)]
         public async Task CreateSmsCode_Test(string phone, CreateSmsCodeInput.SmsCodeTypeEnum smsCodeType)
         {
@@ -31,11 +31,7 @@ namespace App.Tests.SmSCode
             };
             if (string.IsNullOrWhiteSpace(phone))
             {
-                await Assert.ThrowsAsync<AbpValidationException>(async () =>
-                {
-                    //验证手机号码是否必填
-                    await smSCodeAppService.CreateSmsCode(input: input);
-                });
+                await Assert.ThrowsAsync<AbpValidationException>(async () => await smSCodeAppService.CreateSmsCode(input: input));
             }
             else
             {
@@ -43,10 +39,7 @@ namespace App.Tests.SmSCode
                 await smSCodeAppService.CreateSmsCode(input);
 
                 //重复验证
-                await Assert.ThrowsAsync<UserFriendlyException>(async () =>
-                {
-                    await smSCodeAppService.CreateSmsCode(input: input);
-                });
+                await Assert.ThrowsAsync<UserFriendlyException>(async () => await smSCodeAppService.CreateSmsCode(input: input));
             }
         }
     }

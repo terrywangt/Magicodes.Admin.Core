@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
-using Abp.Auditing;
 using Abp.Dependency;
 using Abp.Domain.Uow;
 using Abp.Runtime.Session;
 using Castle.Core.Logging;
 using Magicodes.Admin.Core.Custom.LogInfos;
 
-namespace Magicodes.Unity.Pay
+namespace Magicodes.Pay.Log
 {
     public class TransactionLogHelper : ITransientDependency
     {

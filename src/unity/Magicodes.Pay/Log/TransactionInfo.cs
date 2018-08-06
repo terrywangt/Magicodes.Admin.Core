@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 using Magicodes.Admin.Core.Custom.LogInfos;
 
-namespace Magicodes.Unity.Pay
+namespace Magicodes.Pay.Log
 {
     public class TransactionInfo
     {

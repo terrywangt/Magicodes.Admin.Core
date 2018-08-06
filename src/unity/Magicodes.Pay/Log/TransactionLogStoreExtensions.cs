@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Abp.Threading;
+﻿using Abp.Threading;
 using Magicodes.Admin.Core.Custom.LogInfos;
 
-namespace Magicodes.Unity.Pay
+namespace Magicodes.Pay.Log
 {
     /// <summary>
     /// 扩展

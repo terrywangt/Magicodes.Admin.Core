@@ -2,13 +2,14 @@
 using Magicodes.Admin;
 using Magicodes.Admin.Configuration;
 using Magicodes.App.Application.Configuration;
-using Magicodes.App.Application.Startup;
 using Magicodes.Sms.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Reflection;
 using System.Text;
+using Magicodes.Pay;
+using Magicodes.Sms;
 
 namespace Magicodes.App.Application
 {
@@ -16,8 +17,9 @@ namespace Magicodes.App.Application
     /// 
     /// </summary>
     [DependsOn(
-        typeof(AdminCoreModule)
-        )]
+        typeof(AdminCoreModule),
+        typeof(PayModule),
+        typeof(SmsModule))]
     public class AppApplicationModule : AbpModule
     {
         public static ISmsService SmsService { get; set; }
@@ -32,8 +34,7 @@ namespace Magicodes.App.Application
             IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
 
             var appConfiguration = IocManager.Resolve<IAppConfigurationAccessor>().Configuration;
-            //配置支付\短信等
-            AppStartup.Config(Logger, IocManager, appConfiguration);
+
             if (appConfiguration["Authentication:JwtBearer:IsEnabled"] != null && bool.Parse(appConfiguration["Authentication:JwtBearer:IsEnabled"]))
             {
                 ConfigureTokenAuth(appConfiguration);

@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Magicodes.Admin.Core.Custom.LogInfos;
 
-namespace Magicodes.Unity.Pay
+namespace Magicodes.Pay.Log
 {
     /// <summary>
     /// 交易日志提供程序

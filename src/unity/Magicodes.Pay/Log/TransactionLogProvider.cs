@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Abp.Auditing;
 using Abp.Dependency;
 using Abp.Extensions;
 using Magicodes.Admin.Core.Custom.LogInfos;
 
-namespace Magicodes.Unity.Pay
+namespace Magicodes.Pay.Log
 {
     public class TransactionLogProvider : ITransactionLogProvider, ITransientDependency
     {

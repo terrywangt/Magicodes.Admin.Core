@@ -1,28 +1,38 @@
-﻿using System;
+﻿// ======================================================================
+//   
+//           Copyright (C) 2018-2020 湖南心莱信息科技有限公司    
+//           All rights reserved
+//   
+//           filename : AppStartup.cs
+//           description :
+//   
+//           created by 雪雁 at  2018-08-06 10:20
+//           Mail: wenqiang.li@xin-lai.com
+//           QQ群：85318032（技术交流）
+//           Blog：http://www.cnblogs.com/codelove/
+//           GitHub：https://github.com/xin-lai
+//           Home：http://xin-lai.com
+//   
+// ======================================================================
+
+using System;
 using System.Threading.Tasks;
 using Abp.Dependency;
-using Abp.Domain.Repositories;
-using Abp.Domain.Uow;
 using Abp.Extensions;
-using Abp.Json;
-using Abp.Timing;
 using Abp.UI;
 using Castle.Core.Logging;
-using Magicodes.Admin.Configuration;
 using Magicodes.Alipay;
 using Magicodes.Alipay.Builder;
 using Magicodes.Pay.WeChat;
 using Magicodes.Pay.WeChat.Builder;
 using Magicodes.PayNotify.Builder;
-using Magicodes.Sms.Aliyun;
-using Magicodes.Sms.Aliyun.Builder;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Magicodes.App.Application.Startup
+namespace Magicodes.Pay.Startup
 {
-    public class AppStartup
+    public class PayStartup
     {
         /// <summary>
         ///     配置微信小程序
@@ -39,21 +49,25 @@ namespace Magicodes.App.Application.Startup
             }
 
             #region 支付配置
+
             #region 微信支付
+
             //微信支付配置
             WeChatPayBuilder.Create()
                 //设置日志记录
                 .WithLoggerAction(LogAction)
-                .RegisterGetPayConfigFunc(() => new WeChatPayConfig()
+                .RegisterGetPayConfigFunc(() => new WeChatPayConfig
                 {
                     MchId = config["WeChat:Pay:MchId"],
                     PayNotifyUrl = config["WeChat:Pay:NotifyUrl"],
                     TenPayKey = config["WeChat:Pay:TenPayKey"],
                     PayAppId = config["WeChat:Pay:AppId"]
                 }).Build();
+
             #endregion
 
             #region 支付宝支付
+
             AlipayBuilder.Create()
                 .WithLoggerAction(LogAction)
                 .RegisterGetPayConfigFunc(() =>
@@ -79,9 +93,11 @@ namespace Magicodes.App.Application.Startup
                         settings.SignType = config["Alipay:SignType"];
                     return settings;
                 }).Build();
+
             #endregion
 
             #region 支付回调配置
+
             void PayAction(string key, JObject data)
             {
                 //校验返回的订单金额是否与商户侧的订单金额一致
@@ -91,7 +107,6 @@ namespace Magicodes.App.Application.Startup
                 {
                     case "订单支付":
                     {
-                      
                         break;
                     }
                 }
@@ -106,44 +121,36 @@ namespace Magicodes.App.Application.Startup
                     switch (input.Provider)
                     {
                         case "wechat":
+                        {
+                            var api = new WeChatPayApi();
+                            return api.PayNotifyHandler(input.Request.Body, output =>
                             {
-                                var api = new WeChatPayApi();
-                                return api.PayNotifyHandler(input.Request.Body, (output) =>
-                                {
-                                    //获取微信支付自定义数据
-                                    if (string.IsNullOrWhiteSpace(output.Attach))
-                                        throw new UserFriendlyException("自定义参数不允许为空！");
-                                    var data = JsonConvert.DeserializeObject<JObject>(output.Attach);
-                                    var key = data["key"].ToString();
-                                    PayAction(key, data);
-
-                                });
-                            }
+                                //获取微信支付自定义数据
+                                if (string.IsNullOrWhiteSpace(output.Attach))
+                                    throw new UserFriendlyException("自定义参数不允许为空！");
+                                var data = JsonConvert.DeserializeObject<JObject>(output.Attach);
+                                var key = data["key"].ToString();
+                                PayAction(key, data);
+                            });
+                        }
                         case "alipay":
-                            {
-                                //TODO:签名校验
-                                var ordercode = input.Request.Form["out_trade_no"];
-                                var charset = input.Request.Form["charset"];
-                                //PayAction(ordercode);
-                                return Task.FromResult("success");
-                            }
+                        {
+                            //TODO:签名校验
+                            var ordercode = input.Request.Form["out_trade_no"];
+                            var charset = input.Request.Form["charset"];
+                            //PayAction(ordercode);
+                            return Task.FromResult("success");
+                        }
                         default:
                             break;
                     }
 
                     return null;
                 }).Build();
+
             #endregion
+
             #endregion
-
-            //阿里云短信设置
-            AliyunSmsBuilder.Create()
-                //设置日志记录
-                .WithLoggerAction(LogAction).SetSettingsFunc(() => new AliyunSmsSettting(config)).Build();
-
-            AppApplicationModule.SmsService = new AliyunSmsService();
-
-
         }
     }
 }
