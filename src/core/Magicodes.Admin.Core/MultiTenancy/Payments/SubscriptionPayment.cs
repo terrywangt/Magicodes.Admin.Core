@@ -26,7 +26,15 @@ namespace Magicodes.Admin.MultiTenancy.Payments
         public string PaymentId { get; set; }
 
         public Edition Edition { get; set; }
-        
+
         public string InvoiceNo { get; set; }
+
+        public void Cancel()
+        {
+            if (Status == SubscriptionPaymentStatus.Processing)
+            {
+                Status = SubscriptionPaymentStatus.Cancelled;
+            }
+        }
     }
 }

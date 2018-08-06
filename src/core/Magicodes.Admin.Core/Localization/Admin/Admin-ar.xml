@@ -787,5 +787,18 @@
     <text name="Yellow">أصفر</text>
     <text name="UiCustomization_HeaderSkin">التصميم</text>
     <text name="TenantsCannotCreateLanguage">العملاء لايمكنهم إنشاء لغة.</text>
+    <text name="Toggle">تبديل</text>
+    <text name="UserAccount">حساب المستخدم</text>
+    <text name="Expand">مدّد</text>
+    <text name="Attach">إرفاق</text>
+    <text name="Collapse">قلّص</text>
+    <text name="AllOfThesePermissionsMustBeGranted">لم يتم منح الأذونات المطلوبة. يجب منح جميع هذه الأذونات: {0}</text>
+    <text name="AtLeastOneOfThesePermissionsMustBeGranted">لم يتم منح الأذونات المطلوبة. يجب منح واحدة على الأقل من هذه الأذونات: {0}</text>
+    <text name="OnlyLockedUsers">فقط المستخدمين المقفلين</text>
+    <text name="DefaultFromSenderEmailAddress">العنوان الافتراضي للبريد الالكتروني للمرسل</text>
+    <text name="DefaultFromSenderDisplayName">الإسم الافتراضي للمرسل</text>
+    <text name="DefaultLanguage">اللغة الافتراضيه</text>
+    <text name="CurrentUserDidNotLoginToTheApplication">المستخدم الحالي لم يقم بتسجيل الدخول إلى النظام!</text>
+    <text name="MainMenu">الرئيسية</text>
   </texts>
 </localizationDictionary>

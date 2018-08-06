@@ -23,6 +23,6 @@ namespace Magicodes.Admin.EntityHistory
                 .Concat(TenantSideTrackedTypes)
                 .GroupBy(type=>type.FullName)
                 .Select(types=>types.First())
-                .ToArray();        
+                .ToArray();
     }
 }

@@ -129,7 +129,7 @@ namespace Magicodes.Admin.Authorization.Users
             }
         }
 
-        private string L(string name)
+        protected override string L(string name)
         {
             return _localizationManager.GetString(AdminConsts.LocalizationSourceName, name);
         }

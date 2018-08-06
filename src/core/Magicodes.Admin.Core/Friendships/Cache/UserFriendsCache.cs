@@ -75,9 +75,10 @@ namespace Magicodes.Admin.Friendships.Cache
                 }
 
                 friend.UnreadMessageCount = 0;
+                UpdateUserOnCache(userIdentifier, user);
             }
         }
-
+        
         [UnitOfWork]
         public virtual void IncreaseUnreadMessageCount(UserIdentifier userIdentifier, UserIdentifier friendIdentifier, int change)
         {
@@ -100,6 +101,7 @@ namespace Magicodes.Admin.Friendships.Cache
                 }
 
                 friend.UnreadMessageCount += change;
+                UpdateUserOnCache(userIdentifier, user);
             }
         }
 
@@ -116,6 +118,7 @@ namespace Magicodes.Admin.Friendships.Cache
                 if (!user.Friends.ContainsFriend(friend))
                 {
                     user.Friends.Add(friend);
+                    UpdateUserOnCache(userIdentifier, user);
                 }
             }
         }
@@ -133,6 +136,7 @@ namespace Magicodes.Admin.Friendships.Cache
                 if (user.Friends.ContainsFriend(friend))
                 {
                     user.Friends.Remove(friend);
+                    UpdateUserOnCache(userIdentifier, user);
                 }
             }
         }
@@ -155,6 +159,7 @@ namespace Magicodes.Admin.Friendships.Cache
                 if (existingFriendIndex >= 0)
                 {
                     user.Friends[existingFriendIndex] = friend;
+                    UpdateUserOnCache(userIdentifier, user);
                 }
             }
         }
@@ -197,6 +202,11 @@ namespace Magicodes.Admin.Friendships.Cache
                     Friends = friendCacheItems
                 };
             }
+        }
+
+        private void UpdateUserOnCache(UserIdentifier userIdentifier, UserWithFriendsCacheItem user)
+        {
+            _cacheManager.GetCache(FriendCacheItem.CacheName).Set(userIdentifier.ToUserIdentifierString(), user);
         }
     }
 }

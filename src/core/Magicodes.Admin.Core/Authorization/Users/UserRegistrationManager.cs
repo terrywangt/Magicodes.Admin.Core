@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 using Abp.Authorization.Users;
 using Abp.Configuration;
 using Abp.IdentityFramework;
+using Abp.Linq;
 using Abp.Notifications;
 using Abp.Runtime.Session;
 using Abp.UI;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Magicodes.Admin.Authorization.Roles;
 using Magicodes.Admin.Configuration;
 using Magicodes.Admin.Debugging;
@@ -21,6 +21,7 @@ namespace Magicodes.Admin.Authorization.Users
     public class UserRegistrationManager : AdminDomainServiceBase
     {
         public IAbpSession AbpSession { get; set; }
+        public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; }
 
         private readonly TenantManager _tenantManager;
         private readonly UserManager _userManager;
@@ -51,6 +52,7 @@ namespace Magicodes.Admin.Authorization.Users
             _passwordHasher = passwordHasher;
 
             AbpSession = NullAbpSession.Instance;
+            AsyncQueryableExecuter = NullAsyncQueryableExecuter.Instance;
         }
 
         public async Task<User> RegisterAsync(string name, string surname, string emailAddress, string userName, string plainPassword, bool isEmailConfirmed, string emailActivationLink)
@@ -79,7 +81,8 @@ namespace Magicodes.Admin.Authorization.Users
 
             user.Password = _passwordHasher.HashPassword(user, plainPassword);
 
-            foreach (var defaultRole in await _roleManager.Roles.Where(r => r.IsDefault).ToListAsync())
+            var defaultRoles = await AsyncQueryableExecuter.ToListAsync(_roleManager.Roles.Where(r => r.IsDefault));
+            foreach (var defaultRole in defaultRoles)
             {
                 user.Roles.Add(new UserRole(tenant.Id, user.Id, defaultRole.Id));
             }
