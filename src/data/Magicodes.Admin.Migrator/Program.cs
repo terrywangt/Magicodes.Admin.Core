@@ -30,6 +30,8 @@ namespace Magicodes.Admin.Migrator
                     migrateExecuter.Object.Run(_skipConnVerification);
                 }
 
+                if (_skipConnVerification) return;
+                
                 Console.WriteLine("Press ENTER to exit...");
                 Console.ReadLine();
             }
