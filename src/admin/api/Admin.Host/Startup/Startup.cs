@@ -69,6 +69,7 @@ namespace Magicodes.Admin.Web.Startup
                                 .Select(o => o.RemovePostFix("/"))
                                 .ToArray()
                         )
+                        .SetIsOriginAllowedToAllowWildcardSubdomains()
                         .AllowAnyHeader()
                         .AllowAnyMethod()
                         .AllowCredentials();

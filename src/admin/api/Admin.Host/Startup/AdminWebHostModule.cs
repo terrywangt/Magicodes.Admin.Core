@@ -97,7 +97,24 @@ namespace Magicodes.Admin.Web.Startup
         {
             var externalAuthConfiguration = IocManager.Resolve<ExternalAuthConfiguration>();
 
-            if (_appConfiguration["Authentication:Facebook:IsEnabled"] != null && bool.Parse(_appConfiguration["Authentication:Facebook:IsEnabled"]))
+            if (bool.Parse(_appConfiguration["Authentication:OpenId:IsEnabled"]))
+            {
+                externalAuthConfiguration.Providers.Add(
+                    new ExternalLoginProviderInfo(
+                        OpenIdConnectAuthProviderApi.Name,
+                        _appConfiguration["Authentication:OpenId:ClientId"],
+                        _appConfiguration["Authentication:OpenId:ClientSecret"],
+                        typeof(OpenIdConnectAuthProviderApi),
+                        new Dictionary<string, string>
+                        {
+                            {"Authority", _appConfiguration["Authentication:OpenId:Authority"]},
+                            {"LoginUrl",_appConfiguration["Authentication:OpenId:LoginUrl"]}
+                        }
+                    )
+                );
+            }
+
+            if (bool.Parse(_appConfiguration["Authentication:Facebook:IsEnabled"]))
             {
                 externalAuthConfiguration.Providers.Add(
                     new ExternalLoginProviderInfo(
@@ -109,7 +126,7 @@ namespace Magicodes.Admin.Web.Startup
                 );
             }
 
-            if (_appConfiguration["Authentication:Google:IsEnabled"] != null && bool.Parse(_appConfiguration["Authentication:Google:IsEnabled"]))
+            if (bool.Parse(_appConfiguration["Authentication:Google:IsEnabled"]))
             {
                 externalAuthConfiguration.Providers.Add(
                     new ExternalLoginProviderInfo(
@@ -122,7 +139,7 @@ namespace Magicodes.Admin.Web.Startup
             }
 
             //not implemented yet. Will be implemented with https://github.com/aspnetzero/aspnet-zero-angular/issues/5
-            if (_appConfiguration["Authentication:Microsoft:IsEnabled"] != null && bool.Parse(_appConfiguration["Authentication:Microsoft:IsEnabled"]))
+            if (bool.Parse(_appConfiguration["Authentication:Microsoft:IsEnabled"]))
             {
                 externalAuthConfiguration.Providers.Add(
                     new ExternalLoginProviderInfo(

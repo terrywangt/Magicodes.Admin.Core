@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Magicodes.Admin.Web.Authentication.JwtBearer;
 
 namespace Magicodes.Admin.Web.Startup
 {
@@ -41,6 +42,9 @@ namespace Magicodes.Admin.Web.Startup
                         // If you want to allow a certain amount of clock drift, set that here
                         ClockSkew = TimeSpan.Zero
                     };
+
+                    options.SecurityTokenValidators.Clear();
+                    options.SecurityTokenValidators.Add(new AdminJwtSecurityTokenHandler());
 
                     options.Events = new JwtBearerEvents
                     {
