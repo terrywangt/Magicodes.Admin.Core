@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Abp.Auditing;
 using Abp.Runtime.Session;
+using Magicodes.Admin.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Magicodes.Admin.Editions;
 using Magicodes.Admin.Sessions.Dto;
@@ -18,7 +19,7 @@ namespace Magicodes.Admin.Sessions
         public async Task<GetCurrentLoginInformationsOutput> GetCurrentLoginInformations()
         {
             var configuration = AppConfigurationAccessor.Configuration;
-            DateTime releaseDate = configuration["CustomInfo:ReleaseDate"] != null ? Convert.ToDateTime(configuration["CustomInfo:ReleaseDate"]) : AppVersionHelper.ReleaseDate;
+            var releaseDate = configuration["CustomInfo:ReleaseDate"] != null ? Convert.ToDateTime(configuration["CustomInfo:ReleaseDate"]) : AppVersionHelper.ReleaseDate;
             var output = new GetCurrentLoginInformationsOutput
             {
                 Application = new ApplicationInfoDto

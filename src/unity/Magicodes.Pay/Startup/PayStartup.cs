@@ -106,9 +106,9 @@ namespace Magicodes.Pay.Startup
                 switch (key)
                 {
                     case "订单支付":
-                    {
-                        break;
-                    }
+                        {
+                            break;
+                        }
                 }
             }
 
@@ -121,26 +121,26 @@ namespace Magicodes.Pay.Startup
                     switch (input.Provider)
                     {
                         case "wechat":
-                        {
-                            var api = new WeChatPayApi();
-                            return api.PayNotifyHandler(input.Request.Body, output =>
                             {
-                                //获取微信支付自定义数据
-                                if (string.IsNullOrWhiteSpace(output.Attach))
-                                    throw new UserFriendlyException("自定义参数不允许为空！");
-                                var data = JsonConvert.DeserializeObject<JObject>(output.Attach);
-                                var key = data["key"].ToString();
-                                PayAction(key, data);
-                            });
-                        }
+                                var api = new WeChatPayApi();
+                                return api.PayNotifyHandler(input.Request.Body, (output, error) =>
+                                {
+                                    //获取微信支付自定义数据
+                                    if (string.IsNullOrWhiteSpace(output.Attach))
+                                        throw new UserFriendlyException("自定义参数不允许为空！");
+                                    var data = JsonConvert.DeserializeObject<JObject>(output.Attach);
+                                    var key = data["key"].ToString();
+                                    PayAction(key, data);
+                                });
+                            }
                         case "alipay":
-                        {
-                            //TODO:签名校验
-                            var ordercode = input.Request.Form["out_trade_no"];
-                            var charset = input.Request.Form["charset"];
-                            //PayAction(ordercode);
-                            return Task.FromResult("success");
-                        }
+                            {
+                                //TODO:签名校验
+                                var ordercode = input.Request.Form["out_trade_no"];
+                                var charset = input.Request.Form["charset"];
+                                //PayAction(ordercode);
+                                return Task.FromResult("success");
+                            }
                         default:
                             break;
                     }
