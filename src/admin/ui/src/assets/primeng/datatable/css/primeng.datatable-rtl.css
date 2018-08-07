@@ -15,8 +15,7 @@
             border-radius: 3px;
             background: 100% 0;
             position: absolute;
-            top: 1px;
-            right: 0;
+            right: -3px;
             height: 18px;
             width: 18px;
         }
@@ -153,32 +152,36 @@
                 margin-right: 100px;
             }
 
-    .primeng-datatable-container .total-records-count {
-        float: right;
-        position: relative;
-        bottom: 26px;
-    }
+.ui-paginator .ui-paginator-page, .ui-paginator .ui-paginator-pages, .ui-paginator .ui-paginator-next, .ui-paginator .ui-paginator-last, .ui-paginator .ui-paginator-first, .ui-paginator .ui-paginator-prev, .ui-paginator .ui-paginator-current {
+    height: 2.5em;
+}
 
-    .primeng-datatable-container .ui-table-footer {
-        text-align: right;
-        border-top: 0;
-        padding: .75em 1.25em !important;
-    }
+.primeng-datatable-container .total-records-count {
+    float: right;
+    position: relative;
+    bottom: 26px;
+}
 
-    .primeng-datatable-container .ui-table-resizable {
-        padding-bottom: 0px !important;
-    }
+.primeng-datatable-container .ui-table-footer {
+    text-align: right;
+    border-top: 0;
+    padding: .75em 1.25em !important;
+}
 
-    .primeng-datatable-container .ui-table-loading-content {
-        display: none;
-    }
+.primeng-datatable-container .ui-table-resizable {
+    padding-bottom: 0px !important;
+}
 
-    .primeng-datatable-container .ui-table-scrollable-header {
-        border: 0;
-    }
+.primeng-datatable-container .ui-table-loading-content {
+    display: none;
+}
 
-    .primeng-datatable-container .primeng-no-data {
-        border: 1px solid #f4f5f8;
-        padding: 10px;
-        text-align: center;
-    }
+.primeng-datatable-container .ui-table-scrollable-header {
+    border: 0;
+}
+
+.primeng-datatable-container .primeng-no-data {
+    border: 1px solid #f4f5f8;
+    padding: 10px;
+    text-align: center;
+}

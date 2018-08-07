@@ -214,8 +214,8 @@ export class HeaderComponent extends AppComponentBase implements OnInit {
         if (!this._appSessionService.tenant.subscriptionEndDateUtc) {
             return 0;
         }
-
-        return Math.round(moment(this._appSessionService.tenant.subscriptionEndDateUtc).diff(moment().utc(), 'days', true));
+        
+        return Math.round(moment.utc(this._appSessionService.tenant.subscriptionEndDateUtc).diff(moment().utc(), 'days', true));
     }
 
     getTrialSubscriptionNotification(): string {

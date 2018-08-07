@@ -1,4 +1,4 @@
-import { Injectable, Injector } from '@angular/core';
+import { Injectable, Injector, NgZone } from '@angular/core';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { HubConnection } from '@aspnet/signalr';
 
@@ -6,7 +6,8 @@ import { HubConnection } from '@aspnet/signalr';
 export class ChatSignalrService extends AppComponentBase {
 
     constructor(
-        injector: Injector
+        injector: Injector,
+        public _zone: NgZone
     ) {
         super(injector);
     }
@@ -25,7 +26,7 @@ export class ChatSignalrService extends AppComponentBase {
                 abp.log.debug('Chat connection closed with error: ' + e);
             }
             else {
-                abp.log.debug('Caht disconnected');
+                abp.log.debug('Chat disconnected');
             }
 
             if (!abp.signalr.autoConnect) {
@@ -115,10 +116,13 @@ export class ChatSignalrService extends AppComponentBase {
     }
 
     init(): void {
-        abp.signalr.startConnection('/signalr-chat', connection => {
-            abp.event.trigger('app.chat.connected');
-            this.isChatConnected = true;
-            this.configureConnection(connection);
+        this._zone.runOutsideAngular(() => {
+            abp.signalr.connect();
+            abp.signalr.startConnection(abp.appPath + 'signalr-chat', connection => {
+                abp.event.trigger('app.chat.connected');
+                this.isChatConnected = true;
+                this.configureConnection(connection);
+            });
         });
     }
 }

@@ -23,7 +23,7 @@
                     </div>
                 </div>
                 <hr />
-                <div class="m-scrollable" data-scrollable="true">
+                <div>
                     <div class="m-list-timeline m-list-timeline--skin-light m-nav">
                         <div class="m-list-timeline__items" [ngClass]="{'empty':!notifications.length}">
                             <div *ngFor="let notification of notifications" class="m-list-timeline__item user-notification-item" (click)="gotoUrl(notification.url)" [ngClass]="{'user-notification-item-clickable': notification.url,'user-notification-item-unread': notification.isUnread}">
@@ -45,7 +45,7 @@
                         </div>
                         <div *ngIf="notifications.length" class="m-nav__separator m-nav__separator--fit"></div>
                         <div *ngIf="notifications.length" class="external notifications-footer">
-                            <div class="text-center"><a routerLink="notifications">{{l("SeeAllNotifications")}}</a></div>
+                            <div class="text-center"><a routerLink="notifications" class="m-dropdown__toggle">{{l("SeeAllNotifications")}}</a></div>
                         </div>
                     </div>
                 </div>

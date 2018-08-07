@@ -43,7 +43,7 @@ export class EditTenantModalComponent extends AppComponentBase {
             this.editions = editionsResult.items;
             let notSelectedEdition = new SubscribableEditionComboboxItemDto();
             notSelectedEdition.displayText = this.l('NotAssigned');
-            notSelectedEdition.value = '0';
+            notSelectedEdition.value = "";
             this.editions.unshift(notSelectedEdition);
 
             this._tenantService.getTenantForEdit(tenantId).subscribe((tenantResult) => {

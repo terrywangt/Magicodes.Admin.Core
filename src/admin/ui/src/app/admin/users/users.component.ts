@@ -31,6 +31,7 @@ export class UsersComponent extends AppComponentBase {
     filterText = '';
     selectedPermission = '';
     role: number = undefined;
+    onlyLockedUsers = false;
 
     constructor(
         injector: Injector,
@@ -59,6 +60,7 @@ export class UsersComponent extends AppComponentBase {
             this.filterText,
             this.permission ? this.selectedPermission : undefined,
             this.role,
+            this.onlyLockedUsers,
             this.primengTableHelper.getSorting(this.dataTable),
             this.primengTableHelper.getMaxResultCount(this.paginator, event),
             this.primengTableHelper.getSkipCount(this.paginator, event)

@@ -13,6 +13,7 @@ import { ValidationMessagesComponent } from './validation-messages.component';
 import { EqualValidator } from './validation/equal-validator.directive';
 import { MinValueValidator } from './validation/min-value-validator.directive';
 import { PasswordComplexityValidator } from './validation/password-complexity-validator.directive';
+import { NullDefaultValueDirective } from './null-value.directive';
 
 @NgModule({
     imports: [
@@ -33,7 +34,8 @@ import { PasswordComplexityValidator } from './validation/password-complexity-va
         MomentFormatPipe,
         CurrencyInputDirective,
         NormalizeDropdownPositionDirective,
-        ValidationMessagesComponent
+        ValidationMessagesComponent,
+        NullDefaultValueDirective
     ],
     exports: [
         EqualValidator,
@@ -46,7 +48,8 @@ import { PasswordComplexityValidator } from './validation/password-complexity-va
         MomentFormatPipe,
         CurrencyInputDirective,
         NormalizeDropdownPositionDirective,
-        ValidationMessagesComponent
+        ValidationMessagesComponent,
+        NullDefaultValueDirective
     ]
 })
 export class UtilsModule { }

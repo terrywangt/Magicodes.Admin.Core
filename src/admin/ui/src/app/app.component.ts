@@ -60,6 +60,12 @@ export class AppComponent extends AppComponentBase implements OnInit, AfterViewI
             return;
         }
 
+        // fix for https://github.com/aspnetzero/aspnet-zero-core/issues/1333
+        ($ as any).mCustomScrollbar.defaults.advanced.updateOnContentResize = false;
+        ($ as any).mCustomScrollbar.defaults.advanced.updateOnImageLoad = false;
+
+        abp.signalr.autoConnect = false;
+        
         mApp.init();
         mLayout.init();
         mApp.initialized = true;

@@ -12,6 +12,7 @@
             <li *ngIf="showMenuItem(menuItem)" routerLinkActive="m-menu__item--active" class="m-menu__item m-menu__item--submenu" [ngClass]="{'m-menu__item--expanded m-menu__item--open': menuItem.items.length >  0}" aria-haspopup="true" data-menu-submenu-toggle="hover">
 
                 <a [routerLink]="[menuItem.route]" *ngIf="!menuItem.items.length && !menuItem.external" class="m-menu__link m-menu__toggle"
+                   [queryParams]="menuItem.parameters"
                    role="menuitem"
                    aria-haspopup="true"
                    aria-expanded="false"
@@ -55,6 +56,7 @@
                                 data-menu-submenu-toggle="hover"
                                 role="none">
                                 <a [routerLink]="[childMenuItem.route]" *ngIf="!childMenuItem.items.length && !childMenuItem.external" class="m-menu__link m-menu__toggle"
+                                   [queryParams]="menuItem.parameters"
                                    role="menuitem"
                                    aria-haspopup="true"
                                    aria-expanded="false"
@@ -97,6 +99,7 @@
                                                 role="none"
                                                 data-menu-submenu-toggle="hover">
                                                 <a [routerLink]="[childOfChildMenuItem.route]" *ngIf="!childOfChildMenuItem.items.length && !childOfChildMenuItem.external" class="m-menu__link m-menu__toggle"
+                                                   [queryParams]="menuItem.parameters"
                                                    role="menuitem"
                                                    aria-haspopup="true"
                                                    aria-expanded="false"
@@ -137,6 +140,7 @@
                                                             <li *ngIf="showMenuItem(childOfChildOfChildMenuItem)" routerLinkActive="m-menu__item--active " class="m-menu__item m-menu__item--submenu"
                                                                 role="none">
                                                                 <a [routerLink]="[childOfChildOfChildMenuItem.route]" *ngIf="!childOfChildOfChildMenuItem.external" class="m-menu__link"
+                                                                   [queryParams]="menuItem.parameters"
                                                                    role="menuitem"
                                                                    aria-haspopup="true"
                                                                    aria-expanded="false"

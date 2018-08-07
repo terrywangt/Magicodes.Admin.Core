@@ -10,9 +10,9 @@
       "from": "zh-CN",
       "to": "zh"
     },
-    {
-      "from": "he-IL",
-      "to": "he"
-    }
+	{
+		"from": "he-IL",
+		"to": "he"
+	}
   ]
 }

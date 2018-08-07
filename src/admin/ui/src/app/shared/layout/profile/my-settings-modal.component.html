@@ -40,13 +40,17 @@
                                             <button id="btnSmsVerification" (click)="smsVerify()" class="btn btn-primary" type="button" tooltip="{{l('YourPhoneNumberIsNotVerified')}}"><i class="fa fa-warning"></i>{{l('Verify')}}</button>
                                         </span>
 
-                                        <span *ngIf="!isPhoneNumberConfirmed" id="SpanSmsVerificationVerified" style="display: none;" class="input-group-addon" tooltip="{{l('YourPhoneNumberIsVerified')}}">
-                                            <i class="la la-check m--font-success" [attr.aria-label]="l('Verified')"></i>
-                                        </span>
+                                        <div *ngIf="!isPhoneNumberConfirmed" class="input-group-append" id="SpanSmsVerificationVerified" style="display: none;">
+                                            <span class="input-group-text" tooltip="{{l('YourPhoneNumberIsVerified')}}">
+                                                <i class="la la-check m--font-success" [attr.aria-label]="l('Verified')"></i>
+                                            </span>
+                                        </div>
 
-                                        <span *ngIf="isPhoneNumberConfirmed" class="input-group-addon" tooltip="{{l('YourPhoneNumberIsVerified')}}">
-                                            <i class="la la-check m--font-success" [attr.aria-label]="l('Verified')"></i>
-                                        </span>
+                                        <div *ngIf="isPhoneNumberConfirmed" class="input-group-append">
+                                            <span class="input-group-text" tooltip="{{l('YourPhoneNumberIsVerified')}}">
+                                                <i class="la la-check m--font-success" [attr.aria-label]="l('Verified')"></i>
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

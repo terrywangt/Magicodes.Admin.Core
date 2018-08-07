@@ -362,4 +362,13 @@ export class HostDashboardComponent extends AppComponentBase implements AfterVie
 
         window.open(url);
     }
+
+    onResize(event) {
+        if (!this.hostDashboardData) {
+            return;
+        }
+
+        this.drawEditionStatisticsData(this.hostDashboardData.editionStatistics);
+        this.drawIncomeStatisticsChart(this.hostDashboardData.incomeStatistics);
+    }
 }

@@ -34,6 +34,7 @@ import { UserNotificationHelper } from './shared/layout/notifications/UserNotifi
 import { HeaderNotificationsComponent } from './shared/layout/notifications/header-notifications.component';
 import { NotificationSettingsModalComponent } from './shared/layout/notifications/notification-settings-modal.component';
 import { NotificationsComponent } from './shared/layout/notifications/notifications.component';
+import { OAuthModule } from 'angular-oauth2-oidc';
 
 @NgModule({
     declarations: [
@@ -58,6 +59,7 @@ import { NotificationsComponent } from './shared/layout/notifications/notificati
     ],
     imports: [
         ngCommon.CommonModule,
+        OAuthModule.forRoot(),
         FormsModule,
         HttpModule,
         JsonpModule,

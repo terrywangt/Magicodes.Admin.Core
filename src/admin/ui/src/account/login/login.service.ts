@@ -10,6 +10,8 @@ import { AuthenticateModel, AuthenticateResultModel, ExternalAuthenticateModel, 
 import * as _ from 'lodash';
 import { finalize } from 'rxjs/operators';
 
+import { OAuthService, AuthConfig } from 'angular-oauth2-oidc';
+
 declare const FB: any; // Facebook API
 declare const gapi: any; // Facebook API
 declare const WL: any; // Microsoft API
@@ -19,6 +21,7 @@ export class ExternalLoginProvider extends ExternalLoginProviderInfoModel {
     static readonly FACEBOOK: string = 'Facebook';
     static readonly GOOGLE: string = 'Google';
     static readonly MICROSOFT: string = 'Microsoft';
+    static readonly OPENID: string = 'OpenIdConnect';
 
     icon: string;
     initialized = false;
@@ -28,6 +31,7 @@ export class ExternalLoginProvider extends ExternalLoginProviderInfoModel {
 
         this.name = providerInfo.name;
         this.clientId = providerInfo.clientId;
+        this.additionalParams = providerInfo.additionalParams;
         this.icon = ExternalLoginProvider.getSocialIcon(this.name);
     }
 
@@ -60,7 +64,8 @@ export class LoginService {
         private _utilsService: UtilsService,
         private _messageService: MessageService,
         private _tokenService: TokenService,
-        private _logService: LogService
+        private _logService: LogService,
+        private oauthService: OAuthService
     ) {
         this.clear();
     }
@@ -193,11 +198,12 @@ export class LoginService {
         this.rememberMe = false;
     }
 
-    private initExternalLoginProviders() {
+    private initExternalLoginProviders(callback?: any) {
         this._tokenAuthService
             .getExternalAuthenticationProviders()
             .subscribe((providers: ExternalLoginProviderInfoModel[]) => {
                 this.externalLoginProviders = _.map(providers, p => new ExternalLoginProvider(p));
+                callback && callback();
             });
     }
 
@@ -245,7 +251,23 @@ export class LoginService {
                     response_type: 'token'
                 });
             });
+        } else if (loginProvider.name === ExternalLoginProvider.OPENID) {
+            const authConfig = this.getOpenIdConnectConfig(loginProvider);
+            this.oauthService.configure(authConfig);
+            this.oauthService.initImplicitFlow('openIdConnect=1');
         }
+    }
+
+    private getOpenIdConnectConfig(loginProvider: ExternalLoginProvider): AuthConfig {
+        var authConfig = new AuthConfig();
+        authConfig.loginUrl = loginProvider.additionalParams["LoginUrl"];
+        authConfig.issuer = loginProvider.additionalParams["Authority"];
+        authConfig.clientId = loginProvider.clientId;
+        authConfig.responseType = 'id_token';
+        authConfig.redirectUri = window.location.origin + '/account/login';
+        authConfig.scope = 'openid';
+        authConfig.requestAccessToken = false;
+        return authConfig;
     }
 
     private facebookLoginStatusChangeCallback(resp) {
@@ -267,6 +289,38 @@ export class LoginService {
                     this.login(result.accessToken, result.encryptedAccessToken, result.expireInSeconds, false, '', result.returnUrl);
                 });
         }
+    }
+
+    public openIdConnectLoginCallback(resp) {
+        this.initExternalLoginProviders(() => {
+            var openIdProvider = _.filter(this.externalLoginProviders, { name: 'OpenIdConnect' })[0];
+            var authConfig = this.getOpenIdConnectConfig(openIdProvider);
+            this.oauthService.configure(authConfig);
+
+            abp.ui.block();
+
+            this.oauthService.tryLogin().then(() => {
+                var claims = this.oauthService.getIdentityClaims();
+
+                const model = new ExternalAuthenticateModel();
+                model.authProvider = ExternalLoginProvider.OPENID;
+                model.providerAccessCode = this.oauthService.getIdToken();
+                model.providerKey = claims["sub"];
+                model.singleSignIn = UrlHelper.getSingleSignIn();
+                model.returnUrl = UrlHelper.getReturnUrl();
+
+                this._tokenAuthService.externalAuthenticate(model)
+                    .pipe(finalize(() => { abp.ui.unblock(); }))
+                    .subscribe((result: ExternalAuthenticateResultModel) => {
+                        if (result.waitingForActivation) {
+                            this._messageService.info('You have successfully registered. Waiting for activation!');
+                            return;
+                        }
+
+                        this.login(result.accessToken, result.encryptedAccessToken, result.expireInSeconds, false, '', result.returnUrl);
+                    });
+            });
+        });
     }
 
     private googleLoginStatusChangeCallback(isSignedIn) {

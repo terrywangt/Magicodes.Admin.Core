@@ -44,6 +44,15 @@
                                     <role-combo [(selectedRole)]="role" emptyText="{{l('FilterByRole')}}"></role-combo>
                                 </div>
                             </div>
+                            <div class="col-md-6">
+                                <div class="m-checkbox-list">
+                                    <label for="UsersTable_OnlyLockedUsers" class="m-checkbox">
+                                        <input id="UsersTable_OnlyLockedUsers" type="checkbox" name="OnlyLockedUsers" [(ngModel)]="onlyLockedUsers">
+                                        {{l("OnlyLockedUsers")}}
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="row margin-bottom-10" *ngIf="advancedFiltersAreShown">
@@ -89,9 +98,8 @@
                                         {{l('Surname')}}
                                         <p-sortIcon field="surname"></p-sortIcon>
                                     </th>
-                                    <th style="width: 150px" pSortableColumn="roles">
+                                    <th style="width: 150px">
                                         {{l('Roles')}}
-                                        <p-sortIcon field="roles"></p-sortIcon>
                                     </th>
                                     <th style="width: 250px" pSortableColumn="emailAddress">
                                         {{l('EmailAddress')}}

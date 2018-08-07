@@ -12,6 +12,10 @@ export class UrlHelper {
         return search.replace(/(^\?)/, '').split('&').map(function (n) { return n = n.split('='), this[n[0]] = n[1], this; }.bind({}))[0];
     }
 
+    static getQueryParametersUsingHash(): any {
+        return document.location.hash.substr(1, document.location.hash.length - 1).replace(/(^\?)/, '').split('&').map(function(n) { return n = n.split('='), this[n[0]] = n[1], this; }.bind({}))[0];
+    }
+
     static getInitialUrlParameters(): any {
         let questionMarkIndex = UrlHelper.initialUrl.indexOf('?');
         if (questionMarkIndex >= 0) {

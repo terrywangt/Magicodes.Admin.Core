@@ -74,7 +74,7 @@ export class CreateTenantModalComponent extends AppComponentBase {
                 this.editions = result.items;
 
                 var notAssignedItem = new SubscribableEditionComboboxItemDto();
-                notAssignedItem.value = "0";
+                notAssignedItem.value = "";
                 notAssignedItem.displayText = this.l('NotAssigned');
 
                 this.editions.unshift(notAssignedItem);

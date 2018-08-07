@@ -7,6 +7,7 @@ import {
     EditionSelectDto,
     CreatePaymentDto,
     ExecutePaymentDto,
+    CancelPaymentDto,
     CreatePaymentDtoPaymentPeriodType,
     CreatePaymentDtoEditionPaymentType,
     ExecutePaymentDtoPaymentPeriodType,
@@ -125,6 +126,12 @@ export class PayPalComponent extends AppComponentBase {
                         return;
                     });
 
+            },
+            onCancel(data) {
+                const input = new CancelPaymentDto();
+                input.gateway = self.subscriptionPaymentGateway.Paypal;
+                input.paymentId = data.paymentID;
+                self._paymentAppService.cancelPayment(input).toPromise();
             }
         }, '#paypal-button');
 

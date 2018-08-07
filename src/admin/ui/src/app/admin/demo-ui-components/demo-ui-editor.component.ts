@@ -25,8 +25,7 @@ export class DemoUiEditorComponent extends AppComponentBase {
 
         this.demoUiComponentsService.sendAndGetValue(this.htmlEditorInput)
             .subscribe(data => {
-                (abp as any).libs.sweetAlert.config.info.html = true;
-                this.message.info(data.output, this.l('PostedValue'));
+                this.message.info(data.output, this.l('PostedValue'), true);
                 this.notify.info(this.l('SavedSuccessfully'));
             });
     }

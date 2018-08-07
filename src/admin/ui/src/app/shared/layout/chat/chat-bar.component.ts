@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Injector, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Injector, OnInit, Output, ViewChild, ViewEncapsulation, NgZone } from '@angular/core';
 import { CommonLookupModalComponent } from '@app/shared/common/lookup/common-lookup-modal.component';
 import { AppConsts } from '@shared/AppConsts';
 import { AppChatMessageReadState, AppChatSide, AppFriendshipState } from '@shared/AppEnums';
@@ -109,7 +109,8 @@ export class ChatBarComponent extends AppComponentBase implements OnInit, AfterV
         private _localStorageService: LocalStorageService,
         private _chatSignalrService: ChatSignalrService,
         private _profileService: ProfileServiceProxy,
-        private _quickSideBarChat: QuickSideBarChat) {
+        private _quickSideBarChat: QuickSideBarChat,
+        public _zone: NgZone) {
         super(injector);
         this.uploadUrl = AppConsts.remoteServiceBaseUrl + '/Chat/UploadFile';
     }
@@ -469,8 +470,8 @@ export class ChatBarComponent extends AppComponentBase implements OnInit, AfterV
             this.isOpen = $('body').hasClass('m-quick-sidebar--on');
         });
 
-        $('div.m-quick-sidebar').on('mouseleave', () => {
-            if (this.pinned) {
+        $('div.m-quick-sidebar').on('mouseleave', (e) => {
+            if (this.pinned || (e.target && $(e.target).attr("data-toggle") === 'm-popover')) { // don't hide chat panel when mouse is on popover notification
                 return;
             }
 
@@ -509,8 +510,8 @@ export class ChatBarComponent extends AppComponentBase implements OnInit, AfterV
     registerEvents(): void {
         const self = this;
 
-        abp.event.on('app.chat.messageReceived', message => {
-            const user = this.getFriendOrNull(message.targetUserId, message.targetTenantId);
+        function onMessageReceived(message) {
+            const user = self.getFriendOrNull(message.targetUserId, message.targetTenantId);
             if (!user) {
                 return;
             }
@@ -521,12 +522,12 @@ export class ChatBarComponent extends AppComponentBase implements OnInit, AfterV
             if (message.side === AppChatSide.Receiver) {
                 user.unreadMessageCount += 1;
                 message.readState = AppChatMessageReadState.Unread;
-                this.triggerUnreadMessageCountChangeEvent();
+                self.triggerUnreadMessageCountChangeEvent();
 
-                if (this.isOpen && this.selectedUser !== null && user.friendTenantId === this.selectedUser.friendTenantId && user.friendUserId === this.selectedUser.friendUserId) {
-                    this.markAllUnreadMessagesOfUserAsRead(user);
+                if (self.isOpen && self.selectedUser !== null && user.friendTenantId === self.selectedUser.friendTenantId && user.friendUserId === self.selectedUser.friendUserId) {
+                    self.markAllUnreadMessagesOfUserAsRead(user);
                 } else {
-                    this.notify.info(
+                    self.notify.info(
                         abp.utils.formatString('{0}: {1}', user.friendUserName, abp.utils.truncateString(message.message, 100)),
                         null,
                         {
@@ -546,48 +547,78 @@ export class ChatBarComponent extends AppComponentBase implements OnInit, AfterV
             }
 
             self.scrollToBottom();
+        }
+
+        abp.event.on('app.chat.messageReceived', message => {
+            self._zone.run(() => {
+                onMessageReceived(message);
+            });
         });
+
+        function onFriendshipRequestReceived(data, isOwnRequest) {
+            if (!isOwnRequest) {
+                abp.notify.info(self.l('UserSendYouAFriendshipRequest', data.friendUserName));
+            }
+
+            if (!_.filter(self.friends, f => f.friendUserId === data.friendUserId && f.friendTenantId === data.friendTenantId).length) {
+                self.friends.push(data);
+            }
+        }
 
         abp.event.on('app.chat.friendshipRequestReceived', (data, isOwnRequest) => {
-            if (!isOwnRequest) {
-                abp.notify.info(this.l('UserSendYouAFriendshipRequest', data.friendUserName));
-            }
-
-            if (!_.filter(this.friends, f => f.friendUserId === data.friendUserId && f.friendTenantId === data.friendTenantId).length) {
-                this.friends.push(data);
-            }
+            self._zone.run(() => {
+                onFriendshipRequestReceived(data, isOwnRequest);
+            });
         });
 
-        abp.event.on('app.chat.userConnectionStateChanged', data => {
-            const user = this.getFriendOrNull(data.friend.userId, data.friend.tenantId);
+        function onUserConnectionStateChanged(data) {
+            const user = self.getFriendOrNull(data.friend.userId, data.friend.tenantId);
             if (!user) {
                 return;
             }
 
             user.isOnline = data.isConnected;
+        }
+
+        abp.event.on('app.chat.userConnectionStateChanged', data => {
+            self._zone.run(() => {
+                onUserConnectionStateChanged(data);
+            });
         });
 
-        abp.event.on('app.chat.userStateChanged', data => {
-            const user = this.getFriendOrNull(data.friend.userId, data.friend.tenantId);
+        function onUserStateChanged(data) {
+            const user = self.getFriendOrNull(data.friend.userId, data.friend.tenantId);
             if (!user) {
                 return;
             }
 
             user.state = data.state;
+        }
+
+        abp.event.on('app.chat.userStateChanged', data => {
+            self._zone.run(() => {
+                onUserStateChanged(data);
+            });
         });
 
-        abp.event.on('app.chat.allUnreadMessagesOfUserRead', data => {
-            const user = this.getFriendOrNull(data.friend.userId, data.friend.tenantId);
+        function onAllUnreadMessagesOfUserRead(data) {
+            const user = self.getFriendOrNull(data.friend.userId, data.friend.tenantId);
             if (!user) {
                 return;
             }
 
             user.unreadMessageCount = 0;
-            this.triggerUnreadMessageCountChangeEvent();
+            self.triggerUnreadMessageCountChangeEvent();
+        }
+
+        abp.event.on('app.chat.allUnreadMessagesOfUserRead', data => {
+            self._zone.run(() => {
+                onAllUnreadMessagesOfUserRead(data);
+            });
         });
 
-        abp.event.on('app.chat.readStateChange', data => {
-            const user = this.getFriendOrNull(data.friend.userId, data.friend.tenantId);
+        function onReadStateChange(data) {
+            const user = self.getFriendOrNull(data.friend.userId, data.friend.tenantId);
             if (!user) {
                 return;
             }
@@ -596,10 +627,15 @@ export class ChatBarComponent extends AppComponentBase implements OnInit, AfterV
                 (index, message) => {
                     message.receiverReadState = AppChatMessageReadState.Read;
                 });
+        }
+
+        abp.event.on('app.chat.readStateChange', data => {
+            self._zone.run(() => {
+                onReadStateChange(data);
+            });
         });
 
-        abp.event.on('app.chat.connected', () => {
-            const self = this;
+        function onConnected() {
             self.getFriendsAndSettings(() => {
                 DomHelper.waitUntilElementIsReady('#m_quick_sidebar, #m_quick_sidebar_toggle', () => {
                     self.bindUiEvents();
@@ -608,6 +644,12 @@ export class ChatBarComponent extends AppComponentBase implements OnInit, AfterV
                         self.loadLastState();
                     });
                 });
+            });
+        }
+
+        abp.event.on('app.chat.connected', () => {
+            self._zone.run(() => {
+                onConnected();
             });
         });
     }

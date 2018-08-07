@@ -145,3 +145,13 @@ span.m-menu__arrow.m-menu__arrow--adjust {
 body.m-aside-left--skin-dark .m-brand {
     width: auto;
 }
+
+@media(max-width: 1024px) {
+    span.m-menu__arrow.m-menu__arrow--adjust {
+        display: none;
+    }
+}
+
+.m-header__top {
+    height: auto !important;
+}

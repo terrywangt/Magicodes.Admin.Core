@@ -2,7 +2,7 @@
      aria-hidden="true" [config]="{backdrop: 'static'}">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <form *ngIf="active" #roleForm="ngForm" novalidate (ngSubmit)="save()">
+            <form *ngIf="active" #roleForm="ngForm">
                 <div class="modal-header">
                     <h4 class="modal-title">
                         <span *ngIf="auditLog.userId">{{l("AuditLogDetail")}}</span>
@@ -55,8 +55,8 @@
                             <div class="form-group m-form__group row" *ngIf="auditLog.impersonatorUserId">
                                 <label class="col-lg-3 col-form-label">
                                 </label>
-                                <div class="col-lg-9">
-                                    <span>{{AuditLogImpersonatedOperationInfo}}</span>
+                                <div class="col-lg-9 text-warning">
+                                    <span>{{l("AuditLogImpersonatedOperationInfo")}}</span>
                                 </div>
                             </div>
                         </div>

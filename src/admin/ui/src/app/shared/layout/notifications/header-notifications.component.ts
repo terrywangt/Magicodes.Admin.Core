@@ -1,4 +1,4 @@
-import { Component, Injector, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, Injector, OnInit, ViewEncapsulation, NgZone } from '@angular/core';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { NotificationServiceProxy, UserNotification } from '@shared/service-proxies/service-proxies';
 import { IFormattedUserNotification, UserNotificationHelper } from './UserNotificationHelper';
@@ -16,7 +16,8 @@ export class HeaderNotificationsComponent extends AppComponentBase implements On
     constructor(
         injector: Injector,
         private _notificationService: NotificationServiceProxy,
-        private _userNotificationHelper: UserNotificationHelper
+        private _userNotificationHelper: UserNotificationHelper,
+        public _zone: NgZone
     ) {
         super(injector);
     }
@@ -37,23 +38,43 @@ export class HeaderNotificationsComponent extends AppComponentBase implements On
     }
 
     registerToEvents() {
+        var self = this;
+
+        function onNotificationReceived(userNotification) {
+            self._userNotificationHelper.show(userNotification);
+            self.loadNotifications();
+        }
+
         abp.event.on('abp.notifications.received', userNotification => {
-            this._userNotificationHelper.show(userNotification);
-            this.loadNotifications();
+            self._zone.run(() => {
+                onNotificationReceived(userNotification);
+            });
         });
+
+        function onNotificationsRefresh() {
+            self.loadNotifications();
+        }
 
         abp.event.on('app.notifications.refresh', () => {
-            this.loadNotifications();
+            self._zone.run(() => {
+                onNotificationsRefresh();
+            });
         });
 
-        abp.event.on('app.notifications.read', userNotificationId => {
-            for (let i = 0; i < this.notifications.length; i++) {
-                if (this.notifications[i].userNotificationId === userNotificationId) {
-                    this.notifications[i].state = 'READ';
+        function onNotificationsRead(userNotificationId) {
+            for (let i = 0; i < self.notifications.length; i++) {
+                if (self.notifications[i].userNotificationId === userNotificationId) {
+                    self.notifications[i].state = 'READ';
                 }
             }
 
-            this.unreadNotificationCount -= 1;
+            self.unreadNotificationCount -= 1;
+        }
+
+        abp.event.on('app.notifications.read', userNotificationId => {
+            self._zone.run(() => {
+                onNotificationsRead(userNotificationId);
+            });
         });
     }
 
