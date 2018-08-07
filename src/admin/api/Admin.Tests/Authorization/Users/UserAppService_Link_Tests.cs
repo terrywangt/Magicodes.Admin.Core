@@ -183,9 +183,14 @@ namespace Magicodes.Admin.Tests.Authorization.Users
 
         private async Task CreateTestUsersForAccountLinkingAsync()
         {
-            await _userManager.CreateAsync(CreateUserEntity("jnash", "John", "Nash", "jnsh2000@testdomain.com"));
-            await _userManager.CreateAsync(CreateUserEntity("adams_d", "Douglas", "Adams", "adams_d@gmail.com"));
-            await _userManager.CreateAsync(CreateUserEntity("artdent", "Arthur", "Dent", "ArthurDent@yahoo.com"));
+            using (var uow = _unitOfWorkManager.Begin())
+            {
+                await _userManager.CreateAsync(CreateUserEntity("jnash", "John", "Nash", "jnsh2000@testdomain.com"));
+                await _userManager.CreateAsync(CreateUserEntity("adams_d", "Douglas", "Adams", "adams_d@gmail.com"));
+                await _userManager.CreateAsync(CreateUserEntity("artdent", "Arthur", "Dent", "ArthurDent@yahoo.com"));
+
+                await uow.CompleteAsync();
+            }
         }
     }
 }

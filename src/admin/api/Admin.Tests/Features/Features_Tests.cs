@@ -1,6 +1,9 @@
-﻿using System.Linq;
+﻿using System.Globalization;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Abp.Application.Services.Dto;
+using Abp.Localization;
 using Abp.MultiTenancy;
 using Abp.UI;
 using Microsoft.EntityFrameworkCore;
@@ -18,12 +21,14 @@ namespace Magicodes.Admin.Tests.Features
     {
         private readonly IEditionAppService _editionAppService;
         private readonly IUserAppService _userAppService;
+        private readonly ILocalizationManager _localizationManager;
 
         public Features_Tests()
         {
             LoginAsHostAdmin();
             _editionAppService = Resolve<IEditionAppService>();
             _userAppService = Resolve<IUserAppService>();
+            _localizationManager = Resolve<ILocalizationManager>();
         }
 
         [MultiTenantFact]
@@ -96,7 +101,7 @@ namespace Magicodes.Admin.Tests.Features
                         })
             );
 
-            exception.Message.ShouldContain("Reached to maximum allowed user count!");
+            exception.Message.ShouldContain(_localizationManager.GetString(AdminConsts.LocalizationSourceName, "MaximumUserCount_Error_Message"));
         }
     }
 }
