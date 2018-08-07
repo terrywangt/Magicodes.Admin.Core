@@ -12,9 +12,6 @@
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <RootNamespace>Magicodes.App.Application</RootNamespace>
   </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="Abp.AspNetCore" Version="3.7.2" />
-  </ItemGroup>
   <PropertyGroup>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
