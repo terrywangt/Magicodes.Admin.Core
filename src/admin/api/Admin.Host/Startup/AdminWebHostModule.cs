@@ -1,8 +1,10 @@
-﻿using Abp.AspNetZeroCore;
+﻿using System.Collections.Generic;
+using Abp.AspNetZeroCore;
 using Abp.AspNetZeroCore.Web.Authentication.External;
 using Abp.AspNetZeroCore.Web.Authentication.External.Facebook;
 using Abp.AspNetZeroCore.Web.Authentication.External.Google;
 using Abp.AspNetZeroCore.Web.Authentication.External.Microsoft;
+using Abp.AspNetZeroCore.Web.Authentication.External.OpenIdConnect;
 using Abp.Configuration.Startup;
 using Abp.Dependency;
 using Abp.Modules;

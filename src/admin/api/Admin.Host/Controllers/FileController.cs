@@ -1,6 +1,5 @@
-﻿using System.IO;
-using Abp.Auditing;
-using Abp.UI;
+﻿using Abp.Auditing;
+using Abp.Runtime.Caching;
 using Microsoft.AspNetCore.Mvc;
 using Magicodes.Admin.Dto;
 
@@ -9,23 +8,25 @@ namespace Magicodes.Admin.Web.Controllers
     public class FileController : AdminControllerBase
     {
         private readonly IAppFolders _appFolders;
+        private readonly ICacheManager _cacheManager;
 
-        public FileController(IAppFolders appFolders)
+        public FileController(IAppFolders appFolders, ICacheManager cacheManager)
         {
             _appFolders = appFolders;
+            _cacheManager = cacheManager;
         }
 
         [DisableAuditing]
         public ActionResult DownloadTempFile(FileDto file)
         {
-            var filePath = Path.Combine(_appFolders.TempFileDownloadFolder, file.FileToken);
-            if (!System.IO.File.Exists(filePath))
+            var fileBytes = _cacheManager.GetCache(AppConsts.ExcelFileCacheName).Get(file.FileName, ep => ep) as byte[];
+
+            if (fileBytes == null)
             {
-                throw new UserFriendlyException(L("RequestedFileDoesNotExists"));
+                return NotFound(L("RequestedFileDoesNotExists"));
             }
 
-            var fileBytes = System.IO.File.ReadAllBytes(filePath);
-            System.IO.File.Delete(filePath);
+            _cacheManager.GetCache(AppConsts.ExcelFileCacheName).Remove(file.FileName);
             return File(fileBytes, file.FileType, file.FileName);
         }
     }

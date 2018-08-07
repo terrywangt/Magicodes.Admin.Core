@@ -170,6 +170,17 @@ namespace Magicodes.Admin.Web.Controllers
             };
         }
 
+        [HttpGet]
+        [AbpAuthorize]
+        public void LogOut()
+        {
+            if (AbpSession.UserId != null)
+            {
+                var refreshToken = User.Claims.First(c => c.Type == AppConsts.RefreshTokenName);
+                _cacheManager.GetCache(AppConsts.RefreshTokenName).Remove(AbpSession.ToUserIdentifier().ToUserIdentifierString() + refreshToken.Value);
+            }
+        }
+
         [HttpPost]
         public async Task SendTwoFactorAuthCode([FromBody] SendTwoFactorAuthCodeModel model)
         {
@@ -537,8 +548,9 @@ namespace Magicodes.Admin.Web.Controllers
             return SimpleStringCipher.Instance.Encrypt(accessToken, AppConsts.DefaultPassPhrase);
         }
 
-        private List<Claim> CreateJwtClaims(ClaimsIdentity identity)
+        private IEnumerable<Claim> CreateJwtClaims(ClaimsIdentity identity)
         {
+            var refreshToken = Guid.NewGuid().ToString();
             var claims = identity.Claims.ToList();
             var nameIdClaim = claims.First(c => c.Type == _identityOptions.ClaimsIdentity.UserIdClaimType);
 
@@ -547,11 +559,17 @@ namespace Magicodes.Admin.Web.Controllers
                 claims.Add(new Claim(JwtRegisteredClaimNames.Sub, nameIdClaim.Value));
             }
 
+            var userIdentifier = new UserIdentifier(AbpSession.TenantId, Convert.ToInt64(nameIdClaim.Value));
+
             claims.AddRange(new[]
             {
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.Now.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64)
+                new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.Now.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64),
+                new Claim(AppConsts.RefreshTokenName, refreshToken),
+                new Claim(AppConsts.UserIdentifier, userIdentifier.ToUserIdentifierString())
             });
+
+            _cacheManager.GetCache(AppConsts.RefreshTokenName).Set(userIdentifier.ToUserIdentifierString() + refreshToken, refreshToken);
 
             return claims;
         }

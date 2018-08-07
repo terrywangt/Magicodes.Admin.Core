@@ -60,7 +60,7 @@ export class FileUploadModalComponent extends AppComponentBase {
         event.preventDefault();
         let ids = [];
         ids.push(item.data.id);
-        this._commonService.removeObjectAttachments(ids)
+        this._commonService.removeObjectAttachments(ids, this.input.objectType)
             .pipe()
             .subscribe(() => {
                 this.images.forEach((element, index) => {

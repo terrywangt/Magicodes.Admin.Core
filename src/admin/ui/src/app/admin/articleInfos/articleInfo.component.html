@@ -32,8 +32,7 @@
                             <div class="row m--margin-bottom-10">
                                 <label>{{l("Filter")}}</label>
                                 <div class="input-group">
-                                    <input [(ngModel)]="model.filterText" name="Filter" class="form-control" placeholder="{{l('SearchWithThreeDot')}}"
-                                        type="text">
+                                    <input [(ngModel)]="model.filterText" name="Filter" class="form-control" placeholder="{{l('SearchWithThreeDot')}}" type="text">
                                 </div>
                             </div>
                         </div>
@@ -45,24 +44,27 @@
                                         <span></span>
                                     </label>
                                 </div>
-                                <date-range-picker name="CreateDateRange" [isDisabled]="!model.createDateRange" [(startDate)]="model.creationDateStart" [(endDate)]="model.creationDateEnd" [allowFutureDate]="true">
+                                <date-range-picker name="CreateDateRange" [isDisabled]="!model.createDateRange" [(startDate)]="model.creationDateStart" [(endDate)]="model.creationDateEnd"
+                                    [allowFutureDate]="true">
                                 </date-range-picker>
                             </div>
                             <div class="col-xl-6">
                                 <div class="m-checkbox-list">
                                     <label class="m-checkbox">
-                                        <input type="checkbox" [(ngModel)]="model.subscriptionEndDateRangeActive" id="model_updateDateRange" name="UpdateDateRange" value="true"> {{l('UpdateDateRange')}}
+                                        <input type="checkbox" [(ngModel)]="model.subscriptionEndDateRangeActive" id="model_updateDateRange" name="UpdateDateRange"
+                                            value="true"> {{l('UpdateDateRange')}}
                                         <span></span>
                                     </label>
                                 </div>
-                                <date-range-picker name="UpdateDateRange" [isDisabled]="!model.updateDateRange" [(startDate)]="model.subscriptionEndDateStart" [(endDate)]="model.subscriptionEndDateEnd" [allowFutureDate]="false">
+                                <date-range-picker name="UpdateDateRange" [isDisabled]="!model.updateDateRange" [(startDate)]="model.subscriptionEndDateStart"
+                                    [(endDate)]="model.subscriptionEndDateEnd" [allowFutureDate]="false">
                                 </date-range-picker>
-							</div>
+                            </div>
                             <div class="col-md-6">
                                 <label for="SubmenuToggle">{{l("IsActive")}}</label>
                                 <select id="IsActive" name="IsActive" class="form-control" [(ngModel)]="model.isActive">
                                     <option value="all">{{l("All")}}</option>
-									<option value="yes">{{l("Yes")}}</option>
+                                    <option value="yes">{{l("Yes")}}</option>
                                     <option value="no">{{l("No")}}</option>
                                 </select>
                             </div>
@@ -70,7 +72,7 @@
                                 <label for="SubmenuToggle">{{l("IsNeedAuthorizeAccess")}}</label>
                                 <select id="IsNeedAuthorizeAccess" name="IsNeedAuthorizeAccess" class="form-control" [(ngModel)]="model.isNeedAuthorizeAccess">
                                     <option value="all">{{l("All")}}</option>
-									<option value="yes">{{l("Yes")}}</option>
+                                    <option value="yes">{{l("Yes")}}</option>
                                     <option value="no">{{l("No")}}</option>
                                 </select>
                             </div>
@@ -91,75 +93,67 @@
                 <div class="row align-items-center">
                     <!--<Primeng-Datatable-Start>-->
                     <div class="primeng-datatable-container" [busyIf]="primengTableHelper.isLoading">
-						<p-table #dataTable
-                                 (onLazyLoad)="getArticleInfos($event)"
-                                 [value]="primengTableHelper.records"
-                                 rows="{{primengTableHelper.defaultRecordsCountPerPage}}"
-                                 [paginator]="false"
-                                 [lazy]="true"
-                                 [responsive]="primengTableHelper.isResponsive" 
-								 [scrollable]="true"                                 
-                                 [style]="{width:'100%'}" >
-							<ng-template pTemplate="header">
+                        <p-table #dataTable (onLazyLoad)="getArticleInfos($event)" [value]="primengTableHelper.records" rows="{{primengTableHelper.defaultRecordsCountPerPage}}"
+                            [paginator]="false" [lazy]="true" [responsive]="primengTableHelper.isResponsive" [scrollable]="true"
+                            [style]="{width:'100%'}">
+                            <ng-template pTemplate="header">
                                 <tr>
-                                    
-								    <th style="width:130px">{{l('Actions')}}</th>
-									<th pSortableColumn="title" style="width:200px">{{l('Title')}}
-									    <p-sortIcon field="title"></p-sortIcon>
-								    </th>
-									<th pSortableColumn="publisher" style="width:200px">{{l('Publisher')}}
-									    <p-sortIcon field="publisher"></p-sortIcon>
-								    </th>
-									<th pSortableColumn="columnInfo" style="width:200px">{{l('ColumnInfo')}}
-									    <p-sortIcon field="columnInfo"></p-sortIcon>
-								    </th>
-									<th pSortableColumn="articleSourceInfo" style="width:200px">{{l('ArticleSourceInfo')}}
-									    <p-sortIcon field="articleSourceInfo"></p-sortIcon>
-								    </th>
-									<th pSortableColumn="releaseTime" style="width:200px">{{l('ReleaseTime')}}
-									    <p-sortIcon field="releaseTime"></p-sortIcon>
-								    </th>
-									<th pSortableColumn="isActive" style="width:200px">{{l('IsActive')}}
-									    <p-sortIcon field="isActive"></p-sortIcon>
-								    </th>
-									<th pSortableColumn="isNeedAuthorizeAccess" style="width:200px">{{l('IsNeedAuthorizeAccess')}}
-									    <p-sortIcon field="isNeedAuthorizeAccess"></p-sortIcon>
-								    </th>
-									<th pSortableColumn="seoTitle" style="width:200px">{{l('SeoTitle')}}
-									    <p-sortIcon field="seoTitle"></p-sortIcon>
-								    </th>
-									<th pSortableColumn="staticPageUrl" style="width:200px">{{l('StaticPageUrl')}}
-									    <p-sortIcon field="staticPageUrl"></p-sortIcon>
-								    </th>
-									<th style="width:600px">{{l('PictureManage')}}</th>
-									<th pSortableColumn="articleTagInfos" style="width:200px">{{l('ArticleTagInfos')}}
-									    <p-sortIcon field="articleTagInfos"></p-sortIcon>
-								    </th>
-									<th pSortableColumn="url" style="width:200px">{{l('Url')}}
-									    <p-sortIcon field="url"></p-sortIcon>
-								    </th>
-									<th pSortableColumn="recommendedType" style="width:200px">{{l('RecommendedType')}}
-									    <p-sortIcon field="recommendedType"></p-sortIcon>
-								    </th>
-									<th pSortableColumn="viewCount" style="width:200px">{{l('ViewCount')}}
-									    <p-sortIcon field="viewCount"></p-sortIcon>
-								    </th>
-									<th pSortableColumn="creationTime" style="width:200px">{{l('CreationTime')}}
-									    <p-sortIcon field="creationTime"></p-sortIcon>
-								    </th>
-								</tr>
-							</ng-template>
 
-							<ng-template pTemplate="body" let-record="$implicit" >
-                                <tr >
-                                    
+                                    <th style="width:130px">{{l('Actions')}}</th>
+                                    <th pSortableColumn="title" style="width:200px">{{l('Title')}}
+                                        <p-sortIcon field="title"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="publisher" style="width:200px">{{l('Publisher')}}
+                                        <p-sortIcon field="publisher"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="columnInfo" style="width:200px">{{l('ColumnInfo')}}
+                                        <p-sortIcon field="columnInfo"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="articleSourceInfo" style="width:200px">{{l('ArticleSourceInfo')}}
+                                        <p-sortIcon field="articleSourceInfo"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="releaseTime" style="width:200px">{{l('ReleaseTime')}}
+                                        <p-sortIcon field="releaseTime"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="isActive" style="width:200px">{{l('IsActive')}}
+                                        <p-sortIcon field="isActive"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="isNeedAuthorizeAccess" style="width:200px">{{l('IsNeedAuthorizeAccess')}}
+                                        <p-sortIcon field="isNeedAuthorizeAccess"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="seoTitle" style="width:200px">{{l('SeoTitle')}}
+                                        <p-sortIcon field="seoTitle"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="staticPageUrl" style="width:200px">{{l('StaticPageUrl')}}
+                                        <p-sortIcon field="staticPageUrl"></p-sortIcon>
+                                    </th>
+                                    <th style="width:600px">{{l('PictureManage')}}</th>
+                                    <th pSortableColumn="articleTagInfos" style="width:200px">{{l('ArticleTagInfos')}}
+                                        <p-sortIcon field="articleTagInfos"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="url" style="width:200px">{{l('Url')}}
+                                        <p-sortIcon field="url"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="recommendedType" style="width:200px">{{l('RecommendedType')}}
+                                        <p-sortIcon field="recommendedType"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="viewCount" style="width:200px">{{l('ViewCount')}}
+                                        <p-sortIcon field="viewCount"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="creationTime" style="width:200px">{{l('CreationTime')}}
+                                        <p-sortIcon field="creationTime"></p-sortIcon>
+                                    </th>
+                                </tr>
+                            </ng-template>
+
+                            <ng-template pTemplate="body" let-record="$implicit">
+                                <tr>
+
                                     <td style="width: 130px">
                                         <div class="btn-group dropdown" normalizePosition>
-                                            <button class="dropdown-toggle btn btn-sm btn-primary"
-                                                    data-toggle="dropdown"
-                                                    aria-haspopup="true"
-                                                    aria-expanded="false">
-                                                <i class="fa fa-cog"></i><span class="caret"></span> {{l("Actions")}}
+                                            <button class="dropdown-toggle btn btn-sm btn-primary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class="fa fa-cog"></i>
+                                                <span class="caret"></span> {{l("Actions")}}
                                             </button>
                                             <ul class="dropdown-menu" *ngIf="!record.isDeleted">
                                                 <li>
@@ -168,12 +162,12 @@
                                                 <li>
                                                     <a (click)="deleteArticleInfo(record.id)">{{l('Delete')}}</a>
                                                 </li>
-												<li>
-													<a (click)="articleTagInfoModal.show(record.id)">{{l('ArticleTagInfo')}}</a>
-												</li>	
-												<li>
-													<a (click)="fileUploadModal.show(record.id)">{{l('PictureManage')}}</a>
-												</li>
+                                                <li>
+                                                    <a (click)="articleTagInfoModal.show(record.id)">{{l('ArticleTagInfo')}}</a>
+                                                </li>
+                                                <li>
+                                                    <a (click)="fileUploadModal.show(record.id)">{{l('PictureManage')}}</a>
+                                                </li>
                                             </ul>
                                             <ul class="dropdown-menu" *ngIf="record.isDeleted">
                                                 <li>
@@ -182,56 +176,53 @@
                                             </ul>
                                         </div>
                                     </td>
-									<td style="width:200px">{{record.title}}</td>
-									<td style="width:200px">{{record.publisher}}</td>
-									<td style="width:200px">{{record.columnInfo}}</td>
-									<td style="width:200px">{{record.articleSourceInfo}}</td>
-									<td style="width:200px">
-										{{ record.releaseTime ? (record.releaseTime | momentFormat:'L LT') : '-'}}
-									</td>
-									<td style="width:200px">
-										<p-inputSwitch onLabel="{{l('Yes')}}" offLabel="{{l('No')}}" (onChange)="handleIsActiveSwitch($event,record.id)" name="IsActive" [(ngModel)]="record.isActive"></p-inputSwitch>
-									</td>
-									<td style="width:200px">
-										<p-inputSwitch onLabel="{{l('Yes')}}" offLabel="{{l('No')}}" (onChange)="handleIsNeedAuthorizeAccessSwitch($event,record.id)" name="IsActive" [(ngModel)]="record.isNeedAuthorizeAccess"></p-inputSwitch>
-									</td>
-									<td style="width:200px">{{record.seoTitle}}</td>
-									<td style="width:200px">{{record.staticPageUrl}}</td>
-									<td style="width:600px">
+                                    <td style="width:200px">{{record.title}}</td>
+                                    <td style="width:200px">{{record.publisher}}</td>
+                                    <td style="width:200px">{{record.columnInfo}}</td>
+                                    <td style="width:200px">{{record.articleSourceInfo}}</td>
+                                    <td style="width:200px">
+                                        {{ record.releaseTime ? (record.releaseTime | momentFormat:'L LT') : '-'}}
+                                    </td>
+                                    <td style="width:200px">
+                                        <p-inputSwitch (onChange)="handleIsActiveSwitch($event,record.id)" name="IsActive" [(ngModel)]="record.isActive"></p-inputSwitch>
+                                    </td>
+                                    <td style="width:200px">
+                                        <p-inputSwitch (onChange)="handleIsNeedAuthorizeAccessSwitch($event,record.id)" name="IsActive" [(ngModel)]="record.isNeedAuthorizeAccess"></p-inputSwitch>
+                                    </td>
+                                    <td style="width:200px">{{record.seoTitle}}</td>
+                                    <td style="width:200px">{{record.staticPageUrl}}</td>
+                                    <td style="width:600px">
                                         <object-imageList objectTypeName="ArticleInfo" [(objectId)]="record.id"></object-imageList>
                                     </td>
-									<td style="width:200px">{{record.articleTagInfos}}</td>
-									<td style="width:200px">{{record.url}}</td>
-									<td style="width:200px">{{getRecommendedTypeText(record.recommendedType)}}</td>
-									<td style="width:200px">{{record.viewCount}}</td>
-									<td style="width:200px">
-										{{ record.creationTime ? (record.creationTime | momentFormat:'L LT') : '-'}}
-									</td>
-								</tr>
+                                    <td style="width:200px">{{record.articleTagInfos}}</td>
+                                    <td style="width:200px">{{record.url}}</td>
+                                    <td style="width:200px">{{getRecommendedTypeText(record.recommendedType)}}</td>
+                                    <td style="width:200px">{{record.viewCount}}</td>
+                                    <td style="width:200px">
+                                        {{ record.creationTime ? (record.creationTime | momentFormat:'L LT') : '-'}}
+                                    </td>
+                                </tr>
                             </ng-template>
-						</p-table>
+                        </p-table>
 
-						<div class="primeng-paging-container">
-                            <p-paginator rows="{{primengTableHelper.defaultRecordsCountPerPage}}"
-                                         #paginator
-                                         (onPageChange)="getArticleInfos($event)"
-                                         [totalRecords]="primengTableHelper.totalRecordsCount"
-                                         [rowsPerPageOptions]="primengTableHelper.predefinedRecordsCountPerPage">
+                        <div class="primeng-paging-container">
+                            <p-paginator rows="{{primengTableHelper.defaultRecordsCountPerPage}}" #paginator (onPageChange)="getArticleInfos($event)"
+                                [totalRecords]="primengTableHelper.totalRecordsCount" [rowsPerPageOptions]="primengTableHelper.predefinedRecordsCountPerPage">
                             </p-paginator>
                             <span class="total-records-count">
                                 {{l('TotalRecordsCount', primengTableHelper.totalRecordsCount)}}
                             </span>
                         </div>
-					</div>
-					<!--<Primeng-TurboTable-End>-->
-				</div>
+                    </div>
+                    <!--<Primeng-TurboTable-End>-->
+                </div>
             </div>
         </div>
     </div>
 
     <createOrEditArticleInfoModal #createOrEditArticleInfoModal (modalSave)="getArticleInfos()"></createOrEditArticleInfoModal>
 
-	<ArticleTagInfoModal #ArticleTagInfoModal (close)="getArticleInfos()"></ArticleTagInfoModal>
-	
-	<fileUploadModal #fileUploadModal objectTypeName="ArticleInfo"></fileUploadModal>
+    <ArticleTagInfoModal #ArticleTagInfoModal (close)="getArticleInfos()"></ArticleTagInfoModal>
+
+    <fileUploadModal #fileUploadModal objectTypeName="ArticleInfo"></fileUploadModal>
 </div>
