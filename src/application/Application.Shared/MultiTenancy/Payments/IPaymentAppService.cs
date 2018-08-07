@@ -12,6 +12,8 @@ namespace Magicodes.Admin.MultiTenancy.Payments
 
         Task<CreatePaymentResponse> CreatePayment(CreatePaymentDto input);
 
+        Task CancelPayment(CancelPaymentDto input);
+
         Task<ExecutePaymentResponse> ExecutePayment(ExecutePaymentDto input);
 
         Task<PagedResultDto<SubscriptionPaymentListDto>> GetPaymentHistory(GetPaymentHistoryInput input);

@@ -6,22 +6,18 @@ using System.Threading.Tasks;
 using Abp.Auditing;
 using Abp.Runtime.Session;
 using Microsoft.EntityFrameworkCore;
-using Magicodes.Admin.Chat.SignalR;
 using Magicodes.Admin.Editions;
 using Magicodes.Admin.Sessions.Dto;
-using Microsoft.AspNetCore.Hosting;
-using Magicodes.Admin.Configuration;
 
 namespace Magicodes.Admin.Sessions
 {
     public class SessionAppService : AdminAppServiceBase, ISessionAppService
     {
-        public IHostingEnvironment HostingEnvironment { get; set; }
-
+        public IAppConfigurationAccessor AppConfigurationAccessor { get; set; }
         [DisableAuditing]
         public async Task<GetCurrentLoginInformationsOutput> GetCurrentLoginInformations()
         {
-            var configuration = HostingEnvironment.GetAppConfiguration();
+            var configuration = AppConfigurationAccessor.Configuration;
             DateTime releaseDate = configuration["CustomInfo:ReleaseDate"] != null ? Convert.ToDateTime(configuration["CustomInfo:ReleaseDate"]) : AppVersionHelper.ReleaseDate;
             var output = new GetCurrentLoginInformationsOutput
             {
@@ -29,6 +25,7 @@ namespace Magicodes.Admin.Sessions
                 {
                     Version = configuration["CustomInfo:Version"] ?? AppVersionHelper.Version,
                     ReleaseDate = releaseDate,
+                    Features = new Dictionary<string, bool>(),
                     Name = configuration["CustomInfo:Name"] ?? "Magicodes.Admin"
                 }
             };

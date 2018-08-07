@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Abp.Collections.Extensions;
+using Abp.Runtime.Caching;
 using Abp.Runtime.Session;
 using Abp.Timing.Timezone;
 using Magicodes.Admin.Authorization.Users.Dto;
@@ -16,7 +17,8 @@ namespace Magicodes.Admin.Authorization.Users.Exporting
 
         public UserListExcelExporter(
             ITimeZoneConverter timeZoneConverter,
-            IAbpSession abpSession)
+            IAbpSession abpSession,
+            ICacheManager cacheManager) : base(cacheManager)
         {
             _timeZoneConverter = timeZoneConverter;
             _abpSession = abpSession;

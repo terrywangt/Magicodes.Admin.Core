@@ -63,17 +63,13 @@ namespace Magicodes.Admin.Configuration
 
         public async Task UpdateDefaultUiManagementSettings(UiCustomizationSettingsEditDto settings)
         {
-            if (await PermissionChecker.IsGrantedAsync(AppPermissions.Pages_Administration_Host_Settings))
-            {
-                await UpdateApplicationUiManagementSettingsAsync(settings);
-            }
-            else if (await PermissionChecker.IsGrantedAsync(AppPermissions.Pages_Administration_Tenant_Settings))
+            if (AbpSession.TenantId.HasValue)
             {
                 await UpdateTenantUiManagementSettingsAsync(settings);
             }
             else
             {
-                throw new Exception("You cannot change default ui customization settings !");
+                await UpdateApplicationUiManagementSettingsAsync(settings);
             }
         }
 

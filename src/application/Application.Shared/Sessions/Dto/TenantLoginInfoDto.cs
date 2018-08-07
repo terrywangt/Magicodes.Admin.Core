@@ -53,7 +53,7 @@ namespace Magicodes.Admin.Sessions.Dto
                 return 0;
             }
 
-            return Convert.ToInt32(SubscriptionEndDateUtc.Value.Subtract(Clock.Now.ToUniversalTime()).TotalDays);
+            return Convert.ToInt32(SubscriptionEndDateUtc.Value.ToUniversalTime().Subtract(Clock.Now.ToUniversalTime()).TotalDays);
         }
     }
 }

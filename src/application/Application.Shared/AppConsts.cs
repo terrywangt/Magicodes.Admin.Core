@@ -22,6 +22,12 @@
 
         public const int ResizedMaxProfilPictureBytesUserFriendlyValue = 1024;
 
-        public const int MaxProfilPictureBytesUserFriendlyValue = 5; 
+        public const int MaxProfilPictureBytesUserFriendlyValue = 5;
+
+        public const string ExcelFileCacheName = "ExcelFileCacheName";
+
+        public const string RefreshTokenName = "refresh_token";
+
+        public static string UserIdentifier = "user_identifier";
     }
 }

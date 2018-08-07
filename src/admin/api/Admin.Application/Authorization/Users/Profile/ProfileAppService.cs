@@ -117,7 +117,7 @@ namespace Magicodes.Admin.Authorization.Users.Profile
 
             if (cash == null)
             {
-                throw new Exception("Phone numer confirmation code is not found in cache !");
+                throw new Exception("Phone number confirmation code is not found in cache !");
             }
 
             if (input.Code != cash.Code)

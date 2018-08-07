@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Identity;
 using Magicodes.Admin.Authorization.Roles;
 using Magicodes.Admin.Authorization.Users;
 using Magicodes.Admin.MultiTenancy;
-using System.Threading.Tasks;
 
 namespace Magicodes.Admin.Authorization
 {
@@ -42,17 +41,6 @@ namespace Magicodes.Admin.Authorization
                   claimsPrincipalFactory)
         {
 
-        }
-
-        /// <summary>
-        /// 根据租户和用户信息创建登陆
-        /// </summary>
-        /// <param name="user">用户信息</param>
-        /// <param name="tenant">租户信息</param>
-        /// <returns></returns>
-        public async Task<AbpLoginResult<Tenant, User>> CreateLoginResultAsync(User user, Tenant tenant = null)
-        {
-            return await base.CreateLoginResultAsync(user, tenant);
         }
     }
 }

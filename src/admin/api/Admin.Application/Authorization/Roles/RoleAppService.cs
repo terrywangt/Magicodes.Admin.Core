@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Abp.Application.Services.Dto;
 using Abp.Authorization;
-using Abp.Authorization.Users;
 using Abp.Linq.Extensions;
 using Abp.Extensions;
 using Microsoft.EntityFrameworkCore;

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using Abp.AspNetZeroCore.Net;
 using Abp.Collections.Extensions;
 using Abp.Dependency;
+using Abp.Runtime.Caching;
 using Magicodes.Admin.Dto;
 using OfficeOpenXml;
 
@@ -12,6 +12,12 @@ namespace Magicodes.Admin.DataExporting.Excel.EpPlus
     public abstract class EpPlusExcelExporterBase : AdminServiceBase, ITransientDependency
     {
         public IAppFolders AppFolders { get; set; }
+        private readonly ICacheManager _cacheManager;
+
+        protected EpPlusExcelExporterBase(ICacheManager cacheManager)
+        {
+            _cacheManager = cacheManager;
+        }
 
         protected FileDto CreateExcelPackage(string fileName, Action<ExcelPackage> creator)
         {
@@ -63,8 +69,7 @@ namespace Magicodes.Admin.DataExporting.Excel.EpPlus
 
         protected void Save(ExcelPackage excelPackage, FileDto file)
         {
-            var filePath = Path.Combine(AppFolders.TempFileDownloadFolder, file.FileToken);
-            excelPackage.SaveAs(new FileInfo(filePath));
+            _cacheManager.GetCache(AppConsts.ExcelFileCacheName).Set(file.FileName, excelPackage.GetAsByteArray());
         }
     }
 }

@@ -117,6 +117,16 @@ namespace Magicodes.Admin.MultiTenancy.Payments
             }
         }
 
+        public async Task CancelPayment(CancelPaymentDto input)
+        {
+            var payment = await _subscriptionPaymentRepository.GetByGatewayAndPaymentIdAsync(
+                    input.Gateway,
+                    input.PaymentId
+                );
+
+            payment.Cancel();
+        }
+
         public async Task<ExecutePaymentResponse> ExecutePayment(ExecutePaymentDto input)
         {
             using (var paymentGatewayManager = _paymentGatewayManagerFactory.Create(input.Gateway))

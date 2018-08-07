@@ -25,7 +25,7 @@ namespace Magicodes.Admin.Friendships
             IFriendshipManager friendshipManager,
             IOnlineClientManager<ChatChannel> onlineClientManager,
             IChatCommunicator chatCommunicator,
-            ITenantCache tenantCache, 
+            ITenantCache tenantCache,
             IChatFeatureChecker chatFeatureChecker)
         {
             _friendshipManager = friendshipManager;
@@ -142,7 +142,7 @@ namespace Magicodes.Admin.Friendships
                     var tenant = await TenantManager.FindByTenancyNameAsync(tenancyName);
                     if (tenant == null)
                     {
-                        throw new UserFriendlyException("There is no such tenant !");
+                        throw new UserFriendlyException(L("ThereIsNoTenantDefinedWithName{0}", tenancyName));
                     }
 
                     tenantId = tenant.Id;
@@ -154,7 +154,7 @@ namespace Magicodes.Admin.Friendships
                 var user = await UserManager.FindByNameOrEmailAsync(userName);
                 if (user == null)
                 {
-                    throw new UserFriendlyException("There is no such user !");
+                    throw new UserFriendlyException(L("ThereIsNoTenantDefinedWithName{0}", tenancyName));
                 }
 
                 return user.ToUserIdentifier();

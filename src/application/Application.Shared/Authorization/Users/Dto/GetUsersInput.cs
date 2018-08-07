@@ -11,6 +11,8 @@ namespace Magicodes.Admin.Authorization.Users.Dto
 
         public int? Role { get; set; }
 
+        public bool OnlyLockedUsers { get; set; }
+
         public void Normalize()
         {
             if (string.IsNullOrEmpty(Sorting))

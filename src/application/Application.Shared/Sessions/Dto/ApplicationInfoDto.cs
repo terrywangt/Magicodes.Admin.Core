@@ -10,6 +10,7 @@ namespace Magicodes.Admin.Sessions.Dto
         public DateTime ReleaseDate { get; set; }
 
         public Dictionary<string, bool> Features { get; set; }
+
         public string Name { get; set; }
     }
 }

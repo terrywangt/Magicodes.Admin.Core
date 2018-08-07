@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Abp.Extensions;
+using Abp.Runtime.Caching;
 using Abp.Runtime.Session;
 using Abp.Timing.Timezone;
 using Magicodes.Admin.Auditing.Dto;
@@ -15,7 +16,8 @@ namespace Magicodes.Admin.Auditing.Exporting
 
         public AuditLogListExcelExporter(
             ITimeZoneConverter timeZoneConverter,
-            IAbpSession abpSession)
+            IAbpSession abpSession,
+            ICacheManager cacheManager) : base(cacheManager)
         {
             _timeZoneConverter = timeZoneConverter;
             _abpSession = abpSession;
