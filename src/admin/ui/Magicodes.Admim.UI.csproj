@@ -20,9 +20,10 @@
     <None Remove="src\assets\metronic\admin\**" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove=".editorconfig" />
-    <None Remove=".gitignore" />
     <None Remove="npm-shrinkwrap.json" />
-    <None Remove="yarn.lock" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Magicodes.Admin.AngularUI.csproj" />
+    <None Include="Magicodes.Admin.AngularUI.sln" />
   </ItemGroup>
 </Project>
