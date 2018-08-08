@@ -184,10 +184,10 @@
                                         {{ record.releaseTime ? (record.releaseTime | momentFormat:'L LT') : '-'}}
                                     </td>
                                     <td style="width:200px">
-                                        <p-inputSwitch (onChange)="handleIsActiveSwitch($event,record.id)" name="IsActive" [(ngModel)]="record.isActive"></p-inputSwitch>
+                                        <p-inputSwitch (onChange)="handleIsActiveSwitch($event,record.id)" [(ngModel)]="record.isActive"></p-inputSwitch>
                                     </td>
                                     <td style="width:200px">
-                                        <p-inputSwitch (onChange)="handleIsNeedAuthorizeAccessSwitch($event,record.id)" name="IsActive" [(ngModel)]="record.isNeedAuthorizeAccess"></p-inputSwitch>
+                                        <p-inputSwitch (onChange)="handleIsNeedAuthorizeAccessSwitch($event,record.id)" [(ngModel)]="record.isNeedAuthorizeAccess"></p-inputSwitch>
                                     </td>
                                     <td style="width:200px">{{record.seoTitle}}</td>
                                     <td style="width:200px">{{record.staticPageUrl}}</td>

@@ -153,10 +153,10 @@
                                     </td>
                                     <td style="width:200px">{{rowData.title}}</td>
                                     <td style="width:200px">
-                                        <p-inputSwitch (onChange)="handleIsActiveSwitch($event,rowData.id)" name="IsActive" [(ngModel)]="rowData.isActive"></p-inputSwitch>
+                                        <p-inputSwitch (onChange)="handleIsActiveSwitch($event,rowData.id)" [(ngModel)]="rowData.isActive"></p-inputSwitch>
                                     </td>
                                     <td style="width:200px">
-                                        <p-inputSwitch (onChange)="handleIsNeedAuthorizeAccessSwitch($event,rowData.id)" name="IsActive" [(ngModel)]="rowData.isNeedAuthorizeAccess"></p-inputSwitch>
+                                        <p-inputSwitch (onChange)="handleIsNeedAuthorizeAccessSwitch($event,rowData.id)" [(ngModel)]="rowData.isNeedAuthorizeAccess"></p-inputSwitch>
                                     </td>
                                     <td style="width:200px">{{rowData.iconCls}}</td>
                                     <td style="width:600px">
