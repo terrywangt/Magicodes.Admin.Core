@@ -1,8 +1,7 @@
-﻿# 本脚本用于主体框架升级，升级之前请备份
+﻿# 本脚本用于主体框架升级，升级之前会自动备份。
 
 function prompt { '心莱科技: ' + (get-location) + '> '}
 $start = Get-Date
-
 #----------------------------------------------------设置路径--------------------------------------------------------------------------------
 $invocation = (Get-Variable MyInvocation).Value
 $directorypath = Split-Path $invocation.MyCommand.Path
@@ -58,8 +57,7 @@ $gitCloneTask = {
 $upgradeTask = {
     Write-Warning '正在准备升级...';
     $paths = 'admin\api\Admin.Application.Custom', 'admin\api\Admin.Host\appsettings.json', 'admin\api\Admin.Host\appsettings.production.json', 'admin\api\Admin.Host\appsettings.Staging.json', 'admin\ui\nswag\service.config.nswag', 'admin\ui\src\app\admin\admin.module.ts', 'admin\ui\src\app\admin\admin-routing.module.ts', 'admin\ui\src\app\shared\layout\nav\app-navigation.service.ts', 'admin\ui\src\shared\service-proxies\service-proxy.module.ts', 'app\api\App.Application', 'app\api\App.Host\appsettings.json', 'app\api\App.Host\appsettings.production.json', 'app\api\App.Host\appsettings.Staging.json', 'core\Magicodes.Admin.Core.Custom', 'unity\Magicodes.Pay\Startup';
-    #自行合并后台UI
-    #APP单元测试请自行合并
+
     $bakPath = [io.Path]::Combine($directorypath, "bak", "src");
     $tempPath = [io.Path]::Combine($directorypath, "temp", "src");
     foreach ($item in $paths) {
