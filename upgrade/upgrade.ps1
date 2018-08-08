@@ -1,4 +1,4 @@
-﻿# 本脚本用于主体框架升级，升级之前会自动备份。
+﻿# 本脚本用于实际项目中主体框架升级，升级之前会自动备份。
 
 function prompt { '心莱科技: ' + (get-location) + '> '}
 $start = Get-Date
@@ -6,8 +6,6 @@ $start = Get-Date
 $invocation = (Get-Variable MyInvocation).Value
 $directorypath = Split-Path $invocation.MyCommand.Path
 Write-Host $directorypath
-#$rootDir = [io.Directory]::GetParent($directorypath);
-#Set-Location $rootDir
 $rootDir = [io.Directory]::GetParent($directorypath);
 $sourceCodePath = [io.Path]::Combine($rootDir, "src");
 if (![io.Directory]::Exists($sourceCodePath)) {
@@ -54,6 +52,7 @@ $gitCloneTask = {
     cmd /c $cmdString
 }
 
+#复制项目代码
 $upgradeTask = {
     Write-Warning '正在准备升级...';
     $paths = 'admin\api\Admin.Application.Custom', 'admin\api\Admin.Host\appsettings.json', 'admin\api\Admin.Host\appsettings.production.json', 'admin\api\Admin.Host\appsettings.Staging.json', 'admin\ui\nswag\service.config.nswag', 'admin\ui\src\app\admin\admin.module.ts', 'admin\ui\src\app\admin\admin-routing.module.ts', 'admin\ui\src\app\shared\layout\nav\app-navigation.service.ts', 'admin\ui\src\shared\service-proxies\service-proxy.module.ts', 'app\api\App.Application', 'app\api\App.Host\appsettings.json', 'app\api\App.Host\appsettings.production.json', 'app\api\App.Host\appsettings.Staging.json', 'core\Magicodes.Admin.Core.Custom', 'unity\Magicodes.Pay\Startup';
@@ -85,7 +84,7 @@ $upgradeTask = {
             Remove-Item $path  -Force
         }
     }
-    Write-Host -ForegroundColor Red '升级完成，后台UI和APP单元测试请手工合并。合并完成后，请执行数据库迁移并且检查代码是否合并正确。（建议使用版本库比较工具仔细比较）';
+    Write-Host -ForegroundColor Red '升级完成，后台UI和APP单元测试请手工合并。合并完成后，请执行数据库迁移、部分项目包版本合并，以及检查代码是否合并正确。（建议使用版本库比较工具仔细比较）';
 }
 #---------------------------------------------------------------------------------------------------------------------------------------------
 
