@@ -125,3 +125,6 @@ src/Magicodes.Admin.Web.Host/wwwroot/Temp/Downloads
 /src/app/ui/App/platforms
 /src/app/ui/App/plugins
 /src/app/ui/App/node_modules
+/upgrade/bak
+/upgrade/source
+/upgrade/temp
