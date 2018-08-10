@@ -33,7 +33,7 @@ Function  CopyItemsWithFilter($sPath, $dPath, $filter) {
     }
     [io.Directory]::CreateDirectory($dPath);
     Set-Location $sPath
-    $Cmd = "ROBOCOPY $sPath $dPath /E /XF *.log *.dll /XD bin obj node_modules dist .cache packages Logs Debug Release";
+    $Cmd = "ROBOCOPY $sPath $dPath /E /XF *.log *.dll *.tmp *.bak /XD bin obj node_modules dist .cache packages Logs Debug Release";
     Write-Host $Cmd
     cmd /c $Cmd
 }

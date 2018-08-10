@@ -87,6 +87,17 @@ $upgradeTask = {
         Write-Warning "正在清理：$path"
         RemoveItems -path $path
     }
+
+    $ws = New-Object -ComObject WScript.Shell
+    $wsr = $ws.popup("升级准备就绪，自动升级将存在一定的风险，需要继续么（您可以手工完成后续升级）？", 5, "Magicodes升级工具", 1 + 48)
+    if ($wsr -eq 1) {
+        RemoveItems -path $sourceCodePath
+        [io.Directory]::CreateDirectory($sourceCodePath);
+        $tempPath = [io.Path]::Combine($directorypath, "temp", "src");
+        $Cmd = "ROBOCOPY $tempPath $sourceCodePath /E /XF *.log *.dll *.tmp *.bak /XD bin obj node_modules dist .cache packages Logs Debug Release";
+        Write-Host $Cmd
+        cmd /c $Cmd
+    }
     Write-Host -ForegroundColor Red '升级完成！请执行数据库迁移、部分项目包版本合并，以及检查代码是否合并正确。（建议使用版本库比较工具仔细比较）';
 }
 #---------------------------------------------------------------------------------------------------------------------------------------------
