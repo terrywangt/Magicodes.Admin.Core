@@ -12,18 +12,24 @@ Set-Location $directorypath
 $rootDir = [io.Directory]::GetParent($directorypath);
 $sourceCodePath = [io.Path]::Combine($rootDir, "src");
 if (![io.Directory]::Exists($sourceCodePath)) {
-    Write-Error "目录不存在，此结构不支持目前版本的自动升级，请手动升级。$sourceCodePath";
+    Write-Host -ForegroundColor Red "目录不存在，此结构不支持目前版本的自动升级，请手动升级。$sourceCodePath";
     return;
 }
 #框架代码缓存目录
 $adminCorePath = [io.Path]::Combine( [io.Path]::GetPathRoot($directorypath), "temp", "cache", "Magicodes.Admin.Core");
 #---------------------------------------------------------------------------------------------------------------------------------------------
 
-#TODO:检查
-#1.当前是否存在待提交文件
-#2.git状态正常
-#3.目录结构正常
-#4.创建升级分支
+#----------------------------------------------------升级检查以及创建升级分支-------------------------------------------------------------------
+$branchName = Get-Date -Format "yyyyMMdd_HHmmss";
+$branchName = "frmupgrade/$branchName";
+git checkout -B $branchName
+$currentBranchName = git symbolic-ref --short -q HEAD;
+Write-Host -ForegroundColor Yellow "当前分支：$currentBranchName";
+if ($currentBranchName -ne $branchName) {
+    Write-Host -ForegroundColor Red  "创建升级分支出错！";
+    exit
+}
+#---------------------------------------------------------------------------------------------------------------------------------------------
 
 #----------------------------------------------------任务定义--------------------------------------------------------------------------------
 
@@ -79,17 +85,17 @@ $upgradeTask = {
     $dAdminUIPath = [io.Path]::Combine($tempPath, "admin\ui\src\app\admin");
     $adminDirs = [io.Directory]::GetDirectories($adminUIPath);
     foreach ($item in $adminDirs) {
-        if (",articleInfos,articleSourceInfos,audit-logs,columnInfos,components,dashboard,demo-ui-components,editions,install,languages,maintenance,organization-units,roles,settings,shared,subscription-management,tenants,ui-customization,users,".IndexOf(',' + $item.Name + ',') = -1) {
+        if (", articleInfos, articleSourceInfos, audit-logs, columnInfos, components, dashboard, demo-ui-components, editions, install, languages, maintenance, organization-units, roles, settings, shared, subscription-management, tenants, ui-customization, users, ".IndexOf(',' + $item.Name + ',') = -1) {
             Copy-Item -Path  $item  -Destination $dAdminUIPath  -Recurse  -Force
         }
     }
     #升级部分工程文件
     $frmPath = [io.Path]::Combine($adminCorePath, "src");
-    $replacePaths = "admin\api\Admin.Application.Custom\Admin.Application.Custom.csproj;app\api\App.Tests\App.Tests.csproj".Split(';');
+    $replacePaths = "admin\api\Admin.Application.Custom\Admin.Application.Custom.csproj; app\api\App.Tests\App.Tests.csproj".Split(';');
     CopyItemsByPaths -paths $replacePaths -path $frmPath -destination $tempPath
 
     #执行清理
-    $clearPaths = "documents;build;docker;res;softs;tools;migration.bat;README.md;.git;package-lock.json;Magicodes.Admin源码高级版授权合同.doc;Magicodes.Admin源码基础版授权合同.doc;build-mvc.ps1;build-with-ng.ps1".Split(';');
+    $clearPaths = "documents; build; docker; res; softs; tools; migration.bat; README.md; .git; package-lock.json; Magicodes.Admin源码高级版授权合同.doc; Magicodes.Admin源码基础版授权合同.doc; build-mvc.ps1; build-with-ng.ps1".Split(';');
     foreach ($item in $clearPaths) {
         $path = [io.Path]::Combine($directorypath, "temp", $item);
         Write-Warning "正在清理：$path"
