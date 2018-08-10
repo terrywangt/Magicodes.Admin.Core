@@ -20,7 +20,7 @@ if (![io.Directory]::Exists($sourceCodePath)) {
 #----------------------------------------------------任务定义--------------------------------------------------------------------------------
 
 #备份任务
-$bakTask = { 
+$bakTask = {
     Write-Host "正在备份当前代码：$sourceCodePath";
     # 备份路径
     $bakPath = [io.Path]::Combine($directorypath, "bak", "src");
@@ -29,7 +29,7 @@ $bakTask = {
 }
 
 #创建临时目录
-$tempTask = { 
+$tempTask = {
     Write-Host "正在创建临时工作区";
     $sourcePath = [io.Path]::Combine($directorypath, "source")
     # 备份路径
@@ -49,7 +49,7 @@ $gitCloneTask = {
         $gitCmd = "git pull";
     }
     Set-Location $sourcePath
-    
+
     $cmdString = $gitCmd;
     Write-Host $cmdString
     cmd /c $cmdString
@@ -60,7 +60,7 @@ $upgradeTask = {
     Write-Warning '正在准备升级...';
     $paths = 'admin\api\Admin.Application.Custom', 'admin\api\Admin.Host\appsettings.json', 'admin\api\Admin.Host\appsettings.production.json', 'admin\api\Admin.Host\appsettings.Staging.json', 'admin\ui\nswag\service.config.nswag', 'admin\ui\src\app\admin\admin.module.ts', 'admin\ui\src\app\admin\admin-routing.module.ts', 'admin\ui\src\app\shared\layout\nav\app-navigation.service.ts', 'admin\ui\src\shared\service-proxies\service-proxy.module.ts', 'app\api\App.Application', 'app\api\App.Host\appsettings.json', 'app\api\App.Host\appsettings.production.json', 'app\api\App.Host\appsettings.Staging.json', 'core\Magicodes.Admin.Core.Custom', 'unity\Magicodes.Pay\Startup', 'app\api\App.Tests';
 
-    
+
     $bakPath = [io.Path]::Combine($directorypath, "bak", "src");
     $tempPath = [io.Path]::Combine($directorypath, "temp", "src");
     #覆盖自定义代码
@@ -93,9 +93,9 @@ $upgradeTask = {
 
 #----------------------------------------------------执行任务--------------------------------------------------------------------------------
 Invoke-Command -ScriptBlock $bakTask
-# Invoke-Command -ScriptBlock $gitCloneTask
-# Invoke-Command -ScriptBlock $tempTask
-# Invoke-Command -ScriptBlock $upgradeTask
+Invoke-Command -ScriptBlock $gitCloneTask
+Invoke-Command -ScriptBlock $tempTask
+Invoke-Command -ScriptBlock $upgradeTask
 #----------------------------------------------------------------------------------------------------------------------------------------------
 $end = Get-Date
 Write-Host -ForegroundColor Red "执行时间"+ ($end - $start).TotalSeconds

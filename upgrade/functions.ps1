@@ -18,7 +18,7 @@
 #>
 Function  CopyItemsWithFilter($sPath, $dPath, $filter) {
     if (IsNull -objectToCheck $filter) {
-        $filter = "*.log", "*\bin\*", "*obj*", "*\Logs\*", "*\.vs\*", "*\packages\*", "*\node_modules\*", "*\.cache\*", "*\disk\*";
+        $filter = "\bin", "\obj", "\Logs", "\.vs", "\packages\", "\node_modules\", "\.cache\", "\disk\";
     }
     Write-Host "正在将 $sPath 复制到 $dPath";
     if ([io.Directory]::Exists($dPath)) {
@@ -33,12 +33,9 @@ Function  CopyItemsWithFilter($sPath, $dPath, $filter) {
     }
     [io.Directory]::CreateDirectory($dPath);
     Set-Location $sPath
-    $delegate = [Func[string, bool]] { [Linq.Enumerable]::Any($filter, { $args[0].Contains($_) }) }
-    Get-ChildItem $sPath.FullName -Recurse -Exclude $filter | Where-Object { $_.Mode -eq "-a----" -and !$delegate } |
-        ForEach-Object {
-        Copy-Item -Path  $_.FullName  -Destination $dPath  -Recurse  -Force;
-        Write-Host "复制完成：$_";
-    }
+    $Cmd = "ROBOCOPY $sPath $dPath /E /XF *.log *.dll /XD bin obj node_modules dist .cache packages Logs Debug Release";
+    Write-Host $Cmd
+    cmd /c $Cmd
 }
 <#
 .SYNOPSIS
@@ -76,7 +73,7 @@ function IsNull($objectToCheck) {
 目标路径
 
 .EXAMPLE
-CopyItemsByPaths -paths $paths -path -destination $tempPath
+CopyItems -paths $paths -path -destination $tempPath
 
 #>
 function CopyItems ($path, $destination) {
