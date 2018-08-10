@@ -17,9 +17,6 @@
  CopyItemsWithFilter -sPath $sourcePath -dPath $tempPath;
 #>
 Function  CopyItemsWithFilter($sPath, $dPath, $filter) {
-    if (IsNull -objectToCheck $filter) {
-        $filter = "\bin", "\obj", "\Logs", "\.vs", "\packages\", "\node_modules\", "\.cache\", "\disk\";
-    }
     Write-Host "正在将 $sPath 复制到 $dPath";
     if ([io.Directory]::Exists($dPath)) {
         try {
@@ -33,7 +30,7 @@ Function  CopyItemsWithFilter($sPath, $dPath, $filter) {
     }
     [io.Directory]::CreateDirectory($dPath);
     Set-Location $sPath
-    $Cmd = "ROBOCOPY $sPath $dPath /E /XF *.log *.dll *.tmp *.bak /XD bin obj node_modules dist .cache packages Logs Debug Release";
+    $Cmd = "ROBOCOPY $sPath $dPath /256 /E /XF *.log *.dll *.tmp *.bak /XD bin obj node_modules dist .cache packages Logs Debug Release Migrations";
     Write-Host $Cmd
     cmd /c $Cmd
 }

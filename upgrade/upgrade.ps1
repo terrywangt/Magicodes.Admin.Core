@@ -15,7 +15,15 @@ if (![io.Directory]::Exists($sourceCodePath)) {
     Write-Error "目录不存在，此结构不支持目前版本的自动升级，请手动升级。$sourceCodePath";
     return;
 }
+#框架代码缓存目录
+$adminCorePath = [io.Path]::Combine( [io.Path]::GetPathRoot($directorypath), "temp", "cache", "Magicodes.Admin.Core");
 #---------------------------------------------------------------------------------------------------------------------------------------------
+
+#TODO:检查
+#1.当前是否存在待提交文件
+#2.git状态正常
+#3.目录结构正常
+#4.创建升级分支
 
 #----------------------------------------------------任务定义--------------------------------------------------------------------------------
 
@@ -31,7 +39,7 @@ $bakTask = {
 #创建临时目录
 $tempTask = {
     Write-Host "正在创建临时工作区";
-    $sourcePath = [io.Path]::Combine($directorypath, "source")
+    $sourcePath = $adminCorePath
     # 备份路径
     $tempPath = [io.Path]::Combine($directorypath, "temp");
     CopyItemsWithFilter -sPath $sourcePath -dPath $tempPath;
@@ -40,7 +48,7 @@ $tempTask = {
 
 #获取框架最新代码
 $gitCloneTask = {
-    $sourcePath = [io.Path]::Combine($directorypath, "source")
+    $sourcePath = $adminCorePath
     $gitCmd = "git clone https://gitee.com/xl_wenqiang/Magicodes.Admin.Core.git" + " " + $sourcePath;
     if (![io.Directory]::Exists($sourcePath)) {
         [io.Directory]::CreateDirectory($sourcePath);
@@ -76,7 +84,7 @@ $upgradeTask = {
         }
     }
     #升级部分工程文件
-    $frmPath = [io.Path]::Combine($directorypath, "source", "src");
+    $frmPath = [io.Path]::Combine($adminCorePath, "src");
     $replacePaths = "admin\api\Admin.Application.Custom\Admin.Application.Custom.csproj;app\api\App.Tests\App.Tests.csproj".Split(';');
     CopyItemsByPaths -paths $replacePaths -path $frmPath -destination $tempPath
 
@@ -87,18 +95,29 @@ $upgradeTask = {
         Write-Warning "正在清理：$path"
         RemoveItems -path $path
     }
+    $message = '升级准备就绪，自动升级将存在一定的风险。'
+    $question = '确定需要继续么（您可以手工完成后续升级）？【确定前请务必关闭VS等开发工具，以防止文件占用！】'
 
-    $ws = New-Object -ComObject WScript.Shell
-    $wsr = $ws.popup("升级准备就绪，自动升级将存在一定的风险，需要继续么（您可以手工完成后续升级）？", 5, "Magicodes升级工具", 1 + 48)
-    if ($wsr -eq 1) {
+    $choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
+    $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
+    $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
+
+    $decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
+    if ($decision -eq 0) {
         RemoveItems -path $sourceCodePath
         [io.Directory]::CreateDirectory($sourceCodePath);
+
         $tempPath = [io.Path]::Combine($directorypath, "temp", "src");
-        $Cmd = "ROBOCOPY $tempPath $sourceCodePath /E /XF *.log *.dll *.tmp *.bak /XD bin obj node_modules dist .cache packages Logs Debug Release";
+        $Cmd = "ROBOCOPY $tempPath $sourceCodePath /E /XO /256 /XF *.log *.dll *.tmp *.bak /XD bin obj node_modules dist .cache packages Logs Debug Release Migrations";
         Write-Host $Cmd
         cmd /c $Cmd
+        #TODO:执行迁移
+        #TODO:执行API生成
     }
-    Write-Host -ForegroundColor Red '升级完成！请执行数据库迁移、部分项目包版本合并，以及检查代码是否合并正确。（建议使用版本库比较工具仔细比较）';
+    else {
+        Write-Host '操作已取消'
+    }
+    Write-Host -ForegroundColor Red '本次升级完成！请执行数据库迁移、部分项目包版本合并，以及检查代码是否合并正确。（建议使用版本库比较工具仔细比较）';
 }
 #---------------------------------------------------------------------------------------------------------------------------------------------
 
