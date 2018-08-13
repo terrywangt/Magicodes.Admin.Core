@@ -30,7 +30,7 @@ Function  CopyItemsWithFilter($sPath, $dPath, $filter) {
     }
     [io.Directory]::CreateDirectory($dPath);
     Set-Location $sPath
-    $Cmd = "ROBOCOPY $sPath $dPath /256 /E /XF *.log *.dll *.tmp *.bak /XD bin obj node_modules dist .cache packages Logs Debug Release";
+    $Cmd = "ROBOCOPY $sPath $dPath /256 /E /XF *.log *.dll *.tmp *.bak *.pubxml /XD bin obj node_modules .cache packages Logs Debug Release";
     Write-Host $Cmd
     cmd /c $Cmd
 }
@@ -128,5 +128,12 @@ function CopyItemsByPaths($paths, $path, $destination) {
             $dPath = [io.Path]::Combine($destination, [io.Path]::GetDirectoryName($item));
             CopyItems -path $sPath -destination $dPath
         }
+    }
+}
+
+function RemoveItemsByPaths($paths, $path) {
+    foreach ($item in $paths) {
+        $sPath = [io.Path]::Combine($path, $item);
+        RemoveItems -path $sPath
     }
 }

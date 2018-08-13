@@ -72,11 +72,17 @@ $gitCloneTask = {
 #复制项目代码
 $upgradeTask = {
     Write-Warning '正在准备升级...';
-    $paths = 'admin\api\Admin.Application.Custom', 'admin\api\Admin.Host\appsettings.json', 'admin\api\Admin.Host\appsettings.production.json', 'admin\api\Admin.Host\appsettings.Staging.json', 'admin\ui\nswag\service.config.nswag', 'admin\ui\src\app\admin\admin.module.ts', 'admin\ui\src\app\admin\admin-routing.module.ts', 'admin\ui\src\app\shared\layout\nav\app-navigation.service.ts', 'admin\ui\src\shared\service-proxies\service-proxy.module.ts', 'app\api\App.Application', 'app\api\App.Host\appsettings.json', 'app\api\App.Host\appsettings.production.json', 'app\api\App.Host\appsettings.Staging.json', 'core\Magicodes.Admin.Core.Custom', 'unity\Magicodes.Pay\Startup', 'app\api\App.Tests', 'data\Magicodes.Admin.EntityFrameworkCore\Migrations','core\Magicodes.Admin.Core\Authorization\AppAuthorizationProvider.Custom.cs','core\Magicodes.Admin.Core\Authorization\AppPermissions.Custom.cs','core\Magicodes.Admin.Core\Localization\Admin\Admin-zh-CN.xml','data\Magicodes.Admin.EntityFrameworkCore\EntityFrameworkCore\AdminDbContext.Custom.cs','admin\api\Admin.Jobs';
+    $removePaths = 'data\Magicodes.Admin.EntityFrameworkCore\Migrations', 'app\ui';
+
+    $paths = 'admin\api\Admin.Application.Custom', 'admin\api\Admin.Host\appsettings.json', 'admin\api\Admin.Host\appsettings.production.json', 'admin\api\Admin.Host\appsettings.Staging.json', 'admin\ui\nswag\service.config.nswag', 'admin\ui\src\app\admin\admin.module.ts', 'admin\ui\src\app\admin\admin-routing.module.ts', 'admin\ui\src\app\shared\layout\nav\app-navigation.service.ts', 'admin\ui\src\shared\service-proxies\service-proxy.module.ts', 'app\api\App.Application', 'app\api\App.Host\appsettings.json', 'app\api\App.Host\appsettings.production.json', 'app\api\App.Host\appsettings.Staging.json', 'core\Magicodes.Admin.Core.Custom', 'unity\Magicodes.Pay\Startup', 'app\api\App.Tests', 'data\Magicodes.Admin.EntityFrameworkCore\Migrations', 'core\Magicodes.Admin.Core\Authorization\AppAuthorizationProvider.Custom.cs', 'core\Magicodes.Admin.Core\Authorization\AppPermissions.Custom.cs', 'core\Magicodes.Admin.Core\Localization\Admin\Admin-zh-CN.xml', 'data\Magicodes.Admin.EntityFrameworkCore\EntityFrameworkCore\AdminDbContext.Custom.cs', 'admin\api\Admin.Jobs', 'jobs';
 
 
     $bakPath = [io.Path]::Combine($directorypath, "bak", "src");
     $tempPath = [io.Path]::Combine($directorypath, "temp", "src");
+
+    #先移除指定目录
+    RemoveItemsByPaths -paths $removePaths -path $tempPath
+
     #覆盖自定义代码
     CopyItemsByPaths -paths $paths -path $bakPath -destination $tempPath
 
@@ -85,7 +91,9 @@ $upgradeTask = {
     $dAdminUIPath = [io.Path]::Combine($tempPath, "admin\ui\src\app\admin");
     $adminDirs = [io.Directory]::GetDirectories($adminUIPath);
     foreach ($item in $adminDirs) {
-        if (", articleInfos, articleSourceInfos, audit-logs, columnInfos, components, dashboard, demo-ui-components, editions, install, languages, maintenance, organization-units, roles, settings, shared, subscription-management, tenants, ui-customization, users, ".IndexOf(',' + $item.Name + ',') = -1) {
+        [System.IO.DirectoryInfo]$dir=New-Object IO.DirectoryInfo($item);
+        if (", articleInfos, articleSourceInfos, audit-logs, columnInfos, components, dashboard, demo-ui-components, editions, install, languages, maintenance, organization-units, roles, settings, shared, subscription-management, tenants, ui-customization, users, ".IndexOf(', ' + $dir.Name + ',') -eq -1) {
+            Write-Warning "正在还原：$item"
             Copy-Item -Path  $item  -Destination $dAdminUIPath  -Recurse  -Force
         }
     }
@@ -110,13 +118,22 @@ $upgradeTask = {
 
     $decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
     if ($decision -eq 0) {
+        #干掉VS进程
+        Get-Process -Name devenv | Stop-Process
         RemoveItems -path $sourceCodePath
         [io.Directory]::CreateDirectory($sourceCodePath);
 
         $tempPath = [io.Path]::Combine($directorypath, "temp", "src");
-        $Cmd = "ROBOCOPY $tempPath $sourceCodePath /E /XO /256 /XF *.log *.dll *.tmp *.bak /XD bin obj node_modules dist .cache packages Logs Debug Release";
+        $Cmd = "ROBOCOPY $tempPath $sourceCodePath /E /XO /256 /XF *.log *.dll *.tmp *.bak /XD bin obj node_modules .cache packages Logs Debug Release";
         Write-Host $Cmd
         cmd /c $Cmd
+
+        #启动解决方案
+        $slnPath = [io.Path]::Combine($rootDir, "Admin.Host.sln");
+        if ([io.File]::Exists($slnPath)) {
+            Start-Process $slnPath;
+        }
+
         #TODO:执行迁移
         #TODO:执行API生成
     }
