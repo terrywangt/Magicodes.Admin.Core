@@ -91,7 +91,7 @@ $upgradeTask = {
     $dAdminUIPath = [io.Path]::Combine($tempPath, "admin\ui\src\app\admin");
     $adminDirs = [io.Directory]::GetDirectories($adminUIPath);
     foreach ($item in $adminDirs) {
-        [System.IO.DirectoryInfo]$dir=New-Object IO.DirectoryInfo($item);
+        [System.IO.DirectoryInfo]$dir = New-Object IO.DirectoryInfo($item);
         if (", articleInfos, articleSourceInfos, audit-logs, columnInfos, components, dashboard, demo-ui-components, editions, install, languages, maintenance, organization-units, roles, settings, shared, subscription-management, tenants, ui-customization, users, ".IndexOf(', ' + $dir.Name + ',') -eq -1) {
             Write-Warning "正在还原：$item"
             Copy-Item -Path  $item  -Destination $dAdminUIPath  -Recurse  -Force
@@ -119,7 +119,7 @@ $upgradeTask = {
     $decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
     if ($decision -eq 0) {
         #干掉VS进程
-        Get-Process -Name devenv | Stop-Process
+        Get-Process -Name devenv -ErrorAction SilentlyContinue | Stop-Process
         RemoveItems -path $sourceCodePath
         [io.Directory]::CreateDirectory($sourceCodePath);
 
@@ -131,7 +131,7 @@ $upgradeTask = {
         #启动解决方案
         $slnPath = [io.Path]::Combine($rootDir, "Admin.Host.sln");
         if ([io.File]::Exists($slnPath)) {
-            Start-Process $slnPath;
+            Start-Process $slnPath -ErrorAction SilentlyContinue;
         }
 
         #TODO:执行迁移
