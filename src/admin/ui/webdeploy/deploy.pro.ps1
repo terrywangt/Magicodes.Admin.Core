@@ -7,7 +7,7 @@ param(
     $deployUrl = "",
     $userName = "",
     $password = "",
-    $configPath = "deploy.config",
+    $configPath = "deploy.pro.config",
     $siteUrl = "" 
 )
 
@@ -22,7 +22,7 @@ $target = [io.Path]::Combine($rootDir, "dist")
 #--------------------------------------------------------------------------------------------------------------------------------------------
 
 #----------------------------------------------------编译前端脚本----------------------------------------------------------------------------
-#npm run publish
+npm run publish-pro
 
 $webConfigPath = [io.Path]::Combine($rootDir, "web.config")
 Copy-Item -Path $webConfigPath -Destination $target -Force
