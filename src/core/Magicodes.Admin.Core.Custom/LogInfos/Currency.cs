@@ -20,6 +20,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 using System.Linq;
@@ -35,7 +36,11 @@ namespace Magicodes.Admin.Core.Custom.LogInfos
     [Description("金额")]
     public class Currency
     {
-        private readonly string _cultureName; //区域(例如：en-us)
+        /// <summary>
+        /// 区域名称
+        /// </summary>
+        [MaxLength(10)]
+        public string CultureName { get; internal set; } //区域(例如：en-us)
 
         private CultureInfo _culture;
 
@@ -51,7 +56,7 @@ namespace Magicodes.Admin.Core.Custom.LogInfos
                 throw new ArgumentNullException(nameof(culture));
             }
 
-            _cultureName = culture.Name;
+            CultureName = culture.Name;
             _culture = culture;
             CurrencyValue = currencyValue;
         }
@@ -63,7 +68,7 @@ namespace Magicodes.Admin.Core.Custom.LogInfos
         /// <param name="currencyValue"></param>
         public Currency(string cultureName, decimal currencyValue)
         {
-            _cultureName = cultureName;
+            CultureName = cultureName;
             _culture = null;
             CurrencyValue = currencyValue;
         }
@@ -76,7 +81,7 @@ namespace Magicodes.Admin.Core.Custom.LogInfos
         {
             get
             {
-                if (_cultureName == null)
+                if (CultureName == null)
                 {
                     return null;
                 }
@@ -86,21 +91,20 @@ namespace Magicodes.Admin.Core.Custom.LogInfos
                     return _culture;
                 }
 
-                _culture = CultureInfo.CreateSpecificCulture(_cultureName);
+                _culture = CultureInfo.CreateSpecificCulture(CultureName);
                 return _culture;
             }
         }
-
         /// <summary>
-        /// 
+        /// 值
         /// </summary>
-        public decimal CurrencyValue { get; }
-
+        public decimal CurrencyValue { get; internal set; }
+        
         /// <summary>
         /// 
         /// </summary>
         [NotMapped]
-        public bool IsNull => _cultureName == null;
+        public bool IsNull => CultureName == null;
 
         /// <summary>
         /// 

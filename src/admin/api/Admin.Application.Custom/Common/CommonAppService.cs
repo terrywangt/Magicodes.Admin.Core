@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Abp.Authorization;
 using Abp.AutoMapper;
+using Abp.Configuration;
 using Abp.Domain.Repositories;
 using Abp.Reflection.Extensions;
 using Admin.Application.Custom.Common.Dto;
 using Magicodes.Admin.Core.Custom;
 using Magicodes.Admin.Core.Custom.Attachments;
+using Magicodes.Admin.Core.Custom.LogInfos;
 using Microsoft.EntityFrameworkCore;
 
 namespace Admin.Application.Custom.Common
@@ -18,10 +21,17 @@ namespace Admin.Application.Custom.Common
     public class CommonAppService : AppServiceBase, ICommonAppService
     {
         private readonly IRepository<ObjectAttachmentInfo, long> _objectAttachmentInfoRepository;
+        private readonly ISettingManager _settingManager;
+        private readonly IRepository<TransactionLog, long> _transactionLogRepository;
 
-        public CommonAppService(IRepository<ObjectAttachmentInfo, long> objectAttachmentInfoRepository)
+        public CommonAppService(
+            IRepository<ObjectAttachmentInfo, long> objectAttachmentInfoRepository
+            , ISettingManager settingManager
+            , IRepository<TransactionLog, long> transactionLogRepository)
         {
             _objectAttachmentInfoRepository = objectAttachmentInfoRepository;
+            _settingManager = settingManager;
+            _transactionLogRepository = transactionLogRepository;
         }
 
         /// <summary>
@@ -94,6 +104,16 @@ namespace Admin.Application.Custom.Common
                 if (attachmentInfos == null || attachmentInfos.Count == 0 || (attachmentInfos.All(p => p.AttachmentInfoId != objectAttachmentInfo.AttachmentInfoId)))
                     await _objectAttachmentInfoRepository.InsertAsync(objectAttachmentInfo);
             }
+        }
+
+        /// <summary>
+        /// 货币格式化
+        /// </summary>
+        /// <returns></returns>
+        public async Task<string> CurrencyConversion(CurrencyConversionInput input)
+        {
+            Currency currency = new Currency(input.CultureName, input.CurrencyValue);
+            return currency.ToString();
         }
     }
 }
