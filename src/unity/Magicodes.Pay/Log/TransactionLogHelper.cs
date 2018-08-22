@@ -16,8 +16,10 @@
 // ======================================================================
 
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Transactions;
+using Abp.Configuration;
 using Abp.Dependency;
 using Abp.Domain.Uow;
 using Abp.Runtime.Session;
@@ -34,13 +36,18 @@ namespace Magicodes.Pay.Log
 
         private readonly IUnitOfWorkManager _unitOfWorkManager;
 
-        public TransactionLogHelper(ITransactionLogProvider transactionLogProvider,
-            IUnitOfWorkManager unitOfWorkManager, ITransactionLogStore transactionLogStore)
+        private readonly ISettingManager _settingManager;
+
+        public TransactionLogHelper(
+            ITransactionLogProvider transactionLogProvider
+            , IUnitOfWorkManager unitOfWorkManager
+            , ITransactionLogStore transactionLogStore
+            , ISettingManager settingManager)
         {
             _transactionLogProvider = transactionLogProvider;
             _unitOfWorkManager = unitOfWorkManager;
             _transactionLogStore = transactionLogStore;
-
+            _settingManager = settingManager;
             AbpSession = NullAbpSession.Instance;
             Logger = NullLogger.Instance;
         }
@@ -55,11 +62,13 @@ namespace Magicodes.Pay.Log
         /// <returns></returns>
         public TransactionLog CreaTransactionLog(TransactionInfo transactionInfo)
         {
+            var cultureName = _settingManager.GetAllSettingValues().FirstOrDefault(p => p.Name == "Abp.Localization.DefaultLanguageName")?.Value;
             var log = new TransactionLog
             {
                 TenantId = AbpSession.TenantId,
                 CreatorUserId = AbpSession.UserId,
-                Amount = transactionInfo.Amount,
+                Currency = new Currency(cultureName, transactionInfo.Amount),
+                //Amount = transactionInfo.Amount,
                 CustomData = transactionInfo.CustomData,
                 OutTradeNo = transactionInfo.OutTradeNo,
                 PayChannel = transactionInfo.PayChannel,

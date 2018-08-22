@@ -16,10 +16,17 @@ namespace Magicodes.Admin.Core.Custom.LogInfos
     public class TransactionLog : Entity<long>, IHasCreationTime, IMayHaveTenant, ICreationAudited
     {
         /// <summary>
+        /// 名称
+        /// </summary>
+        [Display(Name = "名称")]
+        [MaxLength(50)]
+        public string Name { get; set; }
+
+        /// <summary>
         /// 金额
         /// </summary>
         [Display(Name = "金额")]
-        public decimal Amount { get; set; }
+        public Currency Currency { get; set; }
 
         /// <summary>
         /// 创建者UserId
@@ -110,6 +117,9 @@ namespace Magicodes.Admin.Core.Custom.LogInfos
         [MaxLength(2000)]
         [Display(Name = "异常信息")]
         public string Exception { get; set; }
+
+        
+
         /// <summary>
         /// 创建交易日志
         /// </summary>
@@ -124,6 +134,7 @@ namespace Magicodes.Admin.Core.Custom.LogInfos
             transactionLog.Exception = transactionLog.Exception.TruncateWithPostfix(2000);
             transactionLog.ClientName = transactionLog.ClientName.TruncateWithPostfix(128);
             transactionLog.CustomData = transactionLog.CustomData.TruncateWithPostfix(500);
+            transactionLog.Name = transactionLog.Name.TruncateWithPostfix(50);
             return transactionLog;
         }
     }
