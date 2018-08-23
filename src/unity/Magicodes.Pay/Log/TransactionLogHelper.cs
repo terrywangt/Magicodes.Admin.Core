@@ -62,7 +62,7 @@ namespace Magicodes.Pay.Log
         /// <returns></returns>
         public TransactionLog CreaTransactionLog(TransactionInfo transactionInfo)
         {
-            var cultureName = _settingManager.GetAllSettingValues().FirstOrDefault(p => p.Name == "Abp.Localization.DefaultLanguageName")?.Value;
+            var cultureName = _settingManager.GetSettingValueAsync("Abp.Localization.DefaultLanguageName").Result;
             var log = new TransactionLog
             {
                 TenantId = AbpSession.TenantId,
