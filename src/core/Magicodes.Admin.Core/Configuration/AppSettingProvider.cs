@@ -25,7 +25,7 @@ namespace Magicodes.Admin.Configuration
             //Disable TwoFactorLogin by default (can be enabled by UI)
             context.Manager.GetSettingDefinition(AbpZeroSettingNames.UserManagement.TwoFactorLogin.IsEnabled).DefaultValue = false.ToString().ToLowerInvariant();
 
-            return GetHostSettings().Union(GetTenantSettings()).Union(GetSharedSettings());
+            return GetHostSettings().Union(GetTenantSettings()).Union(GetSharedSettings()).Union(GetPaySettings());
         }
 
         private IEnumerable<SettingDefinition> GetHostSettings()
@@ -63,8 +63,19 @@ namespace Magicodes.Admin.Configuration
                 new SettingDefinition(AppSettings.UiManagement.LeftAside.DropdownSubmenuArrow, GetFromAppSettings(AppSettings.UiManagement.LeftAside.DropdownSubmenuArrow, "true"),isVisibleToClients: true, scopes: SettingScopes.All),
 
                 new SettingDefinition(AppSettings.UiManagement.Footer.FixedFooter, GetFromAppSettings(AppSettings.UiManagement.Footer.FixedFooter, "false"),isVisibleToClients: true, scopes: SettingScopes.All),
-                
+
                 new SettingDefinition(AppSettings.UiManagement.Theme, GetFromAppSettings(AppSettings.UiManagement.Theme, "default"),isVisibleToClients: true, scopes: SettingScopes.All)
+            };
+        }
+
+        private IEnumerable<SettingDefinition> GetPaySettings()
+        {
+            return new[] {
+                new SettingDefinition(AppSettings.WeChatPayManagement.AppId, GetFromAppSettings(AppSettings.WeChatPayManagement.AppId, "")),
+                new SettingDefinition(AppSettings.WeChatPayManagement.MchId, GetFromAppSettings(AppSettings.WeChatPayManagement.MchId, "")),
+                new SettingDefinition(AppSettings.WeChatPayManagement.TenPayKey, GetFromAppSettings(AppSettings.WeChatPayManagement.TenPayKey, "")),
+                new SettingDefinition(AppSettings.WeChatPayManagement.PayNotifyUrl, GetFromAppSettings(AppSettings.WeChatPayManagement.PayNotifyUrl, "")),
+                new SettingDefinition(AppSettings.WeChatPayManagement.IsActive, GetFromAppSettings(AppSettings.WeChatPayManagement.IsActive, "false")),
             };
         }
 

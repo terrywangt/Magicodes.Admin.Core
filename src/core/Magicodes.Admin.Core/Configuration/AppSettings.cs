@@ -73,9 +73,7 @@ namespace Magicodes.Admin.Configuration
             public const string SmsVerificationEnabled = "App.UserManagement.SmsVerificationEnabled";
 
         }
-
-
-
+        
         public static class Recaptcha
         {
             public const string SiteKey = "Recaptcha.SiteKey";
@@ -84,6 +82,15 @@ namespace Magicodes.Admin.Configuration
         public static class CacheKeys
         {
             public const string TenantRegistrationCache = "TenantRegistrationCache";
+        }
+
+        public static class WeChatPayManagement
+        {
+            public const string AppId = "App.WeChatPayManagement.AppId";
+            public const string MchId = "App.WeChatPayManagement.MchId";
+            public const string TenPayKey = "App.WeChatPayManagement.TenPayKey";
+            public const string PayNotifyUrl = "App.WeChatPayManagement.PayNotifyUrl";
+            public const string IsActive = "App.WeChatPayManagement.IsActive";
         }
     }
 }

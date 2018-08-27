@@ -258,6 +258,32 @@
                             <textarea id="Address" rows="5" name="address" class="form-control" [ngClass]="{'edited':hostSettings.billing.address}" [(ngModel)]="hostSettings.billing.address" maxlength="256"></textarea>
                         </div>
                     </tab>
+                    <tab *ngIf="true" heading="{{l('WeChatPay')}}" customClass="m-tabs__item">
+                        <h5>{{l("WeChatPayInformation")}}</h5>
+                        <div class="m-checkbox-list">
+                            <label for="weChatPayIsActive" class="m-checkbox">
+                                <input id="weChatPayIsActive" type="checkbox" name="weChatPayIsActive" [(ngModel)]="paySettings.weChatPay.isActive">
+                                {{l("IsActive")}}
+                                <span></span>
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label for="weChatPay_AppId">{{l("AppId")}}</label>
+                            <input id="weChatPay_AppId" type="text" name="weChatPay_AppId" class="form-control" [ngClass]="{'edited':paySettings.weChatPay.appId}" [(ngModel)]="paySettings.weChatPay.appId" maxlength="64">
+                        </div>
+                        <div class="form-group">
+                            <label for="weChatPay_MchId">{{l("MchId")}}</label>
+                            <input id="weChatPay_MchId" rows="5" name="weChatPay_MchId" class="form-control" [ngClass]="{'edited':paySettings.weChatPay.mchId}" [(ngModel)]="paySettings.weChatPay.mchId" maxlength="64">
+                        </div>
+                        <div class="form-group">
+                            <label for="weChatPay_TenPayKey">{{l("TenPayKey")}}</label>
+                            <input id="weChatPay_TenPayKey" type="text" name="weChatPay_TenPayKey" class="form-control" [ngClass]="{'edited':paySettings.weChatPay.tenPayKey}" [(ngModel)]="paySettings.weChatPay.tenPayKey" maxlength="64">
+                        </div>
+                        <div class="form-group">
+                            <label for="weChatPay_PayNotifyUrl">{{l("PayNotifyUrl")}}</label>
+                            <textarea id="weChatPay_PayNotifyUrl" rows="5" name="weChat_PayPayNotifyUrl" class="form-control" [ngClass]="{'edited':paySettings.weChatPay.payNotifyUrl}" [(ngModel)]="paySettings.weChatPay.payNotifyUrl" maxlength="400"></textarea>
+                        </div>
+                    </tab>
                 </tabset>
             </div>
         </div>
