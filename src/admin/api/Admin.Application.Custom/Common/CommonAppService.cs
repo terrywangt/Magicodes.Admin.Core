@@ -105,15 +105,5 @@ namespace Admin.Application.Custom.Common
                     await _objectAttachmentInfoRepository.InsertAsync(objectAttachmentInfo);
             }
         }
-
-        /// <summary>
-        /// 货币格式化
-        /// </summary>
-        /// <returns></returns>
-        public async Task<string> CurrencyConversion(CurrencyConversionInput input)
-        {
-            Currency currency = new Currency(input.CultureName, input.CurrencyValue);
-            return currency.ToString();
-        }
     }
 }
