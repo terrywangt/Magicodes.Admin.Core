@@ -71,11 +71,24 @@ namespace Magicodes.Admin.Configuration
         private IEnumerable<SettingDefinition> GetPaySettings()
         {
             return new[] {
-                new SettingDefinition(AppSettings.WeChatPayManagement.AppId, GetFromAppSettings(AppSettings.WeChatPayManagement.AppId, "")),
-                new SettingDefinition(AppSettings.WeChatPayManagement.MchId, GetFromAppSettings(AppSettings.WeChatPayManagement.MchId, "")),
-                new SettingDefinition(AppSettings.WeChatPayManagement.TenPayKey, GetFromAppSettings(AppSettings.WeChatPayManagement.TenPayKey, "")),
-                new SettingDefinition(AppSettings.WeChatPayManagement.PayNotifyUrl, GetFromAppSettings(AppSettings.WeChatPayManagement.PayNotifyUrl, "")),
-                new SettingDefinition(AppSettings.WeChatPayManagement.IsActive, GetFromAppSettings(AppSettings.WeChatPayManagement.IsActive, "false")),
+                new SettingDefinition(AppSettings.WeChatPayManagement.AppId, GetFromAppSettings(AppSettings.WeChatPayManagement.AppId, ""),scopes: SettingScopes.Tenant|SettingScopes.Application),
+                new SettingDefinition(AppSettings.WeChatPayManagement.MchId, GetFromAppSettings(AppSettings.WeChatPayManagement.MchId, ""),scopes: SettingScopes.Tenant|SettingScopes.Application),
+                new SettingDefinition(AppSettings.WeChatPayManagement.TenPayKey, GetFromAppSettings(AppSettings.WeChatPayManagement.TenPayKey, ""),scopes: SettingScopes.Tenant|SettingScopes.Application),
+                new SettingDefinition(AppSettings.WeChatPayManagement.PayNotifyUrl, GetFromAppSettings(AppSettings.WeChatPayManagement.PayNotifyUrl, ""),scopes: SettingScopes.Tenant|SettingScopes.Application),
+                new SettingDefinition(AppSettings.WeChatPayManagement.IsActive, GetFromAppSettings(AppSettings.WeChatPayManagement.IsActive, "false"),scopes: SettingScopes.Tenant|SettingScopes.Application),
+
+                new SettingDefinition(AppSettings.AliPayManagement.AppId, GetFromAppSettings(AppSettings.AliPayManagement.AppId, ""),scopes: SettingScopes.Tenant|SettingScopes.Application),
+                new SettingDefinition(AppSettings.AliPayManagement.Uid, GetFromAppSettings(AppSettings.AliPayManagement.Uid, ""),scopes: SettingScopes.Tenant|SettingScopes.Application),
+                new SettingDefinition(AppSettings.AliPayManagement.Gatewayurl, GetFromAppSettings(AppSettings.AliPayManagement.Gatewayurl, "https://openapi.alipay.com/gateway.do"),scopes: SettingScopes.Tenant|SettingScopes.Application),
+                new SettingDefinition(AppSettings.AliPayManagement.AlipayPublicKey, GetFromAppSettings(AppSettings.AliPayManagement.AlipayPublicKey, ""),scopes: SettingScopes.Tenant|SettingScopes.Application),
+                new SettingDefinition(AppSettings.AliPayManagement.AlipaySignPublicKey, GetFromAppSettings(AppSettings.AliPayManagement.AlipaySignPublicKey, ""),scopes: SettingScopes.Tenant|SettingScopes.Application),
+                new SettingDefinition(AppSettings.AliPayManagement.PrivateKey, GetFromAppSettings(AppSettings.AliPayManagement.PrivateKey, ""),scopes: SettingScopes.Tenant|SettingScopes.Application),
+                new SettingDefinition(AppSettings.AliPayManagement.CharSet, GetFromAppSettings(AppSettings.AliPayManagement.CharSet, "utf-8"),scopes: SettingScopes.Tenant|SettingScopes.Application),
+                new SettingDefinition(AppSettings.AliPayManagement.Notify, GetFromAppSettings(AppSettings.AliPayManagement.Notify, ""),scopes: SettingScopes.Tenant|SettingScopes.Application),
+                new SettingDefinition(AppSettings.AliPayManagement.SignType, GetFromAppSettings(AppSettings.AliPayManagement.SignType, "RSA2"),scopes: SettingScopes.Tenant|SettingScopes.Application),
+                new SettingDefinition(AppSettings.AliPayManagement.IsKeyFromFile, GetFromAppSettings(AppSettings.AliPayManagement.IsKeyFromFile, "false"),scopes: SettingScopes.Tenant|SettingScopes.Application),
+                new SettingDefinition(AppSettings.AliPayManagement.IsActive, GetFromAppSettings(AppSettings.AliPayManagement.IsActive, "false"),scopes: SettingScopes.Tenant|SettingScopes.Application),
+
             };
         }
 

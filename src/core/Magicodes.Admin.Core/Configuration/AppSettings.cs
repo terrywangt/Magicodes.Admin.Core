@@ -92,5 +92,20 @@ namespace Magicodes.Admin.Configuration
             public const string PayNotifyUrl = "App.WeChatPayManagement.PayNotifyUrl";
             public const string IsActive = "App.WeChatPayManagement.IsActive";
         }
+
+        public static class AliPayManagement
+        {
+            public const string AppId = "App.AliPayManagement.AppId";
+            public const string Uid = "App.AliPayManagement.Uid";
+            public const string Gatewayurl = "App.AliPayManagement.Gatewayurl";
+            public const string AlipayPublicKey = "App.AliPayManagement.AlipayPublicKey";
+            public const string AlipaySignPublicKey = "App.AliPayManagement.AlipaySignPublicKey";
+            public const string PrivateKey = "App.AliPayManagement.PrivateKey";
+            public const string CharSet = "App.AliPayManagement.CharSet";
+            public const string Notify = "App.AliPayManagement.Notify";
+            public const string SignType = "App.AliPayManagement.SignType";
+            public const string IsKeyFromFile = "App.AliPayManagement.IsKeyFromFile";
+            public const string IsActive = "App.AliPayManagement.IsActive";
+        }
     }
 }
