@@ -4,9 +4,10 @@ import { appModuleAnimation } from '@shared/animations/routerTransition';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { AppSessionService } from '@shared/common/session/app-session.service';
 import {
-    ComboboxItemDto, CommonLookupServiceProxy, DefaultTimezoneScope, HostSettingsEditDto,
-    HostSettingsServiceProxy, SendTestEmailInput, PaySettingEditDto, PaySettingsServiceProxy, SecuritySettingsEditDto
-} from '@shared/service-proxies/service-proxies';
+        ComboboxItemDto, CommonLookupServiceProxy, DefaultTimezoneScope, HostSettingsEditDto,
+        HostSettingsServiceProxy, SendTestEmailInput, PaySettingEditDto, PaySettingsServiceProxy,
+        SecuritySettingsEditDto
+    } from '@shared/service-proxies/service-proxies';
 
 @Component({
     templateUrl: './host-settings.component.html',
@@ -109,9 +110,8 @@ export class HostSettingsComponent extends AppComponentBase implements OnInit, A
         });
 
         self._paySettingService.updateAllSettings(self.paySettings).subscribe(result => {
-            self.notify.info(self.l('SavedSuccessfully'));
-
-            window.location.reload();
+            // self.notify.info(self.l('SavedSuccessfully'));
+            // window.location.reload();
         });
     }
 }

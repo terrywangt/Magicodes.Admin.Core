@@ -18275,7 +18275,7 @@ export interface ISubscriptionPaymentListDto {
 
 export class PaySettingEditDto implements IPaySettingEditDto {
     weChatPay!: WeChatPaySettingEditDto | undefined;
-    aliPay!: any | undefined;
+    aliPay!: AliPaySettingEditDto | undefined;
 
     constructor(data?: IPaySettingEditDto) {
         if (data) {
@@ -18289,7 +18289,7 @@ export class PaySettingEditDto implements IPaySettingEditDto {
     init(data?: any) {
         if (data) {
             this.weChatPay = data["weChatPay"] ? WeChatPaySettingEditDto.fromJS(data["weChatPay"]) : <any>undefined;
-            this.aliPay = data["aliPay"];
+            this.aliPay = data["aliPay"] ? AliPaySettingEditDto.fromJS(data["aliPay"]) : <any>undefined;
         }
     }
 
@@ -18303,14 +18303,14 @@ export class PaySettingEditDto implements IPaySettingEditDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["weChatPay"] = this.weChatPay ? this.weChatPay.toJSON() : <any>undefined;
-        data["aliPay"] = this.aliPay;
+        data["aliPay"] = this.aliPay ? this.aliPay.toJSON() : <any>undefined;
         return data; 
     }
 }
 
 export interface IPaySettingEditDto {
     weChatPay: WeChatPaySettingEditDto | undefined;
-    aliPay: any | undefined;
+    aliPay: AliPaySettingEditDto | undefined;
 }
 
 export class WeChatPaySettingEditDto implements IWeChatPaySettingEditDto {
@@ -18362,6 +18362,82 @@ export interface IWeChatPaySettingEditDto {
     mchId: string | undefined;
     payNotifyUrl: string | undefined;
     tenPayKey: string | undefined;
+    isActive: boolean | undefined;
+}
+
+export class AliPaySettingEditDto implements IAliPaySettingEditDto {
+    appId!: string | undefined;
+    uid!: string | undefined;
+    gatewayurl!: string | undefined;
+    alipayPublicKey!: string | undefined;
+    alipaySignPublicKey!: string | undefined;
+    privateKey!: string | undefined;
+    charSet!: string | undefined;
+    notify!: string | undefined;
+    signType!: string | undefined;
+    isKeyFromFile!: boolean | undefined;
+    isActive!: boolean | undefined;
+
+    constructor(data?: IAliPaySettingEditDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.appId = data["appId"];
+            this.uid = data["uid"];
+            this.gatewayurl = data["gatewayurl"];
+            this.alipayPublicKey = data["alipayPublicKey"];
+            this.alipaySignPublicKey = data["alipaySignPublicKey"];
+            this.privateKey = data["privateKey"];
+            this.charSet = data["charSet"];
+            this.notify = data["notify"];
+            this.signType = data["signType"];
+            this.isKeyFromFile = data["isKeyFromFile"];
+            this.isActive = data["isActive"];
+        }
+    }
+
+    static fromJS(data: any): AliPaySettingEditDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new AliPaySettingEditDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["appId"] = this.appId;
+        data["uid"] = this.uid;
+        data["gatewayurl"] = this.gatewayurl;
+        data["alipayPublicKey"] = this.alipayPublicKey;
+        data["alipaySignPublicKey"] = this.alipaySignPublicKey;
+        data["privateKey"] = this.privateKey;
+        data["charSet"] = this.charSet;
+        data["notify"] = this.notify;
+        data["signType"] = this.signType;
+        data["isKeyFromFile"] = this.isKeyFromFile;
+        data["isActive"] = this.isActive;
+        return data; 
+    }
+}
+
+export interface IAliPaySettingEditDto {
+    appId: string | undefined;
+    uid: string | undefined;
+    gatewayurl: string | undefined;
+    alipayPublicKey: string | undefined;
+    alipaySignPublicKey: string | undefined;
+    privateKey: string | undefined;
+    charSet: string | undefined;
+    notify: string | undefined;
+    signType: string | undefined;
+    isKeyFromFile: boolean | undefined;
     isActive: boolean | undefined;
 }
 

@@ -12,6 +12,7 @@ import * as ApiServiceProxies from './service-proxies';
         ApiServiceProxies.EditionServiceProxy,
         ApiServiceProxies.FriendshipServiceProxy,
         ApiServiceProxies.HostSettingsServiceProxy,
+        ApiServiceProxies.PaySettingsServiceProxy,
         ApiServiceProxies.InstallServiceProxy,
         ApiServiceProxies.LanguageServiceProxy,
         ApiServiceProxies.NotificationServiceProxy,

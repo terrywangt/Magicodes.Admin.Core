@@ -261,8 +261,8 @@
                     <tab *ngIf="true" heading="{{l('WeChatPay')}}" customClass="m-tabs__item">
                         <h5>{{l("WeChatPayInformation")}}</h5>
                         <div class="m-checkbox-list">
-                            <label for="weChatPayIsActive" class="m-checkbox">
-                                <input id="weChatPayIsActive" type="checkbox" name="weChatPayIsActive" [(ngModel)]="paySettings.weChatPay.isActive">
+                            <label for="weChatPay_IsActive" class="m-checkbox">
+                                <input id="weChatPay_IsActive" type="checkbox" name="weChatPay_IsActive" [(ngModel)]="paySettings.weChatPay.isActive">
                                 {{l("IsActive")}}
                                 <span></span>
                             </label>
@@ -277,11 +277,69 @@
                         </div>
                         <div class="form-group">
                             <label for="weChatPay_TenPayKey">{{l("TenPayKey")}}</label>
-                            <input id="weChatPay_TenPayKey" type="text" name="weChatPay_TenPayKey" class="form-control" [ngClass]="{'edited':paySettings.weChatPay.tenPayKey}" [(ngModel)]="paySettings.weChatPay.tenPayKey" maxlength="64">
+                            <input id="weChatPay_TenPayKey" type="text" name="weChatPay_TenPayKey" class="form-control" [ngClass]="{'edited':paySettings.weChatPay.tenPayKey}" [(ngModel)]="paySettings.weChatPay.tenPayKey" maxlength="200">
                         </div>
-                        <div class="form-group">
+                        <div class="form-mgroup">
                             <label for="weChatPay_PayNotifyUrl">{{l("PayNotifyUrl")}}</label>
                             <textarea id="weChatPay_PayNotifyUrl" rows="5" name="weChat_PayPayNotifyUrl" class="form-control" [ngClass]="{'edited':paySettings.weChatPay.payNotifyUrl}" [(ngModel)]="paySettings.weChatPay.payNotifyUrl" maxlength="400"></textarea>
+                        </div>
+                    </tab>                    
+                    <tab *ngIf="true" heading="{{l('AliPay')}}" customClass="m-tabs__item">
+                        <h5>{{l("AliInformation")}}</h5>
+                        <div class="m-checkbox-list">
+                            <label for="aliPay_IsActive" class="m-checkbox">
+                                <input id="aliPay_IsActive" type="checkbox" name="aliPay_IsActive" [(ngModel)]="paySettings.aliPay.isActive">
+                                {{l("IsActive")}}
+                                <span></span>
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label for="aliPay_AppId">{{l("AppId")}}</label>
+                            <input id="aliPay_AppId" type="text" name="aliPay_AppId" class="form-control" [ngClass]="{'edited':paySettings.aliPay.appId}" [(ngModel)]="paySettings.aliPay.appId" maxlength="64">
+                        </div>
+                        <div class="form-group">
+                            <label for="aliPay_Uid">{{l("Uid")}}</label>
+                            <input id="aliPay_Uid" rows="5" name="aliPay_Uid" class="form-control" [ngClass]="{'edited':paySettings.aliPay.uid}" [(ngModel)]="paySettings.aliPay.uid" maxlength="64">
+                        </div>
+                        <div class="form-group">
+                            <label for="aliPay_Gatewayurl">{{l("Gatewayurl")}}</label>
+                            <textarea id="aliPay_Gatewayurl" rows="2" name="aliPay_Gatewayurl" class="form-control" [ngClass]="{'edited':paySettings.aliPay.gatewayurl}" [(ngModel)]="paySettings.aliPay.gatewayurl" maxlength="200">
+                            </textarea>
+                        </div>
+                        <div class="form-mgroup">
+                            <label for="aliPay_AlipayPublicKey">{{l("AlipayPublicKey")}}</label>
+                            <textarea id="aliPay_AlipayPublicKey" rows="5" name="weChat_PayAlipayPublicKey" class="form-control" [ngClass]="{'edited':paySettings.aliPay.alipayPublicKey}" [(ngModel)]="paySettings.aliPay.alipayPublicKey" maxlength="400">
+                            </textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="aliPay_AlipaySignPublicKey">{{l("AlipaySignPublicKey")}}</label>
+                            <textarea id="aliPay_AlipaySignPublicKey" rows="5" name="aliPay_AlipaySignPublicKey" class="form-control" [ngClass]="{'edited':paySettings.aliPay.alipaySignPublicKey}" [(ngModel)]="paySettings.aliPay.alipaySignPublicKey" maxlength="400">
+                            </textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="aliPay_PrivateKey">{{l("PrivateKey")}}</label>
+                            <textarea id="aliPay_PrivateKey" rows="5" name="aliPay_PrivateKey" class="form-control" [ngClass]="{'edited':paySettings.aliPay.privateKey}" [(ngModel)]="paySettings.aliPay.privateKey" maxlength="400">
+                            </textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="aliPay_CharSet">{{l("CharSet")}}</label>
+                            <input id="aliPay_CharSet" type="text" name="aliPay_CharSet" class="form-control" [ngClass]="{'edited':paySettings.aliPay.charSet}" [(ngModel)]="paySettings.aliPay.charSet">
+                        </div>
+                        <div class="form-group">
+                            <label for="aliPay_Notify">{{l("Notify")}}</label>
+                            <textarea id="aliPay_Notify" rows="2" name="aliPay_Notify" class="form-control" [ngClass]="{'edited':paySettings.aliPay.notify}" [(ngModel)]="paySettings.aliPay.notify" maxlength="200">
+                            </textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="aliPay_SignType">{{l("SignType")}}</label>
+                            <input id="aliPay_SignType" type="text" name="aliPay_SignType" class="form-control" [ngClass]="{'edited':paySettings.aliPay.signType}" [(ngModel)]="paySettings.aliPay.signType">
+                        </div>
+                        <div class="m-checkbox-list">
+                            <label for="aliPay_IsKeyFromFile" class="m-checkbox">
+                                <input id="aliPay_IsKeyFromFile" type="checkbox" name="aliPay_IsKeyFromFile" [(ngModel)]="paySettings.aliPay.isKeyFromFile">
+                                {{l("IsKeyFromFile")}}
+                                <span></span>
+                            </label>
                         </div>
                     </tab>
                 </tabset>
