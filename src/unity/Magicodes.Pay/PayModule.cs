@@ -16,8 +16,10 @@
 // ======================================================================
 
 using System.Reflection;
+using Abp.Configuration;
 using Abp.Dependency;
 using Abp.Modules;
+using Abp.Reflection.Extensions;
 using Magicodes.Admin;
 using Magicodes.Admin.Configuration;
 using Magicodes.Alipay;
@@ -36,15 +38,22 @@ namespace Magicodes.Pay
     {
         public override void PreInitialize()
         {
+
         }
 
         public override void Initialize()
         {
+            IocManager.RegisterAssemblyByConvention(typeof(PayModule).GetAssembly());
             IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
+        }
+        public override void PostInitialize()
+        {
+
+            ISettingManager settingManager = IocManager.Resolve<ISettingManager>();
 
             var appConfiguration = IocManager.Resolve<IAppConfigurationAccessor>().Configuration;
             //配置支付\短信等
-            PayStartup.Config(Logger, IocManager, appConfiguration);
+            PayStartup.ConfigAsync(Logger, IocManager, appConfiguration, settingManager).Wait();
             //注册支付回调控制器
             IocManager.Register<PayNotifyController>(DependencyLifeStyle.Transient);
             //注册微信支付API

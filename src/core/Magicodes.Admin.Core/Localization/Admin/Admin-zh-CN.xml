@@ -745,6 +745,27 @@
     <text name="SortNo" value="排序号" />
     <text name="ParentId" value="父级Id" />
     <text name="IconCls" value="小图标" />
-   
+
+    <!-- 2018-08-28 CLL 关于微信和支付宝支付的配置-->
+    <text name="PayIsActiveExplain" value="勾选则会优先使用本配置，忽略配置文件！" />
+    <text name="WeChatPay" value="微信支付" />
+    <text name="WeChatPayInformation" value="微信支付配置信息" />
+    <text name="WeChatAppId" value="开发者的应用ID" />
+    <text name="WeChatMchId" value="商户Id" />
+    <text name="WeChatTenPayKey" value="支付密钥" />
+    <text name="WeChatPayNotifyUrl" value="支付回调路径" />
+    <text name="AliPay" value="支付宝支付" />
+    <text name="AliInformation" value="支付宝支付配置信息" />
+    <text name="AliAppId" value="开发者的应用ID" />
+    <text name="AliUid" value="合作商户UID" />
+    <text name="AliGatewayurl" value="支付宝网关" />
+    <text name="AlipayPublicKey" value="公钥" />
+    <text name="AlipaySignPublicKey" value="签名公钥" />
+    <text name="AliPrivateKey" value="商户私钥" />
+    <text name="AliCharSet" value="编码格式" />
+    <text name="AliNotify" value="支付回调路径" />
+    <text name="AliSignType" value="签名算法" />
+    <text name="IsKeyFromFile" value="是否从文件读取公私钥" />
+    <text name="IsKeyFromFileExplain" value="如果勾选 ，那么公私钥应该配置为密钥文件路径" />
   </texts>
 </localizationDictionary>

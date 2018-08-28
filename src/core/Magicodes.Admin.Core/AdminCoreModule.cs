@@ -57,6 +57,7 @@ namespace Magicodes.Admin
             Configuration.Features.Providers.Add<AppFeatureProvider>();
 
             //Adding setting providers
+
             Configuration.Settings.Providers.Add<AppSettingProvider>();
 
             //Adding notification providers

@@ -14,12 +14,10 @@ namespace Magicodes.Admin.Configuration.Pay
     [AbpAuthorize(AppPermissions.Pages_Administration_Host_Settings)]
     public class PaySettingsAppService : ApplicationService, IPaySettingsAppService
     {
-        readonly ISettingDefinitionManager _settingDefinitionManager;
-
         public PaySettingsAppService(
             ISettingDefinitionManager settingDefinitionManager) : base()
         {
-            _settingDefinitionManager = settingDefinitionManager;
+
         }
 
         public async Task<PaySettingEditDto> GetAllSettings()

@@ -17,10 +17,12 @@
 
 using System;
 using System.Threading.Tasks;
+using Abp.Configuration;
 using Abp.Dependency;
 using Abp.Extensions;
 using Abp.UI;
 using Castle.Core.Logging;
+using Magicodes.Admin.Configuration;
 using Magicodes.Alipay;
 using Magicodes.Alipay.Builder;
 using Magicodes.Pay.WeChat;
@@ -37,7 +39,7 @@ namespace Magicodes.Pay.Startup
         /// <summary>
         ///     配置微信小程序
         /// </summary>
-        public static void Config(ILogger logger, IIocManager iocManager, IConfigurationRoot config)
+        public static async Task ConfigAsync(ILogger logger, IIocManager iocManager, IConfigurationRoot config, ISettingManager settingManager)
         {
             //日志函数
             void LogAction(string tag, string message)
@@ -52,17 +54,36 @@ namespace Magicodes.Pay.Startup
 
             #region 微信支付
 
-            //微信支付配置
-            WeChatPayBuilder.Create()
-                //设置日志记录
-                .WithLoggerAction(LogAction)
-                .RegisterGetPayConfigFunc(() => new WeChatPayConfig
+            WeChatPayConfig weChatPayConfig = null;
+
+            if (Convert.ToBoolean(await settingManager.GetSettingValueAsync(AppSettings.WeChatPayManagement.IsActive)))
+            {
+                weChatPayConfig = new WeChatPayConfig()
+                {
+                    PayAppId = await settingManager.GetSettingValueAsync(AppSettings.WeChatPayManagement.AppId),
+                    MchId = await settingManager.GetSettingValueAsync(AppSettings.WeChatPayManagement.MchId),
+                    PayNotifyUrl = await settingManager.GetSettingValueAsync(AppSettings.WeChatPayManagement.PayNotifyUrl),
+                    TenPayKey = await settingManager.GetSettingValueAsync(AppSettings.WeChatPayManagement.TenPayKey),
+                };
+            }
+            else
+            {
+                weChatPayConfig = new WeChatPayConfig
                 {
                     MchId = config["WeChat:Pay:MchId"],
                     PayNotifyUrl = config["WeChat:Pay:NotifyUrl"],
                     TenPayKey = config["WeChat:Pay:TenPayKey"],
                     PayAppId = config["WeChat:Pay:AppId"]
-                }).Build();
+                };
+            }
+
+
+
+            //微信支付配置
+            WeChatPayBuilder.Create()
+                //设置日志记录
+                .WithLoggerAction(LogAction)
+                .RegisterGetPayConfigFunc(() => weChatPayConfig).Build();
 
             #endregion
 
