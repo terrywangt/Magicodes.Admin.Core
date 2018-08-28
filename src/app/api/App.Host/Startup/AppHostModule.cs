@@ -15,6 +15,7 @@ using Magicodes.Admin.Configuration;
 using Magicodes.Admin.EntityFrameworkCore;
 using Magicodes.Admin.Web;
 using Magicodes.App.Application;
+using Magicodes.Unity;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -28,8 +29,9 @@ namespace App.Host.Startup
     [DependsOn(
         typeof(AdminEntityFrameworkCoreModule),
         typeof(AbpAspNetZeroCoreWebModule),
-        typeof(AdminCoreModule), 
-        typeof(AppApplicationModule)
+        typeof(AdminCoreModule),
+        typeof(AppApplicationModule),
+        typeof(UnityModule)
     )]
     public class AppHostModule : AbpModule
     {
