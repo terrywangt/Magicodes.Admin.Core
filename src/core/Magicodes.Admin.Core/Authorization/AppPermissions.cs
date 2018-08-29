@@ -41,6 +41,8 @@
 
         public const string Pages_Administration_UiCustomization = "Pages.Administration.UiCustomization";
 
+        public const string Pages_Administration_Pay_Settings = "Pages.Administration.Pay.Settings";
+
         //TENANT-SPECIFIC PERMISSIONS
 
         public const string Pages_Tenant_Dashboard = "Pages.Tenant.Dashboard";

@@ -66,7 +66,7 @@ namespace Magicodes.Pay.Startup
                     TenPayKey = await settingManager.GetSettingValueAsync(AppSettings.WeChatPayManagement.TenPayKey),
                 };
             }
-            else
+            else if (!config["WeChat:Pay:IsEnabled"].IsNullOrWhiteSpace() && Convert.ToBoolean(config["WeChat:Pay:IsEnabled"]))
             {
                 weChatPayConfig = new WeChatPayConfig
                 {
@@ -76,15 +76,14 @@ namespace Magicodes.Pay.Startup
                     PayAppId = config["WeChat:Pay:AppId"]
                 };
             }
-
-
-
-            //微信支付配置
-            WeChatPayBuilder.Create()
-                //设置日志记录
-                .WithLoggerAction(LogAction)
-                .RegisterGetPayConfigFunc(() => weChatPayConfig).Build();
-
+            if (weChatPayConfig != null)
+            {
+                //微信支付配置
+                WeChatPayBuilder.Create()
+                    //设置日志记录
+                    .WithLoggerAction(LogAction)
+                    .RegisterGetPayConfigFunc(() => weChatPayConfig).Build();
+            }
             #endregion
 
             #region 支付宝支付
@@ -120,7 +119,7 @@ namespace Magicodes.Pay.Startup
                     alipaySettings.SignType = signType;
                 }
             }
-            else
+            else if (!config["Alipay:IsEnabled"].IsNullOrWhiteSpace() && Convert.ToBoolean(config["Alipay:IsEnabled"]))
             {
                 alipaySettings = new AlipaySettings
                 {
@@ -147,65 +146,67 @@ namespace Magicodes.Pay.Startup
                 }
             }
 
-
-            AlipayBuilder.Create()
-                .WithLoggerAction(LogAction)
-                .RegisterGetPayConfigFunc(() => alipaySettings).Build();
-
+            if (alipaySettings != null)
+            {
+                AlipayBuilder.Create()
+                    .WithLoggerAction(LogAction)
+                    .RegisterGetPayConfigFunc(() => alipaySettings).Build();
+            }
             #endregion
 
             #region 支付回调配置
-
-            void PayAction(string key, JObject data)
+            if (weChatPayConfig != null || alipaySettings != null)
             {
-                //校验返回的订单金额是否与商户侧的订单金额一致
-                //重复处理判断
-                //TODO:支付逻辑
-                switch (key)
+                void PayAction(string key, JObject data)
                 {
-                    case "订单支付":
-                        {
-                            break;
-                        }
-                }
-            }
-
-            //支付回调设置
-            PayNotifyBuilder
-                .Create()
-                //设置日志记录
-                .WithLoggerAction(LogAction).WithPayNotifyFunc(input =>
-                {
-                    switch (input.Provider)
+                    //校验返回的订单金额是否与商户侧的订单金额一致
+                    //重复处理判断
+                    //TODO:支付逻辑
+                    switch (key)
                     {
-                        case "wechat":
+                        case "订单支付":
                             {
-                                var api = new WeChatPayApi();
-                                return api.PayNotifyHandler(input.Request.Body, (output, error) =>
-                                {
-                                    //获取微信支付自定义数据
-                                    if (string.IsNullOrWhiteSpace(output.Attach))
-                                        throw new UserFriendlyException("自定义参数不允许为空！");
-                                    var data = JsonConvert.DeserializeObject<JObject>(output.Attach);
-                                    var key = data["key"].ToString();
-                                    PayAction(key, data);
-                                });
+                                break;
                             }
-                        case "alipay":
-                            {
-                                //TODO:签名校验
-                                var ordercode = input.Request.Form["out_trade_no"];
-                                var charset = input.Request.Form["charset"];
-                                //PayAction(ordercode);
-                                return Task.FromResult("success");
-                            }
-                        default:
-                            break;
                     }
+                }
 
-                    return null;
-                }).Build();
+                //支付回调设置
+                PayNotifyBuilder
+                    .Create()
+                    //设置日志记录
+                    .WithLoggerAction(LogAction).WithPayNotifyFunc(input =>
+                    {
+                        switch (input.Provider)
+                        {
+                            case "wechat":
+                                {
+                                    var api = new WeChatPayApi();
+                                    return api.PayNotifyHandler(input.Request.Body, (output, error) =>
+                                    {
+                                        //获取微信支付自定义数据
+                                        if (string.IsNullOrWhiteSpace(output.Attach))
+                                            throw new UserFriendlyException("自定义参数不允许为空！");
+                                        var data = JsonConvert.DeserializeObject<JObject>(output.Attach);
+                                        var key = data["key"].ToString();
+                                        PayAction(key, data);
+                                    });
+                                }
+                            case "alipay":
+                                {
+                                    //TODO:签名校验
+                                    var ordercode = input.Request.Form["out_trade_no"];
+                                    var charset = input.Request.Form["charset"];
+                                    //PayAction(ordercode);
+                                    return Task.FromResult("success");
+                                }
+                            default:
+                                break;
+                        }
 
+                        return null;
+                    }).Build();
+            }
             #endregion
 
             #endregion

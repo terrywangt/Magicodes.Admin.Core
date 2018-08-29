@@ -5,8 +5,7 @@ import { AppComponentBase } from '@shared/common/app-component-base';
 import { AppSessionService } from '@shared/common/session/app-session.service';
 import {
         ComboboxItemDto, CommonLookupServiceProxy, DefaultTimezoneScope, HostSettingsEditDto,
-        HostSettingsServiceProxy, SendTestEmailInput, PaySettingEditDto, PaySettingsServiceProxy,
-        SecuritySettingsEditDto
+        HostSettingsServiceProxy, SendTestEmailInput, SecuritySettingsEditDto
     } from '@shared/service-proxies/service-proxies';
 
 @Component({
@@ -17,7 +16,6 @@ export class HostSettingsComponent extends AppComponentBase implements OnInit, A
 
     loading = false;
     hostSettings: HostSettingsEditDto;
-    paySettings: PaySettingEditDto;
     editions: ComboboxItemDto[] = undefined;
     testEmailAddress: string = undefined;
     showTimezoneSelection = abp.clock.provider.supportsMultipleTimezone;
@@ -31,7 +29,6 @@ export class HostSettingsComponent extends AppComponentBase implements OnInit, A
         private _hostSettingService: HostSettingsServiceProxy,
         private _commonLookupService: CommonLookupServiceProxy,
         private _appSessionService: AppSessionService,
-        private _paySettingService: PaySettingsServiceProxy,
     ) {
         super(injector);
     }
@@ -44,14 +41,6 @@ export class HostSettingsComponent extends AppComponentBase implements OnInit, A
                 self.hostSettings = setting;
                 self.initialTimeZone = setting.general.timezone;
                 self.usingDefaultTimeZone = setting.general.timezoneForComparison === self.setting.get('Abp.Timing.TimeZone');
-            });
-    }
-
-    loadPaySettings(): void {
-        const self = this;
-        self._paySettingService.getAllSettings()
-            .subscribe(setting => {
-                self.paySettings = setting;
             });
     }
 
@@ -74,7 +63,6 @@ export class HostSettingsComponent extends AppComponentBase implements OnInit, A
         self.showTimezoneSelection = abp.clock.provider.supportsMultipleTimezone;
         self.loadHostSettings();
         self.loadEditions();
-        self.loadPaySettings();
     }
 
     ngOnInit(): void {
@@ -107,11 +95,6 @@ export class HostSettingsComponent extends AppComponentBase implements OnInit, A
                     window.location.reload();
                 });
             }
-        });
-
-        self._paySettingService.updateAllSettings(self.paySettings).subscribe(result => {
-            // self.notify.info(self.l('SavedSuccessfully'));
-            // window.location.reload();
         });
     }
 }
