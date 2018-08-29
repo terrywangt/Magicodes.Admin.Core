@@ -11,7 +11,7 @@ using Magicodes.Admin.Configuration.Pay.Dto;
 namespace Magicodes.Admin.Configuration.Pay
 {
 
-    [AbpAuthorize(AppPermissions.Pages_Administration_Host_Settings)]
+    [AbpAuthorize(AppPermissions.Pages_Administration_Pay_Settings)]
     public class PaySettingsAppService : ApplicationService, IPaySettingsAppService
     {
         public PaySettingsAppService(

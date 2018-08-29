@@ -41,6 +41,7 @@ import { CreateOrEditRoleModalComponent } from './roles/create-or-edit-role-moda
 import { RolesComponent } from './roles/roles.component';
 import { HostSettingsComponent } from './settings/host-settings.component';
 import { TenantSettingsComponent } from './settings/tenant-settings.component';
+import { PaySettingsComponent } from './settings/pay-settings.component';
 import { EditionComboComponent } from './shared/edition-combo.component';
 import { FeatureTreeComponent } from './shared/feature-tree.component';
 import { OrganizationUnitsTreeComponent } from './shared/organization-unit-tree.component';
@@ -118,6 +119,7 @@ import { CreateOrEditColumnInfoModalComponent } from './columnInfos/create-or-ed
         AuditLogDetailModalComponent,
         EntityChangeDetailModalComponent,
         HostSettingsComponent,
+        PaySettingsComponent,
         InstallComponent,
         MaintenanceComponent,
         EditionsComponent,

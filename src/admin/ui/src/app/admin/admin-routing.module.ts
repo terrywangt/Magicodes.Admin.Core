@@ -11,6 +11,7 @@ import { MaintenanceComponent } from './maintenance/maintenance.component';
 import { OrganizationUnitsComponent } from './organization-units/organization-units.component';
 import { RolesComponent } from './roles/roles.component';
 import { HostSettingsComponent } from './settings/host-settings.component';
+import { PaySettingsComponent } from './settings/pay-settings.component';
 import { TenantSettingsComponent } from './settings/tenant-settings.component';
 import { InvoiceComponent } from './subscription-management/invoice/invoice.component';
 import { SubscriptionManagementComponent } from './subscription-management/subscription-management.component';
@@ -31,7 +32,8 @@ import { ColumnInfosComponent } from './columnInfos/columnInfo.component';
                     { path: 'roles', component: RolesComponent, data: { permission: 'Pages.Administration.Roles' } },
                     { path: 'auditLogs', component: AuditLogsComponent, data: { permission: 'Pages.Administration.AuditLogs' } },
                     { path: 'maintenance', component: MaintenanceComponent, data: { permission: 'Pages.Administration.Host.Maintenance' } },
-                    { path: 'hostSettings', component: HostSettingsComponent, data: { permission: 'Pages.Administration.Host.Settings' } },
+                    { path: 'hostSettings', component: HostSettingsComponent, data: { permission: 'Pages.Administration.Pay.Settings' } },
+                    { path: 'paySettings', component: PaySettingsComponent, data: { permission: 'Pages.Administration.Pay.Settings' } },
                     { path: 'editions', component: EditionsComponent, data: { permission: 'Pages.Editions' } },
                     { path: 'languages', component: LanguagesComponent, data: { permission: 'Pages.Administration.Languages' } },
                     { path: 'languages/:name/texts', component: LanguageTextsComponent, data: { permission: 'Pages.Administration.Languages.ChangeTexts' } },
