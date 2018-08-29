@@ -88,32 +88,69 @@ namespace Magicodes.Pay.Startup
             #endregion
 
             #region 支付宝支付
+            AlipaySettings alipaySettings = null;
+            if (Convert.ToBoolean(await settingManager.GetSettingValueAsync(AppSettings.AliPayManagement.IsActive)))
+            {
+                alipaySettings = new AlipaySettings
+                {
+                    AlipayPublicKey = await settingManager.GetSettingValueAsync(AppSettings.AliPayManagement.AlipayPublicKey),
+                    AppId = await settingManager.GetSettingValueAsync(AppSettings.AliPayManagement.AppId),
+                    Uid = await settingManager.GetSettingValueAsync(AppSettings.AliPayManagement.Uid),
+                    PrivateKey = await settingManager.GetSettingValueAsync(AppSettings.AliPayManagement.PrivateKey),
+                };
+
+                var charSet = await settingManager.GetSettingValueAsync(AppSettings.AliPayManagement.CharSet);
+                if (!charSet.IsNullOrWhiteSpace())
+                {
+                    alipaySettings.CharSet = charSet;
+                }
+                var gatewayurl = await settingManager.GetSettingValueAsync(AppSettings.AliPayManagement.Gatewayurl);
+                if (!gatewayurl.IsNullOrWhiteSpace())
+                {
+                    alipaySettings.Gatewayurl = gatewayurl;
+                }
+                var notify = await settingManager.GetSettingValueAsync(AppSettings.AliPayManagement.Notify);
+                if (!notify.IsNullOrWhiteSpace())
+                {
+                    alipaySettings.Notify = notify;
+                }
+                var signType = await settingManager.GetSettingValueAsync(AppSettings.AliPayManagement.SignType);
+                if (!signType.IsNullOrWhiteSpace())
+                {
+                    alipaySettings.SignType = signType;
+                }
+            }
+            else
+            {
+                alipaySettings = new AlipaySettings
+                {
+                    AlipayPublicKey = config["Alipay:PublicKey"],
+                    AppId = config["Alipay:AppId"],
+                    Uid = config["Alipay:Uid"],
+                    PrivateKey = config["Alipay:PrivateKey"]
+                };
+                if (!config["Alipay:CharSet"].IsNullOrWhiteSpace())
+                {
+                    alipaySettings.CharSet = config["Alipay:CharSet"];
+                }
+                if (!config["Alipay:Gatewayurl"].IsNullOrWhiteSpace())
+                {
+                    alipaySettings.Gatewayurl = config["Alipay:Gatewayurl"];
+                }
+                if (!config["Alipay:Notify"].IsNullOrWhiteSpace())
+                {
+                    alipaySettings.Notify = config["Alipay:Notify"];
+                }
+                if (!config["Alipay:SignType"].IsNullOrWhiteSpace())
+                {
+                    alipaySettings.SignType = config["Alipay:SignType"];
+                }
+            }
+
 
             AlipayBuilder.Create()
                 .WithLoggerAction(LogAction)
-                .RegisterGetPayConfigFunc(() =>
-                {
-                    var settings = new AlipaySettings
-                    {
-                        AlipayPublicKey = config["Alipay:PublicKey"],
-                        AppId = config["Alipay:AppId"],
-                        Uid = config["Alipay:Uid"],
-                        PrivateKey = config["Alipay:PrivateKey"]
-                    };
-
-                    if (!config["Alipay:CharSet"].IsNullOrWhiteSpace())
-                        settings.CharSet = config["Alipay:CharSet"];
-
-                    if (!config["Alipay:Gatewayurl"].IsNullOrWhiteSpace())
-                        settings.Gatewayurl = config["Alipay:Gatewayurl"];
-
-                    if (!config["Alipay:Notify"].IsNullOrWhiteSpace())
-                        settings.Notify = config["Alipay:Notify"];
-
-                    if (!config["Alipay:SignType"].IsNullOrWhiteSpace())
-                        settings.SignType = config["Alipay:SignType"];
-                    return settings;
-                }).Build();
+                .RegisterGetPayConfigFunc(() => alipaySettings).Build();
 
             #endregion
 
