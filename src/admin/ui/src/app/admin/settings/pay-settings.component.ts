@@ -31,7 +31,6 @@ export class PaySettingsComponent extends AppComponentBase implements OnInit, Af
     saveAll(): void {
         this._paySettingService.updateAllSettings(this.paySettings).subscribe(result => {
             this.notify.info(this.l('SavedSuccessfully'));
-            window.location.reload();
         });
     }
 }
