@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using Abp.Application.Services;
+﻿using Abp.Application.Services;
 using Abp.Authorization;
 using Abp.Configuration;
 using Magicodes.Admin.Authorization;
 using Magicodes.Admin.Configuration.Pay.Dto;
+using System;
+using System.Threading.Tasks;
 
 namespace Magicodes.Admin.Configuration.Pay
 {
@@ -20,43 +18,34 @@ namespace Magicodes.Admin.Configuration.Pay
 
         }
 
-        public async Task<PaySettingEditDto> GetAllSettings()
+        public async Task<PaySettingEditDto> GetAllSettings() => new PaySettingEditDto
         {
-            return new PaySettingEditDto
-            {
-                WeChatPay = await GetWeChatSettingsAsync(),
-                AliPay = await GetAliPaySettingsAsync()
-            };
-        }
+            WeChatPay = await GetWeChatSettingsAsync(),
+            AliPay = await GetAliPaySettingsAsync()
+        };
 
-        private async Task<WeChatPaySettingEditDto> GetWeChatSettingsAsync()
+        private async Task<WeChatPaySettingEditDto> GetWeChatSettingsAsync() => new WeChatPaySettingEditDto
         {
-            return new WeChatPaySettingEditDto
-            {
-                AppId = await SettingManager.GetSettingValueAsync(AppSettings.WeChatPayManagement.AppId),
-                MchId = await SettingManager.GetSettingValueAsync(AppSettings.WeChatPayManagement.MchId),
-                TenPayKey = await SettingManager.GetSettingValueAsync(AppSettings.WeChatPayManagement.TenPayKey),
-                PayNotifyUrl = await SettingManager.GetSettingValueAsync(AppSettings.WeChatPayManagement.PayNotifyUrl),
-                IsActive = Convert.ToBoolean(await SettingManager.GetSettingValueAsync(AppSettings.WeChatPayManagement.IsActive))
-            };
-        }
-        private async Task<AliPaySettingEditDto> GetAliPaySettingsAsync()
+            AppId = await SettingManager.GetSettingValueAsync(AppSettings.WeChatPayManagement.AppId),
+            MchId = await SettingManager.GetSettingValueAsync(AppSettings.WeChatPayManagement.MchId),
+            TenPayKey = await SettingManager.GetSettingValueAsync(AppSettings.WeChatPayManagement.TenPayKey),
+            PayNotifyUrl = await SettingManager.GetSettingValueAsync(AppSettings.WeChatPayManagement.PayNotifyUrl),
+            IsActive = Convert.ToBoolean(await SettingManager.GetSettingValueAsync(AppSettings.WeChatPayManagement.IsActive))
+        };
+        private async Task<AliPaySettingEditDto> GetAliPaySettingsAsync() => new AliPaySettingEditDto
         {
-            return new AliPaySettingEditDto
-            {
-                AppId = await SettingManager.GetSettingValueAsync(AppSettings.AliPayManagement.AppId),
-                Uid = await SettingManager.GetSettingValueAsync(AppSettings.AliPayManagement.Uid),
-                Gatewayurl = await SettingManager.GetSettingValueAsync(AppSettings.AliPayManagement.Gatewayurl),
-                AlipayPublicKey = await SettingManager.GetSettingValueAsync(AppSettings.AliPayManagement.AlipayPublicKey),
-                AlipaySignPublicKey = await SettingManager.GetSettingValueAsync(AppSettings.AliPayManagement.AlipaySignPublicKey),
-                PrivateKey = await SettingManager.GetSettingValueAsync(AppSettings.AliPayManagement.PrivateKey),
-                CharSet = await SettingManager.GetSettingValueAsync(AppSettings.AliPayManagement.CharSet),
-                Notify = await SettingManager.GetSettingValueAsync(AppSettings.AliPayManagement.Notify),
-                SignType = await SettingManager.GetSettingValueAsync(AppSettings.AliPayManagement.SignType),
-                IsKeyFromFile = Convert.ToBoolean(await SettingManager.GetSettingValueAsync(AppSettings.AliPayManagement.IsKeyFromFile)),
-                IsActive = Convert.ToBoolean(await SettingManager.GetSettingValueAsync(AppSettings.AliPayManagement.IsActive))
-            };
-        }
+            AppId = await SettingManager.GetSettingValueAsync(AppSettings.AliPayManagement.AppId),
+            Uid = await SettingManager.GetSettingValueAsync(AppSettings.AliPayManagement.Uid),
+            Gatewayurl = await SettingManager.GetSettingValueAsync(AppSettings.AliPayManagement.Gatewayurl),
+            AlipayPublicKey = await SettingManager.GetSettingValueAsync(AppSettings.AliPayManagement.AlipayPublicKey),
+            AlipaySignPublicKey = await SettingManager.GetSettingValueAsync(AppSettings.AliPayManagement.AlipaySignPublicKey),
+            PrivateKey = await SettingManager.GetSettingValueAsync(AppSettings.AliPayManagement.PrivateKey),
+            CharSet = await SettingManager.GetSettingValueAsync(AppSettings.AliPayManagement.CharSet),
+            Notify = await SettingManager.GetSettingValueAsync(AppSettings.AliPayManagement.Notify),
+            SignType = await SettingManager.GetSettingValueAsync(AppSettings.AliPayManagement.SignType),
+            IsKeyFromFile = Convert.ToBoolean(await SettingManager.GetSettingValueAsync(AppSettings.AliPayManagement.IsKeyFromFile)),
+            IsActive = Convert.ToBoolean(await SettingManager.GetSettingValueAsync(AppSettings.AliPayManagement.IsActive))
+        };
 
 
         public async Task UpdateAllSettings(PaySettingEditDto input)
@@ -67,26 +56,44 @@ namespace Magicodes.Admin.Configuration.Pay
 
         private async Task UpdateWeChatSettingsAsync(WeChatPaySettingEditDto input)
         {
-            await SettingManager.ChangeSettingForApplicationAsync(AppSettings.WeChatPayManagement.AppId, input.AppId);
-            await SettingManager.ChangeSettingForApplicationAsync(AppSettings.WeChatPayManagement.MchId, input.MchId);
-            await SettingManager.ChangeSettingForApplicationAsync(AppSettings.WeChatPayManagement.TenPayKey, input.TenPayKey);
-            await SettingManager.ChangeSettingForApplicationAsync(AppSettings.WeChatPayManagement.PayNotifyUrl, input.PayNotifyUrl);
-            await SettingManager.ChangeSettingForApplicationAsync(AppSettings.WeChatPayManagement.IsActive, Convert.ToString(input.IsActive));
+            await SaveSettings(AppSettings.WeChatPayManagement.AppId, input.AppId);
+            await SaveSettings(AppSettings.WeChatPayManagement.MchId, input.MchId);
+            await SaveSettings(AppSettings.WeChatPayManagement.TenPayKey, input.TenPayKey);
+            await SaveSettings(AppSettings.WeChatPayManagement.PayNotifyUrl, input.PayNotifyUrl);
+            await SaveSettings(AppSettings.WeChatPayManagement.IsActive, Convert.ToString(input.IsActive));
+        }
+
+        /// <summary>
+        /// 保存设置
+        /// </summary>
+        /// <param name="key">设置键</param>
+        /// <param name="value">值</param>
+        /// <returns></returns>
+        private async Task SaveSettings(string key, string value)
+        {
+            if (AbpSession.TenantId.HasValue)
+            {
+                await SettingManager.ChangeSettingForTenantAsync(AbpSession.TenantId.Value, key, value);
+            }
+            else
+            {
+                await SettingManager.ChangeSettingForApplicationAsync(key, value);
+            }
         }
 
         private async Task UpdateAliSettingsAsync(AliPaySettingEditDto input)
         {
-            await SettingManager.ChangeSettingForApplicationAsync(AppSettings.AliPayManagement.AppId, input.AppId);
-            await SettingManager.ChangeSettingForApplicationAsync(AppSettings.AliPayManagement.Uid, input.Uid);
-            await SettingManager.ChangeSettingForApplicationAsync(AppSettings.AliPayManagement.Gatewayurl, input.Gatewayurl);
-            await SettingManager.ChangeSettingForApplicationAsync(AppSettings.AliPayManagement.AlipayPublicKey, input.AlipayPublicKey);
-            await SettingManager.ChangeSettingForApplicationAsync(AppSettings.AliPayManagement.AlipaySignPublicKey, input.AlipaySignPublicKey);
-            await SettingManager.ChangeSettingForApplicationAsync(AppSettings.AliPayManagement.PrivateKey, input.PrivateKey);
-            await SettingManager.ChangeSettingForApplicationAsync(AppSettings.AliPayManagement.CharSet, input.CharSet);
-            await SettingManager.ChangeSettingForApplicationAsync(AppSettings.AliPayManagement.Notify, input.Notify);
-            await SettingManager.ChangeSettingForApplicationAsync(AppSettings.AliPayManagement.SignType, input.SignType);
-            await SettingManager.ChangeSettingForApplicationAsync(AppSettings.AliPayManagement.IsKeyFromFile, Convert.ToString(input.IsKeyFromFile));
-            await SettingManager.ChangeSettingForApplicationAsync(AppSettings.AliPayManagement.IsActive, Convert.ToString(input.IsActive));
+            await SaveSettings(AppSettings.AliPayManagement.AppId, input.AppId);
+            await SaveSettings(AppSettings.AliPayManagement.Uid, input.Uid);
+            await SaveSettings(AppSettings.AliPayManagement.Gatewayurl, input.Gatewayurl);
+            await SaveSettings(AppSettings.AliPayManagement.AlipayPublicKey, input.AlipayPublicKey);
+            await SaveSettings(AppSettings.AliPayManagement.AlipaySignPublicKey, input.AlipaySignPublicKey);
+            await SaveSettings(AppSettings.AliPayManagement.PrivateKey, input.PrivateKey);
+            await SaveSettings(AppSettings.AliPayManagement.CharSet, input.CharSet);
+            await SaveSettings(AppSettings.AliPayManagement.Notify, input.Notify);
+            await SaveSettings(AppSettings.AliPayManagement.SignType, input.SignType);
+            await SaveSettings(AppSettings.AliPayManagement.IsKeyFromFile, Convert.ToString(input.IsKeyFromFile));
+            await SaveSettings(AppSettings.AliPayManagement.IsActive, Convert.ToString(input.IsActive));
         }
     }
 }
