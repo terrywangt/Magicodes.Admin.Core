@@ -747,8 +747,8 @@
     <text name="IconCls" value="小图标" />
 
     <!-- 2018-08-28 CLL 关于微信和支付宝支付的配置-->
-    <text name="PaySettings" value="支付相关设置"></text>
-    <text name="PayIsActiveExplain" value="勾选则会优先使用本配置，忽略配置文件！" />
+    <text name="PaySettings" value="支付设置"></text>
+    <text name="PayIsActiveExplain" value="请确认配置正确后再启用！" />
     <text name="WeChatPay" value="微信支付" />
     <text name="WeChatPayInformation" value="微信支付配置信息" />
     <text name="WeChatAppId" value="开发者的应用ID" />
