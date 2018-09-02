@@ -3645,63 +3645,6 @@ export class CommonServiceProxy {
         }
         return _observableOf<void>(<any>null);
     }
-
-    /**
-     * 货币格式化
-     * @param input (optional) 
-     * @return Success
-     */
-    currencyConversion(input: CurrencyConversionInput | null | undefined): Observable<string> {
-        let url_ = this.baseUrl + "/api/services/app/Common/CurrencyConversion";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(input);
-
-        let options_ : any = {
-            body: content_,
-            observe: "response",
-            responseType: "blob",
-            headers: new HttpHeaders({
-                "Content-Type": "application/json", 
-                "Accept": "application/json"
-            })
-        };
-
-        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processCurrencyConversion(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processCurrencyConversion(<any>response_);
-                } catch (e) {
-                    return <Observable<string>><any>_observableThrow(e);
-                }
-            } else
-                return <Observable<string>><any>_observableThrow(response_);
-        }));
-    }
-
-    protected processCurrencyConversion(response: HttpResponseBase): Observable<string> {
-        const status = response.status;
-        const responseBlob = 
-            response instanceof HttpResponse ? response.body : 
-            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = resultData200 !== undefined ? resultData200 : <any>null;
-            return _observableOf(result200);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf<string>(<any>null);
-    }
 }
 
 @Injectable()
@@ -4989,6 +4932,120 @@ export class HostDashboardServiceProxy {
             }));
         }
         return _observableOf<GetEditionTenantStatisticsOutput>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    getPendsData(): Observable<GetPendsOutput> {
+        let url_ = this.baseUrl + "/api/services/app/HostDashboard/GetPendsData";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetPendsData(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetPendsData(<any>response_);
+                } catch (e) {
+                    return <Observable<GetPendsOutput>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<GetPendsOutput>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetPendsData(response: HttpResponseBase): Observable<GetPendsOutput> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? GetPendsOutput.fromJS(resultData200) : new GetPendsOutput();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<GetPendsOutput>(<any>null);
+    }
+
+    /**
+     * @param startDate (optional) 
+     * @param endDate (optional) 
+     * @return Success
+     */
+    getHotGoodsData(startDate: moment.Moment | null | undefined, endDate: moment.Moment | null | undefined): Observable<GetHotGoodsOutput[]> {
+        let url_ = this.baseUrl + "/api/services/app/HostDashboard/GetHotGoodsData?";
+        if (startDate !== undefined)
+            url_ += "startDate=" + encodeURIComponent(startDate ? "" + startDate.toJSON() : "") + "&"; 
+        if (endDate !== undefined)
+            url_ += "endDate=" + encodeURIComponent(endDate ? "" + endDate.toJSON() : "") + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetHotGoodsData(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetHotGoodsData(<any>response_);
+                } catch (e) {
+                    return <Observable<GetHotGoodsOutput[]>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<GetHotGoodsOutput[]>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetHotGoodsData(response: HttpResponseBase): Observable<GetHotGoodsOutput[]> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData200 && resultData200.constructor === Array) {
+                result200 = [];
+                for (let item of resultData200)
+                    result200.push(GetHotGoodsOutput.fromJS(item));
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<GetHotGoodsOutput[]>(<any>null);
     }
 }
 
@@ -14163,50 +14220,6 @@ export interface IAddObjectAttachmentInfosInput {
     attachmentInfoIds: number[] | undefined;
 }
 
-export class CurrencyConversionInput implements ICurrencyConversionInput {
-    /** 区域 */
-    cultureName!: string;
-    /** 金额 */
-    currencyValue!: number;
-
-    constructor(data?: ICurrencyConversionInput) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.cultureName = data["cultureName"];
-            this.currencyValue = data["currencyValue"];
-        }
-    }
-
-    static fromJS(data: any): CurrencyConversionInput {
-        data = typeof data === 'object' ? data : {};
-        let result = new CurrencyConversionInput();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["cultureName"] = this.cultureName;
-        data["currencyValue"] = this.currencyValue;
-        return data; 
-    }
-}
-
-export interface ICurrencyConversionInput {
-    /** 区域 */
-    cultureName: string;
-    /** 金额 */
-    currencyValue: number;
-}
-
 export class ListResultDtoOfSubscribableEditionComboboxItemDto implements IListResultDtoOfSubscribableEditionComboboxItemDto {
     items!: SubscribableEditionComboboxItemDto[] | undefined;
 
@@ -15261,9 +15274,13 @@ export interface IAcceptFriendshipRequestInput {
 
 export class HostDashboardData implements IHostDashboardData {
     newTenantsCount!: number | undefined;
+    newTenantsratio!: number | undefined;
     newSubscriptionAmount!: number | undefined;
-    dashboardPlaceholder1!: number | undefined;
-    dashboardPlaceholder2!: number | undefined;
+    subscriptionAmountratio!: number | undefined;
+    newOrdersCount!: number | undefined;
+    newOrdersratio!: number | undefined;
+    newGoodsCount!: number | undefined;
+    newGoodsratio!: number | undefined;
     incomeStatistics!: IncomeStastistic[] | undefined;
     editionStatistics!: TenantEdition[] | undefined;
     expiringTenants!: ExpiringTenant[] | undefined;
@@ -15288,9 +15305,13 @@ export class HostDashboardData implements IHostDashboardData {
     init(data?: any) {
         if (data) {
             this.newTenantsCount = data["newTenantsCount"];
+            this.newTenantsratio = data["newTenantsratio"];
             this.newSubscriptionAmount = data["newSubscriptionAmount"];
-            this.dashboardPlaceholder1 = data["dashboardPlaceholder1"];
-            this.dashboardPlaceholder2 = data["dashboardPlaceholder2"];
+            this.subscriptionAmountratio = data["subscriptionAmountratio"];
+            this.newOrdersCount = data["newOrdersCount"];
+            this.newOrdersratio = data["newOrdersratio"];
+            this.newGoodsCount = data["newGoodsCount"];
+            this.newGoodsratio = data["newGoodsratio"];
             if (data["incomeStatistics"] && data["incomeStatistics"].constructor === Array) {
                 this.incomeStatistics = [];
                 for (let item of data["incomeStatistics"])
@@ -15331,9 +15352,13 @@ export class HostDashboardData implements IHostDashboardData {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["newTenantsCount"] = this.newTenantsCount;
+        data["newTenantsratio"] = this.newTenantsratio;
         data["newSubscriptionAmount"] = this.newSubscriptionAmount;
-        data["dashboardPlaceholder1"] = this.dashboardPlaceholder1;
-        data["dashboardPlaceholder2"] = this.dashboardPlaceholder2;
+        data["subscriptionAmountratio"] = this.subscriptionAmountratio;
+        data["newOrdersCount"] = this.newOrdersCount;
+        data["newOrdersratio"] = this.newOrdersratio;
+        data["newGoodsCount"] = this.newGoodsCount;
+        data["newGoodsratio"] = this.newGoodsratio;
         if (this.incomeStatistics && this.incomeStatistics.constructor === Array) {
             data["incomeStatistics"] = [];
             for (let item of this.incomeStatistics)
@@ -15367,9 +15392,13 @@ export class HostDashboardData implements IHostDashboardData {
 
 export interface IHostDashboardData {
     newTenantsCount: number | undefined;
+    newTenantsratio: number | undefined;
     newSubscriptionAmount: number | undefined;
-    dashboardPlaceholder1: number | undefined;
-    dashboardPlaceholder2: number | undefined;
+    subscriptionAmountratio: number | undefined;
+    newOrdersCount: number | undefined;
+    newOrdersratio: number | undefined;
+    newGoodsCount: number | undefined;
+    newGoodsratio: number | undefined;
     incomeStatistics: IncomeStastistic[] | undefined;
     editionStatistics: TenantEdition[] | undefined;
     expiringTenants: ExpiringTenant[] | undefined;
@@ -15637,6 +15666,102 @@ export class GetEditionTenantStatisticsOutput implements IGetEditionTenantStatis
 
 export interface IGetEditionTenantStatisticsOutput {
     editionStatistics: TenantEdition[] | undefined;
+}
+
+export class GetPendsOutput implements IGetPendsOutput {
+    delivery!: number | undefined;
+    obligation!: number | undefined;
+    rejectedgoods!: number | undefined;
+    stock!: number | undefined;
+    consult!: number | undefined;
+
+    constructor(data?: IGetPendsOutput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.delivery = data["delivery"];
+            this.obligation = data["obligation"];
+            this.rejectedgoods = data["rejectedgoods"];
+            this.stock = data["stock"];
+            this.consult = data["consult"];
+        }
+    }
+
+    static fromJS(data: any): GetPendsOutput {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetPendsOutput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["delivery"] = this.delivery;
+        data["obligation"] = this.obligation;
+        data["rejectedgoods"] = this.rejectedgoods;
+        data["stock"] = this.stock;
+        data["consult"] = this.consult;
+        return data; 
+    }
+}
+
+export interface IGetPendsOutput {
+    delivery: number | undefined;
+    obligation: number | undefined;
+    rejectedgoods: number | undefined;
+    stock: number | undefined;
+    consult: number | undefined;
+}
+
+export class GetHotGoodsOutput implements IGetHotGoodsOutput {
+    goodname!: string | undefined;
+    goodtype!: string | undefined;
+    sales!: number | undefined;
+
+    constructor(data?: IGetHotGoodsOutput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.goodname = data["goodname"];
+            this.goodtype = data["goodtype"];
+            this.sales = data["sales"];
+        }
+    }
+
+    static fromJS(data: any): GetHotGoodsOutput {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetHotGoodsOutput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["goodname"] = this.goodname;
+        data["goodtype"] = this.goodtype;
+        data["sales"] = this.sales;
+        return data; 
+    }
+}
+
+export interface IGetHotGoodsOutput {
+    goodname: string | undefined;
+    goodtype: string | undefined;
+    sales: number | undefined;
 }
 
 export class HostSettingsEditDto implements IHostSettingsEditDto {

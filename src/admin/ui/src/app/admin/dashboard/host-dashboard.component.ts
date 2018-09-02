@@ -40,6 +40,10 @@ export class HostDashboardComponent extends AppComponentBase implements AfterVie
     private _$editionsTable: JQuery;
     expiringTenantsData = [];
     recentTenantsData = [];
+    hotGoods=[];
+    pends:any;
+    charttitle:string="交易额统计";
+    IncomeWithAmount:string="交易额 ：";
 
     constructor(
         injector: Injector,
@@ -50,7 +54,7 @@ export class HostDashboardComponent extends AppComponentBase implements AfterVie
     }
 
     init(): void {
-        this.selectedIncomeStatisticsDateInterval = AppIncomeStatisticsDateInterval.Daily;
+        this.selectedIncomeStatisticsDateInterval = AppIncomeStatisticsDateInterval.Transaction;
     }
 
     ngOnInit(): void {
@@ -62,6 +66,7 @@ export class HostDashboardComponent extends AppComponentBase implements AfterVie
             this.createDateRangePicker();
             this.getDashboardStatisticsData();
             this.bindToolTipForIncomeStatisticsChart($(this.incomeStatisticsChart.nativeElement));
+            this.getpends();
             mApp.initScroller($('.m-scrollable'), {});
         }, 0);
     }
@@ -91,10 +96,33 @@ export class HostDashboardComponent extends AppComponentBase implements AfterVie
                 this.drawIncomeStatisticsChart(result.incomeStatistics);
                 this.loadRecentTenantsTable(result.recentTenants);
                 this.loadExpiringTenantsTable(result.expiringTenants);
+                this.GetHotGoodsData();
                 this.loading = false;
             });
     }
 
+    getpends():void{
+        this.loading = true;
+         this._hostDashboardService.getPendsData(
+             
+         ).subscribe(result => {
+             this.pends=result;
+         });
+    }
+
+    GetHotGoodsData(): void {
+        this.loading = true;
+        this._hostDashboardService
+        .getHotGoodsData
+            (
+            this.selectedDateRange.startDate,
+            this.selectedDateRange.endDate
+            )
+            .subscribe(result => {
+                this.hotGoods = result;
+                this.loading = false;
+            });
+    }
     /*
     * Edition statistics pie chart
     */
@@ -129,7 +157,7 @@ export class HostDashboardComponent extends AppComponentBase implements AfterVie
             const self = this;
             const normalizedData = this.normalizeEditionStatisticsData(data);
 
-            ($ as any).plot($(self.editionStatisticsChart.nativeElement), normalizedData, {
+            ($ as any).plot($(self.editionStatisticsChart), normalizedData, {
                 series: {
                     pie: {
                         show: true,
@@ -254,6 +282,16 @@ export class HostDashboardComponent extends AppComponentBase implements AfterVie
     incomeStatisticsDateIntervalChange(interval: number) {
         this.selectedIncomeStatisticsDateInterval = interval;
         this.refreshIncomeStatisticsData();
+        if (interval==1){
+               this.charttitle="交易额统计";
+               this.IncomeWithAmount="交易额 ：";
+        }else if(interval==2){
+            this.charttitle="用户数统计";
+            this.IncomeWithAmount="用户数 ：";
+        }else if(interval==3){
+            this.charttitle="订单数统计";
+            this.IncomeWithAmount="订单数 ：";
+        }
     }
 
     refreshIncomeStatisticsData(): void {
@@ -301,10 +339,10 @@ export class HostDashboardComponent extends AppComponentBase implements AfterVie
                 return;
             }
 
-            if (incomeStatisticsChartLastTooltipIndex !== item.dataIndex) {
+            if (incomeStatisticsChartLastTooltipIndex !== item.dataIndex) {        
                 let label = '';
                 const isSingleDaySelected = this.selectedDateRange.startDate.format('L') === this.selectedDateRange.endDate.format('L');
-                if (this.selectedIncomeStatisticsDateInterval === AppIncomeStatisticsDateInterval.Daily ||
+                if (this.selectedIncomeStatisticsDateInterval === AppIncomeStatisticsDateInterval.Transaction ||
                     isSingleDaySelected) {
                     label = moment(item.datapoint[0]).format('dddd, DD MMMM YYYY');
                 } else {
@@ -317,9 +355,9 @@ export class HostDashboardComponent extends AppComponentBase implements AfterVie
                         label += ' - ' + moment(nextItem[0]).format('LL');
                     }
                 }
-
+               
                 incomeStatisticsChartLastTooltipIndex = item.dataIndex;
-                const value = this.l('IncomeWithAmount', '<strong>' + item.datapoint[1] + this.currency + '</strong>');
+                const value = this.l(this.IncomeWithAmount + item.datapoint[1]);
                 showChartTooltip(item.pageX, item.pageY, label, value);
             }
         });

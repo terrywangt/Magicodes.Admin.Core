@@ -34,9 +34,9 @@ export class AppTenantAvailabilityState {
 }
 
 export class AppIncomeStatisticsDateInterval {
-    static Daily: number = IncomeStatisticsDateInterval._1;
-    static Weekly: number = IncomeStatisticsDateInterval._2;
-    static Monthly: number = IncomeStatisticsDateInterval._3;
+    static Transaction: number = IncomeStatisticsDateInterval._1;
+    static Consumer: number = IncomeStatisticsDateInterval._2;
+    static Order: number = IncomeStatisticsDateInterval._3;
 }
 
 export class SubscriptionStartType {
