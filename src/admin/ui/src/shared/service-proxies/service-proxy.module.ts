@@ -47,6 +47,7 @@ import * as ApiServiceProxies from './service-proxies';
         ApiServiceProxies.ArticleInfoServiceProxy,
         ApiServiceProxies.ArticleSourceInfoServiceProxy,
         ApiServiceProxies.ColumnInfoServiceProxy,
+        ApiServiceProxies.SmsCodeSettingServiceProxy,
         { provide: HTTP_INTERCEPTORS, useClass: AbpHttpInterceptor, multi: true }
     ]
 })

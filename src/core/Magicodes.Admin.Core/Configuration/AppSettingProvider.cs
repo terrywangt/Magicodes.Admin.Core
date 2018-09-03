@@ -25,7 +25,8 @@ namespace Magicodes.Admin.Configuration
             //Disable TwoFactorLogin by default (can be enabled by UI)
             context.Manager.GetSettingDefinition(AbpZeroSettingNames.UserManagement.TwoFactorLogin.IsEnabled).DefaultValue = false.ToString().ToLowerInvariant();
 
-            return GetHostSettings().Union(GetTenantSettings()).Union(GetSharedSettings()).Union(GetPaySettings());
+            return GetHostSettings().Union(GetTenantSettings()).Union(GetSharedSettings()).Union(GetPaySettings())
+                .Union(GetSmsCodeSettings());
         }
 
         private IEnumerable<SettingDefinition> GetHostSettings()
@@ -122,6 +123,18 @@ namespace Magicodes.Admin.Configuration
         private string GetFromSettings(string name, string defaultValue = null)
         {
             return _appConfiguration[name] ?? defaultValue;
+        }
+
+        private IEnumerable<SettingDefinition> GetSmsCodeSettings()
+        {
+            return new[] {
+                new SettingDefinition(AppSettings.AliSmsCodeManagement.IsEnabled, GetFromAppSettings(AppSettings.AliSmsCodeManagement.IsEnabled, "true"),scopes: SettingScopes.Tenant|SettingScopes.Application),
+                new SettingDefinition(AppSettings.AliSmsCodeManagement.AccessKeyId, GetFromAppSettings(AppSettings.AliSmsCodeManagement.AccessKeySecret, ""),scopes: SettingScopes.Tenant|SettingScopes.Application),
+                new SettingDefinition(AppSettings.AliSmsCodeManagement.AccessKeySecret, GetFromAppSettings(AppSettings.AliSmsCodeManagement.AccessKeySecret, ""),scopes: SettingScopes.Tenant|SettingScopes.Application),
+                new SettingDefinition(AppSettings.AliSmsCodeManagement.SignName, GetFromAppSettings(AppSettings.AliSmsCodeManagement.SignName, ""),scopes: SettingScopes.Tenant|SettingScopes.Application),
+                new SettingDefinition(AppSettings.AliSmsCodeManagement.TemplateCode, GetFromAppSettings(AppSettings.AliSmsCodeManagement.TemplateCode, ""),scopes: SettingScopes.Tenant|SettingScopes.Application),
+                new SettingDefinition(AppSettings.AliSmsCodeManagement.TemplateParam, GetFromAppSettings(AppSettings.AliSmsCodeManagement.TemplateParam, ""),scopes: SettingScopes.Tenant|SettingScopes.Application)
+            };
         }
     }
 }

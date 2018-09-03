@@ -12,6 +12,7 @@ import { OrganizationUnitsComponent } from './organization-units/organization-un
 import { RolesComponent } from './roles/roles.component';
 import { HostSettingsComponent } from './settings/host-settings.component';
 import { PaySettingsComponent } from './settings/pay-settings.component';
+import { SmsCodeSettingsComponent } from './settings/smsCode-settings.component';
 import { TenantSettingsComponent } from './settings/tenant-settings.component';
 import { InvoiceComponent } from './subscription-management/invoice/invoice.component';
 import { SubscriptionManagementComponent } from './subscription-management/subscription-management.component';
@@ -34,6 +35,7 @@ import { ColumnInfosComponent } from './columnInfos/columnInfo.component';
                     { path: 'maintenance', component: MaintenanceComponent, data: { permission: 'Pages.Administration.Host.Maintenance' } },
                     { path: 'hostSettings', component: HostSettingsComponent, data: { permission: 'Pages.Administration.Pay.Settings' } },
                     { path: 'paySettings', component: PaySettingsComponent, data: { permission: 'Pages.Administration.Pay.Settings' } },
+                    { path: 'smsCodeSettings', component: SmsCodeSettingsComponent, data: { permission: 'Pages.Administration.SmsCode.Settings'}},
                     { path: 'editions', component: EditionsComponent, data: { permission: 'Pages.Editions' } },
                     { path: 'languages', component: LanguagesComponent, data: { permission: 'Pages.Administration.Languages' } },
                     { path: 'languages/:name/texts', component: LanguageTextsComponent, data: { permission: 'Pages.Administration.Languages.ChangeTexts' } },
