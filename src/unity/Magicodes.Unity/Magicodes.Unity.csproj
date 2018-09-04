@@ -12,4 +12,9 @@
     <ProjectReference Include="..\..\core\Magicodes.Admin.Core.Custom\Magicodes.Admin.Core.Custom.csproj" />
     <ProjectReference Include="..\..\core\Magicodes.Admin.Core\Magicodes.Admin.Core.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Magicodes.Storage.AliyunOss.Core">
+      <HintPath>C:\Users\18228\.nuget\packages\magicodes.storage.aliyunoss.core\1.0.0\lib\netcoreapp2.0\Magicodes.Storage.AliyunOss.Core.dll</HintPath>
+    </Reference>
+  </ItemGroup>
 </Project>
