@@ -1,4 +1,6 @@
-﻿using Abp.IdentityServer4;
+﻿using Abp.Domain.Entities;
+using Abp.Domain.Uow;
+using Abp.IdentityServer4;
 using Abp.Zero.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Magicodes.Admin.Authorization.Roles;
@@ -10,6 +12,9 @@ using Magicodes.Admin.MultiTenancy;
 using Magicodes.Admin.MultiTenancy.Accounting;
 using Magicodes.Admin.MultiTenancy.Payments;
 using Magicodes.Admin.Storage;
+using Microsoft.EntityFrameworkCore.Metadata;
+using System;
+using System.Linq.Expressions;
 
 namespace Magicodes.Admin.EntityFrameworkCore
 {

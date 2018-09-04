@@ -63,6 +63,8 @@ namespace Magicodes.Admin.Web.Startup
                     typeof(AdminAppModule).GetAssembly(), "app"
                 );
 
+            //默认关闭是否激活筛选器
+            Configuration.UnitOfWork.RegisterFilter(AdminConsts.PassivableFilterName, false);
         }
 
         public override void Initialize()

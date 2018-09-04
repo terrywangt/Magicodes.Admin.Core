@@ -74,6 +74,9 @@ namespace App.Host.Startup
             }
 
             Configuration.ReplaceService<IAppConfigurationAccessor, AppConfigurationAccessor>();
+
+            //启用是否激活筛选器
+            Configuration.UnitOfWork.RegisterFilter(AdminConsts.PassivableFilterName, true);
         }
 
         private void ConfigureTokenAuth()

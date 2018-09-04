@@ -15,5 +15,7 @@
         public const string AdminMenuName = "AdminMenus";
 
         public const string ApiPrefix = "api/";
+
+        public const string PassivableFilterName = "PassivableFilter";
     }
 }
