@@ -4,6 +4,7 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Magicodes.Storage.AliyunOss.Core" Version="1.0.0" />
     <PackageReference Include="Magicodes.Storage.Core" Version="2.0.1" />
     <PackageReference Include="Magicodes.Storage.Local.Core" Version="2.0.2" />
   </ItemGroup>
