@@ -128,7 +128,7 @@ namespace Magicodes.Admin.Configuration
         private IEnumerable<SettingDefinition> GetSmsCodeSettings()
         {
             return new[] {
-                new SettingDefinition(AppSettings.AliSmsCodeManagement.IsEnabled, GetFromAppSettings(AppSettings.AliSmsCodeManagement.IsEnabled, "true"),scopes: SettingScopes.Tenant|SettingScopes.Application),
+                new SettingDefinition(AppSettings.AliSmsCodeManagement.IsEnabled, GetFromAppSettings(AppSettings.AliSmsCodeManagement.IsEnabled, "false"),scopes: SettingScopes.Tenant|SettingScopes.Application),
                 new SettingDefinition(AppSettings.AliSmsCodeManagement.AccessKeyId, GetFromAppSettings(AppSettings.AliSmsCodeManagement.AccessKeySecret, ""),scopes: SettingScopes.Tenant|SettingScopes.Application),
                 new SettingDefinition(AppSettings.AliSmsCodeManagement.AccessKeySecret, GetFromAppSettings(AppSettings.AliSmsCodeManagement.AccessKeySecret, ""),scopes: SettingScopes.Tenant|SettingScopes.Application),
                 new SettingDefinition(AppSettings.AliSmsCodeManagement.SignName, GetFromAppSettings(AppSettings.AliSmsCodeManagement.SignName, ""),scopes: SettingScopes.Tenant|SettingScopes.Application),
