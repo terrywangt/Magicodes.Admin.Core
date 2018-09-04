@@ -8,7 +8,7 @@ param(
     $userName = "",
     $password = "",
     $configPath = "deploy.dev.config",
-    $siteUrl = "" 
+    $siteUrl = ""
 )
 
 function prompt { '心莱科技: ' + (get-location) + '> '}
