@@ -43,6 +43,8 @@
 
         public const string Pages_Administration_Pay_Settings = "Pages.Administration.Pay.Settings";
 
+        public const string Pages_Administration_SmsCode_Settings = "Pages.Administration.SmsCode.Settings";
+
         //TENANT-SPECIFIC PERMISSIONS
 
         public const string Pages_Tenant_Dashboard = "Pages.Tenant.Dashboard";

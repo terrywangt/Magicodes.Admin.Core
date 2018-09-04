@@ -18,7 +18,7 @@
     <div class="m-content">
         <div class="m-portlet m-portlet--mobile">
             <div class="m-portlet__body">
-                <tabset class="tab-container" >
+                <tabset class="tab-container" *ngIf="paySettings">
                     <tab *ngIf="true" heading="{{l('WeChatPay')}}" customClass="m-tabs__item">
                         <h5>{{l("WeChatPayInformation")}}</h5>
                         <div class="m-checkbox-list">
@@ -44,7 +44,7 @@
                             <label for="weChatPay_PayNotifyUrl">{{l("WeChatPayNotifyUrl")}}</label>
                             <textarea id="weChatPay_PayNotifyUrl" rows="5" name="weChat_PayPayNotifyUrl" class="form-control" [ngClass]="{'edited':paySettings.weChatPay.payNotifyUrl}" [(ngModel)]="paySettings.weChatPay.payNotifyUrl" maxlength="400"></textarea>
                         </div>
-                    </tab>                    
+                    </tab>
                     <tab *ngIf="true" heading="{{l('AliPay')}}" customClass="m-tabs__item">
                         <h5>{{l("AliInformation")}}</h5>
                         <div class="m-checkbox-list">

@@ -1,0 +1,57 @@
+<div [@routerTransition]>
+    <div class="m-subheader">
+        <div class="d-flex align-items-center">
+            <div class="mr-auto col-sm-12 col-md-6">
+                <h3 class="m-subheader__title m-subheader__title--separator">
+                    <span>{{l("SmsCodeSettings")}}</span>
+                </h3>
+                <span class="m-section__sub">
+                    {{l("SettingsHeaderInfo")}}
+                </span>
+            </div>
+            <div class="col-sm-12 col-md-6 text-right">
+                <button class="btn btn-primary" (click)="saveAll()"><i class="la la-floppy-o"></i> {{l("SaveAll")}}</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="m-content">
+        <div class="m-portlet m-portlet--mobile">
+            <div class="m-portlet__body">
+                <tabset class="tab-container"  *ngIf="smsCodeSettings" >
+                    <tab *ngIf="true" heading="{{l('AliSmsCode')}}" customClass="m-tabs__item">
+                        <h5>{{l("AliSmsCodeInformation")}}</h5>
+                        <div class="m-checkbox-list">
+                            <label for="aliSmsCode_IsEnabled" class="m-checkbox">
+                                <input id="aliSmsCode_IsEnabled" type="checkbox" name="aliSmsCode_IsEnabled" [(ngModel)]="smsCodeSettings.aliSmsCodeSetting.isEnabled">
+                                {{l("IsEnabled")}}({{l("AliSmsCodeSetting")}})
+                                <span></span>
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label for="aliSmsCode_AccessKeyId">{{l("AccessKeyId")}}</label>
+                            <input id="aliSmsCode_AccessKeyId" type="text" name="aliSmsCode_AccessKeyId" class="form-control" [ngClass]="{'edited':smsCodeSettings.aliSmsCodeSetting.accessKeyId}" [(ngModel)]="smsCodeSettings.aliSmsCodeSetting.accessKeyId" maxlength="64">
+                        </div>
+                        <div class="form-group">
+                            <label for="aliSmsCode_AccessKeySecret">{{l("AccessKeySecret")}}</label>
+                            <input id="aliSmsCode_AccessKeySecret" type="text" name="aliSmsCode_AccessKeySecret" class="form-control" [ngClass]="{'edited':smsCodeSettings.aliSmsCodeSetting.accessKeySecret}" [(ngModel)]="smsCodeSettings.aliSmsCodeSetting.accessKeySecret" maxlength="64">
+                        </div>
+                        <div class="form-group">
+                            <label for="aliSmsCode_SignName">{{l("SignName")}}</label>
+                            <input id="aliSmsCode_SignName" type="text" name="aliSmsCode_SignName" class="form-control" [ngClass]="{'edited':smsCodeSettings.aliSmsCodeSetting.signName}" [(ngModel)]="smsCodeSettings.aliSmsCodeSetting.signName" maxlength="200">
+                        </div>
+                        <div class="form-mgroup">
+                            <label for="aliSmsCode_TemplateCode">{{l("TemplateCode")}}</label>
+                            <textarea id="aliSmsCode_TemplateCode" type="text" name="aliSmsCode_TemplateCode" class="form-control" [ngClass]="{'edited':smsCodeSettings.aliSmsCodeSetting.templateCode}" [(ngModel)]="smsCodeSettings.aliSmsCodeSetting.templateCode" maxlength="400"></textarea>
+                        </div>
+                        <div class="form-mgroup">
+                            <label for="aliSmsCode_TemplateParam">{{l("TemplateParam")}}</label>
+                            <textarea id="aliSmsCode_TemplateParam" type="text" name="aliSmsCode_TemplateParam" class="form-control" [ngClass]="{'edited':smsCodeSettings.aliSmsCodeSetting.templateParam}"
+                                [(ngModel)]="smsCodeSettings.aliSmsCodeSetting.templateParam" maxlength="400"></textarea>
+                        </div>
+                    </tab>
+                </tabset>
+            </div>
+        </div>
+    </div>
+</div>
