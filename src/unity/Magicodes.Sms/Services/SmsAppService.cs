@@ -17,6 +17,7 @@
 
 using System;
 using Abp;
+using Abp.Configuration;
 using Abp.Dependency;
 using Castle.Core.Logging;
 using Magicodes.Admin.Configuration;
@@ -42,6 +43,8 @@ namespace Magicodes.Sms.Services
 
         public ISmsService SmsService { get; set; }
 
+        public ISettingManager SettingManager { get; set; }
+
         public void Initialize()
         {
             //日志函数
@@ -55,11 +58,39 @@ namespace Magicodes.Sms.Services
 
             try
             {
-                //阿里云短信设置
-                AliyunSmsBuilder.Create()
-                    //设置日志记录
-                    .WithLoggerAction(LogAction)
-                    .SetSettingsFunc(() => new AliyunSmsSettting(AppConfigurationAccessor?.Configuration)).Build();
+                if (Convert.ToBoolean(SettingManager
+                    .GetSettingValueAsync(AppSettings.AliSmsCodeManagement.IsEnabled).Result))
+                {
+                    //阿里云短信设置
+                    AliyunSmsBuilder.Create()
+                        //设置日志记录
+                        .WithLoggerAction(LogAction)
+                        .SetSettingsFunc(() => new AliyunSmsSettting()
+                        {
+                            AccessKeyId =
+                                SettingManager.GetSettingValueAsync(AppSettings.AliSmsCodeManagement.AccessKeyId)
+                                    .Result,
+                            AccessKeySecret =
+                                SettingManager.GetSettingValueAsync(AppSettings.AliSmsCodeManagement.AccessKeySecret)
+                                    .Result,
+                            SignName = SettingManager.GetSettingValueAsync(AppSettings.AliSmsCodeManagement.SignName)
+                                .Result,
+                            TemplateCode =
+                                SettingManager.GetSettingValueAsync(AppSettings.AliSmsCodeManagement.TemplateCode)
+                                    .Result,
+                            TemplateParam =
+                                SettingManager.GetSettingValueAsync(AppSettings.AliSmsCodeManagement.TemplateParam)
+                                    .Result
+                        }).Build();
+                }
+                else
+                {
+                    //阿里云短信设置
+                    AliyunSmsBuilder.Create()
+                        //设置日志记录
+                        .WithLoggerAction(LogAction)
+                        .SetSettingsFunc(() => new AliyunSmsSettting(AppConfigurationAccessor?.Configuration)).Build();
+                }
                 SmsService = new AliyunSmsService();
             }
             catch (Exception ex)
