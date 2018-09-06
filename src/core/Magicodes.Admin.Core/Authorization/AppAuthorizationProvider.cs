@@ -60,7 +60,9 @@ namespace Magicodes.Admin.Authorization
             administration.CreateChildPermission(AppPermissions.Pages_Administration_UiCustomization, L("VisualSettings"));
 
             administration.CreateChildPermission(AppPermissions.Pages_Administration_Pay_Settings, L("PaySettings"));
-            
+
+            administration.CreateChildPermission(AppPermissions.Pages_Administration_SmsCode_Settings, L("SmsCodeSettings"));
+
             //TENANT-SPECIFIC PERMISSIONS
 
             pages.CreateChildPermission(AppPermissions.Pages_Tenant_Dashboard, L("Dashboard"), multiTenancySides: MultiTenancySides.Tenant);

@@ -66,7 +66,7 @@ _ReSharper*
 *.ncrunch*
 .*crunch*.local.xml
 
-# Installshield output folder 
+# Installshield output folder
 [Ee]xpress
 
 # DocProject is a documentation generator add-in
@@ -128,3 +128,5 @@ src/Magicodes.Admin.Web.Host/wwwroot/Temp/Downloads
 /upgrade/bak
 /upgrade/source
 /upgrade/temp
+src/admin/api/Admin.Host/Properties/PublishProfiles/dev.pubxml
+src/admin/ui/webdeploy/deploy.dev.config

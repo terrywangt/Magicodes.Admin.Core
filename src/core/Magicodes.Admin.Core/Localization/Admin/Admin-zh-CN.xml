@@ -769,6 +769,18 @@
     <text name="AliSignType" value="签名算法" />
     <text name="IsKeyFromFile" value="是否从文件读取公私钥" />
     <text name="IsKeyFromFileExplain" value="如果勾选 ，那么公私钥应该配置为密钥文件路径" />
+    
+    <!-- 2018-09-03 短信验证码配置 -->
+    <text name="SmsCodeSettings" value="短信配置" />
+    <text name="AliSmsCode" value="阿里云短信" />
+    <text name="AliSmsCodeSetting" value="阿里云短信配置" />
+    <text name="AliSmsCodeInformation" value="阿里云短信配置信息" />
+    <text name="AccessKeyId" value="AccessKeyId" />
+    <text name="AccessKeySecret" value="AccessKeySecret"/>
+    <text name="SignName" value="短信签名" />
+    <text name="TemplateCode" value="短信模板" />
+    <text name="TemplateParam" value="模板中JSON串" />
+
      <!-- 2018-08-29  关于工作台的修改内容的相关配置-->
     <text name="Delivery" value="待发货" />
     <text name="Obligation" value="待付款" />

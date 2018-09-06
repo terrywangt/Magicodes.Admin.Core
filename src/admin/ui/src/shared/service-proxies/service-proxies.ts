@@ -8152,6 +8152,122 @@ export class SessionServiceProxy {
 }
 
 @Injectable()
+export class SmsCodeSettingServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    /**
+     * @return Success
+     */
+    getAllSettings(): Observable<SmsCodeSettingEditDto> {
+        let url_ = this.baseUrl + "/api/services/app/SmsCodeSetting/GetAllSettings";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAllSettings(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllSettings(<any>response_);
+                } catch (e) {
+                    return <Observable<SmsCodeSettingEditDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<SmsCodeSettingEditDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetAllSettings(response: HttpResponseBase): Observable<SmsCodeSettingEditDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? SmsCodeSettingEditDto.fromJS(resultData200) : new SmsCodeSettingEditDto();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<SmsCodeSettingEditDto>(<any>null);
+    }
+
+    /**
+     * @param input (optional) 
+     * @return Success
+     */
+    updateAllSettings(input: SmsCodeSettingEditDto | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/SmsCodeSetting/UpdateAllSettings";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(input);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdateAllSettings(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdateAllSettings(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processUpdateAllSettings(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+}
+
+@Injectable()
 export class SubscriptionServiceProxy {
     private http: HttpClient;
     private baseUrl: string;
@@ -19660,6 +19776,98 @@ export interface IUpdateUserSignInTokenOutput {
     signInToken: string | undefined;
     encodedUserId: string | undefined;
     encodedTenantId: string | undefined;
+}
+
+export class SmsCodeSettingEditDto implements ISmsCodeSettingEditDto {
+    aliSmsCodeSetting!: AliSmsCodeSettingEditDto | undefined;
+
+    constructor(data?: ISmsCodeSettingEditDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.aliSmsCodeSetting = data["aliSmsCodeSetting"] ? AliSmsCodeSettingEditDto.fromJS(data["aliSmsCodeSetting"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): SmsCodeSettingEditDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new SmsCodeSettingEditDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["aliSmsCodeSetting"] = this.aliSmsCodeSetting ? this.aliSmsCodeSetting.toJSON() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface ISmsCodeSettingEditDto {
+    aliSmsCodeSetting: AliSmsCodeSettingEditDto | undefined;
+}
+
+export class AliSmsCodeSettingEditDto implements IAliSmsCodeSettingEditDto {
+    isEnabled!: boolean;
+    accessKeyId!: string;
+    accessKeySecret!: string;
+    signName!: string;
+    templateCode!: string;
+    templateParam!: string | undefined;
+
+    constructor(data?: IAliSmsCodeSettingEditDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.isEnabled = data["isEnabled"];
+            this.accessKeyId = data["accessKeyId"];
+            this.accessKeySecret = data["accessKeySecret"];
+            this.signName = data["signName"];
+            this.templateCode = data["templateCode"];
+            this.templateParam = data["templateParam"];
+        }
+    }
+
+    static fromJS(data: any): AliSmsCodeSettingEditDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new AliSmsCodeSettingEditDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isEnabled"] = this.isEnabled;
+        data["accessKeyId"] = this.accessKeyId;
+        data["accessKeySecret"] = this.accessKeySecret;
+        data["signName"] = this.signName;
+        data["templateCode"] = this.templateCode;
+        data["templateParam"] = this.templateParam;
+        return data; 
+    }
+}
+
+export interface IAliSmsCodeSettingEditDto {
+    isEnabled: boolean;
+    accessKeyId: string;
+    accessKeySecret: string;
+    signName: string;
+    templateCode: string;
+    templateParam: string | undefined;
 }
 
 export class PagedResultDtoOfTenantListDto implements IPagedResultDtoOfTenantListDto {

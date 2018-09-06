@@ -27,7 +27,8 @@ export class AppNavigationService {
                 new AppMenuItem('VisualSettings', 'Pages.Administration.UiCustomization', 'flaticon-medical', '/app/admin/ui-customization'),
                 new AppMenuItem('Settings', 'Pages.Administration.Host.Settings', 'flaticon-settings', '/app/admin/hostSettings'),
                 new AppMenuItem('Settings', 'Pages.Administration.Tenant.Settings', 'flaticon-settings', '/app/admin/tenantSettings'),
-                new AppMenuItem('PaySettings', 'Pages.Administration.Pay.Settings', 'fa fa-cny', '/app/admin/paySettings')
+                new AppMenuItem('PaySettings', 'Pages.Administration.Pay.Settings', 'fa fa-cny', '/app/admin/paySettings'),
+                new AppMenuItem('SmsCodeSettings', 'Pages.Administration.SmsCode.Settings', 'fa fa-cny', '/app/admin/smsCodeSettings')
             ]),
             // new AppMenuItem('DemoUiComponents', 'Pages.DemoUiComponents', 'flaticon-shapes', '/app/admin/demo-ui-components'),
             new AppMenuItem('Contents', '', 'fa fa-terminal', '', [

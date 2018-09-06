@@ -107,5 +107,20 @@ namespace Magicodes.Admin.Configuration
             public const string IsKeyFromFile = "App.AliPayManagement.IsKeyFromFile";
             public const string IsActive = "App.AliPayManagement.IsActive";
         }
+
+        public static class AliSmsCodeManagement
+        {
+            public const string IsEnabled = "App.AliSmsCodeManagement.IsEnabled";
+
+            public const string AccessKeyId = "App.AliSmsCodeManagement.AccessKeyId";
+
+            public const string AccessKeySecret = "App.AliSmsCodeManagement.AccessKeySecret";
+
+            public const string SignName = "App.AliSmsCodeManagement.SignName";
+
+            public const string TemplateCode = "App.AliSmsCodeManagement.TemplateCode";
+
+            public const string TemplateParam = "App.AliSmsCodeManagement.TemplateParam";
+        }
     }
 }

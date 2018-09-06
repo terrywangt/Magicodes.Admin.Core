@@ -26,7 +26,7 @@
 
 >测试服务器暂时抱恙,后续再提供演示环境
 
-<http://demo.admin.xin-lai.com>
+<https://demoadmin.xin-lai.com>
 
 * 账号：Admin
 * 密码：123456abcD
