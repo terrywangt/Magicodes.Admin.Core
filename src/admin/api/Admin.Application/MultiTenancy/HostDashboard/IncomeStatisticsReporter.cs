@@ -7,50 +7,32 @@ using Abp.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Magicodes.Admin.MultiTenancy.HostDashboard.Dto;
 using Magicodes.Admin.MultiTenancy.Payments;
+using Magicodes.Admin.Core.Custom.LogInfos;
 
 namespace Magicodes.Admin.MultiTenancy.HostDashboard
 {
     public class IncomeStatisticsService : AdminDomainServiceBase, IIncomeStatisticsService
     {
         private readonly IRepository<SubscriptionPayment, long> _subscriptionPaymentRepository;
+        private readonly IRepository<Tenant> _tenantRepository;
+        private readonly IRepository<TransactionLog, long> _transactionLogRepository;
 
-        public IncomeStatisticsService(IRepository<SubscriptionPayment, long> subscriptionPaymentRepository)
+
+        public IncomeStatisticsService(IRepository<SubscriptionPayment, long> subscriptionPaymentRepository,
+            IRepository<Tenant> tenantRepository,IRepository<TransactionLog, long> transactionLogRepository)
         {
             _subscriptionPaymentRepository = subscriptionPaymentRepository;
+            _tenantRepository = tenantRepository;
+            _transactionLogRepository = transactionLogRepository;
         }
 
-        private async Task<List<IncomeStastistic>> GetDailyIncomeStatisticsData(DateTime startDate, DateTime endDate)
-        {
-            var dailyRecords = await _subscriptionPaymentRepository.GetAll()
-                .Where(s => s.CreationTime >= startDate &&
-                            s.CreationTime <= endDate &&
-                            s.Status == SubscriptionPaymentStatus.Completed)
-                .GroupBy(s => new DateTime(s.CreationTime.Year, s.CreationTime.Month, s.CreationTime.Day))
-                .Select(s => new IncomeStastistic
-                {
-                    Date = s.First().CreationTime.Date,
-                    Amount = s.Sum(c => c.Amount)
-                })
-                .ToListAsync();
-
-            FillGapsInDailyIncomeStatistics(dailyRecords, startDate, endDate);
-            return dailyRecords.OrderBy(s => s.Date).ToList();
-        }
-
-        private static void FillGapsInDailyIncomeStatistics(ICollection<IncomeStastistic> dailyRecords, DateTime startDate, DateTime endDate)
-        {
-            var currentDay = startDate;
-            while (currentDay <= endDate)
-            {
-                if (dailyRecords.All(d => d.Date != currentDay.Date))
-                {
-                    dailyRecords.Add(new IncomeStastistic(currentDay));
-                }
-
-                currentDay = currentDay.AddDays(1);
-            }
-        }
-
+        /// <summary>
+        /// 获取图表数据
+        /// </summary>
+        /// <param name="startDate"></param>
+        /// <param name="endDate"></param>
+        /// <param name="dateInterval"></param>
+        /// <returns></returns>
         public async Task<List<IncomeStastistic>> GetIncomeStatisticsData(DateTime startDate, DateTime endDate,
             ChartDateInterval dateInterval)
         {
@@ -58,14 +40,14 @@ namespace Magicodes.Admin.MultiTenancy.HostDashboard
 
             switch (dateInterval)
             {
-                case ChartDateInterval.Daily:
-                    incomeStastistics = await GetDailyIncomeStatisticsData(startDate, endDate);
+                case ChartDateInterval.Transaction:
+                    incomeStastistics = await GetTransactionIncomeStatisticsData(startDate, endDate);
                     break;
-                case ChartDateInterval.Weekly:
-                    incomeStastistics = await GetWeeklyIncomeStatisticsData(startDate, endDate);
+                case ChartDateInterval.Consumer:
+                    incomeStastistics = await GetConsumerIncomeStatisticsData(startDate, endDate);
                     break;
-                case ChartDateInterval.Monthly:
-                    incomeStastistics = await GetMonthlyIncomeStatisticsData(startDate, endDate);
+                case ChartDateInterval.Order:
+                    incomeStastistics = await GetOrderIncomeStatisticsData(startDate, endDate);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(dateInterval), dateInterval, null);
@@ -79,64 +61,91 @@ namespace Magicodes.Admin.MultiTenancy.HostDashboard
             return incomeStastistics.OrderBy(i => i.Date).ToList();
         }
 
-        private async Task<List<IncomeStastistic>> GetWeeklyIncomeStatisticsData(DateTime startDate, DateTime endDate)
-        {
-            var dailyRecords = await GetDailyIncomeStatisticsData(startDate, endDate);
-            var firstDayOfWeek = DateTimeFormatInfo.CurrentInfo == null
-                ? DayOfWeek.Sunday
-                : DateTimeFormatInfo.CurrentInfo.FirstDayOfWeek;
+        /// <summary>
+        /// 获取交易额统计
+        /// </summary>
+        /// <param name="startDate"></param>
+        /// <param name="endDate"></param>
+        /// <returns></returns>
+        public async Task<List<IncomeStastistic>> GetTransactionIncomeStatisticsData(DateTime startDate, DateTime endDate){
 
-            var incomeStastistics = new List<IncomeStastistic>();
-            decimal weeklyAmount = 0;
-            var weekStart = dailyRecords.First().Date;
-            var isFirstWeek = weekStart.DayOfWeek == firstDayOfWeek;
-
-            dailyRecords.ForEach(dailyRecord =>
+            List<IncomeStastistic> incomeStastisticlist = new List<IncomeStastistic>();
+            for (int i = 0; i <= endDate.Day - startDate.Day; i++)
             {
-                if (dailyRecord.Date.DayOfWeek == firstDayOfWeek)
+                IncomeStastistic incomeStastistic = new IncomeStastistic
                 {
-                    if (!isFirstWeek)
-                    {
-                        incomeStastistics.Add(new IncomeStastistic(weekStart, weeklyAmount));
-                    }
+                    Amount = await _subscriptionPaymentRepository.GetAll()
+                                     .Where(p => p.CreationTime == startDate.AddDays(i))
+                                     .Select(t => t.Amount)
+                                     .SumAsync(),
+                   
+                    Date = startDate.AddDays(i),   
+            };
 
-                    isFirstWeek = false;
-                    weekStart = dailyRecord.Date;
-                    weeklyAmount = 0;
-                }
-
-                weeklyAmount += dailyRecord.Amount;
-            });
-
-            incomeStastistics.Add(new IncomeStastistic(weekStart, weeklyAmount));
-            return incomeStastistics;
+                incomeStastisticlist.Add(incomeStastistic);
+               
+            }
+          
+                
+            return incomeStastisticlist;
         }
 
-        private async Task<List<IncomeStastistic>> GetMonthlyIncomeStatisticsData(DateTime startDate, DateTime endDate)
+        /// <summary>
+        /// 获取用户统计
+        /// </summary>
+        /// <param name="startDate"></param>
+        /// <param name="endDate"></param>
+        /// <returns></returns>
+        public async Task<List<IncomeStastistic>> GetConsumerIncomeStatisticsData(DateTime startDate, DateTime endDate)
         {
-            var dailyRecords = await GetDailyIncomeStatisticsData(startDate, endDate);
-            var query = dailyRecords.GroupBy(d => new
+            List<IncomeStastistic> incomeStastisticlist = new List<IncomeStastistic>();
+            for (int i = 0; i <= endDate.Day - startDate.Day; i++)
             {
-                d.Date.Year,
-                d.Date.Month
-            })
-            .Select(grouping => new IncomeStastistic
-            {
-                Date = FindMonthlyDate(startDate, grouping.Key.Year, grouping.Key.Month),
-                Amount = grouping.DefaultIfEmpty().Sum(x => x.Amount)
-            });
+                IncomeStastistic incomeStastistic = new IncomeStastistic
+                {
+                    Amount = await _tenantRepository.GetAll()
+                             .Where(p => p.CreationTime == startDate.AddDays(i))
+                             .CountAsync(),
+                  
+                    Date = startDate.AddDays(i),
+                };
 
-            return query.ToList();
-        }
-
-        private static DateTime FindMonthlyDate(DateTime startDate, int groupYear, int groupMonth)
-        {
-            if (groupYear == startDate.Year && groupMonth == startDate.Month)
-            {
-                return new DateTime(groupYear, groupMonth, startDate.Day);
+                incomeStastisticlist.Add(incomeStastistic);
             }
 
-            return new DateTime(groupYear, groupMonth, 1);
+
+            return incomeStastisticlist;
+           
         }
+
+        /// <summary>
+        /// 获取订单统计
+        /// </summary>
+        /// <param name="startDate"></param>
+        /// <param name="endDate"></param>
+        /// <returns></returns>
+        public async Task<List<IncomeStastistic>> GetOrderIncomeStatisticsData(DateTime startDate, DateTime endDate)
+        {
+            List<IncomeStastistic> incomeStastisticlist = new List<IncomeStastistic>();
+            for (int i = 0; i <= endDate.Day - startDate.Day; i++)
+            {
+                IncomeStastistic incomeStastistic = new IncomeStastistic
+                {
+                    Amount = await _transactionLogRepository.GetAll()
+                    .Where(p=>p.CreationTime==startDate.AddDays(i))
+                    .CountAsync(),
+                   
+                    Date = startDate.AddDays(i),
+                };
+
+                incomeStastisticlist.Add(incomeStastistic);
+            }
+
+
+            return incomeStastisticlist;
+        }
+
+
+
     }
 }

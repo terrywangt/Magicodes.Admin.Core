@@ -584,11 +584,12 @@
     <text name="PerMonth">每月</text>
     <text name="PerYear">每年</text>
 
-    <text name="NewSubscriptionAmount">新订购金额</text>
-    <text name="NewTenants">新租户</text>
-    <text name="DashboardSampleStatistics">Demo</text>
+    <text name="NewSubscriptionAmount">总交易金额</text>
+    <text name="NewTenants">总租户数</text>
+    <text name="Orders">总订单数</text>
+    <text name="Goods">总商品数</text>
     <text name="DashboardSampleStatisticsHelpText">Demo</text>
-    <text name="IncomeStatistics">收入统计</text>
+    <text name="IncomeStatistics">数据概览</text>
     <text name="Daily">每日</text>
     <text name="Weekly">每周</text>
     <text name="Monthly">每月</text>
@@ -780,5 +781,18 @@
     <text name="TemplateCode" value="短信模板" />
     <text name="TemplateParam" value="模板中JSON串" />
 
+     <!-- 2018-08-29  关于工作台的修改内容的相关配置-->
+    <text name="Delivery" value="待发货" />
+    <text name="Obligation" value="待付款" />
+    <text name="Rejectedgoods" value="待退货" />
+    <text name="Stock" value="库存预警" />
+    <text name="Consult" value="待回复咨询" />
+    
+    
+    <text name="Transaction" value="交易额" />
+    <text name="Consumer" value="用户" />
+    <text name="Order" value="订单" />
+    
+    <text name="ChartDateFormat">%m/%d/%Y</text>
   </texts>
 </localizationDictionary>

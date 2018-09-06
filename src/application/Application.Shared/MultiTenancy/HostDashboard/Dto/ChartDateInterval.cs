@@ -2,8 +2,8 @@
 {
     public enum ChartDateInterval
     {
-        Daily = 1,
-        Weekly = 2,
-        Monthly = 3
+        Transaction = 1, //交易额统计类型
+        Consumer = 2,    //用户数统计类型
+        Order = 3        //订单数统计类型
     }
 }
