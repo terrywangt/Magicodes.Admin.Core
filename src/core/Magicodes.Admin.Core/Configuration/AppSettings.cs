@@ -10,6 +10,11 @@ namespace Magicodes.Admin.Configuration
         {
             public const string BillingLegalName = "App.HostManagement.BillingLegalName";
             public const string BillingAddress = "App.HostManagement.BillingAddress";
+            public const string BillingDutyparagraph = "App.HostManagement.BillingDutyparagraph";
+            public const string BillingPhone = "App.HostManagement.BillingPhone";
+            public const string BillingAccount = "App.HostManagement.BillingAccount";
+            public const string BillingOpeningbank = "App.HostManagement.BillingOpeningbank";
+
         }
 
         public static class UiManagement

@@ -254,6 +254,23 @@
                             <input id="LegalName" type="text" name="legalName" class="form-control" [ngClass]="{'edited':hostSettings.billing.legalName}" [(ngModel)]="hostSettings.billing.legalName" maxlength="64">
                         </div>
                         <div class="form-group">
+                            <label for="LegalName">{{l("Dutyparagraph")}}*</label>
+                            <input id="Dutyparagraph" type="text" name="Dutyparagraph" class="form-control" [ngClass]="{'edited':hostSettings.billing.dutyparagraph}" [(ngModel)]="hostSettings.billing.dutyparagraph" maxlength="64" 
+                            [required]=true>
+                        </div>
+                        <div class="form-group">
+                            <label for="LegalName">{{l("Phone")}}</label>
+                            <input id="Phone" type="text" name="Phone" class="form-control" [ngClass]="{'edited':hostSettings.billing.phone}" [(ngModel)]="hostSettings.billing.phone" maxlength="64">
+                        </div>
+                        <div class="form-group">
+                            <label for="Account">{{l("Account")}}</label>
+                            <input id="Account" type="text" name="Account" class="form-control" [ngClass]="{'edited':hostSettings.billing.account}" [(ngModel)]="hostSettings.billing.account" maxlength="64">
+                        </div>
+                        <div class="form-group">
+                            <label for="Openingbank">{{l("Openingbank")}}</label>
+                            <input id="Openingbank" type="text" name="Openingbank" class="form-control" [ngClass]="{'edited':hostSettings.billing.openingbank}" [(ngModel)]="hostSettings.billing.openingbank" maxlength="64">
+                        </div>
+                        <div class="form-group">
                             <label for="Address">{{l("Address")}}</label>
                             <textarea id="Address" rows="5" name="address" class="form-control" [ngClass]="{'edited':hostSettings.billing.address}" [(ngModel)]="hostSettings.billing.address" maxlength="256"></textarea>
                         </div>

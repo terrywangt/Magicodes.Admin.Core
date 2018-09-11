@@ -15968,6 +15968,10 @@ export interface ISecuritySettingsEditDto {
 export class HostBillingSettingsEditDto implements IHostBillingSettingsEditDto {
     legalName!: string | undefined;
     address!: string | undefined;
+    dutyparagraph!: string | undefined;
+    phone!: string | undefined;
+    account!: string | undefined;
+    openingbank!: string | undefined;
 
     constructor(data?: IHostBillingSettingsEditDto) {
         if (data) {
@@ -15982,6 +15986,10 @@ export class HostBillingSettingsEditDto implements IHostBillingSettingsEditDto {
         if (data) {
             this.legalName = data["legalName"];
             this.address = data["address"];
+            this.dutyparagraph = data["dutyparagraph"];
+            this.phone = data["phone"];
+            this.account = data["account"];
+            this.openingbank = data["openingbank"];
         }
     }
 
@@ -15996,6 +16004,10 @@ export class HostBillingSettingsEditDto implements IHostBillingSettingsEditDto {
         data = typeof data === 'object' ? data : {};
         data["legalName"] = this.legalName;
         data["address"] = this.address;
+        data["dutyparagraph"] = this.dutyparagraph;
+        data["phone"] = this.phone;
+        data["account"] = this.account;
+        data["openingbank"] = this.openingbank;
         return data; 
     }
 }
@@ -16003,6 +16015,10 @@ export class HostBillingSettingsEditDto implements IHostBillingSettingsEditDto {
 export interface IHostBillingSettingsEditDto {
     legalName: string | undefined;
     address: string | undefined;
+    dutyparagraph: string | undefined;
+    phone: string | undefined;
+    account: string | undefined;
+    openingbank: string | undefined;
 }
 
 export class PasswordComplexitySetting implements IPasswordComplexitySetting {

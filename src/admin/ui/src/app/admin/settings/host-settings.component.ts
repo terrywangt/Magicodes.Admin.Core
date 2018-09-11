@@ -86,15 +86,25 @@ export class HostSettingsComponent extends AppComponentBase implements OnInit, A
     }
 
     saveAll(): void {
+        
         const self = this;
-        self._hostSettingService.updateAllSettings(self.hostSettings).subscribe(result => {
-            self.notify.info(self.l('SavedSuccessfully'));
-
-            if (abp.clock.provider.supportsMultipleTimezone && self.usingDefaultTimeZone && self.initialTimeZone !== self.hostSettings.general.timezone) {
-                self.message.info(self.l('TimeZoneSettingChangedRefreshPageNotification')).done(function () {
-                    window.location.reload();
-                });
-            }
-        });
+        if(self.hostSettings.billing.dutyparagraph!=null&&self.hostSettings.billing.dutyparagraph!=""){
+            if(self.hostSettings.billing.dutyparagraph!=null&&self.hostSettings.billing.dutyparagraph!=""){
+            self._hostSettingService.updateAllSettings(self.hostSettings).subscribe(result => {
+                self.notify.info(self.l('SavedSuccessfully'));
+    
+                if (abp.clock.provider.supportsMultipleTimezone && self.usingDefaultTimeZone && self.initialTimeZone !== self.hostSettings.general.timezone) {
+                    self.message.info(self.l('TimeZoneSettingChangedRefreshPageNotification')).done(function () {
+                        window.location.reload();
+                    });
+                }
+            });
+        }else{
+     alert("抬头名称为必填选项，请输入您的抬头名称 谢谢！")   
+        }
+        }else{
+        alert("税号为必填选项，请输入您的税号 谢谢！")
+        
     }
+  }
 }

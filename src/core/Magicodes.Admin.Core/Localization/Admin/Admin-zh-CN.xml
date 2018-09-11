@@ -779,6 +779,15 @@
     <text name="SignName" value="短信签名" />
     <text name="TemplateCode" value="短信模板" />
     <text name="TemplateParam" value="模板中JSON串" />
+    
+    <!-- 2018-09-011 发票配置 -->
+    <text name="Invoice" value="发票" />
+    <text name="InvoiceInformation" value="发票信息" />
+    <text name="Dutyparagraph" value="税号" />
+    <text name="Phone" value="电话号码" />
+    <text name="Account" value="账户" />
+    <text name="Openingbank" value="开户行名称" />
+  
 
   </texts>
 </localizationDictionary>

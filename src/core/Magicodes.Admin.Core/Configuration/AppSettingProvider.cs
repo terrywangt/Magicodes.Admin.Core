@@ -40,6 +40,11 @@ namespace Magicodes.Admin.Configuration
                 new SettingDefinition(AppSettings.TenantManagement.SubscriptionExpireNotifyDayCount, GetFromAppSettings(AppSettings.TenantManagement.SubscriptionExpireNotifyDayCount, "7"), isVisibleToClients: true),
                 new SettingDefinition(AppSettings.HostManagement.BillingLegalName, GetFromAppSettings(AppSettings.HostManagement.BillingLegalName, "")),
                 new SettingDefinition(AppSettings.HostManagement.BillingAddress, GetFromAppSettings(AppSettings.HostManagement.BillingAddress, "")),
+                new SettingDefinition(AppSettings.HostManagement.BillingDutyparagraph, GetFromAppSettings(AppSettings.HostManagement.BillingDutyparagraph, "")),
+                new SettingDefinition(AppSettings.HostManagement.BillingPhone, GetFromAppSettings(AppSettings.HostManagement.BillingPhone, "")),
+                new SettingDefinition(AppSettings.HostManagement.BillingAccount, GetFromAppSettings(AppSettings.HostManagement.BillingAccount, "")),
+                new SettingDefinition(AppSettings.HostManagement.BillingOpeningbank, GetFromAppSettings(AppSettings.HostManagement.BillingOpeningbank, "")),
+
                 new SettingDefinition(AppSettings.Recaptcha.SiteKey, GetFromSettings("Recaptcha:SiteKey"), isVisibleToClients: true),
 
                 //UI customization options
