@@ -23,11 +23,7 @@
 ![生成结构图](./res/代码生成.png)
 
 ## Demo
-
->测试服务器暂时抱恙,后续再提供演示环境
-
 <https://demoadmin.xin-lai.com>
-
 * 账号：Admin
 * 密码：123456abcD
 
