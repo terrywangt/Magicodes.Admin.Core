@@ -122,5 +122,16 @@ namespace Magicodes.Admin.Configuration
 
             public const string TemplateParam = "App.AliSmsCodeManagement.TemplateParam";
         }
+
+        public static class AliStorageManagement
+        {
+            public const string IsEnabled = "App.AliStorageManagement.IsEnabled";
+
+            public const string AccessKeyId = "App.AliStorageManagement.AccessKeyId";
+
+            public const string AccessKeySecret = "App.AliStorageManagement.AccessKeySecret";
+
+            public const string EndPoint = "App.AliStorageManagement.EndPoint";
+        }
     }
 }

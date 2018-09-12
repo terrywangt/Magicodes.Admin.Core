@@ -1,0 +1,48 @@
+<div [@routerTransition]>
+    <div class="m-subheader">
+        <div class="d-flex align-items-center">
+            <div class="mr-auto col-sm-12 col-md-6">
+                <h3 class="m-subheader__title m-subheader__title--separator">
+                    <span>{{l("StorageSettings")}}</span>
+                </h3>
+                <span class="m-section__sub">
+                    {{l("SettingsHeaderInfo")}}
+                </span>
+            </div>
+            <div class="col-sm-12 col-md-6 text-right">
+                <button class="btn btn-primary" (click)="saveAll()"><i class="la la-floppy-o"></i> {{l("SaveAll")}}</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="m-content">
+        <div class="m-portlet m-portlet--mobile">
+            <div class="m-portlet__body">
+                <tabset class="tab-container"  *ngIf="storageSettings" >
+                    <tab *ngIf="true" heading="{{l('AliStorage')}}" customClass="m-tabs__item">
+                        <!-- <h5>{{l("AliStorageInformation")}}</h5> -->
+                        <div class="m-checkbox-list">
+                            <label for="aliStorage_IsEnabled" class="m-checkbox">
+                                <input id="aliStorage_IsEnabled" type="checkbox" name="aliStorage_IsEnabled" [(ngModel)]="storageSettings.aliStorageSetting.isEnabled">
+                                {{l("IsEnabled")}}({{l("AliStorageSetting")}})
+                                <span></span>
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label for="aliStorage_AccessKeyId">{{l("AccessKeyId")}}</label>
+                            <input id="aliStorage_AccessKeyId" type="text" name="aliStorage_AccessKeyId" class="form-control" [ngClass]="{'edited':storageSettings.aliStorageSetting.accessKeyId}" [(ngModel)]="storageSettings.aliStorageSetting.accessKeyId" maxlength="64">
+                        </div>
+                        <div class="form-group">
+                            <label for="aliStorage_AccessKeySecret">{{l("AccessKeySecret")}}</label>
+                            <input id="aliStorage_AccessKeySecret" type="text" name="aliStorage_AccessKeySecret" class="form-control" [ngClass]="{'edited':storageSettings.aliStorageSetting.accessKeySecret}" [(ngModel)]="storageSettings.aliStorageSetting.accessKeySecret" maxlength="64">
+                        </div>
+                        <div class="form-group">
+                            <label for="aliStorage_EndPoint">{{l("EndPoint")}}</label>
+                            <input id="aliStorage_EndPoint" type="text" name="aliStorage_EndPoint" class="form-control" [ngClass]="{'edited':storageSettings.aliStorageSetting.endPoint}" [(ngModel)]="storageSettings.aliStorageSetting.endPoint" maxlength="64">
+                        </div>
+                    </tab>
+                </tabset>
+            </div>
+        </div>
+    </div>
+</div>

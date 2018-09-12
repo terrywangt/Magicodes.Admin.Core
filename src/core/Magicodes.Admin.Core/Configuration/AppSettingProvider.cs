@@ -26,7 +26,7 @@ namespace Magicodes.Admin.Configuration
             context.Manager.GetSettingDefinition(AbpZeroSettingNames.UserManagement.TwoFactorLogin.IsEnabled).DefaultValue = false.ToString().ToLowerInvariant();
 
             return GetHostSettings().Union(GetTenantSettings()).Union(GetSharedSettings()).Union(GetPaySettings())
-                .Union(GetSmsCodeSettings());
+                .Union(GetSmsCodeSettings()).Union(GetStorageCodeSettings());
         }
 
         private IEnumerable<SettingDefinition> GetHostSettings()
@@ -129,11 +129,21 @@ namespace Magicodes.Admin.Configuration
         {
             return new[] {
                 new SettingDefinition(AppSettings.AliSmsCodeManagement.IsEnabled, GetFromAppSettings(AppSettings.AliSmsCodeManagement.IsEnabled, "false"),scopes: SettingScopes.Tenant|SettingScopes.Application),
-                new SettingDefinition(AppSettings.AliSmsCodeManagement.AccessKeyId, GetFromAppSettings(AppSettings.AliSmsCodeManagement.AccessKeySecret, ""),scopes: SettingScopes.Tenant|SettingScopes.Application),
+                new SettingDefinition(AppSettings.AliSmsCodeManagement.AccessKeyId, GetFromAppSettings(AppSettings.AliSmsCodeManagement.AccessKeyId, ""),scopes: SettingScopes.Tenant|SettingScopes.Application),
                 new SettingDefinition(AppSettings.AliSmsCodeManagement.AccessKeySecret, GetFromAppSettings(AppSettings.AliSmsCodeManagement.AccessKeySecret, ""),scopes: SettingScopes.Tenant|SettingScopes.Application),
                 new SettingDefinition(AppSettings.AliSmsCodeManagement.SignName, GetFromAppSettings(AppSettings.AliSmsCodeManagement.SignName, ""),scopes: SettingScopes.Tenant|SettingScopes.Application),
                 new SettingDefinition(AppSettings.AliSmsCodeManagement.TemplateCode, GetFromAppSettings(AppSettings.AliSmsCodeManagement.TemplateCode, ""),scopes: SettingScopes.Tenant|SettingScopes.Application),
                 new SettingDefinition(AppSettings.AliSmsCodeManagement.TemplateParam, GetFromAppSettings(AppSettings.AliSmsCodeManagement.TemplateParam, ""),scopes: SettingScopes.Tenant|SettingScopes.Application)
+            };
+        }
+
+        private IEnumerable<SettingDefinition> GetStorageCodeSettings()
+        {
+            return new[] {
+                new SettingDefinition(AppSettings.AliStorageManagement.IsEnabled, GetFromAppSettings(AppSettings.AliStorageManagement.IsEnabled, "false"),scopes: SettingScopes.Tenant|SettingScopes.Application),
+                new SettingDefinition(AppSettings.AliStorageManagement.AccessKeyId, GetFromAppSettings(AppSettings.AliStorageManagement.AccessKeyId, ""),scopes: SettingScopes.Tenant|SettingScopes.Application),
+                new SettingDefinition(AppSettings.AliStorageManagement.AccessKeySecret, GetFromAppSettings(AppSettings.AliStorageManagement.AccessKeySecret, ""),scopes: SettingScopes.Tenant|SettingScopes.Application),
+                new SettingDefinition(AppSettings.AliStorageManagement.EndPoint, GetFromAppSettings(AppSettings.AliStorageManagement.EndPoint, ""),scopes: SettingScopes.Tenant|SettingScopes.Application),
             };
         }
     }

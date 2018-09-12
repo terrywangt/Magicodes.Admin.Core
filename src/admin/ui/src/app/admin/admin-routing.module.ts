@@ -22,6 +22,7 @@ import { UsersComponent } from './users/users.component';
 import { ArticleInfosComponent } from './articleInfos/articleInfo.component';
 import { ArticleSourceInfosComponent } from './articleSourceInfos/articleSourceInfo.component';
 import { ColumnInfosComponent } from './columnInfos/columnInfo.component';
+import { StorageSettingsComponent } from './settings/Storage-settings.component';
 
 @NgModule({
     imports: [
@@ -50,7 +51,8 @@ import { ColumnInfosComponent } from './columnInfos/columnInfo.component';
                     { path: 'ui-customization', component: UiCustomizationComponent },
 					{ path: 'articleInfo', component: ArticleInfosComponent},
 					{ path: 'articleSourceInfo', component: ArticleSourceInfosComponent},
-					{ path: 'columnInfo', component: ColumnInfosComponent}
+                    { path: 'columnInfo', component: ColumnInfosComponent},
+                    { path: 'storageSettings', component: StorageSettingsComponent},
                 ]
             }
         ])

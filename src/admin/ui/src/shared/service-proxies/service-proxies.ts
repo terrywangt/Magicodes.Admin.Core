@@ -8154,6 +8154,122 @@ export class SmsCodeSettingServiceProxy {
 }
 
 @Injectable()
+export class StorageSettingServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    /**
+     * @return Success
+     */
+    getAllSettings(): Observable<StorageSettingEditDto> {
+        let url_ = this.baseUrl + "/api/services/app/StorageSetting/GetAllSettings";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAllSettings(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllSettings(<any>response_);
+                } catch (e) {
+                    return <Observable<StorageSettingEditDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<StorageSettingEditDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetAllSettings(response: HttpResponseBase): Observable<StorageSettingEditDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? StorageSettingEditDto.fromJS(resultData200) : new StorageSettingEditDto();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<StorageSettingEditDto>(<any>null);
+    }
+
+    /**
+     * @param input (optional) 
+     * @return Success
+     */
+    updateAllSettings(input: StorageSettingEditDto | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/StorageSetting/UpdateAllSettings";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(input);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdateAllSettings(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdateAllSettings(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processUpdateAllSettings(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+}
+
+@Injectable()
 export class SubscriptionServiceProxy {
     private http: HttpClient;
     private baseUrl: string;
@@ -19642,6 +19758,90 @@ export interface IAliSmsCodeSettingEditDto {
     signName: string;
     templateCode: string;
     templateParam: string | undefined;
+}
+
+export class StorageSettingEditDto implements IStorageSettingEditDto {
+    aliStorageSetting!: AliStorageSettingEditDto | undefined;
+
+    constructor(data?: IStorageSettingEditDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.aliStorageSetting = data["aliStorageSetting"] ? AliStorageSettingEditDto.fromJS(data["aliStorageSetting"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): StorageSettingEditDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new StorageSettingEditDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["aliStorageSetting"] = this.aliStorageSetting ? this.aliStorageSetting.toJSON() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IStorageSettingEditDto {
+    aliStorageSetting: AliStorageSettingEditDto | undefined;
+}
+
+export class AliStorageSettingEditDto implements IAliStorageSettingEditDto {
+    isEnabled!: boolean;
+    accessKeyId!: string;
+    accessKeySecret!: string;
+    endPoint!: string | undefined;
+
+    constructor(data?: IAliStorageSettingEditDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.isEnabled = data["isEnabled"];
+            this.accessKeyId = data["accessKeyId"];
+            this.accessKeySecret = data["accessKeySecret"];
+            this.endPoint = data["endPoint"];
+        }
+    }
+
+    static fromJS(data: any): AliStorageSettingEditDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new AliStorageSettingEditDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isEnabled"] = this.isEnabled;
+        data["accessKeyId"] = this.accessKeyId;
+        data["accessKeySecret"] = this.accessKeySecret;
+        data["endPoint"] = this.endPoint;
+        return data; 
+    }
+}
+
+export interface IAliStorageSettingEditDto {
+    isEnabled: boolean;
+    accessKeyId: string;
+    accessKeySecret: string;
+    endPoint: string | undefined;
 }
 
 export class PagedResultDtoOfTenantListDto implements IPagedResultDtoOfTenantListDto {

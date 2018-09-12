@@ -73,7 +73,7 @@ import { ArticleSourceInfosComponent } from './articleSourceInfos/articleSourceI
 import { CreateOrEditArticleSourceInfoModalComponent } from './articleSourceInfos/create-or-edit-articleSourceInfo-modal.component';
 import { ColumnInfosComponent } from './columnInfos/columnInfo.component';
 import { CreateOrEditColumnInfoModalComponent } from './columnInfos/create-or-edit-columnInfo-modal.component';
-
+import { StorageSettingsComponent } from './settings/Storage-settings.component';
 
 @NgModule({
     imports: [
@@ -122,6 +122,7 @@ import { CreateOrEditColumnInfoModalComponent } from './columnInfos/create-or-ed
         HostSettingsComponent,
         PaySettingsComponent,
         SmsCodeSettingsComponent,
+        StorageSettingsComponent,
         InstallComponent,
         MaintenanceComponent,
         EditionsComponent,

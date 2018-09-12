@@ -780,5 +780,11 @@
     <text name="TemplateCode" value="短信模板" />
     <text name="TemplateParam" value="模板中JSON串" />
 
+    <!--2018-09-10 存储配置-->  
+    <text name="StorageSettings" value="存储配置" />
+    <text name="AliStorage" value="阿里云存储" />
+    <text name="AliStorageSetting" value="阿里云存储配置" />
+    <text name="AliStorageInformation" value="阿里云存储配置信息" />
+    <text name="EndPoint" value="地域节点" />
   </texts>
 </localizationDictionary>
