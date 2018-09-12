@@ -82,7 +82,6 @@ namespace Magicodes.App.Application.Localization
             }
 
             var source = LocalizationManager.GetSource(AdminConsts.AppLocalizationSourceName);
-            var baseCulture = CultureInfo.GetCultureInfo("en");
             var targetCulture = CultureInfo.GetCultureInfo(input.LanguageName);
 
             var languageTexts = source
@@ -90,9 +89,7 @@ namespace Magicodes.App.Application.Localization
                 .Select(localizedString => new AppLanguageTextListDto
                 {
                     Key = localizedString.Name,
-                    EnValue = _applicationLanguageTextManager.GetStringOrNull(AbpSession.TenantId, source.Name,
-                        baseCulture, localizedString.Name),
-                    TargetValue = _applicationLanguageTextManager.GetStringOrNull(AbpSession.TenantId, source.Name,
+                    Value = _applicationLanguageTextManager.GetStringOrNull(AbpSession.TenantId, source.Name,
                         targetCulture, localizedString.Name, false)
                 })
                 .AsQueryable();
