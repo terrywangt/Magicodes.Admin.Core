@@ -1,11 +1,9 @@
-﻿using System.Threading.Tasks;
-using Abp.Runtime.Caching;
-using Abp.Timing;
-using Magicodes.Admin.Core.Custom.LogInfos;
+﻿using Abp.Runtime.Caching;
+using Magicodes.Admin.Identity;
 using Magicodes.App.Application.Users;
-using Magicodes.App.Application.Users.Cache;
 using Magicodes.App.Application.Users.Dto;
 using Shouldly;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace App.Tests.Users
@@ -14,23 +12,20 @@ namespace App.Tests.Users
     {
         private readonly IUsersAppService _usersAppService;
         private readonly ICacheManager _cacheManager;
+        private readonly ISmsVerificationCodeManager _smsVerificationCodeManager;
 
         public Users_Tests()
         {
             _usersAppService = Resolve<IUsersAppService>();
             _cacheManager = Resolve<ICacheManager>();
+            _smsVerificationCodeManager = Resolve<ISmsVerificationCodeManager>();
         }
 
         [Theory(DisplayName = "注册")]
         [InlineData("Test", "Test", "9957fc0fa630436e821b9e087b76aaf4", (AppRegisterInput.FromEnum)0, "0f36dbb147c7478ebab94cd68a33202e", "Test")]
         public async Task AppRegister_Test(string phone, string code, string openId, AppRegisterInput.FromEnum from, string unionId, string trueName)
         {
-            var cacheKey = $"{phone}_Register";
-            var cacheItem = new SmsVerificationCodeCacheItem { Code = code };
-            _cacheManager.GetSmsVerificationCodeCache().Set(
-                cacheKey,
-                cacheItem
-            );
+            await _smsVerificationCodeManager.Create(phone, "Register");
 
             var input = new AppRegisterInput()
             {
