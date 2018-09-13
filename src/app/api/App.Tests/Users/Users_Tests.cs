@@ -1,7 +1,9 @@
 ﻿using System.Threading.Tasks;
+using Abp.Runtime.Caching;
 using Abp.Timing;
 using Magicodes.Admin.Core.Custom.LogInfos;
 using Magicodes.App.Application.Users;
+using Magicodes.App.Application.Users.Cache;
 using Magicodes.App.Application.Users.Dto;
 using Shouldly;
 using Xunit;
@@ -10,24 +12,25 @@ namespace App.Tests.Users
 {
     public class Users_Tests : AppTestBase
     {
-        private readonly IUsersAppService usersAppService;
+        private readonly IUsersAppService _usersAppService;
+        private readonly ICacheManager _cacheManager;
 
         public Users_Tests()
         {
-            usersAppService = Resolve<IUsersAppService>();
+            _usersAppService = Resolve<IUsersAppService>();
+            _cacheManager = Resolve<ICacheManager>();
         }
 
         [Theory(DisplayName = "注册")]
         [InlineData("Test", "Test", "9957fc0fa630436e821b9e087b76aaf4", (AppRegisterInput.FromEnum)0, "0f36dbb147c7478ebab94cd68a33202e", "Test")]
         public async Task AppRegister_Test(string phone, string code, string openId, AppRegisterInput.FromEnum from, string unionId, string trueName)
         {
-            UsingDbContext((context) => context.SmsCodeLogs.Add(new SmsCodeLog()
-            {
-                CreationTime = Clock.Now,
-                Phone = phone,
-                SmsCode = code,
-                SmsCodeType = SmsCodeTypes.Register
-            }));
+            var cacheKey = $"{phone}_Register";
+            var cacheItem = new SmsVerificationCodeCacheItem { Code = code };
+            _cacheManager.GetSmsVerificationCodeCache().Set(
+                cacheKey,
+                cacheItem
+            );
 
             var input = new AppRegisterInput()
             {
@@ -38,7 +41,7 @@ namespace App.Tests.Users
                 UnionId = unionId,
                 TrueName = trueName,
             };
-            var output = await usersAppService.AppRegister(input);
+            var output = await _usersAppService.AppRegister(input);
             output.ShouldNotBeNull();
         }
 
@@ -51,7 +54,7 @@ namespace App.Tests.Users
                 Phone = phone,
                 Code = code,
             };
-            var output = await usersAppService.AppLogin(input);
+            var output = await _usersAppService.AppLogin(input);
             output.ShouldNotBeNull();
         }
 
@@ -65,7 +68,7 @@ namespace App.Tests.Users
                 OpenIdOrUnionId = openIdOrUnionId,
                 From = from,
             };
-            var output = await usersAppService.AppTokenAuth(input);
+            var output = await _usersAppService.AppTokenAuth(input);
             output.ShouldNotBeNull();
         }
     }

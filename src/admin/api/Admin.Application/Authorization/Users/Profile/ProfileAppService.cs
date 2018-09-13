@@ -107,7 +107,7 @@ namespace Magicodes.Admin.Authorization.Users.Profile
                 cacheItem
             );
 
-            await _smsSender.SendAsync(user.PhoneNumber, L("SmsVerificationMessage", code));
+            await _smsSender.SendCodeAsync(user.PhoneNumber,code);
         }
 
         public async Task VerifySmsCode(VerifySmsCodeInputDto input)

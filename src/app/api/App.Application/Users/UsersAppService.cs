@@ -1,21 +1,17 @@
-﻿using Abp;
-using Abp.Application.Services;
+﻿using Abp.Application.Services;
 using Abp.Authorization;
 using Abp.Authorization.Users;
 using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
 using Abp.Extensions;
 using Abp.Runtime.Caching;
-using Abp.Runtime.Session;
 using Abp.Timing;
 using Abp.UI;
 using Magicodes.Admin.Authorization.Users;
-using Magicodes.Admin.Authorization.Users.Profile.Dto;
 using Magicodes.Admin.Core.Custom.Authorization;
-using Magicodes.Admin.Core.Custom.LogInfos;
+using Magicodes.Admin.Identity;
 using Magicodes.Admin.MultiTenancy;
 using Magicodes.App.Application.Configuration;
-using Magicodes.App.Application.Users.Cache;
 using Magicodes.App.Application.Users.Dto;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -44,37 +40,35 @@ namespace Magicodes.App.Application.Users
 
         public IOptions<IdentityOptions> IdentityOptions { get; set; }
 
-        private readonly IUserSmser _userSmser;
-
-
         private readonly IRepository<User, long> _userRepository;
         private readonly IRepository<AppUserOpenId, long> _appUserOpenIdResposotory;
-        private readonly IRepository<SmsCodeLog, long> _smsRepository;
         private readonly UserManager _userManager;
         private readonly IPasswordHasher<User> _passwordHasher;
         private readonly IRepository<Tenant> _tenantRepository;
         private readonly ICacheManager _cacheManager;
+        private readonly ISmsVerificationCodeManager _smsVerificationCodeManager;
+        private readonly ISmsSender _smsSender;
 
         public UsersAppService(
             IRepository<User, long> userRepository,
             IRepository<AppUserOpenId, long> appUserOpenIdResposotory,
-            IRepository<SmsCodeLog, long> smsRepository,
             UserManager userManager,
             IUnitOfWorkManager unitOfWorkManager,
             IPasswordHasher<User> passwordHasher,
             IRepository<Tenant> tenantRepository,
-            IUserSmser userSmser,
-            ICacheManager cacheManager)
+            ICacheManager cacheManager,
+            ISmsVerificationCodeManager smsVerificationCodeManager,
+            ISmsSender smsSender)
         {
             _userRepository = userRepository;
             _appUserOpenIdResposotory = appUserOpenIdResposotory;
-            _smsRepository = smsRepository;
             _userManager = userManager;
             _unitOfWorkManager = unitOfWorkManager;
             _passwordHasher = passwordHasher;
             _tenantRepository = tenantRepository;
-            _userSmser = userSmser;
             _cacheManager = cacheManager;
+            _smsVerificationCodeManager = smsVerificationCodeManager;
+            _smsSender = smsSender;
         }
 
         /// <summary>
@@ -90,11 +84,12 @@ namespace Magicodes.App.Application.Users
             #region 验证码验证
             using (var unitOfWork = _unitOfWorkManager.Begin())
             {
-                var codeValTime = Clock.Now.AddMinutes(-10);
-                if (!_smsRepository.GetAll().Any(p => p.Phone == input.Phone && p.SmsCode == input.Code && p.SmsCodeType == SmsCodeTypes.Register && p.CreationTime > codeValTime))
+                var codeValid = await _smsVerificationCodeManager.VerifyCode(input.Phone, input.Code, "Register");
+                if (!codeValid)
                 {
                     throw new UserFriendlyException("短信验证码不正确或已过期!");
                 }
+               
                 if (_userManager.Users.Any(p => (p.PhoneNumber == input.Phone)))
                 {
                     throw new UserFriendlyException("该手机号码已被注册！");
@@ -282,7 +277,7 @@ namespace Magicodes.App.Application.Users
             var user = GetUserByChecking(input.PhoneNumber);
             user.SetNewPasswordResetCode();
             //发送短信密码重置验证码
-            await _userSmser.SendVerificationMessage(user.PhoneNumber, user.PasswordResetCode);
+            await _smsSender.SendCodeAsync(user.PhoneNumber, user.PasswordResetCode);
         }
 
         /// <summary>
@@ -317,7 +312,7 @@ namespace Magicodes.App.Application.Users
             };
         }
 
-        
+
 
         /// <summary>
         /// 检查用户

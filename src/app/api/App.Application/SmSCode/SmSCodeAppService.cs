@@ -1,16 +1,12 @@
-﻿using Abp;
-using Abp.Authorization;
-using Abp.Domain.Repositories;
+﻿using Abp.Authorization;
 using Abp.Domain.Uow;
 using Abp.Runtime.Caching;
+using Abp.Timing;
 using Abp.UI;
 using Magicodes.Admin.Authorization.Users;
-using Magicodes.Admin.Core.Custom.LogInfos;
+using Magicodes.Admin.Identity;
 using Magicodes.App.Application.SmSCode.Dto;
-using Magicodes.App.Application.Users.Cache;
-using Magicodes.Sms.Services;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -25,10 +21,8 @@ namespace Magicodes.App.Application.SmSCode
     {
         #region 依赖注入字段
 
-        private readonly IRepository<SmsCodeLog, long> _smsCodeLogRepository;
-        private readonly ISmsAppService _smsAppService;
-        private readonly IUserSmser _userSmser;
         private readonly ICacheManager _cacheManager;
+        private readonly ISmsVerificationCodeManager _smsVerificationCodeManager;
 
         #endregion
 
@@ -36,12 +30,10 @@ namespace Magicodes.App.Application.SmSCode
 
         /// <inheritdoc />
         public SmSCodeAppService(
-            IRepository<SmsCodeLog, long> smsCodeLogRepository, ISmsAppService smsAppService, IUserSmser userSmser, ICacheManager cacheManager)
+             ICacheManager cacheManager, ISmsVerificationCodeManager smsVerificationCodeManager)
         {
-            _smsCodeLogRepository = smsCodeLogRepository;
-            _smsAppService = smsAppService;
-            _userSmser = userSmser;
             _cacheManager = cacheManager;
+            _smsVerificationCodeManager = smsVerificationCodeManager;
         }
 
         #endregion
@@ -57,28 +49,12 @@ namespace Magicodes.App.Application.SmSCode
         public async Task CreateSmsCode(CreateSmsCodeInput input)
         {
             //---------------请结合以下内容编写实现（勿删）---------------
-            // 验证码长度为4，60s内不得重复发送
+            // 验证码长度为4，60s内不得重复发送。
+            // 验证码10分钟内有效。
             //------------------------------------------------------
             GetUserByChecking(input.PhoneNumber);
 
-            var code = RandomHelper.GetRandom(1000, 9999).ToString();
-            var cacheKey = $"{input.PhoneNumber}_{input.SmsCodeType}";
-            var outTime = DateTime.Now.AddSeconds(-60);
-            var cash = await _cacheManager.GetSmsVerificationCodeCache().GetOrDefaultAsync(cacheKey);
-
-            //验证码长度为4，60s内不得重复发送
-            if (cash != null && cash.CreationTime >= outTime)
-            {
-                throw new UserFriendlyException(L("SmsRepeatSendTip"));
-            }
-
-            var cacheItem = new SmsVerificationCodeCacheItem { Code = code };
-            _cacheManager.GetSmsVerificationCodeCache().Set(
-                cacheKey,
-                cacheItem
-            );
-
-            await _userSmser.SendVerificationMessage(input.PhoneNumber, code);
+            await _smsVerificationCodeManager.CreateAndSendVerificationMessage(input.PhoneNumber, input.SmsCodeType.ToString(), 60, Clock.Now.AddMinutes(10));
         }
 
         /// <summary>
@@ -90,13 +66,7 @@ namespace Magicodes.App.Application.SmSCode
         [HttpPut]
         public async Task VerifySmsCode(VerifySmsCodeInputDto input)
         {
-            var cacheKey = $"{input.PhoneNumber}_{input.SmsCodeType}";
-            var cash = await _cacheManager.GetSmsVerificationCodeCache().GetOrDefaultAsync(cacheKey);
-
-            if (cash == null || input.Code != cash.Code)
-            {
-                throw new UserFriendlyException(L("WrongSmsVerificationCode"));
-            }
+            await _smsVerificationCodeManager.VerifyCodeAndShowUserFriendlyException(input.PhoneNumber, input.Code, input.SmsCodeType.ToString());
 
             var user = GetUserByChecking(input.PhoneNumber);
             user.IsPhoneNumberConfirmed = true;
