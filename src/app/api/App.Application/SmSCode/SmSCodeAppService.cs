@@ -1,15 +1,18 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Abp;
 using Abp.Authorization;
 using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
+using Abp.Runtime.Caching;
 using Abp.UI;
+using Magicodes.Admin.Authorization.Users;
 using Magicodes.Admin.Core.Custom.LogInfos;
 using Magicodes.App.Application.SmSCode.Dto;
-using Magicodes.Sms.Aliyun;
+using Magicodes.App.Application.Users.Cache;
 using Magicodes.Sms.Services;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Magicodes.App.Application.SmSCode
 {
@@ -24,16 +27,21 @@ namespace Magicodes.App.Application.SmSCode
 
         private readonly IRepository<SmsCodeLog, long> _smsCodeLogRepository;
         private readonly ISmsAppService _smsAppService;
+        private readonly IUserSmser _userSmser;
+        private readonly ICacheManager _cacheManager;
 
         #endregion
 
         #region 构造函数注入
 
+        /// <inheritdoc />
         public SmSCodeAppService(
-            IRepository<SmsCodeLog, long> smsCodeLogRepository, ISmsAppService smsAppService)
+            IRepository<SmsCodeLog, long> smsCodeLogRepository, ISmsAppService smsAppService, IUserSmser userSmser, ICacheManager cacheManager)
         {
             _smsCodeLogRepository = smsCodeLogRepository;
             _smsAppService = smsAppService;
+            _userSmser = userSmser;
+            _cacheManager = cacheManager;
         }
 
         #endregion
@@ -51,36 +59,69 @@ namespace Magicodes.App.Application.SmSCode
             //---------------请结合以下内容编写实现（勿删）---------------
             // 验证码长度为4，60s内不得重复发送
             //------------------------------------------------------
-            var code = new Random().Next(1000, 9999).ToString();
-            var codeType = SmsCodeTypes.BindPhone;
-            switch (input.SmsCodeType)
+            GetUserByChecking(input.PhoneNumber);
+
+            var code = RandomHelper.GetRandom(1000, 9999).ToString();
+            var cacheKey = $"{input.PhoneNumber}_{input.SmsCodeType}";
+            var outTime = DateTime.Now.AddSeconds(-60);
+            var cash = await _cacheManager.GetSmsVerificationCodeCache().GetOrDefaultAsync(cacheKey);
+
+            //验证码长度为4，60s内不得重复发送
+            if (cash != null && cash.CreationTime >= outTime)
             {
-                case CreateSmsCodeInput.SmsCodeTypeEnum.Register:
-                    codeType = SmsCodeTypes.Register;
-                    break;
-                case CreateSmsCodeInput.SmsCodeTypeEnum.Login:
-                    codeType = SmsCodeTypes.Login;
-                    break;
-                default:
-                    break;
+                throw new UserFriendlyException(L("SmsRepeatSendTip"));
             }
 
-            var outTime = DateTime.Now.AddSeconds(-60);
-            //验证码长度为4，60s内不得重复发送
-            if (_smsCodeLogRepository.GetAll().Any(p =>
-                p.Phone == input.Phone && p.SmsCodeType == codeType && p.CreationTime >= outTime))
-                throw new UserFriendlyException("请勿重复发送！");
-            var smsCodeLog = new SmsCodeLog
+            var cacheItem = new SmsVerificationCodeCacheItem { Code = code };
+            _cacheManager.GetSmsVerificationCodeCache().Set(
+                cacheKey,
+                cacheItem
+            );
+
+            await _userSmser.SendVerificationMessage(input.PhoneNumber, code);
+        }
+
+        /// <summary>
+        /// 短信验证码校验
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [AbpAllowAnonymous]
+        [HttpPut]
+        public async Task VerifySmsCode(VerifySmsCodeInputDto input)
+        {
+            var cacheKey = $"{input.PhoneNumber}_{input.SmsCodeType}";
+            var cash = await _cacheManager.GetSmsVerificationCodeCache().GetOrDefaultAsync(cacheKey);
+
+            if (cash == null || input.Code != cash.Code)
             {
-                Phone = input.Phone,
-                SmsCode = code,
-                SmsCodeType = codeType
-            };
-            
-            var smsService = _smsAppService.SmsService;
-            var result = await smsService.SendCodeAsync(input.Phone, code);
-            if (!result.Success) throw new UserFriendlyException(result.ErrorMessage);
-            await _smsCodeLogRepository.InsertAsync(smsCodeLog);
+                throw new UserFriendlyException(L("WrongSmsVerificationCode"));
+            }
+
+            var user = GetUserByChecking(input.PhoneNumber);
+            user.IsPhoneNumberConfirmed = true;
+            await UserManager.UpdateAsync(user);
+        }
+
+        /// <summary>
+        /// 检查用户
+        /// </summary>
+        /// <param name="phoneNumber"></param>
+        /// <returns></returns>
+        private User GetUserByChecking(string phoneNumber)
+        {
+            var user = UserManager.Users.FirstOrDefault(p => p.PhoneNumber == phoneNumber);
+            if (user == null)
+            {
+                throw new UserFriendlyException(L("InvalidPhoneNumber"));
+            }
+
+            if (!user.IsActive)
+            {
+                throw new UserFriendlyException(L("UserIsNotActive"));
+            }
+
+            return user;
         }
     }
 }

@@ -26,7 +26,7 @@ namespace App.Tests.SmSCode
             //---------------------------------------------------------
             var input = new CreateSmsCodeInput()
             {
-                Phone = phone,
+                PhoneNumber = phone,
                 SmsCodeType = smsCodeType,
             };
             if (string.IsNullOrWhiteSpace(phone))
