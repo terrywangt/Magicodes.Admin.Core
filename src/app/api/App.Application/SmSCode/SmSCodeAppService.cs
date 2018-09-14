@@ -36,8 +36,12 @@ namespace Magicodes.App.Application.SmSCode
     [Route("api/[controller]")]
     public class SmSCodeAppService : AppServiceBase, ISmSCodeAppService
     {
-        #region 构造函数注入
+        #region 依赖注入字段
+        private readonly ICacheManager _cacheManager;
+        private readonly ISmsVerificationCodeManager _smsVerificationCodeManager;
+        #endregion
 
+        #region 构造函数注入
         /// <inheritdoc />
         public SmSCodeAppService(
             ICacheManager cacheManager, ISmsVerificationCodeManager smsVerificationCodeManager)
@@ -45,7 +49,6 @@ namespace Magicodes.App.Application.SmSCode
             _cacheManager = cacheManager;
             _smsVerificationCodeManager = smsVerificationCodeManager;
         }
-
         #endregion
 
         /// <summary>
@@ -98,12 +101,5 @@ namespace Magicodes.App.Application.SmSCode
 
             return user;
         }
-
-        #region 依赖注入字段
-
-        private readonly ICacheManager _cacheManager;
-        private readonly ISmsVerificationCodeManager _smsVerificationCodeManager;
-
-        #endregion
     }
 }
