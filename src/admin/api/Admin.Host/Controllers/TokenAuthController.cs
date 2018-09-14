@@ -210,7 +210,7 @@ namespace Magicodes.Admin.Web.Controllers
                 }
                 else if (model.Provider == "Phone")
                 {
-                    await _smsSender.SendAsync(await _userManager.GetPhoneNumberAsync(user), message);
+                    await _smsSender.SendCodeAsync(await _userManager.GetPhoneNumberAsync(user), cacheItem.Code);
                 }
             }
 

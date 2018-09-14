@@ -1,29 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Abp.Application.Services;
+﻿using Abp.Application.Services;
 using Abp.Authorization;
-using Abp.Dependency;
+using Abp.Authorization.Users;
 using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
+using Abp.Extensions;
+using Abp.Runtime.Caching;
 using Abp.Timing;
 using Abp.UI;
-using Abp.Application.Services.Dto;
-using Microsoft.AspNetCore.Mvc;
-using Magicodes.App.Application.Users.Dto;
 using Magicodes.Admin.Authorization.Users;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Options;
-using Abp.Extensions;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using Abp.Authorization.Users;
 using Magicodes.Admin.Core.Custom.Authorization;
-using Magicodes.Admin.Core.Custom.LogInfos;
+using Magicodes.Admin.Identity;
 using Magicodes.Admin.MultiTenancy;
 using Magicodes.App.Application.Configuration;
+using Magicodes.App.Application.Users.Dto;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace Magicodes.App.Application.Users
 {
@@ -42,30 +40,35 @@ namespace Magicodes.App.Application.Users
 
         public IOptions<IdentityOptions> IdentityOptions { get; set; }
 
-
         private readonly IRepository<User, long> _userRepository;
         private readonly IRepository<AppUserOpenId, long> _appUserOpenIdResposotory;
-        private readonly IRepository<SmsCodeLog, long> _smsRepository;
         private readonly UserManager _userManager;
         private readonly IPasswordHasher<User> _passwordHasher;
         private readonly IRepository<Tenant> _tenantRepository;
+        private readonly ICacheManager _cacheManager;
+        private readonly ISmsVerificationCodeManager _smsVerificationCodeManager;
+        private readonly ISmsSender _smsSender;
 
         public UsersAppService(
             IRepository<User, long> userRepository,
             IRepository<AppUserOpenId, long> appUserOpenIdResposotory,
-            IRepository<SmsCodeLog, long> smsRepository,
             UserManager userManager,
             IUnitOfWorkManager unitOfWorkManager,
             IPasswordHasher<User> passwordHasher,
-            IRepository<Tenant> tenantRepository)
+            IRepository<Tenant> tenantRepository,
+            ICacheManager cacheManager,
+            ISmsVerificationCodeManager smsVerificationCodeManager,
+            ISmsSender smsSender)
         {
-            this._userRepository = userRepository;
-            this._appUserOpenIdResposotory = appUserOpenIdResposotory;
-            this._smsRepository = smsRepository;
-            this._userManager = userManager;
+            _userRepository = userRepository;
+            _appUserOpenIdResposotory = appUserOpenIdResposotory;
+            _userManager = userManager;
             _unitOfWorkManager = unitOfWorkManager;
-            this._passwordHasher = passwordHasher;
+            _passwordHasher = passwordHasher;
             _tenantRepository = tenantRepository;
+            _cacheManager = cacheManager;
+            _smsVerificationCodeManager = smsVerificationCodeManager;
+            _smsSender = smsSender;
         }
 
         /// <summary>
@@ -81,11 +84,12 @@ namespace Magicodes.App.Application.Users
             #region 验证码验证
             using (var unitOfWork = _unitOfWorkManager.Begin())
             {
-                var codeValTime = Clock.Now.AddMinutes(-10);
-                if (!_smsRepository.GetAll().Any(p => p.Phone == input.Phone && p.SmsCode == input.Code && p.SmsCodeType == SmsCodeTypes.Register && p.CreationTime > codeValTime))
+                var codeValid = await _smsVerificationCodeManager.VerifyCode(input.Phone, input.Code, "Register");
+                if (!codeValid)
                 {
                     throw new UserFriendlyException("短信验证码不正确或已过期!");
                 }
+
                 if (_userManager.Users.Any(p => (p.PhoneNumber == input.Phone)))
                 {
                     throw new UserFriendlyException("该手机号码已被注册！");
@@ -128,7 +132,7 @@ namespace Magicodes.App.Application.Users
             User user = null;
             using (var unitOfWork = _unitOfWorkManager.Begin())
             {
-                bool hasPhone = phone.IsNullOrEmpty() ? false : true;
+                var hasPhone = !phone.IsNullOrEmpty();
                 //支持游客注册
                 var userName = hasPhone ? phone : Guid.NewGuid().ToString("N");
                 user = new User
@@ -177,7 +181,7 @@ namespace Magicodes.App.Application.Users
                         TenantId = AbpSession.TenantId,
                     });
                 }
-                
+
                 //获取授权信息
                 var result = await CreateToken(user);
                 output.AccessToken = result.AccessToken;
@@ -188,7 +192,7 @@ namespace Magicodes.App.Application.Users
                 #endregion
             }
 
-           
+
             return output;
         }
 
@@ -200,12 +204,10 @@ namespace Magicodes.App.Application.Users
         [AbpAllowAnonymous]
         [RemoteService(IsEnabled = false)]
         [HttpPost("Login")]
-        public async Task<AppLoginOutput> AppLogin(AppLoginInput input)
-        {
+        public async Task<AppLoginOutput> AppLogin(AppLoginInput input) =>
             //TODO:[API]登陆
             //请结合描述或要点实现方法，并且在完成后删除掉TODO注释
             throw new NotSupportedException("AppLogin");
-        }
 
         /// <summary>
         /// 授权访问
@@ -219,7 +221,7 @@ namespace Magicodes.App.Application.Users
         {
             AppUserOpenId userOpenIdInfo = null;
             var openIdPlatform = OpenIdPlatforms.WeChat;
-            bool isUnionId = false;
+            var isUnionId = false;
 
             switch (input.From)
             {
@@ -261,6 +263,76 @@ namespace Magicodes.App.Application.Users
                     UserId = registerResult.UserId
                 };
             }
+        }
+
+        /// <summary>
+        /// 获取密码重置Code
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [AbpAllowAnonymous]
+        [HttpGet("PasswordResetCode")]
+        public async Task SendPasswordResetCode(SendPasswordResetCodeInput input)
+        {
+            var user = GetUserByChecking(input.PhoneNumber);
+            user.SetNewPasswordResetCode();
+            //发送短信密码重置验证码
+            await _smsSender.SendCodeAsync(user.PhoneNumber, user.PasswordResetCode);
+        }
+
+        /// <summary>
+        /// 重置密码
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [AbpAllowAnonymous]
+        [HttpPost("ResetPassword")]
+        public async Task<ResetPasswordOutput> ResetPassword(ResetPasswordInput input)
+        {
+            var user = await UserManager.GetUserByIdAsync(input.UserId);
+            if (user == null || user.PasswordResetCode.IsNullOrEmpty() || user.PasswordResetCode != input.ResetCode)
+            {
+                throw new UserFriendlyException(L("InvalidPasswordResetCode"), L("InvalidPasswordResetCode_Detail"));
+            }
+
+            user.Password = _passwordHasher.HashPassword(user, input.Password);
+            user.PasswordResetCode = null;
+            user.IsPhoneNumberConfirmed = true;
+            user.ShouldChangePasswordOnNextLogin = false;
+
+            await UserManager.UpdateAsync(user);
+
+            var tokenResult = await CreateToken(user);
+            return new ResetPasswordOutput
+            {
+                AccessToken = tokenResult.AccessToken,
+                ExpireInSeconds = tokenResult.ExpireInSeconds,
+                UserId = tokenResult.UserId,
+                PhoneNumber = tokenResult.Phone
+            };
+        }
+
+
+
+        /// <summary>
+        /// 检查用户
+        /// </summary>
+        /// <param name="phoneNumber"></param>
+        /// <returns></returns>
+        private User GetUserByChecking(string phoneNumber)
+        {
+            var user = UserManager.Users.FirstOrDefault(p => p.PhoneNumber == phoneNumber);
+            if (user == null)
+            {
+                throw new UserFriendlyException(L("InvalidPhoneNumber"));
+            }
+
+            if (!user.IsActive)
+            {
+                throw new UserFriendlyException(L("UserIsNotActive"));
+            }
+
+            return user;
         }
 
         private async Task<AppTokenAuthOutput> CreateToken(User user)
@@ -307,8 +379,11 @@ namespace Magicodes.App.Application.Users
                 result = await LogInManager.CreateLoginResultAsync(user, tenant);
             }
             else
+            {
                 //登陆
                 result = await LogInManager.CreateLoginResultAsync(user, null);
+            }
+
             return result;
         }
 

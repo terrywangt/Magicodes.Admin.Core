@@ -14,6 +14,7 @@ using App.Tests.Logging;
 using App.Tests.Url;
 using Castle.Core.Logging;
 using Castle.MicroKernel.Registration;
+using Magicodes.Admin;
 using Magicodes.Admin.Configuration;
 using Magicodes.Admin.Core.Custom;
 using Magicodes.Admin.EntityFrameworkCore;
@@ -27,6 +28,7 @@ namespace App.Tests
     [DependsOn(
         typeof(AppCoreModule),
         typeof(AppApplicationModule),
+        typeof(AdminCoreModule),
         typeof(AdminEntityFrameworkCoreModule),
         typeof(AbpTestBaseModule))]
     public class AppTestModule : AbpModule

@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Abp.Runtime.Validation;
 using Abp.UI;
+using Magicodes.Admin.Localization;
 using Magicodes.App.Application.SmSCode;
 using Magicodes.App.Application.SmSCode.Dto;
 using Xunit;
@@ -18,7 +19,7 @@ namespace App.Tests.SmSCode
 
         [Theory(DisplayName = "请求发送短信验证码")]
         //[InlineData("", (CreateSmsCodeInput.SmsCodeTypeEnum)0)]
-        [InlineData("13671974358", (CreateSmsCodeInput.SmsCodeTypeEnum)0)]
+        [InlineData("18975060440", (CreateSmsCodeInput.SmsCodeTypeEnum)0)]
         public async Task CreateSmsCode_Test(string phone, CreateSmsCodeInput.SmsCodeTypeEnum smsCodeType)
         {
             //---------------请结合以下要点编写单元测试（勿删）---------------
@@ -26,7 +27,7 @@ namespace App.Tests.SmSCode
             //---------------------------------------------------------
             var input = new CreateSmsCodeInput()
             {
-                Phone = phone,
+                PhoneNumber = phone,
                 SmsCodeType = smsCodeType,
             };
             if (string.IsNullOrWhiteSpace(phone))
@@ -35,7 +36,6 @@ namespace App.Tests.SmSCode
             }
             else
             {
-                
                 await smSCodeAppService.CreateSmsCode(input);
 
                 //重复验证
