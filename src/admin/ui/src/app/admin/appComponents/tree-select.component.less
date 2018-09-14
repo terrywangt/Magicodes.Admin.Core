@@ -1,0 +1,37 @@
+﻿.tree{
+    position: relative;
+    cursor: pointer;
+    .tree-box{
+      width: 100%;
+    }
+    .tree-input{
+        width: 100%;
+        border-radius: 3px;
+        border: 1px solid transparent;
+        border-color: #ebedf2;
+        padding: 0.55rem 1rem
+    }
+    .tree-select{
+        position: absolute;
+        top: 38px;
+        left: 0;
+        z-index: 9;
+        background-color: #fff;
+        border:1px solid #ddd;
+        max-height: 700px;
+        max-width: 100%;
+        overflow-y: auto;
+    }
+}
+:host ::ng-deep{
+    .ui-state-highlight{
+        .ui-treetable-toggler{
+            color:#fff;
+        }
+    }
+    .tree-hidden{
+        a{
+            visibility: hidden !important;    
+        }
+    }
+}

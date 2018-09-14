@@ -13,6 +13,7 @@ namespace Magicodes.Admin.Core.Custom.LogInfos
     /// 交易日志
     /// </summary>
     [Description("交易日志")]
+    [Display(Name = "交易日志")]
     public class TransactionLog : Entity<long>, IHasCreationTime, IMayHaveTenant, ICreationAudited
     {
         /// <summary>

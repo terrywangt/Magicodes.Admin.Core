@@ -786,5 +786,38 @@
     <text name="AliStorageSetting" value="阿里云存储配置" />
     <text name="AliStorageInformation" value="阿里云存储配置信息" />
     <text name="EndPoint" value="地域节点" />
+  
+    <!--交易日志-->
+    <text name="TransactionLog" value="交易日志" />
+    <text name="Currency" value="金额" />
+    <text name="ClientIpAddress" value="客户端Ip" />
+    <text name="ClientName" value="客户端名称" />
+    <text name="IsFreeze" value="是否冻结" />
+    <text name="PayChannel" value="支付渠道" />
+    <text name="Terminal" value="终端" />
+    <text name="TransactionState" value="交易状态" />
+    <text name="OutTradeNo" value="交易单号" />
+    <text name="TransactionId" value="支付订单号" />
+    <text name="PayTime" value="支付完成时间" />
+    <text name="Exception" value="异常信息" />
+  
+    <!--终端-->  
+    <text name="Unknown" value="未知" />
+    <text name="Android" value="Android" />
+    <text name="Iphone" value="Iphone" />
+    <text name="Ipad" value="Ipad" /> 
+    <text name="MacOS" value="MacOS" />
+    <text name="WindowsXP" value="WindowsXP" />
+    <text name="WindowsVista" value="WindowsVista" />
+    <text name="Windows7" value="Windows7" />
+    <text name="Windows8" value="Windows8" />
+    <text name="Windows10" value="Windows10" /> 
+    
+    <!--交易状态-->  
+    <text name="NotPay" value="未支付" />
+    <text name="PayError" value="支付失败" />
+    <text name="PendingRefund" value="待退款" /> 
+    <text name="Refunded" value="已退款" />
+
   </texts>
 </localizationDictionary>

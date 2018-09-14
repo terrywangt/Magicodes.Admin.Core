@@ -1,0 +1,16 @@
+﻿<div class="ui-inputgroup tree">
+  <input pInputText type="text" placeholder="请选择父级" (click)="show()" [(ngModel)]="value.data.label" readonly >
+  <button pButton type="button"  (click)="show()" icon="fa {{isShow?'fa-angle-up':'fa-angle-down'}}"  class="ui-button-secondary"></button>     
+  <div class="tree-select" [hidden]="!isShow">
+      <p-treeTable [value]="list" (onNodeExpand)="open($event)">
+          <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
+              <tr (click)="select(rowNode)" [class.ui-state-highlight]="rowData.isSelect">
+                  <td>
+                      <p-treeTableToggler [class.tree-hidden]="rowNode.level+1==level" [rowNode]="rowNode"></p-treeTableToggler>
+                      {{rowData.title}}
+                  </td>
+              </tr> 
+          </ng-template>
+      </p-treeTable>
+  </div>
+</div>

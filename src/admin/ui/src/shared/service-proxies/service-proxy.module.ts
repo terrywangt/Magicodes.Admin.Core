@@ -43,6 +43,7 @@ import * as ApiServiceProxies from './service-proxies';
          * 公用组件服务
          */
         ApiServiceProxies.CommonServiceProxy,
+        ApiServiceProxies.TransactionLogServiceProxy,
         ApiServiceProxies.ArticleInfoArticleTagInfoServiceProxy,
         ApiServiceProxies.ArticleInfoServiceProxy,
         ApiServiceProxies.ArticleSourceInfoServiceProxy,

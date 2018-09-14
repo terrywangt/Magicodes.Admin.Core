@@ -23,6 +23,8 @@ import { ArticleInfosComponent } from './articleInfos/articleInfo.component';
 import { ArticleSourceInfosComponent } from './articleSourceInfos/articleSourceInfo.component';
 import { ColumnInfosComponent } from './columnInfos/columnInfo.component';
 import { StorageSettingsComponent } from './settings/Storage-settings.component';
+import { TransactionLogsComponent } from './transactionLogs/transactionLog.component';
+
 
 @NgModule({
     imports: [
@@ -53,6 +55,7 @@ import { StorageSettingsComponent } from './settings/Storage-settings.component'
 					{ path: 'articleSourceInfo', component: ArticleSourceInfosComponent},
                     { path: 'columnInfo', component: ColumnInfosComponent},
                     { path: 'storageSettings', component: StorageSettingsComponent},
+                    { path: 'transactionLog', component: TransactionLogsComponent},
                 ]
             }
         ])

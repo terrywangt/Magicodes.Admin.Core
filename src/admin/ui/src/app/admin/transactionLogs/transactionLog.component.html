@@ -1,0 +1,185 @@
+﻿<div [@routerTransition]>
+    <div class="m-subheader ">
+        <div class="d-flex align-items-center">
+            <div class="mr-auto col-xs-6">
+                <h3 class="m-subheader__title m-subheader__title--separator">
+                    <span>{{l("TransactionLog")}}</span>
+                </h3>
+            </div>
+            <div class="col-sm-6 text-right">
+                <audit-log serviceName="TransactionLogAppService" objectName="Magicodes.Admin.Core.Custom.LogInfos.TransactionLog"></audit-log>
+                <button type="button" class="btn btn-success" (click)="exportToExcel()">
+                    <i class="fa fa-file-excel-o"></i> {{l("ExportToExcel")}}
+                </button>
+                <!-- <button class="btn btn-primary blue" (click)="createTransactionLog()">
+                    <i class="fa fa-plus"></i>{{l("Create")}}
+                </button> -->
+                <button type="button" class="btn btn-metal" (click)="getTransactionLogs()">
+                    <i class="fa fa-refresh"></i> {{l("Refresh")}}
+                </button>
+                <!-- <button type="button" class="btn default" (click)="getRecycleData()">
+                    <i class="fa fa-recycle"></i> {{model.isOnlyGetRecycleData?l('Close'):l('RecycleBin')}}
+                </button> -->
+            </div>
+        </div>
+    </div>
+    <div class="m-content">
+        <div class="m-portlet m-portlet--mobile">
+            <div class="m-portlet__body">
+                <div class="m-form m-form--label-align-right">
+                    <form (submit)="getTransactionLogs()" autocomplete="off">
+                        <div class="form-body">
+                            <div class="row m--margin-bottom-10">
+                                <label>{{l("Filter")}}</label>
+                                <div class="input-group">
+                                    <input [(ngModel)]="model.filterText" name="Filter" class="form-control" placeholder="{{l('SearchWithThreeDot')}}" type="text">
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="advancedFiltersAreShown" class="row">
+                            <div class="col-xl-6">
+                                <div class="m-checkbox-list">
+                                    <label class="m-checkbox">
+                                        <input type="checkbox" [(ngModel)]="model.creationDateRangeActive" id="model_CreateDateRange" name="CreateDateRange" value="true"> {{l('CreateDateRange')}}
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <date-range-picker name="CreateDateRange" [isDisabled]="!model.creationDateRangeActive" [(startDate)]="model.creationDateStart"
+                                    [(endDate)]="model.creationDateEnd" [allowFutureDate]="true">
+                                </date-range-picker>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="SubmenuToggle">{{l("IsFreeze")}}</label>
+                                <select id="IsFreeze" name="IsFreeze" class="form-control" [(ngModel)]="model.isFreeze">
+                                    <option value="all">{{l("All")}}</option>
+                                    <option value="yes">{{l("Yes")}}</option>
+                                    <option value="no">{{l("No")}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row m--margin-bottom-10">
+                            <div class="col-sm-6">
+                                <span class="clickable-item text-muted" *ngIf="!advancedFiltersAreShown" (click)="advancedFiltersAreShown=!advancedFiltersAreShown">
+                                    <i class="fa fa-angle-down"></i> {{l("ShowAdvancedFilters")}}
+                                </span>
+                                <span class="clickable-item text-muted" *ngIf="advancedFiltersAreShown" (click)="advancedFiltersAreShown=!advancedFiltersAreShown">
+                                    <i class="fa fa-angle-up"></i> {{l("HideAdvancedFilters")}}
+                                </span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="row align-items-center">
+                    <!--<Primeng-Datatable-Start>-->
+                    <div class="primeng-datatable-container" [busyIf]="primengTableHelper.isLoading">
+                        <p-table #dataTable (onLazyLoad)="getTransactionLogs($event)" [value]="primengTableHelper.records" rows="{{primengTableHelper.defaultRecordsCountPerPage}}"
+                            [paginator]="false" [lazy]="true" [responsive]="primengTableHelper.isResponsive" [scrollable]="true"
+                            [style]="{width:'100%'}">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <!-- <th style="width:130px">{{l('Actions')}}</th> -->
+                                    <th pSortableColumn="amount" style="width:200px">{{l('Amount')}}
+                                        <p-sortIcon field="amount"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="creationTime" style="width:200px">{{l('CreationTime')}}
+                                        <p-sortIcon field="creationTime"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="clientIpAddress" style="width:200px">{{l('ClientIpAddress')}}
+                                        <p-sortIcon field="clientIpAddress"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="clientName" style="width:200px">{{l('ClientName')}}
+                                        <p-sortIcon field="clientName"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="isFreeze" style="width:200px">{{l('IsFreeze')}}
+                                        <p-sortIcon field="isFreeze"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="payChannel" style="width:200px">{{l('PayChannel')}}
+                                        <p-sortIcon field="payChannel"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="terminal" style="width:200px">{{l('Terminal')}}
+                                        <p-sortIcon field="terminal"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="transactionState" style="width:200px">{{l('TransactionState')}}
+                                        <p-sortIcon field="transactionState"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="customData" style="width:200px">{{l('CustomData')}}
+                                        <p-sortIcon field="customData"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="outTradeNo" style="width:200px">{{l('OutTradeNo')}}
+                                        <p-sortIcon field="outTradeNo"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="payTime" style="width:200px">{{l('PayTime')}}
+                                        <p-sortIcon field="payTime"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="exception" style="width:200px">{{l('Exception')}}
+                                        <p-sortIcon field="exception"></p-sortIcon>
+                                    </th>
+                                </tr>
+                            </ng-template>
+
+                            <ng-template pTemplate="body" let-record="$implicit">
+                                <tr>
+                                    <!-- <td style="width: 130px">
+                                        <div class="btn-group dropdown" normalizePosition>
+                                            <button class="dropdown-toggle btn btn-sm btn-primary"
+                                                    data-toggle="dropdown"
+                                                    aria-haspopup="true"
+                                                    aria-expanded="false">
+                                                <i class="fa fa-cog"></i><span class="caret"></span> {{l("Actions")}}
+                                            </button>
+                                            <ul class="dropdown-menu" *ngIf="!record.isDeleted">
+                                                <li>
+                                                    <a (click)="editTransactionLog(record.id)">{{l('Edit')}}</a>
+                                                </li>
+                                                <li>
+                                                    <a (click)="deleteTransactionLog(record.id)">{{l('Delete')}}</a>
+                                                </li>
+                                            </ul>
+                                            <ul class="dropdown-menu" *ngIf="record.isDeleted">
+                                                <li>
+                                                    <a (click)="restore(record.id)">{{l('Restore')}}</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td> -->
+                                    <td style="width:200px">{{record.cultureValue}}</td>
+                                    <td style="width:200px">
+                                        {{ record.creationTime ? (record.creationTime | momentFormat:'L LT') : '-'}}
+                                    </td>
+                                    <td style="width:200px">{{record.clientIpAddress}}</td>
+                                    <td style="width:200px">{{record.clientName}}</td>
+                                    <td style="width:200px">
+                                        <p-inputSwitch onLabel="{{l('Yes')}}" offLabel="{{l('No')}}" (onChange)="handleIsFreezeSwitch($event,record.id)" name="IsActive"
+                                            [(ngModel)]="record.isFreeze"></p-inputSwitch>
+                                    </td>
+                                    <td style="width:200px">{{getPayChannelText(record.payChannel)}}</td>
+                                    <td style="width:200px">{{getTerminalText(record.terminal)}}</td>
+                                    <td style="width:200px">{{getTransactionStateText(record.transactionState)}}</td>
+                                    <td style="width:200px">{{record.customData}}</td>
+                                    <td style="width:200px">{{record.outTradeNo}}</td>
+                                    <td style="width:200px">
+                                        {{ record.payTime ? (record.payTime | momentFormat:'L LT') : '-'}}
+                                    </td>
+                                    <td style="width:200px">{{record.exception}}</td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+
+                        <div class="primeng-paging-container">
+                            <p-paginator rows="{{primengTableHelper.defaultRecordsCountPerPage}}" #paginator (onPageChange)="getTransactionLogs($event)"
+                                [totalRecords]="primengTableHelper.totalRecordsCount" [rowsPerPageOptions]="primengTableHelper.predefinedRecordsCountPerPage">
+                            </p-paginator>
+                            <span class="total-records-count">
+                                {{l('TotalRecordsCount', primengTableHelper.totalRecordsCount)}}
+                            </span>
+                        </div>
+                    </div>
+                    <!--<Primeng-TurboTable-End>-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <createOrEditTransactionLogModal #createOrEditTransactionLogModal (modalSave)="getTransactionLogs()"></createOrEditTransactionLogModal>
+</div>
