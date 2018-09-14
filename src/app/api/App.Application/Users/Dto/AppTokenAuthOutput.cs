@@ -1,4 +1,21 @@
-﻿namespace Magicodes.App.Application.Users.Dto
+﻿// ======================================================================
+//   
+//           Copyright (C) 2018-2020 湖南心莱信息科技有限公司    
+//           All rights reserved
+//   
+//           filename : AppTokenAuthOutput.cs
+//           description :
+//   
+//           created by 雪雁 at  2018-07-30 10:04
+//           Mail: wenqiang.li@xin-lai.com
+//           QQ群：85318032（技术交流）
+//           Blog：http://www.cnblogs.com/codelove/
+//           GitHub：https://github.com/xin-lai
+//           Home：http://xin-lai.com
+//   
+// ======================================================================
+
+namespace Magicodes.App.Application.Users.Dto
 {
     /// <summary>
     ///     授权访问 输出参数

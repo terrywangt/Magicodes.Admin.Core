@@ -1,43 +1,60 @@
-﻿using System;
+﻿// ======================================================================
+//   
+//           Copyright (C) 2018-2020 湖南心莱信息科技有限公司    
+//           All rights reserved
+//   
+//           filename : AppServiceBase.cs
+//           description :
+//   
+//           created by 雪雁 at  2018-07-12 18:13
+//           Mail: wenqiang.li@xin-lai.com
+//           QQ群：85318032（技术交流）
+//           Blog：http://www.cnblogs.com/codelove/
+//           GitHub：https://github.com/xin-lai
+//           Home：http://xin-lai.com
+//   
+// ======================================================================
+
+using System;
 using System.Threading.Tasks;
 using Abp.Application.Services;
 using Abp.Auditing;
+using Abp.Authorization;
+using Abp.Domain.Entities;
+using Abp.Domain.Entities.Auditing;
+using Abp.Domain.Uow;
+using Abp.Events.Bus;
 using Abp.IdentityFramework;
 using Abp.MultiTenancy;
 using Abp.Runtime.Session;
 using Abp.Threading;
-using Microsoft.AspNetCore.Identity;
+using Abp.Timing;
+using Magicodes.Admin;
 using Magicodes.Admin.Authorization.Users;
 using Magicodes.Admin.MultiTenancy;
-using Magicodes.Admin;
-using Abp.Timing;
-using Abp.Authorization;
-using Abp.Domain.Uow;
-using Abp.Events.Bus;
-using Abp.Domain.Entities.Auditing;
-using Abp.Domain.Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace Magicodes.App.Application
 {
     /// <summary>
-    /// APP服务接口基类
-    /// 默认移除审计
+    ///     APP服务接口基类
+    ///     默认移除审计
     /// </summary>
     [DisableAuditing]
     [AbpAuthorize]
     public abstract class AppServiceBase : ApplicationService
     {
-        public TenantManager TenantManager { get; set; }
-
-        public UserManager UserManager { get; set; }
-
-        public IEventBus EventBus { get; set; }
-
         protected AppServiceBase()
         {
             LocalizationSourceName = AdminConsts.AppLocalizationSourceName;
             EventBus = NullEventBus.Instance;
         }
+
+        public TenantManager TenantManager { get; set; }
+
+        public UserManager UserManager { get; set; }
+
+        public IEventBus EventBus { get; set; }
 
         //protected virtual async Task<User> GetCurrentUserAsync()
         //{
@@ -77,7 +94,7 @@ namespace Magicodes.App.Application
 
 
         /// <summary>
-        /// 设置创建模型默认属性
+        ///     设置创建模型默认属性
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="model"></param>
@@ -89,7 +106,7 @@ namespace Magicodes.App.Application
         }
 
         /// <summary>
-        /// 软删除
+        ///     软删除
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="model"></param>
@@ -101,7 +118,7 @@ namespace Magicodes.App.Application
         }
 
         /// <summary>
-        /// 禁用租户筛选器
+        ///     禁用租户筛选器
         /// </summary>
         /// <param name="func"></param>
         protected void DisableTenantFilterWitchAction<TResult>(Func<Task<TResult>> func)
@@ -113,7 +130,7 @@ namespace Magicodes.App.Application
         }
 
         /// <summary>
-        /// 禁用租户筛选器
+        ///     禁用租户筛选器
         /// </summary>
         /// <typeparam name="TResult"></typeparam>
         /// <param name="func"></param>

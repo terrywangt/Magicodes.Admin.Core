@@ -1,20 +1,36 @@
-﻿using Abp.Modules;
-using Magicodes.Admin;
-using Magicodes.Admin.Configuration;
-using Magicodes.App.Application.Configuration;
-using Magicodes.Sms.Core;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
+﻿// ======================================================================
+//   
+//           Copyright (C) 2018-2020 湖南心莱信息科技有限公司    
+//           All rights reserved
+//   
+//           filename : AppApplicationModule.cs
+//           description :
+//   
+//           created by 雪雁 at  2018-07-12 18:13
+//           Mail: wenqiang.li@xin-lai.com
+//           QQ群：85318032（技术交流）
+//           Blog：http://www.cnblogs.com/codelove/
+//           GitHub：https://github.com/xin-lai
+//           Home：http://xin-lai.com
+//   
+// ======================================================================
+
 using System;
 using System.Reflection;
 using System.Text;
+using Abp.Modules;
+using Magicodes.Admin;
+using Magicodes.Admin.Configuration;
+using Magicodes.App.Application.Configuration;
 using Magicodes.Pay;
 using Magicodes.Sms;
+using Magicodes.Sms.Core;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Magicodes.App.Application
 {
     /// <summary>
-    /// 
     /// </summary>
     [DependsOn(
         typeof(AdminCoreModule),
@@ -26,7 +42,6 @@ namespace Magicodes.App.Application
 
         public override void PreInitialize()
         {
-
         }
 
         public override void Initialize()
@@ -35,10 +50,9 @@ namespace Magicodes.App.Application
 
             var appConfiguration = IocManager.Resolve<IAppConfigurationAccessor>().Configuration;
 
-            if (appConfiguration["Authentication:JwtBearer:IsEnabled"] != null && bool.Parse(appConfiguration["Authentication:JwtBearer:IsEnabled"]))
-            {
+            if (appConfiguration["Authentication:JwtBearer:IsEnabled"] != null &&
+                bool.Parse(appConfiguration["Authentication:JwtBearer:IsEnabled"]))
                 ConfigureTokenAuth(appConfiguration);
-            }
         }
 
         private void ConfigureTokenAuth(IConfigurationRoot appConfiguration)
@@ -46,10 +60,13 @@ namespace Magicodes.App.Application
             IocManager.Register<TokenAuthConfiguration>();
             var tokenAuthConfig = IocManager.Resolve<TokenAuthConfiguration>();
 
-            tokenAuthConfig.SecurityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(appConfiguration["Authentication:JwtBearer:SecurityKey"]));
+            tokenAuthConfig.SecurityKey =
+                new SymmetricSecurityKey(
+                    Encoding.ASCII.GetBytes(appConfiguration["Authentication:JwtBearer:SecurityKey"]));
             tokenAuthConfig.Issuer = appConfiguration["Authentication:JwtBearer:Issuer"];
             tokenAuthConfig.Audience = appConfiguration["Authentication:JwtBearer:Audience"];
-            tokenAuthConfig.SigningCredentials = new SigningCredentials(tokenAuthConfig.SecurityKey, SecurityAlgorithms.HmacSha256);
+            tokenAuthConfig.SigningCredentials =
+                new SigningCredentials(tokenAuthConfig.SecurityKey, SecurityAlgorithms.HmacSha256);
             tokenAuthConfig.Expiration = TimeSpan.FromDays(1);
         }
     }
