@@ -11,12 +11,15 @@ using Abp.Zero.Configuration;
 using App.Tests.Configuration;
 using App.Tests.DependencyInjection;
 using App.Tests.Logging;
+using App.Tests.SmSCode;
 using App.Tests.Url;
 using Castle.Core.Logging;
 using Castle.MicroKernel.Registration;
+using Magicodes.Admin;
 using Magicodes.Admin.Configuration;
 using Magicodes.Admin.Core.Custom;
 using Magicodes.Admin.EntityFrameworkCore;
+using Magicodes.Admin.Identity;
 using Magicodes.Admin.Url;
 using Magicodes.App.Application;
 using Microsoft.Extensions.Configuration;
@@ -27,6 +30,7 @@ namespace App.Tests
     [DependsOn(
         typeof(AppCoreModule),
         typeof(AppApplicationModule),
+        typeof(AdminCoreModule),
         typeof(AdminEntityFrameworkCoreModule),
         typeof(AbpTestBaseModule))]
     public class AppTestModule : AbpModule
@@ -54,6 +58,8 @@ namespace App.Tests
             IocManager.Register<ILogger, TestLogger>();
             
             IocManager.Register<IWebUrlService, FakeWebUrlService>();
+
+            Configuration.ReplaceService<ISmsSender, NullSmsSender>();
 
             Configuration.ReplaceService<IAppConfigurationAccessor, TestAppConfigurationAccessor>();
             Configuration.ReplaceService<IEmailSender, NullEmailSender>(DependencyLifeStyle.Transient);

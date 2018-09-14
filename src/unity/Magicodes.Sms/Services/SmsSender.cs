@@ -16,11 +16,16 @@
 // ======================================================================
 
 using System;
+using System.Threading.Tasks;
 using Abp;
 using Abp.Configuration;
 using Abp.Dependency;
+using Abp.UI;
 using Castle.Core.Logging;
+using Magicodes.Admin.Authorization.Users;
 using Magicodes.Admin.Configuration;
+using Magicodes.Admin.Identity;
+using Magicodes.Admin.Localization;
 using Magicodes.Sms.Aliyun;
 using Magicodes.Sms.Aliyun.Builder;
 using Magicodes.Sms.Core;
@@ -30,10 +35,12 @@ namespace Magicodes.Sms.Services
     /// <summary>
     ///     短信发送服务
     /// </summary>
-    public class SmsAppService : IShouldInitialize, ISingletonDependency, ISmsAppService
+    public class SmsSender : IShouldInitialize, ISingletonDependency, ISmsSender
     {
-        public SmsAppService()
+        private readonly IAppLocalizationManager _appLocalizationManager;
+        public SmsSender(IAppLocalizationManager appLocalizationManager)
         {
+            _appLocalizationManager = appLocalizationManager;
             Logger = NullLogger.Instance;
         }
 
@@ -96,6 +103,22 @@ namespace Magicodes.Sms.Services
             catch (Exception ex)
             {
                 Logger.Error("阿里云短信未配置或者配置错误！", ex);
+            }
+        }
+
+        /// <summary>
+        /// 发送短信验证码
+        /// </summary>
+        /// <param name="phone">手机号码</param>
+        /// <param name="code">验证码</param>
+        /// <returns></returns>
+        public async Task SendCodeAsync(string phone, string code)
+        {
+            var result = await SmsService.SendCodeAsync(phone, code);
+            if (!result.Success)
+            {
+                Logger.Error("短信发送失败：" + result.ErrorMessage);
+                throw new UserFriendlyException(_appLocalizationManager.L("SmsSendError"));
             }
         }
     }

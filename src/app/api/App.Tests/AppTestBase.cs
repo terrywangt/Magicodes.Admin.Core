@@ -1,12 +1,10 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Abp;
+﻿using Abp;
 using Abp.EntityFrameworkCore.Extensions;
 using Abp.Events.Bus;
 using Abp.Events.Bus.Entities;
 using Abp.Runtime.Session;
 using Abp.TestBase;
+using Abp.Timing;
 using Castle.Core.Logging;
 using GenFu;
 using Magicodes.Admin.Authorization.Roles;
@@ -15,6 +13,11 @@ using Magicodes.Admin.Dto;
 using Magicodes.Admin.EntityFrameworkCore;
 using Magicodes.Admin.MultiTenancy;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 
 namespace App.Tests
 {
@@ -60,7 +63,16 @@ namespace App.Tests
             UsingDbContext(
                 context =>
                 {
-                   
+                    var user = User.CreateTenantAdminUser(AbpSession.TenantId.Value, "Test@xin-lai.com");
+                    user.Password = new PasswordHasher<User>(new OptionsWrapper<PasswordHasherOptions>(new PasswordHasherOptions())).HashPassword(user, "123456abcD");
+                    user.UserName = "UnitTest";
+                    user.IsEmailConfirmed = true;
+                    user.ShouldChangePasswordOnNextLogin = false;
+                    user.IsActive = true;
+                    user.PhoneNumber = "13671974358";
+                    user.IsPhoneNumberConfirmed = true;
+                    context.Users.Add(user);
+                    context.SaveChanges();
                 });
             #endregion
         }
@@ -72,25 +84,13 @@ namespace App.Tests
             return new DisposeAction(() => AbpSession.TenantId = previousTenantId);
         }
 
-        protected void UsingDbContext(Action<AdminDbContext> action)
-        {
-            UsingDbContext(AbpSession.TenantId, action);
-        }
+        protected void UsingDbContext(Action<AdminDbContext> action) => UsingDbContext(AbpSession.TenantId, action);
 
-        protected Task UsingDbContextAsync(Func<AdminDbContext, Task> action)
-        {
-            return UsingDbContextAsync(AbpSession.TenantId, action);
-        }
+        protected Task UsingDbContextAsync(Func<AdminDbContext, Task> action) => UsingDbContextAsync(AbpSession.TenantId, action);
 
-        protected T UsingDbContext<T>(Func<AdminDbContext, T> func)
-        {
-            return UsingDbContext(AbpSession.TenantId, func);
-        }
+        protected T UsingDbContext<T>(Func<AdminDbContext, T> func) => UsingDbContext(AbpSession.TenantId, func);
 
-        protected Task<T> UsingDbContextAsync<T>(Func<AdminDbContext, Task<T>> func)
-        {
-            return UsingDbContextAsync(AbpSession.TenantId, func);
-        }
+        protected Task<T> UsingDbContextAsync<T>(Func<AdminDbContext, Task<T>> func) => UsingDbContextAsync(AbpSession.TenantId, func);
 
         protected void UsingDbContext(int? tenantId, Action<AdminDbContext> action)
         {
@@ -150,15 +150,9 @@ namespace App.Tests
 
         #region Login
 
-        protected void LoginAsHostAdmin()
-        {
-            LoginAsHost(User.AdminUserName);
-        }
+        protected void LoginAsHostAdmin() => LoginAsHost(User.AdminUserName);
 
-        protected void LoginAsDefaultTenantAdmin()
-        {
-            LoginAsTenant(Tenant.DefaultTenantName, User.AdminUserName);
-        }
+        protected void LoginAsDefaultTenantAdmin() => LoginAsTenant(Tenant.DefaultTenantName, User.AdminUserName);
 
         protected void LoginAsHost(string userName)
         {
@@ -246,39 +240,21 @@ namespace App.Tests
 
         #region GetTenant / GetTenantOrNull
 
-        protected Tenant GetTenant(string tenancyName)
-        {
-            return UsingDbContext(null, context => context.Tenants.Single(t => t.TenancyName == tenancyName));
-        }
+        protected Tenant GetTenant(string tenancyName) => UsingDbContext(null, context => context.Tenants.Single(t => t.TenancyName == tenancyName));
 
-        protected async Task<Tenant> GetTenantAsync(string tenancyName)
-        {
-            return await UsingDbContext(null, async context => await context.Tenants.SingleAsync(t => t.TenancyName == tenancyName));
-        }
+        protected async Task<Tenant> GetTenantAsync(string tenancyName) => await UsingDbContext(null, async context => await context.Tenants.SingleAsync(t => t.TenancyName == tenancyName));
 
-        protected Tenant GetTenantOrNull(string tenancyName)
-        {
-            return UsingDbContext(null, context => context.Tenants.FirstOrDefault(t => t.TenancyName == tenancyName));
-        }
+        protected Tenant GetTenantOrNull(string tenancyName) => UsingDbContext(null, context => context.Tenants.FirstOrDefault(t => t.TenancyName == tenancyName));
 
-        protected async Task<Tenant> GetTenantOrNullAsync(string tenancyName)
-        {
-            return await UsingDbContext(null, async context => await context.Tenants.FirstOrDefaultAsync(t => t.TenancyName == tenancyName));
-        }
+        protected async Task<Tenant> GetTenantOrNullAsync(string tenancyName) => await UsingDbContext(null, async context => await context.Tenants.FirstOrDefaultAsync(t => t.TenancyName == tenancyName));
 
         #endregion
 
         #region GetRole
 
-        protected Role GetRole(string roleName)
-        {
-            return UsingDbContext(context => context.Roles.Single(r => r.Name == roleName && r.TenantId == AbpSession.TenantId));
-        }
+        protected Role GetRole(string roleName) => UsingDbContext(context => context.Roles.Single(r => r.Name == roleName && r.TenantId == AbpSession.TenantId));
 
-        protected async Task<Role> GetRoleAsync(string roleName)
-        {
-            return await UsingDbContext(async context => await context.Roles.SingleAsync(r => r.Name == roleName && r.TenantId == AbpSession.TenantId));
-        }
+        protected async Task<Role> GetRoleAsync(string roleName) => await UsingDbContext(async context => await context.Roles.SingleAsync(r => r.Name == roleName && r.TenantId == AbpSession.TenantId));
 
         #endregion
 
@@ -306,25 +282,19 @@ namespace App.Tests
             return user;
         }
 
-        protected User GetUserByUserNameOrNull(string userName)
-        {
-            return UsingDbContext(context =>
-                context.Users.FirstOrDefault(u =>
-                    u.UserName == userName &&
-                    u.TenantId == AbpSession.TenantId
-                    ));
-        }
+        protected User GetUserByUserNameOrNull(string userName) => UsingDbContext(context =>
+                                                                                 context.Users.FirstOrDefault(u =>
+                                                                                     u.UserName == userName &&
+                                                                                     u.TenantId == AbpSession.TenantId
+                                                                                     ));
 
-        protected async Task<User> GetUserByUserNameOrNullAsync(string userName, bool includeRoles = false)
-        {
-            return await UsingDbContextAsync(async context =>
-                await context.Users
-                    .IncludeIf(includeRoles, u => u.Roles)
-                    .FirstOrDefaultAsync(u =>
-                            u.UserName == userName &&
-                            u.TenantId == AbpSession.TenantId
-                    ));
-        }
+        protected async Task<User> GetUserByUserNameOrNullAsync(string userName, bool includeRoles = false) => await UsingDbContextAsync(async context =>
+                                                                                                                             await context.Users
+                                                                                                                                 .IncludeIf(includeRoles, u => u.Roles)
+                                                                                                                                 .FirstOrDefaultAsync(u =>
+                                                                                                                                         u.UserName == userName &&
+                                                                                                                                         u.TenantId == AbpSession.TenantId
+                                                                                                                                 ));
 
         #endregion
     }

@@ -1,11 +1,9 @@
 ﻿using System.Threading.Tasks;
+using Abp.Dependency;
 
 namespace Magicodes.Admin.Identity
 {
-    /// <summary>
-    /// 短信发送服务
-    /// </summary>
-    public interface ISmsSender
+    public class NullSmsSender : ISmsSender
     {
         /// <summary>
         /// 发送短信验证码
@@ -13,6 +11,6 @@ namespace Magicodes.Admin.Identity
         /// <param name="phone">手机号码</param>
         /// <param name="code">验证码</param>
         /// <returns></returns>
-        Task SendCodeAsync(string phone, string code);
+        public Task SendCodeAsync(string phone, string code) => Task.FromResult(0);
     }
 }

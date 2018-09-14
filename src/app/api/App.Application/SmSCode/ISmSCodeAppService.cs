@@ -15,5 +15,12 @@ namespace Magicodes.App.Application.SmSCode
         /// <param name="input"></param>
         /// <returns></returns>
         Task CreateSmsCode(CreateSmsCodeInput input);
+
+        /// <summary>
+        /// 短信验证码校验
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        Task VerifySmsCode(VerifySmsCodeInputDto input);
     }
 }

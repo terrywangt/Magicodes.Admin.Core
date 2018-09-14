@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Abp.Application.Services;
+using Abp.Auditing;
 using Abp.IdentityFramework;
 using Abp.MultiTenancy;
 using Abp.Runtime.Session;
@@ -18,6 +19,11 @@ using Abp.Domain.Entities;
 
 namespace Magicodes.App.Application
 {
+    /// <summary>
+    /// APP服务接口基类
+    /// 默认移除审计
+    /// </summary>
+    [DisableAuditing]
     [AbpAuthorize]
     public abstract class AppServiceBase : ApplicationService
     {
@@ -29,7 +35,7 @@ namespace Magicodes.App.Application
 
         protected AppServiceBase()
         {
-            LocalizationSourceName = AdminConsts.LocalizationSourceName;
+            LocalizationSourceName = AdminConsts.AppLocalizationSourceName;
             EventBus = NullEventBus.Instance;
         }
 
