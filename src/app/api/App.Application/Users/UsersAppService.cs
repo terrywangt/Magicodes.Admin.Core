@@ -1,5 +1,4 @@
-﻿using Abp.Application.Services;
-using Abp.Authorization;
+﻿using Abp.Authorization;
 using Abp.Authorization.Users;
 using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
@@ -72,27 +71,22 @@ namespace Magicodes.App.Application.Users
         }
 
         /// <summary>
-        /// 注册
+        /// 注册或登陆
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
         [AbpAllowAnonymous]
-        [HttpPost("Register")]
+        [HttpPost("")]
         [UnitOfWork(IsDisabled = true)]
-        public async Task<AppRegisterOutput> AppRegister(AppRegisterInput input)
+        public async Task<AppRegisterOutput> AppRegisterOrLogin(AppRegisterInput input)
         {
             #region 验证码验证
             using (var unitOfWork = _unitOfWorkManager.Begin())
             {
-                var codeValid = await _smsVerificationCodeManager.VerifyCode(input.Phone, input.Code, "Register");
+                var codeValid = await _smsVerificationCodeManager.VerifyCode(input.Phone, input.Code, "RegisterOrLogin");
                 if (!codeValid)
                 {
                     throw new UserFriendlyException("短信验证码不正确或已过期!");
-                }
-
-                if (_userManager.Users.Any(p => (p.PhoneNumber == input.Phone)))
-                {
-                    throw new UserFriendlyException("该手机号码已被注册！");
                 }
             }
             #endregion
@@ -109,13 +103,13 @@ namespace Magicodes.App.Application.Users
                     default:
                         break;
                 }
-                return await Register(input.Phone, input.TrueName, input.OpenId, input.UnionId, from);
+                return await RegisterOrLogin(input.Phone, input.TrueName, input.OpenId, input.UnionId, from);
             }
         }
 
 
         /// <summary>
-        /// 注册
+        /// 注册或登陆
         /// </summary>
         /// <param name="phone"></param>
         /// <param name="name"></param>
@@ -124,14 +118,19 @@ namespace Magicodes.App.Application.Users
         /// <param name="platform"></param>
         /// <returns></returns>
         [UnitOfWork(IsDisabled = true)]
-        private async Task<AppRegisterOutput> Register(string phone = null, string name = null, string openId = null, string unionId = null, OpenIdPlatforms platform = OpenIdPlatforms.WeChat)
+        private async Task<AppRegisterOutput> RegisterOrLogin(string phone = null, string name = null, string openId = null, string unionId = null, OpenIdPlatforms platform = OpenIdPlatforms.WeChat)
         {
             var output = new AppRegisterOutput()
             {
             };
-            User user = null;
+            var user = _userManager.Users.FirstOrDefault(p => (p.PhoneNumber == phone));
             using (var unitOfWork = _unitOfWorkManager.Begin())
             {
+                if (user != null)
+                {
+                    await BindAndTokenAuth(openId, unionId, platform, output, user, unitOfWork);
+                    return output;
+                }
                 var hasPhone = !phone.IsNullOrEmpty();
                 //支持游客注册
                 var userName = hasPhone ? phone : Guid.NewGuid().ToString("N");
@@ -152,25 +151,44 @@ namespace Magicodes.App.Application.Users
                 output.Phone = phone;
 
                 CheckErrors(await _userManager.CreateAsync(user));
+                await BindAndTokenAuth(openId, unionId, platform, output, user, unitOfWork);
+            }
+            return output;
+        }
 
-                #region 关联第三方OpenId
-                if ((!openId.IsNullOrEmpty()) || (!unionId.IsNullOrEmpty()))
+        /// <summary>
+        /// 绑定第三方并且授权
+        /// </summary>
+        /// <param name="openId"></param>
+        /// <param name="unionId"></param>
+        /// <param name="platform"></param>
+        /// <param name="output"></param>
+        /// <param name="user"></param>
+        /// <param name="unitOfWork"></param>
+        /// <returns></returns>
+        private async Task BindAndTokenAuth(string openId, string unionId, OpenIdPlatforms platform, AppRegisterOutput output, User user, IUnitOfWorkCompleteHandle unitOfWork)
+        {
+            #region 关联第三方OpenId
+            if ((!openId.IsNullOrEmpty()) || (!unionId.IsNullOrEmpty()))
+            {
+                var appTokenAuthInput = new AppTokenAuthInput()
                 {
-                    var appTokenAuthInput = new AppTokenAuthInput()
-                    {
-                        OpenIdOrUnionId = unionId ?? openId
-                    };
-                    switch (platform)
-                    {
-                        case OpenIdPlatforms.WeChat:
-                            appTokenAuthInput.From = openId.IsNullOrWhiteSpace() ? AppTokenAuthInput.FromEnum.WeChatUnionId : AppTokenAuthInput.FromEnum.WeChat;
-                            break;
-                        case OpenIdPlatforms.WechatMiniProgram:
-                            appTokenAuthInput.From = AppTokenAuthInput.FromEnum.WeChatMiniProgram;
-                            break;
-                        default:
-                            break;
-                    }
+                    OpenIdOrUnionId = unionId ?? openId
+                };
+                switch (platform)
+                {
+                    case OpenIdPlatforms.WeChat:
+                        appTokenAuthInput.From = openId.IsNullOrWhiteSpace() ? AppTokenAuthInput.FromEnum.WeChatUnionId : AppTokenAuthInput.FromEnum.WeChat;
+                        break;
+                    case OpenIdPlatforms.WechatMiniProgram:
+                        appTokenAuthInput.From = AppTokenAuthInput.FromEnum.WeChatMiniProgram;
+                        break;
+                    default:
+                        break;
+                }
+
+                if (!_appUserOpenIdResposotory.GetAll().Any(p => (p.OpenId == openId || p.UnionId == unionId) && p.From == platform && p.UserId == user.Id && p.TenantId == AbpSession.TenantId))
+                {
                     _appUserOpenIdResposotory.Insert(new AppUserOpenId()
                     {
                         OpenId = openId,
@@ -181,33 +199,17 @@ namespace Magicodes.App.Application.Users
                         TenantId = AbpSession.TenantId,
                     });
                 }
-
-                //获取授权信息
-                var result = await CreateToken(user);
-                output.AccessToken = result.AccessToken;
-                output.ExpireInSeconds = result.ExpireInSeconds;
-                output.UserId = result.UserId;
-                output.Phone = user.PhoneNumber;
-                await unitOfWork.CompleteAsync();
-                #endregion
             }
 
-
-            return output;
+            //获取授权信息
+            var result = await CreateToken(user);
+            output.AccessToken = result.AccessToken;
+            output.ExpireInSeconds = result.ExpireInSeconds;
+            output.UserId = result.UserId;
+            output.Phone = user.PhoneNumber;
+            await unitOfWork.CompleteAsync();
+            #endregion
         }
-
-        /// <summary>
-        /// 登陆
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        [AbpAllowAnonymous]
-        [RemoteService(IsEnabled = false)]
-        [HttpPost("Login")]
-        public async Task<AppLoginOutput> AppLogin(AppLoginInput input) =>
-            //TODO:[API]登陆
-            //请结合描述或要点实现方法，并且在完成后删除掉TODO注释
-            throw new NotSupportedException("AppLogin");
 
         /// <summary>
         /// 授权访问
@@ -253,7 +255,7 @@ namespace Magicodes.App.Application.Users
             }
             else
             {
-                var registerResult = await Register(openId: isUnionId ? null : input.OpenIdOrUnionId, unionId: isUnionId ? input.OpenIdOrUnionId : null, platform: openIdPlatform);
+                var registerResult = await RegisterOrLogin(openId: isUnionId ? null : input.OpenIdOrUnionId, unionId: isUnionId ? input.OpenIdOrUnionId : null, platform: openIdPlatform);
 
                 return new AppTokenAuthOutput()
                 {

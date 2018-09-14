@@ -24,21 +24,28 @@ namespace App.Tests.Users
             _usersAppService = Resolve<IUsersAppService>();
             _cacheManager = Resolve<ICacheManager>();
             _smsVerificationCodeManager = Resolve<ISmsVerificationCodeManager>();
-            _userManager = Resolve<UserManager>();
-            _unitOfWorkManager = Resolve<IUnitOfWorkManager>();
         }
 
-        [Theory(DisplayName = "登陆", Skip = "暂不实现APP登陆")]
-        [InlineData("Test", "Test")]
-        public async Task AppLogin_Test(string phone, string code)
+        [Theory(DisplayName = "注册或登陆")]
+        [InlineData("Test", "Test", "9957fc0fa630436e821b9e087b76aaf4", (AppRegisterInput.FromEnum)0, "0f36dbb147c7478ebab94cd68a33202e", "Test")]
+        public async Task AppRegister_Test(string phone, string code, string openId, AppRegisterInput.FromEnum from, string unionId, string trueName)
         {
-            var input = new AppLoginInput()
+            await _smsVerificationCodeManager.Create(phone, "Register");
+
+            var input = new AppRegisterInput()
             {
                 Phone = phone,
                 Code = code,
+                OpenId = openId,
+                From = from,
+                UnionId = unionId,
+                TrueName = trueName,
             };
-            var output = await _usersAppService.AppLogin(input);
+            var output = await _usersAppService.AppRegisterOrLogin(input);
             output.ShouldNotBeNull();
+
+            var loginOutput = await _usersAppService.AppRegisterOrLogin(input);
+            loginOutput.ShouldNotBeNull();
         }
 
         [Theory(DisplayName = "授权访问")]

@@ -10,18 +10,11 @@ namespace Magicodes.App.Application.Users
     public interface IUsersAppService : IApplicationService
     {
         /// <summary>
-        ///     注册
+        ///     注册或登陆
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        Task<AppRegisterOutput> AppRegister(AppRegisterInput input);
-
-        /// <summary>
-        ///     登陆
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        Task<AppLoginOutput> AppLogin(AppLoginInput input);
+        Task<AppRegisterOutput> AppRegisterOrLogin(AppRegisterInput input);
 
         /// <summary>
         ///     授权访问
