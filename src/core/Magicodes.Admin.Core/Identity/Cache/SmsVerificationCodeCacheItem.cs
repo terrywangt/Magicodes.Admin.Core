@@ -19,7 +19,7 @@ namespace Magicodes.Admin.Identity.Cache
         /// <summary>
         /// 创建时间
         /// </summary>
-        public DateTime CreationTime { get; set; }
+        public DateTime CreationTime { get; set; } = Clock.Now;
 
         /// <summary>
         /// 过期时间
@@ -31,7 +31,6 @@ namespace Magicodes.Admin.Identity.Cache
         /// </summary>
         public SmsVerificationCodeCacheItem()
         {
-
         }
 
         /// <summary>
@@ -41,7 +40,6 @@ namespace Magicodes.Admin.Identity.Cache
         public SmsVerificationCodeCacheItem(string code)
         {
             Code = code;
-            CreationTime = Clock.Now;
         }
     }
 }
