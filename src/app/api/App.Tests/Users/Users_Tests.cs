@@ -1,12 +1,10 @@
-﻿using System.Linq;
-using Abp.Runtime.Caching;
+﻿using Abp.Runtime.Caching;
 using Magicodes.Admin.Identity;
 using Magicodes.App.Application.Users;
 using Magicodes.App.Application.Users.Dto;
 using Shouldly;
+using System.Linq;
 using System.Threading.Tasks;
-using Abp.Domain.Uow;
-using Magicodes.Admin.Authorization.Users;
 using Xunit;
 
 namespace App.Tests.Users
@@ -16,8 +14,6 @@ namespace App.Tests.Users
         private readonly IUsersAppService _usersAppService;
         private readonly ICacheManager _cacheManager;
         private readonly ISmsVerificationCodeManager _smsVerificationCodeManager;
-        private readonly UserManager _userManager;
-        private readonly IUnitOfWorkManager _unitOfWorkManager;
 
         public Users_Tests()
         {
@@ -27,24 +23,28 @@ namespace App.Tests.Users
         }
 
         [Theory(DisplayName = "注册或登陆")]
-        [InlineData("Test", "Test", "9957fc0fa630436e821b9e087b76aaf4", (AppRegisterInput.FromEnum)0, "0f36dbb147c7478ebab94cd68a33202e", "Test")]
-        public async Task AppRegister_Test(string phone, string code, string openId, AppRegisterInput.FromEnum from, string unionId, string trueName)
+        [InlineData("1367197435x", "9957fc0fa630436e821b9e087b76aaf4", (AppRegisterInput.FromEnum)0, "0f36dbb147c7478ebab94cd68a33202e", "Test")]
+        public async Task AppRegisterOrLogin_Test(string phone, string openId, AppRegisterInput.FromEnum from, string unionId, string trueName)
         {
-            await _smsVerificationCodeManager.Create(phone, "Register");
+            var smsCode = await _smsVerificationCodeManager.Create(phone, "RegisterOrLogin");
 
-            var input = new AppRegisterInput()
+            await _smsVerificationCodeManager.VerifyCodeAndShowUserFriendlyException(phone, smsCode, "RegisterOrLogin");
+
+            var userInput = new AppRegisterInput()
             {
                 Phone = phone,
-                Code = code,
+                Code = smsCode,
                 OpenId = openId,
                 From = from,
                 UnionId = unionId,
                 TrueName = trueName,
             };
-            var output = await _usersAppService.AppRegisterOrLogin(input);
+            var output = await _usersAppService.AppRegisterOrLogin(userInput);
             output.ShouldNotBeNull();
 
-            var loginOutput = await _usersAppService.AppRegisterOrLogin(input);
+            userInput.Code = await _smsVerificationCodeManager.Create(phone, "RegisterOrLogin");
+            //验证登陆逻辑
+            var loginOutput = await _usersAppService.AppRegisterOrLogin(userInput);
             loginOutput.ShouldNotBeNull();
         }
 
@@ -62,27 +62,10 @@ namespace App.Tests.Users
             output.ShouldNotBeNull();
         }
 
-        [Theory(DisplayName = "发送验证码,注册,重置密码")]
-        [InlineData("18975060440", "1043", "9957fc0fa630436e821b9e087b76aaf4", (AppRegisterInput.FromEnum)0, "0f36dbb147c7478ebab94cd68a33202e", "Test")]
-        [UnitOfWork(IsDisabled = true)]
-        public async Task SendPasswordResetCode_Test(string phone, string code, string openId, AppRegisterInput.FromEnum from, string unionId, string trueName)
+        [Theory(DisplayName = "重置密码")]
+        [InlineData("13671974358")]
+        public async Task SendPasswordResetCode_Test(string phone)
         {
-            var smsCode = await _smsVerificationCodeManager.Create(phone, "Register");
-
-            await _smsVerificationCodeManager.VerifyCodeAndShowUserFriendlyException(phone, smsCode, "Register");
-
-            var userInput = new AppRegisterInput()
-            {
-                Phone = phone,
-                Code = smsCode,
-                OpenId = openId,
-                From = from,
-                UnionId = unionId,
-                TrueName = trueName,
-            };
-            var output = await _usersAppService.AppRegister(userInput);
-            output.ShouldNotBeNull();
-
             var input = new SendPasswordResetCodeInput()
             {
                 PhoneNumber = phone
@@ -90,29 +73,16 @@ namespace App.Tests.Users
 
             await _usersAppService.SendPasswordResetCode(input);
 
-            User user;
-            using (var unitOfWork =
-                _unitOfWorkManager.Begin(new UnitOfWorkOptions()))
+            var user = UsingDbContext(context => context.Users.FirstOrDefault(p => p.PhoneNumber == phone));
+
+            var reseInput = new ResetPasswordInput()
             {
-                user = _userManager.Users.FirstOrDefault(p => p.PhoneNumber == phone);
-                unitOfWork.Complete();
-            }
-
-
-            using (var unitOfWork =
-                _unitOfWorkManager.Begin(new UnitOfWorkOptions()))
-            {
-                var reseInput = new ResetPasswordInput()
-                {
-                    UserId = user.Id,
-                    ResetCode = user.PasswordResetCode,
-                    Password = "123456"
-                };
-
-                var reseUser = await _usersAppService.ResetPassword(reseInput);
-                reseUser.ShouldNotBeNull();
-                unitOfWork.Complete();
-            }
+                UserId = user.Id,
+                ResetCode = user.PasswordResetCode,
+                Password = "123456"
+            };
+            var reseUser = await _usersAppService.ResetPassword(reseInput);
+            reseUser.ShouldNotBeNull();
         }
     }
 }

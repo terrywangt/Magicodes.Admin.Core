@@ -123,9 +123,9 @@ namespace Magicodes.App.Application.Users
             var output = new AppRegisterOutput()
             {
             };
-            var user = _userManager.Users.FirstOrDefault(p => (p.PhoneNumber == phone));
             using (var unitOfWork = _unitOfWorkManager.Begin())
             {
+                var user = _userManager.Users.FirstOrDefault(p => (p.PhoneNumber == phone));
                 if (user != null)
                 {
                     await BindAndTokenAuth(openId, unionId, platform, output, user, unitOfWork);
