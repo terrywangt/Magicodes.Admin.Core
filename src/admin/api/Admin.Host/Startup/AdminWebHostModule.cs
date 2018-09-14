@@ -21,11 +21,13 @@ using Admin.Application.Custom;
 using Magicodes.Admin.Friendships;
 using Magicodes.Admin.Chat;
 using Magicodes.Unity;
+using Magicodes.Sms;
 
 namespace Magicodes.Admin.Web.Startup
 {
     [DependsOn(
         typeof(AdminApplicationModule),
+        typeof(SmsModule),
         typeof(AdminWebCoreModule),
         typeof(AdminAppModule),
         typeof(UnityModule)
@@ -62,7 +64,6 @@ namespace Magicodes.Admin.Web.Startup
                 .CreateControllersForAppServices(
                     typeof(AdminAppModule).GetAssembly(), "app"
                 );
-
         }
 
         public override void Initialize()

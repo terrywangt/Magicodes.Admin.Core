@@ -57,6 +57,7 @@
     <Folder Include="wwwroot\Plugins\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\unity\Magicodes.Sms\Magicodes.Sms.csproj" />
     <ProjectReference Include="..\..\..\unity\Magicodes.Unity\Magicodes.Unity.csproj" />
     <ProjectReference Include="..\Admin.Application.Custom\Admin.Application.Custom.csproj" />
     <ProjectReference Include="..\Admin.Application\Admin.Application.csproj" />

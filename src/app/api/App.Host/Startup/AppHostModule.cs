@@ -13,22 +13,19 @@ using App.Host.Configuration;
 using Magicodes.Admin;
 using Magicodes.Admin.Configuration;
 using Magicodes.Admin.EntityFrameworkCore;
-using Magicodes.Admin.Web;
 using Magicodes.App.Application;
+using Magicodes.Sms;
 using Magicodes.Unity;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-
-//using Magicodes.Admin.App;
-
-//using Magicodes.App.Application;
 
 namespace App.Host.Startup
 {
     [DependsOn(
         typeof(AdminEntityFrameworkCoreModule),
         typeof(AbpAspNetZeroCoreWebModule),
+        typeof(SmsModule),
         typeof(AdminCoreModule),
         typeof(AppApplicationModule),
         typeof(UnityModule)
