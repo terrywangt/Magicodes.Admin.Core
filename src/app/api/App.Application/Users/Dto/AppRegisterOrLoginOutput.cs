@@ -3,10 +3,10 @@
 //           Copyright (C) 2018-2020 湖南心莱信息科技有限公司    
 //           All rights reserved
 //   
-//           filename : AppLanguageTextListDto.cs
+//           filename : AppRegisterOrLoginOutput.cs
 //           description :
 //   
-//           created by 雪雁 at  2018-09-04 10:16
+//           created by 雪雁 at  2018-07-30 10:04
 //           Mail: wenqiang.li@xin-lai.com
 //           QQ群：85318032（技术交流）
 //           Blog：http://www.cnblogs.com/codelove/
@@ -15,21 +15,31 @@
 //   
 // ======================================================================
 
-namespace Magicodes.App.Application.Localization.Dto
+namespace Magicodes.App.Application.Users.Dto
 {
     /// <summary>
-    ///     APP语言列表对象
+    ///     注册 输出参数
     /// </summary>
-    public class AppLanguageTextListDto
+    public class AppRegisterOrLoginOutput
     {
         /// <summary>
-        ///     语言key
+        ///     用户Id
         /// </summary>
-        public string Key { get; set; }
+        public long UserId { get; set; }
 
         /// <summary>
-        ///     当前语言值（默认使用用户当前定义的语言）
+        ///     手机号码
         /// </summary>
-        public string Value { get; set; }
+        public string Phone { get; set; }
+
+        /// <summary>
+        ///     访问AccessToken
+        /// </summary>
+        public string AccessToken { get; set; }
+
+        /// <summary>
+        ///     过期时间
+        /// </summary>
+        public int ExpireInSeconds { get; set; }
     }
 }

@@ -22,15 +22,15 @@ namespace App.Tests.Users
             _smsVerificationCodeManager = Resolve<ISmsVerificationCodeManager>();
         }
 
-        [Theory(DisplayName = "注册或登陆")]
-        [InlineData("1367197435x", "9957fc0fa630436e821b9e087b76aaf4", (AppRegisterInput.FromEnum)0, "0f36dbb147c7478ebab94cd68a33202e", "Test")]
-        public async Task AppRegisterOrLogin_Test(string phone, string openId, AppRegisterInput.FromEnum from, string unionId, string trueName)
+        [Theory(DisplayName = "注册")]
+        [InlineData("1367197435x", "9957fc0fa630436e821b9e087b76aaf4", (AppRegisterOrLoginInput.FromEnum)0, "0f36dbb147c7478ebab94cd68a33202e", "Test")]
+        public async Task AppRegister_Test(string phone, string openId, AppRegisterOrLoginInput.FromEnum from, string unionId, string trueName)
         {
             var smsCode = await _smsVerificationCodeManager.Create(phone, "RegisterOrLogin");
 
             await _smsVerificationCodeManager.VerifyCodeAndShowUserFriendlyException(phone, smsCode, "RegisterOrLogin");
 
-            var userInput = new AppRegisterInput()
+            var userInput = new AppRegisterOrLoginInput()
             {
                 Phone = phone,
                 Code = smsCode,
@@ -41,8 +41,25 @@ namespace App.Tests.Users
             };
             var output = await _usersAppService.AppRegisterOrLogin(userInput);
             output.ShouldNotBeNull();
+        }
 
-            userInput.Code = await _smsVerificationCodeManager.Create(phone, "RegisterOrLogin");
+        [Theory(DisplayName = "登陆")]
+        [InlineData("13671974358", "9957fc0fa630436e821b9e087b76aaf4", null, null)]
+        [InlineData("13671974358", "9957fc0fa630436e821b9e087b76aaf4", (AppRegisterOrLoginInput.FromEnum)0, "0f36dbb147c7478ebab94cd68a33202e")]
+        public async Task AppLogin_Test(string phone, string openId, AppRegisterOrLoginInput.FromEnum? from, string unionId)
+        {
+            var smsCode = await _smsVerificationCodeManager.Create(phone, "RegisterOrLogin");
+
+            await _smsVerificationCodeManager.VerifyCodeAndShowUserFriendlyException(phone, smsCode, "RegisterOrLogin");
+
+            var userInput = new AppRegisterOrLoginInput()
+            {
+                Phone = phone,
+                Code = smsCode,
+                OpenId = openId,
+                From = from,
+                UnionId = unionId,
+            };
             //验证登陆逻辑
             var loginOutput = await _usersAppService.AppRegisterOrLogin(userInput);
             loginOutput.ShouldNotBeNull();
