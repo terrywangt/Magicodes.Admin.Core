@@ -52,7 +52,6 @@ namespace Magicodes.App.Application.SmSCode
             // 验证码长度为4，60s内不得重复发送。
             // 验证码10分钟内有效。
             //------------------------------------------------------
-            GetUserByChecking(input.PhoneNumber);
 
             await _smsVerificationCodeManager.CreateAndSendVerificationMessage(input.PhoneNumber, input.SmsCodeType.ToString(), 60, Clock.Now.AddMinutes(10));
         }

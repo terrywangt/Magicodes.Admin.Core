@@ -89,7 +89,7 @@ namespace Magicodes.App.Application.Users
                 {
                     throw new UserFriendlyException("短信验证码不正确或已过期!");
                 }
-               
+
                 if (_userManager.Users.Any(p => (p.PhoneNumber == input.Phone)))
                 {
                     throw new UserFriendlyException("该手机号码已被注册！");

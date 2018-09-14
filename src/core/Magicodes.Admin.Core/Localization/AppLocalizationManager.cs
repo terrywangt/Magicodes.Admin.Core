@@ -10,10 +10,11 @@ namespace Magicodes.Admin.Localization
     /// </summary>
     public class AppLocalizationManager : IAppLocalizationManager, ITransientDependency
     {
-        protected AppLocalizationManager()
+        public AppLocalizationManager()
         {
             LocalizationManager = NullLocalizationManager.Instance;
         }
+        
 
         private ILocalizationSource _localizationSource;
         public ILocalizationManager LocalizationManager { get; set; }

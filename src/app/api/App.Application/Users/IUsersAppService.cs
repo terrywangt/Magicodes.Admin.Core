@@ -29,5 +29,19 @@ namespace Magicodes.App.Application.Users
         /// <param name="input"></param>
         /// <returns></returns>
         Task<AppTokenAuthOutput> AppTokenAuth(AppTokenAuthInput input);
+
+        /// <summary>
+        /// 获取密码重置Code
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        Task SendPasswordResetCode(SendPasswordResetCodeInput input);
+
+        /// <summary>
+        /// 重置密码
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        Task<ResetPasswordOutput> ResetPassword(ResetPasswordInput input);
     }
 }
