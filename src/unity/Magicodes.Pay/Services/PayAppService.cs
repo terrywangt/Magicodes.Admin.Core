@@ -34,17 +34,13 @@ namespace Magicodes.Pay.Services
     [Route("api/[controller]")]
     public class PayAppService : IPayAppService
     {
-        private readonly IAlipayAppService _alipayAppService;
         private readonly IClientInfoProvider _clientInfoProvider;
-        private readonly WeChatPayApi _weChatPayApi;
 
-        public PayAppService(WeChatPayApi weChatPayApi, IAlipayAppService alipayAppService,
-            IClientInfoProvider clientInfoProvider)
-        {
-            _weChatPayApi = weChatPayApi;
-            _alipayAppService = alipayAppService;
-            _clientInfoProvider = clientInfoProvider;
-        }
+        public PayAppService(IClientInfoProvider clientInfoProvider) => _clientInfoProvider = clientInfoProvider;
+
+        public WeChatPayApi WeChatPayApi { get; set; }
+
+        public IAlipayAppService AlipayAppService { get; set; }
 
         /// <summary>
         ///     支付宝APP支付
@@ -54,6 +50,10 @@ namespace Magicodes.Pay.Services
         [HttpPost("AppPay/Alipay")]
         public async Task<string> AliAppPay(AppPayInput input)
         {
+            if (AlipayAppService == null)
+            {
+                throw new UserFriendlyException("支付未开放，请联系管理员！");
+            }
             var appPayInput = new Alipay.Dto.AppPayInput
             {
                 Body = input.Body,
@@ -63,7 +63,7 @@ namespace Magicodes.Pay.Services
             };
             try
             {
-                var appPayOutput = await _alipayAppService.AppPay(appPayInput);
+                var appPayOutput = await AlipayAppService.AppPay(appPayInput);
                 return appPayOutput.Response.Body;
             }
             catch (Exception ex)
@@ -80,6 +80,10 @@ namespace Magicodes.Pay.Services
         [HttpPost("AppPay/WeChat")]
         public Task<AppPayOutput> WeChatAppPay(AppPayInput input)
         {
+            if (WeChatPayApi == null)
+            {
+                throw new UserFriendlyException("支付未开放，请联系管理员！");
+            }
             var appPayInput = new WeChat.Pay.Dto.AppPayInput
             {
                 Body = input.Body,
@@ -89,7 +93,7 @@ namespace Magicodes.Pay.Services
             };
             try
             {
-                var appPayOutput = _weChatPayApi.AppPay(appPayInput);
+                var appPayOutput = WeChatPayApi.AppPay(appPayInput);
                 return Task.FromResult(appPayOutput);
             }
             catch (Exception ex)

@@ -48,7 +48,6 @@ namespace Magicodes.Pay
         }
         public override void PostInitialize()
         {
-
             ISettingManager settingManager = IocManager.Resolve<ISettingManager>();
 
             var appConfiguration = IocManager.Resolve<IAppConfigurationAccessor>().Configuration;
@@ -56,10 +55,6 @@ namespace Magicodes.Pay
             PayStartup.ConfigAsync(Logger, IocManager, appConfiguration, settingManager).Wait();
             //注册支付回调控制器
             IocManager.Register<PayNotifyController>(DependencyLifeStyle.Transient);
-            //注册微信支付API
-            IocManager.Register<WeChatPayApi>(DependencyLifeStyle.Transient);
-            //注册支付宝支付API
-            IocManager.Register<IAlipayAppService, AlipayAppService>(DependencyLifeStyle.Transient);
         }
     }
 }

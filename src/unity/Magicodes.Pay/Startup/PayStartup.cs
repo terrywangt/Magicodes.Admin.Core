@@ -83,6 +83,9 @@ namespace Magicodes.Pay.Startup
                     //设置日志记录
                     .WithLoggerAction(LogAction)
                     .RegisterGetPayConfigFunc(() => weChatPayConfig).Build();
+
+                //注册微信支付API
+                iocManager.Register<WeChatPayApi>(DependencyLifeStyle.Transient);
             }
             #endregion
 
@@ -151,6 +154,9 @@ namespace Magicodes.Pay.Startup
                 AlipayBuilder.Create()
                     .WithLoggerAction(LogAction)
                     .RegisterGetPayConfigFunc(() => alipaySettings).Build();
+
+                //注册支付宝支付API
+                iocManager.Register<IAlipayAppService, AlipayAppService>(DependencyLifeStyle.Transient);
             }
             #endregion
 
