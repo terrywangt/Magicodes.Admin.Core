@@ -1,4 +1,4 @@
-# Magicodes.Admin.Core
+# Magicodes.Admin
 
 >加群 85318032 获取最新动态和文档。
 
@@ -53,7 +53,7 @@ Magicodes.Admin，是一套高效率、易扩展、基础设施强大、代码�
 * **一键部署（后台服务、前台服务、后台前端）**
 * **接口调用代码生成（nswag，后台前端和移动端前端）**
 * **升级工具**
-* **配套项目/产品开发流程（<https://gitee.com/xl_wenqiang/xinlai_devprocess/blob/master/1.%E6%80%BB%E4%BD%93%E8%AF%B4%E6%98%8E.md>）**
+* **配套项目/产品开发流程（<https://gitee.com/xl_wenqiang/xinlai_devprocess>）**
 
 加群 **85318032** 获取最新动态和文档。
 
