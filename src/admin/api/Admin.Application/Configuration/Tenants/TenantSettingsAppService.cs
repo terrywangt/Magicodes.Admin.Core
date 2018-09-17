@@ -172,7 +172,10 @@ namespace Magicodes.Admin.Configuration.Tenants
             {
                 LegalName = await SettingManager.GetSettingValueAsync(AppSettings.TenantManagement.BillingLegalName),
                 Address = await SettingManager.GetSettingValueAsync(AppSettings.TenantManagement.BillingAddress),
-                TaxVatNo = await SettingManager.GetSettingValueAsync(AppSettings.TenantManagement.BillingTaxVatNo)
+                TaxNumber = await SettingManager.GetSettingValueAsync(AppSettings.TenantManagement.BillingTaxNumber),
+                BankAccount = await SettingManager.GetSettingValueAsync(AppSettings.TenantManagement.BillingBankAccount),
+                Bank = await SettingManager.GetSettingValueAsync(AppSettings.TenantManagement.BillingBank),
+                Contact = await SettingManager.GetSettingValueAsync(AppSettings.TenantManagement.BillingContact),
             };
         }
 
@@ -258,7 +261,10 @@ namespace Magicodes.Admin.Configuration.Tenants
         {
             await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(),AppSettings.TenantManagement.BillingLegalName, input.LegalName);
             await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(),AppSettings.TenantManagement.BillingAddress, input.Address);
-            await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(),AppSettings.TenantManagement.BillingTaxVatNo, input.TaxVatNo);
+            await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), AppSettings.TenantManagement.BillingTaxNumber, input.TaxNumber);
+            await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), AppSettings.TenantManagement.BillingContact, input.Contact);
+            await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), AppSettings.TenantManagement.BillingBank, input.Bank);
+            await SettingManager.ChangeSettingForTenantAsync(AbpSession.GetTenantId(), AppSettings.TenantManagement.BillingBankAccount, input.BankAccount);
 
         }
 

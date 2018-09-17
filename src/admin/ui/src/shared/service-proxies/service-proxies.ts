@@ -15968,10 +15968,10 @@ export interface ISecuritySettingsEditDto {
 export class HostBillingSettingsEditDto implements IHostBillingSettingsEditDto {
     legalName!: string | undefined;
     address!: string | undefined;
-    dutyparagraph!: string | undefined;
-    phone!: string | undefined;
-    account!: string | undefined;
-    openingbank!: string | undefined;
+    taxNumber!: string | undefined;
+    contact!: string | undefined;
+    bankAccount!: string | undefined;
+    bank!: string | undefined;
 
     constructor(data?: IHostBillingSettingsEditDto) {
         if (data) {
@@ -15986,10 +15986,10 @@ export class HostBillingSettingsEditDto implements IHostBillingSettingsEditDto {
         if (data) {
             this.legalName = data["legalName"];
             this.address = data["address"];
-            this.dutyparagraph = data["dutyparagraph"];
-            this.phone = data["phone"];
-            this.account = data["account"];
-            this.openingbank = data["openingbank"];
+            this.taxNumber = data["taxNumber"];
+            this.contact = data["contact"];
+            this.bankAccount = data["bankAccount"];
+            this.bank = data["bank"];
         }
     }
 
@@ -16004,10 +16004,10 @@ export class HostBillingSettingsEditDto implements IHostBillingSettingsEditDto {
         data = typeof data === 'object' ? data : {};
         data["legalName"] = this.legalName;
         data["address"] = this.address;
-        data["dutyparagraph"] = this.dutyparagraph;
-        data["phone"] = this.phone;
-        data["account"] = this.account;
-        data["openingbank"] = this.openingbank;
+        data["taxNumber"] = this.taxNumber;
+        data["contact"] = this.contact;
+        data["bankAccount"] = this.bankAccount;
+        data["bank"] = this.bank;
         return data; 
     }
 }
@@ -16015,10 +16015,10 @@ export class HostBillingSettingsEditDto implements IHostBillingSettingsEditDto {
 export interface IHostBillingSettingsEditDto {
     legalName: string | undefined;
     address: string | undefined;
-    dutyparagraph: string | undefined;
-    phone: string | undefined;
-    account: string | undefined;
-    openingbank: string | undefined;
+    taxNumber: string | undefined;
+    contact: string | undefined;
+    bankAccount: string | undefined;
+    bank: string | undefined;
 }
 
 export class PasswordComplexitySetting implements IPasswordComplexitySetting {
@@ -16404,7 +16404,10 @@ export class InvoiceDto implements IInvoiceDto {
     invoiceDate!: moment.Moment | undefined;
     tenantLegalName!: string | undefined;
     tenantAddress!: string[] | undefined;
-    tenantTaxNo!: string | undefined;
+    taxNumber!: string | undefined;
+    contact!: string | undefined;
+    bankAccount!: string | undefined;
+    bank!: string | undefined;
     hostLegalName!: string | undefined;
     hostAddress!: string[] | undefined;
 
@@ -16429,7 +16432,10 @@ export class InvoiceDto implements IInvoiceDto {
                 for (let item of data["tenantAddress"])
                     this.tenantAddress.push(item);
             }
-            this.tenantTaxNo = data["tenantTaxNo"];
+            this.taxNumber = data["taxNumber"];
+            this.contact = data["contact"];
+            this.bankAccount = data["bankAccount"];
+            this.bank = data["bank"];
             this.hostLegalName = data["hostLegalName"];
             if (data["hostAddress"] && data["hostAddress"].constructor === Array) {
                 this.hostAddress = [];
@@ -16458,7 +16464,10 @@ export class InvoiceDto implements IInvoiceDto {
             for (let item of this.tenantAddress)
                 data["tenantAddress"].push(item);
         }
-        data["tenantTaxNo"] = this.tenantTaxNo;
+        data["taxNumber"] = this.taxNumber;
+        data["contact"] = this.contact;
+        data["bankAccount"] = this.bankAccount;
+        data["bank"] = this.bank;
         data["hostLegalName"] = this.hostLegalName;
         if (this.hostAddress && this.hostAddress.constructor === Array) {
             data["hostAddress"] = [];
@@ -16476,7 +16485,10 @@ export interface IInvoiceDto {
     invoiceDate: moment.Moment | undefined;
     tenantLegalName: string | undefined;
     tenantAddress: string[] | undefined;
-    tenantTaxNo: string | undefined;
+    taxNumber: string | undefined;
+    contact: string | undefined;
+    bankAccount: string | undefined;
+    bank: string | undefined;
     hostLegalName: string | undefined;
     hostAddress: string[] | undefined;
 }
@@ -21026,7 +21038,10 @@ export interface ILdapSettingsEditDto {
 export class TenantBillingSettingsEditDto implements ITenantBillingSettingsEditDto {
     legalName!: string | undefined;
     address!: string | undefined;
-    taxVatNo!: string | undefined;
+    taxNumber!: string | undefined;
+    contact!: string | undefined;
+    bankAccount!: string | undefined;
+    bank!: string | undefined;
 
     constructor(data?: ITenantBillingSettingsEditDto) {
         if (data) {
@@ -21041,7 +21056,10 @@ export class TenantBillingSettingsEditDto implements ITenantBillingSettingsEditD
         if (data) {
             this.legalName = data["legalName"];
             this.address = data["address"];
-            this.taxVatNo = data["taxVatNo"];
+            this.taxNumber = data["taxNumber"];
+            this.contact = data["contact"];
+            this.bankAccount = data["bankAccount"];
+            this.bank = data["bank"];
         }
     }
 
@@ -21056,7 +21074,10 @@ export class TenantBillingSettingsEditDto implements ITenantBillingSettingsEditD
         data = typeof data === 'object' ? data : {};
         data["legalName"] = this.legalName;
         data["address"] = this.address;
-        data["taxVatNo"] = this.taxVatNo;
+        data["taxNumber"] = this.taxNumber;
+        data["contact"] = this.contact;
+        data["bankAccount"] = this.bankAccount;
+        data["bank"] = this.bank;
         return data; 
     }
 }
@@ -21064,7 +21085,10 @@ export class TenantBillingSettingsEditDto implements ITenantBillingSettingsEditD
 export interface ITenantBillingSettingsEditDto {
     legalName: string | undefined;
     address: string | undefined;
-    taxVatNo: string | undefined;
+    taxNumber: string | undefined;
+    contact: string | undefined;
+    bankAccount: string | undefined;
+    bank: string | undefined;
 }
 
 export class ListResultDtoOfNameValueDto implements IListResultDtoOfNameValueDto {

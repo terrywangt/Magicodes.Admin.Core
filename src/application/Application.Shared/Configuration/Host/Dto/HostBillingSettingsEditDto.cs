@@ -14,20 +14,20 @@ namespace Magicodes.Admin.Configuration.Host.Dto
         /// <summary>
         /// 税号
         /// </summary>
-        public string Dutyparagraph { get; set; }
+        public string TaxNumber { get; set; }
 
         /// <summary>
-        /// 电话
+        /// 联系方式
         /// </summary>
-        public string Phone { get; set; }
+        public string Contact { get; set; }
         /// <summary>
-        /// 账户
+        /// 银行账户
         /// </summary>
-        public  string Account { get; set; }
+        public  string BankAccount { get; set; }
         /// <summary>
         /// 开户行
         /// </summary>
-        public string Openingbank { get; set; }
+        public string Bank { get; set; }
 
 
     }
