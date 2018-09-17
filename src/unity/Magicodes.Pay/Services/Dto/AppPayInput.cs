@@ -34,7 +34,6 @@ namespace Magicodes.Pay.Services.Dto
 
         /// <summary>订单总金额，单位为元，精确到小数点后两位，取值范围[0.01,100000000]</summary>
         [Required]
-        [MaxLength(9)]
         [Range(0.01, 100000000.0)]
         public decimal TotalAmount { get; set; }
     }
