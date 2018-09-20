@@ -45,6 +45,8 @@
 
         public const string Pages_Administration_SmsCode_Settings = "Pages.Administration.SmsCode.Settings";
 
+        public const string Pages_Administration_Storage_Settings = "Pages.Administration.Storage.Settings";
+
         //TENANT-SPECIFIC PERMISSIONS
 
         public const string Pages_Tenant_Dashboard = "Pages.Tenant.Dashboard";

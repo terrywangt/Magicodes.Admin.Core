@@ -1,11 +1,14 @@
-﻿using System.IO;
+﻿using Abp.Configuration;
 using Abp.Extensions;
 using Abp.UI;
+using Castle.Core.Logging;
 using Magicodes.Admin.Configuration;
 using Magicodes.Storage.AliyunOss.Core;
 using Magicodes.Storage.Core;
 using Magicodes.Storage.Local.Core;
 using Microsoft.AspNetCore.Hosting;
+using System;
+using System.IO;
 
 namespace Magicodes.Unity.Storage
 {
@@ -14,11 +17,20 @@ namespace Magicodes.Unity.Storage
     {
         private readonly IAppConfigurationAccessor _appConfiguration;
         private readonly IHostingEnvironment _env;
+        private readonly ISettingManager _settingManager;
 
-        public StorageManager(IAppConfigurationAccessor appConfiguration, IHostingEnvironment env)
+        public ILogger Logger { get; set; }
+
+        public StorageManager()
+        {
+            Logger = NullLogger.Instance;
+        }
+
+        public StorageManager(IAppConfigurationAccessor appConfiguration, IHostingEnvironment env, ISettingManager settingManager)
         {
             _appConfiguration = appConfiguration;
             _env = env;
+            _settingManager = settingManager;
         }
 
         /// <inheritdoc />
@@ -30,6 +42,15 @@ namespace Magicodes.Unity.Storage
         /// </summary>
         public void Initialize()
         {
+            //日志函数
+            void LogAction(string tag, string message)
+            {
+                if (tag.Equals("error", StringComparison.CurrentCultureIgnoreCase))
+                    Logger.Error(message);
+                else
+                    Logger.Debug(message);
+            }
+
             #region 配置存储程序
             switch (_appConfiguration.Configuration["StorageProvider:Type"])
             {
@@ -48,31 +69,39 @@ namespace Magicodes.Unity.Storage
                     }
                 case "AliyunOssStorageProvider":
                     {
-                        var accessKeyId =
-                            _appConfiguration.Configuration["StorageProvider:AliyunOssStorageProvider:AccessKeyId"];
-                        var accessKeySecret =
-                            _appConfiguration.Configuration["StorageProvider:AliyunOssStorageProvider:AccessKeySecret"];
-                        var endpoint =
-                            _appConfiguration.Configuration["StorageProvider:AliyunOssStorageProvider:Endpoint"];
-                        if (accessKeyId.IsNullOrWhiteSpace())
+                        AliyunOssConfig aliyunOssConfig = null;
+
+                        if (Convert.ToBoolean(_settingManager.GetSettingValueAsync(AppSettings.AliStorageManagement.IsEnabled).Result))
+                        {
+                            aliyunOssConfig = new AliyunOssConfig() {
+                                AccessKeyId =  _settingManager.GetSettingValueAsync(AppSettings.AliStorageManagement.AccessKeyId).Result,
+                                AccessKeySecret = _settingManager.GetSettingValueAsync(AppSettings.AliStorageManagement.AccessKeySecret).Result,
+                                Endpoint = _settingManager.GetSettingValueAsync(AppSettings.AliStorageManagement.EndPoint).Result
+                            };
+                        }
+                        else
+                        {
+                            aliyunOssConfig = new AliyunOssConfig()
+                            {
+                                AccessKeyId = _appConfiguration.Configuration["StorageProvider:AliyunOssStorageProvider:AccessKeyId"],
+                                AccessKeySecret = _appConfiguration.Configuration["StorageProvider:AliyunOssStorageProvider:AccessKeySecret"],
+                                Endpoint = _appConfiguration.Configuration["StorageProvider:AliyunOssStorageProvider:Endpoint"]
+                            };
+                        }
+
+                        if (aliyunOssConfig.AccessKeyId.IsNullOrWhiteSpace())
                         {
                             throw new UserFriendlyException("AliyunOssStorageProvider accessKeyId is null!");
                         }
-                        if (accessKeySecret.IsNullOrWhiteSpace())
+                        if (aliyunOssConfig.AccessKeySecret.IsNullOrWhiteSpace())
                         {
                             throw new UserFriendlyException("AliyunOssStorageProvider accessKeySecret is null!");
                         }
-                        if (endpoint.IsNullOrWhiteSpace())
+                        if (aliyunOssConfig.Endpoint.IsNullOrWhiteSpace())
                         {
                             throw new UserFriendlyException("AliyunOssStorageProvider endpoint is null!");
                         }
 
-                        var aliyunOssConfig = new AliyunOssConfig
-                        {
-                            AccessKeyId = accessKeyId,
-                            AccessKeySecret = accessKeySecret,
-                            Endpoint = endpoint
-                        };
                         StorageProvider = new AliyunOssStorageProvider(aliyunOssConfig);
                         break;
                     }

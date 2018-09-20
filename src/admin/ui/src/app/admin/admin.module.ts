@@ -73,8 +73,10 @@ import { ArticleSourceInfosComponent } from './articleSourceInfos/articleSourceI
 import { CreateOrEditArticleSourceInfoModalComponent } from './articleSourceInfos/create-or-edit-articleSourceInfo-modal.component';
 import { ColumnInfosComponent } from './columnInfos/columnInfo.component';
 import { CreateOrEditColumnInfoModalComponent } from './columnInfos/create-or-edit-columnInfo-modal.component';
-
-
+import { StorageSettingsComponent } from './settings/Storage-settings.component';
+import { TransactionLogsComponent } from './transactionLogs/transactionLog.component';
+import { CreateOrEditTransactionLogModalComponent } from './transactionLogs/create-or-edit-transactionLog-modal.component';
+import { ColumnInfoTreeSelectComponent } from './appComponents/columnInfoTreeSelect/columnInfo-tree-select.component';
 @NgModule({
     imports: [
         FormsModule,
@@ -122,6 +124,7 @@ import { CreateOrEditColumnInfoModalComponent } from './columnInfos/create-or-ed
         HostSettingsComponent,
         PaySettingsComponent,
         SmsCodeSettingsComponent,
+        StorageSettingsComponent,
         InstallComponent,
         MaintenanceComponent,
         EditionsComponent,
@@ -152,6 +155,11 @@ import { CreateOrEditColumnInfoModalComponent } from './columnInfos/create-or-ed
         DemoUiInputMaskComponent,
         DemoUiEditorComponent,
         UiCustomizationComponent,
+
+        
+        TransactionLogsComponent,
+        CreateOrEditTransactionLogModalComponent,
+		ColumnInfoTreeSelectComponent,
         ArticleInfoArticleTagInfoComponent,
         ArticleInfoArticleTagInfoCreateOrEditModalComponent,
 

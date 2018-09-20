@@ -1,0 +1,123 @@
+﻿<div bsModal #createOrEditModal="bs-modal" (onShown)="onShown()" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createOrEditModal"
+     aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+
+        <div class="modal-content">
+            <form *ngIf="active" #transactionLogForm="ngForm" novalidate (ngSubmit)="save()">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <span *ngIf="formModel.id">{{l("Edit")}}</span>
+                        <span *ngIf="!formModel.id">{{l("Create")}}</span>
+                    </h5>
+                    <button type="button" class="close" (click)="close()" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="row">
+					<div class="form-group form-md-line-input form-md-floating-label no-hint col-xl-6">
+						<label>{{l("Amount")}} *</label>
+						<input autofocus class="form-control" type="number" name="Amount" 
+						[ngClass]="{'edited': formModel.amount}" 
+						[(ngModel)]="formModel.amount" 
+						[required]="true"
+                        
+						maxlength=""
+						minlength=""
+						>
+					</div>
+					<div class="form-group form-md-line-input form-md-floating-label no-hint col-xl-6">
+						<label>{{l("ClientIpAddress")}} </label>
+						<input  class="form-control" type="text" name="ClientIpAddress" 
+						[ngClass]="{'edited': formModel.clientIpAddress}" 
+						[(ngModel)]="formModel.clientIpAddress" 
+						[required]="false"
+                        
+						maxlength="64"
+						minlength=""
+						>
+					</div>
+					<div class="form-group form-md-line-input form-md-floating-label no-hint col-xl-6">
+						<label>{{l("ClientName")}} </label>
+						<input  class="form-control" type="text" name="ClientName" 
+						[ngClass]="{'edited': formModel.clientName}" 
+						[(ngModel)]="formModel.clientName" 
+						[required]="false"
+                        
+						maxlength="128"
+						minlength=""
+						>
+					</div>
+					<div class="form-group form-md-line-input form-md-floating-label no-hint col-xl-6" style="margin-top: 35px;">
+                         <label class="m-checkbox">
+                             <input  id="EditTransactionLog_IsFreeze" type="checkbox" name="IsFreeze" 
+							 [(ngModel)]="formModel.isFreeze"
+							 [required]="false"
+							 >
+                             {{l("IsFreeze")}} 
+                             <span></span>
+                         </label>                         
+                    </div>
+					<div class="form-group form-md-line-input form-md-floating-label no-hint col-xl-6">
+						<label>{{l("PayChannel")}} *</label>
+						<enum-combo [(selectedValue)]="formModel.payChannel" fullName="Magicodes.Admin.Core.Custom.LogInfos.PayChannels"></enum-combo>
+					</div>
+					<div class="form-group form-md-line-input form-md-floating-label no-hint col-xl-6">
+						<label>{{l("Terminal")}} *</label>
+						<enum-combo [(selectedValue)]="formModel.terminal" fullName="Magicodes.Admin.Core.Custom.LogInfos.Terminals"></enum-combo>
+					</div>
+					<div class="form-group form-md-line-input form-md-floating-label no-hint col-xl-6">
+						<label>{{l("TransactionState")}} *</label>
+						<enum-combo [(selectedValue)]="formModel.transactionState" fullName="Magicodes.Admin.Core.Custom.LogInfos.TransactionStates"></enum-combo>
+					</div>
+					<div class="form-group form-md-line-input form-md-floating-label no-hint col-xl-6">
+						<label>{{l("CustomData")}} </label>
+						<input  class="form-control" type="text" name="CustomData" 
+						[ngClass]="{'edited': formModel.customData}" 
+						[(ngModel)]="formModel.customData" 
+						[required]="false"
+                        
+						maxlength="500"
+						minlength=""
+						>
+					</div>
+					<div class="form-group form-md-line-input form-md-floating-label no-hint col-xl-6">
+						<label>{{l("OutTradeNo")}} </label>
+						<input  class="form-control" type="text" name="OutTradeNo" 
+						[ngClass]="{'edited': formModel.outTradeNo}" 
+						[(ngModel)]="formModel.outTradeNo" 
+						[required]="false"
+                        
+						maxlength="50"
+						minlength=""
+						>
+					</div>
+					<div class="form-group form-md-line-input form-md-floating-label no-hint col-xl-6">
+					   <label>{{l("PayTime")}} </label>
+                       <input  type="datetime" #PayTimeDatePicker name="PayTimeDatePicker" class="form-control"
+					   [required]="false"
+					   [ngClass]="{'edited': formModel.payTime}"
+					   >
+                    </div>
+					<div class="form-group form-md-line-input form-md-floating-label no-hint col-xl-6">
+						<label>{{l("Exception")}} </label>
+						<input  class="form-control" type="text" name="Exception" 
+						[ngClass]="{'edited': formModel.exception}" 
+						[(ngModel)]="formModel.exception" 
+						[required]="false"
+                        
+						maxlength="2000"
+						minlength=""
+						>
+					</div>
+                    </div>
+				</div>
+				<div class="modal-footer">
+                    <button type="button" [disabled]="saving" class="btn btn-secondary" (click)="close()">{{l("Cancel")}}</button>
+                    <button type="submit" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')" [disabled]="!transactionLogForm.form.valid" class="btn btn-primary"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

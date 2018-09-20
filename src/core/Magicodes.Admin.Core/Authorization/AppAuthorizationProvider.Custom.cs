@@ -17,8 +17,15 @@ namespace Magicodes.Admin.Authorization
         public void SetCustomPermissions(Permission root)
         {
 
+            #region TransactionLog【交易日志】
+            var transactionLog = root.CreateChildPermission(AppPermissions.Pages_TransactionLog, L("TransactionLog"));
+            transactionLog.CreateChildPermission(AppPermissions.Pages_TransactionLog_Create, L("CreateNew"));
+            transactionLog.CreateChildPermission(AppPermissions.Pages_TransactionLog_Edit, L("Edit"));
+            transactionLog.CreateChildPermission(AppPermissions.Pages_TransactionLog_Delete, L("Delete"));
+            transactionLog.CreateChildPermission(AppPermissions.Pages_TransactionLog_Restore, L("Restore"));
+            #endregion
 
-			#region ArticleInfo_ArticleTagInfos【文章标签】
+            #region ArticleInfo_ArticleTagInfos【文章标签】
             var articleInfo_articleTagInfos = root.CreateChildPermission(AppPermissions.Pages_ArticleInfo_ArticleTagInfo, L("ArticleTagInfos"));
             articleInfo_articleTagInfos.CreateChildPermission(AppPermissions.Pages_ArticleInfo_ArticleTagInfo_Create, L("CreateNew"));
             articleInfo_articleTagInfos.CreateChildPermission(AppPermissions.Pages_ArticleInfo_ArticleTagInfo_Edit, L("Edit"));

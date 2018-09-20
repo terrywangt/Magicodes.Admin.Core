@@ -8,8 +8,21 @@ namespace Magicodes.Admin.Authorization
     /// </summary>
     public partial class AppPermissions
     {
+        #region TransactionLog【交易日志】
 
-		#region ArticleTagInfos【文章标签】
+        public const string Pages_TransactionLog = "Pages.TransactionLog";
+
+        public const string Pages_TransactionLog_Create = "Pages.TransactionLog.Create";
+
+        public const string Pages_TransactionLog_Edit = "Pages.TransactionLog.Edit";
+
+        public const string Pages_TransactionLog_Delete = "Pages.TransactionLog.Delete";
+
+        public const string Pages_TransactionLog_Restore = "Pages.TransactionLog.Restore";
+
+        #endregion
+
+        #region ArticleTagInfos【文章标签】
 
         public const string Pages_ArticleInfo_ArticleTagInfo = "Pages.ArticleInfo.ArticleTagInfo";
 
