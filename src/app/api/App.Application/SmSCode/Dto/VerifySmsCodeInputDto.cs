@@ -24,14 +24,9 @@ namespace Magicodes.App.Application.SmSCode.Dto
         public enum SmsCodeTypeEnum
         {
             /// <summary>
-            ///     注册
+            ///     注册或登陆
             /// </summary>
-            Register = 0,
-
-            /// <summary>
-            ///     登陆
-            /// </summary>
-            Login = 1
+            RegisterOrLogin = 0
         }
 
         /// <summary>
