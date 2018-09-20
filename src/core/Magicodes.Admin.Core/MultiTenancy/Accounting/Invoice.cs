@@ -15,7 +15,7 @@ namespace Magicodes.Admin.MultiTenancy.Accounting
 
         public string TenantAddress { get; set; }
 
-        public string TaxNumber { get; set; }
+        public string TenantTaxNo { get; set; }
 
         /// <summary>
         /// 联系方式

@@ -71,7 +71,7 @@ namespace Magicodes.Admin.MultiTenancy.Accounting
                 TenantLegalName = invoice.TenantLegalName,
                 Bank=invoice.Bank,
                 BankAccount=invoice.Bank,
-                TaxNumber=invoice.TaxNumber,
+                TaxNumber=invoice.TenantTaxNo,
                 Contact=invoice.Contact,
             };
         }
@@ -108,7 +108,7 @@ namespace Magicodes.Admin.MultiTenancy.Accounting
                 Bank=tenantBank,
                 BankAccount=tenantBankAccount,
                 Contact=tenantContact,
-                TaxNumber=tenantTaxNumber,
+                TenantTaxNo=tenantTaxNumber,
             });
 
             payment.InvoiceNo = invoiceNo;

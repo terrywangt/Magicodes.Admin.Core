@@ -13,8 +13,6 @@ namespace Admin.Application.Custom.AppCommon
     public class TreeAppService : AppServiceBase, ITreeAppService
     {
 		private readonly IRepository<ColumnInfo, long> _columnInfoRepository;
-		
-       
 
         public TreeAppService(
 		IRepository<ColumnInfo, long> columnInfoRepository

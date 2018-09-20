@@ -151,8 +151,7 @@ namespace Magicodes.Admin.Configuration.Host
                 TaxNumber = await SettingManager.GetSettingValueAsync(AppSettings.HostManagement.BillingTaxNumber),
                 BankAccount = await SettingManager.GetSettingValueAsync(AppSettings.HostManagement.BillingBankAccount),
                 Bank = await SettingManager.GetSettingValueAsync(AppSettings.HostManagement.BillingBank),
-                Contact = await SettingManager.GetSettingValueAsync(AppSettings.HostManagement.BillingContact),
-
+                Contact = await SettingManager.GetSettingValueAsync(AppSettings.HostManagement.BillingContact)
             };
         }
 
