@@ -147,7 +147,12 @@ namespace Magicodes.Admin.Configuration.Host
             return new HostBillingSettingsEditDto
             {
                 LegalName = await SettingManager.GetSettingValueAsync(AppSettings.HostManagement.BillingLegalName),
-                Address = await SettingManager.GetSettingValueAsync(AppSettings.HostManagement.BillingAddress)
+                Address = await SettingManager.GetSettingValueAsync(AppSettings.HostManagement.BillingAddress),
+                TaxNumber = await SettingManager.GetSettingValueAsync(AppSettings.HostManagement.BillingTaxNumber),
+                BankAccount = await SettingManager.GetSettingValueAsync(AppSettings.HostManagement.BillingBankAccount),
+                Bank = await SettingManager.GetSettingValueAsync(AppSettings.HostManagement.BillingBank),
+                Contact = await SettingManager.GetSettingValueAsync(AppSettings.HostManagement.BillingContact),
+
             };
         }
 
@@ -192,7 +197,10 @@ namespace Magicodes.Admin.Configuration.Host
         {
             await SettingManager.ChangeSettingForApplicationAsync(AppSettings.HostManagement.BillingLegalName, input.LegalName);
             await SettingManager.ChangeSettingForApplicationAsync(AppSettings.HostManagement.BillingAddress, input.Address);
-
+            await SettingManager.ChangeSettingForApplicationAsync(AppSettings.HostManagement.BillingTaxNumber, input.TaxNumber);
+            await SettingManager.ChangeSettingForApplicationAsync(AppSettings.HostManagement.BillingContact, input.Contact);
+            await SettingManager.ChangeSettingForApplicationAsync(AppSettings.HostManagement.BillingBank, input.Bank);
+            await SettingManager.ChangeSettingForApplicationAsync(AppSettings.HostManagement.BillingBankAccount, input.BankAccount);
         }
 
         private async Task UpdateGeneralSettingsAsync(GeneralSettingsEditDto settings)

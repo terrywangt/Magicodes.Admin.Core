@@ -8154,122 +8154,6 @@ export class SmsCodeSettingServiceProxy {
 }
 
 @Injectable()
-export class StorageSettingServiceProxy {
-    private http: HttpClient;
-    private baseUrl: string;
-    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
-
-    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
-        this.http = http;
-        this.baseUrl = baseUrl ? baseUrl : "";
-    }
-
-    /**
-     * @return Success
-     */
-    getAllSettings(): Observable<StorageSettingEditDto> {
-        let url_ = this.baseUrl + "/api/services/app/StorageSetting/GetAllSettings";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ : any = {
-            observe: "response",
-            responseType: "blob",
-            headers: new HttpHeaders({
-                "Content-Type": "application/json", 
-                "Accept": "application/json"
-            })
-        };
-
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetAllSettings(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processGetAllSettings(<any>response_);
-                } catch (e) {
-                    return <Observable<StorageSettingEditDto>><any>_observableThrow(e);
-                }
-            } else
-                return <Observable<StorageSettingEditDto>><any>_observableThrow(response_);
-        }));
-    }
-
-    protected processGetAllSettings(response: HttpResponseBase): Observable<StorageSettingEditDto> {
-        const status = response.status;
-        const responseBlob = 
-            response instanceof HttpResponse ? response.body : 
-            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = resultData200 ? StorageSettingEditDto.fromJS(resultData200) : new StorageSettingEditDto();
-            return _observableOf(result200);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf<StorageSettingEditDto>(<any>null);
-    }
-
-    /**
-     * @param input (optional) 
-     * @return Success
-     */
-    updateAllSettings(input: StorageSettingEditDto | null | undefined): Observable<void> {
-        let url_ = this.baseUrl + "/api/services/app/StorageSetting/UpdateAllSettings";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(input);
-
-        let options_ : any = {
-            body: content_,
-            observe: "response",
-            responseType: "blob",
-            headers: new HttpHeaders({
-                "Content-Type": "application/json", 
-            })
-        };
-
-        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processUpdateAllSettings(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processUpdateAllSettings(<any>response_);
-                } catch (e) {
-                    return <Observable<void>><any>_observableThrow(e);
-                }
-            } else
-                return <Observable<void>><any>_observableThrow(response_);
-        }));
-    }
-
-    protected processUpdateAllSettings(response: HttpResponseBase): Observable<void> {
-        const status = response.status;
-        const responseBlob = 
-            response instanceof HttpResponse ? response.body : 
-            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return _observableOf<void>(<any>null);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf<void>(<any>null);
-    }
-}
-
-@Injectable()
 export class SubscriptionServiceProxy {
     private http: HttpClient;
     private baseUrl: string;
@@ -10137,448 +10021,6 @@ export class TokenAuthServiceProxy {
             }));
         }
         return _observableOf<void>(<any>null);
-    }
-}
-
-@Injectable()
-export class TransactionLogServiceProxy {
-    private http: HttpClient;
-    private baseUrl: string;
-    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
-
-    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
-        this.http = http;
-        this.baseUrl = baseUrl ? baseUrl : "";
-    }
-
-    /**
-     * 获取交易日志列表
-     * @param isOnlyGetRecycleData (optional) 是否仅获取回收站数据
-     * @param creationDateStart (optional) 创建开始时间
-     * @param creationDateEnd (optional) 创建结束时间
-     * @param filter (optional) 关键字
-     * @param sorting (optional) 
-     * @param maxResultCount (optional) 
-     * @param skipCount (optional) 
-     * @return Success
-     */
-    getTransactionLogs(isOnlyGetRecycleData: boolean | null | undefined, creationDateStart: moment.Moment | null | undefined, creationDateEnd: moment.Moment | null | undefined, filter: string | null | undefined, sorting: string | null | undefined, maxResultCount: number | null | undefined, skipCount: number | null | undefined): Observable<PagedResultDtoOfTransactionLogListDto> {
-        let url_ = this.baseUrl + "/api/services/app/TransactionLog/GetTransactionLogs?";
-        if (isOnlyGetRecycleData !== undefined)
-            url_ += "IsOnlyGetRecycleData=" + encodeURIComponent("" + isOnlyGetRecycleData) + "&"; 
-        if (creationDateStart !== undefined)
-            url_ += "CreationDateStart=" + encodeURIComponent(creationDateStart ? "" + creationDateStart.toJSON() : "") + "&"; 
-        if (creationDateEnd !== undefined)
-            url_ += "CreationDateEnd=" + encodeURIComponent(creationDateEnd ? "" + creationDateEnd.toJSON() : "") + "&"; 
-        if (filter !== undefined)
-            url_ += "Filter=" + encodeURIComponent("" + filter) + "&"; 
-        if (sorting !== undefined)
-            url_ += "Sorting=" + encodeURIComponent("" + sorting) + "&"; 
-        if (maxResultCount !== undefined)
-            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&"; 
-        if (skipCount !== undefined)
-            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&"; 
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ : any = {
-            observe: "response",
-            responseType: "blob",
-            headers: new HttpHeaders({
-                "Content-Type": "application/json", 
-                "Accept": "application/json"
-            })
-        };
-
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetTransactionLogs(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processGetTransactionLogs(<any>response_);
-                } catch (e) {
-                    return <Observable<PagedResultDtoOfTransactionLogListDto>><any>_observableThrow(e);
-                }
-            } else
-                return <Observable<PagedResultDtoOfTransactionLogListDto>><any>_observableThrow(response_);
-        }));
-    }
-
-    protected processGetTransactionLogs(response: HttpResponseBase): Observable<PagedResultDtoOfTransactionLogListDto> {
-        const status = response.status;
-        const responseBlob = 
-            response instanceof HttpResponse ? response.body : 
-            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = resultData200 ? PagedResultDtoOfTransactionLogListDto.fromJS(resultData200) : new PagedResultDtoOfTransactionLogListDto();
-            return _observableOf(result200);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf<PagedResultDtoOfTransactionLogListDto>(<any>null);
-    }
-
-    /**
-     * 导出交易日志
-     * @param isOnlyGetRecycleData (optional) 是否仅获取回收站数据
-     * @param creationDateStart (optional) 创建开始时间
-     * @param creationDateEnd (optional) 创建结束时间
-     * @param filter (optional) 关键字
-     * @param sorting (optional) 
-     * @param maxResultCount (optional) 
-     * @param skipCount (optional) 
-     * @return Success
-     */
-    getTransactionLogsToExcel(isOnlyGetRecycleData: boolean | null | undefined, creationDateStart: moment.Moment | null | undefined, creationDateEnd: moment.Moment | null | undefined, filter: string | null | undefined, sorting: string | null | undefined, maxResultCount: number | null | undefined, skipCount: number | null | undefined): Observable<FileDto> {
-        let url_ = this.baseUrl + "/api/services/app/TransactionLog/GetTransactionLogsToExcel?";
-        if (isOnlyGetRecycleData !== undefined)
-            url_ += "IsOnlyGetRecycleData=" + encodeURIComponent("" + isOnlyGetRecycleData) + "&"; 
-        if (creationDateStart !== undefined)
-            url_ += "CreationDateStart=" + encodeURIComponent(creationDateStart ? "" + creationDateStart.toJSON() : "") + "&"; 
-        if (creationDateEnd !== undefined)
-            url_ += "CreationDateEnd=" + encodeURIComponent(creationDateEnd ? "" + creationDateEnd.toJSON() : "") + "&"; 
-        if (filter !== undefined)
-            url_ += "Filter=" + encodeURIComponent("" + filter) + "&"; 
-        if (sorting !== undefined)
-            url_ += "Sorting=" + encodeURIComponent("" + sorting) + "&"; 
-        if (maxResultCount !== undefined)
-            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&"; 
-        if (skipCount !== undefined)
-            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&"; 
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ : any = {
-            observe: "response",
-            responseType: "blob",
-            headers: new HttpHeaders({
-                "Content-Type": "application/json", 
-                "Accept": "application/json"
-            })
-        };
-
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetTransactionLogsToExcel(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processGetTransactionLogsToExcel(<any>response_);
-                } catch (e) {
-                    return <Observable<FileDto>><any>_observableThrow(e);
-                }
-            } else
-                return <Observable<FileDto>><any>_observableThrow(response_);
-        }));
-    }
-
-    protected processGetTransactionLogsToExcel(response: HttpResponseBase): Observable<FileDto> {
-        const status = response.status;
-        const responseBlob = 
-            response instanceof HttpResponse ? response.body : 
-            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = resultData200 ? FileDto.fromJS(resultData200) : new FileDto();
-            return _observableOf(result200);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf<FileDto>(<any>null);
-    }
-
-    /**
-     * 获取交易日志
-     * @param id (optional) 
-     * @return Success
-     */
-    getTransactionLogForEdit(id: number | null | undefined): Observable<GetTransactionLogForEditOutput> {
-        let url_ = this.baseUrl + "/api/services/app/TransactionLog/GetTransactionLogForEdit?";
-        if (id !== undefined)
-            url_ += "Id=" + encodeURIComponent("" + id) + "&"; 
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ : any = {
-            observe: "response",
-            responseType: "blob",
-            headers: new HttpHeaders({
-                "Content-Type": "application/json", 
-                "Accept": "application/json"
-            })
-        };
-
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetTransactionLogForEdit(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processGetTransactionLogForEdit(<any>response_);
-                } catch (e) {
-                    return <Observable<GetTransactionLogForEditOutput>><any>_observableThrow(e);
-                }
-            } else
-                return <Observable<GetTransactionLogForEditOutput>><any>_observableThrow(response_);
-        }));
-    }
-
-    protected processGetTransactionLogForEdit(response: HttpResponseBase): Observable<GetTransactionLogForEditOutput> {
-        const status = response.status;
-        const responseBlob = 
-            response instanceof HttpResponse ? response.body : 
-            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = resultData200 ? GetTransactionLogForEditOutput.fromJS(resultData200) : new GetTransactionLogForEditOutput();
-            return _observableOf(result200);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf<GetTransactionLogForEditOutput>(<any>null);
-    }
-
-    /**
-     * 创建或者编辑交易日志
-     * @param input (optional) 
-     * @return Success
-     */
-    createOrUpdateTransactionLog(input: CreateOrUpdateTransactionLogDto | null | undefined): Observable<void> {
-        let url_ = this.baseUrl + "/api/services/app/TransactionLog/CreateOrUpdateTransactionLog";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(input);
-
-        let options_ : any = {
-            body: content_,
-            observe: "response",
-            responseType: "blob",
-            headers: new HttpHeaders({
-                "Content-Type": "application/json", 
-            })
-        };
-
-        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processCreateOrUpdateTransactionLog(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processCreateOrUpdateTransactionLog(<any>response_);
-                } catch (e) {
-                    return <Observable<void>><any>_observableThrow(e);
-                }
-            } else
-                return <Observable<void>><any>_observableThrow(response_);
-        }));
-    }
-
-    protected processCreateOrUpdateTransactionLog(response: HttpResponseBase): Observable<void> {
-        const status = response.status;
-        const responseBlob = 
-            response instanceof HttpResponse ? response.body : 
-            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return _observableOf<void>(<any>null);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf<void>(<any>null);
-    }
-
-    /**
-     * 删除交易日志
-     * @param id (optional) 
-     * @return Success
-     */
-    deleteTransactionLog(id: number | null | undefined): Observable<void> {
-        let url_ = this.baseUrl + "/api/services/app/TransactionLog/DeleteTransactionLog?";
-        if (id !== undefined)
-            url_ += "Id=" + encodeURIComponent("" + id) + "&"; 
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ : any = {
-            observe: "response",
-            responseType: "blob",
-            headers: new HttpHeaders({
-                "Content-Type": "application/json", 
-            })
-        };
-
-        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processDeleteTransactionLog(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processDeleteTransactionLog(<any>response_);
-                } catch (e) {
-                    return <Observable<void>><any>_observableThrow(e);
-                }
-            } else
-                return <Observable<void>><any>_observableThrow(response_);
-        }));
-    }
-
-    protected processDeleteTransactionLog(response: HttpResponseBase): Observable<void> {
-        const status = response.status;
-        const responseBlob = 
-            response instanceof HttpResponse ? response.body : 
-            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return _observableOf<void>(<any>null);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf<void>(<any>null);
-    }
-
-    /**
-     * IsFreeze开关服务
-     * @param input (optional) 开关输入参数
-     * @return Success
-     */
-    updateIsFreezeSwitchAsync(input: SwitchEntityInputDtoOfInt64 | null | undefined): Observable<void> {
-        let url_ = this.baseUrl + "/api/services/app/TransactionLog/UpdateIsFreezeSwitchAsync";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(input);
-
-        let options_ : any = {
-            body: content_,
-            observe: "response",
-            responseType: "blob",
-            headers: new HttpHeaders({
-                "Content-Type": "application/json", 
-            })
-        };
-
-        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processUpdateIsFreezeSwitchAsync(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processUpdateIsFreezeSwitchAsync(<any>response_);
-                } catch (e) {
-                    return <Observable<void>><any>_observableThrow(e);
-                }
-            } else
-                return <Observable<void>><any>_observableThrow(response_);
-        }));
-    }
-
-    protected processUpdateIsFreezeSwitchAsync(response: HttpResponseBase): Observable<void> {
-        const status = response.status;
-        const responseBlob = 
-            response instanceof HttpResponse ? response.body : 
-            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return _observableOf<void>(<any>null);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf<void>(<any>null);
-    }
-}
-
-@Injectable()
-export class TreeServiceProxy {
-    private http: HttpClient;
-    private baseUrl: string;
-    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
-
-    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
-        this.http = http;
-        this.baseUrl = baseUrl ? baseUrl : "";
-    }
-
-    /**
-     * 获取栏目 树级列表
-     * @param parentId (optional) 
-     * @return Success
-     */
-    getColumnInfoTreeNodes(parentId: number | null | undefined): Observable<TreeOutputDto> {
-        let url_ = this.baseUrl + "/api/services/app/Tree/GetColumnInfoTreeNodes?";
-        if (parentId !== undefined)
-            url_ += "ParentId=" + encodeURIComponent("" + parentId) + "&"; 
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ : any = {
-            observe: "response",
-            responseType: "blob",
-            headers: new HttpHeaders({
-                "Content-Type": "application/json", 
-                "Accept": "application/json"
-            })
-        };
-
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetColumnInfoTreeNodes(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processGetColumnInfoTreeNodes(<any>response_);
-                } catch (e) {
-                    return <Observable<TreeOutputDto>><any>_observableThrow(e);
-                }
-            } else
-                return <Observable<TreeOutputDto>><any>_observableThrow(response_);
-        }));
-    }
-
-    protected processGetColumnInfoTreeNodes(response: HttpResponseBase): Observable<TreeOutputDto> {
-        const status = response.status;
-        const responseBlob = 
-            response instanceof HttpResponse ? response.body : 
-            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = resultData200 ? TreeOutputDto.fromJS(resultData200) : new TreeOutputDto();
-            return _observableOf(result200);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf<TreeOutputDto>(<any>null);
     }
 }
 
@@ -16526,6 +15968,10 @@ export interface ISecuritySettingsEditDto {
 export class HostBillingSettingsEditDto implements IHostBillingSettingsEditDto {
     legalName!: string | undefined;
     address!: string | undefined;
+    taxNumber!: string | undefined;
+    contact!: string | undefined;
+    bankAccount!: string | undefined;
+    bank!: string | undefined;
 
     constructor(data?: IHostBillingSettingsEditDto) {
         if (data) {
@@ -16540,6 +15986,10 @@ export class HostBillingSettingsEditDto implements IHostBillingSettingsEditDto {
         if (data) {
             this.legalName = data["legalName"];
             this.address = data["address"];
+            this.taxNumber = data["taxNumber"];
+            this.contact = data["contact"];
+            this.bankAccount = data["bankAccount"];
+            this.bank = data["bank"];
         }
     }
 
@@ -16554,6 +16004,10 @@ export class HostBillingSettingsEditDto implements IHostBillingSettingsEditDto {
         data = typeof data === 'object' ? data : {};
         data["legalName"] = this.legalName;
         data["address"] = this.address;
+        data["taxNumber"] = this.taxNumber;
+        data["contact"] = this.contact;
+        data["bankAccount"] = this.bankAccount;
+        data["bank"] = this.bank;
         return data; 
     }
 }
@@ -16561,6 +16015,10 @@ export class HostBillingSettingsEditDto implements IHostBillingSettingsEditDto {
 export interface IHostBillingSettingsEditDto {
     legalName: string | undefined;
     address: string | undefined;
+    taxNumber: string | undefined;
+    contact: string | undefined;
+    bankAccount: string | undefined;
+    bank: string | undefined;
 }
 
 export class PasswordComplexitySetting implements IPasswordComplexitySetting {
@@ -16946,7 +16404,10 @@ export class InvoiceDto implements IInvoiceDto {
     invoiceDate!: moment.Moment | undefined;
     tenantLegalName!: string | undefined;
     tenantAddress!: string[] | undefined;
-    tenantTaxNo!: string | undefined;
+    taxNumber!: string | undefined;
+    contact!: string | undefined;
+    bankAccount!: string | undefined;
+    bank!: string | undefined;
     hostLegalName!: string | undefined;
     hostAddress!: string[] | undefined;
 
@@ -16971,7 +16432,10 @@ export class InvoiceDto implements IInvoiceDto {
                 for (let item of data["tenantAddress"])
                     this.tenantAddress.push(item);
             }
-            this.tenantTaxNo = data["tenantTaxNo"];
+            this.taxNumber = data["taxNumber"];
+            this.contact = data["contact"];
+            this.bankAccount = data["bankAccount"];
+            this.bank = data["bank"];
             this.hostLegalName = data["hostLegalName"];
             if (data["hostAddress"] && data["hostAddress"].constructor === Array) {
                 this.hostAddress = [];
@@ -17000,7 +16464,10 @@ export class InvoiceDto implements IInvoiceDto {
             for (let item of this.tenantAddress)
                 data["tenantAddress"].push(item);
         }
-        data["tenantTaxNo"] = this.tenantTaxNo;
+        data["taxNumber"] = this.taxNumber;
+        data["contact"] = this.contact;
+        data["bankAccount"] = this.bankAccount;
+        data["bank"] = this.bank;
         data["hostLegalName"] = this.hostLegalName;
         if (this.hostAddress && this.hostAddress.constructor === Array) {
             data["hostAddress"] = [];
@@ -17018,7 +16485,10 @@ export interface IInvoiceDto {
     invoiceDate: moment.Moment | undefined;
     tenantLegalName: string | undefined;
     tenantAddress: string[] | undefined;
-    tenantTaxNo: string | undefined;
+    taxNumber: string | undefined;
+    contact: string | undefined;
+    bankAccount: string | undefined;
+    bank: string | undefined;
     hostLegalName: string | undefined;
     hostAddress: string[] | undefined;
 }
@@ -20202,90 +19672,6 @@ export interface IAliSmsCodeSettingEditDto {
     templateParam: string | undefined;
 }
 
-export class StorageSettingEditDto implements IStorageSettingEditDto {
-    aliStorageSetting!: AliStorageSettingEditDto | undefined;
-
-    constructor(data?: IStorageSettingEditDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.aliStorageSetting = data["aliStorageSetting"] ? AliStorageSettingEditDto.fromJS(data["aliStorageSetting"]) : <any>undefined;
-        }
-    }
-
-    static fromJS(data: any): StorageSettingEditDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new StorageSettingEditDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["aliStorageSetting"] = this.aliStorageSetting ? this.aliStorageSetting.toJSON() : <any>undefined;
-        return data; 
-    }
-}
-
-export interface IStorageSettingEditDto {
-    aliStorageSetting: AliStorageSettingEditDto | undefined;
-}
-
-export class AliStorageSettingEditDto implements IAliStorageSettingEditDto {
-    isEnabled!: boolean;
-    accessKeyId!: string;
-    accessKeySecret!: string;
-    endPoint!: string | undefined;
-
-    constructor(data?: IAliStorageSettingEditDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.isEnabled = data["isEnabled"];
-            this.accessKeyId = data["accessKeyId"];
-            this.accessKeySecret = data["accessKeySecret"];
-            this.endPoint = data["endPoint"];
-        }
-    }
-
-    static fromJS(data: any): AliStorageSettingEditDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new AliStorageSettingEditDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["isEnabled"] = this.isEnabled;
-        data["accessKeyId"] = this.accessKeyId;
-        data["accessKeySecret"] = this.accessKeySecret;
-        data["endPoint"] = this.endPoint;
-        return data; 
-    }
-}
-
-export interface IAliStorageSettingEditDto {
-    isEnabled: boolean;
-    accessKeyId: string;
-    accessKeySecret: string;
-    endPoint: string | undefined;
-}
-
 export class PagedResultDtoOfTenantListDto implements IPagedResultDtoOfTenantListDto {
     totalCount!: number | undefined;
     items!: TenantListDto[] | undefined;
@@ -21652,7 +21038,10 @@ export interface ILdapSettingsEditDto {
 export class TenantBillingSettingsEditDto implements ITenantBillingSettingsEditDto {
     legalName!: string | undefined;
     address!: string | undefined;
-    taxVatNo!: string | undefined;
+    taxNumber!: string | undefined;
+    contact!: string | undefined;
+    bankAccount!: string | undefined;
+    bank!: string | undefined;
 
     constructor(data?: ITenantBillingSettingsEditDto) {
         if (data) {
@@ -21667,7 +21056,10 @@ export class TenantBillingSettingsEditDto implements ITenantBillingSettingsEditD
         if (data) {
             this.legalName = data["legalName"];
             this.address = data["address"];
-            this.taxVatNo = data["taxVatNo"];
+            this.taxNumber = data["taxNumber"];
+            this.contact = data["contact"];
+            this.bankAccount = data["bankAccount"];
+            this.bank = data["bank"];
         }
     }
 
@@ -21682,7 +21074,10 @@ export class TenantBillingSettingsEditDto implements ITenantBillingSettingsEditD
         data = typeof data === 'object' ? data : {};
         data["legalName"] = this.legalName;
         data["address"] = this.address;
-        data["taxVatNo"] = this.taxVatNo;
+        data["taxNumber"] = this.taxNumber;
+        data["contact"] = this.contact;
+        data["bankAccount"] = this.bankAccount;
+        data["bank"] = this.bank;
         return data; 
     }
 }
@@ -21690,7 +21085,10 @@ export class TenantBillingSettingsEditDto implements ITenantBillingSettingsEditD
 export interface ITenantBillingSettingsEditDto {
     legalName: string | undefined;
     address: string | undefined;
-    taxVatNo: string | undefined;
+    taxNumber: string | undefined;
+    contact: string | undefined;
+    bankAccount: string | undefined;
+    bank: string | undefined;
 }
 
 export class ListResultDtoOfNameValueDto implements IListResultDtoOfNameValueDto {
@@ -22163,497 +21561,6 @@ export interface IExternalAuthenticateResultModel {
     expireInSeconds: number | undefined;
     waitingForActivation: boolean | undefined;
     returnUrl: string | undefined;
-}
-
-export class PagedResultDtoOfTransactionLogListDto implements IPagedResultDtoOfTransactionLogListDto {
-    totalCount!: number | undefined;
-    items!: TransactionLogListDto[] | undefined;
-
-    constructor(data?: IPagedResultDtoOfTransactionLogListDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.totalCount = data["totalCount"];
-            if (data["items"] && data["items"].constructor === Array) {
-                this.items = [];
-                for (let item of data["items"])
-                    this.items.push(TransactionLogListDto.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): PagedResultDtoOfTransactionLogListDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new PagedResultDtoOfTransactionLogListDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["totalCount"] = this.totalCount;
-        if (this.items && this.items.constructor === Array) {
-            data["items"] = [];
-            for (let item of this.items)
-                data["items"].push(item.toJSON());
-        }
-        return data; 
-    }
-}
-
-export interface IPagedResultDtoOfTransactionLogListDto {
-    totalCount: number | undefined;
-    items: TransactionLogListDto[] | undefined;
-}
-
-/** 交易日志列表Dto */
-export class TransactionLogListDto implements ITransactionLogListDto {
-    /** 区域名称 */
-    cultureValue!: string | undefined;
-    /** 创建时间 */
-    creationTime!: moment.Moment | undefined;
-    /** 客户端Ip */
-    clientIpAddress!: string | undefined;
-    /** 客户端名称 */
-    clientName!: string | undefined;
-    /** 是否冻结 */
-    isFreeze!: boolean | undefined;
-    /** 支付渠道 */
-    payChannel!: TransactionLogListDtoPayChannel | undefined;
-    /** 终端 */
-    terminal!: TransactionLogListDtoTerminal | undefined;
-    /** 交易状态 */
-    transactionState!: TransactionLogListDtoTransactionState | undefined;
-    /** 自定义数据 */
-    customData!: string | undefined;
-    /** 交易单号 */
-    outTradeNo!: string | undefined;
-    /** 支付完成时间 */
-    payTime!: moment.Moment | undefined;
-    /** 异常信息 */
-    exception!: string | undefined;
-    /** 是否已删除 */
-    isDeleted!: boolean | undefined;
-    id!: number | undefined;
-
-    constructor(data?: ITransactionLogListDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.cultureValue = data["cultureValue"];
-            this.creationTime = data["creationTime"] ? moment(data["creationTime"].toString()) : <any>undefined;
-            this.clientIpAddress = data["clientIpAddress"];
-            this.clientName = data["clientName"];
-            this.isFreeze = data["isFreeze"];
-            this.payChannel = data["payChannel"];
-            this.terminal = data["terminal"];
-            this.transactionState = data["transactionState"];
-            this.customData = data["customData"];
-            this.outTradeNo = data["outTradeNo"];
-            this.payTime = data["payTime"] ? moment(data["payTime"].toString()) : <any>undefined;
-            this.exception = data["exception"];
-            this.isDeleted = data["isDeleted"];
-            this.id = data["id"];
-        }
-    }
-
-    static fromJS(data: any): TransactionLogListDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new TransactionLogListDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["cultureValue"] = this.cultureValue;
-        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
-        data["clientIpAddress"] = this.clientIpAddress;
-        data["clientName"] = this.clientName;
-        data["isFreeze"] = this.isFreeze;
-        data["payChannel"] = this.payChannel;
-        data["terminal"] = this.terminal;
-        data["transactionState"] = this.transactionState;
-        data["customData"] = this.customData;
-        data["outTradeNo"] = this.outTradeNo;
-        data["payTime"] = this.payTime ? this.payTime.toISOString() : <any>undefined;
-        data["exception"] = this.exception;
-        data["isDeleted"] = this.isDeleted;
-        data["id"] = this.id;
-        return data; 
-    }
-}
-
-/** 交易日志列表Dto */
-export interface ITransactionLogListDto {
-    /** 区域名称 */
-    cultureValue: string | undefined;
-    /** 创建时间 */
-    creationTime: moment.Moment | undefined;
-    /** 客户端Ip */
-    clientIpAddress: string | undefined;
-    /** 客户端名称 */
-    clientName: string | undefined;
-    /** 是否冻结 */
-    isFreeze: boolean | undefined;
-    /** 支付渠道 */
-    payChannel: TransactionLogListDtoPayChannel | undefined;
-    /** 终端 */
-    terminal: TransactionLogListDtoTerminal | undefined;
-    /** 交易状态 */
-    transactionState: TransactionLogListDtoTransactionState | undefined;
-    /** 自定义数据 */
-    customData: string | undefined;
-    /** 交易单号 */
-    outTradeNo: string | undefined;
-    /** 支付完成时间 */
-    payTime: moment.Moment | undefined;
-    /** 异常信息 */
-    exception: string | undefined;
-    /** 是否已删除 */
-    isDeleted: boolean | undefined;
-    id: number | undefined;
-}
-
-/** 交易日志���༭���ģ�� */
-export class GetTransactionLogForEditOutput implements IGetTransactionLogForEditOutput {
-    transactionLog!: TransactionLogEditDto | undefined;
-
-    constructor(data?: IGetTransactionLogForEditOutput) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.transactionLog = data["transactionLog"] ? TransactionLogEditDto.fromJS(data["transactionLog"]) : <any>undefined;
-        }
-    }
-
-    static fromJS(data: any): GetTransactionLogForEditOutput {
-        data = typeof data === 'object' ? data : {};
-        let result = new GetTransactionLogForEditOutput();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["transactionLog"] = this.transactionLog ? this.transactionLog.toJSON() : <any>undefined;
-        return data; 
-    }
-}
-
-/** 交易日志���༭���ģ�� */
-export interface IGetTransactionLogForEditOutput {
-    transactionLog: TransactionLogEditDto | undefined;
-}
-
-/** 交易日志编辑Dto */
-export class TransactionLogEditDto implements ITransactionLogEditDto {
-    /** 金额 */
-    amount!: number;
-    /** 客户端Ip */
-    clientIpAddress!: string | undefined;
-    /** 客户端名称 */
-    clientName!: string | undefined;
-    /** 是否冻结 */
-    isFreeze!: boolean | undefined;
-    /** 支付渠道 */
-    payChannel!: TransactionLogEditDtoPayChannel;
-    /** 终端 */
-    terminal!: TransactionLogEditDtoTerminal;
-    /** 交易状态 */
-    transactionState!: TransactionLogEditDtoTransactionState;
-    /** 自定义数据 */
-    customData!: string | undefined;
-    /** 交易单号 */
-    outTradeNo!: string | undefined;
-    /** 支付完成时间 */
-    payTime!: moment.Moment | undefined;
-    /** 异常信息 */
-    exception!: string | undefined;
-    id!: number | undefined;
-
-    constructor(data?: ITransactionLogEditDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.amount = data["amount"];
-            this.clientIpAddress = data["clientIpAddress"];
-            this.clientName = data["clientName"];
-            this.isFreeze = data["isFreeze"];
-            this.payChannel = data["payChannel"];
-            this.terminal = data["terminal"];
-            this.transactionState = data["transactionState"];
-            this.customData = data["customData"];
-            this.outTradeNo = data["outTradeNo"];
-            this.payTime = data["payTime"] ? moment(data["payTime"].toString()) : <any>undefined;
-            this.exception = data["exception"];
-            this.id = data["id"];
-        }
-    }
-
-    static fromJS(data: any): TransactionLogEditDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new TransactionLogEditDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["amount"] = this.amount;
-        data["clientIpAddress"] = this.clientIpAddress;
-        data["clientName"] = this.clientName;
-        data["isFreeze"] = this.isFreeze;
-        data["payChannel"] = this.payChannel;
-        data["terminal"] = this.terminal;
-        data["transactionState"] = this.transactionState;
-        data["customData"] = this.customData;
-        data["outTradeNo"] = this.outTradeNo;
-        data["payTime"] = this.payTime ? this.payTime.toISOString() : <any>undefined;
-        data["exception"] = this.exception;
-        data["id"] = this.id;
-        return data; 
-    }
-}
-
-/** 交易日志编辑Dto */
-export interface ITransactionLogEditDto {
-    /** 金额 */
-    amount: number;
-    /** 客户端Ip */
-    clientIpAddress: string | undefined;
-    /** 客户端名称 */
-    clientName: string | undefined;
-    /** 是否冻结 */
-    isFreeze: boolean | undefined;
-    /** 支付渠道 */
-    payChannel: TransactionLogEditDtoPayChannel;
-    /** 终端 */
-    terminal: TransactionLogEditDtoTerminal;
-    /** 交易状态 */
-    transactionState: TransactionLogEditDtoTransactionState;
-    /** 自定义数据 */
-    customData: string | undefined;
-    /** 交易单号 */
-    outTradeNo: string | undefined;
-    /** 支付完成时间 */
-    payTime: moment.Moment | undefined;
-    /** 异常信息 */
-    exception: string | undefined;
-    id: number | undefined;
-}
-
-/** 交易日志创建或者编辑Dto */
-export class CreateOrUpdateTransactionLogDto implements ICreateOrUpdateTransactionLogDto {
-    transactionLog!: TransactionLogEditDto;
-
-    constructor(data?: ICreateOrUpdateTransactionLogDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-        if (!data) {
-            this.transactionLog = new TransactionLogEditDto();
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.transactionLog = data["transactionLog"] ? TransactionLogEditDto.fromJS(data["transactionLog"]) : new TransactionLogEditDto();
-        }
-    }
-
-    static fromJS(data: any): CreateOrUpdateTransactionLogDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new CreateOrUpdateTransactionLogDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["transactionLog"] = this.transactionLog ? this.transactionLog.toJSON() : <any>undefined;
-        return data; 
-    }
-}
-
-/** 交易日志创建或者编辑Dto */
-export interface ICreateOrUpdateTransactionLogDto {
-    transactionLog: TransactionLogEditDto;
-}
-
-export class TreeOutputDto implements ITreeOutputDto {
-    data!: TreeItemDto[] | undefined;
-
-    constructor(data?: ITreeOutputDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            if (data["data"] && data["data"].constructor === Array) {
-                this.data = [];
-                for (let item of data["data"])
-                    this.data.push(TreeItemDto.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): TreeOutputDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new TreeOutputDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        if (this.data && this.data.constructor === Array) {
-            data["data"] = [];
-            for (let item of this.data)
-                data["data"].push(item.toJSON());
-        }
-        return data; 
-    }
-}
-
-export interface ITreeOutputDto {
-    data: TreeItemDto[] | undefined;
-}
-
-export class TreeItemDto implements ITreeItemDto {
-    data!: TreeItemDataDto | undefined;
-    leaf!: boolean | undefined;
-    expanded!: boolean | undefined;
-    children!: TreeItemDto[] | undefined;
-
-    constructor(data?: ITreeItemDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.data = data["data"] ? TreeItemDataDto.fromJS(data["data"]) : <any>undefined;
-            this.leaf = data["leaf"];
-            this.expanded = data["expanded"];
-            if (data["children"] && data["children"].constructor === Array) {
-                this.children = [];
-                for (let item of data["children"])
-                    this.children.push(TreeItemDto.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): TreeItemDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new TreeItemDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["data"] = this.data ? this.data.toJSON() : <any>undefined;
-        data["leaf"] = this.leaf;
-        data["expanded"] = this.expanded;
-        if (this.children && this.children.constructor === Array) {
-            data["children"] = [];
-            for (let item of this.children)
-                data["children"].push(item.toJSON());
-        }
-        return data; 
-    }
-}
-
-export interface ITreeItemDto {
-    data: TreeItemDataDto | undefined;
-    leaf: boolean | undefined;
-    expanded: boolean | undefined;
-    children: TreeItemDto[] | undefined;
-}
-
-export class TreeItemDataDto implements ITreeItemDataDto {
-    title!: string | undefined;
-    id!: number | undefined;
-    icon!: string | undefined;
-
-    constructor(data?: ITreeItemDataDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.title = data["title"];
-            this.id = data["id"];
-            this.icon = data["icon"];
-        }
-    }
-
-    static fromJS(data: any): TreeItemDataDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new TreeItemDataDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["title"] = this.title;
-        data["id"] = this.id;
-        data["icon"] = this.icon;
-        return data; 
-    }
-}
-
-export interface ITreeItemDataDto {
-    title: string | undefined;
-    id: number | undefined;
-    icon: string | undefined;
 }
 
 export class UiCustomizationSettingsEditDto implements IUiCustomizationSettingsEditDto {
@@ -24072,58 +22979,6 @@ export enum RegisterTenantInputSubscriptionStartType {
 
 export enum RegisterTenantInputGateway {
     _1 = 1, 
-}
-
-export enum TransactionLogListDtoPayChannel {
-    _0 = 0, 
-    _1 = 1, 
-}
-
-export enum TransactionLogListDtoTerminal {
-    _0 = 0, 
-    _1 = 1, 
-    _2 = 2, 
-    _3 = 3, 
-    _4 = 4, 
-    _5 = 5, 
-    _6 = 6, 
-    _7 = 7, 
-    _8 = 8, 
-    _9 = 9, 
-}
-
-export enum TransactionLogListDtoTransactionState {
-    _0 = 0, 
-    _1 = 1, 
-    _2 = 2, 
-    _3 = 3, 
-    _4 = 4, 
-}
-
-export enum TransactionLogEditDtoPayChannel {
-    _0 = 0, 
-    _1 = 1, 
-}
-
-export enum TransactionLogEditDtoTerminal {
-    _0 = 0, 
-    _1 = 1, 
-    _2 = 2, 
-    _3 = 3, 
-    _4 = 4, 
-    _5 = 5, 
-    _6 = 6, 
-    _7 = 7, 
-    _8 = 8, 
-    _9 = 9, 
-}
-
-export enum TransactionLogEditDtoTransactionState {
-    _0 = 0, 
-    _1 = 1, 
-    _2 = 2, 
-    _3 = 3, 
-    _4 = 4, 
 }
 
 export class SwaggerException extends Error {

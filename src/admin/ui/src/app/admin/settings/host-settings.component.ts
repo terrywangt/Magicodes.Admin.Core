@@ -86,15 +86,20 @@ export class HostSettingsComponent extends AppComponentBase implements OnInit, A
     }
 
     saveAll(): void {
+        
         const self = this;
-        self._hostSettingService.updateAllSettings(self.hostSettings).subscribe(result => {
-            self.notify.info(self.l('SavedSuccessfully'));
-
-            if (abp.clock.provider.supportsMultipleTimezone && self.usingDefaultTimeZone && self.initialTimeZone !== self.hostSettings.general.timezone) {
-                self.message.info(self.l('TimeZoneSettingChangedRefreshPageNotification')).done(function () {
-                    window.location.reload();
-                });
-            }
-        });
-    }
+       
+          
+            self._hostSettingService.updateAllSettings(self.hostSettings).subscribe(result => {
+                self.notify.info(self.l('SavedSuccessfully'));
+    
+                if (abp.clock.provider.supportsMultipleTimezone && self.usingDefaultTimeZone && self.initialTimeZone !== self.hostSettings.general.timezone) {
+                    self.message.info(self.l('TimeZoneSettingChangedRefreshPageNotification')).done(function () {
+                        window.location.reload();
+                    });
+                }
+            });
+        
+        
+  }
 }

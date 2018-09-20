@@ -779,6 +779,20 @@
     <text name="SignName" value="短信签名" />
     <text name="TemplateCode" value="短信模板" />
     <text name="TemplateParam" value="模板中JSON串" />
+    
+    <!-- 2018-09-11 发票配置 -->
+    <text name="Invoice" value="发票" />
+    <text name="InvoiceInformation" value="发票信息" />
+    <text name="TaxNumber" value="税号" />
+    <text name="Contact" value="联系方式" />
+    <text name="BankAccount" value="银行账户" />
+    <text name="Bank" value="开户行名称" />
+
+    <!-- 2018-09-17 发票配置 -->
+    <text name="Appearance" value="外观" />
+    <text name="ApplicationLogo" value="应用logo" />
+    <text name="CustomCSS" value="客户定制系统" />
+  
 
     <!--2018-09-10 存储配置-->  
     <text name="StorageSettings" value="存储配置" />

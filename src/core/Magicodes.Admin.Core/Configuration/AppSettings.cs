@@ -10,6 +10,11 @@ namespace Magicodes.Admin.Configuration
         {
             public const string BillingLegalName = "App.HostManagement.BillingLegalName";
             public const string BillingAddress = "App.HostManagement.BillingAddress";
+            public const string BillingTaxNumber = "App.HostManagement.BillingTaxNumber";
+            public const string BillingContact = "App.HostManagement.BillingContact";
+            public const string BillingBankAccount = "App.HostManagement.BillingBankAccount";
+            public const string BillingBank = "App.HostManagement.BillingBank";
+
         }
 
         public static class UiManagement
@@ -55,9 +60,12 @@ namespace Magicodes.Admin.Configuration
             public const string UseCaptchaOnRegistration = "App.TenantManagement.UseCaptchaOnRegistration";
             public const string DefaultEdition = "App.TenantManagement.DefaultEdition";
             public const string SubscriptionExpireNotifyDayCount = "App.TenantManagement.SubscriptionExpireNotifyDayCount";
-            public const string BillingLegalName = "App.UserManagement.BillingLegalName";
-            public const string BillingAddress = "App.UserManagement.BillingAddress";
-            public const string BillingTaxVatNo = "App.UserManagement.BillingTaxVatNo";
+            public const string BillingLegalName = "App.HostManagement.BillingLegalName";
+            public const string BillingAddress = "App.HostManagement.BillingAddress";
+            public const string BillingTaxNumber = "App.HostManagement.BillingTaxNumber";
+            public const string BillingContact = "App.HostManagement.BillingContact";
+            public const string BillingBankAccount = "App.HostManagement.BillingBankAccount";
+            public const string BillingBank = "App.HostManagement.BillingBank";
         }
 
         public static class UserManagement
