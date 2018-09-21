@@ -12,6 +12,7 @@ using App.Host.Authentication.TwoFactor;
 using App.Host.Configuration;
 using Magicodes.Admin;
 using Magicodes.Admin.Configuration;
+using Magicodes.Admin.Core.Custom;
 using Magicodes.Admin.EntityFrameworkCore;
 using Magicodes.App.Application;
 using Magicodes.Sms;
@@ -27,6 +28,7 @@ namespace App.Host.Startup
         typeof(AbpAspNetZeroCoreWebModule),
         typeof(SmsModule),
         typeof(AdminCoreModule),
+        typeof(AppCoreModule),
         typeof(AppApplicationModule),
         typeof(UnityModule)
     )]
