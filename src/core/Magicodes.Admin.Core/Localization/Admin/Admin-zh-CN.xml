@@ -833,5 +833,7 @@
     <text name="PendingRefund" value="待退款" /> 
     <text name="Refunded" value="已退款" />
 
+    <text name="PleaseSelectProperSort" value="请选择正确的分类" />
+
   </texts>
 </localizationDictionary>

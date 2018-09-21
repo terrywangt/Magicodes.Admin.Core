@@ -54,6 +54,12 @@ namespace Magicodes.Admin.Core.Custom.Attachments
         public AttachmentTypes AttachmentType { get; set; }
 
         /// <summary>
+        /// 附件/素材分类
+        /// </summary>
+        [Display(Name = "附件/素材分类")]
+        public AttachmentSorts AttachmentSorts { get; set; }
+
+        /// <summary>
         /// 内容MD5编码
         /// </summary>
         [MaxLength(32)]

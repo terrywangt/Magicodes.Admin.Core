@@ -1,26 +1,22 @@
-﻿using Abp.AspNetCore.Mvc.Controllers;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Threading.Tasks;
+using Abp.AspNetCore.Mvc.Controllers;
 using Abp.Auditing;
 using Abp.Domain.Repositories;
-using Abp.IO.Extensions;
 using Abp.Timing;
 using Abp.UI;
 using Abp.Web.Models;
-using Magicodes.Admin.IO;
-using Magicodes.Storage;
-using Magicodes.Storage.Core;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using System.Threading.Tasks;
 using Magicodes.Admin.Core.Custom.Attachments;
 using Magicodes.Admin.Dto;
-using Magicodes.Unity;
+using Magicodes.Storage.Core;
 using Magicodes.Unity.Storage;
+using Microsoft.AspNetCore.Mvc;
 
-namespace Magicodes.Admin.Web.Controllers
+namespace App.Host.Controllers
 {
+    [Route("api/Attachment")]
     public class AttachmentController : AbpController
     {
         private readonly IRepository<AttachmentInfo, long> _attachmentInfoRepository;
@@ -32,7 +28,7 @@ namespace Magicodes.Admin.Web.Controllers
             _storageManager = storageManager;
         }
 
-        [HttpPost]
+        [HttpPost("UploadFiles")]
         [DisableAuditing]
         public async Task<ActionResult> UploadFiles(AddAttachmentInputDto input)
         {
@@ -56,7 +52,7 @@ namespace Magicodes.Admin.Web.Controllers
                         throw new UserFriendlyException(L("File_SizeLimit_Error"));
                     }
 
-                    if (!Enum.TryParse(input.AttachmentSort.ToString(), false, out Core.Custom.Attachments.AttachmentSorts result))
+                    if (!Enum.TryParse(input.AttachmentSort.ToString(), false, out Magicodes.Admin.Core.Custom.Attachments.AttachmentSorts result))
                     {
                         throw new UserFriendlyException(L("PleaseSelectProperSort"));
                     }
@@ -94,7 +90,7 @@ namespace Magicodes.Admin.Web.Controllers
                                 ContainerName = blobInfo.Container,
                                 AttachmentType = attachmentType,
                                 ContentMD5 = blobInfo.ContentMD5,
-                                AttachmentSorts = (Core.Custom.Attachments.AttachmentSorts)input.AttachmentSort
+                                AttachmentSorts = (Magicodes.Admin.Core.Custom.Attachments.AttachmentSorts)input.AttachmentSort
                             };
                             _attachmentInfoRepository.Insert(attach);
                             filesOutput.Add(attach);
