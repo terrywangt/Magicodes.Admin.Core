@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
@@ -22,6 +23,8 @@ using Magicodes.ExporterAndImporter.Core;
 using Abp.AspNetZeroCore.Net;
 using Magicodes.Admin.Dto;
 using Abp.Domain.Uow;
+using Abp.Runtime.Caching;
+using Magicodes.Admin;
 using Magicodes.Admin.Core.Custom.Attachments;
 
 
@@ -35,44 +38,45 @@ namespace Admin.Application.Custom.Contents
     {
 
         private readonly IRepository<ColumnInfo, long> _columnInfoRepository;
-	    private readonly IExporter _excelExporter;
-    		private readonly IRepository<ObjectAttachmentInfo, long> _objectAttachmentRepository;
-    
-		/// <summary>
-		/// 
-		/// </summary>
+        private readonly IExporter _excelExporter;
+        private readonly IRepository<ObjectAttachmentInfo, long> _objectAttachmentRepository;
+        private readonly ICacheManager _cacheManager;
+
+        /// <summary>
+        /// 
+        /// </summary>
         public ColumnInfoAppService(
-            IRepository<ColumnInfo, long> columnInfoRepository 
-            , IExporter excelExporter
-		, IRepository<ObjectAttachmentInfo, long> objectAttachmentRepository
-                ) : base()
+            IRepository<ColumnInfo, long> columnInfoRepository,
+            IExporter excelExporter,
+            IRepository<ObjectAttachmentInfo, long> objectAttachmentRepository,
+            ICacheManager cacheManager) : base()
         {
             _columnInfoRepository = columnInfoRepository;
-			_excelExporter = excelExporter;
-        _objectAttachmentRepository = objectAttachmentRepository;
-    
+            _excelExporter = excelExporter;
+            _objectAttachmentRepository = objectAttachmentRepository;
+            _cacheManager = cacheManager;
         }
 
-		/// <summary>
-		/// 获取栏目列表
-		/// </summary>
+        /// <summary>
+        /// 获取栏目列表
+        /// </summary>
         public async Task<PagedResultDto<ColumnInfoListDto>> GetColumnInfos(GetColumnInfosInput input)
         {
             async Task<PagedResultDto<ColumnInfoListDto>> getListFunc(bool isLoadSoftDeleteData)
             {
                 var query = CreateColumnInfosQuery(input);
-                
-								//仅加载已删除的数据
-				if (isLoadSoftDeleteData)
-                query = query.Where(p => p.IsDeleted);
-				
-				var resultCount = await query.CountAsync();
+
+                //仅加载已删除的数据
+                if (isLoadSoftDeleteData)
+                    query = query.Where(p => p.IsDeleted);
+
+                var resultCount = await query.CountAsync();
                 var results = await query
                     .OrderBy(input.Sorting)
                     .PageBy(input)
                     .ToListAsync();
 
-				return new PagedResultDto<ColumnInfoListDto>(resultCount, results.MapTo<List<ColumnInfoListDto>>());
+                return new PagedResultDto<ColumnInfoListDto>(resultCount, results.MapTo<List<ColumnInfoListDto>>());
             }
 
             //是否仅加载回收站数据
@@ -86,10 +90,10 @@ namespace Admin.Application.Custom.Contents
             return await getListFunc(false);
         }
 
-		/// <summary>
-		/// 导出栏目
-		/// </summary>
-		public async Task<FileDto> GetColumnInfosToExcel(GetColumnInfosInput input)
+        /// <summary>
+        /// 导出栏目
+        /// </summary>
+        public async Task<FileDto> GetColumnInfosToExcel(GetColumnInfosInput input)
         {
             async Task<List<ColumnInfoExportDto>> getListFunc(bool isLoadSoftDeleteData)
             {
@@ -106,7 +110,7 @@ namespace Admin.Application.Custom.Contents
 
             List<ColumnInfoExportDto> exportData = null;
 
-			            //是否仅加载回收站数据
+            //是否仅加载回收站数据
             if (input.IsOnlyGetRecycleData)
             {
                 using (UnitOfWorkManager.Current.DisableFilter(AbpDataFilters.SoftDelete))
@@ -114,45 +118,56 @@ namespace Admin.Application.Custom.Contents
                     exportData = await getListFunc(true);
                 }
             }
-			
+
             exportData = await getListFunc(false);
             var fileDto = new FileDto(L("ColumnInfo") + L("ExportData") + ".xlsx", MimeTypeNames.ApplicationVndOpenxmlformatsOfficedocumentSpreadsheetmlSheet);
             var filePath = GetTempFilePath(fileName: fileDto.FileToken);
             await _excelExporter.Export(filePath, exportData);
+
+            if (!File.Exists(filePath))
+            {
+                throw new UserFriendlyException(L("RequestedFileDoesNotExists"));
+            }
+
+            var fileBytes = File.ReadAllBytes(filePath);
+            File.Delete(filePath);
+
+            _cacheManager.GetCache(AppConsts.ExcelFileCacheName).Set(fileDto.FileName, fileBytes);
+
             return fileDto;
         }
 
-		/// <summary>
-		/// 
-		/// </summary>
+        /// <summary>
+        /// 
+        /// </summary>
         private IQueryable<ColumnInfo> CreateColumnInfosQuery(GetColumnInfosInput input)
         {
             var query = _columnInfoRepository.GetAll();
-			
-			//关键字搜索
-			query = query
-					.WhereIf(
+
+            //关键字搜索
+            query = query
+                    .WhereIf(
                     !input.Filter.IsNullOrEmpty(),
-					p => p.Title.Contains(input.Filter) || p.Description.Contains(input.Filter) || p.Introduction.Contains(input.Filter) || p.IconCls.Contains(input.Filter) || p.Url.Contains(input.Filter));
-			
-			
-			//创建时间范围搜索
-			query = query
+                    p => p.Title.Contains(input.Filter) || p.Description.Contains(input.Filter) || p.Introduction.Contains(input.Filter) || p.IconCls.Contains(input.Filter) || p.Url.Contains(input.Filter));
+
+
+            //创建时间范围搜索
+            query = query
                 .WhereIf(input.CreationDateStart.HasValue, t => t.CreationTime >= input.CreationDateStart.Value)
                 .WhereIf(input.CreationDateEnd.HasValue, t => t.CreationTime <= input.CreationDateEnd.Value);
-			
-			
-			//修改时间范围搜索
-			query = query
+
+
+            //修改时间范围搜索
+            query = query
                 .WhereIf(input.ModificationTimeStart.HasValue, t => t.LastModificationTime >= input.ModificationTimeStart.Value)
                 .WhereIf(input.ModificationTimeEnd.HasValue, t => t.LastModificationTime <= input.ModificationTimeEnd.Value);
-			
+
             return query;
         }
 
-		/// <summary>
-		/// 获取栏目
-		/// </summary>
+        /// <summary>
+        /// 获取栏目
+        /// </summary>
         [AbpAuthorize(AppPermissions.Pages_ColumnInfo_Create, AppPermissions.Pages_ColumnInfo_Edit)]
         public async Task<GetColumnInfoForEditOutput> GetColumnInfoForEdit(NullableIdDto<long> input)
         {
@@ -173,9 +188,9 @@ namespace Admin.Application.Custom.Contents
             };
         }
 
-		/// <summary>
-		/// 创建或者编辑栏目
-		/// </summary>
+        /// <summary>
+        /// 创建或者编辑栏目
+        /// </summary>
         [AbpAuthorize(AppPermissions.Pages_ColumnInfo_Create, AppPermissions.Pages_ColumnInfo_Edit)]
         public async Task CreateOrUpdateColumnInfo(CreateOrUpdateColumnInfoDto input)
         {
@@ -189,9 +204,9 @@ namespace Admin.Application.Custom.Contents
             }
         }
 
-		/// <summary>
-		/// 删除栏目
-		/// </summary>
+        /// <summary>
+        /// 删除栏目
+        /// </summary>
         [AbpAuthorize(AppPermissions.Pages_ColumnInfo_Delete)]
         public async Task DeleteColumnInfo(EntityDto<long> input)
         {
@@ -199,7 +214,7 @@ namespace Admin.Application.Custom.Contents
             columnInfo.IsDeleted = true;
             columnInfo.DeleterUserId = AbpSession.GetUserId();
             columnInfo.DeletionTime = Clock.Now;
-            
+
         }
 
         /// <summary>
@@ -234,7 +249,7 @@ namespace Admin.Application.Custom.Contents
                 TenantId = AbpSession.TenantId
             };
             await _columnInfoRepository.InsertAsync(columnInfo);
-             
+
         }
 
         /// <summary>
@@ -292,29 +307,29 @@ namespace Admin.Application.Custom.Contents
             await base.MoveTo(_columnInfoRepository, input);
         }
 
-		/// <summary>
+        /// <summary>
         /// IsActive开关服务
         /// </summary>
         /// <param name="input">开关输入参数</param>
         /// <returns></returns>
-		[AbpAuthorize(AppPermissions.Pages_ColumnInfo_Edit)]
+        [AbpAuthorize(AppPermissions.Pages_ColumnInfo_Edit)]
         public async Task UpdateIsActiveSwitchAsync(SwitchEntityInputDto<long> input)
-		{
+        {
             var columnInfo = await _columnInfoRepository.GetAsync(input.Id);
-			columnInfo.IsActive = input.SwitchValue;
-		}
+            columnInfo.IsActive = input.SwitchValue;
+        }
 
-		/// <summary>
+        /// <summary>
         /// IsNeedAuthorizeAccess开关服务
         /// </summary>
         /// <param name="input">开关输入参数</param>
         /// <returns></returns>
-		[AbpAuthorize(AppPermissions.Pages_ColumnInfo_Edit)]
+        [AbpAuthorize(AppPermissions.Pages_ColumnInfo_Edit)]
         public async Task UpdateIsNeedAuthorizeAccessSwitchAsync(SwitchEntityInputDto<long> input)
-		{
+        {
             var columnInfo = await _columnInfoRepository.GetAsync(input.Id);
-			columnInfo.IsNeedAuthorizeAccess = input.SwitchValue;
-		}
+            columnInfo.IsNeedAuthorizeAccess = input.SwitchValue;
+        }
 
 
     }

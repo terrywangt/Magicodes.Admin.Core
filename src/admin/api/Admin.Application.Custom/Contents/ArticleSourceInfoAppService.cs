@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
@@ -22,6 +23,8 @@ using Magicodes.ExporterAndImporter.Core;
 using Abp.AspNetZeroCore.Net;
 using Magicodes.Admin.Dto;
 using Abp.Domain.Uow;
+using Abp.Runtime.Caching;
+using Magicodes.Admin;
 
 
 namespace Admin.Application.Custom.Contents
@@ -35,18 +38,19 @@ namespace Admin.Application.Custom.Contents
 
         private readonly IRepository<ArticleSourceInfo, long> _articleSourceInfoRepository;
 	    private readonly IExporter _excelExporter;
-    
-		/// <summary>
-		/// 
-		/// </summary>
+        private readonly ICacheManager _cacheManager;
+
+        /// <summary>
+        /// 
+        /// </summary>
         public ArticleSourceInfoAppService(
             IRepository<ArticleSourceInfo, long> articleSourceInfoRepository 
             , IExporter excelExporter
-            ) : base()
+            , ICacheManager cacheManager) : base()
         {
             _articleSourceInfoRepository = articleSourceInfoRepository;
 			_excelExporter = excelExporter;
-
+            _cacheManager = cacheManager;
         }
 
 		/// <summary>
@@ -115,6 +119,17 @@ namespace Admin.Application.Custom.Contents
             var fileDto = new FileDto(L("ArticleSourceInfo") + L("ExportData") + ".xlsx", MimeTypeNames.ApplicationVndOpenxmlformatsOfficedocumentSpreadsheetmlSheet);
             var filePath = GetTempFilePath(fileName: fileDto.FileToken);
             await _excelExporter.Export(filePath, exportData);
+
+            if (!File.Exists(filePath))
+            {
+                throw new UserFriendlyException(L("RequestedFileDoesNotExists"));
+            }
+
+            var fileBytes = File.ReadAllBytes(filePath);
+            File.Delete(filePath);
+
+            _cacheManager.GetCache(AppConsts.ExcelFileCacheName).Set(fileDto.FileName, fileBytes);
+
             return fileDto;
         }
 
