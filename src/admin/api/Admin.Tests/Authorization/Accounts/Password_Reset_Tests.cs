@@ -46,7 +46,7 @@ namespace Magicodes.Admin.Tests.Authorization.Accounts
             await accountAppService.ResetPassword(
                 new ResetPasswordInput
                 {
-                    Password = "newpass",
+                    Password = "New@Passw0rd",
                     ResetCode = passResetCode,
                     UserId = user.Id
                 }
@@ -57,7 +57,7 @@ namespace Magicodes.Admin.Tests.Authorization.Accounts
             user = await GetCurrentUserAsync();
             LocalIocManager
                 .Resolve<IPasswordHasher<User>>()
-                .VerifyHashedPassword(user, user.Password, "newpass")
+                .VerifyHashedPassword(user, user.Password, "New@Passw0rd")
                 .ShouldBe(PasswordVerificationResult.Success);
         }
     }
