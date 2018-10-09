@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Magicodes.Admin.Web.Authentication.JwtBearer;
 
@@ -55,9 +56,10 @@ namespace Magicodes.Admin.Web.Startup
 
             if (bool.Parse(configuration["IdentityServer:IsEnabled"]))
             {
+                IdentityModelEventSource.ShowPII = true;
                 authenticationBuilder.AddIdentityServerAuthentication("IdentityBearer", options =>
                 {
-                    options.Authority = configuration["App:ServerRootAddress"];
+                    options.Authority = configuration["IdentityServer:Authority"];
                     options.ApiName = configuration["IdentityServer:ApiName"];
                     options.ApiSecret = configuration["IdentityServer:ApiSecret"];
                     options.RequireHttpsMetadata = false;

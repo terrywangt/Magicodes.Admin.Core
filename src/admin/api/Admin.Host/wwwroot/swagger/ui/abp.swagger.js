@@ -48,6 +48,7 @@
                     var result = responseJSON.result;
                     var expireDate = new Date(Date.now() + (result.expireInSeconds * 1000));
                     abp.auth.setToken(result.accessToken, expireDate);
+                    abp.utils.setCookieValue("enc_auth_token", result.encryptedAccessToken, expireDate);
                     callback();   
                 } else {
                     alert('Login failed !');
@@ -64,7 +65,7 @@
     abp.swagger.login = function (callback) {
         //Get TenantId first
         var tenancyName = document.getElementById('tenancyName').value;
-
+        
         if (tenancyName) {
             var xhrTenancyName = new XMLHttpRequest();
             xhrTenancyName.onreadystatechange = function () {
@@ -87,8 +88,26 @@
         }
     };
 
-    abp.swagger.logout = function () {
-        abp.auth.clearToken();
+    abp.swagger.logout = function(callback) {
+        var xhrLogout = new XMLHttpRequest();
+
+        var authToken = abp.auth.getToken();
+        if (!authToken) {
+            return true;
+        }
+
+        xhrLogout.onreadystatechange = function() {
+            if (xhrLogout.readyState === XMLHttpRequest.DONE && xhrLogout.status === 200) {
+                abp.auth.clearToken();
+                abp.utils.setCookieValue("enc_auth_token", undefined);
+                callback && callback();
+            }
+        };
+
+        xhrLogout.open('GET', '/api/TokenAuth/LogOut', true);
+        xhrLogout.setRequestHeader(abp.auth.tokenHeaderName, 'Bearer ' + authToken);
+        xhrLogout.setRequestHeader('Content-type', 'application/json');
+        xhrLogout.send();
     }
 
     abp.swagger.closeAuthDialog = function () {
