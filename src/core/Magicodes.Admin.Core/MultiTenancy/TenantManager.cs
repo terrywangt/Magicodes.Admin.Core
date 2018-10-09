@@ -19,6 +19,7 @@ using Magicodes.Admin.Notifications;
 using System;
 using System.Diagnostics;
 using System.Linq.Expressions;
+using Abp.Runtime.Session;
 using Abp.UI;
 using Microsoft.EntityFrameworkCore;
 using Magicodes.Admin.MultiTenancy.Payments;
@@ -30,6 +31,8 @@ namespace Magicodes.Admin.MultiTenancy
     /// </summary>
     public class TenantManager : AbpTenantManager<Tenant, User>
     {
+        public IAbpSession AbpSession { get; set; }
+
         private readonly IUnitOfWorkManager _unitOfWorkManager;
         private readonly RoleManager _roleManager;
         private readonly UserManager _userManager;
@@ -64,6 +67,8 @@ namespace Magicodes.Admin.MultiTenancy
                 featureValueStore
             )
         {
+            AbpSession = NullAbpSession.Instance;
+
             _unitOfWorkManager = unitOfWorkManager;
             _roleManager = roleManager;
             _userEmailer = userEmailer;
@@ -131,15 +136,25 @@ namespace Magicodes.Admin.MultiTenancy
                     CheckErrors(await _roleManager.UpdateAsync(userRole));
 
                     //Create admin user for the tenant
+                    var adminUser = User.CreateTenantAdminUser(tenant.Id, adminEmailAddress);
+                    adminUser.ShouldChangePasswordOnNextLogin = shouldChangePasswordOnNextLogin;
+                    adminUser.IsActive = true;
+
                     if (adminPassword.IsNullOrEmpty())
                     {
                         adminPassword = User.CreateRandomPassword();
                     }
+                    else
+                    {
+                        await _userManager.InitializeOptionsAsync(AbpSession.TenantId);
+                        foreach (var validator in _userManager.PasswordValidators)
+                        {
+                            CheckErrors(await validator.ValidateAsync(_userManager, adminUser, adminPassword));
+                        }
 
-                    var adminUser = User.CreateTenantAdminUser(tenant.Id, adminEmailAddress);
+                    }
+
                     adminUser.Password = _passwordHasher.HashPassword(adminUser, adminPassword);
-                    adminUser.ShouldChangePasswordOnNextLogin = shouldChangePasswordOnNextLogin;
-                    adminUser.IsActive = true;
 
                     CheckErrors(await _userManager.CreateAsync(adminUser));
                     await _unitOfWorkManager.Current.SaveChangesAsync(); //To get admin user's id

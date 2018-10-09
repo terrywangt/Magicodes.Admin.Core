@@ -720,9 +720,6 @@
     <text name="UiCustomization_AllowAsideMinimizing">Allow aside minimizing</text>
     <text name="UiCustomization_DefaultMinimizedAside">Default minimized aside</text>
     <text name="UiCustomization_AllowAsideHiding">Allow aside hiding</text>
-    <text name="UiCustomization_SubmenuToggle">Submenu toggle</text>
-    <text name="UiCustomization_Dropdown">Dropdown</text>
-    <text name="UiCustomization_Accordion">Accordion</text>
     <text name="UiCustomization_DropdownSubmenuSkin">Dropdown submenu skin</text>
     <text name="UiCustomization_Inherit">Inherit</text>
     <text name="UiCustomization_DropdownSubmenuArrow">Dropdown submenu arrow</text>
@@ -800,5 +797,9 @@
     <text name="DefaultLanguage">Default language</text>
     <text name="CurrentUserDidNotLoginToTheApplication">Current user did not login to the application!</text>
     <text name="MainMenu">Main menu</text>
+    <text name="IncorrectImageFormat">Incorrect image format!</text>
+    <text name="NotificationDeleteWarningMessage">This notification will be deleted</text>
+    <text name="ProcessingWithThreeDot">Processing...</text>
+    <text name="ThereIsNoSuchImageFileWithGivenToken">There is no image with given token</text>
   </texts>
 </localizationDictionary>

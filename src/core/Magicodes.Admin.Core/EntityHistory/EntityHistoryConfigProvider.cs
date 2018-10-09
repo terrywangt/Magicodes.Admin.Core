@@ -7,7 +7,6 @@ namespace Magicodes.Admin.EntityHistory
 {
     public class EntityHistoryConfigProvider : ICustomConfigProvider
     {
-        private static Dictionary<string, object> EntityHistoryConfig => new Dictionary<string, object>();
         private readonly IAbpStartupConfiguration _abpStartupConfiguration;
 
         public EntityHistoryConfigProvider(IAbpStartupConfiguration abpStartupConfiguration)
@@ -17,20 +16,22 @@ namespace Magicodes.Admin.EntityHistory
 
         public Dictionary<string, object> GetConfig(CustomConfigProviderContext customConfigProviderContext)
         {
+            var entityHistoryConfig = new Dictionary<string, object>();
+
             if (!_abpStartupConfiguration.EntityHistory.IsEnabled)
             {
-                return EntityHistoryConfig;
+                return entityHistoryConfig;
             }
 
             foreach (var type in EntityHistoryHelper.TrackedTypes)
             {
                 if (_abpStartupConfiguration.EntityHistory.Selectors.Any(s => s.Predicate(type)))
                 {
-                    EntityHistoryConfig.Add(type.FullName ?? "", type.FullName);
+                    entityHistoryConfig.Add(type.FullName ?? "", type.FullName);
                 }
             }
 
-            return EntityHistoryConfig;
+            return entityHistoryConfig;
         }
     }
 }

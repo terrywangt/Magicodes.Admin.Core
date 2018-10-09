@@ -64,7 +64,7 @@ namespace Magicodes.Admin.Authorization.Roles
             }
         }
 
-        protected override string L(string name)
+        private new string L(string name)
         {
             return _localizationManager.GetString(AdminConsts.LocalizationSourceName, name);
         }
