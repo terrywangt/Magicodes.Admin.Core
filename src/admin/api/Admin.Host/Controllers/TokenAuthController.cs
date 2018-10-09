@@ -21,6 +21,7 @@ using Abp.Runtime.Session;
 using Abp.Timing;
 using Abp.UI;
 using Abp.Zero.Configuration;
+using IdentityModel;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -158,7 +159,7 @@ namespace Magicodes.Admin.Web.Controllers
             }
 
             //Login!
-            var accessToken = CreateAccessToken(CreateJwtClaims(loginResult.Identity));
+            var accessToken = CreateAccessToken(await CreateJwtClaims(loginResult.Identity, loginResult.User));
             return new AuthenticateResultModel
             {
                 AccessToken = accessToken,
@@ -172,12 +173,13 @@ namespace Magicodes.Admin.Web.Controllers
 
         [HttpGet]
         [AbpAuthorize]
-        public void LogOut()
+        public async Task LogOut()
         {
             if (AbpSession.UserId != null)
             {
-                var refreshToken = User.Claims.First(c => c.Type == AppConsts.RefreshTokenName);
-                _cacheManager.GetCache(AppConsts.RefreshTokenName).Remove(AbpSession.ToUserIdentifier().ToUserIdentifierString() + refreshToken.Value);
+                var tokenValidityKeyInClaims = User.Claims.First(c => c.Type == AppConsts.TokenValidityKey);
+                await _userManager.RemoveTokenValidityKeyAsync(_userManager.GetUser(AbpSession.ToUserIdentifier()), tokenValidityKeyInClaims.Value);
+                _cacheManager.GetCache(AppConsts.TokenValidityKey).Remove(tokenValidityKeyInClaims.Value);
             }
         }
 
@@ -228,7 +230,7 @@ namespace Magicodes.Admin.Web.Controllers
         public async Task<ImpersonatedAuthenticateResultModel> ImpersonatedAuthenticate(string impersonationToken)
         {
             var result = await _impersonationManager.GetImpersonatedUserAndIdentity(impersonationToken);
-            var accessToken = CreateAccessToken(CreateJwtClaims(result.Identity));
+            var accessToken = CreateAccessToken(await CreateJwtClaims(result.Identity, result.User));
 
             return new ImpersonatedAuthenticateResultModel
             {
@@ -242,7 +244,7 @@ namespace Magicodes.Admin.Web.Controllers
         public async Task<SwitchedAccountAuthenticateResultModel> LinkedAccountAuthenticate(string switchAccountToken)
         {
             var result = await _userLinkManager.GetSwitchedUserAndIdentity(switchAccountToken);
-            var accessToken = CreateAccessToken(CreateJwtClaims(result.Identity));
+            var accessToken = CreateAccessToken(await CreateJwtClaims(result.Identity, result.User));
 
             return new SwitchedAccountAuthenticateResultModel
             {
@@ -269,7 +271,7 @@ namespace Magicodes.Admin.Web.Controllers
             {
                 case AbpLoginResultType.Success:
                     {
-                        var accessToken = CreateAccessToken(CreateJwtClaims(loginResult.Identity));
+                        var accessToken = CreateAccessToken(await CreateJwtClaims(loginResult.Identity, loginResult.User));
 
                         var returnUrl = model.ReturnUrl;
 
@@ -309,7 +311,7 @@ namespace Magicodes.Admin.Web.Controllers
                             );
                         }
 
-                        var accessToken = CreateAccessToken(CreateJwtClaims(loginResult.Identity));
+                        var accessToken = CreateAccessToken(await CreateJwtClaims(loginResult.Identity, loginResult.User));
                         return new ExternalAuthenticateResultModel
                         {
                             AccessToken = accessToken,
@@ -543,14 +545,14 @@ namespace Magicodes.Admin.Web.Controllers
             return new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
         }
 
-        private string GetEncrpyedAccessToken(string accessToken)
+        private static string GetEncrpyedAccessToken(string accessToken)
         {
             return SimpleStringCipher.Instance.Encrypt(accessToken, AppConsts.DefaultPassPhrase);
         }
 
-        private IEnumerable<Claim> CreateJwtClaims(ClaimsIdentity identity)
+        private async Task<IEnumerable<Claim>> CreateJwtClaims(ClaimsIdentity identity, User user, TimeSpan? expiration = null)
         {
-            var refreshToken = Guid.NewGuid().ToString();
+            var tokenValidityKey = Guid.NewGuid().ToString();
             var claims = identity.Claims.ToList();
             var nameIdClaim = claims.First(c => c.Type == _identityOptions.ClaimsIdentity.UserIdClaimType);
 
@@ -565,11 +567,16 @@ namespace Magicodes.Admin.Web.Controllers
             {
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.Now.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64),
-                new Claim(AppConsts.RefreshTokenName, refreshToken),
+                new Claim(AppConsts.TokenValidityKey, tokenValidityKey),
                 new Claim(AppConsts.UserIdentifier, userIdentifier.ToUserIdentifierString())
             });
 
-            _cacheManager.GetCache(AppConsts.RefreshTokenName).Set(userIdentifier.ToUserIdentifierString() + refreshToken, refreshToken);
+            _cacheManager
+                .GetCache(AppConsts.TokenValidityKey)
+                .Set(tokenValidityKey, "");
+
+            await _userManager.AddTokenValidityKeyAsync(user, tokenValidityKey,
+                DateTime.UtcNow.Add(expiration ?? _configuration.Expiration));
 
             return claims;
         }

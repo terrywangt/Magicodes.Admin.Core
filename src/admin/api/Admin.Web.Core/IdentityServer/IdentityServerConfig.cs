@@ -11,7 +11,11 @@ namespace Magicodes.Admin.Web.IdentityServer
         {
             return new List<ApiResource>
             {
-                new ApiResource("default-api", "Default (all) API") {Description = "AllFunctionalityYouHaveInTheApplication"}
+                new ApiResource("default-api", "Default (all) API")
+                {
+                    Description = "AllFunctionalityYouHaveInTheApplication",
+                    ApiSecrets= {new Secret("secret") }
+                }
             };
         }
 

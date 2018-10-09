@@ -4,6 +4,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Abp.AspNetCore.Mvc.Authorization;
 using Abp.AspNetZeroCore.Net;
+using Abp.Authorization;
 using Abp.Extensions;
 using Abp.IO.Extensions;
 using Abp.Runtime.Session;
@@ -11,6 +12,7 @@ using Abp.UI;
 using Abp.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Magicodes.Admin.Authorization;
 using Magicodes.Admin.MultiTenancy;
 using Magicodes.Admin.Storage;
 using Magicodes.Admin.Web.Helpers;
@@ -32,6 +34,7 @@ namespace Magicodes.Admin.Web.Controllers
         }
 
         [HttpPost]
+        [AbpMvcAuthorize(AppPermissions.Pages_Administration_Tenant_Settings)]
         public async Task<JsonResult> UploadLogo()
         {
             try
@@ -77,6 +80,7 @@ namespace Magicodes.Admin.Web.Controllers
         }
 
         [HttpPost]
+        [AbpMvcAuthorize(AppPermissions.Pages_Administration_Tenant_Settings)]
         public async Task<JsonResult> UploadCustomCss()
         {
             try

@@ -15,6 +15,7 @@ using Abp.Modules;
 using Abp.Reflection.Extensions;
 using Abp.Runtime.Caching.Redis;
 using Abp.Zero.Configuration;
+using Castle.Core.Internal;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -68,6 +69,9 @@ namespace Magicodes.Admin.Web
 
             Configuration.ReplaceService<IAppConfigurationAccessor, AppConfigurationAccessor>();
 
+            //Uncomment this line to use Hangfire instead of default background job manager (remember also to uncomment related lines in Startup.cs file(s)).
+            //Configuration.BackgroundJobs.UseHangfire();
+
             //Uncomment this line to use Redis cache instead of in-memory cache.
             //See app.config for Redis configuration and connection string
             //Configuration.Caching.UseRedis(options =>
@@ -104,7 +108,6 @@ namespace Magicodes.Admin.Web
             var appFolders = IocManager.Resolve<AppFolders>();
 
             appFolders.SampleProfileImagesFolder = Path.Combine(_env.WebRootPath, $"Common{Path.DirectorySeparatorChar}Images{Path.DirectorySeparatorChar}SampleProfilePics");
-            appFolders.TempFileDownloadFolder = Path.Combine(_env.WebRootPath, $"Temp{Path.DirectorySeparatorChar}Downloads");
             appFolders.WebLogsFolder = Path.Combine(_env.ContentRootPath, $"App_Data{Path.DirectorySeparatorChar}Logs");
 
 #if NET461
@@ -117,12 +120,6 @@ namespace Magicodes.Admin.Web
                 }
             }
 #endif
-
-            try
-            {
-                DirectoryHelper.CreateIfNotExists(appFolders.TempFileDownloadFolder);
-            }
-            catch { }
         }
     }
 }
