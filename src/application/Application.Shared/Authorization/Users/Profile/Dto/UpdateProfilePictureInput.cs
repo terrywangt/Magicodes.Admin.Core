@@ -6,7 +6,7 @@ namespace Magicodes.Admin.Authorization.Users.Profile.Dto
     {
         [Required]
         [MaxLength(400)]
-        public string FileName { get; set; }
+        public string FileToken { get; set; }
 
         public int X { get; set; }
 

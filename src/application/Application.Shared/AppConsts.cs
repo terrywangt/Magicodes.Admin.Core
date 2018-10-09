@@ -24,10 +24,8 @@
 
         public const int MaxProfilPictureBytesUserFriendlyValue = 5;
 
-        public const string ExcelFileCacheName = "ExcelFileCacheName";
-
+        public const string TokenValidityKey = "token_validity_key";
         public const string RefreshTokenName = "refresh_token";
-
         public static string UserIdentifier = "user_identifier";
     }
 }

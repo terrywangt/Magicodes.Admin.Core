@@ -17,5 +17,7 @@ namespace Magicodes.Admin.Notifications
         Task<GetNotificationSettingsOutput> GetNotificationSettings();
         
         Task UpdateNotificationSettings(UpdateNotificationSettingsInput input);
+
+        Task DeleteNotification(EntityDto<Guid> input);
     }
 }
