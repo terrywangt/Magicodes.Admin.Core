@@ -125,13 +125,13 @@ namespace Magicodes.Admin.Auditing
             if (AbpSession.TenantId == null)
             {
                 entityHistoryConfig = entityHistoryConfig
-                    .Where(c => EntityHistoryHelper.HostSideTrackedTypes.Contains(c.Value))
+                    .Where(c => EntityHistoryHelper.HostSideTrackedTypes.Select(x=>x.FullName).Contains(c.Value.ToString()))
                     .ToDictionary(key => key.Key, value => value.Value);
             }
             else
             {
                 entityHistoryConfig = entityHistoryConfig
-                    .Where(c => EntityHistoryHelper.TenantSideTrackedTypes.Contains(c.Value))
+                    .Where(c => EntityHistoryHelper.TenantSideTrackedTypes.Select(x => x.FullName).Contains(c.Value.ToString()))
                     .ToDictionary(key => key.Key, value => value.Value);
             }
 

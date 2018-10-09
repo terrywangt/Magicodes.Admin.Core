@@ -130,7 +130,7 @@ namespace Magicodes.Admin.Authorization.Accounts
                 throw new UserFriendlyException(L("InvalidPasswordResetCode"), L("InvalidPasswordResetCode_Detail"));
             }
 
-            user.Password = _passwordHasher.HashPassword(user, input.Password);
+            CheckErrors(await UserManager.ChangePasswordAsync(user, input.Password));
             user.PasswordResetCode = null;
             user.IsEmailConfirmed = true;
             user.ShouldChangePasswordOnNextLogin = false;

@@ -45,7 +45,6 @@ namespace Magicodes.Admin.Configuration
                     DefaultMinimizedAside = await _settingManager.GetSettingValueAsync<bool>(AppSettings.UiManagement.LeftAside.DefaultMinimizedAside),
                     AllowAsideHiding = await _settingManager.GetSettingValueAsync<bool>(AppSettings.UiManagement.LeftAside.AllowAsideHiding),
                     DefaultHiddenAside = await _settingManager.GetSettingValueAsync<bool>(AppSettings.UiManagement.LeftAside.DefaultHiddenAside),
-                    SubmenuToggle = await _settingManager.GetSettingValueAsync(AppSettings.UiManagement.LeftAside.SubmenuToggle),
                     DropdownSubmenuSkin = await _settingManager.GetSettingValueAsync(AppSettings.UiManagement.LeftAside.DropdownSubmenuSkin),
                     DropdownSubmenuArrow = await _settingManager.GetSettingValueAsync<bool>(AppSettings.UiManagement.LeftAside.DropdownSubmenuArrow)
                 },
@@ -112,7 +111,6 @@ namespace Magicodes.Admin.Configuration
                     DefaultMinimizedAside = await _settingManager.GetSettingValueForApplicationAsync<bool>(AppSettings.UiManagement.LeftAside.DefaultMinimizedAside),
                     AllowAsideHiding = await _settingManager.GetSettingValueForApplicationAsync<bool>(AppSettings.UiManagement.LeftAside.AllowAsideHiding),
                     DefaultHiddenAside = await _settingManager.GetSettingValueForApplicationAsync<bool>(AppSettings.UiManagement.LeftAside.DefaultHiddenAside),
-                    SubmenuToggle = await _settingManager.GetSettingValueForApplicationAsync(AppSettings.UiManagement.LeftAside.SubmenuToggle),
                     DropdownSubmenuSkin = await _settingManager.GetSettingValueForApplicationAsync(AppSettings.UiManagement.LeftAside.DropdownSubmenuSkin),
                     DropdownSubmenuArrow = await _settingManager.GetSettingValueForApplicationAsync<bool>(AppSettings.UiManagement.LeftAside.DropdownSubmenuArrow)
                 },
@@ -152,7 +150,6 @@ namespace Magicodes.Admin.Configuration
                     DefaultMinimizedAside = await _settingManager.GetSettingValueForTenantAsync<bool>(AppSettings.UiManagement.LeftAside.DefaultMinimizedAside, tenantId),
                     AllowAsideHiding = await _settingManager.GetSettingValueForTenantAsync<bool>(AppSettings.UiManagement.LeftAside.AllowAsideHiding, tenantId),
                     DefaultHiddenAside = await _settingManager.GetSettingValueForTenantAsync<bool>(AppSettings.UiManagement.LeftAside.DefaultHiddenAside, tenantId),
-                    SubmenuToggle = await _settingManager.GetSettingValueForTenantAsync(AppSettings.UiManagement.LeftAside.SubmenuToggle, tenantId),
                     DropdownSubmenuSkin = await _settingManager.GetSettingValueForTenantAsync(AppSettings.UiManagement.LeftAside.DropdownSubmenuSkin, tenantId),
                     DropdownSubmenuArrow = await _settingManager.GetSettingValueForTenantAsync<bool>(AppSettings.UiManagement.LeftAside.DropdownSubmenuArrow, tenantId)
                 },
@@ -184,7 +181,6 @@ namespace Magicodes.Admin.Configuration
             await _settingManager.ChangeSettingForTenantAsync(tenantId, AppSettings.UiManagement.LeftAside.DefaultMinimizedAside, settings.Menu.DefaultMinimizedAside.ToString());
             await _settingManager.ChangeSettingForTenantAsync(tenantId, AppSettings.UiManagement.LeftAside.AllowAsideHiding, settings.Menu.AllowAsideHiding.ToString());
             await _settingManager.ChangeSettingForTenantAsync(tenantId, AppSettings.UiManagement.LeftAside.DefaultHiddenAside, settings.Menu.DefaultHiddenAside.ToString());
-            await _settingManager.ChangeSettingForTenantAsync(tenantId, AppSettings.UiManagement.LeftAside.SubmenuToggle, settings.Menu.SubmenuToggle);
             await _settingManager.ChangeSettingForTenantAsync(tenantId, AppSettings.UiManagement.LeftAside.DropdownSubmenuSkin, settings.Menu.DropdownSubmenuSkin);
             await _settingManager.ChangeSettingForTenantAsync(tenantId, AppSettings.UiManagement.LeftAside.DropdownSubmenuArrow, settings.Menu.DropdownSubmenuArrow.ToString());
 
@@ -210,7 +206,6 @@ namespace Magicodes.Admin.Configuration
             await _settingManager.ChangeSettingForApplicationAsync(AppSettings.UiManagement.LeftAside.DefaultMinimizedAside, settings.Menu.DefaultMinimizedAside.ToString());
             await _settingManager.ChangeSettingForApplicationAsync(AppSettings.UiManagement.LeftAside.AllowAsideHiding, settings.Menu.AllowAsideHiding.ToString());
             await _settingManager.ChangeSettingForApplicationAsync(AppSettings.UiManagement.LeftAside.DefaultHiddenAside, settings.Menu.DefaultHiddenAside.ToString());
-            await _settingManager.ChangeSettingForApplicationAsync(AppSettings.UiManagement.LeftAside.SubmenuToggle, settings.Menu.SubmenuToggle);
             await _settingManager.ChangeSettingForApplicationAsync(AppSettings.UiManagement.LeftAside.DropdownSubmenuSkin, settings.Menu.DropdownSubmenuSkin);
             await _settingManager.ChangeSettingForApplicationAsync(AppSettings.UiManagement.LeftAside.DropdownSubmenuArrow, settings.Menu.DropdownSubmenuArrow.ToString());
 
@@ -238,7 +233,6 @@ namespace Magicodes.Admin.Configuration
             await _settingManager.ChangeSettingForUserAsync(userIdentifier, AppSettings.UiManagement.LeftAside.DefaultMinimizedAside, settings.Menu.DefaultMinimizedAside.ToString());
             await _settingManager.ChangeSettingForUserAsync(userIdentifier, AppSettings.UiManagement.LeftAside.AllowAsideHiding, settings.Menu.AllowAsideHiding.ToString());
             await _settingManager.ChangeSettingForUserAsync(userIdentifier, AppSettings.UiManagement.LeftAside.DefaultHiddenAside, settings.Menu.DefaultHiddenAside.ToString());
-            await _settingManager.ChangeSettingForUserAsync(userIdentifier, AppSettings.UiManagement.LeftAside.SubmenuToggle, settings.Menu.SubmenuToggle);
             await _settingManager.ChangeSettingForUserAsync(userIdentifier, AppSettings.UiManagement.LeftAside.DropdownSubmenuSkin, settings.Menu.DropdownSubmenuSkin);
             await _settingManager.ChangeSettingForUserAsync(userIdentifier, AppSettings.UiManagement.LeftAside.DropdownSubmenuArrow, settings.Menu.DropdownSubmenuArrow.ToString());
 

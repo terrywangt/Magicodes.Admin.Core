@@ -100,5 +100,10 @@ namespace Magicodes.Admin.Notifications
                 }
             }
         }
+
+        public async Task DeleteNotification(EntityDto<Guid> input)
+        {
+            await _userNotificationManager.DeleteUserNotificationAsync(AbpSession.TenantId, input.Id);
+        }
     }
 }
