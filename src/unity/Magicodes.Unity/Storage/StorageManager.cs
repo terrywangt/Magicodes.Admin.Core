@@ -43,13 +43,13 @@ namespace Magicodes.Unity.Storage
         public void Initialize()
         {
             //日志函数
-            void LogAction(string tag, string message)
-            {
-                if (tag.Equals("error", StringComparison.CurrentCultureIgnoreCase))
-                    Logger.Error(message);
-                else
-                    Logger.Debug(message);
-            }
+            //void LogAction(string tag, string message)
+            //{
+            //    if (tag.Equals("error", StringComparison.CurrentCultureIgnoreCase))
+            //        Logger.Error(message);
+            //    else
+            //        Logger.Debug(message);
+            //}
 
             #region 配置存储程序
             switch (_appConfiguration.Configuration["StorageProvider:Type"])

@@ -21,6 +21,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
+using Magicodes.Admin.Storage;
 
 namespace Admin.Application.Custom.LogInfos
 {
@@ -33,6 +34,7 @@ namespace Admin.Application.Custom.LogInfos
         private readonly IRepository<TransactionLog, long> _transactionLogRepository;
         private readonly IExporter _excelExporter;
         private readonly ISettingManager _settingManager;
+        private readonly ITempFileCacheManager _tempFileCacheManager;
 
         /// <summary>
         /// 
@@ -40,13 +42,12 @@ namespace Admin.Application.Custom.LogInfos
         public TransactionLogAppService(
             IRepository<TransactionLog, long> transactionLogRepository
             , ISettingManager settingManager
-            , IExporter excelExporter
-            ) : base()
+            , IExporter excelExporter, ITempFileCacheManager tempFileCacheManager) : base()
         {
             _transactionLogRepository = transactionLogRepository;
             _settingManager = settingManager;
             _excelExporter = excelExporter;
-
+            _tempFileCacheManager = tempFileCacheManager;
         }
 
         /// <summary>
@@ -118,8 +119,8 @@ namespace Admin.Application.Custom.LogInfos
 			
             exportData = await getListFunc(false);
             var fileDto = new FileDto(L("TransactionLog") + L("ExportData") + ".xlsx", MimeTypeNames.ApplicationVndOpenxmlformatsOfficedocumentSpreadsheetmlSheet);
-            var filePath = GetTempFilePath(fileName: fileDto.FileToken);
-            await _excelExporter.Export(filePath, exportData);
+            var byteArray = await _excelExporter.ExportAsByteArray(exportData);
+            _tempFileCacheManager.SetFile(fileDto.FileToken, byteArray);
             return fileDto;
         }
 

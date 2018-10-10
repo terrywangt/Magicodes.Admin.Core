@@ -4,8 +4,6 @@ using Abp.Domain.Entities.Auditing;
 using System.Collections.Generic;
 using Abp.Application.Services.Dto;
 using Magicodes.Admin.Core.Custom.Contents;
-using System.Collections.Generic;
-using Magicodes.Admin.Core.Custom.Contents;
 
 namespace Admin.Application.Custom.Contents.Dto
 {

@@ -69,7 +69,10 @@ namespace Magicodes.Admin.MultiTenancy.Accounting
 
                 TenantAddress = invoice.TenantAddress.Replace("\r\n", "|").Split('|').ToList(),
                 TenantLegalName = invoice.TenantLegalName,
-                TenantTaxNo = invoice.TenantTaxNo
+                Bank = invoice.Bank,
+                BankAccount = invoice.Bank,
+                TaxNumber = invoice.TenantTaxNo,
+                Contact = invoice.Contact,
             };
         }
 
@@ -86,9 +89,12 @@ namespace Magicodes.Admin.MultiTenancy.Accounting
 
             var tenantLegalName = await SettingManager.GetSettingValueAsync(AppSettings.TenantManagement.BillingLegalName);
             var tenantAddress = await SettingManager.GetSettingValueAsync(AppSettings.TenantManagement.BillingAddress);
-            var tenantTaxNo = await SettingManager.GetSettingValueAsync(AppSettings.TenantManagement.BillingTaxVatNo);
+            var tenantTaxNumber = await SettingManager.GetSettingValueAsync(AppSettings.TenantManagement.BillingTaxNumber);
+            var tenantContact = await SettingManager.GetSettingValueAsync(AppSettings.TenantManagement.BillingContact);
+            var tenantBank = await SettingManager.GetSettingValueAsync(AppSettings.TenantManagement.BillingBank);
+            var tenantBankAccount = await SettingManager.GetSettingValueAsync(AppSettings.TenantManagement.BillingBankAccount);
 
-            if (string.IsNullOrEmpty(tenantLegalName) || string.IsNullOrEmpty(tenantAddress) || string.IsNullOrEmpty(tenantTaxNo))
+            if (string.IsNullOrEmpty(tenantLegalName) || string.IsNullOrEmpty(tenantAddress) || string.IsNullOrEmpty(tenantTaxNumber) || string.IsNullOrEmpty(tenantContact) || string.IsNullOrEmpty(tenantBank) || string.IsNullOrEmpty(tenantBankAccount))
             {
                 throw new UserFriendlyException(L("InvoiceInfoIsMissingOrNotCompleted"));
             }
@@ -99,7 +105,10 @@ namespace Magicodes.Admin.MultiTenancy.Accounting
                 InvoiceDate = Clock.Now,
                 TenantLegalName = tenantLegalName,
                 TenantAddress = tenantAddress,
-                TenantTaxNo = tenantTaxNo
+                Bank = tenantBank,
+                BankAccount = tenantBankAccount,
+                Contact = tenantContact,
+                TenantTaxNo = tenantTaxNumber,
             });
 
             payment.InvoiceNo = invoiceNo;

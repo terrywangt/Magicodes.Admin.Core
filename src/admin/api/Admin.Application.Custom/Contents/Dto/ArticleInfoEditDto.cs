@@ -6,7 +6,6 @@ using Abp.Application.Services.Dto;
 using System.ComponentModel.DataAnnotations;
 using Admin.Application.Custom.Contents;
 using Magicodes.Admin.Core.Custom.Contents;
-using System.Collections.Generic;
 
 namespace Admin.Application.Custom.Contents.Dto
 {

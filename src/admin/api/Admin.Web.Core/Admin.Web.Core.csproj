@@ -1,5 +1,5 @@
-<Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="..\..\common.props"></Import>
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\..\..\common.props"></Import>
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
@@ -11,10 +11,11 @@
     <RootNamespace>Magicodes.Admin.Web</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Magicodes.Admin.Application\Magicodes.Admin.Application.csproj" />
-    <ProjectReference Include="..\Magicodes.Admin.EntityFrameworkCore\Magicodes.Admin.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\..\..\data\Magicodes.Admin.EntityFrameworkCore\Magicodes.Admin.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\Admin.Application\Admin.Application.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Magicodes.SwaggerUI" Version="1.7.3" />
     <PackageReference Include="Abp.AspNetCore.SignalR" Version="3.8.3" />
     <PackageReference Include="Abp.AspNetZeroCore.Web" Version="1.1.7" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="2.1.2" />
