@@ -130,3 +130,5 @@ src/Magicodes.Admin.Web.Host/wwwroot/Temp/Downloads
 /upgrade/temp
 src/admin/api/Admin.Host/Properties/PublishProfiles/dev.pubxml
 src/admin/ui/webdeploy/deploy.dev.config
+/src/admin/api/Admin.Host/Properties/PublishProfiles/pro.pubxml
+/src/admin/ui/webdeploy/deploy.pro.config

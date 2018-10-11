@@ -69,7 +69,7 @@ namespace Magicodes.Unity.Storage
                     }
                 case "AliyunOssStorageProvider":
                     {
-                        AliyunOssConfig aliyunOssConfig = null;
+                        AliyunOssConfig aliyunOssConfig;
 
                         if (Convert.ToBoolean(_settingManager.GetSettingValueAsync(AppSettings.AliStorageManagement.IsEnabled).Result))
                         {
