@@ -31,42 +31,44 @@ export interface TreeNode {
     animations: [appModuleAnimation()]
 })
 
-export class ColumnInfosComponent extends AppComponentBase implements OnInit {    
+export class ColumnInfosComponent extends AppComponentBase implements OnInit {
     @ViewChild('dataTable') dataTable: Table;
     @ViewChild('paginator') paginator: Paginator;
-	@ViewChild('createOrEditColumnInfoModal') createOrEditColumnInfoModal: CreateOrEditColumnInfoModalComponent;
-	advancedFiltersAreShown = false;
-	list: TreeNode[] = [];
+    @ViewChild('createOrEditColumnInfoModal') createOrEditColumnInfoModal: CreateOrEditColumnInfoModalComponent;
+    public createDateRange: moment.Moment[] = [moment().startOf('day'), moment().endOf('day')];
+    public updateDateRange: moment.Moment[] = [moment().startOf('day'), moment().endOf('day')];
+    advancedFiltersAreShown = false;
+    list: TreeNode[] = [];
     loading = false;
-	isShowTreeTable=true;
-	model: {
+    isShowTreeTable = true;
+    model: {
         //是否仅获取回收站数据
         isOnlyGetRecycleData: boolean;
         filterText: string;
-		creationDateRangeActive: boolean;        
+        creationDateRangeActive: boolean;
         creationDateStart: moment.Moment;
         creationDateEnd: moment.Moment;
-		subscriptionEndDateRangeActive: boolean;
+        subscriptionEndDateRangeActive: boolean;
         subscriptionEndDateStart: moment.Moment;
         subscriptionEndDateEnd: moment.Moment;
-		isActive: string;
-		isNeedAuthorizeAccess: string;
+        isActive: string;
+        isNeedAuthorizeAccess: string;
     } = <any>{};
 
-	constructor(
-        injector: Injector,        
+    constructor(
+        injector: Injector,
         private _activatedRoute: ActivatedRoute,
-		private _fileDownloadService: FileDownloadService,
+        private _fileDownloadService: FileDownloadService,
 
-		private _columnInfoService: ColumnInfoServiceProxy,
-        
-    ) {		
+        private _columnInfoService: ColumnInfoServiceProxy,
+
+    ) {
         super(injector);
         this.setFiltersFromRoute();
     }
 
-	setFiltersFromRoute(): void {
-		const self = this;
+    setFiltersFromRoute(): void {
+        const self = this;
         if (self._activatedRoute.snapshot.queryParams['subscriptionEndDateStart'] != null) {
             self.model.subscriptionEndDateRangeActive = true;
             self.model.subscriptionEndDateStart = moment(this._activatedRoute.snapshot.queryParams['subscriptionEndDateStart']);
@@ -95,18 +97,18 @@ export class ColumnInfosComponent extends AppComponentBase implements OnInit {
         }
     }
 
-	ngOnInit(): void {
-		const self = this;
+    ngOnInit(): void {
+        const self = this;
         self.model.filterText = self._activatedRoute.snapshot.queryParams['filterText'] || '';
-		this.getList();
+        this.getList();
     }
 
-	showOrdinaryTable(){
-        this.isShowTreeTable=!this.isShowTreeTable;
+    showOrdinaryTable() {
+        this.isShowTreeTable = !this.isShowTreeTable;
     }
 
-	getColumnInfos(event?: LazyLoadEvent) {
-		const self = this;
+    getColumnInfos(event?: LazyLoadEvent) {
+        const self = this;
         if (self.primengTableHelper.shouldResetPaging(event)) {
             self.paginator.changePage(0);
             return;
@@ -115,14 +117,14 @@ export class ColumnInfosComponent extends AppComponentBase implements OnInit {
 
         self._columnInfoService.getColumnInfos(
             self.model.isOnlyGetRecycleData ? self.model.isOnlyGetRecycleData : false,
-			self.model.creationDateRangeActive ? self.model.creationDateStart : undefined,
-			self.model.creationDateRangeActive ? self.model.creationDateEnd : undefined,
-			self.model.subscriptionEndDateRangeActive ? self.model.subscriptionEndDateStart : undefined,
+            self.model.creationDateRangeActive ? self.model.creationDateStart : undefined,
+            self.model.creationDateRangeActive ? self.model.creationDateEnd : undefined,
+            self.model.subscriptionEndDateRangeActive ? self.model.subscriptionEndDateStart : undefined,
             self.model.subscriptionEndDateRangeActive ? self.model.subscriptionEndDateEnd : undefined,
-			self.model.filterText,                  
-            self.dataTable==undefined ? undefined : self.primengTableHelper.getSorting(self.dataTable),
-            self.paginator==undefined ? 10 : self.primengTableHelper.getMaxResultCount(self.paginator, event),
-            self.paginator==undefined ? 0 : self.primengTableHelper.getSkipCount(self.paginator, event)
+            self.model.filterText,
+            self.dataTable == undefined ? undefined : self.primengTableHelper.getSorting(self.dataTable),
+            self.paginator == undefined ? 10 : self.primengTableHelper.getMaxResultCount(self.paginator, event),
+            self.paginator == undefined ? 0 : self.primengTableHelper.getSkipCount(self.paginator, event)
         ).subscribe(result => {
             self.primengTableHelper.totalRecordsCount = result.totalCount;
             self.primengTableHelper.records = result.items;
@@ -151,19 +153,19 @@ export class ColumnInfosComponent extends AppComponentBase implements OnInit {
             }
         );
     }
-	createColumnInfo(): void {
-		const self = this;
+    createColumnInfo(): void {
+        const self = this;
         self.createOrEditColumnInfoModal.show();
     }
 
-	editColumnInfo(id:number): void {
-		const self = this;
+    editColumnInfo(id: number): void {
+        const self = this;
         self.createOrEditColumnInfoModal.show(id);
     }
 
-	deleteColumnInfo(id: number): void {
-		const self = this;
-		self.message.confirm(
+    deleteColumnInfo(id: number): void {
+        const self = this;
+        self.message.confirm(
             self.l('AreYouSure'),
             self.l('DeleteWarningMessage'),
             isConfirmed => {
@@ -177,20 +179,20 @@ export class ColumnInfosComponent extends AppComponentBase implements OnInit {
         );
     }
 
-	reloadPage(): void {
-		const self = this;
+    reloadPage(): void {
+        const self = this;
         self.paginator.changePage(self.paginator.getPage());
     }
 
-	exportToExcel(): void {
+    exportToExcel(): void {
         const self = this;
         self._columnInfoService.getColumnInfosToExcel(
             self.model.isOnlyGetRecycleData,
-			self.model.subscriptionEndDateRangeActive ? self.model.subscriptionEndDateStart : undefined,
+            self.model.subscriptionEndDateRangeActive ? self.model.subscriptionEndDateStart : undefined,
             self.model.subscriptionEndDateRangeActive ? self.model.subscriptionEndDateEnd : undefined,
-			self.model.creationDateRangeActive ? self.model.creationDateStart : undefined,
-			self.model.creationDateRangeActive ? self.model.creationDateEnd : undefined,
-			self.model.filterText,
+            self.model.creationDateRangeActive ? self.model.creationDateStart : undefined,
+            self.model.creationDateRangeActive ? self.model.creationDateEnd : undefined,
+            self.model.filterText,
             undefined,
             1000,
             0).subscribe(result => {
@@ -216,27 +218,27 @@ export class ColumnInfosComponent extends AppComponentBase implements OnInit {
         input.targetId = this.primengTableHelper.records[targetIndex].id;
         this._columnInfoService.moveTo(input).subscribe();
     }
-	handleIsActiveSwitch(event, id: number){
-			const self = this;
-			const input = new SwitchEntityInputDtoOfInt64();
-			input.id = id;
-			input.switchValue = event.checked;
-			self._columnInfoService.updateIsActiveSwitchAsync(input).subscribe(result => {
-                self.notify.success(self.l('SuccessfulOperation'));
-			})
-		}
-	handleIsNeedAuthorizeAccessSwitch(event, id: number){
-			const self = this;
-			const input = new SwitchEntityInputDtoOfInt64();
-			input.id = id;
-			input.switchValue = event.checked;
-			self._columnInfoService.updateIsNeedAuthorizeAccessSwitchAsync(input).subscribe(result => {
-                self.notify.success(self.l('SuccessfulOperation'));
-			})
-		}
+    handleIsActiveSwitch(event, id: number) {
+        const self = this;
+        const input = new SwitchEntityInputDtoOfInt64();
+        input.id = id;
+        input.switchValue = event.checked;
+        self._columnInfoService.updateIsActiveSwitchAsync(input).subscribe(result => {
+            self.notify.success(self.l('SuccessfulOperation'));
+        })
+    }
+    handleIsNeedAuthorizeAccessSwitch(event, id: number) {
+        const self = this;
+        const input = new SwitchEntityInputDtoOfInt64();
+        input.id = id;
+        input.switchValue = event.checked;
+        self._columnInfoService.updateIsNeedAuthorizeAccessSwitchAsync(input).subscribe(result => {
+            self.notify.success(self.l('SuccessfulOperation'));
+        })
+    }
 
 
-getList(node?) {
+    getList(node?) {
         this.loading = true;
         this._columnInfoService.getChildrenColumnInfos(node ? node.data.id : undefined, false)
             .subscribe(result => {

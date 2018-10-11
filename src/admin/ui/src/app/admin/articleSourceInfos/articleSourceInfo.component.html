@@ -32,8 +32,8 @@
                             <div class="row m--margin-bottom-10">
                                 <label>{{l("Filter")}}</label>
                                 <div class="input-group">
-                                    <input [(ngModel)]="model.filterText" name="Filter" class="form-control" placeholder="{{l('SearchWithThreeDot')}}"
-                                        type="text">
+                                    <input [(ngModel)]="model.filterText" name="Filter" class="form-control"
+                                        placeholder="{{l('SearchWithThreeDot')}}" type="text">
                                 </div>
                             </div>
                         </div>
@@ -41,23 +41,26 @@
                             <div class="col-xl-6">
                                 <div class="m-checkbox-list">
                                     <label class="m-checkbox">
-                                        <input type="checkbox" [(ngModel)]="model.creationDateRangeActive" id="model_CreateDateRange" name="CreateDateRange" value="true"> {{l('CreateDateRange')}}
+                                        <input type="checkbox" [(ngModel)]="model.creationDateRangeActive" id="model_CreateDateRange"
+                                            name="CreateDateRange" value="true"> {{l('CreateDateRange')}}
                                         <span></span>
                                     </label>
                                 </div>
-                                <date-range-picker name="CreateDateRange" [isDisabled]="!model.createDateRange" [(startDate)]="model.creationDateStart" [(endDate)]="model.creationDateEnd" [allowFutureDate]="true">
-                                </date-range-picker>
+
+                                <input class="form-control" id="CreateDateRange" name="CreateDateRange" #drp="bsDaterangepicker"
+                                    bsDaterangepicker dateRangePickerInitialValue [(ngModel)]="createDateRange">
                             </div>
                             <div class="col-xl-6">
                                 <div class="m-checkbox-list">
                                     <label class="m-checkbox">
-                                        <input type="checkbox" [(ngModel)]="model.subscriptionEndDateRangeActive" id="model_updateDateRange" name="UpdateDateRange" value="true"> {{l('UpdateDateRange')}}
+                                        <input type="checkbox" [(ngModel)]="model.subscriptionEndDateRangeActive" id="model_updateDateRange"
+                                            name="UpdateDateRange" value="true"> {{l('UpdateDateRange')}}
                                         <span></span>
                                     </label>
                                 </div>
-                                <date-range-picker name="UpdateDateRange" [isDisabled]="!model.updateDateRange" [(startDate)]="model.subscriptionEndDateStart" [(endDate)]="model.subscriptionEndDateEnd" [allowFutureDate]="false">
-                                </date-range-picker>
-							</div>
+                                <input class="form-control" id="UpdateDateRange" name="UpdateDateRange" #drp="bsDaterangepicker"
+                                    bsDaterangepicker dateRangePickerInitialValue [(ngModel)]="updateDateRange">
+                            </div>
                         </div>
                         <div class="row m--margin-bottom-10">
                             <div class="col-sm-6">
@@ -75,37 +78,29 @@
                 <div class="row align-items-center">
                     <!--<Primeng-Datatable-Start>-->
                     <div class="primeng-datatable-container" [busyIf]="primengTableHelper.isLoading">
-						<p-table #dataTable
-                                 (onLazyLoad)="getArticleSourceInfos($event)"
-                                 [value]="primengTableHelper.records"
-                                 rows="{{primengTableHelper.defaultRecordsCountPerPage}}"
-                                 [paginator]="false"
-                                 [lazy]="true"
-                                 [responsive]="primengTableHelper.isResponsive" 
-								 [scrollable]="true"                                 
-                                 [style]="{width:'100%'}" >
-							<ng-template pTemplate="header">
+                        <p-table #dataTable (onLazyLoad)="getArticleSourceInfos($event)" [value]="primengTableHelper.records"
+                            rows="{{primengTableHelper.defaultRecordsCountPerPage}}" [paginator]="false" [lazy]="true"
+                            [responsive]="primengTableHelper.isResponsive" [scrollable]="true" [style]="{width:'100%'}">
+                            <ng-template pTemplate="header">
                                 <tr>
-                                    
-								    <th style="width:130px">{{l('Actions')}}</th>
-									<th pSortableColumn="name" style="width:200px">{{l('Name')}}
-									    <p-sortIcon field="name"></p-sortIcon>
-								    </th>
-									<th pSortableColumn="creationTime" style="width:200px">{{l('CreationTime')}}
-									    <p-sortIcon field="creationTime"></p-sortIcon>
-								    </th>
-								</tr>
-							</ng-template>
 
-							<ng-template pTemplate="body" let-record="$implicit" >
-                                <tr >
-                                    
+                                    <th style="width:130px">{{l('Actions')}}</th>
+                                    <th pSortableColumn="name" style="width:200px">{{l('Name')}}
+                                        <p-sortIcon field="name"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="creationTime" style="width:200px">{{l('CreationTime')}}
+                                        <p-sortIcon field="creationTime"></p-sortIcon>
+                                    </th>
+                                </tr>
+                            </ng-template>
+
+                            <ng-template pTemplate="body" let-record="$implicit">
+                                <tr>
+
                                     <td style="width: 130px">
                                         <div class="btn-group dropdown" normalizePosition>
-                                            <button class="dropdown-toggle btn btn-sm btn-primary"
-                                                    data-toggle="dropdown"
-                                                    aria-haspopup="true"
-                                                    aria-expanded="false">
+                                            <button class="dropdown-toggle btn btn-sm btn-primary" data-toggle="dropdown"
+                                                aria-haspopup="true" aria-expanded="false">
                                                 <i class="fa fa-cog"></i><span class="caret"></span> {{l("Actions")}}
                                             </button>
                                             <ul class="dropdown-menu" *ngIf="!record.isDeleted">
@@ -123,28 +118,26 @@
                                             </ul>
                                         </div>
                                     </td>
-									<td style="width:200px">{{record.name}}</td>
-									<td style="width:200px">
-										{{ record.creationTime ? (record.creationTime | momentFormat:'L LT') : '-'}}
-									</td>
-								</tr>
+                                    <td style="width:200px">{{record.name}}</td>
+                                    <td style="width:200px">
+                                        {{ record.creationTime ? (record.creationTime | momentFormat:'L LT') : '-'}}
+                                    </td>
+                                </tr>
                             </ng-template>
-						</p-table>
+                        </p-table>
 
-						<div class="primeng-paging-container">
-                            <p-paginator rows="{{primengTableHelper.defaultRecordsCountPerPage}}"
-                                         #paginator
-                                         (onPageChange)="getArticleSourceInfos($event)"
-                                         [totalRecords]="primengTableHelper.totalRecordsCount"
-                                         [rowsPerPageOptions]="primengTableHelper.predefinedRecordsCountPerPage">
+                        <div class="primeng-paging-container">
+                            <p-paginator rows="{{primengTableHelper.defaultRecordsCountPerPage}}" #paginator
+                                (onPageChange)="getArticleSourceInfos($event)" [totalRecords]="primengTableHelper.totalRecordsCount"
+                                [rowsPerPageOptions]="primengTableHelper.predefinedRecordsCountPerPage">
                             </p-paginator>
                             <span class="total-records-count">
                                 {{l('TotalRecordsCount', primengTableHelper.totalRecordsCount)}}
                             </span>
                         </div>
-					</div>
-					<!--<Primeng-TurboTable-End>-->
-				</div>
+                    </div>
+                    <!--<Primeng-TurboTable-End>-->
+                </div>
             </div>
         </div>
     </div>

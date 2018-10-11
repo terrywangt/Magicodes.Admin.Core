@@ -18,7 +18,8 @@ export class CreateOrEditTransactionLogModalComponent extends AppComponentBase {
     active = false;
     saving = false;
 
-
+    public createDateRange: moment.Moment[] = [moment().startOf('day'), moment().endOf('day')];
+    public updateDateRange: moment.Moment[] = [moment().startOf('day'), moment().endOf('day')];
     formModel: TransactionLogEditDto = new TransactionLogEditDto();
 
     constructor(

@@ -35,7 +35,8 @@
                             <div class="row m--margin-bottom-10">
                                 <label>{{l("Filter")}}</label>
                                 <div class="input-group">
-                                    <input [(ngModel)]="model.filterText" name="Filter" class="form-control" placeholder="{{l('SearchWithThreeDot')}}" type="text">
+                                    <input [(ngModel)]="model.filterText" name="Filter" class="form-control"
+                                        placeholder="{{l('SearchWithThreeDot')}}" type="text">
                                 </div>
                             </div>
                         </div>
@@ -43,25 +44,25 @@
                             <div class="col-xl-6">
                                 <div class="m-checkbox-list">
                                     <label class="m-checkbox">
-                                        <input type="checkbox" [(ngModel)]="model.creationDateRangeActive" id="model_CreateDateRange" name="CreateDateRange" value="true"> {{l('CreateDateRange')}}
+                                        <input type="checkbox" [(ngModel)]="model.creationDateRangeActive" id="model_CreateDateRange"
+                                            name="CreateDateRange" value="true"> {{l('CreateDateRange')}}
                                         <span></span>
                                     </label>
                                 </div>
-                                <date-range-picker name="CreateDateRange" [isDisabled]="!model.createDateRange" [(startDate)]="model.creationDateStart" [(endDate)]="model.creationDateEnd"
-                                    [allowFutureDate]="true">
-                                </date-range-picker>
+
+                                <input class="form-control" id="CreateDateRange" name="CreateDateRange" #drp="bsDaterangepicker"
+                                    bsDaterangepicker dateRangePickerInitialValue [(ngModel)]="createDateRange">
                             </div>
                             <div class="col-xl-6">
                                 <div class="m-checkbox-list">
                                     <label class="m-checkbox">
-                                        <input type="checkbox" [(ngModel)]="model.subscriptionEndDateRangeActive" id="model_updateDateRange" name="UpdateDateRange"
-                                            value="true"> {{l('UpdateDateRange')}}
+                                        <input type="checkbox" [(ngModel)]="model.subscriptionEndDateRangeActive" id="model_updateDateRange"
+                                            name="UpdateDateRange" value="true"> {{l('UpdateDateRange')}}
                                         <span></span>
                                     </label>
                                 </div>
-                                <date-range-picker name="UpdateDateRange" [isDisabled]="!model.updateDateRange" [(startDate)]="model.subscriptionEndDateStart"
-                                    [(endDate)]="model.subscriptionEndDateEnd" [allowFutureDate]="false">
-                                </date-range-picker>
+                                <input class="form-control" id="UpdateDateRange" name="UpdateDateRange" #drp="bsDaterangepicker"
+                                    bsDaterangepicker dateRangePickerInitialValue [(ngModel)]="updateDateRange">
                             </div>
                             <div class="col-md-6">
                                 <label for="SubmenuToggle">{{l("IsActive")}}</label>
@@ -73,7 +74,8 @@
                             </div>
                             <div class="col-md-6">
                                 <label for="SubmenuToggle">{{l("IsNeedAuthorizeAccess")}}</label>
-                                <select id="IsNeedAuthorizeAccess" name="IsNeedAuthorizeAccess" class="form-control" [(ngModel)]="model.isNeedAuthorizeAccess">
+                                <select id="IsNeedAuthorizeAccess" name="IsNeedAuthorizeAccess" class="form-control"
+                                    [(ngModel)]="model.isNeedAuthorizeAccess">
                                     <option value="all">{{l("All")}}</option>
                                     <option value="yes">{{l("Yes")}}</option>
                                     <option value="no">{{l("No")}}</option>
@@ -96,7 +98,8 @@
                 <!--<Primeng-TreeTable-Start>-->
                 <div class="row align-items-center" *ngIf="isShowTreeTable">
                     <div class="primeng-datatable-container">
-                        <p-treeTable [value]="list" [paginator]="false" [lazy]="false" [loading]="loading" (onNodeExpand)="onNodeExpand($event)">
+                        <p-treeTable [value]="list" [paginator]="false" [lazy]="false" [loading]="loading"
+                            (onNodeExpand)="onNodeExpand($event)">
                             <ng-template pTemplate="header" let-columns>
                                 <tr>
                                     <th style="width:110px"></th>
@@ -129,7 +132,8 @@
                                     </td>
                                     <td style="width: 130px">
                                         <div class="btn-group dropdown" normalizePosition>
-                                            <button class="dropdown-toggle btn btn-sm btn-primary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <button class="dropdown-toggle btn btn-sm btn-primary" data-toggle="dropdown"
+                                                aria-haspopup="true" aria-expanded="false">
                                                 <i class="fa fa-cog"></i>
                                                 <span class="caret"></span> {{l("Actions")}}
                                             </button>
@@ -156,7 +160,8 @@
                                         <p-inputSwitch (onChange)="handleIsActiveSwitch($event,rowData.id)" [(ngModel)]="rowData.isActive"></p-inputSwitch>
                                     </td>
                                     <td style="width:200px">
-                                        <p-inputSwitch (onChange)="handleIsNeedAuthorizeAccessSwitch($event,rowData.id)" [(ngModel)]="rowData.isNeedAuthorizeAccess"></p-inputSwitch>
+                                        <p-inputSwitch (onChange)="handleIsNeedAuthorizeAccessSwitch($event,rowData.id)"
+                                            [(ngModel)]="rowData.isNeedAuthorizeAccess"></p-inputSwitch>
                                     </td>
                                     <td style="width:200px">{{rowData.iconCls}}</td>
                                     <td style="width:600px">
@@ -176,9 +181,10 @@
                 <div class="row align-items-center" *ngIf="!isShowTreeTable">
                     <!--<Primeng-Datatable-Start>-->
                     <div class="primeng-datatable-container" [busyIf]="primengTableHelper.isLoading">
-                        <p-table #dataTable (onLazyLoad)="getColumnInfos($event)" [value]="primengTableHelper.records" rows="{{primengTableHelper.defaultRecordsCountPerPage}}"
-                            [paginator]="false" [lazy]="true" [responsive]="primengTableHelper.isResponsive" [scrollable]="true"
-                            [style]="{width:'100%'}" (onRowReorder)="getReorder($event)">
+                        <p-table #dataTable (onLazyLoad)="getColumnInfos($event)" [value]="primengTableHelper.records"
+                            rows="{{primengTableHelper.defaultRecordsCountPerPage}}" [paginator]="false" [lazy]="true"
+                            [responsive]="primengTableHelper.isResponsive" [scrollable]="true" [style]="{width:'100%'}"
+                            (onRowReorder)="getReorder($event)">
                             <ng-template pTemplate="header">
                                 <tr>
                                     <th style="width:30px"></th>
@@ -208,11 +214,13 @@
                             <ng-template pTemplate="body" let-record="$implicit" let-index="rowIndex">
                                 <tr [pReorderableRow]="index">
                                     <td style="width:30px">
-                                        <i class="fa fa-arrows" title="{{l('DragAndDropSortTip')}}" pReorderableRowHandle></i>
+                                        <i class="fa fa-arrows" title="{{l('DragAndDropSortTip')}}"
+                                            pReorderableRowHandle></i>
                                     </td>
                                     <td style="width: 130px">
                                         <div class="btn-group dropdown" normalizePosition>
-                                            <button class="dropdown-toggle btn btn-sm btn-primary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <button class="dropdown-toggle btn btn-sm btn-primary" data-toggle="dropdown"
+                                                aria-haspopup="true" aria-expanded="false">
                                                 <i class="fa fa-cog"></i>
                                                 <span class="caret"></span> {{l("Actions")}}
                                             </button>
@@ -236,10 +244,12 @@
                                     </td>
                                     <td style="width:200px">{{record.title}}</td>
                                     <td style="width:200px">
-                                        <p-inputSwitch (onChange)="handleIsActiveSwitch($event,record.id)" name="IsActive" [(ngModel)]="record.isActive"></p-inputSwitch>
+                                        <p-inputSwitch (onChange)="handleIsActiveSwitch($event,record.id)" name="IsActive"
+                                            [(ngModel)]="record.isActive"></p-inputSwitch>
                                     </td>
                                     <td style="width:200px">
-                                        <p-inputSwitch (onChange)="handleIsNeedAuthorizeAccessSwitch($event,record.id)" name="IsActive" [(ngModel)]="record.isNeedAuthorizeAccess"></p-inputSwitch>
+                                        <p-inputSwitch (onChange)="handleIsNeedAuthorizeAccessSwitch($event,record.id)"
+                                            name="IsActive" [(ngModel)]="record.isNeedAuthorizeAccess"></p-inputSwitch>
                                     </td>
                                     <td style="width:200px">{{record.iconCls}}</td>
                                     <td style="width:600px">
@@ -254,8 +264,9 @@
                         </p-table>
 
                         <div class="primeng-paging-container">
-                            <p-paginator rows="{{primengTableHelper.defaultRecordsCountPerPage}}" #paginator (onPageChange)="getColumnInfos($event)"
-                                [totalRecords]="primengTableHelper.totalRecordsCount" [rowsPerPageOptions]="primengTableHelper.predefinedRecordsCountPerPage">
+                            <p-paginator rows="{{primengTableHelper.defaultRecordsCountPerPage}}" #paginator
+                                (onPageChange)="getColumnInfos($event)" [totalRecords]="primengTableHelper.totalRecordsCount"
+                                [rowsPerPageOptions]="primengTableHelper.predefinedRecordsCountPerPage">
                             </p-paginator>
                             <span class="total-records-count">
                                 {{l('TotalRecordsCount', primengTableHelper.totalRecordsCount)}}

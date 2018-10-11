@@ -240,27 +240,19 @@
                                                 <div class="row align-items-center m--margin-bottom-10">
                                                     <div class="col-md-6">
                                                         <div class="form-group">
-                                                            <label for="StartEndRangeEntityChange" class="control-label">{{l("DateRange")}}</label>
-                                                            <!-- <date-range-picker id="StartEndRangeEntityChange" [(startDate)]="startDate" [(endDate)]="endDate"></date-range-picker> -->
+                                                            <label for="StartEndRange" class="control-label">{{l("DateRange")}}</label>
+                                                            <input class="form-control" id="StartEndRange" name="StartEndRange"
+                                                                #drp="bsDaterangepicker" bsDaterangepicker
+                                                                dateRangePickerInitialValue [(ngModel)]="dateRange">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
-                                                            <label for="UserNameEntityChange" class="control-label">{{l("UserName")}}</label>
-                                                            <input id="UserNameEntityChange" type="text" name="UserNameEntityChange"
-                                                                class="form-control" [(ngModel)]="usernameEntityChange">
+                                                            <label for="UsernameAuditLog" class="control-label">{{l("UserName")}}</label>
+                                                            <input id="UsernameAuditLog" type="text" name="UsernameAuditLog"
+                                                                class="form-control" [(ngModel)]="usernameAuditLog">
                                                         </div>
                                                     </div>
-                                                    <!-- <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label for="EntityTypeFullName" class="control-label">{{l("Object")}}</label>
-
-                                                            <select id="EntityTypeFullName" name="EntityTypeFullName" class="form-control" [(ngModel)]="entityTypeFullName">
-                                                                <option value="" selected="selected">{{l("All")}}</option>
-                                                                <option *ngFor="let objectType of objectTypes" [value]="objectType.value">{{objectType.name}}</option>
-                                                            </select>
-                                                        </div>
-                                                    </div> -->
                                                 </div>
                                             </form>
                                         </div>
