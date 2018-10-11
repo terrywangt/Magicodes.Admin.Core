@@ -1,30 +1,31 @@
-﻿using System.Collections.Generic;
+﻿using Abp.Application.Services.Dto;
+using Abp.AspNetZeroCore.Net;
+using Abp.Authorization;
+using Abp.AutoMapper;
+using Abp.Domain.Repositories;
+using Abp.Domain.Uow;
+using Abp.Extensions;
+using Abp.Linq.Extensions;
+using Abp.Runtime.Caching;
+using Abp.Runtime.Session;
+using Abp.Timing;
+using Abp.UI;
+using Admin.Application.Custom.Contents.Dto;
+using Magicodes.Admin;
+using Magicodes.Admin.Authorization;
+using Magicodes.Admin.Core.Custom.Attachments;
+using Magicodes.Admin.Core.Custom.Contents;
+using Magicodes.Admin.Dto;
+using Magicodes.Admin.Storage;
+using Magicodes.ExporterAndImporter.Core;
+using Magicodes.Unity.Editor;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
-using Abp.UI;
-using Abp.Extensions;
-using Abp.Linq.Extensions;
-using Abp.Domain.Repositories;
-using Abp.Application.Services.Dto;
-using Microsoft.EntityFrameworkCore;
-using Abp.Authorization;
-using Abp.AutoMapper;
-using Abp.Runtime.Session;
-using Abp.Timing;
-using Magicodes.Admin.Authorization;
-using Admin.Application.Custom.Contents.Dto;
-using Magicodes.Admin.Core.Custom.Contents;
-using Magicodes.ExporterAndImporter.Core;
-using Abp.AspNetZeroCore.Net;
-using Magicodes.Admin.Dto;
-using Abp.Domain.Uow;
-using Abp.Runtime.Caching;
-using Magicodes.Admin;
-using Magicodes.Admin.Core.Custom.Attachments;
-using Magicodes.Unity.Editor;
 
 namespace Admin.Application.Custom.Contents
 {
@@ -42,6 +43,7 @@ namespace Admin.Application.Custom.Contents
         private readonly EditorHelper _editorHelper;
         private readonly IRepository<ObjectAttachmentInfo, long> _objectAttachmentRepository;
         private readonly ICacheManager _cacheManager;
+        private readonly ITempFileCacheManager _tempFileCacheManager;
 
         /// <summary>
         /// 
@@ -53,7 +55,8 @@ namespace Admin.Application.Custom.Contents
             , IRepository<ArticleSourceInfo, long> articleSourceInfoRepository
             , EditorHelper editorHelper
             , IRepository<ObjectAttachmentInfo, long> objectAttachmentRepository
-            , ICacheManager cacheManager) : base()
+            , ICacheManager cacheManager
+            , ITempFileCacheManager tempFileCacheManager) : base()
         {
             _articleInfoRepository = articleInfoRepository;
             _excelExporter = excelExporter;
@@ -64,6 +67,7 @@ namespace Admin.Application.Custom.Contents
             _editorHelper = editorHelper;
             _objectAttachmentRepository = objectAttachmentRepository;
             _cacheManager = cacheManager;
+            _tempFileCacheManager = tempFileCacheManager;
         }
 
         /// <summary>
@@ -77,7 +81,9 @@ namespace Admin.Application.Custom.Contents
 
                 //仅加载已删除的数据
                 if (isLoadSoftDeleteData)
+                {
                     query = query.Where(p => p.IsDeleted);
+                }
 
                 var resultCount = await query.CountAsync();
                 var results = await query
@@ -113,7 +119,10 @@ namespace Admin.Application.Custom.Contents
 
                 var exportListDtos = results.MapTo<List<ArticleInfoExportDto>>();
                 if (exportListDtos.Count == 0)
+                {
                     throw new UserFriendlyException(L("NoDataToExport"));
+                }
+
                 return exportListDtos;
             }
 
@@ -130,18 +139,8 @@ namespace Admin.Application.Custom.Contents
 
             exportData = await getListFunc(false);
             var fileDto = new FileDto(L("ArticleInfo") + L("ExportData") + ".xlsx", MimeTypeNames.ApplicationVndOpenxmlformatsOfficedocumentSpreadsheetmlSheet);
-            var filePath = GetTempFilePath(fileName: fileDto.FileToken);
-            await _excelExporter.Export(filePath, exportData);
-
-            if (!File.Exists(filePath))
-            {
-                throw new UserFriendlyException(L("RequestedFileDoesNotExists"));
-            }
-
-            var fileBytes = File.ReadAllBytes(filePath);
-            File.Delete(filePath);
-
-            _cacheManager.GetCache(AppConsts.ExcelFileCacheName).Set(fileDto.FileName, fileBytes);
+            var byteArray = await _excelExporter.ExportAsByteArray(exportData);
+            _tempFileCacheManager.SetFile(fileDto.FileToken, byteArray);
             return fileDto;
         }
 

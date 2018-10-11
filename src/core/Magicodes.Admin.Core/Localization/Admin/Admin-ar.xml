@@ -720,9 +720,6 @@
     <text name="UiCustomization_AllowAsideMinimizing">السماح بتقليل الجانب</text>
     <text name="UiCustomization_DefaultMinimizedAside">الجانب مقلّل افتراضيا</text>
     <text name="UiCustomization_AllowAsideHiding">السماح بغلق الجانب</text>
-    <text name="UiCustomization_SubmenuToggle">ترجيح القائمة الفرعية</text>
-    <text name="UiCustomization_Dropdown">القائمة المنسدلة</text>
-    <text name="UiCustomization_Accordion">قائمة الأكورديون</text>
     <text name="UiCustomization_DropdownSubmenuSkin">تصميم القائمة المنسدلة</text>
     <text name="UiCustomization_Inherit">موروث</text>
     <text name="UiCustomization_DropdownSubmenuArrow">سهم القائمة المنسدلة</text>
@@ -800,5 +797,9 @@
     <text name="DefaultLanguage">اللغة الافتراضيه</text>
     <text name="CurrentUserDidNotLoginToTheApplication">المستخدم الحالي لم يقم بتسجيل الدخول إلى النظام!</text>
     <text name="MainMenu">الرئيسية</text>
+    <text name="IncorrectImageFormat">نوع ملف الصورة غير صحيح!</text>
+    <text name="NotificationDeleteWarningMessage">سيتم حذف هذا الإشعار</text>
+    <text name="ProcessingWithThreeDot">قيد التنفيذ...</text>
+    <text name="ThereIsNoSuchImageFileWithGivenToken">لم نعثر على صورة بالرمز المطلوب</text>
   </texts>
 </localizationDictionary>

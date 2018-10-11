@@ -721,9 +721,6 @@
     <text name="UiCustomization_AllowAsideMinimizing">Cho phép thu nhỏ sang một bên</text>
     <text name="UiCustomization_DefaultMinimizedAside">Mặc định thu nhỏ sang một bên</text>
     <text name="UiCustomization_AllowAsideHiding">Cho phép ẩn sang một bên</text>
-    <text name="UiCustomization_SubmenuToggle">Chuyển đổi menu con</text>
-    <text name="UiCustomization_Dropdown">Thả xuống</text>
-    <text name="UiCustomization_Accordion">Accordion</text>
     <text name="UiCustomization_DropdownSubmenuSkin">Giao diện menu con thả xuống</text>
     <text name="UiCustomization_Inherit">Thừa kế</text>
     <text name="UiCustomization_DropdownSubmenuArrow">Mũi tên menu con thả xuống</text>

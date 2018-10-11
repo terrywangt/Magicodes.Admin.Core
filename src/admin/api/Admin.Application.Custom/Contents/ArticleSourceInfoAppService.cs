@@ -1,30 +1,26 @@
-﻿using System;
+﻿using Abp.Application.Services.Dto;
+using Abp.AspNetZeroCore.Net;
+using Abp.Authorization;
+using Abp.AutoMapper;
+using Abp.Domain.Repositories;
+using Abp.Domain.Uow;
+using Abp.Extensions;
+using Abp.Linq.Extensions;
+using Abp.Runtime.Session;
+using Abp.Timing;
+using Abp.UI;
+using Admin.Application.Custom.Contents.Dto;
+using Magicodes.Admin.Authorization;
+using Magicodes.Admin.Core.Custom.Contents;
+using Magicodes.Admin.Dto;
+using Magicodes.Admin.Storage;
+using Magicodes.ExporterAndImporter.Core;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
-using Abp;
-using Abp.UI;
-using Abp.Extensions;
-using Abp.Linq.Extensions;
-using Abp.Domain.Repositories;
-using Abp.Application.Services.Dto;
-using Microsoft.EntityFrameworkCore;
-using Abp.Authorization;
-using Abp.AutoMapper;
-using Abp.Runtime.Session;
-using Abp.Timing;
-using Magicodes.Admin.Authorization;
-using Admin.Application.Custom.Contents.Dto;
-using Magicodes.Admin.Core.Custom.Contents;
-using Magicodes.ExporterAndImporter.Core;
-using Abp.AspNetZeroCore.Net;
-using Magicodes.Admin.Dto;
-using Abp.Domain.Uow;
-using Abp.Runtime.Caching;
-using Magicodes.Admin;
 
 
 namespace Admin.Application.Custom.Contents
@@ -37,42 +33,44 @@ namespace Admin.Application.Custom.Contents
     {
 
         private readonly IRepository<ArticleSourceInfo, long> _articleSourceInfoRepository;
-	    private readonly IExporter _excelExporter;
-        private readonly ICacheManager _cacheManager;
+        private readonly IExporter _excelExporter;
+        private readonly ITempFileCacheManager _tempFileCacheManager;
 
         /// <summary>
         /// 
         /// </summary>
         public ArticleSourceInfoAppService(
-            IRepository<ArticleSourceInfo, long> articleSourceInfoRepository 
+            IRepository<ArticleSourceInfo, long> articleSourceInfoRepository
             , IExporter excelExporter
-            , ICacheManager cacheManager) : base()
+            , ITempFileCacheManager tempFileCacheManager) : base()
         {
             _articleSourceInfoRepository = articleSourceInfoRepository;
-			_excelExporter = excelExporter;
-            _cacheManager = cacheManager;
+            _excelExporter = excelExporter;
+            _tempFileCacheManager = tempFileCacheManager;
         }
 
-		/// <summary>
-		/// 获取文章来源列表
-		/// </summary>
+        /// <summary>
+        /// 获取文章来源列表
+        /// </summary>
         public async Task<PagedResultDto<ArticleSourceInfoListDto>> GetArticleSourceInfos(GetArticleSourceInfosInput input)
         {
             async Task<PagedResultDto<ArticleSourceInfoListDto>> getListFunc(bool isLoadSoftDeleteData)
             {
                 var query = CreateArticleSourceInfosQuery(input);
-                
-								//仅加载已删除的数据
-				if (isLoadSoftDeleteData)
-                query = query.Where(p => p.IsDeleted);
-				
-				var resultCount = await query.CountAsync();
+
+                //仅加载已删除的数据
+                if (isLoadSoftDeleteData)
+                {
+                    query = query.Where(p => p.IsDeleted);
+                }
+
+                var resultCount = await query.CountAsync();
                 var results = await query
                     .OrderBy(input.Sorting)
                     .PageBy(input)
                     .ToListAsync();
 
-				return new PagedResultDto<ArticleSourceInfoListDto>(resultCount, results.MapTo<List<ArticleSourceInfoListDto>>());
+                return new PagedResultDto<ArticleSourceInfoListDto>(resultCount, results.MapTo<List<ArticleSourceInfoListDto>>());
             }
 
             //是否仅加载回收站数据
@@ -86,10 +84,10 @@ namespace Admin.Application.Custom.Contents
             return await getListFunc(false);
         }
 
-		/// <summary>
-		/// 导出文章来源
-		/// </summary>
-		public async Task<FileDto> GetArticleSourceInfosToExcel(GetArticleSourceInfosInput input)
+        /// <summary>
+        /// 导出文章来源
+        /// </summary>
+        public async Task<FileDto> GetArticleSourceInfosToExcel(GetArticleSourceInfosInput input)
         {
             async Task<List<ArticleSourceInfoExportDto>> getListFunc(bool isLoadSoftDeleteData)
             {
@@ -100,13 +98,16 @@ namespace Admin.Application.Custom.Contents
 
                 var exportListDtos = results.MapTo<List<ArticleSourceInfoExportDto>>();
                 if (exportListDtos.Count == 0)
+                {
                     throw new UserFriendlyException(L("NoDataToExport"));
+                }
+
                 return exportListDtos;
             }
 
             List<ArticleSourceInfoExportDto> exportData = null;
 
-			            //是否仅加载回收站数据
+            //是否仅加载回收站数据
             if (input.IsOnlyGetRecycleData)
             {
                 using (UnitOfWorkManager.Current.DisableFilter(AbpDataFilters.SoftDelete))
@@ -114,56 +115,45 @@ namespace Admin.Application.Custom.Contents
                     exportData = await getListFunc(true);
                 }
             }
-			
+
             exportData = await getListFunc(false);
             var fileDto = new FileDto(L("ArticleSourceInfo") + L("ExportData") + ".xlsx", MimeTypeNames.ApplicationVndOpenxmlformatsOfficedocumentSpreadsheetmlSheet);
-            var filePath = GetTempFilePath(fileName: fileDto.FileToken);
-            await _excelExporter.Export(filePath, exportData);
-
-            if (!File.Exists(filePath))
-            {
-                throw new UserFriendlyException(L("RequestedFileDoesNotExists"));
-            }
-
-            var fileBytes = File.ReadAllBytes(filePath);
-            File.Delete(filePath);
-
-            _cacheManager.GetCache(AppConsts.ExcelFileCacheName).Set(fileDto.FileName, fileBytes);
-
+            var byteArray = await _excelExporter.ExportAsByteArray(exportData);
+            _tempFileCacheManager.SetFile(fileDto.FileToken, byteArray);
             return fileDto;
         }
 
-		/// <summary>
-		/// 
-		/// </summary>
+        /// <summary>
+        /// 
+        /// </summary>
         private IQueryable<ArticleSourceInfo> CreateArticleSourceInfosQuery(GetArticleSourceInfosInput input)
         {
             var query = _articleSourceInfoRepository.GetAll();
-			
-			//关键字搜索
-			query = query
-					.WhereIf(
+
+            //关键字搜索
+            query = query
+                    .WhereIf(
                     !input.Filter.IsNullOrEmpty(),
-					p => p.Name.Contains(input.Filter));
-			
-			
-			//创建时间范围搜索
-			query = query
+                    p => p.Name.Contains(input.Filter));
+
+
+            //创建时间范围搜索
+            query = query
                 .WhereIf(input.CreationDateStart.HasValue, t => t.CreationTime >= input.CreationDateStart.Value)
                 .WhereIf(input.CreationDateEnd.HasValue, t => t.CreationTime <= input.CreationDateEnd.Value);
-			
-			
-			//修改时间范围搜索
-			query = query
+
+
+            //修改时间范围搜索
+            query = query
                 .WhereIf(input.ModificationTimeStart.HasValue, t => t.LastModificationTime >= input.ModificationTimeStart.Value)
                 .WhereIf(input.ModificationTimeEnd.HasValue, t => t.LastModificationTime <= input.ModificationTimeEnd.Value);
-			
+
             return query;
         }
 
-		/// <summary>
-		/// 获取文章来源
-		/// </summary>
+        /// <summary>
+        /// 获取文章来源
+        /// </summary>
         [AbpAuthorize(AppPermissions.Pages_ArticleSourceInfo_Create, AppPermissions.Pages_ArticleSourceInfo_Edit)]
         public async Task<GetArticleSourceInfoForEditOutput> GetArticleSourceInfoForEdit(NullableIdDto<long> input)
         {
@@ -184,9 +174,9 @@ namespace Admin.Application.Custom.Contents
             };
         }
 
-		/// <summary>
-		/// 创建或者编辑文章来源
-		/// </summary>
+        /// <summary>
+        /// 创建或者编辑文章来源
+        /// </summary>
         [AbpAuthorize(AppPermissions.Pages_ArticleSourceInfo_Create, AppPermissions.Pages_ArticleSourceInfo_Edit)]
         public async Task CreateOrUpdateArticleSourceInfo(CreateOrUpdateArticleSourceInfoDto input)
         {
@@ -200,9 +190,9 @@ namespace Admin.Application.Custom.Contents
             }
         }
 
-		/// <summary>
-		/// 删除文章来源
-		/// </summary>
+        /// <summary>
+        /// 删除文章来源
+        /// </summary>
         [AbpAuthorize(AppPermissions.Pages_ArticleSourceInfo_Delete)]
         public async Task DeleteArticleSourceInfo(EntityDto<long> input)
         {
@@ -210,7 +200,7 @@ namespace Admin.Application.Custom.Contents
             articleSourceInfo.IsDeleted = true;
             articleSourceInfo.DeleterUserId = AbpSession.GetUserId();
             articleSourceInfo.DeletionTime = Clock.Now;
-            
+
         }
 
         /// <summary>
@@ -233,7 +223,7 @@ namespace Admin.Application.Custom.Contents
                 TenantId = AbpSession.TenantId
             };
             await _articleSourceInfoRepository.InsertAsync(articleSourceInfo);
-             
+
         }
 
         /// <summary>

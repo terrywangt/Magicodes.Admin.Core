@@ -127,21 +127,6 @@ namespace Admin.Application.Custom
         }
 
         /// <summary>
-        /// 获取临时目录路径
-        /// </summary>
-        /// <param name="fileName"></param>
-        /// <param name="ext"></param>
-        /// <returns></returns>
-        protected string GetTempFilePath(string fileName = null, string ext = null)
-        {
-            if (fileName.IsNullOrEmpty())
-            {
-                fileName = Guid.NewGuid().ToString("N");
-            }
-            return Path.Combine(AppFolders.TempFileDownloadFolder, $"{fileName}{ext}");
-        }
-
-        /// <summary>
         /// 拖拽排序支持
         /// </summary>
         /// <typeparam name="TEntity">实体</typeparam>

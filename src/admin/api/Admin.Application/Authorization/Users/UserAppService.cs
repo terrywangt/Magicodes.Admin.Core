@@ -268,10 +268,9 @@ namespace Magicodes.Admin.Authorization.Users
 
             if (input.SetRandomPassword)
             {
-                input.User.Password = User.CreateRandomPassword();
+                user.Password = _passwordHasher.HashPassword(user, User.CreateRandomPassword());
             }
-
-            if (!input.User.Password.IsNullOrEmpty())
+            else if (!input.User.Password.IsNullOrEmpty())
             {
                 await UserManager.InitializeOptionsAsync(AbpSession.TenantId);
                 CheckErrors(await UserManager.ChangePasswordAsync(user, input.User.Password));
@@ -308,20 +307,20 @@ namespace Magicodes.Admin.Authorization.Users
             user.TenantId = AbpSession.TenantId;
 
             //Set password
-            if (input.SetRandomPassword || input.User.Password.IsNullOrEmpty())
+            if (input.SetRandomPassword)
             {
-                input.User.Password = User.CreateRandomPassword();
+                user.Password = _passwordHasher.HashPassword(user, User.CreateRandomPassword());
             }
-            else
+            else if (!input.User.Password.IsNullOrEmpty())
             {
                 await UserManager.InitializeOptionsAsync(AbpSession.TenantId);
                 foreach (var validator in _passwordValidators)
                 {
                     CheckErrors(await validator.ValidateAsync(UserManager, user, input.User.Password));
                 }
+                user.Password = _passwordHasher.HashPassword(user, input.User.Password);
             }
 
-            user.Password = _passwordHasher.HashPassword(user, input.User.Password);
             user.ShouldChangePasswordOnNextLogin = input.User.ShouldChangePasswordOnNextLogin;
 
             //Assign roles

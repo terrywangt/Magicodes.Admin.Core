@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using Abp.Extensions;
-using Abp.Runtime.Caching;
 using Abp.Runtime.Session;
 using Abp.Timing.Timezone;
 using Magicodes.Admin.Auditing.Dto;
 using Magicodes.Admin.DataExporting.Excel.EpPlus;
 using Magicodes.Admin.Dto;
+using Magicodes.Admin.Storage;
 
 namespace Magicodes.Admin.Auditing.Exporting
 {
@@ -13,11 +13,12 @@ namespace Magicodes.Admin.Auditing.Exporting
     {
         private readonly ITimeZoneConverter _timeZoneConverter;
         private readonly IAbpSession _abpSession;
-
+        
         public AuditLogListExcelExporter(
             ITimeZoneConverter timeZoneConverter,
             IAbpSession abpSession,
-            ICacheManager cacheManager) : base(cacheManager)
+            ITempFileCacheManager tempFileCacheManager)
+            : base(tempFileCacheManager)
         {
             _timeZoneConverter = timeZoneConverter;
             _abpSession = abpSession;

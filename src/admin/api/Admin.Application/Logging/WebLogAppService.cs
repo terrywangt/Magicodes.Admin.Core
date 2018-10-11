@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using Abp.AspNetZeroCore.Net;
 using Abp.Authorization;
-using Abp.IO;
 using Magicodes.Admin.Authorization;
 using Magicodes.Admin.Dto;
 using Magicodes.Admin.IO;
 using Magicodes.Admin.Logging.Dto;
+using Magicodes.Admin.Storage;
 
 namespace Magicodes.Admin.Logging
 {
@@ -17,10 +16,12 @@ namespace Magicodes.Admin.Logging
     public class WebLogAppService : AdminAppServiceBase, IWebLogAppService
     {
         private readonly IAppFolders _appFolders;
+        private readonly ITempFileCacheManager _tempFileCacheManager;
 
-        public WebLogAppService(IAppFolders appFolders)
+        public WebLogAppService(IAppFolders appFolders, ITempFileCacheManager tempFileCacheManager)
         {
             _appFolders = appFolders;
+            _tempFileCacheManager = tempFileCacheManager;
         }
 
         public GetLatestWebLogsOutput GetLatestWebLogs()
@@ -72,14 +73,12 @@ namespace Magicodes.Admin.Logging
         public FileDto DownloadWebLogs()
         {
             //Create temporary copy of logs
-            var tempLogDirectory = CopyAllLogFilesToTempDirectory();
-            var logFiles = new DirectoryInfo(tempLogDirectory).GetFiles("*.*", SearchOption.TopDirectoryOnly).ToList();
+            var logFiles = GetAllLogFiles();
 
             //Create the zip file
             var zipFileDto = new FileDto("WebSiteLogs.zip", MimeTypeNames.ApplicationZip);
-            var outputZipFilePath = Path.Combine(_appFolders.TempFileDownloadFolder, zipFileDto.FileToken);
-
-            using (var outputZipFileStream = File.Create(outputZipFilePath))
+            
+            using (var outputZipFileStream = new MemoryStream())
             {
                 using (var zipStream = new ZipArchive(outputZipFileStream, ZipArchiveMode.Create))
                 {
@@ -96,28 +95,13 @@ namespace Magicodes.Admin.Logging
                         }
                     }
                 }
-            }
 
-            //Delete temporary copied logs
-            Directory.Delete(tempLogDirectory, true);
+                _tempFileCacheManager.SetFile(zipFileDto.FileToken, outputZipFileStream.ToArray());
+            }
 
             return zipFileDto;
         }
-
-        private string CopyAllLogFilesToTempDirectory()
-        {
-            var tempDirectoryPath = Path.Combine(_appFolders.TempFileDownloadFolder, Guid.NewGuid().ToString("N").Substring(16));
-            DirectoryHelper.CreateIfNotExists(tempDirectoryPath);
-
-            foreach (var file in GetAllLogFiles())
-            {
-                var destinationFilePath = Path.Combine(tempDirectoryPath, file.Name);
-                File.Copy(file.FullName, destinationFilePath, true);
-            }
-
-            return tempDirectoryPath;
-        }
-
+        
         private List<FileInfo> GetAllLogFiles()
         {
             var directory = new DirectoryInfo(_appFolders.WebLogsFolder);

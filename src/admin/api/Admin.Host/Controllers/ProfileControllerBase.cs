@@ -5,26 +5,27 @@ using System.IO;
 using System.Linq;
 using Abp.Extensions;
 using Abp.IO.Extensions;
-using Abp.Runtime.Session;
 using Abp.UI;
 using Abp.Web.Models;
 using Magicodes.Admin.Authorization.Users.Profile.Dto;
-using Magicodes.Admin.IO;
+using Magicodes.Admin.Dto;
+using Magicodes.Admin.Storage;
 using Magicodes.Admin.Web.Helpers;
 
 namespace Magicodes.Admin.Web.Controllers
 {
     public abstract class ProfileControllerBase : AdminControllerBase
     {
-        private readonly IAppFolders _appFolders;
+        private readonly ITempFileCacheManager _tempFileCacheManager;
+
         private const int MaxProfilePictureSize = 5242880; //5MB
 
-        protected ProfileControllerBase(IAppFolders appFolders)
+        protected ProfileControllerBase(ITempFileCacheManager tempFileCacheManager)
         {
-            _appFolders = appFolders;
+            _tempFileCacheManager = tempFileCacheManager;
         }
 
-        public UploadProfilePictureOutput UploadProfilePicture()
+        public UploadProfilePictureOutput UploadProfilePicture(FileDto input)
         {
             try
             {
@@ -49,23 +50,18 @@ namespace Magicodes.Admin.Web.Controllers
 
                 if (!ImageFormatHelper.GetRawImageFormat(fileBytes).IsIn(ImageFormat.Jpeg, ImageFormat.Png, ImageFormat.Gif))
                 {
-                    throw new Exception("Uploaded file is not an accepted image file !");
+                    throw new Exception(L("IncorrectImageFormat"));
                 }
 
-                //Delete old temp profile pictures
-                AppFileHelper.DeleteFilesInFolderIfExists(_appFolders.TempFileDownloadFolder, "userProfileImage_" + AbpSession.GetUserId());
+                _tempFileCacheManager.SetFile(input.FileToken, fileBytes);
 
-                //Save new picture
-                var fileInfo = new FileInfo(profilePictureFile.FileName);
-                var tempFileName = "userProfileImage_" + AbpSession.GetUserId() + fileInfo.Extension;
-                var tempFilePath = Path.Combine(_appFolders.TempFileDownloadFolder, tempFileName);
-                System.IO.File.WriteAllBytes(tempFilePath, fileBytes);
-
-                using (var bmpImage = new Bitmap(tempFilePath))
+                using (var bmpImage = new Bitmap(new MemoryStream(fileBytes)))
                 {
                     return new UploadProfilePictureOutput
                     {
-                        FileName = tempFileName,
+                        FileToken = input.FileToken,
+                        FileName = input.FileName,
+                        FileType = input.FileType,
                         Width = bmpImage.Width,
                         Height = bmpImage.Height
                     };

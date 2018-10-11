@@ -7,7 +7,6 @@ using Abp.Auditing;
 using Abp.Authorization;
 using Abp.Configuration;
 using Abp.Extensions;
-using Abp.IO;
 using Abp.Localization;
 using Abp.Runtime.Caching;
 using Abp.Runtime.Session;
@@ -37,6 +36,7 @@ namespace Magicodes.Admin.Authorization.Users.Profile
         private readonly GoogleTwoFactorAuthenticateService _googleTwoFactorAuthenticateService;
         private readonly ISmsSender _smsSender;
         private readonly ICacheManager _cacheManager;
+        private readonly ITempFileCacheManager _tempFileCacheManager;
 
         public ProfileAppService(
             IAppFolders appFolders,
@@ -45,7 +45,8 @@ namespace Magicodes.Admin.Authorization.Users.Profile
             IFriendshipManager friendshipManager,
             GoogleTwoFactorAuthenticateService googleTwoFactorAuthenticateService,
             ISmsSender smsSender,
-            ICacheManager cacheManager)
+            ICacheManager cacheManager, 
+            ITempFileCacheManager tempFileCacheManager)
         {
             _appFolders = appFolders;
             _binaryObjectManager = binaryObjectManager;
@@ -54,6 +55,7 @@ namespace Magicodes.Admin.Authorization.Users.Profile
             _googleTwoFactorAuthenticateService = googleTwoFactorAuthenticateService;
             _smsSender = smsSender;
             _cacheManager = cacheManager;
+            _tempFileCacheManager = tempFileCacheManager;
         }
 
         [DisableAuditing]
@@ -107,7 +109,7 @@ namespace Magicodes.Admin.Authorization.Users.Profile
                 cacheItem
             );
 
-            await _smsSender.SendCodeAsync(user.PhoneNumber,code);
+            await _smsSender.SendCodeAsync(user.PhoneNumber, code);
         }
 
         public async Task VerifySmsCode(VerifySmsCodeInputDto input)
@@ -170,23 +172,25 @@ namespace Magicodes.Admin.Authorization.Users.Profile
 
         public async Task UpdateProfilePicture(UpdateProfilePictureInput input)
         {
-            var tempProfilePicturePath = Path.Combine(_appFolders.TempFileDownloadFolder, input.FileName);
-
             byte[] byteArray;
 
-            using (var fsTempProfilePicture = new FileStream(tempProfilePicturePath, FileMode.Open))
-            {
-                using (var bmpImage = new Bitmap(fsTempProfilePicture))
-                {
-                    var width = (input.Width == 0 || input.Width > bmpImage.Width) ? bmpImage.Width : input.Width;
-                    var height = (input.Height == 0 || input.Height > bmpImage.Height) ? bmpImage.Height : input.Height;
-                    var bmCrop = bmpImage.Clone(new Rectangle(input.X, input.Y, width, height), bmpImage.PixelFormat);
+            var imageBytes = _tempFileCacheManager.GetFile(input.FileToken);
 
-                    using (var stream = new MemoryStream())
-                    {
-                        bmCrop.Save(stream, bmpImage.RawFormat);
-                        byteArray = stream.ToArray();
-                    }
+            if (imageBytes == null)
+            {
+                throw new UserFriendlyException("ThereIsNoSuchImageFileWithGivenToken");
+            }
+
+            using (var bmpImage = new Bitmap(new MemoryStream(imageBytes)))
+            {
+                var width = (input.Width == 0 || input.Width > bmpImage.Width) ? bmpImage.Width : input.Width;
+                var height = (input.Height == 0 || input.Height > bmpImage.Height) ? bmpImage.Height : input.Height;
+                var bmCrop = bmpImage.Clone(new Rectangle(input.X, input.Y, width, height), bmpImage.PixelFormat);
+
+                using (var stream = new MemoryStream())
+                {
+                    bmCrop.Save(stream, bmpImage.RawFormat);
+                    byteArray = stream.ToArray();
                 }
             }
 
@@ -206,8 +210,6 @@ namespace Magicodes.Admin.Authorization.Users.Profile
             await _binaryObjectManager.SaveAsync(storedFile);
 
             user.ProfilePictureId = storedFile.Id;
-
-            FileHelper.DeleteIfExists(tempProfilePicturePath);
         }
 
         [AbpAllowAnonymous]

@@ -69,10 +69,10 @@ namespace Magicodes.Admin.MultiTenancy.Accounting
 
                 TenantAddress = invoice.TenantAddress.Replace("\r\n", "|").Split('|').ToList(),
                 TenantLegalName = invoice.TenantLegalName,
-                Bank=invoice.Bank,
-                BankAccount=invoice.Bank,
-                TaxNumber=invoice.TenantTaxNo,
-                Contact=invoice.Contact,
+                Bank = invoice.Bank,
+                BankAccount = invoice.Bank,
+                TaxNumber = invoice.TenantTaxNo,
+                Contact = invoice.Contact,
             };
         }
 
@@ -105,10 +105,10 @@ namespace Magicodes.Admin.MultiTenancy.Accounting
                 InvoiceDate = Clock.Now,
                 TenantLegalName = tenantLegalName,
                 TenantAddress = tenantAddress,
-                Bank=tenantBank,
-                BankAccount=tenantBankAccount,
-                Contact=tenantContact,
-                TenantTaxNo=tenantTaxNumber,
+                Bank = tenantBank,
+                BankAccount = tenantBankAccount,
+                Contact = tenantContact,
+                TenantTaxNo = tenantTaxNumber,
             });
 
             payment.InvoiceNo = invoiceNo;

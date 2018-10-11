@@ -1,29 +1,26 @@
-﻿using System;
+﻿using Abp.Application.Services.Dto;
+using Abp.AspNetZeroCore.Net;
+using Abp.Authorization;
+using Abp.AutoMapper;
+using Abp.Domain.Repositories;
+using Abp.Domain.Uow;
+using Abp.Extensions;
+using Abp.Linq.Extensions;
+using Abp.Runtime.Session;
+using Abp.Timing;
+using Abp.UI;
+using Admin.Application.Custom.Contents.Dto;
+using Magicodes.Admin.Authorization;
+using Magicodes.Admin.Core.Custom.Contents;
+using Magicodes.Admin.Dto;
+using Magicodes.Admin.Storage;
+using Magicodes.ExporterAndImporter.Core;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
-using Abp;
-using Abp.UI;
-using Abp.Extensions;
-using Abp.Linq.Extensions;
-using Abp.Domain.Repositories;
-using Abp.Application.Services.Dto;
-using Microsoft.EntityFrameworkCore;
-using Abp.Authorization;
-using Abp.AutoMapper;
-using Abp.Runtime.Session;
-using Abp.Timing;
-using Magicodes.Admin.Authorization;
-using Admin.Application.Custom.Contents.Dto;
-using Magicodes.Admin.Core.Custom.Contents;
-using Magicodes.ExporterAndImporter.Core;
-using Abp.AspNetZeroCore.Net;
-using Magicodes.Admin.Dto;
-using Abp.Domain.Uow;
-
-using Magicodes.Admin.Core.Custom.Contents;
 
 namespace Admin.Application.Custom.Contents
 {
@@ -35,43 +32,47 @@ namespace Admin.Application.Custom.Contents
     {
         private readonly IRepository<ArticleTagInfo, long> _articleTagInfoRepository;
         private readonly IRepository<ArticleInfo, long> _articleInfoRepository;
-    		private readonly IExporter _excelExporter;
+        private readonly IExporter _excelExporter;
+        private readonly ITempFileCacheManager _tempFileCacheManager;
 
-		/// <summary>
-		/// 
-		/// </summary>
+        /// <summary>
+        /// 
+        /// </summary>
         public ArticleInfoArticleTagInfoAppService(
-            IRepository<ArticleTagInfo, long> articleTagInfoRepository 
+            IRepository<ArticleTagInfo, long> articleTagInfoRepository
             , IExporter excelExporter
             , IRepository<ArticleInfo, long> articleInfoRepository
-            ) : base()
+            , ITempFileCacheManager tempFileCacheManager) : base()
         {
             _articleTagInfoRepository = articleTagInfoRepository;
-			_excelExporter = excelExporter;
-			
+            _excelExporter = excelExporter;
+
             _articleInfoRepository = articleInfoRepository;
+            _tempFileCacheManager = tempFileCacheManager;
         }
 
-		/// <summary>
-		/// 获取列表
-		/// </summary>
+        /// <summary>
+        /// 获取列表
+        /// </summary>
         public async Task<PagedResultDto<ArticleTagInfoListDto>> GetArticleTagInfos(GetArticleInfoArticleTagInfosInput input)
         {
             async Task<PagedResultDto<ArticleTagInfoListDto>> getListFunc(bool isLoadSoftDeleteData)
             {
                 var query = CreateArticleTagInfosQuery(input);
-                
-								//仅加载已删除的数据
-				if (isLoadSoftDeleteData)
-                query = query.Where(p => p.IsDeleted);
-				
-				var resultCount = await query.CountAsync();
+
+                //仅加载已删除的数据
+                if (isLoadSoftDeleteData)
+                {
+                    query = query.Where(p => p.IsDeleted);
+                }
+
+                var resultCount = await query.CountAsync();
                 var results = await query
                     .OrderBy(input.Sorting)
                     .PageBy(input)
                     .ToListAsync();
 
-				return new PagedResultDto<ArticleTagInfoListDto>(resultCount, results.MapTo<List<ArticleTagInfoListDto>>());
+                return new PagedResultDto<ArticleTagInfoListDto>(resultCount, results.MapTo<List<ArticleTagInfoListDto>>());
             }
 
             //是否仅加载回收站数据
@@ -85,10 +86,10 @@ namespace Admin.Application.Custom.Contents
             return await getListFunc(false);
         }
 
-		/// <summary>
-		/// 导出
-		/// </summary>
-		public async Task<FileDto> GetArticleTagInfosToExcel(GetArticleInfoArticleTagInfosInput input)
+        /// <summary>
+        /// 导出
+        /// </summary>
+        public async Task<FileDto> GetArticleTagInfosToExcel(GetArticleInfoArticleTagInfosInput input)
         {
             async Task<List<ArticleTagInfoExportDto>> getListFunc(bool isLoadSoftDeleteData)
             {
@@ -99,13 +100,16 @@ namespace Admin.Application.Custom.Contents
 
                 var exportListDtos = results.MapTo<List<ArticleTagInfoExportDto>>();
                 if (exportListDtos.Count == 0)
+                {
                     throw new UserFriendlyException(L("NoDataToExport"));
+                }
+
                 return exportListDtos;
             }
 
             List<ArticleTagInfoExportDto> exportData = null;
 
-			            //是否仅加载回收站数据
+            //是否仅加载回收站数据
             if (input.IsOnlyGetRecycleData)
             {
                 using (UnitOfWorkManager.Current.DisableFilter(AbpDataFilters.SoftDelete))
@@ -113,46 +117,46 @@ namespace Admin.Application.Custom.Contents
                     exportData = await getListFunc(true);
                 }
             }
-			
+
             exportData = await getListFunc(false);
-            var fileDto = new FileDto(L("ArticleTagInfo") +L("ExportData")+ ".xlsx", MimeTypeNames.ApplicationVndOpenxmlformatsOfficedocumentSpreadsheetmlSheet);
-            var filePath = GetTempFilePath(fileName: fileDto.FileToken);
-            await _excelExporter.Export(filePath, exportData);
+            var fileDto = new FileDto(L("ArticleTagInfo") + L("ExportData") + ".xlsx", MimeTypeNames.ApplicationVndOpenxmlformatsOfficedocumentSpreadsheetmlSheet);
+            var byteArray = await _excelExporter.ExportAsByteArray(exportData);
+            _tempFileCacheManager.SetFile(fileDto.FileToken, byteArray);
             return fileDto;
         }
 
-		/// <summary>
-		/// 
-		/// </summary>
+        /// <summary>
+        /// 
+        /// </summary>
         private IQueryable<ArticleTagInfo> CreateArticleTagInfosQuery(GetArticleInfoArticleTagInfosInput input)
         {
-            var query = _articleTagInfoRepository.GetAllIncluding(p=>p.ArticleInfo).Where(p => p.ArticleInfo.Id == input.ArticleInfoId);;
+            var query = _articleTagInfoRepository.GetAllIncluding(p => p.ArticleInfo).Where(p => p.ArticleInfo.Id == input.ArticleInfoId); ;
 
-			
-			//关键字搜索
-			query = query
-					.WhereIf(
+
+            //关键字搜索
+            query = query
+                    .WhereIf(
                     !input.Filter.IsNullOrEmpty(),
-					p => p.Name.Contains(input.Filter));
-			
-			
-			//创建时间范围搜索
-			query = query
+                    p => p.Name.Contains(input.Filter));
+
+
+            //创建时间范围搜索
+            query = query
                 .WhereIf(input.CreationDateStart.HasValue, t => t.CreationTime >= input.CreationDateStart.Value)
                 .WhereIf(input.CreationDateEnd.HasValue, t => t.CreationTime <= input.CreationDateEnd.Value);
-			
-			
-			//修改时间范围搜索
-			query = query
+
+
+            //修改时间范围搜索
+            query = query
                 .WhereIf(input.ModificationTimeStart.HasValue, t => t.LastModificationTime >= input.ModificationTimeStart.Value)
                 .WhereIf(input.ModificationTimeEnd.HasValue, t => t.LastModificationTime <= input.ModificationTimeEnd.Value);
-			
+
             return query;
         }
 
-		/// <summary>
-		/// 获取
-		/// </summary>
+        /// <summary>
+        /// 获取
+        /// </summary>
         [AbpAuthorize(AppPermissions.Pages_ArticleInfo_ArticleTagInfo_Create, AppPermissions.Pages_ArticleInfo_ArticleTagInfo_Edit)]
         public async Task<GetArticleTagInfoForEditOutput> GetArticleTagInfoForEdit(NullableIdDto<long> input)
         {
@@ -173,9 +177,9 @@ namespace Admin.Application.Custom.Contents
             };
         }
 
-		/// <summary>
-		/// 创建或者编辑
-		/// </summary>
+        /// <summary>
+        /// 创建或者编辑
+        /// </summary>
         [AbpAuthorize(AppPermissions.Pages_ArticleInfo_ArticleTagInfo_Create, AppPermissions.Pages_ArticleInfo_ArticleTagInfo_Edit)]
         public async Task CreateOrUpdateArticleTagInfo(CreateOrUpdateArticleInfoArticleTagInfoDto input)
         {
@@ -189,9 +193,9 @@ namespace Admin.Application.Custom.Contents
             }
         }
 
-		/// <summary>
-		/// 删除
-		/// </summary>
+        /// <summary>
+        /// 删除
+        /// </summary>
         [AbpAuthorize(AppPermissions.Pages_ArticleInfo_ArticleTagInfo_Delete)]
         public async Task DeleteArticleTagInfo(EntityDto<long> input)
         {
@@ -199,7 +203,7 @@ namespace Admin.Application.Custom.Contents
             articleTagInfo.IsDeleted = true;
             articleTagInfo.DeleterUserId = AbpSession.GetUserId();
             articleTagInfo.DeletionTime = Clock.Now;
-            
+
         }
 
         /// <summary>
@@ -223,7 +227,7 @@ namespace Admin.Application.Custom.Contents
                 TenantId = AbpSession.TenantId
             };
             await _articleTagInfoRepository.InsertAsync(articleTagInfo);
-             
+
         }
 
         /// <summary>
@@ -266,9 +270,9 @@ namespace Admin.Application.Custom.Contents
 
 
 
-		/// <summary>
-		/// 获取选择列表
-		/// </summary>
+        /// <summary>
+        /// 获取选择列表
+        /// </summary>
         public async Task<List<GetDataComboItemDto<long>>> GetArticleInfoDataComboItems()
         {
             var list = await _articleInfoRepository.GetAll()

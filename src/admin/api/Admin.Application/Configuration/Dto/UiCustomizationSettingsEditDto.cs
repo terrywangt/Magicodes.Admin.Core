@@ -49,8 +49,6 @@ namespace Magicodes.Admin.Configuration.Dto
 
         public bool DefaultHiddenAside { get; set; }
 
-        public string SubmenuToggle { get; set; }
-
         public string DropdownSubmenuSkin { get; set; }
 
         public bool DropdownSubmenuArrow { get; set; }

@@ -23,9 +23,8 @@ using Magicodes.ExporterAndImporter.Core;
 using Abp.AspNetZeroCore.Net;
 using Magicodes.Admin.Dto;
 using Abp.Domain.Uow;
-using Abp.Runtime.Caching;
 using Magicodes.Admin;
-using Magicodes.Admin.Core.Custom.Attachments;
+using Magicodes.Admin.Storage;
 
 
 namespace Admin.Application.Custom.Contents
@@ -39,8 +38,7 @@ namespace Admin.Application.Custom.Contents
 
         private readonly IRepository<ColumnInfo, long> _columnInfoRepository;
         private readonly IExporter _excelExporter;
-        private readonly IRepository<ObjectAttachmentInfo, long> _objectAttachmentRepository;
-        private readonly ICacheManager _cacheManager;
+        private readonly ITempFileCacheManager _tempFileCacheManager;
 
         /// <summary>
         /// 
@@ -48,13 +46,11 @@ namespace Admin.Application.Custom.Contents
         public ColumnInfoAppService(
             IRepository<ColumnInfo, long> columnInfoRepository,
             IExporter excelExporter,
-            IRepository<ObjectAttachmentInfo, long> objectAttachmentRepository,
-            ICacheManager cacheManager) : base()
+            ITempFileCacheManager tempFileCacheManager) : base()
         {
             _columnInfoRepository = columnInfoRepository;
             _excelExporter = excelExporter;
-            _objectAttachmentRepository = objectAttachmentRepository;
-            _cacheManager = cacheManager;
+            _tempFileCacheManager = tempFileCacheManager;
         }
 
         /// <summary>
@@ -120,20 +116,10 @@ namespace Admin.Application.Custom.Contents
             }
 
             exportData = await getListFunc(false);
+
             var fileDto = new FileDto(L("ColumnInfo") + L("ExportData") + ".xlsx", MimeTypeNames.ApplicationVndOpenxmlformatsOfficedocumentSpreadsheetmlSheet);
-            var filePath = GetTempFilePath(fileName: fileDto.FileToken);
-            await _excelExporter.Export(filePath, exportData);
-
-            if (!File.Exists(filePath))
-            {
-                throw new UserFriendlyException(L("RequestedFileDoesNotExists"));
-            }
-
-            var fileBytes = File.ReadAllBytes(filePath);
-            File.Delete(filePath);
-
-            _cacheManager.GetCache(AppConsts.ExcelFileCacheName).Set(fileDto.FileName, fileBytes);
-
+            var byteArray = await _excelExporter.ExportAsByteArray(exportData);
+            _tempFileCacheManager.SetFile(fileDto.FileToken, byteArray);
             return fileDto;
         }
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Abp.Auditing;
 using Abp.Authorization.Users;
@@ -38,7 +39,7 @@ namespace Magicodes.Admin.Authorization.Accounts.Dto
         {
             if (!UserName.IsNullOrEmpty())
             {
-                if (!UserName.Equals(EmailAddress) && ValidationHelper.IsEmail(UserName))
+                if (!UserName.Equals(EmailAddress, StringComparison.OrdinalIgnoreCase) && ValidationHelper.IsEmail(UserName))
                 {
                     yield return new ValidationResult("Username cannot be an email address unless it's same with your email address !");
                 }

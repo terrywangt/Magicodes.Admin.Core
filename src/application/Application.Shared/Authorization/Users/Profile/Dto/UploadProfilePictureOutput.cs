@@ -1,10 +1,15 @@
 using Abp.Web.Models;
+using Magicodes.Admin.Dto;
 
 namespace Magicodes.Admin.Authorization.Users.Profile.Dto
 {
     public class UploadProfilePictureOutput : ErrorInfo
     {
         public string FileName { get; set; }
+
+        public string FileType { get; set; }
+
+        public string FileToken { get; set; }
 
         public int Width { get; set; }
 

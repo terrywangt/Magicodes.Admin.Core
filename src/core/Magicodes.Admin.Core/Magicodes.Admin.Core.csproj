@@ -31,14 +31,13 @@
     <PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="3.3.1" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
     <PackageReference Include="TimeZoneConverter" Version="2.4.1" />
-    <PackageReference Include="Abp.AspNetZeroCore" Version="1.1.6" />
+    <PackageReference Include="Abp.AspNetZeroCore" Version="1.1.7" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Abp.ZeroCore.IdentityServer4.EntityFrameworkCore" Version="3.8.1" />
-    <PackageReference Include="Abp.AutoMapper" Version="3.8.1" />
-    <PackageReference Include="Abp.MailKit" Version="3.8.1" />
-    <PackageReference Include="Abp.Zero.Ldap" Version="3.8.1" />
-    <PackageReference Include="Abp" Version="3.8.1" />
+    <PackageReference Include="Abp.ZeroCore.IdentityServer4.EntityFrameworkCore" Version="3.8.3" />
+    <PackageReference Include="Abp.AutoMapper" Version="3.8.3" />
+    <PackageReference Include="Abp.MailKit" Version="3.8.3" />
+    <PackageReference Include="Abp.Zero.Ldap" Version="3.8.3" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />

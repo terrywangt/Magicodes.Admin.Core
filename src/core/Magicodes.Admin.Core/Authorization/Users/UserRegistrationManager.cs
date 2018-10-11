@@ -79,15 +79,14 @@ namespace Magicodes.Admin.Authorization.Users
 
             user.SetNormalizedNames();
 
-            user.Password = _passwordHasher.HashPassword(user, plainPassword);
-
             var defaultRoles = await AsyncQueryableExecuter.ToListAsync(_roleManager.Roles.Where(r => r.IsDefault));
             foreach (var defaultRole in defaultRoles)
             {
                 user.Roles.Add(new UserRole(tenant.Id, user.Id, defaultRole.Id));
             }
 
-            CheckErrors(await _userManager.CreateAsync(user));
+            await _userManager.InitializeOptionsAsync(AbpSession.TenantId);
+            CheckErrors(await _userManager.CreateAsync(user, plainPassword));
             await CurrentUnitOfWork.SaveChangesAsync();
 
             if (!user.IsEmailConfirmed)
