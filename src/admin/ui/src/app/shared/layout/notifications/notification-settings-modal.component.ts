@@ -30,13 +30,6 @@ export class NotificationSettingsModalComponent extends AppComponentBase {
         });
     }
 
-    onShown(): void {
-        $('#ReceiveNotifications').bootstrapSwitch('state', this.settings.receiveNotifications);
-        $('#ReceiveNotifications').bootstrapSwitch('onSwitchChange', (el, value) => {
-            this.settings.receiveNotifications = value;
-        });
-    }
-
     save(): void {
         const input = new UpdateNotificationSettingsInput();
         input.receiveNotifications = this.settings.receiveNotifications;

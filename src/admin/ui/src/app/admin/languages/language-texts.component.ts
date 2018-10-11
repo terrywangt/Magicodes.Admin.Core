@@ -84,13 +84,6 @@ export class LanguageTextsComponent extends AppComponentBase implements AfterVie
             this.targetValueFilter = params['targetValueFilter'] || 'ALL';
             this.filterText = params['filterText'] || '';
 
-            setTimeout(() => {
-                $(this.baseLanguageNameCombobox.nativeElement).selectpicker('refresh');
-                $(this.targetLanguageNameCombobox.nativeElement).selectpicker('refresh');
-                $(this.sourceNameCombobox.nativeElement).selectpicker('refresh');
-                $(this.targetValueFilterCombobox.nativeElement).selectpicker('refresh');
-            }, 0);
-
             this.reloadPage();
         });
     }

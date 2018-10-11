@@ -1,8 +1,7 @@
-import { AfterViewChecked, Component, ElementRef, EventEmitter, Injector, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Injector, Output, ViewChild } from '@angular/core';
 import { AppConsts } from '@shared/AppConsts';
 import { AppTimezoneScope } from '@shared/AppEnums';
 import { AppComponentBase } from '@shared/common/app-component-base';
-import { AppSessionService } from '@shared/common/session/app-session.service';
 import { CurrentUserProfileEditDto, DefaultTimezoneScope, ProfileServiceProxy, UpdateGoogleAuthenticatorKeyOutput } from '@shared/service-proxies/service-proxies';
 import { ModalDirective } from 'ngx-bootstrap';
 import { SmsVerificationModalComponent } from './sms-verification-modal.component';
@@ -12,10 +11,8 @@ import { finalize } from 'rxjs/operators';
     selector: 'mySettingsModal',
     templateUrl: './my-settings-modal.component.html'
 })
-export class MySettingsModalComponent extends AppComponentBase implements AfterViewChecked {
+export class MySettingsModalComponent extends AppComponentBase {
 
-
-    @ViewChild('nameInput') nameInput: ElementRef;
     @ViewChild('mySettingsModal') modal: ModalDirective;
     @ViewChild('smsVerificationModal') smsVerificationModal: SmsVerificationModalComponent;
     @Output() modalSave: EventEmitter<any> = new EventEmitter<any>();
@@ -34,16 +31,9 @@ export class MySettingsModalComponent extends AppComponentBase implements AfterV
 
     constructor(
         injector: Injector,
-        private _profileService: ProfileServiceProxy,
-        private _appSessionService: AppSessionService
+        private _profileService: ProfileServiceProxy
     ) {
         super(injector);
-    }
-
-    ngAfterViewChecked(): void {
-        //Temporary fix for: https://github.com/valor-software/ngx-bootstrap/issues/1508
-        $('tabset ul.nav').addClass('m-tabs-line');
-        $('tabset ul.nav li a.nav-link').addClass('m-tabs__link');
     }
 
     show(): void {
@@ -79,7 +69,7 @@ export class MySettingsModalComponent extends AppComponentBase implements AfterV
     }
 
     onShown(): void {
-        $(this.nameInput.nativeElement).focus();
+        document.getElementById('Name').focus();
     }
 
     close(): void {
@@ -92,10 +82,10 @@ export class MySettingsModalComponent extends AppComponentBase implements AfterV
         this._profileService.updateCurrentUserProfile(this.user)
             .pipe(finalize(() => { this.saving = false; }))
             .subscribe(() => {
-                this._appSessionService.user.name = this.user.name;
-                this._appSessionService.user.surname = this.user.surname;
-                this._appSessionService.user.userName = this.user.userName;
-                this._appSessionService.user.emailAddress = this.user.emailAddress;
+                this.appSession.user.name = this.user.name;
+                this.appSession.user.surname = this.user.surname;
+                this.appSession.user.userName = this.user.userName;
+                this.appSession.user.emailAddress = this.user.emailAddress;
 
                 this.notify.info(this.l('SavedSuccessfully'));
                 this.close();

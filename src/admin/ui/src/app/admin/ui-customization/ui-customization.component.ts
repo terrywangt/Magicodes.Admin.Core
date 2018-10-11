@@ -1,4 +1,4 @@
-import { AfterViewChecked, Component, Injector, OnInit } from '@angular/core';
+import { Component, Injector, OnInit } from '@angular/core';
 import { appModuleAnimation } from '@shared/animations/routerTransition';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { UiCustomizationSettingsEditDto, UiCustomizationSettingsServiceProxy } from '@shared/service-proxies/service-proxies';
@@ -7,7 +7,7 @@ import { UiCustomizationSettingsEditDto, UiCustomizationSettingsServiceProxy } f
     templateUrl: './ui-customization.component.html',
     animations: [appModuleAnimation()]
 })
-export class UiCustomizationComponent extends AppComponentBase implements AfterViewChecked, OnInit {
+export class UiCustomizationComponent extends AppComponentBase implements OnInit {
 
     settings: UiCustomizationSettingsEditDto;
 
@@ -16,12 +16,6 @@ export class UiCustomizationComponent extends AppComponentBase implements AfterV
         private _uiCustomizationService: UiCustomizationSettingsServiceProxy
     ) {
         super(injector);
-    }
-
-    ngAfterViewChecked(): void {
-        //Temporary fix for: https://github.com/valor-software/ngx-bootstrap/issues/1508
-        $('tabset ul.nav').addClass('m-tabs-line');
-        $('tabset ul.nav li a.nav-link').addClass('m-tabs__link');
     }
 
     ngOnInit(): void {

@@ -11,10 +11,9 @@ import { PaginatorModule } from 'primeng/primeng';
 import { TableModule } from 'primeng/table';
 import { AppAuthService } from './auth/app-auth.service';
 import { AppRouteGuard } from './auth/auth-route-guard';
-import { JqPluginDirective } from './libs/jq-plugin.directive';
 import { CommonLookupModalComponent } from './lookup/common-lookup-modal.component';
-import { DatePickerDirective } from './timing/date-picker.component';
-import { DateRangePickerComponent } from './timing/date-range-picker.component';
+import { DateRangePickerInitialValueSetterDirective } from './timing/date-range-picker-initial-value.directive';
+import { DatePickerInitialValueSetterDirective } from './timing/date-picker-initial-value.directive';
 import { DateTimeService } from './timing/date-time.service';
 import { TimeZoneComboComponent } from './timing/timezone-combo.component';
 
@@ -31,17 +30,15 @@ import { TimeZoneComboComponent } from './timing/timezone-combo.component';
     ],
     declarations: [
         TimeZoneComboComponent,
-        JqPluginDirective,
         CommonLookupModalComponent,
-        DateRangePickerComponent,
-        DatePickerDirective
+        DateRangePickerInitialValueSetterDirective,
+        DatePickerInitialValueSetterDirective
     ],
     exports: [
         TimeZoneComboComponent,
-        JqPluginDirective,
         CommonLookupModalComponent,
-        DateRangePickerComponent,
-        DatePickerDirective
+        DateRangePickerInitialValueSetterDirective,
+        DatePickerInitialValueSetterDirective
     ],
     providers: [
         DateTimeService,

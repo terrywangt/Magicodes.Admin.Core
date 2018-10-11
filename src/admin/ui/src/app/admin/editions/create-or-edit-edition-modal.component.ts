@@ -1,18 +1,19 @@
-import { AfterViewChecked, Component, ElementRef, EventEmitter, Injector, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Injector, Output, ViewChild } from '@angular/core';
 import { AppEditionExpireAction } from '@shared/AppEnums';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { ComboboxItemDto, CommonLookupServiceProxy, CreateOrUpdateEditionDto, EditionEditDto, EditionServiceProxy } from '@shared/service-proxies/service-proxies';
 import { ModalDirective } from 'ngx-bootstrap';
 import { FeatureTreeComponent } from '../shared/feature-tree.component';
 import { finalize } from 'rxjs/operators';
+import createNumberMask from 'text-mask-addons/dist/createNumberMask';
+
 
 @Component({
     selector: 'createOrEditEditionModal',
     templateUrl: './create-or-edit-edition-modal.component.html'
 })
-export class CreateOrEditEditionModalComponent extends AppComponentBase implements AfterViewChecked {
+export class CreateOrEditEditionModalComponent extends AppComponentBase {
 
-    @ViewChild('editionNameInput') editionNameInput: ElementRef;
     @ViewChild('createOrEditModal') modal: ModalDirective;
     @ViewChild('featureTree') featureTree: FeatureTreeComponent;
 
@@ -20,6 +21,9 @@ export class CreateOrEditEditionModalComponent extends AppComponentBase implemen
 
     active = false;
     saving = false;
+    currencyMask = createNumberMask({
+        prefix: ''
+    });
 
     edition: EditionEditDto = new EditionEditDto();
     expiringEditions: ComboboxItemDto[] = [];
@@ -36,12 +40,6 @@ export class CreateOrEditEditionModalComponent extends AppComponentBase implemen
         private _commonLookupService: CommonLookupServiceProxy
     ) {
         super(injector);
-    }
-
-    ngAfterViewChecked(): void {
-        //Temporary fix for: https://github.com/valor-software/ngx-bootstrap/issues/1508
-        $('tabset ul.nav').addClass('m-tabs-line');
-        $('tabset ul.nav li a.nav-link').addClass('m-tabs__link');
     }
 
     show(editionId?: number): void {
@@ -67,15 +65,7 @@ export class CreateOrEditEditionModalComponent extends AppComponentBase implemen
     }
 
     onShown(): void {
-        $(this.editionNameInput.nativeElement).focus();
-    }
-
-    updateAnnualPrice(value): void {
-        this.edition.annualPrice = value;
-    }
-
-    updateMonthlyPrice(value): void {
-        this.edition.monthlyPrice = value;
+        document.getElementById('EditionDisplayName').focus();
     }
 
     resetPrices(isFree) {

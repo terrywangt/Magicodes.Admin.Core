@@ -38,32 +38,38 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="MonthlyPrice">{{l("MonthlyPrice")}}</label>
-                                        <input #monthlyPriceInput="ngModel"
-                                               type="text"
-                                               name="MonthlyPrice"
-                                               id="MonthlyPrice"
-                                               currencyInput
-                                               class="form-control"
-                                               autocomplete="off"
-                                               [ngClass]="{'edited':edition.monthlyPrice}"
-                                               [required]="!isFree"
-                                               [(ngModel)]="edition.monthlyPrice" />
+                                        <div class="input-group m-input-group">
+                                            <div class="input-group-prepend"><span class="input-group-text">$</span></div>
+                                            <input #monthlyPriceInput="ngModel"
+                                                   type="text"
+                                                   name="MonthlyPrice"
+                                                   id="MonthlyPrice"
+                                                   class="form-control"
+                                                   autocomplete="off"
+                                                   [ngClass]="{'edited':edition.monthlyPrice}"
+                                                   [required]="!isFree"
+                                                   [(ngModel)]="edition.monthlyPrice"
+                                                   [textMask]="{mask: currencyMask}" />
+                                        </div>
                                         <validation-messages [formCtrl]="monthlyPriceInput"></validation-messages>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="AnnualPrice">{{l("AnnualPrice")}}</label>
-                                        <input #annualPriceInput="ngModel"
-                                               type="text"
-                                               name="AnnualPrice"
-                                               id="AnnualPrice"
-                                               currencyInput
-                                               class="form-control"
-                                               autocomplete="off"
-                                               [ngClass]="{'edited':edition.annualPrice}"
-                                               [required]="!isFree"
-                                               [(ngModel)]="edition.annualPrice" />
+                                        <div class="input-group m-input-group">
+                                            <div class="input-group-prepend"><span class="input-group-text">$</span></div>
+                                            <input #annualPriceInput="ngModel"
+                                                   type="text"
+                                                   name="AnnualPrice"
+                                                   id="AnnualPrice"
+                                                   class="form-control"
+                                                   autocomplete="off"
+                                                   [ngClass]="{'edited':edition.annualPrice}"
+                                                   [required]="!isFree"
+                                                   [(ngModel)]="edition.annualPrice"
+                                                   [textMask]="{mask: currencyMask}" />
+                                        </div>
                                         <validation-messages [formCtrl]="annualPriceInput"></validation-messages>
                                     </div>
                                 </div>
@@ -121,7 +127,7 @@
                                     </label>
                                 </div>
                                 <div class="form-group edition-list" *ngIf="expireAction == expireActionEnum.AssignToAnotherEdition">
-                                    <select name="expiringEdition" class="form-control edited" [(ngModel)]="edition.expiringEditionId" [minValue]="expireAction == expireActionEnum.AssignToAnotherEdition ? 1:0" [ngClass]="{'edited':edition.expiringEditionId}">
+                                    <select name="expiringEdition" class="form-control edited" [(ngModel)]="edition.expiringEditionId" [attr.min]="expireAction == expireActionEnum.AssignToAnotherEdition ? 1:0" [ngClass]="{'edited':edition.expiringEditionId}">
                                         <option *ngFor="let expiringEdition of expiringEditions" [value]="expiringEdition.value">{{expiringEdition.displayText}}</option>
                                     </select>
                                 </div>

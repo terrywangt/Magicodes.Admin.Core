@@ -1,72 +1,56 @@
-import { Directive, ElementRef, Input, OnInit } from '@angular/core';
+import { Directive, ElementRef, Input, OnInit, AfterViewInit } from '@angular/core';
+import { AppLocalizationService } from '@app/shared/common/localization/app-localization.service';
+import * as _ from 'lodash';
 
 @Directive({
     selector: '[buttonBusy]'
 })
-export class ButtonBusyDirective implements OnInit {
+export class ButtonBusyDirective implements OnInit, AfterViewInit {
 
-    @Input() set buttonBusy(isBusy: boolean){
+    @Input() set buttonBusy(isBusy: boolean) {
         this.refreshState(isBusy);
     }
 
     @Input() busyText: string;
 
-    private _$button: JQuery;
-    private _$buttonInnerSpan: JQuery;
-    private _$buttonIcon: JQuery;
+    private _button: any;
+    private _originalButtonInnerHtml: any;
 
     constructor(
-        private _element: ElementRef
-        ) {
+        private _element: ElementRef,
+        private _appLocalizationService: AppLocalizationService
+    ) {
     }
 
     ngOnInit(): void {
-        this._$button = $(this._element.nativeElement);
-        this._$buttonInnerSpan = this._$button.find('span');
-        this._$buttonIcon = this._$button.find('i');
+        this._button = this._element.nativeElement;
+    }
+
+    ngAfterViewInit(): void {
+        this._originalButtonInnerHtml = this._button.innerHTML;
     }
 
     refreshState(isBusy: boolean): void {
-        if (!this._$button) {
+        if (!this._button) {
             return;
         }
 
         if (isBusy) {
             // disable button
-            this._$button.attr('disabled', 'disabled');
+            this._button.setAttribute('disabled', 'disabled');
 
-            //change icon
-            if (this._$buttonIcon.length) {
-                this._$buttonIcon.data('_originalClasses', this._$buttonIcon.attr('class'));
-                this._$buttonIcon.removeClass();
-                this._$buttonIcon.addClass('fa fa-spin fa-spinner');
-            }
+            this._button.innerHTML = '<i class="fa fa-spin fa-spinner"></i>' +
+                '<span>' + (this.busyText ? this.busyText : this._appLocalizationService.l('ProcessingWithThreeDot')) + '</span>';
 
-            // change text
-            if (this.busyText && this._$buttonInnerSpan.length) {
-                this._$buttonInnerSpan.data('_originalText', this._$buttonInnerSpan.html());
-                this._$buttonInnerSpan.html(this.busyText);
-            }
-
-            this._$button.data('_disabledBefore', true);
+            this._button.setAttribute('_disabledBefore', true);
         } else {
-            if (!this._$button.data('_disabledBefore')) {
+            if (!this._button.getAttribute('_disabledBefore')) {
                 return;
             }
 
             // enable button
-            this._$button.removeAttr('disabled');
-
-            // restore icon
-            if (this._$buttonIcon.length && this._$buttonIcon.data('_originalClasses')) {
-                this._$buttonIcon.removeClass();
-                this._$buttonIcon.addClass(this._$buttonIcon.data('_originalClasses'));
-            }
-
-            // restore text
-            if (this._$buttonInnerSpan.length && this._$buttonInnerSpan.data('_originalText')) {
-                this._$buttonInnerSpan.html(this._$buttonInnerSpan.data('_originalText'));
-            }
+            this._button.removeAttribute('disabled');
+            this._button.innerHTML = this._originalButtonInnerHtml;
         }
     }
 }

@@ -1,41 +1,57 @@
 export class DomHelper {
 
     static waitUntilElementIsReady(selector: string, callback: any, checkPeriod?: number): void {
-        if (!$) {
-            return;
-        }
-
-        let elementCount = selector.split(',').length;
+        let selectors = selector.split(',');
+        let elementCount = selectors.length;
 
         if (!checkPeriod) {
             checkPeriod = 100;
         }
 
         let checkExist = setInterval(() => {
-            if ($(selector).length >= elementCount) {
+            let foundElementCount = 0;
+            for (let i = 0; i < selectors.length; i++) {
+                let selector = selectors[i].trim();
+                if (selector[0] === '#') {
+                    let idSelector = selector.replace('#', '');
+                    foundElementCount = foundElementCount + (document.getElementById(idSelector) ? 1 : 0);
+                } else if (selector[0] === '.') {
+                    let classSelector = selector.replace('.', '');
+                    foundElementCount = foundElementCount + (document.getElementsByClassName(classSelector) ? 1 : 0);
+                }
+            }
+
+            if (foundElementCount >= elementCount) {
                 clearInterval(checkExist);
                 callback();
             }
         }, checkPeriod);
     }
 
-    static waitUntilElementIsVisible(selector: string, callback: any, checkPeriod?: number): void {
-        if (!$) {
-            return;
+    static createElement(tag: string, attributes: any[]): any {
+        let el = document.createElement(tag);
+        for (let i = 0; i < attributes.length; i++) {
+            let attribute = attributes[i];
+            el.setAttribute(attribute.key, attribute.value);
         }
 
-        let elementCount = selector.split(',').length;
+        return el;
+    }
 
-        if (!checkPeriod) {
-            checkPeriod = 100;
+    static getElementByAttributeValue(tag: string, attribute: string, value: string) {
+        let els = document.getElementsByTagName(tag);
+        if (!els) {
+            return undefined;
         }
 
-        let checkExist = setInterval(() => {
-            if ($(selector.replace('/,/g', ':visible,' + ':visible')).length >= elementCount) {
-                clearInterval(checkExist);
-                callback();
+        for (let i = 0; i < els.length; i++) {
+            let el = els[i];
+            if (el.getAttribute(attribute) === value) {
+                return el;
             }
-        }, checkPeriod);
+        }
+
+        return undefined;
     }
 
 }

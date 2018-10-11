@@ -1,20 +1,21 @@
 import { PermissionCheckerService } from '@abp/auth/permission-checker.service';
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, CanActivateChild, Router, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivate, CanActivateChild, CanLoad, Router, RouterStateSnapshot } from '@angular/router';
 import { AppSessionService } from '@shared/common/session/app-session.service';
 import { UrlHelper } from '@shared/helpers/UrlHelper';
+import { Data, Route } from '@node_modules/@angular/router/src/config';
+import { Observable } from '@node_modules/rxjs/internal/Observable';
 
 @Injectable()
-export class AppRouteGuard implements CanActivate, CanActivateChild {
+export class AppRouteGuard implements CanActivate, CanActivateChild, CanLoad {
 
     constructor(
         private _permissionChecker: PermissionCheckerService,
         private _router: Router,
-        private _sessionService: AppSessionService,
+        private _sessionService: AppSessionService
     ) { }
 
-    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-
+    canActivateInternal(data: Data, state: RouterStateSnapshot): boolean {
         if (state && UrlHelper.isInstallUrl(state.url)) {
             return true;
         }
@@ -24,11 +25,11 @@ export class AppRouteGuard implements CanActivate, CanActivateChild {
             return false;
         }
 
-        if (!route.data || !route.data['permission']) {
+        if (!data || !data['permission']) {
             return true;
         }
 
-        if (this._permissionChecker.isGranted(route.data['permission'])) {
+        if (this._permissionChecker.isGranted(data['permission'])) {
             return true;
         }
 
@@ -36,8 +37,16 @@ export class AppRouteGuard implements CanActivate, CanActivateChild {
         return false;
     }
 
+    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+        return this.canActivateInternal(route.data, state);
+    }
+
     canActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
         return this.canActivate(route, state);
+    }
+
+    canLoad(route: Route): Observable<boolean> | Promise<boolean> | boolean {
+        return this.canActivateInternal(route.data, null);
     }
 
     selectBestRoute(): string {

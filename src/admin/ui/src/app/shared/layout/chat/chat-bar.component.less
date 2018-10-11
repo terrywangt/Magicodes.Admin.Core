@@ -238,21 +238,33 @@ a.page-quick-sidebar-pinner.pinned {
 
 .m-messenger__form-tools {
     a:hover {
-        .ui-button {
+        span.ui-button {
             background-color: #f4f5f8 !important;
         }
     }
 }
+
+.m-messenger__form-tools .ui-fileupload-choose:not(.ui-state-disabled) {
+    border: none;
+}
+
 .m-messenger__form-tools .ui-fileupload-choose:not(.ui-state-disabled):hover,
 .m-messenger__form-tools .ui-fileupload-choose:not(.ui-state-disabled):focus,
 .m-messenger__form-tools .ui-fileupload-choose:not(.ui-state-disabled):active {
     background-color: #f4f5f8 !important;
+    color: black;
     box-shadow: none !important;
+    border: none;
 }
 
 .m-messenger__form-tools .chat-link-button {
     width: 100%;
-    border: none;
+    border: none !important;
+    background-color: #fff !important;
+}
+
+.m-messenger__form-tools .chat-link-button:hover {
+    background-color: #f4f5f8 !important;
 }
 
 .m-messenger__form-tools .ui-button span {
@@ -282,4 +294,18 @@ a.page-quick-sidebar-pinner.pinned {
     padding: 5px;
     background-color: #3598dc;
     color: #f7f7f7;
+}
+
+.chat-attachment-menu {
+    transform: none !important;
+    left: -200px !important;
+    width: 250px !important;
+
+    li {
+        a:hover {
+            button.chat-link-button {
+                background-color: #f4f5f8 !important;
+            }
+        }
+    }
 }

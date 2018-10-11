@@ -28,8 +28,8 @@ export class AuditLogsComponent extends AppComponentBase {
     @ViewChild('paginatorEntityChanges') paginatorEntityChanges: Paginator;
 
     //Filters
-    public startDate: moment.Moment = moment().startOf('day');
-    public endDate: moment.Moment = moment().endOf('day');
+    public dateRange: moment.Moment[] = [moment().startOf('day'), moment().endOf('day')];
+
     public usernameAuditLog: string;
     public usernameEntityChange: string;
     public serviceName: string;
@@ -72,8 +72,8 @@ export class AuditLogsComponent extends AppComponentBase {
         this.primengTableHelperAuditLogs.showLoadingIndicator();
 
         this._auditLogService.getAuditLogs(
-            this.startDate,
-            this.endDate,
+            this.dateRange[0],
+            this.dateRange[1],
             this.usernameAuditLog,
             this.serviceName,
             this.methodName,
@@ -106,8 +106,8 @@ export class AuditLogsComponent extends AppComponentBase {
         this.primengTableHelperEntityChanges.showLoadingIndicator();
 
         this._auditLogService.getEntityChanges(
-            this.startDate,
-            this.endDate,
+            this.dateRange[0],
+            this.dateRange[1],
             this.usernameEntityChange,
             this.entityTypeFullName,
             this.primengTableHelperEntityChanges.getSorting(this.dataTableEntityChanges),
@@ -123,8 +123,8 @@ export class AuditLogsComponent extends AppComponentBase {
     exportToExcelAuditLogs(): void {
         const self = this;
         self._auditLogService.getAuditLogsToExcel(
-            self.startDate,
-            self.endDate,
+            self.dateRange[0],
+            self.dateRange[1],
             self.usernameAuditLog,
             self.serviceName,
             self.methodName,
@@ -143,8 +143,8 @@ export class AuditLogsComponent extends AppComponentBase {
     exportToExcelEntityChanges(): void {
         const self = this;
         self._auditLogService.getEntityChangesToExcel(
-            self.startDate,
-            self.endDate,
+            self.dateRange[0],
+            self.dateRange[1],
             self.usernameEntityChange,
             self.entityTypeFullName,
             undefined,

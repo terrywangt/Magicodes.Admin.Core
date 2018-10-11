@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Injector, Output, ViewChild } from '@angular/core';
+import { OnInit, Component, EventEmitter, Injector, Output, ViewChild } from '@angular/core';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { HtmlHelper } from '@shared/helpers/HtmlHelper';
 import { ListResultDtoOfOrganizationUnitDto, MoveOrganizationUnitInput, OrganizationUnitDto, OrganizationUnitServiceProxy } from '@shared/service-proxies/service-proxies';
@@ -9,6 +9,11 @@ import { IBasicOrganizationUnitInfo } from './basic-organization-unit-info';
 import { CreateOrEditUnitModalComponent } from './create-or-edit-unit-modal.component';
 import { IUserWithOrganizationUnit } from './user-with-organization-unit';
 import { IUsersWithOrganizationUnit } from './users-with-organization-unit';
+
+import { TreeNode, MenuItem } from 'primeng/api';
+
+import { ArrayToTreeConverterService } from '@shared/utils/array-to-tree-converter.service';
+import { TreeDataHelperService } from '@shared/utils/tree-data-helper.service';
 
 export interface IOrganizationUnitOnTree extends IBasicOrganizationUnitInfo {
     id: number;
@@ -25,206 +30,147 @@ export interface IOrganizationUnitOnTree extends IBasicOrganizationUnitInfo {
     templateUrl: './organization-tree.component.html',
     styleUrls: ['./organization-tree.component.less']
 })
-export class OrganizationTreeComponent extends AppComponentBase implements AfterViewInit {
+export class OrganizationTreeComponent extends AppComponentBase implements OnInit {
 
     @Output() ouSelected = new EventEmitter<IBasicOrganizationUnitInfo>();
 
-    @ViewChild('tree') tree: ElementRef;
     @ViewChild('createOrEditOrganizationUnitModal') createOrEditOrganizationUnitModal: CreateOrEditUnitModalComponent;
 
-    private _$tree: JQuery;
-    private _updatingNode: any;
+
+    treeData: any;
+    selectedOu: TreeNode;
+    ouContextMenuItems: MenuItem[];
+    canManageOrganizationUnits = false;
 
     constructor(
         injector: Injector,
-        private _organizationUnitService: OrganizationUnitServiceProxy
+        private _organizationUnitService: OrganizationUnitServiceProxy,
+        private _arrayToTreeConverterService: ArrayToTreeConverterService,
+        private _treeDataHelperService: TreeDataHelperService
     ) {
         super(injector);
     }
 
     totalUnitCount = 0;
 
-    set selectedOu(ou: IOrganizationUnitOnTree) {
-        this._selectedOu = ou;
-        this.ouSelected.emit(ou);
+    ngOnInit(): void {
+        this.canManageOrganizationUnits = this.isGranted('Pages.Administration.OrganizationUnits.ManageOrganizationTree');
+        this.ouContextMenuItems = this.getContextMenuItems();
+        this.getTreeDataFromServer();
     }
 
-    private _selectedOu: IOrganizationUnitOnTree;
-
-    ngAfterViewInit(): void {
-        const self = this;
-        this._$tree = $(this.tree.nativeElement);
-        this.getTreeDataFromServer(treeData => {
-            this.totalUnitCount = treeData.length;
-
-            const jsTreePlugins = [
-                'types',
-                'contextmenu',
-                'wholerow',
-                'sort'
-            ];
-
-            if (this.isGranted('Pages.Administration.OrganizationUnits.ManageOrganizationTree')) {
-                jsTreePlugins.push('dnd');
-            }
-
-            this._$tree
-                .on('changed.jstree', (e, data) => {
-                    if (data.selected.length !== 1) {
-                        this.selectedOu = null;
-                    } else {
-                        this.selectedOu = data.instance.get_node(data.selected[0]).original;
-                    }
-                })
-                .on('move_node.jstree', (e, data) => {
-                    if (!this.isGranted('Pages.Administration.OrganizationUnits.ManageOrganizationTree')) {
-                        this._$tree.jstree('refresh'); //rollback
-                        return;
-                    }
-
-                    const parentNodeName = (!data.parent || data.parent === '#')
-                        ? this.l('Root')
-                        : this._$tree.jstree('get_node', data.parent).original.displayName;
-
-                    this.message.confirm(
-                        this.l('OrganizationUnitMoveConfirmMessage', data.node.original.displayName, parentNodeName),
-                        this.l('AreYouSure'),
-                        isConfirmed => {
-                            if (isConfirmed) {
-                                const input = new MoveOrganizationUnitInput();
-                                input.id = data.node.id;
-                                input.newParentId = (!data.parent || data.parent === '#') ? undefined : data.parent;
-                                this._organizationUnitService.moveOrganizationUnit(input)
-                                    .pipe(catchError(error => {
-                                        this._$tree.jstree('refresh'); //rollback
-                                        return Observable.throw(error);
-                                    }))
-                                    .subscribe(() => {
-                                        this.notify.success(this.l('SuccessfullyMoved'));
-                                        this.reload();
-                                    });
-                            } else {
-                                this._$tree.jstree('refresh'); //rollback
-                            }
-                        }
-                    );
-                })
-                .jstree({
-                    'core': {
-                        data: treeData,
-                        multiple: false,
-                        check_callback: () => true
-                    },
-                    types: {
-                        'default': {
-                            'icon': 'fa fa-folder m--font-warning'
-                        },
-                        'file': {
-                            'icon': 'fa fa-file m--font-warning'
-                        }
-                    },
-                    contextmenu: {
-                        items: function (node) { return self.contextMenu(node, self); }
-                    },
-                    sort: function (node1, node2) {
-                        if (this.get_node(node2).original.displayName < this.get_node(node1).original.displayName) {
-                            return 1;
-                        }
-
-                        return -1;
-                    },
-                    plugins: jsTreePlugins
-                });
-
-            this._$tree.on('click', '.ou-text .fa-caret-down', function (e) {
-                e.preventDefault();
-
-                const ouId = $(this).closest('.ou-text').attr('data-ou-id');
-                setTimeout(() => {
-                    self._$tree.jstree('show_contextmenu', ouId);
-                }, 100);
-            });
+    nodeSelect(event) {
+        this.ouSelected.emit(<IBasicOrganizationUnitInfo>{
+            id: event.node.data.id,
+            displayName: event.node.data.displayName
         });
+    }
+
+    nodeDrop(event) {
+        this.message.confirm(
+            this.l('OrganizationUnitMoveConfirmMessage', event.dragNode.data.displayName, event.dropNode.data.displayName),
+            this.l('AreYouSure'),
+            isConfirmed => {
+                if (isConfirmed) {
+                    const input = new MoveOrganizationUnitInput();
+                    input.id = event.dragNode.data.id;
+                    input.newParentId = event.originalEvent.target.nodeName === 'SPAN' ? event.dropNode.data.id : undefined;
+
+                    this._organizationUnitService.moveOrganizationUnit(input)
+                        .pipe(catchError(error => {
+                            this.revertDragDrop();
+                            return Observable.throw(error);
+                        }))
+                        .subscribe(() => {
+                            this.notify.success(this.l('SuccessfullyMoved'));
+                            this.reload();
+                        });
+                } else {
+                    this.revertDragDrop();
+                }
+            }
+        );
+    }
+
+    revertDragDrop() {
+        this.reload();
     }
 
     reload(): void {
-        this.getTreeDataFromServer(treeData => {
-            this.totalUnitCount = treeData.length;
-            (<any>this._$tree.jstree(true)).settings.core.data = treeData;
-            this._$tree.jstree('refresh');
-        });
+        this.getTreeDataFromServer();
     }
 
-    private getTreeDataFromServer(callback: (ous: IOrganizationUnitOnTree[]) => void): void {
+    private getTreeDataFromServer(): void {
+        let self = this;
         this._organizationUnitService.getOrganizationUnits().subscribe((result: ListResultDtoOfOrganizationUnitDto) => {
-            const treeData = _.map(result.items, item => (<IOrganizationUnitOnTree>{
-                id: item.id,
-                parent: item.parentId ? item.parentId : '#',
-                code: item.code,
-                displayName: item.displayName,
-                memberCount: item.memberCount,
-                text: this.generateTextOnTree(item),
-                dto: item,
-                state: {
-                    opened: true
-                }
-            }));
-
-            callback(treeData);
+            this.totalUnitCount = result.items.length;
+            this.treeData = this._arrayToTreeConverterService.createTree(result.items, 'parentId', 'id', null, 'children',
+                [{
+                    target: 'label',
+                    targetFunction(item) {
+                        return self.generateTextOnTree(item);
+                    }
+                }, {
+                    target: 'expandedIcon',
+                    value: 'fa fa-folder-open m--font-warning'
+                },
+                {
+                    target: 'collapsedIcon',
+                    value: 'fa fa-folder m--font-warning'
+                },
+                {
+                    target: 'selectable',
+                    value: true
+                }]);
         });
     }
 
     private generateTextOnTree(ou: IOrganizationUnitOnTree | OrganizationUnitDto) {
-        const itemClass = ou.memberCount > 0 ? ' ou-text-has-members' : ' ou-text-no-members';
-        return '<span title="' + ou.code + '" class="ou-text' + itemClass + '" data-ou-id="' + ou.id + '">' + HtmlHelper.encodeText(ou.displayName) + ' (<span class="ou-text-member-count">' + ou.memberCount + '</span>) <i class="fa fa-caret-down text-muted"></i></span>';
+        return HtmlHelper.encodeText(ou.displayName) + '(' + ou.memberCount + ')';
     }
 
-    private contextMenu(node: any, self: OrganizationTreeComponent) {
-        const canManageOrganizationTree = self.isGranted('Pages.Administration.OrganizationUnits.ManageOrganizationTree');
+    private getContextMenuItems(): any[] {
 
-        const items = {
-            editUnit: {
-                label: self.l('Edit'),
-                _disabled: !canManageOrganizationTree,
-                action: () => {
-                    self._updatingNode = node;
-                    self.createOrEditOrganizationUnitModal.show({
-                        id: node.id,
-                        displayName: node.original.displayName
+        const canManageOrganizationTree = this.isGranted('Pages.Administration.OrganizationUnits.ManageOrganizationTree');
+
+        let items = [
+            {
+                label: this.l('Edit'),
+                disabled: !canManageOrganizationTree,
+                command: (event) => {
+                    this.createOrEditOrganizationUnitModal.show({
+                        id: this.selectedOu.data.id,
+                        displayName: this.selectedOu.data.displayName
                     });
                 }
             },
-
-            addSubUnit: {
-                label: self.l('AddSubUnit'),
-                _disabled: !canManageOrganizationTree,
-                action: () => {
-                    self.addUnit(node.id);
+            {
+                label: this.l('AddSubUnit'),
+                disabled: !canManageOrganizationTree,
+                command: () => {
+                    this.addUnit(this.selectedOu.data.id);
                 }
             },
-
-            'delete': {
-                label: self.l('Delete'),
-                _disabled: !canManageOrganizationTree,
-                action: data => {
-                    const instance = $.jstree.reference(data.reference);
-
+            {
+                label: this.l('Delete'),
+                disabled: !canManageOrganizationTree,
+                command: () => {
                     this.message.confirm(
-                        this.l('OrganizationUnitDeleteWarningMessage', node.original.displayName),
+                        this.l('OrganizationUnitDeleteWarningMessage', this.selectedOu.data.displayName),
                         this.l('AreYouSure'),
                         isConfirmed => {
                             if (isConfirmed) {
-                                this._organizationUnitService.deleteOrganizationUnit(node.id).subscribe(() => {
-                                    this.selectedOu = null;
+                                this._organizationUnitService.deleteOrganizationUnit(this.selectedOu.data.id).subscribe(() => {
+                                    this.deleteUnit(this.selectedOu.data.id);
                                     this.notify.success(this.l('SuccessfullyDeleted'));
-                                    instance.delete_node(node);
+                                    this.selectedOu = null;
                                 });
                             }
                         }
                     );
                 }
             }
-        };
+        ];
 
         return items;
     }
@@ -236,28 +182,67 @@ export class OrganizationTreeComponent extends AppComponentBase implements After
     }
 
     unitCreated(ou: OrganizationUnitDto): void {
-        const instance = $.jstree.reference(this._$tree);
-        instance.create_node(
-            ou.parentId ? instance.get_node(ou.parentId) : '#',
-            {
-                id: ou.id,
-                parent: ou.parentId ? ou.parentId : '#',
-                code: ou.code,
-                displayName: ou.displayName,
-                memberCount: 0,
-                text: this.generateTextOnTree(ou),
-                state: {
-                    opened: true
-                }
+        if (ou.parentId) {
+            let unit = this._treeDataHelperService.findNode(this.treeData, { data: { id: ou.parentId } });
+            if (!unit) {
+                return;
+            }
+
+            unit.children.push({
+                label: this.generateTextOnTree(ou),
+                expandedIcon: 'fa fa-folder-open m--font-warning',
+                collapsedIcon: 'fa fa-folder m--font-warning',
+                selected: true,
+                children: [],
+                data: ou
             });
+        } else {
+            this.treeData.push({
+                label: this.generateTextOnTree(ou),
+                expandedIcon: 'fa fa-folder-open m--font-warning',
+                collapsedIcon: 'fa fa-folder m--font-warning',
+                selected: true,
+                children: [],
+                data: ou
+            });
+        }
 
         this.totalUnitCount += 1;
     }
 
+    deleteUnit(id) {
+        let node = this._treeDataHelperService.findNode(this.treeData, { data: { id: id } });
+        if (!node) {
+            return;
+        }
+
+        if (!node.data.parentId) {
+            _.remove(this.treeData, {
+                data: {
+                    id: id
+                }
+            });
+        }
+
+        let parentNode = this._treeDataHelperService.findNode(this.treeData, { data: { id: node.data.parentId } });
+        if (!parentNode) {
+            return;
+        }
+
+        _.remove(parentNode.children, {
+            data: {
+                id: id
+            }
+        });
+    }
+
     unitUpdated(ou: OrganizationUnitDto): void {
-        const instance = $.jstree.reference(this._$tree);
-        this._updatingNode.original.displayName = ou.displayName;
-        instance.rename_node(this._updatingNode, this.generateTextOnTree(ou));
+        let item = this._treeDataHelperService.findNode(this.treeData, { data: { id: ou.id } });
+        if (!item) {
+            return;
+        }
+
+        item.label = this.generateTextOnTree(ou);
     }
 
     membersAdded(data: IUsersWithOrganizationUnit): void {
@@ -269,8 +254,8 @@ export class OrganizationTreeComponent extends AppComponentBase implements After
     }
 
     incrementMemberCount(ouId: number, incrementAmount: number): void {
-        const treeNode = this._$tree.jstree('get_node', ouId);
-        treeNode.original.memberCount = treeNode.original.memberCount + incrementAmount;
-        this._$tree.jstree('rename_node', treeNode, this.generateTextOnTree(treeNode.original));
+        let item = this._treeDataHelperService.findNode(this.treeData, { data: { id: ouId } });
+        item.data.memberCount += incrementAmount;
+        item.label = this.generateTextOnTree(item.data);
     }
 }

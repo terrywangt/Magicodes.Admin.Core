@@ -21,8 +21,6 @@ export class ChatMessageComponent implements OnInit {
 
     ngOnInit(): void {
         this.setChatMessageType();
-        $('#chatImageUpload').find('.fa-plus').addClass('fa-camera').removeClass('fa-plus');
-        $('#chatFileUpload').find('.fa-plus').addClass('fa-file').removeClass('fa-plus');
     }
 
     private setChatMessageType(): void {
@@ -49,13 +47,10 @@ export class ChatMessageComponent implements OnInit {
 
         } else if (this.message.message.startsWith('[link]')) {
             this.chatMessageType = 'link';
-
             let linkMessage = JSON.parse(this.message.message.substring('[link]'.length));
-
             this.chatMessage = linkMessage.message == null ? '' : linkMessage.message;
         } else {
             this.chatMessageType = 'text';
-
             this.chatMessage = this.message.message;
         }
     }

@@ -12,7 +12,6 @@ import * as ApiServiceProxies from './service-proxies';
         ApiServiceProxies.EditionServiceProxy,
         ApiServiceProxies.FriendshipServiceProxy,
         ApiServiceProxies.HostSettingsServiceProxy,
-        ApiServiceProxies.PaySettingsServiceProxy,
         ApiServiceProxies.InstallServiceProxy,
         ApiServiceProxies.LanguageServiceProxy,
         ApiServiceProxies.NotificationServiceProxy,
@@ -39,17 +38,6 @@ import * as ApiServiceProxies from './service-proxies';
         ApiServiceProxies.SubscriptionServiceProxy,
         ApiServiceProxies.InstallServiceProxy,
         ApiServiceProxies.UiCustomizationSettingsServiceProxy,
-        /**
-         * 公用组件服务
-         */
-        ApiServiceProxies.CommonServiceProxy,
-        ApiServiceProxies.TransactionLogServiceProxy,
-        ApiServiceProxies.ArticleInfoArticleTagInfoServiceProxy,
-        ApiServiceProxies.ArticleInfoServiceProxy,
-        ApiServiceProxies.ArticleSourceInfoServiceProxy,
-        ApiServiceProxies.ColumnInfoServiceProxy,
-        ApiServiceProxies.SmsCodeSettingServiceProxy,
-        ApiServiceProxies.StorageSettingServiceProxy,
         { provide: HTTP_INTERCEPTORS, useClass: AbpHttpInterceptor, multi: true }
     ]
 })

@@ -14,7 +14,13 @@
             <div class="form-group m-form__group row">
                 <label for="SampleDatePicker" class="col-md-12">Default date picker</label>
                 <div class="col-lg-10 col-md-9 col-sm-8">
-                    <input id="SampleDatePicker" type="datetime" #SampleDatePicker name="SampleDatePicker" class="form-control">
+                    <input id="SampleDatePicker"
+                           type="text"
+                           #SampleDatePicker
+                           name="SampleDatePicker"
+                           class="form-control"
+                           [(ngModel)]="sampleDate"
+                           bsDatepicker>
                 </div>
                 <div class="col-lg-2 col-md-3 col-sm-4">
                     <button class="btn btn-primary" type="button" (click)="submitDate()">{{l("Submit")}}</button>
@@ -22,24 +28,14 @@
             </div>
 
             <div class="form-group m-form__group row">
-                <label for="SampleDateTimePicker" class="col-md-12">Default datetime picker</label>
-                <div class="col-lg-10 col-md-9 col-sm-8">
-                    <input id="SampleDateTimePicker" type="datetime" #SampleDateTimePicker name="SampleDateTimePicker" class="form-control">
-                </div>
-                <div class="col-lg-2 col-md-3 col-sm-4">
-                    <button class="btn btn-primary" (click)="submitDateTime()" type="button">{{l("Submit")}}</button>
-                </div>
-            </div>
-
-            <div class="form-group m-form__group row">
                 <label for="SampleDateRangePicker" class="col-md-12">Default daterange picker</label>
                 <div class="col-lg-10 col-md-9 col-sm-8">
-                    <date-range-picker name="SampleDateRangePicker"
-                                       [(startDate)]="dateRangePickerStartDate"
-                                       [(endDate)]="dateRangePickerEndDate"
-                                       [allowFutureDate]="true"
-                                       id="SampleDateRangePicker">
-                    </date-range-picker>
+                    <input name="SampleDateRangePicker"
+                           type="text"
+                           class="form-control"
+                           id="SampleDateRangePicker"
+                           bsDaterangepicker
+                           [(ngModel)]="sampleDateRange"/>
                 </div>
                 <div class="col-lg-2 col-md-3 col-sm-4">
                     <button class="btn btn-primary" (click)="submitDateRange()" type="button">{{l("Submit")}}</button>

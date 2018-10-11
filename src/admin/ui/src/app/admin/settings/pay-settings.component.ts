@@ -24,8 +24,8 @@ export class PaySettingsComponent extends AppComponentBase implements OnInit, Af
     }
 
     ngAfterViewChecked(): void {
-        $('tabset ul.nav').addClass('m-tabs-line');
-        $('tabset ul.nav li a.nav-link').addClass('m-tabs__link');
+        // $('tabset ul.nav').addClass('m-tabs-line');
+        // $('tabset ul.nav li a.nav-link').addClass('m-tabs__link');
     }
 
     saveAll(): void {

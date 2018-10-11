@@ -41,7 +41,7 @@ export class EntityChangeDetailModalComponent extends AppComponentBase {
     }
 
     isDate(date, propertyTypeFullName): boolean {
-        return propertyTypeFullName.includes("DateTime") && !isNaN(Date.parse(date).valueOf());
+        return propertyTypeFullName.includes('DateTime') && !isNaN(Date.parse(date).valueOf());
     }
 
     show(record: EntityChangeListDto): void {

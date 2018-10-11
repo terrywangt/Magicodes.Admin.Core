@@ -1,4 +1,4 @@
-<header class="m-grid__item m-header"
+<header mHeader #mHeader class="m-grid__item m-header"
         data-minimize="false"
         [attr.data-minimize]="ui.getIsMenuMinimizable()"
         [attr.data-minimize-mobile]="ui.getIsMenuMinimizableMobile()"
@@ -20,7 +20,7 @@
                             <a href="javascript:;" *ngIf="ui.leftMenuUsed() && ui.allowAsideHiding()" id="m_aside_left_hide_toggle" class="m-brand__icon m-brand__toggler m-brand__toggler--left m--visible-desktop-inline-block">
                                 <span></span>
                             </a>
-                            <a href="javascript:;" *ngIf="ui.leftMenuUsed() && ui.allowAsideMinimizing() && !ui.allowAsideHiding()" id="m_aside_left_minimize_toggle" class="m-brand__icon m-brand__toggler m-brand__toggler--left m--visible-desktop-inline-block">
+                            <a href="javascript:;" *ngIf="ui.leftMenuUsed() && ui.allowAsideMinimizing() && !ui.allowAsideHiding()" mMenuAsideToggle id="m_aside_left_minimize_toggle" class="m-brand__icon m-brand__toggler m-brand__toggler--left m--visible-desktop-inline-block">
                                 <span></span>
                             </a>
                             <!-- END -->
@@ -35,7 +35,7 @@
                             </a>
                             <!-- end::Responsive Header Menu Toggler-->
                             <!-- BEGIN: Topbar Toggler -->
-                            <a id="m_aside_header_topbar_mobile_toggle" href="javascript:;" class="m-brand__icon m--visible-tablet-and-mobile-inline-block">
+                            <a id="m_aside_header_topbar_mobile_toggle" href="javascript:;" (click)="clickTopbarToggle($event)" class="m-brand__icon m--visible-tablet-and-mobile-inline-block">
                                 <i class="flaticon-more" [attr.aria-label]="l('Expand')"></i>
                             </a>
                             <!-- BEGIN: Topbar Toggler -->
@@ -50,37 +50,43 @@
                             <ul class="m-topbar__nav m-nav m-nav--inline"
                                 aria-label="TopMenu"
                                 role="menubar">
-                                <li *ngIf="languages.length > 1" class="m-nav__item m-dropdown m-dropdown--large m-dropdown--arrow m-dropdown--align-center m-dropdown--mobile-full-width m-dropdown--skin-light m-list-search m-list-search--skin-light m-dropdown--open dropdown-language">
-                                    <a href="javascript:;" class="m-nav__link m-dropdown__toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"
-                                       role="menuitem"
-                                       aria-haspopup="true"
-                                       aria-expanded="false"
-                                       tabindex="-1">
-                                        <i [class]="currentLanguage.icon"></i>
-                                        <span class="m-menu__link-text langname">
-                                            {{currentLanguage.displayName}}
+                                <li *ngIf="languages.length > 1" class="m-nav__item m-topbar__languages m-dropdown m-dropdown--small m-dropdown--arrow m-dropdown--align-right m-dropdown--mobile-full-width m-dropdown--skin-light m-list-search--skin-light" m-dropdown-toggle="click">
+                                    <a href="javascript:;" class="m-nav__link m-dropdown__toggle">
+                                        <span class="m-nav__link-text">
+                                            <i [class]="currentLanguage.icon"></i>
+                                            <span class="m-menu__link-text langname m--font-primary">
+                                                {{currentLanguage.displayName}}
+                                            </span>
+                                            <i class="fa fa-angle-down"></i>
                                         </span>
-                                        <i class="fa fa-angle-down"></i>
                                     </a>
-                                    <ul class="dropdown-menu"
-                                        [attr.aria-label]="l('Languages')"
-                                        role="menu">
-                                        <li *ngFor="let language of languages" role="none">
-                                            <a href="javascript:;" (click)="changeLanguage(language.name)">
-                                                <i [class]="language.icon"></i> {{language.displayName}}
-                                            </a>
-                                        </li>
-                                    </ul>
+                                    <div class="m-dropdown__wrapper">
+                                        <span class="m-dropdown__arrow m-dropdown__arrow--right m-dropdown__arrow--adjust"></span>
+                                        <div class="m-dropdown__inner">
+                                            <div class="m-dropdown__body">
+                                                <div class="m-dropdown__content">
+                                                    <ul class="m-nav m-nav--skin-light">
+                                                        <ng-container *ngFor="let language of languages">
+                                                            <li class="m-nav__item" [ngClass]="{'m-nav__item--active': language.active}">
+                                                                <a href="javascript:;" (click)="changeLanguage(language.name)" class="m-nav__link">
+                                                                    <span class="m-nav__link-icon">
+                                                                        <i [class]="language.icon"></i>
+                                                                    </span>
+                                                                    <span class="m-nav__link-title m-topbar__language-text m-nav__link-text">{{language.displayName}}</span>
+                                                                </a>
+                                                            </li>
+                                                        </ng-container>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </li>
 
-                                <li headerNotifications class="m-nav__item m-topbar__notifications m-topbar__notifications--img m-dropdown m-dropdown--large m-dropdown--header-bg-fill m-dropdown--arrow m-dropdown--align-center 	m-dropdown--mobile-full-width" data-dropdown-toggle="click" data-dropdown-persistent="true" id="header_notification_bar"></li>
+                                <li headerNotifications class="m-nav__item m-topbar__notifications m-topbar__notifications--img m-dropdown m-dropdown--large m-dropdown--header-bg-fill m-dropdown--arrow m-dropdown--align-center 	m-dropdown--mobile-full-width" m-dropdown-toggle="click" data-dropdown-persistent="true" id="header_notification_bar"></li>
 
-                                <li class="m-nav__item m-topbar__user-profile m-topbar__user-profile--img  m-dropdown m-dropdown--medium m-dropdown--arrow m-dropdown--header-bg-fill m-dropdown--align-right m-dropdown--mobile-full-width m-dropdown--skin-light" data-dropdown-toggle="click">
-                                    <a href="javascript:;" class="m-nav__link m-dropdown__toggle"
-                                       role="menuitem"
-                                       aria-haspopup="true"
-                                       aria-expanded="false"
-                                       tabindex="0">
+                                <li class="m-nav__item m-topbar__user-profile m-topbar__user-profile--img m-dropdown m-dropdown--medium m-dropdown--arrow m-dropdown--header-bg-fill m-dropdown--align-right m-dropdown--mobile-full-width m-dropdown--skin-light" m-dropdown-toggle="click">
+                                    <a href="#" class="m-nav__link m-dropdown__toggle">
                                         <span class="m-topbar__username m--font-primary">
                                             <i *ngIf="isImpersonatedLogin" class="fa fa-reply m--font-danger"></i>
                                             <span *ngIf="isMultiTenancyEnabled" class="tenancy-name">{{tenancyName}}\</span>{{userName}}
@@ -92,7 +98,7 @@
                                     <div class="m-dropdown__wrapper">
                                         <span class="m-dropdown__arrow m-dropdown__arrow--right m-dropdown__arrow--adjust"></span>
                                         <div class="m-dropdown__inner">
-                                            <div class="m-dropdown__header m--align-center"  [ngStyle]="{ 'background': 'url(' + appRootUrl() + 'assets/metronic/dist/html/' + ui.getTheme() + '/assets/demo/' + ui.getTheme() + '/media/img/misc/user_profile_bg.jpg)', 'background-size': 'cover'}">
+                                            <div class="m-dropdown__header m--align-center" [ngStyle]="{ 'background': 'url(' + appRootUrl() + 'assets/metronic/dist/html/' + ui.getTheme() + '/assets/demo/' + ui.getTheme() + '/media/img/misc/user_profile_bg.jpg)', 'background-size': 'cover'}">
                                                 <div class="m-card-user m-card-user--skin-dark">
                                                     <div class="m-card-user__pic">
                                                         <img alt="" class="header-profile-picture m--img-rounded m--marginless m--img-centered" [src]="profilePicture" />
@@ -273,7 +279,7 @@
                                        aria-expanded="false"
                                        tabindex="-1">
                                         <span class="m-nav__link-icon">
-                                            <i class="flaticon-chat"></i>
+                                            <i class="flaticon-chat-2"></i>
                                         </span>
                                         <span class="m-badge m-badge--danger" [ngClass]="{'d-none': !unreadChatMessageCount}" id="UnreadChatMessageCount">{{unreadChatMessageCount}}</span>
                                     </a>
@@ -286,7 +292,7 @@
             </div>
         </div>
     </div>
-    <div class="m-header__bottom m-aside-menu--skin-{{s('App.UiManagement.Left.AsideSkin')}}" *ngIf="ui.topMenuUsed()">
+    <div class="{{ui.getTopBarMenuContainerClass()}}" *ngIf="ui.topMenuUsed()">
         <top-bar-menu></top-bar-menu>
     </div>
     <div *ngIf="subscriptionStatusBarVisible()"

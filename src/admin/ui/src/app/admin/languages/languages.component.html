@@ -55,28 +55,25 @@
                             <ng-template pTemplate="body" let-record="$implicit">
                                 <tr>
                                     <td style="width: 130px; text-align: center">
-                                        <div class="btn-group dropdown">
-                                            <button class="dropdown-toggle btn btn-sm btn-primary"
-                                                    data-toggle="dropdown"
-                                                    aria-haspopup="true"
-                                                    aria-expanded="false">
+                                        <div class="btn-group dropdown" dropdown>
+                                            <button dropdownToggle class="dropdown-toggle btn btn-sm btn-primary">
                                                 <i class="fa fa-cog"></i><span class="caret"></span> {{l("Actions")}}
                                             </button>
-                                            <ul class="dropdown-menu">
+                                            <ul class="dropdown-menu" *dropdownMenu>
                                                 <li>
-                                                    <a *ngIf="permission.isGranted('Pages.Administration.Languages.Edit') && record.tenantId === appSession.tenantId"
+                                                    <a href="javascript:;" *ngIf="permission.isGranted('Pages.Administration.Languages.Edit') && record.tenantId === appSession.tenantId"
                                                        (click)="createOrEditLanguageModal.show(record.id)">{{l('Edit')}}</a>
                                                 </li>
                                                 <li>
-                                                    <a *ngIf="permission.isGranted('Pages.Administration.Languages.ChangeTexts')"
+                                                    <a href="javascript:;" *ngIf="permission.isGranted('Pages.Administration.Languages.ChangeTexts')"
                                                        (click)="changeTexts(record)">{{l('ChangeTexts')}}</a>
                                                 </li>
                                                 <li>
-                                                    <a *ngIf="permission.isGranted('Pages.Administration.Languages.Edit')"
+                                                    <a href="javascript:;" *ngIf="permission.isGranted('Pages.Administration.Languages.Edit')"
                                                        (click)="setAsDefaultLanguage(record)">{{l('SetAsDefaultLanguage')}}</a>
                                                 </li>
                                                 <li>
-                                                    <a *ngIf="permission.isGranted('Pages.Administration.Languages.Delete') && record.tenantId === appSession.tenantId"
+                                                    <a href="javascript:;" *ngIf="permission.isGranted('Pages.Administration.Languages.Delete') && record.tenantId === appSession.tenantId"
                                                        (click)="deleteLanguage(record)">{{l('Delete')}}</a>
                                                 </li>
                                             </ul>

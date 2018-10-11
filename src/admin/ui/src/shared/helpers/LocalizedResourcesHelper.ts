@@ -2,64 +2,57 @@ import { AppConsts } from '@shared/AppConsts';
 import * as _ from 'lodash';
 import * as rtlDetect from 'rtl-detect';
 
+import { StyleLoaderService } from '@shared/utils/style-loader.service';
+
 export class LocalizedResourcesHelper {
 
     static loadResources(callback: () => void): void {
-        $.when(LocalizedResourcesHelper.loadLocalizedStlyes(), LocalizedResourcesHelper.loadLocalizedScripts()).done(() => {
-            callback();
-        });
+        Promise.all([LocalizedResourcesHelper.loadLocalizedStlyes()])
+            .then(() => {
+                callback();
+            });
     }
 
-    static loadLocalizedStlyes(): JQueryPromise<any> {
+    static loadLocalizedStlyes(): Promise<any> {
         const isRtl = rtlDetect.isRtlLang(abp.localization.currentLanguage.name);
-        let theme = abp.setting.get("App.UiManagement.Theme").toLocaleLowerCase();
+        let theme = abp.setting.get('App.UiManagement.Theme').toLocaleLowerCase();
 
         if (isRtl) {
-            $('html').attr('dir', 'rtl');
+            document.documentElement.setAttribute('dir', 'rtl');
         }
 
         return LocalizedResourcesHelper.loadLocalizedStylesForTheme(theme, isRtl);
     }
 
-    static loadLocalizedStylesForTheme(theme: string, isRtl: boolean): JQueryPromise<any> {
-        let cssPostfix = isRtl ? '-rtl':'';
+    static loadLocalizedStylesForTheme(theme: string, isRtl: boolean): Promise<any> {
+        let cssPostfix = isRtl ? '-rtl' : '';
 
-        $('head').append($('<link rel="stylesheet" type="text/css" />').attr('href', AppConsts.appBaseUrl + '/assets/metronic/dist/html/' + theme + '/assets/demo/' + theme + '/base/style.bundle' + cssPostfix.replace('-', '.') + '.css'));
-        $('head').append($('<link rel="stylesheet" type="text/css" />').attr('href', AppConsts.appBaseUrl + '/assets/primeng/datatable/css/primeng.datatable' + cssPostfix + '.css'));
-        $('head').append($('<link rel="stylesheet" type="text/css" />').attr('href', AppConsts.appBaseUrl + '/assets/common/styles/themes/' + theme + '/primeng.datatable' + cssPostfix + '.css'));
+        let styleLoaderService = new StyleLoaderService();
 
-        $('head').append($('<link rel="stylesheet" type="text/css" />').attr('href', AppConsts.appBaseUrl + '/assets/common/styles/metronic-customize.css'));
-        $('head').append($('<link rel="stylesheet" type="text/css" />').attr('href', AppConsts.appBaseUrl + '/assets/common/styles/themes/' + theme + '/metronic-customize.css'));
-
-        $('head').append($('<link rel="stylesheet" type="text/css" />').attr('href', AppConsts.appBaseUrl + '/assets/common/styles/metronic-customize-angular.css'));
-        $('head').append($('<link rel="stylesheet" type="text/css" />').attr('href', AppConsts.appBaseUrl + '/assets/common/styles/themes/' + theme + '/metronic-customize-angular.css'));
+        styleLoaderService.load(
+            AppConsts.appBaseUrl + '/assets/metronic/dist/html/' + theme + '/assets/demo/' + theme + '/base/style.bundle' + cssPostfix.replace('-', '.') + '.css',
+            AppConsts.appBaseUrl + '/assets/primeng/datatable/css/primeng.datatable' + cssPostfix + '.css',
+            AppConsts.appBaseUrl + '/assets/common/styles/themes/' + theme + '/primeng.datatable' + cssPostfix + '.css',
+            AppConsts.appBaseUrl + '/assets/common/styles/metronic-customize.css',
+            AppConsts.appBaseUrl + '/assets/common/styles/themes/' + theme + '/metronic-customize.css',
+            AppConsts.appBaseUrl + '/assets/common/styles/metronic-customize-angular.css',
+            AppConsts.appBaseUrl + '/assets/common/styles/themes/' + theme + '/metronic-customize-angular.css'
+        );
 
         if (abp.setting.get('App.UiManagement.Left.Position') === 'top') {
-            $('head').append($('<link rel="stylesheet" type="text/css" />').attr('href', AppConsts.appBaseUrl + '/assets/common/styles/metronic-customize-top-menu.css'));
-            $('head').append($('<link rel="stylesheet" type="text/css" />').attr('href', AppConsts.appBaseUrl + '/assets/common/styles/themes/' + theme + '/metronic-customize-top-menu.css'));
+            styleLoaderService.load(
+                AppConsts.appBaseUrl + '/assets/common/styles/metronic-customize-top-menu.css',
+                AppConsts.appBaseUrl + '/assets/common/styles/themes/' + theme + '/metronic-customize-top-menu.css'
+            );
         }
 
         if (isRtl) {
-            $('head').append($('<link rel="stylesheet" type="text/css" />').attr('href', AppConsts.appBaseUrl + '/assets/common/styles/abp-zero-template-rtl.css'));
+            styleLoaderService.load(
+                AppConsts.appBaseUrl + '/assets/common/styles/abp-zero-template-rtl.css'
+            );
         }
 
-        return $.Deferred().resolve().promise();
-    }
-
-    private static loadLocalizedScripts(): JQueryPromise<any> {
-        if (!abp.session.userId) {
-            return $.Deferred().resolve().promise();
-        }
-
-        const currentCulture = abp.localization.currentLanguage.name;
-
-        const bootstrapSelect = AppConsts.appBaseUrl + '/assets/localization/bootstrap-select/defaults-{0}.js';
-        const jqueryTimeago = AppConsts.appBaseUrl + '/assets/localization/jquery-timeago/jquery.timeago.{0}.js';
-
-        return $.when(
-            jQuery.getScript(abp.utils.formatString(bootstrapSelect, LocalizedResourcesHelper.findBootstrapSelectLocalization(currentCulture))),
-            jQuery.getScript(abp.utils.formatString(jqueryTimeago, LocalizedResourcesHelper.findTimeagoLocalization(currentCulture)))
-        );
+        return Promise.resolve(true);
     }
 
     private static mapCultureForBootstrapSelect(currentCulture: string): string {

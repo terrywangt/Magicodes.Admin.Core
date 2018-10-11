@@ -1,5 +1,4 @@
 <div [@routerTransition]>
-    
     <div class="m-subheader ">
         <div class="d-flex align-items-center">
             <div class="mr-auto col-xs-6">
@@ -11,7 +10,7 @@
                 </span>
             </div>
             <div class="col-xs-6 text-right">
-                <button ng-if="vm.permissions.create" class="btn btn-primary" (click)="createTenant()"><i class="fa fa-plus"></i>{{l("CreateNewTenant")}}</button>
+                <button *ngIf="permission.isGranted('Pages.Tenants.Create')" class="btn btn-primary" (click)="createTenant()"><i class="fa fa-plus"></i>{{l("CreateNewTenant")}}</button>
             </div>
         </div>
     </div>
@@ -50,12 +49,13 @@
                                             <span></span>
                                         </label>
                                     </div>
-                                    <date-range-picker name="SubscriptionEndDateRange"
-                                                       [isDisabled]="!filters.subscriptionEndDateRangeActive"
-                                                       [(startDate)]="filters.subscriptionEndDateStart"
-                                                       [(endDate)]="filters.subscriptionEndDateEnd"
-                                                       [allowFutureDate]="true">
-                                    </date-range-picker>
+                                    <input class="form-control"
+                                           name="SubscriptionEndDateRange"
+                                           [attr.disabled]="!filters.subscriptionEndDateRangeActive ? 'disabled' : null"
+                                           #drpSubscriptionEndDateRange="bsDaterangepicker"
+                                           bsDaterangepicker
+                                           dateRangePickerInitialValue
+                                           [(ngModel)]="subscriptionDateRange">
                                 </div>
                                 <div class="col-xl-6">
                                     <div class="m-checkbox-list">
@@ -69,12 +69,13 @@
                                             <span></span>
                                         </label>
                                     </div>
-                                    <date-range-picker name="CreationDateRange"
-                                                       [isDisabled]="!filters.creationDateRangeActive"
-                                                       [(startDate)]="filters.creationDateStart"
-                                                       [(endDate)]="filters.creationDateEnd"
-                                                       [allowFutureDate]="false">
-                                    </date-range-picker>
+                                    <input class="form-control"
+                                           name="CreationDateRange"
+                                           [attr.disabled]="!filters.creationDateRangeActive ? 'disabled' : null"
+                                           #drpCreationDateRange="bsDaterangepicker"
+                                           bsDaterangepicker
+                                           dateRangePickerInitialValue
+                                           [(ngModel)]="creationDateRange">
                                 </div>
                             </div>
                             <div class="row m--margin-bottom-10">
@@ -124,32 +125,29 @@
                             <ng-template pTemplate="body" let-record="$implicit">
                                 <tr>
                                     <td style="width: 130px">
-                                        <div class="btn-group dropdown">
-                                            <button class="dropdown-toggle btn btn-sm btn-primary"
-                                                    data-toggle="dropdown"
-                                                    aria-haspopup="true"
-                                                    aria-expanded="false">
+                                        <div class="btn-group dropdown" dropdown>
+                                            <button dropdownToggle class="dropdown-toggle btn btn-sm btn-primary">
                                                 <i class="fa fa-cog"></i><span class="caret"></span> {{l("Actions")}}
                                             </button>
-                                            <ul class="dropdown-menu">
+                                            <ul class="dropdown-menu" *dropdownMenu>
                                                 <li [class.disabled]="!record.isActive">
-                                                    <a *ngIf="permission.isGranted('Pages.Tenants.Impersonation')"
+                                                    <a href="javascript:;" *ngIf="permission.isGranted('Pages.Tenants.Impersonation')" [class.disabled]="!record.isActive"
                                                        (click)="record.isActive && showUserImpersonateLookUpModal(record)">{{l('LoginAsThisTenant')}}</a>
                                                 </li>
                                                 <li>
-                                                    <a *ngIf="permission.isGranted('Pages.Tenants.Edit')"
+                                                    <a href="javascript:;" *ngIf="permission.isGranted('Pages.Tenants.Edit')"
                                                        (click)="editTenantModal.show(record.id)">{{l('Edit')}}</a>
                                                 </li>
                                                 <li>
-                                                    <a *ngIf="permission.isGranted('Pages.Tenants.ChangeFeatures')"
+                                                    <a href="javascript:;" *ngIf="permission.isGranted('Pages.Tenants.ChangeFeatures')"
                                                        (click)="tenantFeaturesModal.show(record.id, record.name)">{{l('Features')}}</a>
                                                 </li>
                                                 <li>
-                                                    <a *ngIf="permission.isGranted('Pages.Tenants.Delete')"
+                                                    <a href="javascript:;" *ngIf="permission.isGranted('Pages.Tenants.Delete')"
                                                        (click)="deleteTenant(record)">{{l('Delete')}}</a>
                                                 </li>
                                                 <li>
-                                                    <a (click)="unlockUser(record)">{{l('Unlock')}}</a>
+                                                    <a href="javascript:;" (click)="unlockUser(record)">{{l('Unlock')}}</a>
                                                 </li>
                                             </ul>
                                         </div>

@@ -77,6 +77,10 @@
 
 /* Sweet alert */
 
+.swal2-title {
+    display: inline-block !important;
+}
+
 .swal-footer {
     text-align: center;
 }

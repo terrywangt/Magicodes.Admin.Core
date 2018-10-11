@@ -44,21 +44,18 @@
                             <ng-template pTemplate="body" let-record="$implicit">
                                 <tr>
                                     <td style="width: 130px;text-align:center">
-                                        <div class="btn-group dropdown">
-                                            <button class="dropdown-toggle btn btn-sm btn-primary"
-                                                    data-toggle="dropdown"
-                                                    aria-haspopup="true"
-                                                    aria-expanded="false">
+                                        <div class="btn-group dropdown" dropdown>
+                                            <button dropdownToggle class="dropdown-toggle btn btn-sm btn-primary">
                                                 <i class="fa fa-cog"></i><span class="caret"></span> {{l("Actions")}}
                                             </button>
-                                            <ul class="dropdown-menu">
+                                            <ul class="dropdown-menu" *dropdownMenu>
                                                 <li>
-                                                    <a *ngIf="permission.isGranted('Pages.Editions.Edit')"
+                                                    <a href="javascript:;" *ngIf="permission.isGranted('Pages.Editions.Edit')"
                                                        (click)="createOrEditEditionModal.show(record.id)">{{l('Edit')}}</a>
                                                 </li>
 
                                                 <li>
-                                                    <a *ngIf="permission.isGranted('Pages.Editions.Delete')"
+                                                    <a href="javascript:;" *ngIf="permission.isGranted('Pages.Editions.Delete')"
                                                        (click)="deleteEdition(record)">{{l('Delete')}}</a>
                                                 </li>
                                             </ul>

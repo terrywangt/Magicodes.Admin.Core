@@ -50,7 +50,7 @@ export abstract class AppComponentBase {
 
     ls(sourcename: string, key: string, ...args: any[]): string {
         let localizedText = this.localization.localize(key, sourcename);
-        
+
         if (!localizedText) {
             localizedText = key;
         }

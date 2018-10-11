@@ -1,4 +1,4 @@
-<div [@routerTransition] (window:resize)="onResize($event)">
+<div [@routerTransition]>
     <div id="HostDashboard">
         <div class="m-subheader">
             <div class="d-flex align-items-center">
@@ -11,18 +11,27 @@
                     </span>
                 </div>
                 <div>
-                    <button name="RefreshButton" class="btn btn-primary" (click)="getDashboardStatisticsData()"><i class="la la-refresh"></i>{{l("Refresh")}}</button>
-                    <span #DashboardDateRangePicker class="m-subheader__daterange dashboard-report-range">
+                    <button name="RefreshButton" class="btn btn-primary" (click)="getDashboardStatisticsData(selectedDateRange)"><i class="la la-refresh"></i>{{l("Refresh")}}</button>
+                    <span #DashboardDateRangePicker class="m-subheader__daterange dashboard-report-range" (click)="dateRangePicker.toggle()">
                         <span class="m-subheader__daterange-label">
                             <span class="m-subheader__daterange-title"></span>
                             <span class="m-subheader__daterange-date m--font-brand">
-                                {{selectedDateRange.startDate.format('LL')}} - {{selectedDateRange.endDate.format('LL')}}
+                                {{selectedDateRange[0] | momentFormat: 'LL'}} - {{selectedDateRange[1] | momentFormat: 'LL'}}
                             </span>
                         </span>
                         <a href="javascript:;" class="btn btn-sm btn-primary m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill">
                             <i class="la la-angle-down" [attr.aria-label]="l('Expand')"></i>
                         </a>
                     </span>
+                    <input type="text"
+                           class="btn btn-primary date-range-filter"
+                           #dateRangePicker="bsDaterangepicker"
+                           readonly="readonly"
+                           [(ngModel)]="selectedDateRange"
+                           (bsValueChange)="getDashboardStatisticsData($event)"
+                           placement="left"
+                           style="visibility: hidden; margin-left: -220px"
+                           bsDaterangepicker />
                 </div>
             </div>
         </div>
@@ -42,9 +51,8 @@
                                         {{("Subscriptions")}}
                                     </span>
                                     <span class="m-widget24__stats m--font-brand">
-                                        $<span class="new-subscription-amount counterup">
-                                            {{hostDashboardData != null ? hostDashboardData.newSubscriptionAmount : "..."}}
-                                        </span>
+                                        <span *ngIf="!hostDashboardData">...</span>
+                                        <span *ngIf="hostDashboardData" counto [step]="30" [countTo]="hostDashboardData.newSubscriptionAmount" [countFrom]="0" [duration]="5" (countoChange)="countoNewSubscriptionAmount = $event">{{countoNewSubscriptionAmount | currency:'USD':'symbol':'1.0-0'}}</span>
                                     </span>
                                     <div class="m--space-10"></div>
                                     <div class="progress m-progress--sm">
@@ -52,7 +60,7 @@
                                     </div>
                                     <span class="m-widget24__change">
                                         <div class="status-title">
-                                            {{selectedDateRange.startDate.format('L')}} - {{selectedDateRange.endDate.format('L')}}
+                                            {{selectedDateRange[0] | momentFormat: 'L'}} - {{selectedDateRange[1] | momentFormat: 'L'}}
                                         </div>
                                     </span>
                                     <span class="m-widget24__number">
@@ -70,8 +78,9 @@
                                     <span class="m-widget24__desc">
                                         {{l("Tenants")}}
                                     </span>
-                                    <span class="m-widget24__stats m--font-info new-tenants-count counterup">
-                                        {{hostDashboardData != null ? hostDashboardData.newTenantsCount : "..."}}
+                                    <span class="m-widget24__stats m--font-info">
+                                        <span *ngIf="!hostDashboardData">...</span>
+                                        <span *ngIf="hostDashboardData" counto [step]="10" [countTo]="hostDashboardData.newTenantsCount" [countFrom]="0" [duration]="5" (countoChange)="countoNewTenantsCount = $event">{{countoNewTenantsCount | number:'1.0-0' }}</span>
                                     </span>
                                     <div class="m--space-10"></div>
                                     <div class="progress m-progress--sm">
@@ -79,7 +88,7 @@
                                     </div>
                                     <span class="m-widget24__change">
                                         <div class="status-title">
-                                            {{selectedDateRange.startDate.format('L')}} - {{selectedDateRange.endDate.format('L')}}
+                                            {{selectedDateRange[0] | momentFormat: 'L'}} - {{selectedDateRange[1] | momentFormat: 'L'}}
                                         </div>
                                     </span>
                                 </div>
@@ -95,8 +104,9 @@
                                     <span class="m-widget24__desc">
                                         {{l("DashboardSampleStatistics")}}
                                     </span>
-                                    <span class="m-widget24__stats m--font-danger dashboard-placeholder1 counterup">
-                                        {{hostDashboardData != null ? hostDashboardData.dashboardPlaceholder1 : "..."}}
+                                    <span class="m-widget24__stats m--font-danger">
+                                        <span *ngIf="!hostDashboardData">...</span>
+                                        <span *ngIf="hostDashboardData" counto [step]="100" [countTo]="hostDashboardData.dashboardPlaceholder1" [countFrom]="0" [duration]="5" (countoChange)="countoDashboardPlaceholder1 = $event">{{countoDashboardPlaceholder1 | number:'1.0-0' }}</span>
                                     </span>
                                     <div class="m--space-10"></div>
                                     <div class="progress m-progress--sm">
@@ -121,8 +131,9 @@
                                     <span class="m-widget24__desc">
                                         {{l("DashboardSampleStatistics")}}
                                     </span>
-                                    <span class="m-widget24__stats m--font-success dashboard-placeholder2 counterup">
-                                        {{hostDashboardData != null ? hostDashboardData.dashboardPlaceholder2 : "..."}}
+                                    <span class="m-widget24__stats m--font-success">
+                                        <span *ngIf="!hostDashboardData">...</span>
+                                        <span *ngIf="hostDashboardData" counto [step]="100" [countTo]="hostDashboardData.dashboardPlaceholder2" [countFrom]="0" [duration]="5" (countoChange)="countoDashboardPlaceholder2 = $event">{{countoDashboardPlaceholder2 | number:'1.0-0' }}</span>
                                     </span>
                                     <div class="m--space-10"></div>
                                     <div class="progress m-progress--sm">
@@ -142,7 +153,7 @@
             </div>
             <div class="row">
                 <div class="col-md-6 col-sm-12">
-                    <div class="m-portlet m-portlet--full-height income-statistics">
+                    <div class="m-portlet m-portlet--full-height income-statistics" style="max-height: 383px; height: 383px;">
                         <div class="m-portlet__head">
                             <div class="m-portlet__head-caption">
                                 <div class="m-portlet__head-title">
@@ -151,7 +162,7 @@
                                         <span class="caption-subject font-blue bold uppercase">{{l("IncomeStatistics")}}</span>
                                         <small>
                                             <span class="caption-helper">
-                                                {{selectedDateRange.startDate.format('L')}} - {{selectedDateRange.endDate.format('L')}}
+                                                {{selectedDateRange[0] | momentFormat: 'L'}} - {{selectedDateRange[1] | momentFormat: 'L'}}
                                             </span>
                                         </small>
                                     </h3>
@@ -159,21 +170,21 @@
                             </div>
                             <div class="m-portlet__head-tools">
                                 <div class="btn-group btn-group-devided" data-toggle="buttons">
-                                    <label class="btn m-btn--pill btn-secondary active" (click)="incomeStatisticsDateIntervalChange(appIncomeStatisticsDateInterval.Daily)">
+                                    <label class="btn m-btn--pill btn-secondary" [ngClass]="{'active': selectedIncomeStatisticsDateInterval ==  appIncomeStatisticsDateInterval.Daily}" (click)="incomeStatisticsDateIntervalChange(appIncomeStatisticsDateInterval.Daily)">
                                         <input type="radio"
                                                name="IncomeStatisticsDatePeriod"
                                                class="toggle"
                                                [value]="appIncomeStatisticsDateInterval.Daily">
                                         {{l("Daily")}}
                                     </label>
-                                    <label class="btn m-btn--pill btn-secondary" (click)="incomeStatisticsDateIntervalChange(appIncomeStatisticsDateInterval.Weekly)">
+                                    <label class="btn m-btn--pill btn-secondary" [ngClass]="{'active': selectedIncomeStatisticsDateInterval ==  appIncomeStatisticsDateInterval.Weekly}" (click)="incomeStatisticsDateIntervalChange(appIncomeStatisticsDateInterval.Weekly)">
                                         <input type="radio"
                                                name="IncomeStatisticsDatePeriod"
                                                class="toggle"
                                                [value]="appIncomeStatisticsDateInterval.Weekly">
                                         {{l("Weekly")}}
                                     </label>
-                                    <label class="btn m-btn--pill btn-secondary" (click)="incomeStatisticsDateIntervalChange(appIncomeStatisticsDateInterval.Monthly)">
+                                    <label class="btn m-btn--pill btn-secondary" [ngClass]="{'active': selectedIncomeStatisticsDateInterval ==  appIncomeStatisticsDateInterval.Monthly}" (click)="incomeStatisticsDateIntervalChange(appIncomeStatisticsDateInterval.Monthly)">
                                         <input type="radio"
                                                name="IncomeStatisticsDatePeriod"
                                                class="toggle"
@@ -184,11 +195,14 @@
                             </div>
                         </div>
                         <div class="m-portlet__body">
-                            <div #IncomeStatisticsChart
-                                 class="chart income-statistics-chart"
-                                 [busyIf]="loadingIncomeStatistics"
-                                 [hidden]="!incomeStatisticsHasData">
-                            </div>
+                            <ngx-charts-area-chart *ngIf="incomeStatisticsHasData" [busyIf]="loadingIncomeStatistics" [results]="incomeStatisticsData"
+                                                   [showXAxisLabel]="true" showYAxisLabel="true" [xAxis]="true" [yAxis]="true" [showGridLines]="true">
+                                <ng-template #tooltipTemplate let-model="model">
+                                    <span>{{model.name}}</span>
+                                    <br />
+                                    <span>{{l('IncomeWithAmount', model.value + ' ' + currency)}}</span>
+                                </ng-template>
+                            </ngx-charts-area-chart>
                             <div class="note note-info text-center chart"
                                  [hidden]="incomeStatisticsHasData">
                                 <small class="text-muted">{{l("NoData")}}</small>
@@ -197,7 +211,7 @@
                     </div>
                 </div>
                 <div class="col-md-6 col-sm-12">
-                    <div class="m-portlet m-portlet--full-height edition-statistics">
+                    <div class="m-portlet m-portlet--full-height edition-statistics" style="max-height: 383px; height: 383px;">
                         <div class="m-portlet__head">
                             <div class="m-portlet__head-caption">
                                 <div class="m-portlet__head-title">
@@ -206,7 +220,7 @@
                                         <span class="caption-subject font-green-seagreen">{{l("EditionStatistics")}}</span>
                                         <small>
                                             <span class="caption-helper">
-                                                {{selectedDateRange.startDate.format('L')}} - {{selectedDateRange.endDate.format('L')}}
+                                                {{selectedDateRange[0] | momentFormat: 'L'}} - {{selectedDateRange[1] | momentFormat: 'L'}}
                                             </span>
                                         </small>
                                     </h3>
@@ -214,10 +228,8 @@
                             </div>
                         </div>
                         <div class="m-portlet__body">
-                            <div #EditionStatisticsChart
-                                 class="edition-statistics-chart chart"
-                                 [hidden]="!editionStatisticsHasData">
-                            </div>
+                            <ngx-charts-pie-chart *ngIf="editionStatisticsHasData" [results]="editionStatisticsData" [legend]="true" [doughnut]="true" [arcWidth]="0.75">
+                            </ngx-charts-pie-chart>
                             <div class="note note-info text-center text-muted "
                                  [hidden]="editionStatisticsHasData">
                                 <small class="text-muted">{{l("NoData")}}</small>

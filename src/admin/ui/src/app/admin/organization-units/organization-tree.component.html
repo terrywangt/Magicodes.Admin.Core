@@ -14,7 +14,14 @@
         </div>
     </div>
     <div class="m-portlet__body">
-        <div #tree></div>
+        <p-tree [value]="treeData"
+                selectionMode="single"
+                [(selection)]="selectedOu"
+                (onNodeSelect)="nodeSelect($event)"
+                (onNodeDrop)="nodeDrop($event)"
+                [contextMenu]="ouContextMenu"
+                [draggableNodes]="canManageOrganizationUnits" [droppableNodes]="canManageOrganizationUnits"></p-tree>
+        <p-contextMenu #ouContextMenu [model]="ouContextMenuItems"></p-contextMenu>
         <div *ngIf="!totalUnitCount" class="text-muted">
             {{l("NoOrganizationUnitDefinedYet")}}
         </div>

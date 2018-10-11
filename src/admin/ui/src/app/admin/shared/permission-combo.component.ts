@@ -1,11 +1,12 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Injector, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Injector, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { FlatPermissionWithLevelDto, PermissionServiceProxy } from '@shared/service-proxies/service-proxies';
+import * as _ from 'lodash';
 
 @Component({
     selector: 'permission-combo',
     template:
-    `<select #PermissionCombobox
+        `<select #PermissionCombobox
         class="form-control"
         [(ngModel)]="selectedPermission"
         (ngModelChange)="selectedPermissionChange.emit($event)"
@@ -14,7 +15,7 @@ import { FlatPermissionWithLevelDto, PermissionServiceProxy } from '@shared/serv
             <option *ngFor="let permission of permissions" [value]="permission.name">{{permission.displayName}}</option>
     </select>`
 })
-export class PermissionComboComponent extends AppComponentBase implements OnInit, AfterViewInit {
+export class PermissionComboComponent extends AppComponentBase implements OnInit {
 
     @ViewChild('PermissionCombobox') permissionComboboxElement: ElementRef;
 
@@ -30,23 +31,12 @@ export class PermissionComboComponent extends AppComponentBase implements OnInit
     }
 
     ngOnInit(): void {
-        let self = this;
         this._permissionService.getAllPermissions().subscribe(result => {
-            $.each(result.items, (index, item) => {
+            _.forEach(result.items, item => {
                 item.displayName = Array(item.level + 1).join('---') + ' ' + item.displayName;
             });
 
             this.permissions = result.items;
-            setTimeout(() => {
-                $(self.permissionComboboxElement.nativeElement).selectpicker('refresh');
-            }, 0);
-        });
-    }
-
-    ngAfterViewInit(): void {
-        $(this.permissionComboboxElement.nativeElement).selectpicker({
-            iconBase: 'famfamfam-flag',
-            tickIcon: 'fa fa-check'
         });
     }
 }

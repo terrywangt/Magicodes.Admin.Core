@@ -13,7 +13,7 @@ export class ChatSignalrService extends AppComponentBase {
     }
 
     chatHub: HubConnection;
-    isChatConnected: boolean = false;
+    isChatConnected = false;
 
     configureConnection(connection): void {
         // Set the common hub
@@ -24,8 +24,7 @@ export class ChatSignalrService extends AppComponentBase {
             this.isChatConnected = false;
             if (e) {
                 abp.log.debug('Chat connection closed with error: ' + e);
-            }
-            else {
+            } else {
                 abp.log.debug('Chat disconnected');
             }
 

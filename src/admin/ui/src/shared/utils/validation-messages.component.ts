@@ -1,9 +1,15 @@
-import { AfterViewInit, Component, ElementRef, Input } from '@angular/core';
+import { Component, ElementRef, Input } from '@angular/core';
 import { AppLocalizationService } from '@app/shared/common/localization/app-localization.service';
+
+class ErrorDef {
+    error: string;
+    localizationKey: string;
+    errorProperty: string;
+}
 
 @Component({
     selector: '<validation-messages>',
-    template: `<div class="has-danger" *ngIf="formCtrl.invalid && formCtrl.dirty">
+    template: `<div class="has-danger" *ngIf="formCtrl.invalid && (formCtrl.dirty || formCtrl.touched)">
                     <div *ngFor="let errorDef of errorDefs">
                         <div *ngIf="getErrorDefinitionIsInValid(errorDef)" class="form-control-feedback">
                             {{getErrorDefinitionMessage(errorDef)}}
@@ -11,10 +17,11 @@ import { AppLocalizationService } from '@app/shared/common/localization/app-loca
                     </div>
                </div>`
 })
-export class ValidationMessagesComponent implements AfterViewInit {
+export class ValidationMessagesComponent {
 
     @Input() formCtrl;
-    @Input() errorDefs: any[] = [];
+
+    errorDefs: ErrorDef[];
 
     private _elementRef: ElementRef;
     private _appLocalizationService: AppLocalizationService;
@@ -25,44 +32,24 @@ export class ValidationMessagesComponent implements AfterViewInit {
     ) {
         this._elementRef = elementRef;
         this._appLocalizationService = appLocalizationService;
+        this.errorDefs = [
+            { error: 'required', localizationKey: 'ThisFieldIsRequired' } as ErrorDef,
+            { error: 'minlength', localizationKey: 'PleaseEnterAtLeastNCharacter', errorProperty: 'requiredLength' } as ErrorDef,
+            { error: 'maxlength', localizationKey: 'PleaseEnterNoMoreThanNCharacter', errorProperty: 'requiredLength' } as ErrorDef,
+            { error: 'email', localizationKey: 'InvalidEmailAddress' } as ErrorDef,
+            { error: 'pattern', localizationKey: 'InvalidPattern', errorProperty: 'requiredPattern' } as ErrorDef
+        ];
     }
 
-    ngAfterViewInit(): void {
-        setTimeout(() => {
-            let targetElements = $(this._elementRef.nativeElement).parent().find('[name=\'' + this.formCtrl.name + '\']');
-            if (!targetElements || targetElements.length > 1) {
-                return;
-            }
-
-            let targetElement = $(targetElements[0] as any);
-
-            if (targetElement.attr('required')) {
-                this.errorDefs.push({ required: this._appLocalizationService.l('ThisFieldIsRequired') });
-            }
-
-            if (targetElement.attr('minlength')) {
-                this.errorDefs.push({ minlength: this._appLocalizationService.l('PleaseEnterAtLeastNCharacter', targetElement.attr('minlength')) });
-            }
-
-            if (targetElement.attr('maxlength')) {
-                this.errorDefs.push({ maxlength: this._appLocalizationService.l('PleaseEnterNoMoreThanNCharacter', targetElement.attr('maxlength')) });
-            }
-        });
+    getErrorDefinitionIsInValid(errorDef: ErrorDef): boolean {
+        return !!this.formCtrl.errors[errorDef.error];
     }
 
-    getErrorDefinitionIsInValid(errorDef: any): boolean {
-        return !!this.formCtrl.errors[Object.keys(errorDef)[0]];
-    }
-
-    getErrorDefinitionMessage(errorDef: any): any {
-        return errorDef[Object.keys(errorDef)[0]];
-    }
-
-    addValidationDefinitionIfNotExists(validationKey: string, validationMessage: string): void {
-        if (this.errorDefs[validationKey]) {
-            return;
-        }
-
-        this.errorDefs.push({ validationKey: validationMessage });
+    getErrorDefinitionMessage(errorDef: ErrorDef): string {
+        let errorRequirement = this.formCtrl.errors[errorDef.error][errorDef.errorProperty];
+        return !!errorRequirement
+            ? this._appLocalizationService.l(errorDef.localizationKey, errorRequirement)
+            : this._appLocalizationService.l(errorDef.localizationKey);
     }
 }
+

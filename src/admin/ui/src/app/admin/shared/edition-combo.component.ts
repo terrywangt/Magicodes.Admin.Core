@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Injector, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Injector, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { ComboboxItemDto, EditionServiceProxy } from '@shared/service-proxies/service-proxies';
 
@@ -8,12 +8,11 @@ import { ComboboxItemDto, EditionServiceProxy } from '@shared/service-proxies/se
     `<select #EditionCombobox
         class="form-control"
         [(ngModel)]="selectedEdition"
-        (ngModelChange)="selectedEditionChange.emit($event)"
-        [attr.data-live-search]="true">
+        (ngModelChange)="selectedEditionChange.emit($event)">
             <option *ngFor="let edition of editions" [value]="edition.value">{{edition.displayText}}</option>
     </select>`
 })
-export class EditionComboComponent extends AppComponentBase implements OnInit, AfterViewInit {
+export class EditionComboComponent extends AppComponentBase implements OnInit {
 
     @ViewChild('EditionCombobox') editionComboboxElement: ElementRef;
 
@@ -29,19 +28,8 @@ export class EditionComboComponent extends AppComponentBase implements OnInit, A
     }
 
     ngOnInit(): void {
-        let self = this;
         this._editionService.getEditionComboboxItems(0, true, false).subscribe(editions => {
             this.editions = editions;
-            setTimeout(() => {
-                $(self.editionComboboxElement.nativeElement).selectpicker('refresh');
-            }, 0);
-        });
-    }
-
-    ngAfterViewInit(): void {
-        $(this.editionComboboxElement.nativeElement).selectpicker({
-            iconBase: 'famfamfam-flag',
-            tickIcon: 'fa fa-check'
         });
     }
 }

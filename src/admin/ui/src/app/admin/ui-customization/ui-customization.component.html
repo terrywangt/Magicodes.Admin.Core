@@ -161,13 +161,6 @@
                                 </label>
                             </div>
                             <div class="form-group m-form__group" *ngIf="leftMenuPositionSelected()">
-                                <label for="SubmenuToggle">{{l("UiCustomization_SubmenuToggle")}}</label>
-                                <select id="SubmenuToggle" name="SubmenuToggle" class="form-control" [(ngModel)]="settings.menu.submenuToggle">
-                                    <option value="dropdown">{{l("UiCustomization_Dropdown")}}</option>
-                                    <option value="accordion">{{l("UiCustomization_Accordion")}}</option>
-                                </select>
-                            </div>
-                            <div class="form-group m-form__group" *ngIf="leftMenuPositionSelected()">
                                 <label for="DropdownSubmenuSkin">{{l("UiCustomization_DropdownSubmenuSkin")}}</label>
                                 <select id="DropdownSubmenuSkin" name="DropdownSubmenuSkin" class="form-control" [(ngModel)]="settings.menu.dropdownSubmenuSkin">
                                     <option value="inherit">{{l("UiCustomization_Inherit")}}</option>

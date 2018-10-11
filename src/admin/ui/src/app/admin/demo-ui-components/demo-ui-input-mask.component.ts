@@ -45,7 +45,6 @@ export class DemoUiInputMaskComponent extends AppComponentBase {
         this.demoUiComponentsService.sendAndGetValue(value)
             .subscribe(data => {
                 this.message.info(data.output, this.l('PostedValue'));
-                this.notify.info(this.l('SavedSuccessfully'));
             });
     }
 }

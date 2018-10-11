@@ -5,13 +5,11 @@ import { RoleListDto, RoleServiceProxy } from '@shared/service-proxies/service-p
 @Component({
     selector: 'role-combo',
     template:
-    `<select #RoleCombobox
+        `<select #RoleCombobox
         class="form-control"
         [(ngModel)]="selectedRole"
-        (ngModelChange)="selectedRoleChange.emit($event)"
-        [attr.data-live-search]="true"
-        jq-plugin="selectpicker">
-            <option value="">{{emptyText}}</option>
+        (ngModelChange)="selectedRoleChange.emit($event)">
+              <option value="undefined" selected="true">{{l('FilterByRole')}}</option>
             <option *ngFor="let role of roles" [value]="role.id">{{role.displayName}}</option>
     </select>`
 })
@@ -24,8 +22,6 @@ export class RoleComboComponent extends AppComponentBase implements OnInit {
     @Input() selectedRole: string = undefined;
     @Output() selectedRoleChange: EventEmitter<string> = new EventEmitter<string>();
 
-    @Input() emptyText = '';
-
     constructor(
         private _roleService: RoleServiceProxy,
         injector: Injector) {
@@ -36,9 +32,6 @@ export class RoleComboComponent extends AppComponentBase implements OnInit {
         const self = this;
         this._roleService.getRoles(undefined).subscribe(result => {
             this.roles = result.items;
-            setTimeout(() => {
-                $(self.roleComboboxElement.nativeElement).selectpicker('refresh');
-            }, 0);
         });
     }
 }

@@ -1,6 +1,7 @@
+import { Injector, ElementRef, Component, OnInit, AfterViewInit, ViewChild, ViewEncapsulation, Inject } from '@angular/core';
+
 import { AbpMultiTenancyService } from '@abp/multi-tenancy/abp-multi-tenancy.service';
 import { AbpSessionService } from '@abp/session/abp-session.service';
-import { Component, Injector, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ImpersonationService } from '@app/admin/users/impersonation.service';
 import { AppAuthService } from '@app/shared/common/auth/app-auth.service';
 import { LinkedAccountService } from '@app/shared/layout/linked-account.service';
@@ -9,7 +10,6 @@ import { NotificationSettingsModalComponent } from '@app/shared/layout/notificat
 import { AppConsts } from '@shared/AppConsts';
 import { EditionPaymentType, SubscriptionStartType } from '@shared/AppEnums';
 import { AppComponentBase } from '@shared/common/app-component-base';
-import { AppSessionService } from '@shared/common/session/app-session.service';
 import { ChangeUserLanguageDto, GetCurrentLoginInformationsOutput, LinkedUserDto, ProfileServiceProxy, SessionServiceProxy, TenantLoginInfoDto, UserLinkServiceProxy, UserServiceProxy } from '@shared/service-proxies/service-proxies';
 import * as _ from 'lodash';
 import * as moment from 'moment';
@@ -19,12 +19,15 @@ import { ChangePasswordModalComponent } from './profile/change-password-modal.co
 import { ChangeProfilePictureModalComponent } from './profile/change-profile-picture-modal.component';
 import { MySettingsModalComponent } from './profile/my-settings-modal.component';
 
+import { DOCUMENT } from '@angular/common';
+import { LayoutRefService } from '@metronic/app/core/services/layout/layout-ref.service';
+
 @Component({
     templateUrl: './header.component.html',
     selector: 'header-bar',
     encapsulation: ViewEncapsulation.None
 })
-export class HeaderComponent extends AppComponentBase implements OnInit {
+export class HeaderComponent extends AppComponentBase implements OnInit, AfterViewInit {
 
     @ViewChild('notificationSettingsModal') notificationSettingsModal: NotificationSettingsModalComponent;
 
@@ -33,6 +36,8 @@ export class HeaderComponent extends AppComponentBase implements OnInit {
     @ViewChild('changePasswordModal') changePasswordModal: ChangePasswordModalComponent;
     @ViewChild('changeProfilePictureModal') changeProfilePictureModal: ChangeProfilePictureModalComponent;
     @ViewChild('mySettingsModal') mySettingsModal: MySettingsModalComponent;
+
+    @ViewChild('mHeader') mHeader: ElementRef;
 
     languages: abp.localization.ILanguageInfo[];
     currentLanguage: abp.localization.ILanguageInfo;
@@ -70,7 +75,8 @@ export class HeaderComponent extends AppComponentBase implements OnInit {
         private _linkedAccountService: LinkedAccountService,
         private _userNotificationHelper: UserNotificationHelper,
         private _sessionService: SessionServiceProxy,
-        private _appSessionService: AppSessionService
+        private layoutRefService: LayoutRefService,
+        @Inject(DOCUMENT) private document: Document
     ) {
         super(injector);
     }
@@ -84,15 +90,20 @@ export class HeaderComponent extends AppComponentBase implements OnInit {
         this._userNotificationHelper.settingsModal = this.notificationSettingsModal;
 
         this.languages = _.filter(this.localization.languages, l => (<any>l).isDisabled === false);
+
         this.currentLanguage = this.localization.currentLanguage;
         this.isImpersonatedLogin = this._abpSessionService.impersonatorUserId > 0;
 
         this.shownLoginNameTitle = this.isImpersonatedLogin ? this.l('YouCanBackToYourAccount') : '';
-        this.getCurrentLoginInformations();
+        this.setCurrentLoginInformations();
         this.getProfilePicture();
         this.getRecentlyLinkedUsers();
 
         this.registerToEvents();
+    }
+
+    ngAfterViewInit(): void {
+        this.layoutRefService.addElement('header', this.mHeader.nativeElement);
     }
 
     registerToEvents() {
@@ -125,15 +136,11 @@ export class HeaderComponent extends AppComponentBase implements OnInit {
         });
     }
 
-    getCurrentLoginInformations(): void {
+    setCurrentLoginInformations(): void {
         this.shownLoginName = this.appSession.getShownLoginName();
         this.tenancyName = this.appSession.tenancyName;
         this.userName = this.appSession.user.userName;
-
-        this._sessionService.getCurrentLoginInformations()
-            .subscribe((result: GetCurrentLoginInformationsOutput) => {
-                this.tenant = result.tenant;
-            });
+        this.tenant = this.appSession.tenant;
     }
 
     getShownUserName(linkedUser: LinkedUserDto): string {
@@ -199,32 +206,36 @@ export class HeaderComponent extends AppComponentBase implements OnInit {
     }
 
     subscriptionStatusBarVisible(): boolean {
-        return this._appSessionService.tenantId > 0 && (this._appSessionService.tenant.isInTrialPeriod || this.subscriptionIsExpiringSoon());
+        return this.appSession.tenantId > 0 && (this.appSession.tenant.isInTrialPeriod || this.subscriptionIsExpiringSoon());
     }
 
     subscriptionIsExpiringSoon(): boolean {
-        if (this._appSessionService.tenant.subscriptionEndDateUtc) {
-            return moment().utc().add(AppConsts.subscriptionExpireNootifyDayCount, 'days') >= moment(this._appSessionService.tenant.subscriptionEndDateUtc);
+        if (this.appSession.tenant.subscriptionEndDateUtc) {
+            return moment().utc().add(AppConsts.subscriptionExpireNootifyDayCount, 'days') >= moment(this.appSession.tenant.subscriptionEndDateUtc);
         }
 
         return false;
     }
 
     getSubscriptionExpiringDayCount(): number {
-        if (!this._appSessionService.tenant.subscriptionEndDateUtc) {
+        if (!this.appSession.tenant.subscriptionEndDateUtc) {
             return 0;
         }
-        
-        return Math.round(moment.utc(this._appSessionService.tenant.subscriptionEndDateUtc).diff(moment().utc(), 'days', true));
+
+        return Math.round(moment.utc(this.appSession.tenant.subscriptionEndDateUtc).diff(moment().utc(), 'days', true));
     }
 
     getTrialSubscriptionNotification(): string {
         return this.l('TrialSubscriptionNotification',
-            '<strong>' + this._appSessionService.tenant.edition.displayName + '</strong>',
-            '<a href=\'/account/buy?editionId=' + this._appSessionService.tenant.edition.id + '&editionPaymentType=' + this.editionPaymentType.BuyNow + '\'>' + this.l('ClickHere') + '</a>');
+            '<strong>' + this.appSession.tenant.edition.displayName + '</strong>',
+            '<a href=\'/account/buy?editionId=' + this.appSession.tenant.edition.id + '&editionPaymentType=' + this.editionPaymentType.BuyNow + '\'>' + this.l('ClickHere') + '</a>');
     }
 
     getExpireNotification(localizationKey: string): string {
         return this.l(localizationKey, this.getSubscriptionExpiringDayCount());
+    }
+
+    clickTopbarToggle(event: Event): void {
+        this.document.body.classList.toggle('m-topbar--on');
     }
 }

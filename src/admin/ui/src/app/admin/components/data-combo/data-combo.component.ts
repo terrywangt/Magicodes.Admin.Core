@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Injector, Input, OnInit, Output, ViewChild,SimpleChanges } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Injector, Input, OnInit, Output, ViewChild, SimpleChanges } from '@angular/core';
 import { AppComponentBase } from '@shared/common/app-component-base';
 
 @Component({
@@ -28,15 +28,15 @@ export class DataComboComponent extends AppComponentBase implements OnInit {
     }
 
     ngOnInit(): void {
-        setTimeout(() => {
-            $(this.DataComboboxElement.nativeElement).selectpicker('refresh');
-        }, 0);
+        // setTimeout(() => {
+        //     $(this.DataComboboxElement.nativeElement).selectpicker('refresh');
+        // }, 0);
     }
     ngOnChanges(changes: SimpleChanges) {
-        if(changes.values&&changes.values.previousValue){
-            setTimeout(() => {
-                $(this.DataComboboxElement.nativeElement).selectpicker('refresh');
-            }, 0);
+        if (changes.values && changes.values.previousValue) {
+            // setTimeout(() => {
+            //     $(this.DataComboboxElement.nativeElement).selectpicker('refresh');
+            // }, 0);
         }
     }
 }

@@ -1,5 +1,4 @@
 <div [@routerTransition]>
-        <form #articleInfoForm="ngForm"  novalidate (ngSubmit)="saveAll()">
     <div class="m-subheader">
         <div class="d-flex align-items-center">
             <div class="mr-auto col-sm-12 col-md-6">
@@ -11,7 +10,7 @@
                 </span>
             </div>
             <div class="col-sm-12 col-md-6 text-right">
-                <button class="btn btn-primary" type="submit"  [disabled]="!articleInfoForm.form.valid"><i class="la la-floppy-o"></i> {{l("SaveAll")}}</button>
+                <button class="btn btn-primary" (click)="saveAll()"><i class="la la-floppy-o"></i> {{l("SaveAll")}}</button>
             </div>
         </div>
     </div>
@@ -278,8 +277,8 @@
                         </div>
                         <div class="form-group">
                             <label for="TaxNumber">{{l("TaxNumber")}}*</label>
-                            <input id="TaxNumber" type="text" name="TaxNumber" class="form-control" [ngClass]="{'edited':settings.billing.taxNumber}" [(ngModel)]="settings.billing.taxNumber" maxlength="64" 
-                            required>
+                            <input id="TaxNumber" type="text" name="TaxNumber" class="form-control" [ngClass]="{'edited':settings.billing.taxNumber}" [(ngModel)]="settings.billing.taxNumber" maxlength="64"
+                                   required>
                         </div>
                         <div class="form-group">
                             <label for="Contact">{{l("Contact")}}</label>
@@ -302,5 +301,4 @@
             </div>
         </div>
     </div>
-</form>
 </div>

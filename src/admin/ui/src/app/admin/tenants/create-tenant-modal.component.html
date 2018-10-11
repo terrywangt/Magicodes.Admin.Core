@@ -47,8 +47,8 @@
 
                     <div class="form-group">
                         <label for="AdminEmailAddress">{{l("AdminEmailAddress")}} *</label>
-                        <input id="AdminEmailAddress" #adminEmailAddressInput="ngModel" type="email" name="AdminEmailAddress" class="form-control" [(ngModel)]="tenant.adminEmailAddress" [ngClass]="{'edited':tenant.adminEmailAddress}" required pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{1,})+$" maxlength="256">
-                        <validation-messages [formCtrl]="adminEmailAddressInput" [errorDefs]="[{pattern: l('InvalidEmailAddress')}]"></validation-messages>
+                        <input id="AdminEmailAddress" #adminEmailAddressInput="ngModel" type="email" name="AdminEmailAddress" class="form-control" [(ngModel)]="tenant.adminEmailAddress" [ngClass]="{'edited':tenant.adminEmailAddress}" required pattern="^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$" maxlength="256">
+                        <validation-messages [formCtrl]="adminEmailAddressInput"></validation-messages>
                     </div>
 
                     <div class="m-checkbox-list">
@@ -115,7 +115,7 @@
 
                     <div [hidden]="isUnlimited || !isSubscriptionFieldsVisible" class="form-group" [ngClass]="{'has-error': !subscriptionEndDateIsValid()}">
                         <label for="SubscriptionEndDate">{{l("SubscriptionEndDate")}}</label>
-                        <input id="SubscriptionEndDate" type="text" #SubscriptionEndDateUtc name="SubscriptionEndDateUtc" class="form-control">
+                        <input id="SubscriptionEndDate" type="text" #SubscriptionEndDateUtc name="SubscriptionEndDateUtc" class="form-control" bsDatepicker [(ngModel)]="tenant.subscriptionEndDateUtc" autocomplete="off">
                     </div>
 
                     <div [hidden]="!isSubscriptionFieldsVisible" class="m-checkbox-list">

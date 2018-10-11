@@ -41,7 +41,7 @@
                             </div>
                             <div class="col-md-6" *ngIf="isGranted('Pages.Administration.Roles')">
                                 <div class="form-group">
-                                    <role-combo [(selectedRole)]="role" emptyText="{{l('FilterByRole')}}"></role-combo>
+                                    <role-combo [(selectedRole)]="role"></role-combo>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -127,32 +127,29 @@
                                 <tr>
                                     <td style="width: 130px"
                                         [hidden]="!isGrantedAny('Pages.Administration.Users.Impersonation', 'Pages.Administration.Users.Edit', 'Pages.Administration.Users.ChangePermissions', 'Pages.Administration.Users.Delete')">
-                                        <div class="btn-group dropdown" normalizePosition>
-                                            <button class="dropdown-toggle btn btn-sm btn-primary"
-                                                    data-toggle="dropdown"
-                                                    aria-haspopup="true"
-                                                    aria-expanded="false">
+                                        <div class="btn-group dropdown" dropdown container="body">
+                                            <button dropdownToggle class="dropdown-toggle btn btn-sm btn-primary">
                                                 <i class="fa fa-cog"></i><span class="caret"></span> {{l("Actions")}}
                                             </button>
-                                            <ul class="dropdown-menu">
+                                            <ul class="dropdown-menu" *dropdownMenu>
                                                 <li>
-                                                    <a *ngIf="permission.isGranted('Pages.Administration.Users.Impersonation') && record.id !== appSession.userId"
+                                                    <a href="javascript:;" *ngIf="permission.isGranted('Pages.Administration.Users.Impersonation') && record.id !== appSession.userId"
                                                        (click)="_impersonationService.impersonate(record.id, appSession.tenantId)">{{l('LoginAsThisUser')}}</a>
                                                 </li>
                                                 <li>
-                                                    <a *ngIf="permission.isGranted('Pages.Administration.Users.Edit')"
+                                                    <a href="javascript:;" *ngIf="permission.isGranted('Pages.Administration.Users.Edit')"
                                                        (click)="createOrEditUserModal.show(record.id)">{{l('Edit')}}</a>
                                                 </li>
                                                 <li>
-                                                    <a *ngIf="permission.isGranted('Pages.Administration.Users.ChangePermissions')"
+                                                    <a href="javascript:;" *ngIf="permission.isGranted('Pages.Administration.Users.ChangePermissions')"
                                                        (click)="editUserPermissionsModal.show(record.id, record.userName)">{{l('Permissions')}}</a>
                                                 </li>
                                                 <li>
-                                                    <a *ngIf="permission.isGranted('Pages.Administration.Users.ChangePermissions')"
+                                                    <a href="javascript:;" *ngIf="permission.isGranted('Pages.Administration.Users.ChangePermissions')"
                                                        (click)="unlockUser(record)">{{l('Unlock')}}</a>
                                                 </li>
                                                 <li>
-                                                    <a *ngIf="permission.isGranted('Pages.Administration.Users.Delete')"
+                                                    <a href="javascript:;" *ngIf="permission.isGranted('Pages.Administration.Users.Delete')"
                                                        (click)="deleteUser(record)">{{l('Delete')}}</a>
                                                 </li>
                                             </ul>

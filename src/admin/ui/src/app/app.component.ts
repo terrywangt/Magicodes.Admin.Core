@@ -2,7 +2,6 @@ import { AfterViewInit, Component, Injector, OnInit, ViewContainerRef } from '@a
 import { Router } from '@angular/router';
 import { AppConsts } from '@shared/AppConsts';
 import { SubscriptionStartType } from '@shared/AppEnums';
-import { AppSessionService } from '@shared/common/session/app-session.service';
 import { UrlHelper } from '@shared/helpers/UrlHelper';
 import { ChatSignalrService } from 'app/shared/layout/chat/chat-signalr.service';
 import * as moment from 'moment';
@@ -26,8 +25,7 @@ export class AppComponent extends AppComponentBase implements OnInit, AfterViewI
         injector: Injector,
         viewContainerRef: ViewContainerRef,
         private _router: Router,
-        private _chatSignalrService: ChatSignalrService,
-        private _appSessionService: AppSessionService) {
+        private _chatSignalrService: ChatSignalrService) {
         super(injector);
         this.viewContainerRef = viewContainerRef; // You need this small hack in order to catch application root view container ref (required by ng2 bootstrap modal)
         this.router = _router;
@@ -42,32 +40,20 @@ export class AppComponent extends AppComponentBase implements OnInit, AfterViewI
     }
 
     subscriptionStatusBarVisible(): boolean {
-        return this._appSessionService.tenantId > 0 &&
-            (this._appSessionService.tenant.isInTrialPeriod ||
+        return this.appSession.tenantId > 0 &&
+            (this.appSession.tenant.isInTrialPeriod ||
                 this.subscriptionIsExpiringSoon());
     }
 
     subscriptionIsExpiringSoon(): boolean {
-        if (this._appSessionService.tenant.subscriptionEndDateUtc) {
-            return moment().utc().add(AppConsts.subscriptionExpireNootifyDayCount, 'days') >= moment(this._appSessionService.tenant.subscriptionEndDateUtc);
+        if (this.appSession.tenant.subscriptionEndDateUtc) {
+            return moment().utc().add(AppConsts.subscriptionExpireNootifyDayCount, 'days') >= moment(this.appSession.tenant.subscriptionEndDateUtc);
         }
 
         return false;
     }
 
     ngAfterViewInit(): void {
-        if (mApp.initialized) {
-            return;
-        }
-
-        // fix for https://github.com/aspnetzero/aspnet-zero-core/issues/1333
-        ($ as any).mCustomScrollbar.defaults.advanced.updateOnContentResize = false;
-        ($ as any).mCustomScrollbar.defaults.advanced.updateOnImageLoad = false;
-
         abp.signalr.autoConnect = false;
-        
-        mApp.init();
-        mLayout.init();
-        mApp.initialized = true;
     }
 }

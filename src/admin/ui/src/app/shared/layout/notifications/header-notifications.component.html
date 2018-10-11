@@ -1,7 +1,7 @@
 <a href="javascript:;" class="m-nav__link m-dropdown__toggle" id="m_topbar_notification_icon_not">
     <span class="m-nav__link-badge m-badge m-badge--dot m-badge--dot-small" [ngClass]="{'m-badge--danger':unreadNotificationCount}"></span>
     <span class="m-nav__link-icon">
-        <i class="flaticon-music-2" [attr.aria-label]="l('Notifications')"></i>
+        <i class="flaticon-alarm" [attr.aria-label]="l('Notifications')"></i>
     </span>
 </a>
 <div class="m-dropdown__wrapper">
@@ -32,8 +32,8 @@
                                 <span class="m-list-timeline__text">
                                     {{notification.text}}
                                 </span>
-                                <span class="m-list-timeline__time" jq-plugin="timeago">
-                                    {{notification.time}}
+                                <span class="m-list-timeline__time">
+                                    {{notification.time | momentFromNow}}
                                     <span *ngIf="notification.isUnread">
                                         <a href="javascript:;" *ngIf="notification.state=='UNREAD'" class="m-link set-notification-as-read" (click)="setNotificationAsRead(notification); $event.preventDefault(); $event.stopPropagation();">{{l("SetAsRead")}}</a>
                                     </span>

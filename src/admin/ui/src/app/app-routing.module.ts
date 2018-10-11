@@ -28,7 +28,8 @@ import { NotificationsComponent } from './shared/layout/notifications/notificati
                     {
                         path: 'admin',
                         loadChildren: 'app/admin/admin.module#AdminModule', //Lazy load admin module
-                        data: { preload: true }
+                        data: { preload: true },
+                        canLoad: [AppRouteGuard]
                     }, {
                         path: '**', redirectTo: 'notifications'
                     }
@@ -54,8 +55,7 @@ export class AppRoutingModule {
             }
 
             if (event instanceof NavigationEnd) {
-                $('meta[property=og\\:url]').attr('content', window.location.href);
-                $('#m_aside_left').mOffcanvas().hide();
+                document.querySelector('meta[property=og\\:url').setAttribute('content', window.location.href);
             }
         });
     }
