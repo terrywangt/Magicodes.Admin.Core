@@ -38,6 +38,15 @@ import * as ApiServiceProxies from './service-proxies';
         ApiServiceProxies.SubscriptionServiceProxy,
         ApiServiceProxies.InstallServiceProxy,
         ApiServiceProxies.UiCustomizationSettingsServiceProxy,
+        ApiServiceProxies.CommonServiceProxy,
+        ApiServiceProxies.TransactionLogServiceProxy,
+        ApiServiceProxies.ArticleInfoServiceProxy,
+        ApiServiceProxies.ColumnInfoServiceProxy,
+        ApiServiceProxies.ArticleSourceInfoServiceProxy,
+        ApiServiceProxies.ArticleInfoArticleTagInfoServiceProxy,
+        ApiServiceProxies.PaySettingsServiceProxy,
+        ApiServiceProxies.SmsCodeSettingServiceProxy,
+        ApiServiceProxies.StorageSettingServiceProxy,
         { provide: HTTP_INTERCEPTORS, useClass: AbpHttpInterceptor, multi: true }
     ]
 })
