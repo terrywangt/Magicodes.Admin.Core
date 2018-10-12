@@ -36,5 +36,19 @@ namespace Magicodes.Pay.Services.Dto
         [Required]
         [Range(0.01, 100000000.0)]
         public decimal TotalAmount { get; set; }
+
+        /// <summary>
+        ///     自定义数据
+        /// </summary>
+        [MaxLength(500)]
+        [Display(Name = "自定义数据")]
+        public string CustomData { get; set; }
+
+        /// <summary>
+        ///     交易单号
+        /// </summary>
+        [MaxLength(50)]
+        [Display(Name = "交易单号")]
+        public string OutTradeNo { get; set; }
     }
 }

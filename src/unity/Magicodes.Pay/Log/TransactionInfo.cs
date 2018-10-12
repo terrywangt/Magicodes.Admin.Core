@@ -72,5 +72,11 @@ namespace Magicodes.Pay.Log
         ///     异常信息
         /// </summary>
         public Exception Exception { get; set; }
+
+        /// <summary>
+        /// 主题（商品的标题/交易标题/订单标题/订单关键字等）
+        /// </summary>
+        [MaxLength(256)]
+        public string Subject { get; set; }
     }
 }

@@ -20,11 +20,13 @@ using System.Threading.Tasks;
 using Abp.Configuration;
 using Abp.Dependency;
 using Abp.Extensions;
+using Abp.Threading;
 using Abp.UI;
 using Castle.Core.Logging;
 using Magicodes.Admin.Configuration;
 using Magicodes.Alipay;
 using Magicodes.Alipay.Builder;
+using Magicodes.Pay.PaymentCallbacks;
 using Magicodes.Pay.WeChat;
 using Magicodes.Pay.WeChat.Builder;
 using Magicodes.PayNotify.Builder;
@@ -163,17 +165,16 @@ namespace Magicodes.Pay.Startup
             #region 支付回调配置
             if (weChatPayConfig != null || alipaySettings != null)
             {
-                void PayAction(string key, JObject data)
+                void PayAction(string key, string outTradeNo, string transactionId, decimal totalFee, JObject data)
                 {
-                    //校验返回的订单金额是否与商户侧的订单金额一致
-                    //重复处理判断
-                    //TODO:支付逻辑
-                    switch (key)
+                    using (var paymentCallbackManagerObj = iocManager.ResolveAsDisposable<PaymentCallbackManager>())
                     {
-                        case "订单支付":
-                            {
-                                break;
-                            }
+                        var paymentCallbackManager = paymentCallbackManagerObj?.Object;
+                        if (paymentCallbackManager == null)
+                        {
+                            throw new ApplicationException("支付回调管理器异常，无法执行回调！");
+                        }
+                        AsyncHelper.RunSync(async () => await paymentCallbackManager.ExecuteCallback(key, outTradeNo, transactionId, totalFee, data));
                     }
                 }
 
@@ -192,10 +193,15 @@ namespace Magicodes.Pay.Startup
                                     {
                                         //获取微信支付自定义数据
                                         if (string.IsNullOrWhiteSpace(output.Attach))
+                                        {
                                             throw new UserFriendlyException("自定义参数不允许为空！");
+                                        }
+
                                         var data = JsonConvert.DeserializeObject<JObject>(output.Attach);
-                                        var key = data["key"].ToString();
-                                        PayAction(key, data);
+                                        var key = data["key"]?.ToString();
+                                        var outTradeNo = output.OutTradeNo;
+                                        var totalFee = decimal.Parse(output.TotalFee) / 100;
+                                        PayAction(key, outTradeNo, output.TransactionId, totalFee, data);
                                     });
                                 }
                             case "alipay":

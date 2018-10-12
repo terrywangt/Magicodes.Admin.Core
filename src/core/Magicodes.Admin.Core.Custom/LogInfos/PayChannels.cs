@@ -13,6 +13,11 @@
         /// <summary>
         /// 支付宝支付
         /// </summary>
-        AliPay = 1
+        AliPay = 1,
+
+        /// <summary>
+        /// 余额支付
+        /// </summary>
+        BalancePay = 2
     }
 }

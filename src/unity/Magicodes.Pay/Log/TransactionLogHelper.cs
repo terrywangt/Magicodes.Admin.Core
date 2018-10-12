@@ -15,19 +15,24 @@
 //   
 // ======================================================================
 
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Transactions;
 using Abp.Configuration;
 using Abp.Dependency;
+using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
+using Abp.Extensions;
 using Abp.Runtime.Session;
+using Abp.Timing;
 using Castle.Core.Logging;
 using Magicodes.Admin.Core.Custom.LogInfos;
+using System;
+using System.Threading.Tasks;
+using System.Transactions;
 
 namespace Magicodes.Pay.Log
 {
+    /// <summary>
+    /// 交易日志辅助类
+    /// </summary>
     public class TransactionLogHelper : ITransientDependency
     {
         private readonly ITransactionLogProvider _transactionLogProvider;
@@ -38,16 +43,20 @@ namespace Magicodes.Pay.Log
 
         private readonly ISettingManager _settingManager;
 
+        private readonly IRepository<TransactionLog, long> _transactionLogRepository;
+
         public TransactionLogHelper(
             ITransactionLogProvider transactionLogProvider
             , IUnitOfWorkManager unitOfWorkManager
             , ITransactionLogStore transactionLogStore
-            , ISettingManager settingManager)
+            , ISettingManager settingManager
+            , IRepository<TransactionLog, long> transactionLogRepository)
         {
             _transactionLogProvider = transactionLogProvider;
             _unitOfWorkManager = unitOfWorkManager;
             _transactionLogStore = transactionLogStore;
             _settingManager = settingManager;
+            _transactionLogRepository = transactionLogRepository;
             AbpSession = NullAbpSession.Instance;
             Logger = NullLogger.Instance;
         }
@@ -60,7 +69,7 @@ namespace Magicodes.Pay.Log
         /// </summary>
         /// <param name="transactionInfo"></param>
         /// <returns></returns>
-        public TransactionLog CreaTransactionLog(TransactionInfo transactionInfo)
+        public TransactionLog CreateTransactionLog(TransactionInfo transactionInfo)
         {
             var cultureName = _settingManager.GetSettingValueAsync("Abp.Localization.DefaultLanguageName").Result;
             var log = new TransactionLog
@@ -68,7 +77,7 @@ namespace Magicodes.Pay.Log
                 TenantId = AbpSession.TenantId,
                 CreatorUserId = AbpSession.UserId,
                 Currency = new Currency(cultureName, transactionInfo.Amount),
-                //Amount = transactionInfo.Amount,
+                Name = transactionInfo.Subject,
                 CustomData = transactionInfo.CustomData,
                 OutTradeNo = transactionInfo.OutTradeNo,
                 PayChannel = transactionInfo.PayChannel,
@@ -112,6 +121,42 @@ namespace Magicodes.Pay.Log
             {
                 await _transactionLogStore.SaveAsync(transactionLog);
                 await uow.CompleteAsync();
+            }
+        }
+
+        /// <summary>
+        /// 执行业务逻辑并更新交易日志
+        /// </summary>
+        /// <param name="outTradeNo">商户系统的订单号</param>
+        /// <param name="transactionId">微信支付订单号</param>
+        /// <param name="action">业务逻辑</param>
+        /// <returns></returns>
+        public async Task UpdateAsync(string outTradeNo, string transactionId, Action<IUnitOfWorkManager, TransactionLog> action)
+        {
+            using (var uow = _unitOfWorkManager.Begin())
+            {
+                var logInfo = await _transactionLogRepository.FirstOrDefaultAsync(p => p.OutTradeNo == outTradeNo);
+                if (logInfo == null)
+                {
+                    Logger.Error("交易订单号为 " + outTradeNo + " 不存在！");
+                    return;
+                }
+                try
+                {
+                    action(_unitOfWorkManager, logInfo);
+                    logInfo.TransactionState = TransactionStates.Success;
+                    logInfo.PayTime = Clock.Now;
+                    logInfo.TransactionId = transactionId;
+                    await uow.CompleteAsync();
+                }
+                catch (Exception ex)
+                {
+                    logInfo.TransactionState = TransactionStates.PayError;
+                    logInfo.PayTime = Clock.Now;
+                    logInfo.Exception = ex.ToString().TruncateWithPostfix(2000);
+                    await uow.CompleteAsync();
+                    throw;
+                }
             }
         }
     }
