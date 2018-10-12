@@ -20,6 +20,9 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Magicodes.App.Application.Configuration
 {
+    /// <summary>
+    /// Token验证配置文件
+    /// </summary>
     public class TokenAuthConfiguration
     {
         public SymmetricSecurityKey SecurityKey { get; set; }

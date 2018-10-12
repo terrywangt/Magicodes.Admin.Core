@@ -7,7 +7,6 @@ using Abp.Configuration.Startup;
 using Abp.Modules;
 using Abp.Reflection.Extensions;
 using Abp.Zero.Configuration;
-using App.Host.Authentication.JwtBearer;
 using App.Host.Authentication.TwoFactor;
 using App.Host.Configuration;
 using Magicodes.Admin;
@@ -15,6 +14,7 @@ using Magicodes.Admin.Configuration;
 using Magicodes.Admin.Core.Custom;
 using Magicodes.Admin.EntityFrameworkCore;
 using Magicodes.App.Application;
+using Magicodes.App.Application.Configuration;
 using Magicodes.Sms;
 using Magicodes.Unity;
 using Microsoft.AspNetCore.Hosting;
@@ -67,25 +67,7 @@ namespace App.Host.Startup
                 cache.DefaultAbsoluteExpireTime = TimeSpan.FromMinutes(2);
             });
 
-            if (_appConfiguration["Authentication:JwtBearer:IsEnabled"] != null && bool.Parse(_appConfiguration["Authentication:JwtBearer:IsEnabled"]))
-            {
-                ConfigureTokenAuth();
-            }
-
             Configuration.ReplaceService<IAppConfigurationAccessor, AppConfigurationAccessor>();
-        }
-
-        private void ConfigureTokenAuth()
-        {
-            IocManager.Register<TokenAuthConfiguration>();
-            var tokenAuthConfig = IocManager.Resolve<TokenAuthConfiguration>();
-
-            tokenAuthConfig.SecurityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_appConfiguration["Authentication:JwtBearer:SecurityKey"]));
-            tokenAuthConfig.Issuer = _appConfiguration["Authentication:JwtBearer:Issuer"];
-            tokenAuthConfig.Audience = _appConfiguration["Authentication:JwtBearer:Audience"];
-            tokenAuthConfig.SigningCredentials = new SigningCredentials(tokenAuthConfig.SecurityKey, SecurityAlgorithms.HmacSha256);
-            //90天过期
-            tokenAuthConfig.Expiration = TimeSpan.FromDays(90);
         }
 
         public override void Initialize()
