@@ -31,11 +31,11 @@ namespace Magicodes.Pay.PaymentCallbacks
         /// </summary>
         /// <param name="key">支付业务关键字</param>
         /// <param name="outTradeNo">商户系统的订单号</param>
-        /// <param name="totalFee">金额</param>
+        /// <param name="totalFee">金额（单位：分）</param>
         /// <param name="transactionId">微信支付订单号</param>
         /// <param name="data">自定义数据</param>
         /// <returns></returns>
-        public async Task ExecuteCallback(string key, string outTradeNo, string transactionId, decimal totalFee, JObject data)
+        public async Task ExecuteCallback(string key, string outTradeNo, string transactionId, int totalFee, JObject data)
         {
             Logger.Info("正在执行【" + key + "】回调逻辑。data:" + data?.ToJsonString());
             var userIdentifer = UserIdentifier.Parse(data?["uid"]?.ToString());
@@ -54,7 +54,7 @@ namespace Magicodes.Pay.PaymentCallbacks
                              }
                          case "系统充值":
                              {
-                                 //await UserManager.UpdateRechargeInfo(userIdentifer, totalFee);
+                                 await UserManager.UpdateRechargeInfo(userIdentifer, totalFee);
                              }
                              break;
                          default:

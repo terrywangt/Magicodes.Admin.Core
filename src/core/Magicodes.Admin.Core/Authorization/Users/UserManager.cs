@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Abp;
+﻿using Abp;
 using Abp.Authorization;
 using Abp.Authorization.Users;
 using Abp.Configuration;
@@ -13,10 +9,14 @@ using Abp.Organizations;
 using Abp.Runtime.Caching;
 using Abp.Threading;
 using Abp.UI;
+using Magicodes.Admin.Authorization.Roles;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Magicodes.Admin.Authorization.Roles;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Magicodes.Admin.Authorization.Users
 {
@@ -47,7 +47,7 @@ namespace Magicodes.Admin.Authorization.Users
             IRepository<OrganizationUnit, long> organizationUnitRepository,
             IRepository<UserOrganizationUnit, long> userOrganizationUnitRepository,
             IOrganizationUnitSettings organizationUnitSettings,
-            ISettingManager settingManager, 
+            ISettingManager settingManager,
             ILocalizationManager localizationManager)
             : base(
                   roleManager,
@@ -81,10 +81,7 @@ namespace Magicodes.Admin.Authorization.Users
             }
         }
 
-        public User GetUserOrNull(UserIdentifier userIdentifier)
-        {
-            return AsyncHelper.RunSync(() => GetUserOrNullAsync(userIdentifier));
-        }
+        public User GetUserOrNull(UserIdentifier userIdentifier) => AsyncHelper.RunSync(() => GetUserOrNullAsync(userIdentifier));
 
         public async Task<User> GetUserAsync(UserIdentifier userIdentifier)
         {
@@ -97,10 +94,7 @@ namespace Magicodes.Admin.Authorization.Users
             return user;
         }
 
-        public User GetUser(UserIdentifier userIdentifier)
-        {
-            return AsyncHelper.RunSync(() => GetUserAsync(userIdentifier));
-        }
+        public User GetUser(UserIdentifier userIdentifier) => AsyncHelper.RunSync(() => GetUserAsync(userIdentifier));
 
         public override Task<IdentityResult> SetRoles(User user, string[] roleNames)
         {
@@ -129,9 +123,48 @@ namespace Magicodes.Admin.Authorization.Users
             }
         }
 
-        private new string L(string name)
+        private new string L(string name) => _localizationManager.GetString(AdminConsts.LocalizationSourceName, name);
+
+        /// <summary>
+        /// 更新余额，可用于充值或扣款
+        /// </summary>
+        /// <param name="totalFee"></param>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        public async Task UpdateRechargeInfo(int totalFee, User user = null)
         {
-            return _localizationManager.GetString(AdminConsts.LocalizationSourceName, name);
+            if (totalFee == 0)
+            {
+                throw new UserFriendlyException("金额不能等于0！");
+            }
+
+            if (user == null)
+            {
+                user = await FindByIdAsync(AbpSession.UserId?.ToString());
+            }
+
+            if (user == null || user.IsActive == false || user.IsDeleted)
+            {
+                throw new UserFriendlyException("用户信息异常！");
+            }
+
+            if (totalFee < 0 && user.Wallet.Balance + totalFee < 0)
+            {
+                throw new UserFriendlyException("余额不足！");
+            }
+            user.Wallet.Balance += totalFee * 100;
+        }
+
+        /// <summary>
+        /// 更新充值金额
+        /// </summary>
+        /// <param name="userIdentifier"></param>
+        /// <param name="totalFee">金额（元）</param>
+        /// <returns></returns>
+        public async Task UpdateRechargeInfo(UserIdentifier userIdentifier, int totalFee)
+        {
+            var user = await GetUserOrNullAsync(userIdentifier);
+            await UpdateRechargeInfo(totalFee, user);
         }
     }
 }

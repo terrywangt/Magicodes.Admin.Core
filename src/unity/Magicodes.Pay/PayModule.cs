@@ -43,7 +43,6 @@ namespace Magicodes.Pay
 
         public override void Initialize()
         {
-            IocManager.RegisterAssemblyByConvention(typeof(PayModule).GetAssembly());
             IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
         }
         public override void PostInitialize()
