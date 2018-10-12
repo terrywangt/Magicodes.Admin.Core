@@ -15,8 +15,6 @@
 //   
 // ======================================================================
 
-using System;
-using System.Threading.Tasks;
 using Abp.Configuration;
 using Abp.Dependency;
 using Abp.Extensions;
@@ -33,6 +31,9 @@ using Magicodes.PayNotify.Builder;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Magicodes.Pay.Startup
 {
@@ -47,9 +48,13 @@ namespace Magicodes.Pay.Startup
             void LogAction(string tag, string message)
             {
                 if (tag.Equals("error", StringComparison.CurrentCultureIgnoreCase))
+                {
                     logger.Error(message);
+                }
                 else
+                {
                     logger.Debug(message);
+                }
             }
 
             #region 支付配置
@@ -165,7 +170,7 @@ namespace Magicodes.Pay.Startup
             #region 支付回调配置
             if (weChatPayConfig != null || alipaySettings != null)
             {
-                void PayAction(string key, string outTradeNo, string transactionId, decimal totalFee, JObject data)
+                void PayAction(string key, string outTradeNo, string transactionId, int totalFee, JObject data)
                 {
                     using (var paymentCallbackManagerObj = iocManager.ResolveAsDisposable<PaymentCallbackManager>())
                     {
@@ -188,29 +193,52 @@ namespace Magicodes.Pay.Startup
                         {
                             case "wechat":
                                 {
-                                    var api = new WeChatPayApi();
-                                    return api.PayNotifyHandler(input.Request.Body, (output, error) =>
+                                    using (var obj = iocManager.ResolveAsDisposable<WeChatPayApi>())
                                     {
-                                        //获取微信支付自定义数据
-                                        if (string.IsNullOrWhiteSpace(output.Attach))
+                                        var api = obj.Object;
+                                        return api.PayNotifyHandler(input.Request.Body, (output, error) =>
                                         {
-                                            throw new UserFriendlyException("自定义参数不允许为空！");
-                                        }
+                                            //获取微信支付自定义数据
+                                            if (string.IsNullOrWhiteSpace(output.Attach))
+                                            {
+                                                throw new UserFriendlyException("自定义参数不允许为空！");
+                                            }
 
-                                        var data = JsonConvert.DeserializeObject<JObject>(output.Attach);
-                                        var key = data["key"]?.ToString();
-                                        var outTradeNo = output.OutTradeNo;
-                                        var totalFee = decimal.Parse(output.TotalFee) / 100;
-                                        PayAction(key, outTradeNo, output.TransactionId, totalFee, data);
-                                    });
+                                            var data = JsonConvert.DeserializeObject<JObject>(output.Attach);
+                                            var key = data["key"]?.ToString();
+                                            var outTradeNo = output.OutTradeNo;
+                                            var totalFee = int.Parse(output.TotalFee);
+                                            PayAction(key, outTradeNo, output.TransactionId, totalFee, data);
+                                        });
+                                    }
+
                                 }
                             case "alipay":
                                 {
-                                    //TODO:签名校验
-                                    var ordercode = input.Request.Form["out_trade_no"];
-                                    var charset = input.Request.Form["charset"];
-                                    //PayAction(ordercode);
-                                    return Task.FromResult("success");
+                                    using (var obj = iocManager.ResolveAsDisposable<IAlipayAppService>())
+                                    {
+                                        var api = obj.Object;
+                                        
+                                        var dictionary = input.Request.Form.ToDictionary(p => p.Key, p2 => p2.Value.FirstOrDefault()?.ToString());
+                                        //签名校验
+                                        if (!api.PayNotifyHandler(dictionary))
+                                        {
+                                            throw new UserFriendlyException("支付宝支付签名错误！");
+                                        }
+                                        var outTradeNo = input.Request.Form["out_trade_no"];
+                                        var tradeNo = input.Request.Form["trade_no"];
+                                        var charset = input.Request.Form["charset"];
+                                        var totalFee = (int)(decimal.Parse(input.Request.Form["total_fee"]) * 100);
+                                        var businessParams = input.Request.Form["business_params"];
+                                        if (string.IsNullOrWhiteSpace(businessParams))
+                                        {
+                                            throw new UserFriendlyException("自定义参数不允许为空！");
+                                        }
+                                        var data = JsonConvert.DeserializeObject<JObject>(businessParams);
+                                        var key = data["key"]?.ToString();
+                                        PayAction(key, outTradeNo, tradeNo, totalFee, data);
+                                        return Task.FromResult("success");
+                                    }
                                 }
                             default:
                                 break;

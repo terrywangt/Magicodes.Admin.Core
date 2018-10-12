@@ -20,12 +20,16 @@ namespace Magicodes.Admin.Authorization.Users
 
         public string GoogleAuthenticatorKey { get; set; }
 
-        //Can add application specific user properties here
+        /// <summary>
+        /// 钱包
+        /// </summary>
+        public Wallet Wallet { get; set; }
 
         public User()
         {
             IsLockoutEnabled = true;
             IsTwoFactorEnabled = true;
+            Wallet = new Wallet();
         }
 
         /// <summary>
@@ -46,7 +50,6 @@ namespace Magicodes.Admin.Authorization.Users
             };
 
             user.SetNormalizedNames();
-
             return user;
         }
 

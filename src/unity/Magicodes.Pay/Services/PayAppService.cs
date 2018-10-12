@@ -19,6 +19,7 @@ using Abp;
 using Abp.Auditing;
 using Abp.Timing;
 using Abp.UI;
+using Magicodes.Admin.Authorization.Users;
 using Magicodes.Admin.Core.Custom.LogInfos;
 using Magicodes.Alipay;
 using Magicodes.Pay.Log;
@@ -29,7 +30,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Threading.Tasks;
-using Magicodes.Admin.Authorization.Users;
 using AppPayOutput = Magicodes.Pay.WeChat.Pay.Dto.AppPayOutput;
 
 namespace Magicodes.Pay.Services
@@ -181,7 +181,7 @@ namespace Magicodes.Pay.Services
                 throw new UserFriendlyException("余额支付不支持此业务！");
             }
             var userIdentifer = UserIdentifier.Parse(uid);
-            //await UserManager.UpdateRechargeInfo(userIdentifer, -input.TotalAmount);
+            await UserManager.UpdateRechargeInfo(userIdentifer, (int)(-input.TotalAmount * 100));
 
             var transactionInfo = new TransactionInfo()
             {
@@ -192,7 +192,6 @@ namespace Magicodes.Pay.Services
                 Subject = input.Subject,
                 TransactionState = TransactionStates.NotPay,
                 //TransactionId = "",
-                //PayTime = DateTime.Now,
                 Exception = null,
                 PayTime = Clock.Now,
             };
@@ -215,7 +214,6 @@ namespace Magicodes.Pay.Services
                 Subject = input.Subject,
                 TransactionState = TransactionStates.NotPay,
                 //TransactionId = "",
-                //PayTime = DateTime.Now,
                 Exception = exception
             };
             var transactionLog = _transactionLogHelper.CreateTransactionLog(transactionInfo);
