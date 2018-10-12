@@ -33,12 +33,12 @@ export class RootRoutingModule {
                 if (abp.session.userId > 0) {
                     this.setAppModuleBodyClassInternal();
                 } else {
-                    $('body').attr('class', this._uiCustomizationService.getAccountModuleBodyClass());
+                    document.body.className = this._uiCustomizationService.getAccountModuleBodyClass();
                 }
             }
 
             if (url.indexOf('/account/') >= 0) {
-                $('body').attr('class', this._uiCustomizationService.getAccountModuleBodyClass());
+                document.body.className = this._uiCustomizationService.getAccountModuleBodyClass();
             } else {
                 this.setAppModuleBodyClassInternal();
             }
@@ -46,26 +46,30 @@ export class RootRoutingModule {
     }
 
     setAppModuleBodyClassInternal(): void {
-        let $currentBodyClass = $('body').attr('class');
+        let currentBodyClass = document.body.className;
         let classesToRemember = '';
 
-        if ($currentBodyClass.indexOf('m-brand--minimize') >= 0) {
-            classesToRemember += 'm-brand--minimize ';
+        if (currentBodyClass.indexOf('m-brand--minimize') >= 0) {
+            classesToRemember += ' m-brand--minimize ';
         }
 
-        if ($currentBodyClass.indexOf('m-aside-left--minimize') >= 0) {
-            classesToRemember += 'm-aside-left--minimize';
+        if (currentBodyClass.indexOf('m-aside-left--minimize') >= 0) {
+            classesToRemember += ' m-aside-left--minimize';
         }
 
-        if ($currentBodyClass.indexOf('m-brand--hide') >= 0) {
-            classesToRemember += 'm-brand--hide';
+        if (currentBodyClass.indexOf('m-brand--hide') >= 0) {
+            classesToRemember += ' m-brand--hide';
         }
 
-        if ($currentBodyClass.indexOf('m-aside-left--hide') >= 0) {
-            classesToRemember += 'm-aside-left--hide';
+        if (currentBodyClass.indexOf('m-aside-left--hide') >= 0) {
+            classesToRemember += ' m-aside-left--hide';
         }
 
-        $('body').attr('class', this._uiCustomizationService.getAppModuleBodyClass() + ' ' + classesToRemember);
+        if (currentBodyClass.indexOf('swal2-toast-shown') >= 0) {
+            classesToRemember += ' swal2-toast-shown';
+        }
+
+        document.body.className = this._uiCustomizationService.getAppModuleBodyClass() + ' ' + classesToRemember;
     }
 
     getSetting(key: string): string {

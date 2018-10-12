@@ -32,7 +32,8 @@
                             <div class="row m--margin-bottom-10">
                                 <label>{{l("Filter")}}</label>
                                 <div class="input-group">
-                                    <input [(ngModel)]="model.filterText" name="Filter" class="form-control" placeholder="{{l('SearchWithThreeDot')}}" type="text">
+                                    <input [(ngModel)]="model.filterText" name="Filter" class="form-control"
+                                        placeholder="{{l('SearchWithThreeDot')}}" type="text">
                                 </div>
                             </div>
                         </div>
@@ -40,14 +41,16 @@
                             <div class="col-xl-6">
                                 <div class="m-checkbox-list">
                                     <label class="m-checkbox">
-                                        <input type="checkbox" [(ngModel)]="model.creationDateRangeActive" id="model_CreateDateRange" name="CreateDateRange" value="true"> {{l('CreateDateRange')}}
+                                        <input type="checkbox" [(ngModel)]="model.creationDateRangeActive" id="model_CreateDateRange"
+                                            name="CreateDateRange" value="true"> {{l('CreateDateRange')}}
                                         <span></span>
                                     </label>
                                 </div>
-                                <date-range-picker name="CreateDateRange" [isDisabled]="!model.creationDateRangeActive" [(startDate)]="model.creationDateStart"
-                                    [(endDate)]="model.creationDateEnd" [allowFutureDate]="true">
-                                </date-range-picker>
+
+                                <input class="form-control" id="CreateDateRange" name="CreateDateRange" #drp="bsDaterangepicker"
+                                    bsDaterangepicker dateRangePickerInitialValue [(ngModel)]="createDateRange">
                             </div>
+
                             <div class="col-md-6">
                                 <label for="SubmenuToggle">{{l("IsFreeze")}}</label>
                                 <select id="IsFreeze" name="IsFreeze" class="form-control" [(ngModel)]="model.isFreeze">
@@ -73,9 +76,9 @@
                 <div class="row align-items-center">
                     <!--<Primeng-Datatable-Start>-->
                     <div class="primeng-datatable-container" [busyIf]="primengTableHelper.isLoading">
-                        <p-table #dataTable (onLazyLoad)="getTransactionLogs($event)" [value]="primengTableHelper.records" rows="{{primengTableHelper.defaultRecordsCountPerPage}}"
-                            [paginator]="false" [lazy]="true" [responsive]="primengTableHelper.isResponsive" [scrollable]="true"
-                            [style]="{width:'100%'}">
+                        <p-table #dataTable (onLazyLoad)="getTransactionLogs($event)" [value]="primengTableHelper.records"
+                            rows="{{primengTableHelper.defaultRecordsCountPerPage}}" [paginator]="false" [lazy]="true"
+                            [responsive]="primengTableHelper.isResponsive" [scrollable]="true" [style]="{width:'100%'}">
                             <ng-template pTemplate="header">
                                 <tr>
                                     <!-- <th style="width:130px">{{l('Actions')}}</th> -->
@@ -150,7 +153,7 @@
                                     <td style="width:200px">{{record.clientIpAddress}}</td>
                                     <td style="width:200px">{{record.clientName}}</td>
                                     <td style="width:200px">
-                                        <p-inputSwitch onLabel="{{l('Yes')}}" offLabel="{{l('No')}}" (onChange)="handleIsFreezeSwitch($event,record.id)" name="IsActive"
+                                        <p-inputSwitch (onChange)="handleIsFreezeSwitch($event,record.id)" name="IsActive"
                                             [(ngModel)]="record.isFreeze"></p-inputSwitch>
                                     </td>
                                     <td style="width:200px">{{getPayChannelText(record.payChannel)}}</td>
@@ -167,8 +170,9 @@
                         </p-table>
 
                         <div class="primeng-paging-container">
-                            <p-paginator rows="{{primengTableHelper.defaultRecordsCountPerPage}}" #paginator (onPageChange)="getTransactionLogs($event)"
-                                [totalRecords]="primengTableHelper.totalRecordsCount" [rowsPerPageOptions]="primengTableHelper.predefinedRecordsCountPerPage">
+                            <p-paginator rows="{{primengTableHelper.defaultRecordsCountPerPage}}" #paginator
+                                (onPageChange)="getTransactionLogs($event)" [totalRecords]="primengTableHelper.totalRecordsCount"
+                                [rowsPerPageOptions]="primengTableHelper.predefinedRecordsCountPerPage">
                             </p-paginator>
                             <span class="total-records-count">
                                 {{l('TotalRecordsCount', primengTableHelper.totalRecordsCount)}}

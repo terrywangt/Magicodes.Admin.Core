@@ -1,7 +1,7 @@
 import { Component, Input, Injector, } from '@angular/core';
 import { Router } from '@angular/router';
-import { AppSessionService } from '@shared/common/session/app-session.service';
 import { AppComponentBase } from '@shared/common/app-component-base';
+import { ScriptLoaderService } from '@shared/utils/script-loader.service';
 
 import {
     EditionSelectDto,
@@ -45,7 +45,7 @@ export class PayPalComponent extends AppComponentBase {
     set edition(val: EditionSelectDto) {
         this._edition = val;
         if (val && val.id) {
-            jQuery.getScript('https://www.paypalobjects.com/api/checkout.js').done(() => {
+            new ScriptLoaderService().load('https://www.paypalobjects.com/api/checkout.js').then(() => {
                 this.paypalIsLoading = false;
                 this.preparePaypalButton();
 
@@ -62,7 +62,6 @@ export class PayPalComponent extends AppComponentBase {
     constructor(
         injector: Injector,
         private _paymentAppService: PaymentServiceProxy,
-        private _appSessionService: AppSessionService,
         private _router: Router
     ) {
         super(injector);
@@ -111,7 +110,7 @@ export class PayPalComponent extends AppComponentBase {
                 self._paymentAppService
                     .executePayment(input)
                     .toPromise().then((result: ExecutePaymentDto) => {
-                        if (self._appSessionService.userId) {
+                        if (self.appSession.userId) {
                             self._router.navigate(['app/admin/subscription-management']);
                         } else {
                             self._router.navigate(['account/register-tenant'], {

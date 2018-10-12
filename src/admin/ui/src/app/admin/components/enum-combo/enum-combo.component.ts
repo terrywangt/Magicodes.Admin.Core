@@ -38,7 +38,7 @@ export class EnumComboComponent extends AppComponentBase implements OnInit {
         this._commonService.getEnumValuesList(this.fullName).subscribe(result => {
             this.values = result;
             setTimeout(() => {
-                $(self.EnumComboboxElement.nativeElement).selectpicker('refresh');
+                //$(self.EnumComboboxElement.nativeElement).selectpicker('refresh');
             }, 0);
         });
     }

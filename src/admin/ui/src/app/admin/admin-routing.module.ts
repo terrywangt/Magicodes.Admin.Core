@@ -1,4 +1,4 @@
-﻿import { NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { AuditLogsComponent } from './audit-logs/audit-logs.component';
 import { HostDashboardComponent } from './dashboard/host-dashboard.component';
@@ -25,7 +25,6 @@ import { ColumnInfosComponent } from './columnInfos/columnInfo.component';
 import { StorageSettingsComponent } from './settings/storage-settings.component';
 import { TransactionLogsComponent } from './transactionLogs/transactionLog.component';
 
-
 @NgModule({
     imports: [
         RouterModule.forChild([
@@ -36,9 +35,9 @@ import { TransactionLogsComponent } from './transactionLogs/transactionLog.compo
                     { path: 'roles', component: RolesComponent, data: { permission: 'Pages.Administration.Roles' } },
                     { path: 'auditLogs', component: AuditLogsComponent, data: { permission: 'Pages.Administration.AuditLogs' } },
                     { path: 'maintenance', component: MaintenanceComponent, data: { permission: 'Pages.Administration.Host.Maintenance' } },
-                    { path: 'hostSettings', component: HostSettingsComponent, data: { permission: 'Pages.Administration.Pay.Settings' } },
+                    { path: 'hostSettings', component: HostSettingsComponent, data: { permission: 'Pages.Administration.Host.Settings' } },
                     { path: 'paySettings', component: PaySettingsComponent, data: { permission: 'Pages.Administration.Pay.Settings' } },
-                    { path: 'smsCodeSettings', component: SmsCodeSettingsComponent, data: { permission: 'Pages.Administration.SmsCode.Settings'}},
+                    { path: 'smsCodeSettings', component: SmsCodeSettingsComponent, data: { permission: 'Pages.Administration.SmsCode.Settings' } },
                     { path: 'editions', component: EditionsComponent, data: { permission: 'Pages.Editions' } },
                     { path: 'languages', component: LanguagesComponent, data: { permission: 'Pages.Administration.Languages' } },
                     { path: 'languages/:name/texts', component: LanguageTextsComponent, data: { permission: 'Pages.Administration.Languages.ChangeTexts' } },
@@ -51,11 +50,11 @@ import { TransactionLogsComponent } from './transactionLogs/transactionLog.compo
                     { path: 'demo-ui-components', component: DemoUiComponentsComponent, data: { permission: 'Pages.DemoUiComponents' } },
                     { path: 'install', component: InstallComponent },
                     { path: 'ui-customization', component: UiCustomizationComponent },
-					{ path: 'articleInfo', component: ArticleInfosComponent},
-					{ path: 'articleSourceInfo', component: ArticleSourceInfosComponent},
-                    { path: 'columnInfo', component: ColumnInfosComponent},
-                    { path: 'storageSettings', component: StorageSettingsComponent},
-                    { path: 'transactionLog', component: TransactionLogsComponent},
+                    { path: 'articleInfo', component: ArticleInfosComponent },
+                    { path: 'articleSourceInfo', component: ArticleSourceInfosComponent },
+                    { path: 'columnInfo', component: ColumnInfosComponent },
+                    { path: 'storageSettings', component: StorageSettingsComponent },
+                    { path: 'transactionLog', component: TransactionLogsComponent }
                 ]
             }
         ])
@@ -70,19 +69,9 @@ export class AdminRoutingModule {
         private router: Router
     ) {
         router.events.subscribe((event) => {
-            this.hideOpenDataTableDropdownMenus();
-
             if (event instanceof NavigationEnd) {
                 window.scroll(0, 0);
             }
         });
     }
-
-    hideOpenDataTableDropdownMenus(): void {
-        let $dropdownMenus = $('.dropdown-menu.tether-element');
-        $dropdownMenus.css({
-            'display': 'none'
-        });
-    }
-
 }

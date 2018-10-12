@@ -4,7 +4,7 @@ import { ImpersonationService } from '@app/admin/users/impersonation.service';
 import { CommonLookupModalComponent } from '@app/shared/common/lookup/common-lookup-modal.component';
 import { appModuleAnimation } from '@shared/animations/routerTransition';
 import { AppComponentBase } from '@shared/common/app-component-base';
-import { EntityDtoOfInt64, FindUsersInput, NameValueDto, SwitchEntityInputDtoOfInt64,  } from '@shared/service-proxies/service-proxies';
+import { EntityDtoOfInt64, FindUsersInput, NameValueDto, SwitchEntityInputDtoOfInt64, } from '@shared/service-proxies/service-proxies';
 import * as moment from 'moment';
 import { LazyLoadEvent } from 'primeng/components/common/lazyloadevent';
 import { Paginator } from 'primeng/components/paginator/paginator';
@@ -15,7 +15,7 @@ import { InputSwitchModule } from 'primeng/inputswitch';
 import { ArticleInfoServiceProxy } from '@shared/service-proxies/service-proxies';
 import { CreateOrEditArticleInfoModalComponent } from './create-or-edit-articleInfo-modal.component';
 
-import { ArticleInfoArticleTagInfoComponent } from './articleTagInfo.component';	
+import { ArticleInfoArticleTagInfoComponent } from './articleTagInfo.component';
 
 @Component({
     templateUrl: './articleInfo.component.html',
@@ -23,42 +23,44 @@ import { ArticleInfoArticleTagInfoComponent } from './articleTagInfo.component';
     animations: [appModuleAnimation()]
 })
 
-export class ArticleInfosComponent extends AppComponentBase implements OnInit {    
+export class ArticleInfosComponent extends AppComponentBase implements OnInit {
     @ViewChild('dataTable') dataTable: Table;
     @ViewChild('paginator') paginator: Paginator;
-	@ViewChild('createOrEditArticleInfoModal') createOrEditArticleInfoModal: CreateOrEditArticleInfoModalComponent;
+    @ViewChild('createOrEditArticleInfoModal') createOrEditArticleInfoModal: CreateOrEditArticleInfoModalComponent;
 
-	@ViewChild('ArticleTagInfoModal') articleTagInfoModal : ArticleInfoArticleTagInfoComponent;
+    @ViewChild('ArticleTagInfoModal') articleTagInfoModal: ArticleInfoArticleTagInfoComponent;
 
-	advancedFiltersAreShown = false;
-	model: {
+    advancedFiltersAreShown = false;
+    public createDateRange: moment.Moment[] = [moment().startOf('day'), moment().endOf('day')];
+    public updateDateRange: moment.Moment[] = [moment().startOf('day'), moment().endOf('day')];
+    model: {
         //是否仅获取回收站数据
         isOnlyGetRecycleData: boolean;
         filterText: string;
-		creationDateRangeActive: boolean;        
+        creationDateRangeActive: boolean;
         creationDateStart: moment.Moment;
         creationDateEnd: moment.Moment;
-		subscriptionEndDateRangeActive: boolean;
+        subscriptionEndDateRangeActive: boolean;
         subscriptionEndDateStart: moment.Moment;
         subscriptionEndDateEnd: moment.Moment;
-		isActive: string;
-		isNeedAuthorizeAccess: string;
+        isActive: string;
+        isNeedAuthorizeAccess: string;
     } = <any>{};
 
-	constructor(
-        injector: Injector,        
+    constructor(
+        injector: Injector,
         private _activatedRoute: ActivatedRoute,
-		private _fileDownloadService: FileDownloadService,
+        private _fileDownloadService: FileDownloadService,
 
-		private _articleInfoService: ArticleInfoServiceProxy,
-        
-    ) {		
+        private _articleInfoService: ArticleInfoServiceProxy,
+
+    ) {
         super(injector);
         this.setFiltersFromRoute();
     }
 
-	setFiltersFromRoute(): void {
-		const self = this;
+    setFiltersFromRoute(): void {
+        const self = this;
         if (self._activatedRoute.snapshot.queryParams['subscriptionEndDateStart'] != null) {
             self.model.subscriptionEndDateRangeActive = true;
             self.model.subscriptionEndDateStart = moment(this._activatedRoute.snapshot.queryParams['subscriptionEndDateStart']);
@@ -87,13 +89,13 @@ export class ArticleInfosComponent extends AppComponentBase implements OnInit {
         }
     }
 
-	ngOnInit(): void {
-		const self = this;
+    ngOnInit(): void {
+        const self = this;
         self.model.filterText = self._activatedRoute.snapshot.queryParams['filterText'] || '';
     }
 
-	getArticleInfos(event?: LazyLoadEvent) {
-		const self = this;
+    getArticleInfos(event?: LazyLoadEvent) {
+        const self = this;
         if (self.primengTableHelper.shouldResetPaging(event)) {
             self.paginator.changePage(0);
             return;
@@ -102,11 +104,11 @@ export class ArticleInfosComponent extends AppComponentBase implements OnInit {
 
         self._articleInfoService.getArticleInfos(
             self.model.isOnlyGetRecycleData ? self.model.isOnlyGetRecycleData : false,
-			self.model.creationDateRangeActive ? self.model.creationDateStart : undefined,
-			self.model.creationDateRangeActive ? self.model.creationDateEnd : undefined,
-			self.model.subscriptionEndDateRangeActive ? self.model.subscriptionEndDateStart : undefined,
+            self.model.creationDateRangeActive ? self.model.creationDateStart : undefined,
+            self.model.creationDateRangeActive ? self.model.creationDateEnd : undefined,
+            self.model.subscriptionEndDateRangeActive ? self.model.subscriptionEndDateStart : undefined,
             self.model.subscriptionEndDateRangeActive ? self.model.subscriptionEndDateEnd : undefined,
-			self.model.filterText,                  
+            self.model.filterText,
             self.primengTableHelper.getSorting(self.dataTable),
             self.primengTableHelper.getMaxResultCount(self.paginator, event),
             self.primengTableHelper.getSkipCount(self.paginator, event)
@@ -138,19 +140,19 @@ export class ArticleInfosComponent extends AppComponentBase implements OnInit {
             }
         );
     }
-	createArticleInfo(): void {
-		const self = this;
+    createArticleInfo(): void {
+        const self = this;
         self.createOrEditArticleInfoModal.show();
     }
 
-	editArticleInfo(id:number): void {
-		const self = this;
+    editArticleInfo(id: number): void {
+        const self = this;
         self.createOrEditArticleInfoModal.show(id);
     }
 
-	deleteArticleInfo(id: number): void {
-		const self = this;
-		self.message.confirm(
+    deleteArticleInfo(id: number): void {
+        const self = this;
+        self.message.confirm(
             self.l('AreYouSure'),
             self.l('DeleteWarningMessage'),
             isConfirmed => {
@@ -164,20 +166,20 @@ export class ArticleInfosComponent extends AppComponentBase implements OnInit {
         );
     }
 
-	reloadPage(): void {
-		const self = this;
+    reloadPage(): void {
+        const self = this;
         self.paginator.changePage(self.paginator.getPage());
     }
 
-	exportToExcel(): void {
+    exportToExcel(): void {
         const self = this;
         self._articleInfoService.getArticleInfosToExcel(
             self.model.isOnlyGetRecycleData,
-			self.model.subscriptionEndDateRangeActive ? self.model.subscriptionEndDateStart : undefined,
+            self.model.subscriptionEndDateRangeActive ? self.model.subscriptionEndDateStart : undefined,
             self.model.subscriptionEndDateRangeActive ? self.model.subscriptionEndDateEnd : undefined,
-			self.model.creationDateRangeActive ? self.model.creationDateStart : undefined,
-			self.model.creationDateRangeActive ? self.model.creationDateEnd : undefined,
-			self.model.filterText,
+            self.model.creationDateRangeActive ? self.model.creationDateStart : undefined,
+            self.model.creationDateRangeActive ? self.model.creationDateEnd : undefined,
+            self.model.filterText,
             undefined,
             1000,
             0).subscribe(result => {
@@ -185,24 +187,24 @@ export class ArticleInfosComponent extends AppComponentBase implements OnInit {
             });
     }
 
-	handleIsActiveSwitch(event, id: number){
-			const self = this;
-			const input = new SwitchEntityInputDtoOfInt64();
-			input.id = id;
-			input.switchValue = event.checked;
-			self._articleInfoService.updateIsActiveSwitchAsync(input).subscribe(result => {
-                self.notify.success(self.l('SuccessfulOperation'));
-			})
-		}
-	handleIsNeedAuthorizeAccessSwitch(event, id: number){
-			const self = this;
-			const input = new SwitchEntityInputDtoOfInt64();
-			input.id = id;
-			input.switchValue = event.checked;
-			self._articleInfoService.updateIsNeedAuthorizeAccessSwitchAsync(input).subscribe(result => {
-                self.notify.success(self.l('SuccessfulOperation'));
-			})
-		}
+    handleIsActiveSwitch(event, id: number) {
+        const self = this;
+        const input = new SwitchEntityInputDtoOfInt64();
+        input.id = id;
+        input.switchValue = event.checked;
+        self._articleInfoService.updateIsActiveSwitchAsync(input).subscribe(result => {
+            self.notify.success(self.l('SuccessfulOperation'));
+        })
+    }
+    handleIsNeedAuthorizeAccessSwitch(event, id: number) {
+        const self = this;
+        const input = new SwitchEntityInputDtoOfInt64();
+        input.id = id;
+        input.switchValue = event.checked;
+        self._articleInfoService.updateIsNeedAuthorizeAccessSwitchAsync(input).subscribe(result => {
+            self.notify.success(self.l('SuccessfulOperation'));
+        })
+    }
 
     getRecommendedTypeText(value: number) {
         return this.l(RecommendedTypeEnum[value]);

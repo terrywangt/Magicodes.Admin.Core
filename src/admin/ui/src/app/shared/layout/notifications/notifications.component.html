@@ -22,8 +22,7 @@
                                 <select #TargetValueFilterSelectionCombobox
                                         class="form-control"
                                         [(ngModel)]="readStateFilter"
-                                        name="readStateFilter"
-                                        jq-plugin="selectpicker">
+                                        name="readStateFilter">
                                     <option value="ALL">{{l("All")}}</option>
                                     <option value="UNREAD">{{l("Unread")}}</option>
                                 </select>
@@ -62,12 +61,13 @@
                             <ng-template pTemplate="body" let-record="$implicit">
                                 <tr>
                                     <td style="width:130px">
-                                        <div class="btn-group dropdown">
-                                            <button class="btn btn-sm btn-primary" [attr.title]="!isRead(record) ? l('SetAsRead') : ''" (click)="setAsRead(record)" [disabled]="isRead(record)">
-                                                <i class="fa fa-check" *ngIf="isRead(record)" [attr.aria-label]="l('Read')"></i>
-                                                <i class="fa fa-circle-o" *ngIf="!isRead(record)" [attr.aria-label]="l('Unread')"></i>
-                                            </button>
-                                        </div>
+                                        <button class="btn btn-sm btn-primary" [attr.title]="!isRead(record) ? l('SetAsRead') : ''" (click)="setAsRead(record)" [disabled]="isRead(record)">
+                                            <i class="fa fa-check" *ngIf="isRead(record)" [attr.aria-label]="l('Read')"></i>
+                                            <i class="fa fa-circle-notch" *ngIf="!isRead(record)" [attr.aria-label]="l('Unread')"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-danger" [attr.title]="l('Delete')" (click)="deleteNotification(record)">
+                                            <i class="fa fa-remove" [attr.aria-label]="l('Delete')"></i>
+                                        </button>
                                     </td>
                                     <td>
                                         <span class="ui-column-title">{{l('Notification')}}</span>

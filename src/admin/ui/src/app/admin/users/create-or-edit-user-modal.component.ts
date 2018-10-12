@@ -15,9 +15,8 @@ import { finalize } from 'rxjs/operators';
         }`
     ]
 })
-export class CreateOrEditUserModalComponent extends AppComponentBase implements AfterViewChecked {
+export class CreateOrEditUserModalComponent extends AppComponentBase {
 
-    @ViewChild('nameInput') nameInput: ElementRef;
     @ViewChild('createOrEditModal') modal: ModalDirective;
     @ViewChild('organizationUnitTree') organizationUnitTree: OrganizationUnitsTreeComponent;
 
@@ -46,12 +45,6 @@ export class CreateOrEditUserModalComponent extends AppComponentBase implements 
         private _profileService: ProfileServiceProxy
     ) {
         super(injector);
-    }
-
-    ngAfterViewChecked(): void {
-        //Temporary fix for: https://github.com/valor-software/ngx-bootstrap/issues/1508
-        $('tabset ul.nav').addClass('m-tabs-line');
-        $('tabset ul.nav li a.nav-link').addClass('m-tabs__link');
     }
 
     show(userId?: number): void {
@@ -132,12 +125,12 @@ export class CreateOrEditUserModalComponent extends AppComponentBase implements 
     }
 
     onShown(): void {
-        $(this.nameInput.nativeElement).focus();
-
         this.organizationUnitTree.data = <IOrganizationUnitsTreeComponentData>{
             allOrganizationUnits: this.allOrganizationUnits,
             selectedOrganizationUnits: this.memberedOrganizationUnits
         };
+
+        document.getElementById('Name').focus();
     }
 
     save(): void {

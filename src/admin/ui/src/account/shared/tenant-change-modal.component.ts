@@ -32,7 +32,7 @@ export class TenantChangeModalComponent extends AppComponentBase {
     }
 
     onShown(): void {
-        $(this.tenancyNameInput.nativeElement).focus().select();
+        (this.tenancyNameInput.nativeElement as any).focus();
     }
 
     save(): void {

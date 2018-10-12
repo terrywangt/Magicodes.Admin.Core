@@ -6069,6 +6069,57 @@ export class NotificationServiceProxy {
         }
         return _observableOf<void>(<any>null);
     }
+
+    /**
+     * @param id (optional) 
+     * @return Success
+     */
+    deleteNotification(id: string | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/Notification/DeleteNotification?";
+        if (id !== undefined)
+            url_ += "Id=" + encodeURIComponent("" + id) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDeleteNotification(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDeleteNotification(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processDeleteNotification(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
 }
 
 @Injectable()
@@ -19323,7 +19374,7 @@ export interface IChangePasswordInput {
 }
 
 export class UpdateProfilePictureInput implements IUpdateProfilePictureInput {
-    fileName!: string;
+    fileToken!: string;
     x!: number | undefined;
     y!: number | undefined;
     width!: number | undefined;
@@ -19340,7 +19391,7 @@ export class UpdateProfilePictureInput implements IUpdateProfilePictureInput {
 
     init(data?: any) {
         if (data) {
-            this.fileName = data["fileName"];
+            this.fileToken = data["fileToken"];
             this.x = data["x"];
             this.y = data["y"];
             this.width = data["width"];
@@ -19357,7 +19408,7 @@ export class UpdateProfilePictureInput implements IUpdateProfilePictureInput {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["fileName"] = this.fileName;
+        data["fileToken"] = this.fileToken;
         data["x"] = this.x;
         data["y"] = this.y;
         data["width"] = this.width;
@@ -19367,7 +19418,7 @@ export class UpdateProfilePictureInput implements IUpdateProfilePictureInput {
 }
 
 export interface IUpdateProfilePictureInput {
-    fileName: string;
+    fileToken: string;
     x: number | undefined;
     y: number | undefined;
     width: number | undefined;
@@ -22848,7 +22899,6 @@ export class UiCustomizationMenuSettingsEditDto implements IUiCustomizationMenuS
     defaultMinimizedAside!: boolean | undefined;
     allowAsideHiding!: boolean | undefined;
     defaultHiddenAside!: boolean | undefined;
-    submenuToggle!: string | undefined;
     dropdownSubmenuSkin!: string | undefined;
     dropdownSubmenuArrow!: boolean | undefined;
 
@@ -22870,7 +22920,6 @@ export class UiCustomizationMenuSettingsEditDto implements IUiCustomizationMenuS
             this.defaultMinimizedAside = data["defaultMinimizedAside"];
             this.allowAsideHiding = data["allowAsideHiding"];
             this.defaultHiddenAside = data["defaultHiddenAside"];
-            this.submenuToggle = data["submenuToggle"];
             this.dropdownSubmenuSkin = data["dropdownSubmenuSkin"];
             this.dropdownSubmenuArrow = data["dropdownSubmenuArrow"];
         }
@@ -22892,7 +22941,6 @@ export class UiCustomizationMenuSettingsEditDto implements IUiCustomizationMenuS
         data["defaultMinimizedAside"] = this.defaultMinimizedAside;
         data["allowAsideHiding"] = this.allowAsideHiding;
         data["defaultHiddenAside"] = this.defaultHiddenAside;
-        data["submenuToggle"] = this.submenuToggle;
         data["dropdownSubmenuSkin"] = this.dropdownSubmenuSkin;
         data["dropdownSubmenuArrow"] = this.dropdownSubmenuArrow;
         return data; 
@@ -22907,7 +22955,6 @@ export interface IUiCustomizationMenuSettingsEditDto {
     defaultMinimizedAside: boolean | undefined;
     allowAsideHiding: boolean | undefined;
     defaultHiddenAside: boolean | undefined;
-    submenuToggle: string | undefined;
     dropdownSubmenuSkin: string | undefined;
     dropdownSubmenuArrow: boolean | undefined;
 }

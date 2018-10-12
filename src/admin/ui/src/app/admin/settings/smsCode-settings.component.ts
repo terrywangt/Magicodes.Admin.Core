@@ -7,7 +7,7 @@ import { SmsCodeSettingEditDto, SmsCodeSettingServiceProxy, AliSmsCodeSettingEdi
     templateUrl: './smsCode-settings.component.html',
     animations: [appModuleAnimation()]
 })
-export class SmsCodeSettingsComponent extends AppComponentBase implements  AfterViewChecked {
+export class SmsCodeSettingsComponent extends AppComponentBase implements AfterViewChecked {
     smsCodeSettings: SmsCodeSettingEditDto;
 
     constructor(
@@ -26,8 +26,8 @@ export class SmsCodeSettingsComponent extends AppComponentBase implements  After
     }
 
     ngAfterViewChecked(): void {
-        $('tabset ul.nav').addClass('m-tabs-line');
-        $('tabset ul.nav li a.nav-link').addClass('m-tabs__link');
+        // $('tabset ul.nav').addClass('m-tabs-line');
+        // $('tabset ul.nav li a.nav-link').addClass('m-tabs__link');
     }
 
     saveAll(): void {

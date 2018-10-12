@@ -48,7 +48,7 @@ export class EditTextModalComponent extends AppComponentBase {
     }
 
     onShown(): void {
-        $(this.targetValueInput.nativeElement).focus();
+        (this.targetValueInput.nativeElement as any).focus();
     }
 
     save(): void {

@@ -7,6 +7,7 @@ import { LazyLoadEvent } from 'primeng/components/common/lazyloadevent';
 import { Paginator } from 'primeng/components/paginator/paginator';
 import { Table } from 'primeng/components/table/table';
 import { Observable } from 'rxjs';
+import * as _ from 'lodash';
 
 export interface ICommonLookupModalOptions {
     title?: string;
@@ -26,7 +27,7 @@ export interface ICommonLookupModalOptions {
 export class CommonLookupModalComponent extends AppComponentBase {
 
     static defaultOptions: ICommonLookupModalOptions = {
-        dataSource: null,
+        dataSource: undefined,
         canSelect: () => true,
         loadOnStartup: true,
         isFilterEnabled: true,
@@ -53,14 +54,7 @@ export class CommonLookupModalComponent extends AppComponentBase {
     }
 
     configure(options: ICommonLookupModalOptions): void {
-        this.options = $.extend(
-            true,
-            {
-                title: this.l('SelectAnItem')
-            },
-            CommonLookupModalComponent.defaultOptions,
-            options
-        );
+        this.options = _.merge(options, CommonLookupModalComponent.defaultOptions, { title: this.l('SelectAnItem') });
     }
 
     show(): void {

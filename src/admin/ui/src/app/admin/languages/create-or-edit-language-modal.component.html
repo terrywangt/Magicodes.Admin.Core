@@ -18,8 +18,6 @@
                                 name="languageName"
                                 class="form-control"
                                 [(ngModel)]="language.name"
-                                [attr.data-live-search]="true"
-                                jq-plugin="selectpicker"
                                 required>
                             <option value="">{{emptyText}}</option>
                             <option *ngFor="let languageName of languageNames" [value]="languageName.value">{{languageName.displayText}}</option>
@@ -30,9 +28,7 @@
                         <select #iconCombobox
                                 name="languageIcon"
                                 class="form-control"
-                                [(ngModel)]="language.icon"
-                                jq-plugin="selectpicker"
-                                [attr.data-live-search]="true">
+                                [(ngModel)]="language.icon">
                             <option value="">{{emptyText}}</option>
                             <option *ngFor="let flag of flags" [value]="flag.value" [attr.data-icon]="flag.value">{{flag.displayText}}</option>
                         </select>

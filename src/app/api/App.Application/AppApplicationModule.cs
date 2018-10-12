@@ -15,9 +15,6 @@
 //   
 // ======================================================================
 
-using System;
-using System.Reflection;
-using System.Text;
 using Abp.Modules;
 using Magicodes.Admin;
 using Magicodes.Admin.Configuration;
@@ -27,6 +24,9 @@ using Magicodes.Sms;
 using Magicodes.Sms.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using System;
+using System.Reflection;
+using System.Text;
 
 namespace Magicodes.App.Application
 {
@@ -52,7 +52,9 @@ namespace Magicodes.App.Application
 
             if (appConfiguration["Authentication:JwtBearer:IsEnabled"] != null &&
                 bool.Parse(appConfiguration["Authentication:JwtBearer:IsEnabled"]))
+            {
                 ConfigureTokenAuth(appConfiguration);
+            }
         }
 
         private void ConfigureTokenAuth(IConfigurationRoot appConfiguration)
@@ -67,7 +69,8 @@ namespace Magicodes.App.Application
             tokenAuthConfig.Audience = appConfiguration["Authentication:JwtBearer:Audience"];
             tokenAuthConfig.SigningCredentials =
                 new SigningCredentials(tokenAuthConfig.SecurityKey, SecurityAlgorithms.HmacSha256);
-            tokenAuthConfig.Expiration = TimeSpan.FromDays(1);
+            //默认为90天
+            tokenAuthConfig.Expiration = TimeSpan.FromDays(Convert.ToInt32(appConfiguration["Authentication:JwtBearer:ExpirationDays"] ?? "90"));
         }
     }
 }

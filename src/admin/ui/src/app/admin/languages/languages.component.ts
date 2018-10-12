@@ -21,7 +21,6 @@ export class LanguagesComponent extends AppComponentBase {
     @ViewChild('paginator') paginator: Paginator;
 
     defaultLanguageName: string;
-    private _$languagesTable: JQuery;
 
     constructor(
         injector: Injector,

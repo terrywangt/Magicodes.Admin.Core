@@ -1,4 +1,4 @@
-import { AfterViewChecked, AfterViewInit, Component, Injector, OnInit } from '@angular/core';
+import { Component, Injector, OnInit } from '@angular/core';
 import { appModuleAnimation } from '@shared/animations/routerTransition';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { CachingServiceProxy, EntityDtoOfString, WebLogServiceProxy } from '@shared/service-proxies/service-proxies';
@@ -11,7 +11,7 @@ import { finalize } from 'rxjs/operators';
     styleUrls: ['./maintenance.component.less'],
     animations: [appModuleAnimation()]
 })
-export class MaintenanceComponent extends AppComponentBase implements OnInit, AfterViewInit, AfterViewChecked {
+export class MaintenanceComponent extends AppComponentBase implements OnInit {
 
     loading = false;
     caches: any = null;
@@ -23,12 +23,6 @@ export class MaintenanceComponent extends AppComponentBase implements OnInit, Af
         private _webLogService: WebLogServiceProxy,
         private _fileDownloadService: FileDownloadService) {
         super(injector);
-    }
-
-    ngAfterViewChecked(): void {
-        //Temporary fix for: https://github.com/valor-software/ngx-bootstrap/issues/1508
-        $('tabset ul.nav').addClass('m-tabs-line');
-        $('tabset ul.nav li a.nav-link').addClass('m-tabs__link');
     }
 
     getCaches(): void {
@@ -76,23 +70,23 @@ export class MaintenanceComponent extends AppComponentBase implements OnInit, Af
     getLogClass(log: string): string {
 
         if (log.startsWith('DEBUG')) {
-            return 'label label-default';
+            return 'm-badge m-badge--wide m-badge--default';
         }
 
         if (log.startsWith('INFO')) {
-            return 'label label-info';
+            return 'm-badge m-badge--wide m-badge--info';
         }
 
         if (log.startsWith('WARN')) {
-            return 'label label-warning';
+            return 'm-badge m-badge--wide m-badge--warning';
         }
 
         if (log.startsWith('ERROR')) {
-            return 'label label-danger';
+            return 'm-badge m-badge--wide m-badge--danger';
         }
 
         if (log.startsWith('FATAL')) {
-            return 'label label-danger';
+            return 'm-badge m-badge--wide m-badge--danger';
         }
 
         return '';
@@ -132,17 +126,16 @@ export class MaintenanceComponent extends AppComponentBase implements OnInit, Af
     }
 
     fixWebLogsPanelHeight(): void {
-        const windowHeight = $(window).height();
-        const panelHeight = $('.full-height').height();
+        let panel = document.getElementsByClassName('full-height')[0];
+        const windowHeight = document.body.clientHeight;
+        const panelHeight = panel.clientHeight;
         const difference = windowHeight - panelHeight;
         const fixedHeight = panelHeight + difference;
-        $('.full-height').css('height', (fixedHeight - 350) + 'px');
+        (panel as any).style.height = (fixedHeight - 420) + 'px';
     }
 
-    ngAfterViewInit(): void {
-        $(window).bind('resize', () => {
-            this.fixWebLogsPanelHeight();
-        });
+    onResize(event): void {
+        this.fixWebLogsPanelHeight();
     }
 
     ngOnInit(): void {

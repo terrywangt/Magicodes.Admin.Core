@@ -1,4 +1,4 @@
-.primeng-datatable-container div.ui-chkbox-box {
+﻿.primeng-datatable-container div.ui-chkbox-box {
   color: #57625F !important;
 }
 .primeng-datatable-container div.ui-chkbox-box.ui-state-active {
@@ -28,11 +28,11 @@
   color: #58DCC2 !important;
 }
 .primeng-paging-container .ui-paginator span a.ui-state-active {
-  background: #6ACAB6;
+  background-color: #6ACAB6 !important;
   color: #fff !important;
 }
 .primeng-paging-container .ui-paginator span a:hover {
-  background-color: #DCF3EE;
+  background-color: #DCF3EE !important;
 }
 .primeng-paging-container .ui-paginator span a:hover.ui-state-active {
   background-color: #8BD9C9 !important;

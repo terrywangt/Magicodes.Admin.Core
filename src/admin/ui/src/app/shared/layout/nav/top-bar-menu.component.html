@@ -1,171 +1,98 @@
-<div class="{{ui.getTopBarMenuClass()}}">
-    <div class="m-stack m-stack--ver m-stack--desktop">
-        <!-- begin::Horizontal Menu -->
-        <div class="m-stack__item m-stack__item--middle m-stack__item--fluid">
-            <button class="m-aside-header-menu-mobile-close  m-aside-header-menu-mobile-close--skin-light " id="m_aside_header_menu_mobile_close_btn">
-                <i class="la la-close"></i>
-            </button>
-            <nav id="m_header_menu" class="m-header-menu m-aside-header-menu-mobile m-aside-header-menu-mobile--offcanvas  m-header-menu--skin-dark m-header-menu--submenu-skin-light m-aside-header-menu-mobile--skin-light m-aside-header-menu-mobile--submenu-skin-light "
-                 [attr.aria-label]="l('TopMenu')">
-                <ul class="m-menu__nav m-menu__nav--submenu-arrow" [attr.aria-label]="l('TopMenu')" role="menubar">
-                    <ng-template ngFor let-menuItem [ngForOf]="menu.items" let-mainMenuItemIndex="index">
-                        <li *ngIf="showMenuItem(menuItem)" routerLinkActive="m-menu__item--active" class="m-menu__item m-menu__item--submenu" [ngClass]="{'m-menu__item--expanded m-menu__item--open': menuItem.items.length >  0}" aria-haspopup="true" data-menu-submenu-toggle="hover">
-
-                            <a [routerLink]="[menuItem.route]" *ngIf="!menuItem.items.length && !menuItem.external" class="m-menu__link m-menu__toggle"
-                               role="menuitem"
-                               aria-haspopup="true"
-                               aria-expanded="false"
-                               [attr.tabindex]="mainMenuItemIndex == 0 ? 0 : -1">
-                                <i class="m-menu__link-icon {{menuItem.icon}}"></i>
-                                <span class="m-menu__link-text">
-                                    <span class="title">{{l(menuItem.name)}}</span>
-                                </span>
-                            </a>
-
-                            <a [attr.href]="[menuItem.route]" *ngIf="!menuItem.items.length && menuItem.external" class="m-menu__link" target="_blank"
-                               role="menuitem"
-                               aria-haspopup="true"
-                               aria-expanded="false"
-                               [attr.tabindex]="mainMenuItemIndex == 0 ? 0 : -1">
-                                <i class="m-menu__link-icon {{menuItem.icon}}"></i>
-                                <span class="m-menu__link-text">
-                                    <span class="title">{{l(menuItem.name)}}</span>
-                                </span>
-                            </a>
-
-                            <a href="javascript:;" *ngIf="menuItem.items.length" class="m-menu__link m-menu__toggle"
-                               role="menuitem"
-                               aria-haspopup="true"
-                               aria-expanded="false"
-                               [attr.tabindex]="mainMenuItemIndex == 0 ? 0 : -1">
-                                <i class="m-menu__link-icon {{menuItem.icon}}"></i>
-                                <span class="m-menu__link-text">
-                                    <span class="title">{{l(menuItem.name)}}</span>
-                                </span>
-                                <i class="m-menu__hor-arrow la la-angle-down"></i>
-                            </a>
-                            <nav class="m-menu__submenu m-menu__submenu--classic" *ngIf="menuItem.items.length" [attr.aria-label]="l(menuItem.name)">
-                                <span class="m-menu__arrow m-menu__arrow--adjust"></span>
-                                <ul class="m-menu__subnav"
-                                    [attr.aria-label]="l(menuItem.name)"
-                                    role="menu">
-                                    <ng-template ngFor let-childMenuItem [ngForOf]="menuItem.items" let-mainMenuItemIndex="index">
-                                        <li *ngIf="showMenuItem(childMenuItem)" routerLinkActive="m-menu__item--active" class="m-menu__item m-menu__item--submenu"
-                                            aria-haspopup="true"
-                                            role="none"
-                                            data-menu-submenu-toggle="hover">
-                                            <a [routerLink]="[childMenuItem.route]" *ngIf="!childMenuItem.items.length && !childMenuItem.external" class="m-menu__link m-menu__toggle"
-                                               role="menuitem"
-                                               aria-haspopup="true"
-                                               aria-expanded="false"
-                                               tabindex="-1">
-                                                <i class="m-menu__link-icon {{childMenuItem.icon}}"></i>
-                                                <span class="m-menu__link-text">
-                                                    <span class="title">{{l(childMenuItem.name)}}</span>
-                                                </span>
-                                            </a>
-                                            <a [attr.href]="[childMenuItem.route]" *ngIf="!childMenuItem.items.length && childMenuItem.external" class="m-menu__link" target="_blank"
-                                               role="menuitem"
-                                               aria-haspopup="true"
-                                               aria-expanded="false"
-                                               tabindex="-1">
-                                                <i class="m-menu__link-icon {{childMenuItem.icon}}"></i>
-                                                <span class="m-menu__link-text">
-                                                    <span class="title">{{l(childMenuItem.name)}}</span>
-                                                </span>
-                                            </a>
-                                            <a href="javascript:;" class="m-menu__link m-menu__toggle" *ngIf="childMenuItem.items.length"
-                                               role="menuitem"
-                                               aria-haspopup="true"
-                                               aria-expanded="false"
-                                               tabindex="-1">
-                                                <i class="m-menu__link-icon {{childMenuItem.icon}}"></i>
-                                                <span class="title">{{l(childMenuItem.name)}}</span>
-                                                <i class="m-menu__hor-arrow la la-angle-right"></i>
-                                                <i class="m-menu__ver-arrow la la-angle-right"></i>
-                                            </a>
-                                            <nav class="m-menu__submenu m-menu__submenu--classic m-menu__submenu--right" *ngIf="menuItem.items.length"
-                                                 [attr.aria-label]="l(menuItem.name)">
-                                                <span class="m-menu__arrow" *ngIf="childMenuItem.items.length"></span>
-                                                <ul class="m-menu__subnav" *ngIf="childMenuItem.items.length"
-                                                    [attr.aria-label]="l(menuItem.name)"
-                                                    role="menu">
-                                                    <!-- Menu Level 3 -->
-                                                    <ng-template ngFor let-childOfChildMenuItem [ngForOf]="childMenuItem.items" let-childOfChildMenuItemIndex="index">
-                                                        <li *ngIf="showMenuItem(childOfChildMenuItem)" routerLinkActive="m-menu__item--active " class="m-menu__item m-menu__item--submenu m-menu__item--hover" aria-haspopup="true" data-menu-submenu-toggle="hover" role="none">
-                                                            <a [routerLink]="[childOfChildMenuItem.route]" *ngIf="!childOfChildMenuItem.items.length && !childOfChildMenuItem.external"
-                                                               role="menuitem"
-                                                               aria-haspopup="true"
-                                                               aria-expanded="false"
-                                                               tabindex="-1">
-                                                                <i class="m-menu__link-icon {{childOfChildMenuItem.icon}}"></i>
-                                                                <span class="title">{{l(childOfChildMenuItem.name)}}</span>
-                                                            </a>
-                                                            <a [attr.href]="[childOfChildMenuItem.route]" *ngIf="!childOfChildMenuItem.items.length && childOfChildMenuItem.external" target="_blank"
-                                                               role="menuitem"
-                                                               aria-haspopup="true"
-                                                               aria-expanded="false"
-                                                               tabindex="-1">
-                                                                <i class="m-menu__link-icon {{childOfChildMenuItem.icon}}"></i>
-                                                                <span class="title">{{l(childOfChildMenuItem.name)}}</span>
-                                                            </a>
-                                                            <a href="javascript:;" class="m-menu__link m-menu__toggle" *ngIf="childOfChildMenuItem.items.length"
-                                                               role="menuitem"
-                                                               aria-haspopup="true"
-                                                               aria-expanded="false"
-                                                               tabindex="-1">
-                                                                <i class="m-menu__link-icon {{childOfChildMenuItem.icon}}"></i>
-                                                                <span class="m-menu__link-text">
-                                                                    <span class="title">{{l(childOfChildMenuItem.name)}}</span>
-                                                                </span>
-                                                                <i class="m-menu__hor-arrow la la-angle-right"></i>
-                                                                <i class="m-menu__ver-arrow la la-angle-right"></i>
-                                                            </a>
-                                                            <nav class="m-menu__submenu m-menu__submenu--classic m-menu__submenu--right" *ngIf="menuItem.items.length" [attr.aria-label]="l(menuItem.name)">
-                                                                <span class="m-menu__arrow" *ngIf="childMenuItem.items.length"></span>
-                                                                <ul class="m-menu__subnav" *ngIf="childOfChildMenuItem.items.length"
-                                                                    [attr.aria-label]="l(menuItem.name)"
-                                                                    role="menu">
-                                                                    <!-- Menu Level 4 -->
-                                                                    <ng-template ngFor let-childOfChildOfChildMenuItem [ngForOf]="childOfChildMenuItem.items" let-childOfChildMenuItemIndex="index">
-                                                                        <li *ngIf="showMenuItem(childOfChildOfChildMenuItem)" routerLinkActive="m-menu__item--active " class="m-menu__item m-menu__item--submenu" role="none">
-                                                                            <a [routerLink]="[childOfChildOfChildMenuItem.route]" *ngIf="!childOfChildOfChildMenuItem.external" class="m-menu__link"
-                                                                               role="menuitem"
-                                                                               aria-haspopup="true"
-                                                                               aria-expanded="false"
-                                                                               tabindex="-1">
-                                                                                <i class="m-menu__link-icon {{childOfChildOfChildMenuItem.icon}}"></i>
-                                                                                <span class="m-menu__link-text">
-                                                                                    <span class="title">{{l(childOfChildOfChildMenuItem.name)}}</span>
-                                                                                </span>
-                                                                            </a>
-                                                                            <a [attr.href]="[childOfChildOfChildMenuItem.route]" *ngIf="childOfChildOfChildMenuItem.external" class="m-menu__link" target="_blank"
-                                                                               role="menuitem"
-                                                                               aria-haspopup="true"
-                                                                               aria-expanded="false"
-                                                                               tabindex="-1">
-                                                                                <i class="m-menu__link-icon {{childOfChildOfChildMenuItem.icon}}"></i>
-                                                                                <span class="m-menu__link-text">
-                                                                                    <span class="title">{{l(childOfChildOfChildMenuItem.name)}}</span>
-                                                                                </span>
-                                                                            </a>
-                                                                        </li>
-                                                                    </ng-template>
-                                                                </ul>
-                                                            </nav>
-                                                        </li>
-                                                    </ng-template>
-                                                </ul>
-                                            </nav>
-                                        </li>
-                                    </ng-template>
-                                </ul>
-                            </nav>
-                        </li>
-                    </ng-template>
-                </ul>
-            </nav>
-        </div>
-        <!-- end::Horizontal Menu -->
-    </div>
+<!-- BEGIN: Horizontal Menu -->
+<!-- <div mMenuHorOffcanvas id="m_header_menu" class="m-header-menu m-aside-header-menu-mobile m-aside-header-menu-mobile--offcanvas  m-header-menu--skin-light m-header-menu--submenu-skin-light m-aside-header-menu-mobile--skin-dark m-aside-header-menu-mobile--submenu-skin-dark "> -->
+<div class="{{ui.getTopBarMenuClass()}}" id="m_header_menu" #m_header_menu>
+    <ul class="m-menu__nav m-menu__nav--submenu-arrow">
+        <ng-container *ngFor="let item of menu.items">
+            <ng-container *ngIf="item.name" [ngTemplateOutlet]="m_menu" [ngTemplateOutletContext]="{ item: item }">
+            </ng-container>
+        </ng-container>
+    </ul>
 </div>
+<!-- </div> -->
+<!-- END: Horizontal Menu -->
+
+
+<ng-template #m_menu let-item="item" let-parentItem="parentItem">
+    <li attr.aria-haspopup="true"
+        [attr.m-menu-submenu-toggle]="getItemAttrSubmenuToggle(item)"
+        class="{{ getItemCssClasses(item) }}"
+        *ngIf="showMenuItem(item)"
+        routerLinkActive="m-menu__item--active">
+
+        <!-- if item has submenu -->
+        <ng-container *ngIf="item.items.length">
+            <a href="javascript:;" [ngClass]="{ 'm-menu__toggle': !parentItem }" class="m-menu__link">
+
+                <ng-container [ngTemplateOutlet]="m_menu_item_inner" [ngTemplateOutletContext]="{ item: item, parentItem: parentItem }"></ng-container>
+
+                <!-- arrow icons -->
+                <i *ngIf="item.items.length && !parentItem" class="m-menu__hor-arrow la la-angle-down"></i>
+                <i *ngIf="item.items.length && !parentItem" class="m-menu__ver-arrow la la-angle-right"></i>
+                <!-- else arrow icons -->
+                <i *ngIf="item.items.length && parentItem" class="m-menu__hor-arrow la la-angle-right"></i>
+                <i *ngIf="item.items.length && parentItem" class="m-menu__ver-arrow la la-angle-right"></i>
+            </a>
+        </ng-container>
+
+        <!-- if item hasn't sumbenu -->
+        <ng-container *ngIf="!item.items.length">
+            <a *ngIf="!item.external" [routerLink]="item.route" [queryParams]="item.parameters" [ngClass]="{ 'm-menu__toggle': !parentItem }" class="m-menu__link">
+                <ng-container [ngTemplateOutlet]="m_menu_item_inner" [ngTemplateOutletContext]="{ item: item, parentItem: parentItem }"></ng-container>
+            </a>
+            <a *ngIf="item.external" [attr.href]="[item.route]" target="_blank" class="m-menu__link">
+                <ng-container [ngTemplateOutlet]="m_menu_item_inner" [ngTemplateOutletContext]="{ item: item, parentItem: parentItem }"></ng-container>
+            </a>
+        </ng-container>
+
+        <!-- if menu item has submenu child then recursively call new menu item component -->
+        <ng-container *ngIf="item.items.length">
+            <div class="m-menu__submenu">
+                <span class="m-menu__arrow" [ngClass]="{ 'm-menu__arrow--adjust': !parentItem }"></span>
+                <ul *ngIf="item.items.length" class="m-menu__subnav">
+                    <ng-container *ngFor="let child of item.items">
+
+                        <ng-container [ngTemplateOutlet]="m_menu" [ngTemplateOutletContext]="{ item: child, parentItem: item }">
+                        </ng-container>
+
+                    </ng-container>
+                </ul>
+            </div>
+        </ng-container>
+    </li>
+</ng-template>
+
+<!-- item inner -->
+<ng-template #m_menu_item_inner let-item="item" let-parentItem="parentItem">
+    <!-- if menu item has icon -->
+    <i *ngIf="item.icon" class="m-menu__link-icon" [ngClass]="item.icon"></i>
+
+    <ng-container>
+        <span class="m-menu__item-here"></span>
+        <!-- menu item title text -->
+        <span class="m-menu__link-text">
+            {{l(item.name)}}
+        </span>
+    </ng-container>
+</ng-template>
+
+<!-- item column -->
+<ng-template #m_menu_column let-item="item">
+    <li class="m-menu__item">
+        <!-- <li class="m-menu__item"> -->
+        <h3 class="m-menu__heading m-menu__toggle">
+            <span class="m-menu__link-text">
+                {{item.heading.title}}
+            </span>
+            <i class="m-menu__ver-arrow la la-angle-right"></i>
+        </h3>
+        <ng-container *ngIf="item.items">
+            <ul class="m-menu__inner">
+                <ng-container *ngFor="let child of item.items">
+                    <ng-container [ngTemplateOutlet]="m_menu" [ngTemplateOutletContext]="{ item: child, parentItem: item }">
+                    </ng-container>
+                </ng-container>
+            </ul>
+        </ng-container>
+        <!-- </li> -->
+    </li>
+</ng-template>

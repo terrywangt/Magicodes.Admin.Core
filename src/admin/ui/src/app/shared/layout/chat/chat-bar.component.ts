@@ -1,13 +1,11 @@
-import { AfterViewInit, Component, EventEmitter, Injector, OnInit, Output, ViewChild, ViewEncapsulation, NgZone } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Injector, OnInit, Output, ViewChild, ViewEncapsulation, NgZone, HostBinding, ElementRef } from '@angular/core';
 import { CommonLookupModalComponent } from '@app/shared/common/lookup/common-lookup-modal.component';
 import { AppConsts } from '@shared/AppConsts';
 import { AppChatMessageReadState, AppChatSide, AppFriendshipState } from '@shared/AppEnums';
 import { AppComponentBase } from '@shared/common/app-component-base';
-import { AppSessionService } from '@shared/common/session/app-session.service';
 import { DomHelper } from '@shared/helpers/DomHelper';
 import { BlockUserInput, ChatMessageDtoSide, ChatServiceProxy, CommonLookupServiceProxy, CreateFriendshipRequestByUserNameInput, CreateFriendshipRequestInput, FindUsersInput, FriendDto, FriendDtoState, FriendshipServiceProxy, MarkAllUnreadMessagesOfUserAsReadInput, NameValueDto, ProfileServiceProxy, UnblockUserInput, UserLoginInfoDto } from '@shared/service-proxies/service-proxies';
 import { LocalStorageService } from '@shared/utils/local-storage.service';
-import { QuickSideBarChat } from 'app/shared/layout/chat/QuickSideBarChat';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { ChatFriendDto } from './ChatFriendDto';
@@ -27,14 +25,23 @@ export class ChatBarComponent extends AppComponentBase implements OnInit, AfterV
     uploadUrl: string;
     isFileSelected = false;
 
+    @HostBinding('id') id = 'm_quick_sidebar';
+    @HostBinding('class')
+    classes = 'm-quick-sidebar m-quick-sidebar--tabbed m-quick-sidebar--skin-light';
+    @HostBinding('attr.mQuickSidebarOffcanvas')
+
+    @HostBinding('style.overflow') styleOverflow: any = 'hidden';
+
+    mQuickSidebarOffcanvas: any;
 
     @ViewChild('userLookupModal') userLookupModal: CommonLookupModalComponent;
-    $_chatMessageInput: JQuery;
+    @ViewChild('ChatMessage') chatMessageInput: ElementRef;
+    @ViewChild('chatScrollBar') chatScrollBar;
 
     friendDtoState: typeof AppFriendshipState = AppFriendshipState;
 
     friends: ChatFriendDto[];
-    currentUser: UserLoginInfoDto = this._appSessionService.user;
+    currentUser: UserLoginInfoDto = this.appSession.user;
     profilePicture = AppConsts.appBaseUrl + '/assets/common/images/default-profile-picture.png';
     chatMessage = '';
 
@@ -61,9 +68,8 @@ export class ChatBarComponent extends AppComponentBase implements OnInit, AfterV
         if (newValue) {
             this.markAllUnreadMessagesOfUserAsRead(this.selectedUser);
         }
-
-        this.adjustNotifyPosition();
     }
+
     get isOpen(): boolean {
         return this._isOpen;
     }
@@ -101,15 +107,15 @@ export class ChatBarComponent extends AppComponentBase implements OnInit, AfterV
     }
 
 
-    constructor(injector: Injector,
-        private _appSessionService: AppSessionService,
+    constructor(
+        private el: ElementRef,
+        injector: Injector,
         private _friendshipService: FriendshipServiceProxy,
         private _chatService: ChatServiceProxy,
         private _commonLookupService: CommonLookupServiceProxy,
         private _localStorageService: LocalStorageService,
         private _chatSignalrService: ChatSignalrService,
         private _profileService: ProfileServiceProxy,
-        private _quickSideBarChat: QuickSideBarChat,
         public _zone: NgZone) {
         super(injector);
         this.uploadUrl = AppConsts.remoteServiceBaseUrl + '/Chat/UploadFile';
@@ -118,11 +124,6 @@ export class ChatBarComponent extends AppComponentBase implements OnInit, AfterV
     shareCurrentLink() {
         this.chatMessage = '[link]{"message":"' + window.location.href + '"}';
         this.sendMessage();
-        $('#chatDropdownToggle').dropdown('toggle');
-    }
-
-    onFileSelect() {
-        $('#chatDropdownToggle').dropdown('toggle');
     }
 
     onUploadImage(event): void {
@@ -260,7 +261,7 @@ export class ChatBarComponent extends AppComponentBase implements OnInit, AfterV
         const userId = item.value;
         const input = new CreateFriendshipRequestInput();
         input.userId = parseInt(userId);
-        input.tenantId = this._appSessionService.tenant ? this._appSessionService.tenant.id : null;
+        input.tenantId = this.appSession.tenant ? this.appSession.tenant.id : null;
 
         this._friendshipService.createFriendshipRequest(input).subscribe(() => {
             this.userNameFilter = '';
@@ -279,7 +280,7 @@ export class ChatBarComponent extends AppComponentBase implements OnInit, AfterV
         }
 
         if (!input.tenancyName || !this.interTenantChatAllowed) {
-            const tenantId = this._appSessionService.tenant ? this._appSessionService.tenant.id : null;
+            const tenantId = this.appSession.tenant ? this.appSession.tenant.id : null;
             this.openSearchModal(input.userName, tenantId);
         } else {
             this._friendshipService.createFriendshipRequestByUserName(input).subscribe(() => {
@@ -320,15 +321,6 @@ export class ChatBarComponent extends AppComponentBase implements OnInit, AfterV
         return moment(messageTime).add(-1 * this.serverClientTimeDifference, 'seconds').format('YYYY-MM-DDTHH:mm:ssZ');
     }
 
-    changeNotifyPosition(positionClass: string): void {
-        if (!toastr) {
-            return;
-        }
-
-        toastr.clear();
-        toastr.options.positionClass = positionClass;
-    }
-
     getFriendsAndSettings(callback: any): void {
         this._chatService.getUserChatFriendsWithSettings().subscribe(result => {
             this.friends = (result.friends as ChatFriendDto[]);
@@ -341,22 +333,13 @@ export class ChatBarComponent extends AppComponentBase implements OnInit, AfterV
 
     scrollToBottom(): void {
         setTimeout(() => {
-            this.scrollToBottomInternal();
-        }, 100);
-    }
-
-    scrollToBottomInternal(): void {
-        DomHelper.waitUntilElementIsVisible('.m-messenger-conversation .m-messenger__messages', () => {
-            setTimeout(() => {
-                const $scrollArea = $('.m-messenger-conversation .m-messenger__messages');
-                const scrollToVal = $scrollArea.prop('scrollHeight') + 'px';
-                $scrollArea.slimScroll({ scrollTo: scrollToVal }); 
-            });
+            this.chatScrollBar.directiveRef.scrollToBottom();
         });
     }
 
     loadLastState(): void {
         const self = this;
+
         self._localStorageService.getItem('app.chat.isOpen', (err, isOpen) => {
             self.isOpen = isOpen;
 
@@ -365,13 +348,10 @@ export class ChatBarComponent extends AppComponentBase implements OnInit, AfterV
             });
 
             if (isOpen) {
-                self._quickSideBarChat.show();
+                this.mQuickSidebarOffcanvas.show();
                 self._localStorageService.getItem('app.chat.selectedUser', (err, selectedUser) => {
                     if (selectedUser && selectedUser.friendUserId) {
-                        self.showMessagesPanel();
                         self.selectFriend(selectedUser);
-                    } else {
-                        self.showFriendsPanel();
                     }
                 });
             }
@@ -388,59 +368,54 @@ export class ChatBarComponent extends AppComponentBase implements OnInit, AfterV
 
         this.chatMessage = '';
 
-        this.showMessagesPanel();
-
         if (!chatUser.messagesLoaded) {
             this.loadMessages(chatUser, () => {
                 chatUser.messagesLoaded = true;
+                this.adjustChatScrollbarHeight();
                 this.scrollToBottom();
-                this.$_chatMessageInput.focus();
+                this.chatMessageInput.nativeElement.focus();
             });
         } else {
             this.markAllUnreadMessagesOfUserAsRead(this.selectedUser);
+            this.adjustChatScrollbarHeight();
             this.scrollToBottom();
-            this.$_chatMessageInput.focus();
+            this.chatMessageInput.nativeElement.focus();
         }
     }
 
-    showMessagesPanel(): void {
-        $('.m-messenger-friends').hide();
-        $('.m-messenger-conversation').show(() => {
-            this.initConversationScrollbar();
-        });
-        $('#m_quick_sidebar_back').removeClass('d-none');
+    adjustChatScrollbarHeight(): void {
+        if (!this.selectedUser.friendUserId) {
+            return;
+        }
+
+        let height =
+            document.getElementById('m_quick_sidebar').clientHeight -
+            document.getElementsByClassName('selected-chat-user')[0].clientHeight -
+            document.getElementById('ChatMessage').clientHeight -
+            150;
+
+        this.chatScrollBar.directiveRef.elementRef.nativeElement.parentElement.style.height = height + 'px';
     }
 
-    showFriendsPanel(): void {
-        $('.m-messenger-friends').show();
-        $('.m-messenger-conversation').hide();
-        $('#m_quick_sidebar_back').addClass('d-none');
-    }
+    sendMessage(event?: any): void {
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
 
-    initConversationScrollbar(): void {
-        let $messengerMessages = $('.m-messenger-conversation .m-messenger__messages');
-        let height = $('#m_quick_sidebar').outerHeight(true) - $('.selected-chat-user').outerHeight(true) - $('#ChatMessage').height() - 150;
-
-        $messengerMessages.slimScroll({ destroy: true });
-        $messengerMessages.slimScroll({
-            height: height
-        });
-    }
-
-    sendMessage(): void {
         if (!this.chatMessage) {
             return;
         }
 
         this.sendingMessage = true;
-        const tenancyName = this._appSessionService.tenant ? this._appSessionService.tenant.tenancyName : null;
+        const tenancyName = this.appSession.tenant ? this.appSession.tenant.tenancyName : null;
         this._chatSignalrService.sendMessage({
             tenantId: this.selectedUser.friendTenantId,
             userId: this.selectedUser.friendUserId,
             message: this.chatMessage,
             tenancyName: tenancyName,
-            userName: this._appSessionService.user.userName,
-            profilePictureId: this._appSessionService.user.profilePictureId
+            userName: this.appSession.user.userName,
+            profilePictureId: this.appSession.user.profilePictureId
         }, () => {
             this.chatMessage = '';
             this.sendingMessage = false;
@@ -451,50 +426,33 @@ export class ChatBarComponent extends AppComponentBase implements OnInit, AfterV
         this.pinned = !this.pinned;
     }
 
-    bindUiEvents(): void {
-        const self = this;
-        self._quickSideBarChat.init((e, pos) => {
-            if (pos === 0 && !this.selectedUser.allPreviousMessagesLoaded && !this.loadingPreviousUserMessages) {
-                self.loadMessages(self.selectedUser, null);
-            }
-        });
-
-        const $backToList = $('#m_quick_sidebar_back');
-        $backToList.on('click', () => {
-            self.selectedUser = new ChatFriendDto();
-            this.showFriendsPanel();
-        });
-
-        const $sidebarTogglers = $('#m_quick_sidebar_toggle');
-        $sidebarTogglers.on('click', () => {
-            this.isOpen = $('body').hasClass('m-quick-sidebar--on');
-        });
-
-        $('div.m-quick-sidebar').on('mouseleave', (e) => {
-            if (this.pinned || (e.target && $(e.target).attr("data-toggle") === 'm-popover')) { // don't hide chat panel when mouse is on popover notification
-                return;
-            }
-
-            self._quickSideBarChat.hide();
-            this.isOpen = false;
-            this.adjustNotifyPosition();
-        });
-
-        $(window as any).on('resize', () => {
-            this.initConversationScrollbar();
-        });
+    quickSideBarBackClick(): void {
+        this.selectedUser = new ChatFriendDto();
     }
 
     ngAfterViewInit(): void {
-        this.$_chatMessageInput = $('#ChatMessage');
-    }
+        this.mQuickSidebarOffcanvas = new mOffcanvas(this.el.nativeElement, {
+            overlay: true,
+            baseClass: 'm-quick-sidebar',
+            closeBy: 'm_quick_sidebar_close',
+            toggleBy: 'm_quick_sidebar_toggle'
+        });
 
-    adjustNotifyPosition(): void {
-        if (this.isOpen) {
-            this.changeNotifyPosition('toast-chat-open');
-        } else {
-            this.changeNotifyPosition('toast-bottom-right');
-        }
+        this.mQuickSidebarOffcanvas.events.push({
+            name: 'afterHide',
+            handler: () => {
+                if (this._pinned) {
+                    this.mQuickSidebarOffcanvas.show();
+                } else {
+                    this.isOpen = false;
+                }
+            }
+        }, {
+                name: 'afterShow',
+                handler: () => {
+                    this.isOpen = true;
+                }
+            });
     }
 
     triggerUnreadMessageCountChangeEvent(): void {
@@ -532,12 +490,10 @@ export class ChatBarComponent extends AppComponentBase implements OnInit, AfterV
                         null,
                         {
                             onclick() {
-                                if (!$('body').hasClass('m-quick-sidebar--on')) {
-                                    self._quickSideBarChat.show();
+                                if (document.body.className.indexOf('m-quick-sidebar--on') < 0) {
+                                    self.showChatPanel();
                                     self.isOpen = true;
                                 }
-
-                                self.showMessagesPanel();
 
                                 self.selectFriend(user);
                                 self.pinned = true;
@@ -623,10 +579,9 @@ export class ChatBarComponent extends AppComponentBase implements OnInit, AfterV
                 return;
             }
 
-            $.each(user.messages,
-                (index, message) => {
-                    message.receiverReadState = AppChatMessageReadState.Read;
-                });
+            _.forEach(user.messages, message => {
+                message.receiverReadState = AppChatMessageReadState.Read;
+            });
         }
 
         abp.event.on('app.chat.readStateChange', data => {
@@ -637,12 +592,8 @@ export class ChatBarComponent extends AppComponentBase implements OnInit, AfterV
 
         function onConnected() {
             self.getFriendsAndSettings(() => {
-                DomHelper.waitUntilElementIsReady('#m_quick_sidebar, #m_quick_sidebar_toggle', () => {
-                    self.bindUiEvents();
-
-                    DomHelper.waitUntilElementIsReady('.m-quick-sidebar', () => {
-                        self.loadLastState();
-                    });
+                DomHelper.waitUntilElementIsReady('#m_quick_sidebar', () => {
+                    self.loadLastState();
                 });
             });
         }
@@ -652,6 +603,15 @@ export class ChatBarComponent extends AppComponentBase implements OnInit, AfterV
                 onConnected();
             });
         });
+    }
+
+    showChatPanel(): void {
+        document.body.className += ' m-quick-sidebar--on';
+        document.getElementById('m_quick_sidebar').className += ' m-quick-sidebar--on';
+    }
+
+    onWindowResize(event): void {
+        this.adjustChatScrollbarHeight();
     }
 
     init(): void {
@@ -672,6 +632,6 @@ export class ChatBarComponent extends AppComponentBase implements OnInit, AfterV
 
         this.tenantToTenantChatAllowed = this.feature.isEnabled('App.ChatFeature.TenantToTenant');
         this.tenantToHostChatAllowed = this.feature.isEnabled('App.ChatFeature.TenantToHost');
-        this.interTenantChatAllowed = this.feature.isEnabled('App.ChatFeature.TenantToTenant') || this.feature.isEnabled('App.ChatFeature.TenantToHost') || !this._appSessionService.tenant;
+        this.interTenantChatAllowed = this.feature.isEnabled('App.ChatFeature.TenantToTenant') || this.feature.isEnabled('App.ChatFeature.TenantToHost') || !this.appSession.tenant;
     }
 }

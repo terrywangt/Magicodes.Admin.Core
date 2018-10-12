@@ -3,7 +3,6 @@ import * as ngCommon from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule, JsonpModule } from '@angular/http';
-import { QuickSideBarChat } from '@app/shared/layout/chat/QuickSideBarChat';
 import { ChatSignalrService } from '@app/shared/layout/chat/chat-signalr.service';
 import { LinkAccountModalComponent } from '@app/shared/layout/link-account-modal.component';
 import { LinkedAccountsModalComponent } from '@app/shared/layout/linked-accounts-modal.component';
@@ -15,7 +14,7 @@ import { SmsVerificationModalComponent } from '@app/shared/layout/profile/sms-ve
 import { ServiceProxyModule } from '@shared/service-proxies/service-proxy.module';
 import { UtilsModule } from '@shared/utils/utils.module';
 import { FileUploadModule } from 'ng2-file-upload';
-import { ModalModule, TabsModule, TooltipModule } from 'ngx-bootstrap';
+import { ModalModule, TabsModule, TooltipModule, BsDropdownModule } from 'ngx-bootstrap';
 import { FileUploadModule as PrimeNgFileUploadModule, PaginatorModule, ProgressBarModule } from 'primeng/primeng';
 import { TableModule } from 'primeng/table';
 import { ImpersonationService } from './admin/users/impersonation.service';
@@ -34,7 +33,22 @@ import { UserNotificationHelper } from './shared/layout/notifications/UserNotifi
 import { HeaderNotificationsComponent } from './shared/layout/notifications/header-notifications.component';
 import { NotificationSettingsModalComponent } from './shared/layout/notifications/notification-settings-modal.component';
 import { NotificationsComponent } from './shared/layout/notifications/notifications.component';
-import { OAuthModule } from 'angular-oauth2-oidc';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { TextMaskModule } from 'angular2-text-mask';
+import { ImageCropperModule } from 'ngx-image-cropper';
+
+// Metronic
+import { PerfectScrollbarModule, PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
+const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
+    // suppressScrollX: true
+};
+
+import { CoreModule } from '@metronic/app/core/core.module';
+
+import { MatTooltipModule } from '@angular/material';
+import { LayoutConfigService } from '@metronic/app/core/services/layout-config.service';
+import { UtilsService } from '@metronic/app/core/services/utils.service';
+import { LayoutRefService } from '@metronic/app/core/services/layout/layout-ref.service';
 
 @NgModule({
     declarations: [
@@ -59,13 +73,13 @@ import { OAuthModule } from 'angular-oauth2-oidc';
     ],
     imports: [
         ngCommon.CommonModule,
-        OAuthModule.forRoot(),
         FormsModule,
         HttpModule,
         JsonpModule,
         ModalModule.forRoot(),
         TooltipModule.forRoot(),
         TabsModule.forRoot(),
+        BsDropdownModule.forRoot(),
         FileUploadModule,
         AbpModule,
         AppRoutingModule,
@@ -75,14 +89,26 @@ import { OAuthModule } from 'angular-oauth2-oidc';
         TableModule,
         PaginatorModule,
         PrimeNgFileUploadModule,
-        ProgressBarModule
+        ProgressBarModule,
+        PerfectScrollbarModule,
+        CoreModule,
+        MatTooltipModule,
+        NgxChartsModule,
+        TextMaskModule,
+        ImageCropperModule
     ],
     providers: [
         ImpersonationService,
         LinkedAccountService,
         UserNotificationHelper,
         ChatSignalrService,
-        QuickSideBarChat
+        {
+            provide: PERFECT_SCROLLBAR_CONFIG,
+            useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
+        },
+        LayoutConfigService,
+        UtilsService,
+        LayoutRefService
     ]
 })
 export class AppModule { }

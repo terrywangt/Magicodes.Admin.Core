@@ -44,10 +44,6 @@ export class CreateOrEditLanguageModalComponent extends AppComponentBase {
             }
 
             this.modal.show();
-            setTimeout(() => {
-                    $(this.languageCombobox.nativeElement).selectpicker('refresh');
-                    $(this.iconCombobox.nativeElement).selectpicker('refresh');
-            }, 0);
         });
     }
 

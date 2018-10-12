@@ -152,7 +152,7 @@
 
         <div class="row">
             <div class="col-md-6 col-sm-12">
-                <div class="m-portlet m-portlet--full-height">
+                <div class="m-portlet m-portlet--full-height sales-summary-chart">
                     <div class="m-portlet__head">
                         <div class="m-portlet__head-caption">
                             <div class="m-portlet__head-title">
@@ -163,21 +163,21 @@
                         </div>
                         <div class="m-portlet__head-tools">
                             <div class="btn-group btn-group-devided" data-toggle="buttons">
-                                <label class="btn m-btn--pill btn-secondary active" (click)="salesSummaryChart.reload(appSalesSummaryDateInterval.Daily)">
+                                <label class="btn m-btn--pill btn-secondary" [ngClass]="{'active': salesSummaryChart.selectedDatePeriod ==  appSalesSummaryDateInterval.Daily}" (click)="salesSummaryChart.reload(appSalesSummaryDateInterval.Daily)">
                                     <input type="radio"
                                            name="SalesSummaryDateInterval"
                                            class="toggle"
                                            [value]="appSalesSummaryDateInterval.Daily">
                                     {{l("Daily")}}
                                 </label>
-                                <label class="btn m-btn--pill btn-secondary" (click)="salesSummaryChart.reload(appSalesSummaryDateInterval.Weekly)">
+                                <label class="btn m-btn--pill btn-secondary" [ngClass]="{'active': salesSummaryChart.selectedDatePeriod ==  appSalesSummaryDateInterval.Weekly}" (click)="salesSummaryChart.reload(appSalesSummaryDateInterval.Weekly)">
                                     <input type="radio"
                                            name="SalesSummaryDateInterval"
                                            class="toggle"
                                            [value]="appSalesSummaryDateInterval.Weekly">
                                     {{l("Weekly")}}
                                 </label>
-                                <label class="btn m-btn--pill btn-secondary" (click)="salesSummaryChart.reload(appSalesSummaryDateInterval.Monthly)">
+                                <label class="btn m-btn--pill btn-secondary" [ngClass]="{'active': salesSummaryChart.selectedDatePeriod ==  appSalesSummaryDateInterval.Monthly}" (click)="salesSummaryChart.reload(appSalesSummaryDateInterval.Monthly)">
                                     <input type="radio"
                                            name="SalesSummaryDateInterval"
                                            class="toggle"
@@ -187,7 +187,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="m-portlet__body" [busyIf]="salesSummaryChart.loading">
+                    <div class="m-portlet__body" [busyIf]="salesSummaryChart.loading" style="height: 260px; min-height: 260px;">
                         <div class="row list-separated">
                             <div class="col-md-3 col-sm-3 col-xs-6">
                                 <h6>
@@ -258,11 +258,8 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div id="salesStatistics"
-                             class="portlet-body-morris-fit morris-chart"
-                             style="height: 260px;">
-                        </div>
+                        <ngx-charts-area-chart-stacked [results]="salesSummaryChart.data" [showXAxisLabel]="true" showYAxisLabel="true" [xAxis]="true" [yAxis]="true" [showGridLines]="false" [tooltipDisabled]="false">
+                        </ngx-charts-area-chart-stacked>
                     </div>
                 </div>
             </div>
@@ -304,10 +301,9 @@
                                             </td>
                                             <td>{{stat.countryName}}</td>
                                             <td>{{stat.sales | currency}}</td>
-                                            <td >
+                                            <td>
                                                 <div class="m-widget11__chart" style="height:50px; width: 100px">
-                                                    <iframe class="chartjs-hidden-iframe" tabindex="-1" style="display: block; overflow: hidden; border: 0px; margin: 0px; top: 0px; left: 0px; bottom: 0px; right: 0px; height: 100%; width: 100%; position: absolute; pointer-events: none; z-index: -1;"></iframe>
-                                                    <canvas class="m_chart_sales_by_region" style="display: block; width: 100px; height: 50px;" width="100" height="50"></canvas>
+                                                    <ngx-charts-line-chart [results]="stat.changeData" [showGridLines]="false" [animations]="false" [tooltipDisabled]="true" [customColors]="regionalStatsTable.customColors" [curve]="regionalStatsTable.curve"></ngx-charts-line-chart>
                                                 </div>
                                             </td>
                                             <td>{{stat.averagePrice | currency}}</td>
@@ -341,50 +337,8 @@
                     </div>
                     <div class="m-portlet__body">
                         <div class="row">
-                            <div class="col-md-4">
-                                <div class="easy-pie-chart">
-                                    <div class="number">
-                                        <span>+{{generalStatsPieChart.transactionPercent.value}}%</span>
-                                        <easy-pie-chart [percent]="generalStatsPieChart.transactionPercent.value"
-                                                        [options]="generalStatsPieChart.transactionPercent.options">
-                                        </easy-pie-chart>
-                                    </div>
-                                    <a class="title" href="javascript:;">
-                                        Transactions
-                                        <i class="icon-arrow-right"></i>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="margin-bottom-10 visible-sm"> </div>
-                            <div class="col-md-4">
-                                <div class="easy-pie-chart">
-                                    <div class="number">
-                                        <span>+{{generalStatsPieChart.newVisitPercent.value}}%</span>
-                                        <easy-pie-chart [percent]="generalStatsPieChart.newVisitPercent.value"
-                                                        [options]="generalStatsPieChart.newVisitPercent.options">
-                                        </easy-pie-chart>
-                                    </div>
-                                    <a class="title" href="javascript:;">
-                                        New Visits
-                                        <i class="icon-arrow-right"></i>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="margin-bottom-10 visible-sm"> </div>
-                            <div class="col-md-4">
-                                <div class="easy-pie-chart">
-                                    <div class="number">
-                                        <span>+{{generalStatsPieChart.bouncePercent.value}}%</span>
-                                        <easy-pie-chart [percent]="generalStatsPieChart.bouncePercent.value"
-                                                        [options]="generalStatsPieChart.bouncePercent.options">
-                                        </easy-pie-chart>
-                                    </div>
-                                    <a class="title" href="javascript:;">
-                                        Bounce
-                                        <i class="icon-arrow-right"></i>
-                                    </a>
-                                </div>
-                            </div>
+                            <ngx-charts-pie-grid [results]="generalStatsPieChart.data">
+                            </ngx-charts-pie-grid>
                         </div>
                     </div>
                 </div>
@@ -403,7 +357,13 @@
                     <div class="m-portlet__body">
                         <div class="row">
                             <div class="col-md-12">
-                                <canvas #m_chart_daily_sales id="m_chart_daily_sales"></canvas>
+                                <ngx-charts-bar-vertical [results]="dailySalesLineChart.chartData" [scheme]="dailySalesLineChart.scheme">
+                                    <ng-template #tooltipTemplate let-model="model">
+                                        <span>Day {{model.name}}</span>
+                                        <br />
+                                        <span>{{model.value}}</span>
+                                    </ng-template>
+                                </ngx-charts-bar-vertical>
                             </div>
                         </div>
                     </div>
@@ -481,32 +441,28 @@
                     <div class="m-portlet__body">
                         <!--begin:: Widgets/Profit Share-->
                         <div class="m-widget14">
-                            <div class="row  align-items-center">
-                                <div class="col">
-                                    <div id="m_chart_profit_share" class="m-widget14__chart" style="height: 160px">
-                                        <div class="m-widget14__stat">
-                                            45
-                                        </div>
-                                    </div>
+                            <div class="row align-items-center">
+                                <div class="col" style="height: 190px;">
+                                    <ngx-charts-pie-chart [results]="profitSharePieChart.chartData" [doughnut]="true" [legend]="false" [labels]="false" [scheme]="profitSharePieChart.scheme" [animations]="false" [tooltipDisabled]="true"></ngx-charts-pie-chart>
                                 </div>
                                 <div class="col">
-                                    <div class="m-widget14__legends" *ngIf="profitSharePieChart.data">
+                                    <div class="m-widget14__legends" *ngIf="profitSharePieChart.chartData.length">
                                         <div class="m-widget14__legend">
                                             <span class="m-widget14__legend-bullet m--bg-accent"></span>
                                             <span class="m-widget14__legend-text">
-                                                {{profitSharePieChart.data[0]}}% Product Sales
+                                                {{profitSharePieChart.chartData[0].value}}% Product Sales
                                             </span>
                                         </div>
                                         <div class="m-widget14__legend">
                                             <span class="m-widget14__legend-bullet m--bg-warning"></span>
                                             <span class="m-widget14__legend-text">
-                                                {{profitSharePieChart.data[1]}}% Online Courses
+                                                {{profitSharePieChart.chartData[1].value}}% Online Courses
                                             </span>
                                         </div>
                                         <div class="m-widget14__legend">
                                             <span class="m-widget14__legend-bullet m--bg-brand"></span>
                                             <span class="m-widget14__legend-text">
-                                                {{profitSharePieChart.data[2]}}% Custom Development
+                                                {{profitSharePieChart.chartData[2].value}}% Custom Development
 
                                             </span>
                                         </div>

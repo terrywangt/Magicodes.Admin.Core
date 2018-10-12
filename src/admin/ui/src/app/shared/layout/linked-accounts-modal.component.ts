@@ -22,8 +22,6 @@ export class LinkedAccountsModalComponent extends AppComponentBase {
 
     @Output() modalClose: EventEmitter<any> = new EventEmitter<any>();
 
-    private _$linkedAccountsTable: JQuery;
-
     constructor(
         injector: Injector,
         private abpMultiTenancyService: AbpMultiTenancyService,

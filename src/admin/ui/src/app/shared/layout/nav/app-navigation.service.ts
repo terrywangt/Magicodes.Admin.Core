@@ -36,7 +36,7 @@ export class AppNavigationService {
             new AppMenuItem('Contents', '', 'fa fa-terminal', '', [
                 new AppMenuItem('ArticleInfo', 'Pages.ArticleInfo', 'fa fa-bullseye', '/app/admin/articleInfo'),
                 new AppMenuItem('ArticleSourceInfo', 'Pages.ArticleSourceInfo', 'fa fa-cog', '/app/admin/articleSourceInfo'),
-                new AppMenuItem('ColumnInfo', 'Pages.ColumnInfo', 'fa fa-bell-o', '/app/admin/columnInfo'),
+                new AppMenuItem('ColumnInfo', 'Pages.ColumnInfo', 'fa fa-bell-o', '/app/admin/columnInfo')
             ]),
         ]);
     }

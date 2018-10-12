@@ -1,141 +1,76 @@
-import { AfterViewChecked, AfterViewInit, Component, ElementRef, Injector, OnInit } from '@angular/core';
+import { Component, Injector } from '@angular/core';
 import { PermissionTreeEditModel } from '@app/admin/shared/permission-tree-edit.model';
 import { AppComponentBase } from '@shared/common/app-component-base';
+import { ArrayToTreeConverterService } from '@shared/utils/array-to-tree-converter.service';
+import { TreeDataHelperService } from '@shared/utils/tree-data-helper.service';
+import { FlatPermissionDto } from '@shared/service-proxies/service-proxies';
+import { TreeNode } from 'primeng/api';
 import * as _ from 'lodash';
 
 @Component({
     selector: 'permission-tree',
     template:
-    `<div class="permission-tree"></div>`
+        `<p-tree [value]="treeData" [(selection)]="selectedPermissions" selectionMode="checkbox"></p-tree>`
 })
-export class PermissionTreeComponent extends AppComponentBase implements OnInit, AfterViewInit, AfterViewChecked {
+export class PermissionTreeComponent extends AppComponentBase {
 
     set editData(val: PermissionTreeEditModel) {
-        this._editData = val;
-        this.refreshTree();
+        this.setTreeData(val.permissions);
+        this.setSelectedNodes(val.grantedPermissionNames);
     }
 
-    private _$tree: JQuery;
-    private _editData: PermissionTreeEditModel;
+    treeData: any;
+    selectedPermissions: TreeNode[] = [];
+
     private _createdTreeBefore;
 
-    constructor(private _element: ElementRef,
+    constructor(
+        private _arrayToTreeConverterService: ArrayToTreeConverterService,
+        private _treeDataHelperService: TreeDataHelperService,
         injector: Injector
     ) {
         super(injector);
     }
 
-    ngOnInit(): void {
+    setTreeData(permissions: FlatPermissionDto[]) {
+        this.treeData = this._arrayToTreeConverterService.createTree(permissions, 'parentName', 'name', null, 'children',
+            [{
+                target: 'label',
+                source: 'displayName'
+            }, {
+                target: 'expandedIcon',
+                value: 'fa fa-folder-open m--font-warning'
+            },
+            {
+                target: 'collapsedIcon',
+                value: 'fa fa-folder m--font-warning'
+            },
+            {
+                target: 'expanded',
+                value: true
+            }]);
     }
 
-    ngAfterViewInit(): void {
-        this._$tree = $(this._element.nativeElement);
-
-        this.refreshTree();
-    }
-
-    ngAfterViewChecked(): void {
-
+    setSelectedNodes(grantedPermissionNames: string[]) {
+        _.forEach(grantedPermissionNames, permission => {
+            let item = this._treeDataHelperService.findNode(this.treeData, { data: { name: permission } });
+            if (item) {
+                this.selectedPermissions.push(item);
+            }
+        });
     }
 
     getGrantedPermissionNames(): string[] {
-        if (!this._$tree || !this._createdTreeBefore) {
+        if (!this.selectedPermissions || !this.selectedPermissions.length) {
             return [];
         }
 
         let permissionNames = [];
 
-        let selectedPermissions = this._$tree.jstree('get_selected', true);
-        for (let i = 0; i < selectedPermissions.length; i++) {
-            permissionNames.push(selectedPermissions[i].original.id);
+        for (let i = 0; i < this.selectedPermissions.length; i++) {
+            permissionNames.push(this.selectedPermissions[i].data.name);
         }
 
         return permissionNames;
-    }
-
-    refreshTree(): void {
-        let self = this;
-
-        if (this._createdTreeBefore) {
-            this._$tree.jstree('destroy');
-        }
-
-        this._createdTreeBefore = false;
-
-        if (!this._editData || !this._$tree) {
-            return;
-        }
-
-        let treeData = _.map(this._editData.permissions, function (item) {
-            return {
-                id: item.name,
-                parent: item.parentName ? item.parentName : '#',
-                text: item.displayName,
-                state: {
-                    opened: true,
-                    selected: _.includes(self._editData.grantedPermissionNames, item.name)
-                }
-            };
-        });
-
-        this._$tree.jstree({
-            'core': {
-                data: treeData
-            },
-            'types': {
-                'default': {
-                    'icon': 'fa fa-folder m--font-warning'
-                },
-                'file': {
-                    'icon': 'fa fa-file m--font-warning'
-                }
-            },
-            'checkbox': {
-                keep_selected_style: false,
-                three_state: false,
-                cascade: ''
-            },
-            plugins: ['checkbox', 'types']
-        });
-
-        this._createdTreeBefore = true;
-
-        let inTreeChangeEvent = false;
-
-        function selectNodeAndAllParents(node) {
-            self._$tree.jstree('select_node', node, true);
-            let parent = self._$tree.jstree('get_parent', node);
-            if (parent) {
-                selectNodeAndAllParents(parent);
-            }
-        }
-
-        this._$tree.on('changed.jstree', function (e, data) {
-            if (!data.node) {
-                return;
-            }
-
-            let wasInTreeChangeEvent = inTreeChangeEvent;
-            if (!wasInTreeChangeEvent) {
-                inTreeChangeEvent = true;
-            }
-
-            let childrenNodes;
-
-            if (data.node.state.selected) {
-                selectNodeAndAllParents(self._$tree.jstree('get_parent', data.node));
-
-                childrenNodes = $.makeArray(self._$tree.jstree('get_node', data.node).children);
-                self._$tree.jstree('select_node', childrenNodes);
-
-            } else {
-                childrenNodes = $.makeArray(self._$tree.jstree('get_node', data.node).children);
-                self._$tree.jstree('deselect_node', childrenNodes);
-            }
-
-            if (!wasInTreeChangeEvent) {
-                inTreeChangeEvent = false;
-            }
-        });
     }
 }

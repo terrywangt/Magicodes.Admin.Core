@@ -34,8 +34,8 @@
                             </div>
                             <div class="form-group">
                                 <label for="EmailAddress">{{l("EmailAddress")}} *</label>
-                                <input id="EmailAddress" #emailAddressInput="ngModel" type="email" name="EmailAddress" class="form-control" [(ngModel)]="user.emailAddress" required maxlength="256" email>
-                                <validation-messages [formCtrl]="emailAddressInput" [errorDefs]="[{email: l('InvalidEmailAddress')}]"></validation-messages>
+                                <input id="EmailAddress" #emailAddressInput="ngModel" type="email" name="EmailAddress" class="form-control" [(ngModel)]="user.emailAddress" required maxlength="256" email />
+                                <validation-messages [formCtrl]="emailAddressInput"></validation-messages>
                             </div>
 
                             <div class="form-group">

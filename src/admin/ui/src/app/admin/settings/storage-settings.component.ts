@@ -7,7 +7,7 @@ import { StorageSettingEditDto, StorageSettingServiceProxy, AliStorageSettingEdi
     templateUrl: './storage-settings.component.html',
     animations: [appModuleAnimation()]
 })
-export class StorageSettingsComponent extends AppComponentBase implements  AfterViewChecked {
+export class StorageSettingsComponent extends AppComponentBase implements AfterViewChecked {
     storageSettings: StorageSettingEditDto;
 
     constructor(
@@ -26,8 +26,8 @@ export class StorageSettingsComponent extends AppComponentBase implements  After
     }
 
     ngAfterViewChecked(): void {
-        $('tabset ul.nav').addClass('m-tabs-line');
-        $('tabset ul.nav li a.nav-link').addClass('m-tabs__link');
+        // $('tabset ul.nav').addClass('m-tabs-line');
+        // $('tabset ul.nav li a.nav-link').addClass('m-tabs__link');
     }
 
     saveAll(): void {

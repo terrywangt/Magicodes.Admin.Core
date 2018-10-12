@@ -52,7 +52,9 @@
                         <label for="SubscriptionEndDateUtc">{{l("SubscriptionEndDateUtc")}}</label>
                         <input id="SubscriptionEndDateUtc" type="datetime" #SubscriptionEndDateUtc name="SubscriptionEndDateUtc" class="form-control"
                                [ngClass]="{'edited':tenant.subscriptionEndDateUtc}"
-                               [value]="formatSubscriptionEndDate(tenant.subscriptionEndDateUtc)"
+                               (bsValueChange)="subscriptionEndDateChange($event)"
+                               bsDatepicker
+                               [(ngModel)]="tenant.subscriptionEndDateUtc"
                                [required]="!isUnlimited">
                     </div>
 

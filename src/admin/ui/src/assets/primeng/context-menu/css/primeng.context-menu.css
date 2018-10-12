@@ -1,0 +1,26 @@
+.ui-contextmenu ul li a {
+    text-decoration: none;
+    color: #000;
+}
+
+.ui-contextmenu {
+    margin-left: -255px;
+    margin-top: -120px;
+}
+
+    .ui-contextmenu .ui-menuitem-text {
+        font-family: Poppins !important;
+        font-size: 13px !important;
+    }
+
+    .ui-contextmenu .ui-menuitem :hover {
+        background-color: #f4f5f8;
+    }
+
+
+@media (max-width: 1024px) {
+    .ui-contextmenu {
+        margin-left: 0;
+        margin-top: -120px;
+    }
+}

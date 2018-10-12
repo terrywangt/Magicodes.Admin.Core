@@ -1,4 +1,4 @@
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component, Injector, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppConsts } from '@shared/AppConsts';
 import { accountModuleAnimation } from '@shared/animations/routerTransition';
@@ -6,13 +6,15 @@ import { AppComponentBase } from '@shared/common/app-component-base';
 import { AccountServiceProxy, PasswordComplexitySetting, ProfileServiceProxy, RegisterOutput } from '@shared/service-proxies/service-proxies';
 import { LoginService } from '../login/login.service';
 import { RegisterModel } from './register.model';
-import { finalize } from 'rxjs/operators';
+import { finalize, catchError } from 'rxjs/operators';
+import { RecaptchaComponent } from 'ng-recaptcha';
 
 @Component({
     templateUrl: './register.component.html',
     animations: [accountModuleAnimation()]
 })
 export class RegisterComponent extends AppComponentBase implements OnInit {
+    @ViewChild('recaptchaRef') recaptchaRef: RecaptchaComponent;
 
     model: RegisterModel = new RegisterModel();
     passwordComplexitySetting: PasswordComplexitySetting = new PasswordComplexitySetting();
@@ -55,6 +57,9 @@ export class RegisterComponent extends AppComponentBase implements OnInit {
         this.saving = true;
         this._accountService.register(this.model)
             .pipe(finalize(() => { this.saving = false; }))
+            .pipe(catchError((err, caught): any => {
+                this.recaptchaRef.reset();
+            }))
             .subscribe((result: RegisterOutput) => {
                 if (!result.canLogin) {
                     this.notify.success(this.l('SuccessfullyRegistered'));

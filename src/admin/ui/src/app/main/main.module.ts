@@ -4,10 +4,15 @@ import { FormsModule } from '@angular/forms';
 import { AppCommonModule } from '@app/shared/common/app-common.module';
 import { UtilsModule } from '@shared/utils/utils.module';
 import { CountoModule } from 'angular2-counto';
-import { EasyPieChartModule } from 'ng2modules-easypiechart';
 import { ModalModule, TabsModule, TooltipModule } from 'ngx-bootstrap';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { MainRoutingModule } from './main-routing.module';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+
+import { BsDatepickerModule, BsDatepickerConfig, BsDaterangepickerConfig, BsLocaleService } from 'ngx-bootstrap/datepicker';
+import { NgxBootstrapDatePickerConfigService } from 'assets/ngx-bootstrap/ngx-bootstrap-datepicker-config.service';
+
+NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
 
 @NgModule({
     imports: [
@@ -20,10 +25,16 @@ import { MainRoutingModule } from './main-routing.module';
         UtilsModule,
         MainRoutingModule,
         CountoModule,
-        EasyPieChartModule
+        NgxChartsModule,
+        BsDatepickerModule.forRoot(),
     ],
     declarations: [
         DashboardComponent
+    ],
+    providers: [
+        { provide: BsDatepickerConfig, useFactory: NgxBootstrapDatePickerConfigService.getDatepickerConfig },
+        { provide: BsDaterangepickerConfig, useFactory: NgxBootstrapDatePickerConfigService.getDaterangepickerConfig },
+        { provide: BsLocaleService, useFactory: NgxBootstrapDatePickerConfigService.getDatepickerLocale }
     ]
 })
 export class MainModule { }

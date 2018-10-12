@@ -2,6 +2,7 @@ import { Component, Injector } from '@angular/core';
 import { appModuleAnimation } from '@shared/animations/routerTransition';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { DemoUiComponentsServiceProxy, NameValueOfString } from '@shared/service-proxies/service-proxies';
+import * as _ from 'lodash';
 
 @Component({
     selector: 'demo-ui-selection',
@@ -39,17 +40,11 @@ export class DemoUiSelectionComponent extends AppComponentBase {
             .subscribe((countries: NameValueOfString[]) => {
                 let message = '';
 
-                $.each(countries, (index, item) => {
+                _.forEach(countries, item => {
                     message += `<div><strong>id</strong>: ${item.value} - <strong>name</strong>: ${item.name}</div>`;
                 });
 
-                let $div = document.createElement('div');
-                $div.innerHTML = message;
-
-                (abp as any).libs.sweetAlert.config.info.content = $div;
-                this.message.info('', this.l('PostedValue'));
-                this.notify.info(this.l('SavedSuccessfully'));
-                (abp as any).libs.sweetAlert.config.info.content = '';
+                this.message.info(message, this.l('PostedValue'), true);
             });
     }
 
@@ -59,17 +54,11 @@ export class DemoUiSelectionComponent extends AppComponentBase {
             .subscribe((countries: NameValueOfString[]) => {
                 let message = '';
 
-                $.each(countries, (index, item) => {
+                _.forEach(countries, item => {
                     message += `<div><strong>id</strong>: ${item.value} - <strong>name</strong>: ${item.name}</div>`;
                 });
 
-                let $div = document.createElement('div');
-                $div.innerHTML = message;
-
-                (abp as any).libs.sweetAlert.config.info.content = $div;
-                this.message.info('', this.l('PostedValue'));
-                this.notify.info(this.l('SavedSuccessfully'));
-                (abp as any).libs.sweetAlert.config.info.content = '';
+                this.message.info(message, this.l('PostedValue'), true);
             });
     }
 }

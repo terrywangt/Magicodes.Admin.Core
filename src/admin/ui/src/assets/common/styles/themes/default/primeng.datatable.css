@@ -28,11 +28,11 @@
   color: #5867dd !important;
 }
 .primeng-paging-container .ui-paginator span a.ui-state-active {
-  background: #716aca;
+  background-color: #716aca !important;
   color: #fff !important;
 }
 .primeng-paging-container .ui-paginator span a:hover {
-  background-color: #deddf3;
+  background-color: #deddf3 !important;
 }
 .primeng-paging-container .ui-paginator span a:hover.ui-state-active {
   background-color: #918bd9 !important;

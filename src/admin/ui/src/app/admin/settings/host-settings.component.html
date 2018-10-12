@@ -1,5 +1,4 @@
 <div [@routerTransition]>
-        <form #articleInfoForm="ngForm"  novalidate (ngSubmit)="saveAll()">
     <div class="m-subheader">
         <div class="d-flex align-items-center">
             <div class="mr-auto col-sm-12 col-md-6">
@@ -11,7 +10,7 @@
                 </span>
             </div>
             <div class="col-sm-12 col-md-6 text-right">
-                <button class="btn btn-primary" type="submit"  [disabled]="!articleInfoForm.form.valid"><i class="la la-floppy-o"></i> {{l("SaveAll")}}</button>
+                <button class="btn btn-primary" (click)="saveAll()"><i class="la la-floppy-o"></i> {{l("SaveAll")}}</button>
             </div>
         </div>
     </div>
@@ -56,7 +55,7 @@
                                 <label for="DefaultEditionId">{{l("Edition")}}</label>
                                 <select id="DefaultEditionId" class="form-control" [(ngModel)]="hostSettings.tenantManagement.defaultEditionId">
                                     <option value="">{{emptyText}}</option>
-                                    <option *ngFor="let edition of editions"  [value]="edition.value">{{edition.displayText}}</option>
+                                    <option *ngFor="let edition of editions" [value]="edition.value">{{edition.displayText}}</option>
                                 </select>
                             </div>
                         </div>
@@ -240,14 +239,13 @@
                         <h5>{{l("TestEmailSettingsHeader")}}</h5>
                         <div class="row">
                             <div class="form-group col-md-4">
-                                <input type="text" class="form-control input-mini" [(ngModel)]="testEmailAddress" name="TestEmailAddress">
+                                <input type="text" class="form-control input-mini" [(ngModel)]="testEmailAddress">
                             </div>
                             <div class="form-group col-md-2">
                                 <button class="btn btn-primary" type="button" (click)="sendTestEmail()">{{l("SendTestEmail")}}</button>
                             </div>
                         </div>
                     </tab>
-                   
                     <tab *ngIf="true" heading="{{l('Invoice')}}" customClass="m-tabs__item">
                         <!-- *ngIf="true" is a workaround for https://github.com/valor-software/ng2-bootstrap/issues/823 -->
                         <h5>{{l("InvoiceInformation")}}</h5>
@@ -257,8 +255,8 @@
                         </div>
                         <div class="form-group">
                             <label for="TaxNumber">{{l("TaxNumber")}}*</label>
-                            <input id="TaxNumber" type="text" name="TaxNumber" class="form-control" [ngClass]="{'edited':hostSettings.billing.taxNumber}" [(ngModel)]="hostSettings.billing.taxNumber" maxlength="64" 
-                            required>
+                            <input id="TaxNumber" type="text" name="TaxNumber" class="form-control" [ngClass]="{'edited':hostSettings.billing.taxNumber}" [(ngModel)]="hostSettings.billing.taxNumber" maxlength="64"
+                                   required>
                         </div>
                         <div class="form-group">
                             <label for="Contact">{{l("Contact")}}</label>
@@ -276,13 +274,9 @@
                             <label for="Address">{{l("Address")}}</label>
                             <textarea id="Address" rows="5" name="address" class="form-control" [ngClass]="{'edited':hostSettings.billing.address}" [(ngModel)]="hostSettings.billing.address" maxlength="256"></textarea>
                         </div>
-                   
-                    </tab>
-                
+                        </tab>
                 </tabset>
             </div>
         </div>
     </div>
-        </form>
 </div>
-

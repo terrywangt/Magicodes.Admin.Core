@@ -1,7 +1,9 @@
-import { AfterViewInit, Component, ElementRef, Injector } from '@angular/core';
+import { Component, Injector } from '@angular/core';
 import { AppComponentBase } from '@shared/common/app-component-base';
-import { HtmlHelper } from '@shared/helpers/HtmlHelper';
 import { OrganizationUnitDto } from '@shared/service-proxies/service-proxies';
+import { ArrayToTreeConverterService } from '@shared/utils/array-to-tree-converter.service';
+import { TreeDataHelperService } from '@shared/utils/tree-data-helper.service';
+import { TreeNode } from 'primeng/api';
 import * as _ from 'lodash';
 
 export interface IOrganizationUnitsTreeComponentData {
@@ -12,156 +14,108 @@ export interface IOrganizationUnitsTreeComponentData {
 @Component({
     selector: 'organization-unit-tree',
     template:
-    `<div class='form-group'>
-        <input id='OrganizationUnitsTreeFilter' type='text' class='form-control' placeholder='{{l("SearchWithThreeDot")}}' >
+        `<div class='form-group'>
+        <input id='OrganizationUnitsTreeFilter' type='text' (input)="filterOrganizationUnits($event)" [(ngModel)]="filter" class='form-control' placeholder='{{l("SearchWithThreeDot")}}' >
     </div>
-    <div class="organization-unit-tree"></div>
+    <p-tree [value]="treeData"
+        selectionMode="checkbox"
+        [(selection)]="selectedOus"></p-tree>
     `
 })
-export class OrganizationUnitsTreeComponent extends AppComponentBase implements AfterViewInit {
+export class OrganizationUnitsTreeComponent extends AppComponentBase {
 
     set data(data: IOrganizationUnitsTreeComponentData) {
+        this.setTreeData(data.allOrganizationUnits);
+        this.setSelectedNodes(data.selectedOrganizationUnits);
+
         this._allOrganizationUnits = data.allOrganizationUnits;
         this._selectedOrganizationUnits = data.selectedOrganizationUnits;
-        this.refreshTree();
     }
 
-    private _$tree: JQuery;
-    private _createdTreeBefore;
+    treeData: any;
+    selectedOus: TreeNode[] = [];
 
     private _allOrganizationUnits: OrganizationUnitDto[];
     private _selectedOrganizationUnits: string[];
 
-    private filter = '';
+    filter = '';
 
-    constructor(private _element: ElementRef,
+    constructor(
+        private _arrayToTreeConverterService: ArrayToTreeConverterService,
+        private _treeDataHelperService: TreeDataHelperService,
         injector: Injector
     ) {
         super(injector);
     }
 
-    ngAfterViewInit(): void {
-        this._$tree = $(this._element.nativeElement).find('.organization-unit-tree');
-        this.refreshTree();
-        this.initFiltering();
+    setTreeData(organizationUnits: OrganizationUnitDto[]) {
+        this.treeData = this._arrayToTreeConverterService.createTree(organizationUnits, 'parentId', 'id', null, 'children',
+            [{
+                target: 'label',
+                source: 'displayName'
+            }, {
+                target: 'expandedIcon',
+                value: 'fa fa-folder-open m--font-warning'
+            },
+            {
+                target: 'collapsedIcon',
+                value: 'fa fa-folder m--font-warning'
+            },
+            {
+                target: 'expanded',
+                value: true
+            }]);
+
+    }
+
+    setSelectedNodes(selectedOrganizationUnits: string[]) {
+        _.forEach(selectedOrganizationUnits, ou => {
+            let item = this._treeDataHelperService.findNode(this.treeData, { data: { code: ou } });
+            if (item) {
+                this.selectedOus.push(item);
+            }
+        });
     }
 
     getSelectedOrganizations(): number[] {
-        if (!this._$tree || !this._createdTreeBefore) {
+        if (!this.selectedOus) {
             return [];
         }
 
         let organizationIds = [];
 
-        let selectedOrganizations = this._$tree.jstree('get_selected', true);
-        for (let i = 0; i < selectedOrganizations.length; i++) {
-            organizationIds.push(selectedOrganizations[i].original.id);
-        }
+        _.forEach(this.selectedOus, ou => {
+            organizationIds.push(ou.data.id);
+        });
 
         return organizationIds;
     }
 
-    refreshTree(): void {
-        let self = this;
-
-        if (this._createdTreeBefore) {
-            this._$tree.jstree('destroy');
-        }
-
-        this._createdTreeBefore = false;
-
-        if (!this._allOrganizationUnits || !this._$tree) {
-            return;
-        }
-
-        let treeData = _.map(this._allOrganizationUnits, item => (<any>{
-            id: item.id,
-            parent: item.parentId ? item.parentId : '#',
-            code: item.code,
-            displayName: item.displayName,
-            memberCount: item.memberCount,
-            text: HtmlHelper.encodeText(item.displayName) ,
-            dto: item,
-            state: {
-                opened: true,
-                selected: _.includes(self._selectedOrganizationUnits, item.code)
-            }
-        }));
-
-        this._$tree.jstree({
-            'core': {
-                data: treeData
-            },
-            'types': {
-                'default': {
-                    'icon': 'fa fa-folder m--font-warning'
-                },
-                'file': {
-                    'icon': 'fa fa-file m--font-warning'
-                }
-            },
-            'checkbox': {
-                keep_selected_style: false,
-                three_state: false,
-                cascade: ''
-            },
-            'search': {
-                'show_only_matches': true
-            },
-            plugins: ['checkbox', 'types', 'search']
-        });
-
-        this._createdTreeBefore = true;
-
-        let inTreeChangeEvent = false;
-
-        function selectNodeAndAllParents(node) {
-            self._$tree.jstree('select_node', node, true);
-            let parent = self._$tree.jstree('get_parent', node);
-            if (parent) {
-                selectNodeAndAllParents(parent);
-            }
-        }
-
-        this._$tree.on('changed.jstree', (e, data) => {
-            if (!data.node) {
-                return;
-            }
-
-            let wasInTreeChangeEvent = inTreeChangeEvent;
-            if (!wasInTreeChangeEvent) {
-                inTreeChangeEvent = true;
-            }
-
-            let childrenNodes;
-
-            if (data.node.state.selected) {
-                selectNodeAndAllParents(this._$tree.jstree('get_parent', data.node));
-
-                childrenNodes = $.makeArray(this._$tree.jstree('get_node', data.node).children);
-                this._$tree.jstree('select_node', childrenNodes);
-
+    filterOrganizationUnit(nodes, filterText): any {
+        _.forEach(nodes, node => {
+            if (node.data.displayName.toLowerCase().indexOf(filterText.toLowerCase()) >= 0) {
+                node.styleClass =
+                    this.showParentNodes(node);
             } else {
-                childrenNodes = $.makeArray(this._$tree.jstree('get_node', data.node).children);
-                this._$tree.jstree('deselect_node', childrenNodes);
+                node.styleClass = 'hidden-tree-node';
             }
 
-            if (!wasInTreeChangeEvent) {
-                inTreeChangeEvent = false;
+            if (node.children) {
+                this.filterOrganizationUnit(node.children, filterText);
             }
         });
     }
 
-    initFiltering(): void {
-        let to = false;
-        let self = this;
+    showParentNodes(node): void {
+        if (!node.parent) {
+            return;
+        }
 
-        $('#OrganizationUnitsTreeFilter').keyup(() => {
-            if (to) { (window as any).clearTimeout(to); }
-            to = (window as any).setTimeout(() => {
-                let v = $('#OrganizationUnitsTreeFilter').val() as string;
-                self._$tree.jstree(true).search(v);
-            }, 250);
-        });
+        node.parent.styleClass = '';
+        this.showParentNodes(node.parent);
+    }
+
+    filterOrganizationUnits(event): void {
+        this.filterOrganizationUnit(this.treeData, this.filter);
     }
 }

@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 export class AppUiCustomizationService {
 
     getTheme() {
-      return  this.getSetting("App.UiManagement.Theme");
+        return this.getSetting('App.UiManagement.Theme');
     }
 
     getContainerClass() {
@@ -74,10 +74,6 @@ export class AppUiCustomizationService {
             menuCssClass += this.getSetting('App.UiManagement.Left.DropdownSubmenuSkin');
         }
 
-        if (this.getSetting('App.UiManagement.Left.SubmenuToggle') === 'dropdown') {
-            menuCssClass += ' m-aside-menu--dropdown';
-        }
-
         return menuCssClass;
     }
 
@@ -90,7 +86,11 @@ export class AppUiCustomizationService {
     }
 
     getTopBarMenuClass(): string {
-        let menuCssClass = 'm-container m-container--responsive m-container--full-height m-page__container';
+        let menuCssClass = 'm-header-menu m-aside-header-menu-mobile m-aside-header-menu-mobile--offcanvas m-header-menu--skin-' + this.getSetting('App.UiManagement.Left.AsideSkin');
+        menuCssClass += ' m-header-menu--submenu-skin-' + this.getSetting('App.UiManagement.Left.AsideSkin');
+        menuCssClass += ' m-aside-header-menu-mobile--skin-' + this.getSetting('App.UiManagement.Left.AsideSkin');
+        menuCssClass += ' m-aside-header-menu-mobile--submenu-skin-' + this.getSetting('App.UiManagement.Left.AsideSkin');
+
         if (this.getSetting('App.UiManagement.LayoutType') === 'boxed') {
             return menuCssClass + ' m-container--xxl';
         }
@@ -98,8 +98,14 @@ export class AppUiCustomizationService {
         return menuCssClass;
     }
 
-    getIsMenuDropdown(): boolean {
-        return this.getSetting('App.UiManagement.Left.SubmenuToggle') === 'dropdown';
+    getTopBarMenuContainerClass(): string {
+        //m-header__bottom m-header-menu--skin-light m-container--xxl m-container m-container--full-height m-container--responsive
+        let menuCssClass = 'm-header__bottom m-header-menu--skin-' + this.getSetting('App.UiManagement.Left.AsideSkin') + ' m-container m-container--full-height m-container--responsive';
+        if (this.getSetting('App.UiManagement.LayoutType') === 'boxed') {
+            return menuCssClass + ' m-container--xxl';
+        }
+
+        return menuCssClass;
     }
 
     getIsMenuScrollable(): boolean {

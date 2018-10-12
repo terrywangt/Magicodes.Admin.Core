@@ -1,11 +1,12 @@
-﻿import { CommonModule } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AppCommonModule } from '@app/shared/common/app-common.module';
 import { UtilsModule } from '@shared/utils/utils.module';
 import { AddMemberModalComponent } from 'app/admin/organization-units/add-member-modal.component';
 import { FileUploadModule } from 'ng2-file-upload';
-import { ModalModule, PopoverModule, TabsModule, TooltipModule } from 'ngx-bootstrap';
+import { ModalModule, PopoverModule, TabsModule, TooltipModule, BsDropdownModule } from 'ngx-bootstrap';
+import { BsDatepickerModule, BsDatepickerConfig, BsDaterangepickerConfig, BsLocaleService } from 'ngx-bootstrap/datepicker';
 import { AutoCompleteModule, EditorModule, FileUploadModule as PrimeNgFileUploadModule, InputMaskModule, PaginatorModule } from 'primeng/primeng';
 import { TableModule } from 'primeng/table';
 import { LightboxModule } from 'primeng/lightbox';
@@ -13,8 +14,12 @@ import { OverlayPanelModule } from 'primeng/overlayPanel';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { TreeTableModule } from 'primeng/treetable';
 import { DropdownModule } from 'primeng/dropdown';
-import { AdminRoutingModule } from './admin-routing.module';
+import { TreeModule } from 'primeng/tree';
+import { DragDropModule } from 'primeng/dragdrop';
+import { TreeDragDropService } from 'primeng/api';
+import { ContextMenuModule } from 'primeng/contextmenu';
 import { AuditLogComponent } from './components/auditLog/audit-log.component';
+import { AdminRoutingModule } from './admin-routing.module';
 import { AuditLogDetailModalComponent } from './audit-logs/audit-log-detail-modal.component';
 import { AuditLogsComponent } from './audit-logs/audit-logs.component';
 import { EntityChangeDetailModalComponent } from './audit-logs/entity-change-detail-modal.component';
@@ -65,6 +70,11 @@ import { CreateOrEditUserModalComponent } from './users/create-or-edit-user-moda
 import { EditUserPermissionsModalComponent } from './users/edit-user-permissions-modal.component';
 import { ImpersonationService } from './users/impersonation.service';
 import { UsersComponent } from './users/users.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { CountoModule } from 'angular2-counto';
+import { TextMaskModule } from 'angular2-text-mask';
+import { ImageCropperModule } from 'ngx-image-cropper';
+import { NgxBootstrapDatePickerConfigService } from 'assets/ngx-bootstrap/ngx-bootstrap-datepicker-config.service';
 import { ArticleInfoArticleTagInfoComponent } from './articleInfos/articleTagInfo.component';
 import { ArticleInfoArticleTagInfoCreateOrEditModalComponent } from './articleInfos/create-or-edit-articleTagInfo-modal.component';
 import { ArticleInfosComponent } from './articleInfos/articleInfo.component';
@@ -77,6 +87,9 @@ import { StorageSettingsComponent } from './settings/storage-settings.component'
 import { TransactionLogsComponent } from './transactionLogs/transactionLog.component';
 import { CreateOrEditTransactionLogModalComponent } from './transactionLogs/create-or-edit-transactionLog-modal.component';
 import { ColumnInfoTreeSelectComponent } from './appComponents/columnInfoTreeSelect/columnInfo-tree-select.component';
+
+NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
+
 @NgModule({
     imports: [
         FormsModule,
@@ -86,11 +99,16 @@ import { ColumnInfoTreeSelectComponent } from './appComponents/columnInfoTreeSel
         TabsModule.forRoot(),
         TooltipModule.forRoot(),
         PopoverModule.forRoot(),
+        BsDropdownModule.forRoot(),
+        BsDatepickerModule.forRoot(),
         AdminRoutingModule,
         UtilsModule,
         AppCommonModule,
         TableModule,
         LightboxModule,
+        TreeModule,
+        DragDropModule,
+        ContextMenuModule,
         PaginatorModule,
         PrimeNgFileUploadModule,
         AutoCompleteModule,
@@ -99,7 +117,11 @@ import { ColumnInfoTreeSelectComponent } from './appComponents/columnInfoTreeSel
         OverlayPanelModule,
         InputSwitchModule,
         TreeTableModule,
-        DropdownModule
+        DropdownModule,
+        NgxChartsModule,
+        CountoModule,
+        TextMaskModule,
+        ImageCropperModule
     ],
     declarations: [
         UsersComponent,
@@ -159,7 +181,7 @@ import { ColumnInfoTreeSelectComponent } from './appComponents/columnInfoTreeSel
 
         TransactionLogsComponent,
         CreateOrEditTransactionLogModalComponent,
-		ColumnInfoTreeSelectComponent,
+        ColumnInfoTreeSelectComponent,
         ArticleInfoArticleTagInfoComponent,
         ArticleInfoArticleTagInfoCreateOrEditModalComponent,
 
@@ -179,7 +201,11 @@ import { ColumnInfoTreeSelectComponent } from './appComponents/columnInfoTreeSel
         AddMemberModalComponent
     ],
     providers: [
-        ImpersonationService
+        ImpersonationService,
+        TreeDragDropService,
+        { provide: BsDatepickerConfig, useFactory: NgxBootstrapDatePickerConfigService.getDatepickerConfig },
+        { provide: BsDaterangepickerConfig, useFactory: NgxBootstrapDatePickerConfigService.getDaterangepickerConfig },
+        { provide: BsLocaleService, useFactory: NgxBootstrapDatePickerConfigService.getDatepickerLocale }
     ]
 })
 export class AdminModule { }

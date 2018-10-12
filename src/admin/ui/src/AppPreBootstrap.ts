@@ -5,8 +5,10 @@ import { AppAuthService } from '@app/shared/common/auth/app-auth.service';
 import { AppConsts } from '@shared/AppConsts';
 import { SubdomainTenancyNameFinder } from '@shared/helpers/SubdomainTenancyNameFinder';
 import * as moment from 'moment';
+import * as _ from 'lodash';
 import { LocalizedResourcesHelper } from './shared/helpers/LocalizedResourcesHelper';
 import { UrlHelper } from './shared/helpers/UrlHelper';
+import { XmlHttpRequestHelper } from '@shared/helpers/XmlHttpRequestHelper';
 import { environment } from './environments/environment';
 
 export class AppPreBootstrap {
@@ -14,7 +16,7 @@ export class AppPreBootstrap {
     static run(appRootUrl: string, callback: () => void, resolve: any, reject: any): void {
         AppPreBootstrap.getApplicationConfig(appRootUrl, () => {
             if (UrlHelper.isInstallUrl(location.href)) {
-                LocalizedResourcesHelper.loadLocalizedStylesForTheme("default", false);
+                LocalizedResourcesHelper.loadLocalizedStylesForTheme('default', false);
                 callback();
                 return;
             }
@@ -42,15 +44,15 @@ export class AppPreBootstrap {
     }
 
     private static getApplicationConfig(appRootUrl: string, callback: () => void) {
+        let type = 'GET';
+        let url = appRootUrl + 'assets/' + environment.appConfig;
+        let customHeaders = [
+            {
+                name: 'Abp.TenantId',
+                value: abp.multiTenancy.getTenantIdCookie() + ''
+            }];
 
-        return abp.ajax({
-            url: appRootUrl + 'assets/' + environment.appConfig,
-            method: 'GET',
-            headers: {
-                'Abp.TenantId': abp.multiTenancy.getTenantIdCookie()
-            }
-        }).done(result => {
-
+        XmlHttpRequestHelper.ajax(type, url, customHeaders, null, (result) => {
             const subdomainTenancyNameFinder = new SubdomainTenancyNameFinder();
             const tenancyName = subdomainTenancyNameFinder.getCurrentTenancyNameOrNull(result.appBaseUrl);
 
@@ -82,43 +84,55 @@ export class AppPreBootstrap {
         return abp.timing.localClockProvider;
     }
 
-    private static impersonatedAuthenticate(impersonationToken: string, tenantId: number, callback: () => void): JQueryPromise<any> {
+    private static impersonatedAuthenticate(impersonationToken: string, tenantId: number, callback: () => void): void {
         abp.multiTenancy.setTenantIdCookie(tenantId);
         const cookieLangValue = abp.utils.getCookieValue('Abp.Localization.CultureName');
-        return abp.ajax({
-            url: AppConsts.remoteServiceBaseUrl + '/api/TokenAuth/ImpersonatedAuthenticate?impersonationToken=' + impersonationToken,
-            method: 'POST',
-            headers: {
-                '.AspNetCore.Culture': ('c=' + cookieLangValue + '|uic=' + cookieLangValue),
-                'Abp.TenantId': abp.multiTenancy.getTenantIdCookie()
+
+        let requestHeaders = {
+            '.AspNetCore.Culture': ('c=' + cookieLangValue + '|uic=' + cookieLangValue),
+            'Abp.TenantId': abp.multiTenancy.getTenantIdCookie()
+        };
+
+        XmlHttpRequestHelper.ajax(
+            'POST',
+            AppConsts.remoteServiceBaseUrl + '/api/TokenAuth/ImpersonatedAuthenticate?impersonationToken=' + impersonationToken,
+            requestHeaders,
+            null,
+            (response) => {
+                let result = response.result;
+                abp.auth.setToken(result.accessToken);
+                AppPreBootstrap.setEncryptedTokenCookie(result.encryptedAccessToken);
+                location.search = '';
+                callback();
             }
-        }).done(result => {
-            abp.auth.setToken(result.accessToken);
-            AppPreBootstrap.setEncryptedTokenCookie(result.encryptedAccessToken);
-            location.search = '';
-            callback();
-        });
+        );
     }
 
-    private static linkedAccountAuthenticate(switchAccountToken: string, tenantId: number, callback: () => void): JQueryPromise<any> {
+    private static linkedAccountAuthenticate(switchAccountToken: string, tenantId: number, callback: () => void): void {
         abp.multiTenancy.setTenantIdCookie(tenantId);
         const cookieLangValue = abp.utils.getCookieValue('Abp.Localization.CultureName');
-        return abp.ajax({
-            url: AppConsts.remoteServiceBaseUrl + '/api/TokenAuth/LinkedAccountAuthenticate?switchAccountToken=' + switchAccountToken,
-            method: 'POST',
-            headers: {
-                '.AspNetCore.Culture': ('c=' + cookieLangValue + '|uic=' + cookieLangValue),
-                'Abp.TenantId': abp.multiTenancy.getTenantIdCookie()
+
+        let requestHeaders = {
+            '.AspNetCore.Culture': ('c=' + cookieLangValue + '|uic=' + cookieLangValue),
+            'Abp.TenantId': abp.multiTenancy.getTenantIdCookie()
+        };
+
+        XmlHttpRequestHelper.ajax(
+            'POST',
+            AppConsts.remoteServiceBaseUrl + '/api/TokenAuth/LinkedAccountAuthenticate?switchAccountToken=' + switchAccountToken,
+            requestHeaders,
+            null,
+            (response) => {
+                let result = response.result;
+                abp.auth.setToken(result.accessToken);
+                AppPreBootstrap.setEncryptedTokenCookie(result.encryptedAccessToken);
+                location.search = '';
+                callback();
             }
-        }).done(result => {
-            abp.auth.setToken(result.accessToken);
-            AppPreBootstrap.setEncryptedTokenCookie(result.encryptedAccessToken);
-            location.search = '';
-            callback();
-        });
+        );
     }
 
-    private static getUserConfiguration(callback: () => void): JQueryPromise<any> {
+    private static getUserConfiguration(callback: () => void): any {
         const cookieLangValue = abp.utils.getCookieValue('Abp.Localization.CultureName');
         const token = abp.auth.getToken();
 
@@ -131,12 +145,10 @@ export class AppPreBootstrap {
             requestHeaders['Authorization'] = 'Bearer ' + token;
         }
 
-        return abp.ajax({
-            url: AppConsts.remoteServiceBaseUrl + '/AbpUserConfiguration/GetAll',
-            method: 'GET',
-            headers: requestHeaders
-        }).done(result => {
-            $.extend(true, abp, result);
+        return XmlHttpRequestHelper.ajax('GET', AppConsts.remoteServiceBaseUrl + '/AbpUserConfiguration/GetAll', requestHeaders, null, (response) => {
+            let result = response.result;
+
+            _.merge(abp, result);
 
             abp.clock.provider = this.getCurrentClockProvider(result.clock.provider);
 

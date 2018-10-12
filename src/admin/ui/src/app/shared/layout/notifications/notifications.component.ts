@@ -111,6 +111,22 @@ export class NotificationsComponent extends AppComponentBase {
             });
     }
 
+    deleteNotification(userNotification: UserNotification): void {
+        this.message.confirm(
+            this.l('NotificationDeleteWarningMessage'),
+            this.l('AreYouSure'),
+            (isConfirmed) => {
+                if (isConfirmed) {
+                    this._notificationService.deleteNotification(userNotification.id)
+                        .subscribe(() => {
+                            this.reloadPage();
+                            this.notify.success(this.l('SuccessfullyDeleted'));
+                        });
+                }
+            }
+        );
+    }
+
     public getRowClass(formattedRecord: IFormattedUserNotification): string {
         return formattedRecord.state === 'READ' ? 'notification-read' : '';
     }

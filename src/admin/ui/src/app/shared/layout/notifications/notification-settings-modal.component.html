@@ -1,4 +1,4 @@
-<div bsModal #modal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal" (onShown)="onShown()"
+<div bsModal #modal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal"
      aria-hidden="true" [config]="{backdrop: 'static'}">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -14,13 +14,13 @@
                 <div class="modal-body" *ngIf="settings">
                     <h4>{{l("ReceiveNotifications")}}</h4>
                     <div>
-                        <input type="checkbox"
-                               id="ReceiveNotifications"
-                               jq-plugin="bootstrapSwitch"
-                               name="ReceiveNotifications"
-                               attr.switch-size="small"
-                               [attr.switch-on-text]="l('On')"
-                               [attr.switch-off-text]="l('Off')"/>
+                        <span class="m-switch m-switch--icon-check">
+                            <label>
+                                <input type="checkbox" name="ReceiveNotifications" value="true" [(ngModel)]="settings.receiveNotifications">
+                                <span></span>
+                            </label>
+                        </span>
+
                         <div class="help-block">{{l("ReceiveNotifications_Definition")}}</div>
                     </div>
                     <h4 *ngIf="settings.notifications.length" class="m--margin-top-20">{{l("NotificationTypes")}}</h4>

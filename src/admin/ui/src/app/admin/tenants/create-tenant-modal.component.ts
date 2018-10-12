@@ -1,11 +1,10 @@
-import { Component, ElementRef, EventEmitter, Injector, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Injector, Output, ViewChild } from '@angular/core';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import {
     CommonLookupServiceProxy, CreateTenantInput,
     PasswordComplexitySetting, ProfileServiceProxy,
     TenantServiceProxy, SubscribableEditionComboboxItemDto
-} from
-    '@shared/service-proxies/service-proxies';
+} from '@shared/service-proxies/service-proxies';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { ModalDirective } from 'ngx-bootstrap';
@@ -17,9 +16,7 @@ import { finalize } from 'rxjs/operators';
 })
 export class CreateTenantModalComponent extends AppComponentBase {
 
-    @ViewChild('tenancyNameInput') tenancyNameInput: ElementRef;
     @ViewChild('createModal') modal: ModalDirective;
-    @ViewChild('SubscriptionEndDateUtc') subscriptionEndDateUtc: ElementRef;
 
     @Output() modalSave: EventEmitter<any> = new EventEmitter<any>();
 
@@ -54,11 +51,7 @@ export class CreateTenantModalComponent extends AppComponentBase {
     }
 
     onShown(): void {
-        $(this.tenancyNameInput.nativeElement).focus();
-        $(this.subscriptionEndDateUtc.nativeElement).datetimepicker({
-            locale: abp.localization.currentLanguage.name,
-            format: 'L'
-        });
+        document.getElementById('TenancyName').focus();
     }
 
     init(): void {
@@ -73,8 +66,8 @@ export class CreateTenantModalComponent extends AppComponentBase {
             .subscribe((result) => {
                 this.editions = result.items;
 
-                var notAssignedItem = new SubscribableEditionComboboxItemDto();
-                notAssignedItem.value = "";
+                let notAssignedItem = new SubscribableEditionComboboxItemDto();
+                notAssignedItem.value = '';
                 notAssignedItem.displayText = this.l('NotAssigned');
 
                 this.editions.unshift(notAssignedItem);
@@ -101,7 +94,7 @@ export class CreateTenantModalComponent extends AppComponentBase {
             this.isSelectedEditionFree = true;
         }
 
-        var selectedEdition = selectedEditions[0];
+        let selectedEdition = selectedEditions[0];
         this.isSelectedEditionFree = selectedEdition.isFree;
         return this.isSelectedEditionFree;
     }
@@ -115,12 +108,11 @@ export class CreateTenantModalComponent extends AppComponentBase {
             return true;
         }
 
-        if (!this.subscriptionEndDateUtc) {
+        if (!this.tenant.subscriptionEndDateUtc) {
             return false;
         }
 
-        let subscriptionEndDateUtc = $(this.subscriptionEndDateUtc.nativeElement).val();
-        return subscriptionEndDateUtc !== undefined && subscriptionEndDateUtc !== '';
+        return this.tenant.subscriptionEndDateUtc !== undefined;
     }
 
     save(): void {
@@ -134,10 +126,7 @@ export class CreateTenantModalComponent extends AppComponentBase {
             this.tenant.editionId = null;
         }
 
-        //take selected date as UTC
-        if (!this.isUnlimited && this.tenant.editionId > 0) {
-            this.tenant.subscriptionEndDateUtc = moment($(this.subscriptionEndDateUtc.nativeElement).data('DateTimePicker').date().format('YYYY-MM-DDTHH:mm:ss') + 'Z');
-        } else {
+        if (this.isUnlimited || this.tenant.editionId <= 0) {
             this.tenant.subscriptionEndDateUtc = null;
         }
 

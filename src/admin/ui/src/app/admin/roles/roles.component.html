@@ -53,20 +53,17 @@
                             <ng-template pTemplate="body" let-record="$implicit">
                                 <tr>
                                     <td [hidden]="!isGrantedAny('Pages.Administration.Roles.Edit', 'Pages.Administration.Roles.Delete')">
-                                        <div class="btn-group dropdown">
-                                            <button class="dropdown-toggle btn btn-primary btn-sm dropdown-toggle"
-                                                    data-toggle="dropdown"
-                                                    aria-haspopup="true"
-                                                    aria-expanded="false">
+                                        <div class="btn-group dropdown" dropdown>
+                                            <button dropdownToggle class="dropdown-toggle btn btn-primary btn-sm dropdown-toggle">
                                                 <i class="fa fa-cog"></i><span class="caret"></span> {{l("Actions")}}
                                             </button>
-                                            <ul class="dropdown-menu">
+                                            <ul class="dropdown-menu" *dropdownMenu>
                                                 <li>
-                                                    <a *ngIf="permission.isGranted('Pages.Administration.Roles.Edit')"
+                                                    <a href="javascript:;" *ngIf="permission.isGranted('Pages.Administration.Roles.Edit')"
                                                        (click)="createOrEditRoleModal.show(record.id)">{{l('Edit')}}</a>
                                                 </li>
                                                 <li>
-                                                    <a *ngIf="!record.isStatic && permission.isGranted('Pages.Administration.Roles.Delete')"
+                                                    <a href="javascript:;" *ngIf="!record.isStatic && permission.isGranted('Pages.Administration.Roles.Delete')"
                                                        (click)="deleteRole(record)">{{l('Delete')}}</a>
                                                 </li>
                                             </ul>

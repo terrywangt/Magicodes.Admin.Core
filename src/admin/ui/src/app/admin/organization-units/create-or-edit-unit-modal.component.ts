@@ -36,7 +36,7 @@ export class CreateOrEditUnitModalComponent extends AppComponentBase {
     }
 
     onShown(): void {
-        $(this.organizationUnitDisplayNameInput.nativeElement).focus();
+        document.getElementById('OrganizationUnitDisplayName').focus();
     }
 
     show(organizationUnit: IOrganizationUnitOnEdit): void {

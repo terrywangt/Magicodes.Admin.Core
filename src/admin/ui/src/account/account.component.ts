@@ -53,7 +53,7 @@ export class AccountComponent extends AppComponentBase implements OnInit {
 
     ngOnInit(): void {
         this._loginService.init();
-        $('body').attr('class', this._uiCustomizationService.getAccountModuleBodyClass());
+        document.body.className = this._uiCustomizationService.getAccountModuleBodyClass();
     }
 
     goToHome(): void {
@@ -62,7 +62,7 @@ export class AccountComponent extends AppComponentBase implements OnInit {
 
     getBgUrl(): string {
         //https://api.dujin.org/bing/1366.php
-        return 'url(./assets/metronic/dist/html/' + this.ui.getTheme() + '/assets/demo/' + this.ui.getTheme() +'/media/img/bg/bg-4.jpg)';
+        return 'url(./assets/metronic/dist/html/' + this.ui.getTheme() + '/assets/demo/' + this.ui.getTheme() + '/media/img/bg/bg-4.jpg)';
     }
 
     private supportsTenancyNameInUrl() {

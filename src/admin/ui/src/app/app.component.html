@@ -8,11 +8,11 @@
         <button *ngIf="ui.leftMenuUsed()" class="m-aside-left-close m-aside-left-close--skin-{{s('App.UiManagement.Left.AsideSkin')}}" id="m_aside_left_close_btn">
             <i class="la la-close" [attr.aria-label]="l('Close')"></i>
         </button>
-        <div *ngIf="ui.leftMenuUsed()" id="m_aside_left" class="m-grid__item	m-aside-left m-aside-left--skin-{{s('App.UiManagement.Left.AsideSkin')}}">
+        <!--<div *ngIf="ui.leftMenuUsed()" class="m-grid__item m-aside-left m-aside-left--skin-{{s('App.UiManagement.Left.AsideSkin')}}">-->
             <!-- BEGIN: Aside Menu -->
-            <side-bar-menu></side-bar-menu>
+            <side-bar-menu *ngIf="ui.leftMenuUsed()"></side-bar-menu>
             <!-- END: Aside Menu -->
-        </div>
+        <!--</div>-->
         <!-- END: Left Aside -->
         <div class="m-grid__item m-grid__item--fluid m-wrapper">
             <router-outlet></router-outlet>

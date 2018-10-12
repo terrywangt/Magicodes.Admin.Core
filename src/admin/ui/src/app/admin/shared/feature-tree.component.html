@@ -1,0 +1,13 @@
+<p-tree [value]="treeData" [(selection)]="selectedFeatures" selectionMode="checkbox">
+    <ng-template let-node pTemplate="default">
+        <span style="margin-right: 5px;">{{node.label}}</span>
+        <input type="text"
+               [attr.name]="node.data.name"
+               *ngIf="node.data.inputType.name === 'SINGLE_LINE_STRING'"
+               [(ngModel)]="node.value"
+               (change)="onInputChange(node)">
+        <select *ngIf="node.data.inputType.name === 'COMBOBOX'" [(ngModel)]="node.value" (change)="onDropdownChange(node)">
+            <option *ngFor="let item of node.data.inputType.itemSource.items" [value]="item.value">{{item.displayName}}</option>
+        </select>
+    </ng-template>
+</p-tree>

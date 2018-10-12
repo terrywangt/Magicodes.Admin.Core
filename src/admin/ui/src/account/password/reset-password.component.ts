@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { accountModuleAnimation } from '@shared/animations/routerTransition';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { AppUrlService } from '@shared/common/nav/app-url.service';
-import { AppSessionService } from '@shared/common/session/app-session.service';
 import { AccountServiceProxy, PasswordComplexitySetting, ProfileServiceProxy, ResetPasswordOutput, ResolveTenantIdInput } from '@shared/service-proxies/service-proxies';
 import { LoginService } from '../login/login.service';
 import { ResetPasswordModel } from './reset-password.model';
@@ -26,7 +25,6 @@ export class ResetPasswordComponent extends AppComponentBase implements OnInit {
         private _activatedRoute: ActivatedRoute,
         private _loginService: LoginService,
         private _appUrlService: AppUrlService,
-        private _appSessionService: AppSessionService,
         private _profileService: ProfileServiceProxy
     ) {
         super(injector);
@@ -37,7 +35,7 @@ export class ResetPasswordComponent extends AppComponentBase implements OnInit {
             this.model.c = this._activatedRoute.snapshot.queryParams['c'];
 
             this._accountService.resolveTenantId(new ResolveTenantIdInput({ c: this.model.c })).subscribe((tenantId) => {
-                this._appSessionService.changeTenantIfNeeded(
+                this.appSession.changeTenantIfNeeded(
                     tenantId
                 );
 
@@ -49,11 +47,11 @@ export class ResetPasswordComponent extends AppComponentBase implements OnInit {
             this.model.userId = this._activatedRoute.snapshot.queryParams['userId'];
             this.model.resetCode = this._activatedRoute.snapshot.queryParams['resetCode'];
 
-            this._appSessionService.changeTenantIfNeeded(
+            this.appSession.changeTenantIfNeeded(
                 this.parseTenantId(
                     this._activatedRoute.snapshot.queryParams['tenantId']
                 )
-            );   
+            );
         }
     }
 

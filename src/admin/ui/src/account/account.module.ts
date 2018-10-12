@@ -31,6 +31,7 @@ import { SelectEditionComponent } from './register/select-edition.component';
 import { TenantRegistrationHelperService } from './register/tenant-registration-helper.service';
 import { TenantChangeModalComponent } from './shared/tenant-change-modal.component';
 import { TenantChangeComponent } from './shared/tenant-change.component';
+import { OAuthModule } from 'angular-oauth2-oidc';
 
 @NgModule({
     imports: [
@@ -38,17 +39,14 @@ import { TenantChangeComponent } from './shared/tenant-change.component';
         FormsModule,
         HttpModule,
         JsonpModule,
-
         RecaptchaModule.forRoot(),
         ModalModule.forRoot(),
-
         AbpModule,
-
         CommonModule,
-
         UtilsModule,
         ServiceProxyModule,
-        AccountRoutingModule
+        AccountRoutingModule,
+        OAuthModule.forRoot()
     ],
     declarations: [
         AccountComponent,

@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { AppConsts } from '@shared/AppConsts';
 import { UrlHelper } from '@shared/helpers/UrlHelper';
 import { AuthenticateModel, AuthenticateResultModel, ExternalAuthenticateModel, ExternalAuthenticateResultModel, ExternalLoginProviderInfoModel, TokenAuthServiceProxy } from '@shared/service-proxies/service-proxies';
+import { ScriptLoaderService } from '@shared/utils/script-loader.service';
 import * as _ from 'lodash';
 import { finalize } from 'rxjs/operators';
 
@@ -203,7 +204,10 @@ export class LoginService {
             .getExternalAuthenticationProviders()
             .subscribe((providers: ExternalLoginProviderInfoModel[]) => {
                 this.externalLoginProviders = _.map(providers, p => new ExternalLoginProvider(p));
-                callback && callback();
+
+                if (callback) {
+                    callback();
+                }
             });
     }
 
@@ -214,7 +218,7 @@ export class LoginService {
         }
 
         if (loginProvider.name === ExternalLoginProvider.FACEBOOK) {
-            jQuery.getScript('//connect.facebook.net/en_US/sdk.js', () => {
+            new ScriptLoaderService().load('//connect.facebook.net/en_US/sdk.js').then(() => {
                 FB.init({
                     appId: loginProvider.clientId,
                     cookie: false,
@@ -230,7 +234,7 @@ export class LoginService {
                 });
             });
         } else if (loginProvider.name === ExternalLoginProvider.GOOGLE) {
-            jQuery.getScript('https://apis.google.com/js/api.js', () => {
+            new ScriptLoaderService().load('https://apis.google.com/js/api.js').then(() => {
                 gapi.load('client:auth2',
                     () => {
                         gapi.client.init({
@@ -242,7 +246,7 @@ export class LoginService {
                     });
             });
         } else if (loginProvider.name === ExternalLoginProvider.MICROSOFT) {
-            jQuery.getScript('//js.live.net/v5.0/wl.js', () => {
+            new ScriptLoaderService().load('//js.live.net/v5.0/wl.js').then(() => {
                 WL.Event.subscribe('auth.login', this.microsoftLogin);
                 WL.init({
                     client_id: loginProvider.clientId,
@@ -259,9 +263,9 @@ export class LoginService {
     }
 
     private getOpenIdConnectConfig(loginProvider: ExternalLoginProvider): AuthConfig {
-        var authConfig = new AuthConfig();
-        authConfig.loginUrl = loginProvider.additionalParams["LoginUrl"];
-        authConfig.issuer = loginProvider.additionalParams["Authority"];
+        let authConfig = new AuthConfig();
+        authConfig.loginUrl = loginProvider.additionalParams['LoginUrl'];
+        authConfig.issuer = loginProvider.additionalParams['Authority'];
         authConfig.clientId = loginProvider.clientId;
         authConfig.responseType = 'id_token';
         authConfig.redirectUri = window.location.origin + '/account/login';
@@ -293,19 +297,19 @@ export class LoginService {
 
     public openIdConnectLoginCallback(resp) {
         this.initExternalLoginProviders(() => {
-            var openIdProvider = _.filter(this.externalLoginProviders, { name: 'OpenIdConnect' })[0];
-            var authConfig = this.getOpenIdConnectConfig(openIdProvider);
+            let openIdProvider = _.filter(this.externalLoginProviders, { name: 'OpenIdConnect' })[0];
+            let authConfig = this.getOpenIdConnectConfig(openIdProvider);
             this.oauthService.configure(authConfig);
 
-            abp.ui.block();
+            abp.ui.setBusy();
 
             this.oauthService.tryLogin().then(() => {
-                var claims = this.oauthService.getIdentityClaims();
+                let claims = this.oauthService.getIdentityClaims();
 
                 const model = new ExternalAuthenticateModel();
                 model.authProvider = ExternalLoginProvider.OPENID;
                 model.providerAccessCode = this.oauthService.getIdToken();
-                model.providerKey = claims["sub"];
+                model.providerKey = claims['sub'];
                 model.singleSignIn = UrlHelper.getSingleSignIn();
                 model.returnUrl = UrlHelper.getReturnUrl();
 

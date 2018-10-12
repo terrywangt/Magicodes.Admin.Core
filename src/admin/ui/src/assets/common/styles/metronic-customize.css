@@ -69,18 +69,6 @@ html[dir=rtl] .input-group span.input-group-btn button {
 .m-messenger__message .m-messenger__message-body {
   width: 100% !important;
 }
-.m-messenger__message .m-messenger__message-body .m-messenger__message-username {
-  text-align: right !important;
-}
-.m-messenger__message .m-messenger__message-body .m-messenger__message-username span {
-  float: left;
-}
-.m-messenger__message.m-messenger__message--out .m-messenger__message-body .m-messenger__message-username {
-  text-align: left !important;
-}
-.m-messenger__message.m-messenger__message--out .m-messenger__message-body .m-messenger__message-username span {
-  float: right;
-}
 .m-messenger__message.m-messenger__message--out .m-messenger__message-body .m-messenger__message-text {
   text-align: right;
 }

@@ -1,4 +1,4 @@
-import { AfterViewChecked, Component, ElementRef, EventEmitter, Injector, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Injector, Output, ViewChild } from '@angular/core';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { CreateOrUpdateRoleInput, RoleEditDto, RoleServiceProxy } from '@shared/service-proxies/service-proxies';
 import { ModalDirective } from 'ngx-bootstrap';
@@ -9,9 +9,8 @@ import { finalize } from 'rxjs/operators';
     selector: 'createOrEditRoleModal',
     templateUrl: './create-or-edit-role-modal.component.html'
 })
-export class CreateOrEditRoleModalComponent extends AppComponentBase implements AfterViewChecked {
+export class CreateOrEditRoleModalComponent extends AppComponentBase {
 
-    @ViewChild('roleNameInput') roleNameInput: ElementRef;
     @ViewChild('createOrEditModal') modal: ModalDirective;
     @ViewChild('permissionTree') permissionTree: PermissionTreeComponent;
 
@@ -28,12 +27,6 @@ export class CreateOrEditRoleModalComponent extends AppComponentBase implements 
         super(injector);
     }
 
-    ngAfterViewChecked(): void {
-        //Temporary fix for: https://github.com/valor-software/ngx-bootstrap/issues/1508
-        $('tabset ul.nav').addClass('m-tabs-line');
-        $('tabset ul.nav li a.nav-link').addClass('m-tabs__link');
-    }
-
     show(roleId?: number): void {
         const self = this;
         self.active = true;
@@ -47,7 +40,7 @@ export class CreateOrEditRoleModalComponent extends AppComponentBase implements 
     }
 
     onShown(): void {
-        $(this.roleNameInput.nativeElement).focus();
+        document.getElementById('RoleDisplayName').focus();
     }
 
     save(): void {

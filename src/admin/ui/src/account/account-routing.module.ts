@@ -55,9 +55,6 @@ export class AccountRoutingModule {
     ) {
         router.events.subscribe((event: NavigationEnd) => {
             setTimeout(() => {
-                //this will reinitialize metronic App, when navigated to admin module
-                mApp.initialized = false;
-
                 this.toggleBodyCssClass(event.url);
             }, 0);
         });
@@ -65,14 +62,14 @@ export class AccountRoutingModule {
 
     toggleBodyCssClass(url: string): void {
         if (!url) {
-            $('body').attr('class', this._uiCustomizationService.getAccountModuleBodyClass());
+            document.body.className = this._uiCustomizationService.getAccountModuleBodyClass();
             return;
         }
 
         if (url.indexOf('/account/') >= 0) {
-            $('body').attr('class', this._uiCustomizationService.getAccountModuleBodyClass());
+            document.body.className = this._uiCustomizationService.getAccountModuleBodyClass();
         } else {
-            $('body').attr('class', this._uiCustomizationService.getAppModuleBodyClass());
+            document.body.className = this._uiCustomizationService.getAppModuleBodyClass();
         }
     }
 }

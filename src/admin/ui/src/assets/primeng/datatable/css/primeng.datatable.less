@@ -14,7 +14,6 @@
                 border-radius: 3px;
                 background: 0 0;
                 position: absolute;
-                left: -2px;
                 height: 18px;
                 width: 18px;
 
@@ -89,12 +88,13 @@
         .ui-paginator {
             text-align: right;
             border: none !important;
+            background-color: transparent;
 
             span {
                 padding: 0px;
 
                 a {
-                    padding-top: 8px;
+                    padding-top: 11px;
                     cursor: pointer !important;
                     margin-right: 5px !important;
 
@@ -104,12 +104,16 @@
                 }
             }
 
+            .ui-dropdown {
+                border: 1px solid #d6d6d6;
+                height:35px;
+            }
+
             a {
                 display: inline-block;
                 cursor: pointer !important;
-                height: 2.25rem;
-                width: 2.25rem;
-                vertical-align: middle;
+                height: 35px;
+                width: 35px;
                 padding: 0;
                 padding-top: 8px;
                 -webkit-border-radius: 50%;
@@ -128,7 +132,6 @@
                 -ms-align-items: center;
                 align-items: center;
                 text-align: center;
-                vertical-align: middle;
                 font-size: 1rem;
                 line-height: 1rem;
                 font-weight: 400;
@@ -199,4 +202,8 @@
         padding: 10px;
         text-align: center;
     }
+}
+
+.dropdown-menu > .dropdown-item, .dropdown-menu > li > a {
+    white-space: nowrap;
 }

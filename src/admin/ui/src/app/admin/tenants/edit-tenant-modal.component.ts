@@ -22,6 +22,7 @@ export class EditTenantModalComponent extends AppComponentBase {
     saving = false;
     isUnlimited = false;
     subscriptionEndDateUtcIsValid = false;
+    subscriptionEndDateUtcx: moment.Moment = moment().startOf('day');
 
     tenant: TenantEditDto = undefined;
     currentConnectionString: string;
@@ -43,7 +44,7 @@ export class EditTenantModalComponent extends AppComponentBase {
             this.editions = editionsResult.items;
             let notSelectedEdition = new SubscribableEditionComboboxItemDto();
             notSelectedEdition.displayText = this.l('NotAssigned');
-            notSelectedEdition.value = "";
+            notSelectedEdition.value = '';
             this.editions.unshift(notSelectedEdition);
 
             this._tenantService.getTenantForEdit(tenantId).subscribe((tenantResult) => {
@@ -59,30 +60,15 @@ export class EditTenantModalComponent extends AppComponentBase {
     }
 
     onShown(): void {
-        $(this.nameInput.nativeElement).focus();
-        $(this.subscriptionEndDateUtc.nativeElement).datetimepicker({
-            locale: abp.localization.currentLanguage.name,
-            format: 'L',
-            defaultDate: this.tenant.subscriptionEndDateUtc,
-        }).on('dp.change', (e) => {
-            this.subscriptionEndDateUtcIsValid = e.date !== false;
-        });
+        document.getElementById('Name').focus();
+
+        if (this.tenant.subscriptionEndDateUtc) {
+            (this.subscriptionEndDateUtc.nativeElement as any).value = this.tenant.subscriptionEndDateUtc.format('L');
+        }
     }
 
-    formatSubscriptionEndDate(date: any): string {
-        if (this.isUnlimited) {
-            return '';
-        }
-
-        if (!this.tenant.editionId) {
-            return '';
-        }
-
-        if (!date) {
-            return '';
-        }
-
-        return moment(date).format('L');
+    subscriptionEndDateChange(e): void {
+        this.subscriptionEndDateUtcIsValid = e && e.date !== false;
     }
 
     selectedEditionIsFree(): boolean {
@@ -106,14 +92,7 @@ export class EditTenantModalComponent extends AppComponentBase {
         }
 
         //take selected date as UTC
-        if (!this.isUnlimited && this.tenant.editionId) {
-            let date = $(this.subscriptionEndDateUtc.nativeElement).data('DateTimePicker').date();
-            if (!date) {
-                date = this.tenant.subscriptionEndDateUtc;
-            }
-
-            this.tenant.subscriptionEndDateUtc = moment(date.format('YYYY-MM-DDTHH:mm:ss') + 'Z');
-        } else {
+        if (this.isUnlimited || !this.tenant.editionId) {
             this.tenant.subscriptionEndDateUtc = null;
         }
 
@@ -141,12 +120,11 @@ export class EditTenantModalComponent extends AppComponentBase {
 
     onUnlimitedChange(): void {
         if (this.isUnlimited) {
-            $(this.subscriptionEndDateUtc.nativeElement).data('DateTimePicker').clear();
             this.tenant.subscriptionEndDateUtc = null;
             this.subscriptionEndDateUtcIsValid = true;
         } else {
-            let date = $(this.subscriptionEndDateUtc.nativeElement).data('DateTimePicker').date();
-            if (!date) {
+
+            if (!this.tenant.subscriptionEndDateUtc) {
                 this.subscriptionEndDateUtcIsValid = false;
             }
         }

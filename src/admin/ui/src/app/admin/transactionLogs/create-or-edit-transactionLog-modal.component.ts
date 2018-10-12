@@ -1,6 +1,6 @@
-﻿import { Component , ViewChild, Injector, Output, EventEmitter, ElementRef, ChangeDetectorRef } from '@angular/core';
+﻿import { Component, ViewChild, Injector, Output, EventEmitter, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
-import { TransactionLogServiceProxy, CreateOrUpdateTransactionLogDto, TransactionLogEditDto} from '@shared/service-proxies/service-proxies';
+import { TransactionLogServiceProxy, CreateOrUpdateTransactionLogDto, TransactionLogEditDto } from '@shared/service-proxies/service-proxies';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import * as _ from 'lodash';
 import { Data } from '@angular/router/src/config';
@@ -11,14 +11,15 @@ import { finalize } from 'rxjs/operators';
     selector: 'createOrEditTransactionLogModal',
     templateUrl: './create-or-edit-transactionLog-modal.component.html'
 })
-export class CreateOrEditTransactionLogModalComponent extends AppComponentBase {   
-	@ViewChild('PayTimeDatePicker') PayTimeDatePicker: ElementRef;
+export class CreateOrEditTransactionLogModalComponent extends AppComponentBase {
+    @ViewChild('PayTimeDatePicker') PayTimeDatePicker: ElementRef;
     @ViewChild('createOrEditModal') modal: ModalDirective;
     @Output() modalSave: EventEmitter<any> = new EventEmitter<any>();
     active = false;
     saving = false;
 
-
+    public createDateRange: moment.Moment[] = [moment().startOf('day'), moment().endOf('day')];
+    public updateDateRange: moment.Moment[] = [moment().startOf('day'), moment().endOf('day')];
     formModel: TransactionLogEditDto = new TransactionLogEditDto();
 
     constructor(
@@ -30,11 +31,11 @@ export class CreateOrEditTransactionLogModalComponent extends AppComponentBase {
     }
 
     onShown(): void {
-		$(this.PayTimeDatePicker.nativeElement).datetimepicker({
-			locale: abp.localization.currentLanguage.name,
-			format: 'L LT',
-			date: this.formModel.id == null ? '' : this.formModel.payTime.format()
-		});
+        // $(this.PayTimeDatePicker.nativeElement).datetimepicker({
+        // 	locale: abp.localization.currentLanguage.name,
+        // 	format: 'L LT',
+        // 	date: this.formModel.id == null ? '' : this.formModel.payTime.format()
+        // });
     }
 
     show(id?: number): void {
@@ -43,28 +44,28 @@ export class CreateOrEditTransactionLogModalComponent extends AppComponentBase {
         this._changeDetector.detectChanges();
         this.formModel.id = id;
         this._transactionLogService.getTransactionLogForEdit(id).subscribe(result => {
-            this.formModel = result.transactionLog;     
-            this.modal.show();               
+            this.formModel = result.transactionLog;
+            this.modal.show();
         });
     }
 
     save(): void {
         const createOrEditInput = new CreateOrUpdateTransactionLogDto();
-		createOrEditInput.transactionLog = this.formModel;
-		createOrEditInput.transactionLog.payTime = $(this.PayTimeDatePicker.nativeElement).data('DateTimePicker').date();
-		this.saving = true;
-		this._transactionLogService.createOrUpdateTransactionLog(createOrEditInput)
-			.pipe(finalize(() => this.saving = false))
-			.subscribe(() => {
-				this.notify.info(this.l('SavedSuccessfully'));
-				this.close();
-				this.modalSave.emit(true);
-			});
+        createOrEditInput.transactionLog = this.formModel;
+        //createOrEditInput.transactionLog.payTime = $(this.PayTimeDatePicker.nativeElement).data('DateTimePicker').date();
+        this.saving = true;
+        this._transactionLogService.createOrUpdateTransactionLog(createOrEditInput)
+            .pipe(finalize(() => this.saving = false))
+            .subscribe(() => {
+                this.notify.info(this.l('SavedSuccessfully'));
+                this.close();
+                this.modalSave.emit(true);
+            });
     }
 
     close(): void {
         this.modal.hide();
         this.active = false;
-		this.modalSave.emit(true);
+        this.modalSave.emit(true);
     }
 }

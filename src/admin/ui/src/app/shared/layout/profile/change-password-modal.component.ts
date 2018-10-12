@@ -6,7 +6,8 @@ import { finalize } from 'rxjs/operators';
 
 @Component({
     selector: 'changePasswordModal',
-    templateUrl: './change-password-modal.component.html'
+    templateUrl: './change-password-modal.component.html',
+    styleUrls: ['./change-password-modal.component.less']
 })
 export class ChangePasswordModalComponent extends AppComponentBase {
 
@@ -41,7 +42,7 @@ export class ChangePasswordModalComponent extends AppComponentBase {
     }
 
     onShown(): void {
-        $(this.currentPasswordInput.nativeElement).focus();
+        document.getElementById('CurrentPassword').focus();
     }
 
     close(): void {

@@ -25,10 +25,7 @@
                                     <select #baseLanguageNameCombobox
                                             name="baseLanguageName"
                                             class="form-control bs-select"
-                                            [(ngModel)]="baseLanguageName"
-                                            [attr.data-live-search]="true"
-                                            jq-plugin="selectpicker"
-                                            jq-options='{ "iconBase": "famfamfam-flag", "tickIcon": "fa fa-check" }'>
+                                            [(ngModel)]="baseLanguageName">
                                         <option *ngFor="let language of languages" [value]="language.name" [attr.data-icon]="language.icon">{{language.displayName}}</option>
                                     </select>
                                 </div>
@@ -39,10 +36,7 @@
                                     <select #targetLanguageNameCombobox
                                             name="targetLanguageName"
                                             class="form-control bs-select"
-                                            [(ngModel)]="targetLanguageName"
-                                            [attr.data-live-search]="true"
-                                            jq-plugin="selectpicker"
-                                            jq-options='{ "iconBase": "famfamfam-flag", "tickIcon": "fa fa-check" }'>
+                                            [(ngModel)]="targetLanguageName">
                                         <option *ngFor="let language of languages" [value]="language.name" [attr.data-icon]="language.icon">{{language.displayName}}</option>
                                     </select>
                                 </div>
@@ -53,9 +47,7 @@
                                     <select #sourceNameCombobox
                                             name="sourceName"
                                             class="form-control bs-select"
-                                            [(ngModel)]="sourceName"
-                                            [attr.data-live-search]="true"
-                                            jq-plugin="selectpicker">
+                                            [(ngModel)]="sourceName">
                                         <option *ngFor="let sourceName of sourceNames" [value]="sourceName">{{sourceName}}</option>
                                     </select>
                                 </div>
@@ -66,8 +58,7 @@
                                     <select #targetValueFilterCombobox
                                             name="targetValueFilter"
                                             class="form-control bs-select"
-                                            [(ngModel)]="targetValueFilter"
-                                            jq-plugin="selectpicker">
+                                            [(ngModel)]="targetValueFilter">
                                         <option value="ALL">{{l("All")}}</option>
                                         <option value="EMPTY">{{l("EmptyOnes")}}</option>
                                     </select>
