@@ -1,6 +1,6 @@
 {
-  "remoteServiceBaseUrl": "https://demoadminapi.xin-lai.com",
-  "appBaseUrl": "https://demoadmin.xin-lai.com",
+  "remoteServiceBaseUrl": "http://demo.api.xin-lai.com",
+  "appBaseUrl": "http://demo.admin.xin-lai.com/",
   "localeMappings": [
     {
       "from": "pt-BR",

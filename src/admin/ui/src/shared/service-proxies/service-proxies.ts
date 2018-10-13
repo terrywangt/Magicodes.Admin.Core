@@ -24164,7 +24164,6 @@ export enum RegisterTenantInputGateway {
 export enum TransactionLogListDtoPayChannel {
     _0 = 0, 
     _1 = 1, 
-    _2 = 2, 
 }
 
 export enum TransactionLogListDtoTerminal {
@@ -24191,7 +24190,6 @@ export enum TransactionLogListDtoTransactionState {
 export enum TransactionLogEditDtoPayChannel {
     _0 = 0, 
     _1 = 1, 
-    _2 = 2, 
 }
 
 export enum TransactionLogEditDtoTerminal {

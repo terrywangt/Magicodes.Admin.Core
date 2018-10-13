@@ -22,7 +22,7 @@ import { UsersComponent } from './users/users.component';
 import { ArticleInfosComponent } from './articleInfos/articleInfo.component';
 import { ArticleSourceInfosComponent } from './articleSourceInfos/articleSourceInfo.component';
 import { ColumnInfosComponent } from './columnInfos/columnInfo.component';
-import { StorageSettingsComponent } from './settings/storage-settings.component';
+import { StorageSettingsComponent } from './settings/Storage-settings.component';
 import { TransactionLogsComponent } from './transactionLogs/transactionLog.component';
 
 @NgModule({
