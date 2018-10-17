@@ -68,7 +68,7 @@ namespace Admin.Application.Custom.Common
             var objectType = Enum.Parse<AttachmentObjectTypes>(input.ObjectType);
             var list = await _objectAttachmentInfoRepository.GetAllIncluding(p => p.AttachmentInfo)
                 .Where(p => p.ObjectId == input.ObjectId && p.ObjectType == objectType && p.AttachmentInfo.AttachmentType == AttachmentTypes.Image)
-                .Select(p=>p.AttachmentInfo)
+                .Select(p => p.AttachmentInfo)
                 .ToListAsync();
             return list.MapTo<List<GetObjectImagesListDto>>();
         }
