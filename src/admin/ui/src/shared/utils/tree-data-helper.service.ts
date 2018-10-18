@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { TreeNode } from 'primeng/api';
 import * as _ from 'lodash';
 
 @Injectable()
@@ -19,5 +20,14 @@ export class TreeDataHelperService {
         });
 
         return foundNode;
+    }
+
+    findParent(data, nodeSelector) {
+        let node = this.findNode(data, nodeSelector);
+        if (!node) {
+            return null;
+        }
+
+        return node.parent;
     }
 }

@@ -62,19 +62,7 @@ export class SideBarMenuComponent extends AppComponentBase implements OnInit, Af
     }
 
     showMenuItem(menuItem): boolean {
-        if (menuItem.permissionName === 'Pages.Administration.Tenant.SubscriptionManagement' && this.appSession.tenant && !this.appSession.tenant.edition) {
-            return false;
-        }
-
-        if (menuItem.permissionName) {
-            return this.permission.isGranted(menuItem.permissionName);
-        }
-
-        if (menuItem.items && menuItem.items.length) {
-            return this._appNavigationService.checkChildMenuItemPermission(menuItem);
-        }
-
-        return true;
+        return this._appNavigationService.showMenuItem(menuItem);
     }
 
     isMenuItemIsActive(item): boolean {

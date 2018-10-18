@@ -27,8 +27,8 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
     @ViewChild('dataTable') dataTable: Table;
     @ViewChild('paginator') paginator: Paginator;
 
-    subscriptionDateRange: moment.Moment[] = [moment().startOf('day'), moment().add(30, 'days').endOf('day')];
-    creationDateRange: moment.Moment[] = [moment().startOf('day'), moment().endOf('day')];
+    subscriptionDateRange: Date[] = [moment().startOf('day').toDate(), moment().add(30, 'days').endOf('day').toDate()];
+    creationDateRange: Date[] = [moment().startOf('day').toDate(), moment().endOf('day').toDate()];
 
     filters: {
         filterText: string;
@@ -51,30 +51,30 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
     setFiltersFromRoute(): void {
         if (this._activatedRoute.snapshot.queryParams['subscriptionEndDateStart'] != null) {
             this.filters.subscriptionEndDateRangeActive = true;
-            this.subscriptionDateRange[0] = moment(this._activatedRoute.snapshot.queryParams['subscriptionEndDateStart']);
+            this.subscriptionDateRange[0] = moment(this._activatedRoute.snapshot.queryParams['subscriptionEndDateStart']).toDate();
         } else {
-            this.subscriptionDateRange[0] = moment().startOf('day');
+            this.subscriptionDateRange[0] = moment().startOf('day').toDate();
         }
 
         if (this._activatedRoute.snapshot.queryParams['subscriptionEndDateEnd'] != null) {
             this.filters.subscriptionEndDateRangeActive = true;
-            this.subscriptionDateRange[1] = moment(this._activatedRoute.snapshot.queryParams['subscriptionEndDateEnd']);
+            this.subscriptionDateRange[1] = moment(this._activatedRoute.snapshot.queryParams['subscriptionEndDateEnd']).toDate();
         } else {
-            this.subscriptionDateRange[1] = moment().add(30, 'days').endOf('day');
+            this.subscriptionDateRange[1] = moment().add(30, 'days').endOf('day').toDate();
         }
 
         if (this._activatedRoute.snapshot.queryParams['creationDateStart'] != null) {
             this.filters.creationDateRangeActive = true;
-            this.creationDateRange[0] = moment(this._activatedRoute.snapshot.queryParams['creationDateStart']);
+            this.creationDateRange[0] = moment(this._activatedRoute.snapshot.queryParams['creationDateStart']).toDate();
         } else {
-            this.creationDateRange[0] = moment().add(-7, 'days').startOf('day');
+            this.creationDateRange[0] = moment().add(-7, 'days').startOf('day').toDate();
         }
 
         if (this._activatedRoute.snapshot.queryParams['creationDateEnd'] != null) {
             this.filters.creationDateRangeActive = true;
-            this.creationDateRange[1] = moment(this._activatedRoute.snapshot.queryParams['creationDateEnd']);
+            this.creationDateRange[1] = moment(this._activatedRoute.snapshot.queryParams['creationDateEnd']).toDate();
         } else {
-            this.creationDateRange[1] = moment().endOf('day');
+            this.creationDateRange[1] = moment().endOf('day').toDate();
         }
     }
 
@@ -105,10 +105,10 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
 
         this._tenantService.getTenants(
             this.filters.filterText,
-            this.filters.subscriptionEndDateRangeActive ? this.subscriptionDateRange[0] : undefined,
-            this.filters.subscriptionEndDateRangeActive ? this.subscriptionDateRange[1] : undefined,
-            this.filters.creationDateRangeActive ? this.creationDateRange[0] : undefined,
-            this.filters.creationDateRangeActive ? this.creationDateRange[1] : undefined,
+            this.filters.subscriptionEndDateRangeActive ? moment(this.subscriptionDateRange[0]) : undefined,
+            this.filters.subscriptionEndDateRangeActive ? moment(this.subscriptionDateRange[1]) : undefined,
+            this.filters.creationDateRangeActive ? moment(this.creationDateRange[0]) : undefined,
+            this.filters.creationDateRangeActive ? moment(this.creationDateRange[1]) : undefined,
             this.filters.selectedEditionId,
             this.filters.selectedEditionId !== undefined && (this.filters.selectedEditionId + '') !== '-1',
             this.primengTableHelper.getSorting(this.dataTable),
@@ -130,7 +130,7 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
         input.skipCount = 0;
         input.tenantId = record.id;
         this._commonLookupService.findUsers(input).subscribe(result => {
-            if (result.items.length == 0) {
+            if (result.items.length === 0) {
                 this.notify.error(this.l('UserImpersonateErrorMessage'));
                 return;
             }

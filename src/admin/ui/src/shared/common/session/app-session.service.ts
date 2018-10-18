@@ -71,6 +71,12 @@ export class AppSessionService {
     }
 
     private isCurrentTenant(tenantId?: number) {
+        let isTenant = tenantId > 0;
+
+        if (!isTenant && !this.tenant) { // this is host
+            return true;
+        }
+
         if (!tenantId && this.tenant) {
             return false;
         } else if (tenantId && (!this.tenant || this.tenant.id !== tenantId)) {

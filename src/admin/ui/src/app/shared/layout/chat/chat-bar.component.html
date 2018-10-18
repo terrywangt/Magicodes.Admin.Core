@@ -79,7 +79,7 @@
         <hr />
         <div class="m-messenger m-messenger--message-arrow m-messenger--skin-light">
             <div class="m-messenger__messages">
-                <perfect-scrollbar #chatScrollBar style="height: 78vh;">
+                <perfect-scrollbar #chatScrollBar (psYReachStart)="loadPreviousMesssagesOfSelectedUser()" style="height: 78vh;">
                     <div class="m-messenger__message" *ngFor="let message of selectedUser.messages" [ngClass]="{'m-messenger__message--out':message.side === 1, 'm-messenger__message--in':message.side !== 1}">
                         <div *ngIf="message.side !== 1" class="m-messenger__message-pic">
                             <friend-profile-picture [cssClass]="'mCS_img_loaded'" [profilePictureId]="selectedUser.friendProfilePictureId" [userId]="selectedUser.friendUserId" [tenantId]="selectedUser.friendTenantId"></friend-profile-picture>
@@ -118,7 +118,7 @@
                         <input id="ChatMessage" #ChatMessage name="ChatMessage" type="text" class="m-messenger__form-input" placeholder="{{l('TypeAMessageHere')}}" [(ngModel)]="chatMessage" (keydown.Enter)="sendMessage($event)" [disabled]="selectedUser.state == friendDtoState.Blocked" maxlength="4096" required />
                     </div>
                     <div class="m-messenger__form-tools" dropdown dropup="true" #chatAttachmentDropdown="bs-dropdown">
-                        <button id="chatDropdownToggle" class="m-messenger__form-attachment select-media" dropdownToggle>
+                        <button id="chatDropdownToggle" class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air" dropdownToggle>
                             <i class="la la-paperclip" [attr.aria-label]="l('Attach')"></i>
                         </button>
                         <ul class="dropdown-menu chat-attachment-menu" *dropdownMenu role="menu">
@@ -168,4 +168,4 @@
     </div>
 </div>
 <!-- end::Quick Sidebar -->
-<commonLookupModal #userLookupModal (itemSelected)="addFriendSelected($event)"></commonLookupModal>
+

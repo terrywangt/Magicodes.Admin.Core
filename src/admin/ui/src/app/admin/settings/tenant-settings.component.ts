@@ -147,7 +147,7 @@ export class TenantSettingsComponent extends AppComponentBase implements OnInit 
             this.notify.info(this.l('SavedSuccessfully'));
 
             if (abp.clock.provider.supportsMultipleTimezone && this.usingDefaultTimeZone && this.initialTimeZone !== this.settings.general.timezone) {
-                this.message.info(this.l('TimeZoneSettingChangedRefreshPageNotification')).done(() => {
+                this.message.info(this.l('TimeZoneSettingChangedRefreshPageNotification')).then(() => {
                     window.location.reload();
                 });
             }

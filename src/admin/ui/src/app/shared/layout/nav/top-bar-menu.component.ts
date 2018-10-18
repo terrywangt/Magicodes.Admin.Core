@@ -2,7 +2,6 @@ import { PermissionCheckerService } from '@abp/auth/permission-checker.service';
 import { Component, Injector, OnInit, AfterViewInit, ViewEncapsulation, ElementRef, ViewChild } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { AppComponentBase } from '@shared/common/app-component-base';
-import { AppUiCustomizationService } from '@shared/common/ui/app-ui-customization.service';
 import { AppMenu } from './app-menu';
 import { AppNavigationService } from './app-navigation.service';
 import * as objectPath from 'object-path';
@@ -28,7 +27,6 @@ export class TopBarMenuComponent extends AppComponentBase implements OnInit, Aft
         injector: Injector,
         private router: Router,
         public permission: PermissionCheckerService,
-        private _uiCustomizationService: AppUiCustomizationService,
         private _appNavigationService: AppNavigationService) {
         super(injector);
     }
@@ -53,19 +51,7 @@ export class TopBarMenuComponent extends AppComponentBase implements OnInit, Aft
     }
 
     showMenuItem(menuItem): boolean {
-        if (menuItem.permissionName === 'Pages.Administration.Tenant.SubscriptionManagement' && this.appSession.tenant && !this.appSession.tenant.edition) {
-            return false;
-        }
-
-        if (menuItem.permissionName) {
-            return this.permission.isGranted(menuItem.permissionName);
-        }
-
-        if (menuItem.items && menuItem.items.length) {
-            return this._appNavigationService.checkChildMenuItemPermission(menuItem);
-        }
-
-        return true;
+        return this._appNavigationService.showMenuItem(menuItem);
     }
 
     getItemCssClasses(item) {
@@ -83,7 +69,7 @@ export class TopBarMenuComponent extends AppComponentBase implements OnInit, Aft
             cssClasses += ' m-menu__item--active';
         }
 
-        return cssClasses;
+        return cssClasses + ' m-menu__item--rel';
     }
 
     isMenuItemIsActive(item): boolean {
@@ -113,5 +99,4 @@ export class TopBarMenuComponent extends AppComponentBase implements OnInit, Aft
     getItemAttrSubmenuToggle(menuItem) {
         return 'click';
     }
-
 }

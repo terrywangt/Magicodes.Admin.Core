@@ -79,7 +79,7 @@ export class HostSettingsComponent extends AppComponentBase implements OnInit {
             self.notify.info(self.l('SavedSuccessfully'));
 
             if (abp.clock.provider.supportsMultipleTimezone && self.usingDefaultTimeZone && self.initialTimeZone !== self.hostSettings.general.timezone) {
-                self.message.info(self.l('TimeZoneSettingChangedRefreshPageNotification')).done(function () {
+                self.message.info(self.l('TimeZoneSettingChangedRefreshPageNotification')).then(() => {
                     window.location.reload();
                 });
             }

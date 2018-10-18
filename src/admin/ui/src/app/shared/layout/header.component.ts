@@ -238,4 +238,10 @@ export class HeaderComponent extends AppComponentBase implements OnInit, AfterVi
     clickTopbarToggle(event: Event): void {
         this.document.body.classList.toggle('m-topbar--on');
     }
+
+    downloadCollectedData(): void {
+        this._profileServiceProxy.prepareCollectedData().subscribe(() => {
+            this.message.success(this.l('GdprDataPrepareStartedNotification'));
+        });
+    }
 }

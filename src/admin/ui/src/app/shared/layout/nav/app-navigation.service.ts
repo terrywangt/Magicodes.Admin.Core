@@ -1,4 +1,7 @@
 import { PermissionCheckerService } from '@abp/auth/permission-checker.service';
+import { FeatureCheckerService } from '@abp/features/feature-checker.service';
+import { AppSessionService } from '@shared/common/session/app-session.service';
+
 import { Injectable } from '@angular/core';
 import { AppMenu } from './app-menu';
 import { AppMenuItem } from './app-menu-item';
@@ -6,8 +9,11 @@ import { AppMenuItem } from './app-menu-item';
 @Injectable()
 export class AppNavigationService {
 
-    constructor(private _permissionService: PermissionCheckerService) {
-
+    constructor(
+        private _permissionCheckerService: PermissionCheckerService,
+        private _featureCheckerService: FeatureCheckerService,
+        private _appSessionService: AppSessionService
+    ) {
     }
 
     getMenu(): AppMenu {
@@ -46,7 +52,7 @@ export class AppNavigationService {
         for (let i = 0; i < menuItem.items.length; i++) {
             let subMenuItem = menuItem.items[i];
 
-            if (subMenuItem.permissionName && this._permissionService.isGranted(subMenuItem.permissionName)) {
+            if (subMenuItem.permissionName && this._permissionCheckerService.isGranted(subMenuItem.permissionName)) {
                 return true;
             }
 
@@ -58,5 +64,31 @@ export class AppNavigationService {
         }
 
         return false;
+    }
+
+    showMenuItem(menuItem: AppMenuItem): boolean {
+        if (menuItem.permissionName === 'Pages.Administration.Tenant.SubscriptionManagement' && this._appSessionService.tenant && !this._appSessionService.tenant.edition) {
+            return false;
+        }
+
+        let hideMenuItem = false;
+
+        if (menuItem.requiresAuthentication && !this._appSessionService.user) {
+            hideMenuItem = true;
+        }
+
+        if (menuItem.permissionName && !this._permissionCheckerService.isGranted(menuItem.permissionName)) {
+            hideMenuItem = true;
+        }
+
+        if (menuItem.hasFeatureDependency() && !menuItem.featureDependencySatisfied()) {
+            hideMenuItem = true;
+        }
+
+        if (hideMenuItem && menuItem.items && menuItem.items.length) {
+            return this.checkChildMenuItemPermission(menuItem);
+        }
+
+        return !hideMenuItem;
     }
 }

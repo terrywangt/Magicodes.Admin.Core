@@ -1,4 +1,3 @@
-import { NotifyService } from '@abp/notify/notify.service';
 import { Component, Injector, ViewChild, ViewEncapsulation } from '@angular/core';
 import { AuditLogDetailModalComponent } from '@app/admin/audit-logs/audit-log-detail-modal.component';
 import { EntityChangeDetailModalComponent } from '@app/admin/audit-logs/entity-change-detail-modal.component';
@@ -28,7 +27,7 @@ export class AuditLogsComponent extends AppComponentBase {
     @ViewChild('paginatorEntityChanges') paginatorEntityChanges: Paginator;
 
     //Filters
-    public dateRange: moment.Moment[] = [moment().startOf('day'), moment().endOf('day')];
+    public dateRange: Date[] = [moment().startOf('day').toDate(), moment().endOf('day').toDate()];
 
     public usernameAuditLog: string;
     public usernameEntityChange: string;
@@ -48,7 +47,6 @@ export class AuditLogsComponent extends AppComponentBase {
     constructor(
         injector: Injector,
         private _auditLogService: AuditLogServiceProxy,
-        private _notifyService: NotifyService,
         private _fileDownloadService: FileDownloadService
     ) {
         super(injector);
@@ -72,8 +70,8 @@ export class AuditLogsComponent extends AppComponentBase {
         this.primengTableHelperAuditLogs.showLoadingIndicator();
 
         this._auditLogService.getAuditLogs(
-            this.dateRange[0],
-            this.dateRange[1],
+            moment(this.dateRange[0]),
+            moment(this.dateRange[1]),
             this.usernameAuditLog,
             this.serviceName,
             this.methodName,
@@ -106,8 +104,8 @@ export class AuditLogsComponent extends AppComponentBase {
         this.primengTableHelperEntityChanges.showLoadingIndicator();
 
         this._auditLogService.getEntityChanges(
-            this.dateRange[0],
-            this.dateRange[1],
+            moment(this.dateRange[0]),
+            moment(this.dateRange[1]),
             this.usernameEntityChange,
             this.entityTypeFullName,
             this.primengTableHelperEntityChanges.getSorting(this.dataTableEntityChanges),
@@ -123,8 +121,8 @@ export class AuditLogsComponent extends AppComponentBase {
     exportToExcelAuditLogs(): void {
         const self = this;
         self._auditLogService.getAuditLogsToExcel(
-            self.dateRange[0],
-            self.dateRange[1],
+            moment(self.dateRange[0]),
+            moment(self.dateRange[1]),
             self.usernameAuditLog,
             self.serviceName,
             self.methodName,
@@ -143,8 +141,8 @@ export class AuditLogsComponent extends AppComponentBase {
     exportToExcelEntityChanges(): void {
         const self = this;
         self._auditLogService.getEntityChangesToExcel(
-            self.dateRange[0],
-            self.dateRange[1],
+            moment(self.dateRange[0]),
+            moment(self.dateRange[1]),
             self.usernameEntityChange,
             self.entityTypeFullName,
             undefined,

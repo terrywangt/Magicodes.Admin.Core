@@ -10,7 +10,7 @@ var abp = abp || {};
         opts = opts || {};
         opts.title = title;
         opts.type = type;
-        opts.confirmButtonText = opts.confirmButtonText || abp.localization.abpWeb('Yes');
+        opts.confirmButtonText = opts.confirmButtonText || abp.localization.abpWeb('Ok');
 
         if (isHtml) {
             opts.html = message;
@@ -18,7 +18,7 @@ var abp = abp || {};
             opts.text = message;
         }
 
-        swal(opts);
+        return swal(opts);
     };
 
     abp.message.info = function (message, title, isHtml, opts) {
@@ -62,7 +62,7 @@ var abp = abp || {};
             opts.text = message;
         }
 
-        swal(opts).then((result) => {
+        return swal(opts).then((result) => {
             callback && callback(result.value);
         });
     };

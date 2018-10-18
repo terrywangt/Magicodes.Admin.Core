@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Injector, OnInit, Output, ViewChild, ViewEncapsulation, NgZone, HostBinding, ElementRef } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Injector, OnInit, Input, Output, ViewChild, ViewEncapsulation, NgZone, HostBinding, ElementRef } from '@angular/core';
 import { CommonLookupModalComponent } from '@app/shared/common/lookup/common-lookup-modal.component';
 import { AppConsts } from '@shared/AppConsts';
 import { AppChatMessageReadState, AppChatSide, AppFriendshipState } from '@shared/AppEnums';
@@ -20,6 +20,7 @@ import { ChatSignalrService } from './chat-signalr.service';
 export class ChatBarComponent extends AppComponentBase implements OnInit, AfterViewInit {
 
     @Output() onProgress: EventEmitter<any> = new EventEmitter();
+    @Input() userLookupModal: CommonLookupModalComponent;
 
     public progress = 0;
     uploadUrl: string;
@@ -34,7 +35,6 @@ export class ChatBarComponent extends AppComponentBase implements OnInit, AfterV
 
     mQuickSidebarOffcanvas: any;
 
-    @ViewChild('userLookupModal') userLookupModal: CommonLookupModalComponent;
     @ViewChild('ChatMessage') chatMessageInput: ElementRef;
     @ViewChild('chatScrollBar') chatScrollBar;
 
@@ -220,6 +220,12 @@ export class ChatBarComponent extends AppComponentBase implements OnInit, AfterV
                     message.readState = AppChatMessageReadState.Read;
                 }
             });
+        });
+    }
+
+    loadPreviousMesssagesOfSelectedUser(): void {
+        this._zone.run(() => {
+            this.loadMessages(this.selectedUser, null);
         });
     }
 

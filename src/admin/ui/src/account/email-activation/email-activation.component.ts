@@ -27,7 +27,7 @@ export class EmailActivationComponent extends AppComponentBase {
         this._accountService.sendEmailActivationLink(this.model)
             .pipe(finalize(() => { this.saving = false; }))
             .subscribe(() => {
-                this.message.success(this.l('ActivationMailSentMessage'), this.l('MailSent')).done(() => {
+                this.message.success(this.l('ActivationMailSentMessage'), this.l('MailSent')).then(() => {
                     this._router.navigate(['account/login']);
                 });
             });

@@ -18,11 +18,11 @@
     <li *ngIf="showMenuItem(item)" class="m-menu__item" [ngClass]="{ 'm-menu__item--submenu': item.items.length, 'm-menu__item--active' : !item.items.length && isMenuItemIsActive(item), 'm-menu__item--open' : item.items.length && isMenuItemIsActive(item) }" aria-haspopup="true">
 
         <!-- if menu item hasn't submenu -->
-        <a *ngIf="!item.items.length" [routerLink]="item.route" class="m-menu__link m-menu__toggle">
+        <a *ngIf="!item.items.length" [queryParams]="item.parameters" [routerLink]="item.route" class="m-menu__link m-menu__toggle">
             <ng-container [ngTemplateOutlet]="mMenuItemText" [ngTemplateOutletContext]="{ item: item, parentItem: parentItem }"></ng-container>
         </a>
         <!-- if menu item has sumnenu child  -->
-        <a href="javascript:;" *ngIf="item.items.length" class="m-menu__link m-menu__toggle">
+        <a href="javascript:;" *ngIf="item.items.length"  [attr.href]="item.route" class="m-menu__link m-menu__toggle">
             <ng-container [ngTemplateOutlet]="mMenuItemText" [ngTemplateOutletContext]="{ item: item, parentItem: parentItem }"></ng-container>
         </a>
 

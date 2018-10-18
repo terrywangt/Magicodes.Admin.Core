@@ -1,4 +1,4 @@
-<p-tree [value]="treeData" [(selection)]="selectedFeatures" selectionMode="checkbox">
+<p-tree [value]="treeData" [(selection)]="selectedFeatures" selectionMode="checkbox" (onNodeSelect)="nodeSelect($event)" [propagateSelectionUp]="false">
     <ng-template let-node pTemplate="default">
         <span style="margin-right: 5px;">{{node.label}}</span>
         <input type="text"

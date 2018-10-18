@@ -5,7 +5,7 @@
                 {{l('SendSecurityCode')}}
             </h3>
         </div>
-        <form #twoFactorForm="ngForm" class="m-login__form m-form" method="post" (ngSubmit)="submit()">
+        <form #twoFactorForm="ngForm" class="m-login__form m-form" method="post" (ngSubmit)="submit()" *ngIf="loginService.authenticateResult">
             <p>{{l("SendSecurityCode_Information")}}</p>
             <div class="form-group m-form__group">
                 <select autoFocus

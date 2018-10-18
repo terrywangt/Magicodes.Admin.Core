@@ -27,8 +27,7 @@ export interface IOrganizationUnitOnTree extends IBasicOrganizationUnitInfo {
 
 @Component({
     selector: 'organization-tree',
-    templateUrl: './organization-tree.component.html',
-    styleUrls: ['./organization-tree.component.less']
+    templateUrl: './organization-tree.component.html'
 })
 export class OrganizationTreeComponent extends AppComponentBase implements OnInit {
 
@@ -74,7 +73,7 @@ export class OrganizationTreeComponent extends AppComponentBase implements OnIni
                 if (isConfirmed) {
                     const input = new MoveOrganizationUnitInput();
                     input.id = event.dragNode.data.id;
-                    input.newParentId = event.originalEvent.target.nodeName === 'SPAN' ? event.dropNode.data.id : undefined;
+                    input.newParentId = event.originalEvent.target.nodeName === 'SPAN' ? event.dropNode.data.id : event.dropNode.parent.data.id;
 
                     this._organizationUnitService.moveOrganizationUnit(input)
                         .pipe(catchError(error => {

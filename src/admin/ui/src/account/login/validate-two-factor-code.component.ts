@@ -37,11 +37,16 @@ export class ValidateTwoFactorCodeComponent extends AppComponentBase implements 
     }
 
     ngOnInit(): void {
+        if (!this.canActivate()) {
+            this._router.navigate(['account/login']);
+            return;
+        }
+
         const timerSource = timer(1000, 1000);
         this.timerSubscription = timerSource.subscribe(() => {
             this.remainingSeconds = this.remainingSeconds - 1;
             if (this.remainingSeconds <= 0) {
-                this.message.warn(this.l('TimeoutPleaseTryAgain')).done(() => {
+                this.message.warn(this.l('TimeoutPleaseTryAgain')).then(() => {
                     this.loginService.authenticateModel.twoFactorVerificationCode = null;
                     this._router.navigate(['account/login']);
                 });
