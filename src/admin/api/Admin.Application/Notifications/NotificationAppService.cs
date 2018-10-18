@@ -8,6 +8,7 @@ using Abp.Authorization;
 using Abp.Configuration;
 using Abp.Notifications;
 using Abp.Runtime.Session;
+using Abp.UI;
 using Magicodes.Admin.Notifications.Dto;
 
 namespace Magicodes.Admin.Notifications
@@ -103,6 +104,12 @@ namespace Magicodes.Admin.Notifications
 
         public async Task DeleteNotification(EntityDto<Guid> input)
         {
+            var notification = await _userNotificationManager.GetUserNotificationAsync(AbpSession.TenantId, input.Id);
+            if (notification.UserId != AbpSession.GetUserId())
+            {
+                throw new UserFriendlyException(L("ThisNotificationDoesntBelongToYou"));
+            }
+
             await _userNotificationManager.DeleteUserNotificationAsync(AbpSession.TenantId, input.Id);
         }
     }
