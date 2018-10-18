@@ -21,10 +21,6 @@ namespace Magicodes.Admin.Tests.Configuration.Sttings
 
         private readonly ISettingManager _settingManager;
 
-        private readonly IAppConfigurationAccessor _appConfiguration;
-
-        private readonly IHostingEnvironment _env;
-
         public IStorageProvider StorageProvider { get; set; }
 
         public StorageSettingsAppService_Test ()

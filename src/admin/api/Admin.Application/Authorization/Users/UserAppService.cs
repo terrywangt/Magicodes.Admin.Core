@@ -84,7 +84,8 @@ namespace Magicodes.Admin.Authorization.Users
         {
             var query = UserManager.Users
                 .WhereIf(input.Role.HasValue, u => u.Roles.Any(r => r.RoleId == input.Role.Value))
-                .WhereIf(input.OnlyLockedUsers, u => u.LockoutEndDateUtc.HasValue && u.LockoutEndDateUtc.Value > DateTime.UtcNow)
+                .WhereIf(input.OnlyLockedUsers,
+                    u => u.LockoutEndDateUtc.HasValue && u.LockoutEndDateUtc.Value > DateTime.UtcNow)
                 .WhereIf(
                     !input.Filter.IsNullOrWhiteSpace(),
                     u =>
@@ -111,10 +112,10 @@ namespace Magicodes.Admin.Authorization.Users
 
             var userCount = await query.CountAsync();
 
-            var users = await query
+            var users = query
                 .OrderBy(input.Sorting)
                 .PageBy(input)
-                .ToListAsync();
+                .ToList();
 
             var userListDtos = ObjectMapper.Map<List<UserListDto>>(users);
             await FillRoleNames(userListDtos);

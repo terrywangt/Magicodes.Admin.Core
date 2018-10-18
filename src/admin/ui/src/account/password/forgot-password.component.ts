@@ -30,7 +30,7 @@ export class ForgotPasswordComponent extends AppComponentBase {
         this._accountService.sendPasswordResetCode(this.model)
             .pipe(finalize(() => { this.saving = false; }))
             .subscribe(() => {
-                this.message.success(this.l('PasswordResetMailSentMessage'), this.l('MailSent')).done(() => {
+                this.message.success(this.l('PasswordResetMailSentMessage'), this.l('MailSent')).then(() => {
                     this._router.navigate(['account/login']);
                 });
             });

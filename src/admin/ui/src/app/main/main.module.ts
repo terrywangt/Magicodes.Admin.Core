@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { AppCommonModule } from '@app/shared/common/app-common.module';
 import { UtilsModule } from '@shared/utils/utils.module';
 import { CountoModule } from 'angular2-counto';
-import { ModalModule, TabsModule, TooltipModule } from 'ngx-bootstrap';
+import { ModalModule, TabsModule, TooltipModule, BsDropdownModule } from 'ngx-bootstrap';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { MainRoutingModule } from './main-routing.module';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
@@ -27,6 +27,7 @@ NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
         CountoModule,
         NgxChartsModule,
         BsDatepickerModule.forRoot(),
+        BsDropdownModule.forRoot()
     ],
     declarations: [
         DashboardComponent

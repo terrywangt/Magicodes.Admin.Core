@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Abp.Application.Services;
 using Magicodes.Admin.Authorization.Users.Dto;
 using Magicodes.Admin.Authorization.Users.Profile.Dto;
+using Magicodes.Admin.Dto;
 
 namespace Magicodes.Admin.Authorization.Users.Profile
 {
@@ -31,5 +32,7 @@ namespace Magicodes.Admin.Authorization.Users.Profile
         Task SendVerificationSms();
 
         Task VerifySmsCode(VerifySmsCodeInputDto input);
+
+        Task PrepareCollectedData();
     }
 }

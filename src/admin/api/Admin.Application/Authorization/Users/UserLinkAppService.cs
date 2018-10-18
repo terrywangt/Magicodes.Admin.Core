@@ -105,7 +105,7 @@ namespace Magicodes.Admin.Authorization.Users
 
             if (!currentUserAccount.UserLinkId.HasValue)
             {
-                throw new Exception(L("You are not linked to any account"));
+                throw new Exception(L("YouAreNotLinkedToAnyAccount"));
             }
 
             if (!await _userLinkManager.AreUsersLinked(AbpSession.ToUserIdentifier(), input.ToUserIdentifier()))

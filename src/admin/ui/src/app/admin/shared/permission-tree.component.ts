@@ -10,7 +10,7 @@ import * as _ from 'lodash';
 @Component({
     selector: 'permission-tree',
     template:
-        `<p-tree [value]="treeData" [(selection)]="selectedPermissions" selectionMode="checkbox"></p-tree>`
+        `<p-tree [value]="treeData" [(selection)]="selectedPermissions" selectionMode="checkbox" (onNodeSelect)="nodeSelect($event)" [propagateSelectionUp]="false"></p-tree>`
 })
 export class PermissionTreeComponent extends AppComponentBase {
 
@@ -21,8 +21,6 @@ export class PermissionTreeComponent extends AppComponentBase {
 
     treeData: any;
     selectedPermissions: TreeNode[] = [];
-
-    private _createdTreeBefore;
 
     constructor(
         private _arrayToTreeConverterService: ArrayToTreeConverterService,
@@ -72,5 +70,14 @@ export class PermissionTreeComponent extends AppComponentBase {
         }
 
         return permissionNames;
+    }
+
+    nodeSelect(event) {
+        let parentNode = this._treeDataHelperService.findParent(this.treeData, { data: { name: event.node.data.name } });
+
+        while (parentNode != null) {
+            this.selectedPermissions.push(parentNode);
+            parentNode = this._treeDataHelperService.findParent(this.treeData, { data: { name: parentNode.data.name } });
+        }
     }
 }

@@ -23,4 +23,5 @@
     <footer-bar></footer-bar>
     <!-- end::Footer -->
 </div>
-<chat-bar *ngIf="!installationMode"></chat-bar>
+<commonLookupModal #userLookupModal (itemSelected)="chatBarComponent.addFriendSelected($event)"></commonLookupModal>
+<chat-bar #chatBarComponent *ngIf="!installationMode" [userLookupModal]="userLookupModal"></chat-bar>

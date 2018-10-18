@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Abp;
 using Abp.Auditing;
 using Abp.Authorization;
+using Abp.BackgroundJobs;
 using Abp.Configuration;
 using Abp.Extensions;
 using Abp.Localization;
@@ -17,7 +18,9 @@ using Magicodes.Admin.Authentication.TwoFactor.Google;
 using Magicodes.Admin.Authorization.Users.Dto;
 using Magicodes.Admin.Authorization.Users.Profile.Cache;
 using Magicodes.Admin.Authorization.Users.Profile.Dto;
+using Magicodes.Admin.Dto;
 using Magicodes.Admin.Friendships;
+using Magicodes.Admin.Gdpr;
 using Magicodes.Admin.Identity;
 using Magicodes.Admin.Security;
 using Magicodes.Admin.Storage;
@@ -37,6 +40,7 @@ namespace Magicodes.Admin.Authorization.Users.Profile
         private readonly ISmsSender _smsSender;
         private readonly ICacheManager _cacheManager;
         private readonly ITempFileCacheManager _tempFileCacheManager;
+        private readonly IBackgroundJobManager _backgroundJobManager;
 
         public ProfileAppService(
             IAppFolders appFolders,
@@ -45,8 +49,9 @@ namespace Magicodes.Admin.Authorization.Users.Profile
             IFriendshipManager friendshipManager,
             GoogleTwoFactorAuthenticateService googleTwoFactorAuthenticateService,
             ISmsSender smsSender,
-            ICacheManager cacheManager, 
-            ITempFileCacheManager tempFileCacheManager)
+            ICacheManager cacheManager,
+            ITempFileCacheManager tempFileCacheManager,
+            IBackgroundJobManager backgroundJobManager)
         {
             _appFolders = appFolders;
             _binaryObjectManager = binaryObjectManager;
@@ -56,6 +61,7 @@ namespace Magicodes.Admin.Authorization.Users.Profile
             _smsSender = smsSender;
             _cacheManager = cacheManager;
             _tempFileCacheManager = tempFileCacheManager;
+            _backgroundJobManager = backgroundJobManager;
         }
 
         [DisableAuditing]
@@ -132,6 +138,11 @@ namespace Magicodes.Admin.Authorization.Users.Profile
             await UserManager.UpdateAsync(user);
         }
 
+        public async Task PrepareCollectedData()
+        {
+            await _backgroundJobManager.EnqueueAsync<UserCollectedDataPrepareJob, UserIdentifier>(AbpSession.ToUserIdentifier());
+        }
+
         public async Task UpdateCurrentUserProfile(CurrentUserProfileEditDto input)
         {
             var user = await GetCurrentUserAsync();
@@ -178,7 +189,7 @@ namespace Magicodes.Admin.Authorization.Users.Profile
 
             if (imageBytes == null)
             {
-                throw new UserFriendlyException("ThereIsNoSuchImageFileWithGivenToken");
+                throw new UserFriendlyException("There is no such image file with the token: " + input.FileToken);
             }
 
             using (var bmpImage = new Bitmap(new MemoryStream(imageBytes)))

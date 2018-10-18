@@ -23,11 +23,6 @@
                 "glob": "abp.signalr-client.js",
                 "input": "node_modules/abp-web-resources/Abp/Framework/scripts/libs",
                 "output": "/assets/abp"
-              },
-              {
-                "glob": "**.*",
-                "input": "node_modules/timeago/locales",
-                "output": "/assets/localization/jquery-timeago"
               }
             ],
             "styles": [
@@ -105,23 +100,6 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ]
-            },
-            "development": {
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "extractCss": true,
-              "namedChunks": false,
-              "aot": true,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.dev.ts"
-                }
-              ]
             }
           }
         },
@@ -162,6 +140,8 @@
               "node_modules/primeng/resources/themes/nova-light/theme.css",
               "node_modules/primeicons/primeicons.css",
               "node_modules/sweetalert2/dist/sweetalert2.css",
+              "node_modules/spin.js/spin.css",
+              "src/assets/FreezeUI/freeze-ui.min.css",
 
               "src/assets/primeng/file-upload/css/primeng.file-upload.css",
               "src/assets/primeng/autocomplete/css/primeng.autocomplete.css",
@@ -188,10 +168,12 @@
               "node_modules/push.js/bin/push.js",
               "node_modules/quill/dist/quill.js",
               "node_modules/sweetalert2/dist/sweetalert2.js",
+              "src/assets/FreezeUI/freeze-ui.js",
 
               "src/assets/abp-web-resources/abp.js",
               "src/assets/abp-web-resources/abp.sweet-alert.js",
               "src/assets/abp-web-resources/abp.notify.js",
+              "src/assets/abp-web-resources/abp.freeze-ui.js",
               "node_modules/abp-web-resources/Abp/Framework/scripts/libs/abp.moment.js",
 
               "src/metronic/assets/vendors/base/vendors.bundle.js",
@@ -204,11 +186,6 @@
                 "glob": "abp.signalr-client.js",
                 "input": "node_modules/abp-web-resources/Abp/Framework/scripts/libs",
                 "output": "/assets/abp"
-              },
-              {
-                "glob": "**.*",
-                "input": "node_modules/timeago/locales",
-                "output": "/assets/localization/jquery-timeago"
               }
             ]
           }

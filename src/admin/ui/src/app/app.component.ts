@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Injector, OnInit, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, Component, Injector, OnInit, ViewContainerRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppConsts } from '@shared/AppConsts';
 import { SubscriptionStartType } from '@shared/AppEnums';
@@ -7,6 +7,7 @@ import { ChatSignalrService } from 'app/shared/layout/chat/chat-signalr.service'
 import * as moment from 'moment';
 import { AppComponentBase } from 'shared/common/app-component-base';
 import { SignalRHelper } from 'shared/helpers/SignalRHelper';
+import { CommonLookupModalComponent } from '@app/shared/common/lookup/common-lookup-modal.component';
 
 @Component({
     templateUrl: './app.component.html',
@@ -19,7 +20,8 @@ export class AppComponent extends AppComponentBase implements OnInit, AfterViewI
 
     subscriptionStartType = SubscriptionStartType;
     installationMode = true;
-
+    @ViewChild('chatBarComponent') chatBarComponent;
+    @ViewChild('userLookupModal') userLookupModal: CommonLookupModalComponent;
 
     public constructor(
         injector: Injector,

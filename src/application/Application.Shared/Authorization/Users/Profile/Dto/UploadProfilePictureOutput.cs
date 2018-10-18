@@ -1,5 +1,4 @@
 using Abp.Web.Models;
-using Magicodes.Admin.Dto;
 
 namespace Magicodes.Admin.Authorization.Users.Profile.Dto
 {

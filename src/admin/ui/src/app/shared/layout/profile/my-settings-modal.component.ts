@@ -92,7 +92,7 @@ export class MySettingsModalComponent extends AppComponentBase {
                 this.modalSave.emit(null);
 
                 if (abp.clock.provider.supportsMultipleTimezone && this._initialTimezone !== this.user.timezone) {
-                    this.message.info(this.l('TimeZoneSettingChangedRefreshPageNotification')).done(() => {
+                    this.message.info(this.l('TimeZoneSettingChangedRefreshPageNotification')).then(() => {
                         window.location.reload();
                     });
                 }

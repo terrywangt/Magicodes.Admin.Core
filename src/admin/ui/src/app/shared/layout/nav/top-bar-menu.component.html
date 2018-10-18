@@ -36,7 +36,7 @@
 
         <!-- if item hasn't sumbenu -->
         <ng-container *ngIf="!item.items.length">
-            <a *ngIf="!item.external" [routerLink]="item.route" [queryParams]="item.parameters" [ngClass]="{ 'm-menu__toggle': !parentItem }" class="m-menu__link">
+            <a *ngIf="!item.external" [routerLink]="item.route" [queryParams]="item.parameters" class="m-menu__link">
                 <ng-container [ngTemplateOutlet]="m_menu_item_inner" [ngTemplateOutletContext]="{ item: item, parentItem: parentItem }"></ng-container>
             </a>
             <a *ngIf="item.external" [attr.href]="[item.route]" target="_blank" class="m-menu__link">

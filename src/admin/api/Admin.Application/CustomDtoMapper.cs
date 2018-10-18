@@ -57,6 +57,7 @@ namespace Magicodes.Admin
 
             //Chat
             configuration.CreateMap<ChatMessage, ChatMessageDto>();
+            configuration.CreateMap<ChatMessage, ChatMessageExportDto>(); 
 
             //Feature
             configuration.CreateMap<FlatFeatureSelectDto, Feature>().ReverseMap();

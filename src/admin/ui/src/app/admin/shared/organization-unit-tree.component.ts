@@ -19,7 +19,7 @@ export interface IOrganizationUnitsTreeComponentData {
     </div>
     <p-tree [value]="treeData"
         selectionMode="checkbox"
-        [(selection)]="selectedOus"></p-tree>
+        [(selection)]="selectedOus" (onNodeSelect)="nodeSelect($event)" [propagateSelectionUp]="false"></p-tree>
     `
 })
 export class OrganizationUnitsTreeComponent extends AppComponentBase {
@@ -117,5 +117,14 @@ export class OrganizationUnitsTreeComponent extends AppComponentBase {
 
     filterOrganizationUnits(event): void {
         this.filterOrganizationUnit(this.treeData, this.filter);
+    }
+
+    nodeSelect(event) {
+        let parentNode = this._treeDataHelperService.findParent(this.treeData, { data: { id: event.node.data.id } });
+
+        while (parentNode != null) {
+            this.selectedOus.push(parentNode);
+            parentNode = this._treeDataHelperService.findParent(this.treeData, { data: { id: parentNode.data.id } });
+        }
     }
 }

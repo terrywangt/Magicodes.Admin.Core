@@ -163,3 +163,8 @@ body.m-aside-left--skin-dark .m-brand {
 .m-header-menu--skin-dark span.m-menu__arrow.m-menu__arrow--adjust:before {
     color: #262734 !important;
 }
+
+.ui-contextmenu {
+    margin-left: 0px;
+    margin-top: -190px;
+}

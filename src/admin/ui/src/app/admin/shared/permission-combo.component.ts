@@ -9,8 +9,7 @@ import * as _ from 'lodash';
         `<select #PermissionCombobox
         class="form-control"
         [(ngModel)]="selectedPermission"
-        (ngModelChange)="selectedPermissionChange.emit($event)"
-        [attr.data-live-search]="true">
+        (ngModelChange)="selectedPermissionChange.emit($event)">
             <option value="">{{l('FilterByPermission')}}</option>
             <option *ngFor="let permission of permissions" [value]="permission.name">{{permission.displayName}}</option>
     </select>`

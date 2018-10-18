@@ -45,7 +45,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 
 import { CoreModule } from '@metronic/app/core/core.module';
 
-import { MatTooltipModule } from '@angular/material';
 import { LayoutConfigService } from '@metronic/app/core/services/layout-config.service';
 import { UtilsService } from '@metronic/app/core/services/utils.service';
 import { LayoutRefService } from '@metronic/app/core/services/layout/layout-ref.service';
@@ -92,7 +91,6 @@ import { LayoutRefService } from '@metronic/app/core/services/layout/layout-ref.
         ProgressBarModule,
         PerfectScrollbarModule,
         CoreModule,
-        MatTooltipModule,
         NgxChartsModule,
         TextMaskModule,
         ImageCropperModule

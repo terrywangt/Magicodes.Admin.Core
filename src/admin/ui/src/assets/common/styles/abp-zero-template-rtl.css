@@ -1,9 +1,9 @@
-.langname:after{
-	content: "\200E‎" !important;
+.langname:after {
+    content: "\200E‎" !important;
 }
 
-li.dropdown-language ul.dropdown-menu li a:after{
-	content: "\200E‎" !important;
+li.dropdown-language ul.dropdown-menu li a:after {
+    content: "\200E‎" !important;
 }
 
 .tenant-change-component:after {
@@ -43,4 +43,18 @@ nav.m-menu__submenu--right span.m-menu__arrow {
 .dropdown-menu[x-placement^="top"], .dropdown-menu[x-placement^="right"], .dropdown-menu[x-placement^="bottom"], .dropdown-menu[x-placement^="left"] {
     right: auto;
     bottom: auto;
+}
+
+.ui-contextmenu {
+    margin-left: -950px;
+}
+
+.mr-auto, .mx-auto {
+    margin-right: 0px !important;
+}
+
+@media(min-width: 1025px) {
+    .m-aside-left--fixed .m-body {
+        padding-left: 0px;
+    }
 }

@@ -4,6 +4,7 @@ import { EntityDtoOfGuid, NotificationServiceProxy } from '@shared/service-proxi
 import * as moment from 'moment';
 import * as Push from 'push.js'; // if using ES6
 import { NotificationSettingsModalComponent } from './notification-settings-modal.component';
+import { AppConsts } from '@shared/AppConsts';
 
 export interface IFormattedUserNotification {
     userNotificationId: string;
@@ -35,6 +36,8 @@ export class UserNotificationHelper extends AppComponentBase {
                 return '/app/admin/users?filterText=' + userNotification.notification.data.properties.emailAddress;
             case 'App.NewTenantRegistered':
                 return '/app/admin/tenants?filterText=' + userNotification.notification.data.properties.tenancyName;
+            case 'App.GdprDataPrepared':
+                return AppConsts.remoteServiceBaseUrl + '/File/DownloadBinaryFile?id=' + userNotification.notification.data.properties.binaryObjectId + '&contentType=application/zip&fileName=collectedData.zip';
             //Add your custom notification names to navigate to a URL when user clicks to a notification.
         }
 

@@ -81,6 +81,6 @@
     display: inline-block !important;
 }
 
-.swal-footer {
-    text-align: center;
+.body.swal2-height-auto {
+    height: 100% !important;
 }

@@ -80,7 +80,7 @@ namespace Magicodes.Admin.Authorization.Accounts
 
             if (query["tenantId"] == null)
             {
-                throw new Exception("Couldn't find tenant inforamtion !");
+                return Task.FromResult<int?>(null);
             }
 
             var tenantId = Convert.ToInt32(query["tenantId"]) as int?;
@@ -130,6 +130,7 @@ namespace Magicodes.Admin.Authorization.Accounts
                 throw new UserFriendlyException(L("InvalidPasswordResetCode"), L("InvalidPasswordResetCode_Detail"));
             }
 
+            await UserManager.InitializeOptionsAsync(AbpSession.TenantId);
             CheckErrors(await UserManager.ChangePasswordAsync(user, input.Password));
             user.PasswordResetCode = null;
             user.IsEmailConfirmed = true;

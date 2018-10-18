@@ -239,4 +239,13 @@ export class FeatureTreeComponent extends AppComponentBase {
         const value = self.findFeatureValueByName(featureName);
         return value.toLowerCase() === 'true';
     }
+
+    nodeSelect(event) {
+        let parentNode = this._treeDataHelperService.findParent(this.treeData, { data: { name: event.node.data.name } });
+
+        while (parentNode != null) {
+            this.selectedFeatures.push(parentNode);
+            parentNode = this._treeDataHelperService.findParent(this.treeData, { data: { name: parentNode.data.name } });
+        }
+    }
 }

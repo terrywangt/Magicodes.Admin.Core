@@ -801,5 +801,16 @@
     <text name="NotificationDeleteWarningMessage">سيتم حذف هذا الإشعار</text>
     <text name="ProcessingWithThreeDot">قيد التنفيذ...</text>
     <text name="ThereIsNoSuchImageFileWithGivenToken">لم نعثر على صورة بالرمز المطلوب</text>
+    <text name="YouAreNotLinkedToAnyAccount">أنت غير مرتبط بأي حساب</text>
+    <text name="DownloadCollectedData">تحميل البيانات التي تم جمعها</text>
+    <text name="GdprDataPrepareStartedNotification">نحن نعد بياناتك. سيتم إخطارك عند الإنتهاء من إعداد بياناتك.</text>
+    <text name="GdprDataPreparedNotificationMessage">تم إعداد بياناتك ، انقر هنا للتنزيل.</text>
+    <text name="ChatMessage_From">من</text>
+    <text name="ChatMessage_To">الى</text>
+    <text name="ReadState">مقروء</text>
+    <text name="You">أنت</text>
+    <text name="Anonymous">مجهول</text>
+    <text name="Messages">رسائل</text>
+    <text name="ThisNotificationDoesntBelongToYou">هذا الإشعار ليس لك.</text>
   </texts>
 </localizationDictionary>

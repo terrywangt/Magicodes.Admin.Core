@@ -1,5 +1,4 @@
 import { Component, ElementRef, Injector, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { DateTimeService } from '@app/shared/common/timing/date-time.service';
 import { AppIncomeStatisticsDateInterval } from '@shared/AppEnums';
 import { appModuleAnimation } from '@shared/animations/routerTransition';
 import { AppComponentBase } from '@shared/common/app-component-base';
@@ -35,14 +34,13 @@ export class HostDashboardComponent extends AppComponentBase implements OnInit {
     incomeStatisticsData: any = [];
     editionStatisticsData: any = [];
 
-    selectedDateRange: moment.Moment[] = [moment().add(-7, 'days').startOf('day'), moment().endOf('day')];
+    selectedDateRange: Date[] = [moment().add(-7, 'days').startOf('day').toDate(), moment().endOf('day').toDate()];
 
     expiringTenantsData = [];
     recentTenantsData = [];
 
     constructor(
         injector: Injector,
-        private _dateTimeService: DateTimeService,
         private _hostDashboardService: HostDashboardServiceProxy
     ) {
         super(injector);
@@ -133,8 +131,8 @@ export class HostDashboardComponent extends AppComponentBase implements OnInit {
         this.loadingIncomeStatistics = true;
         this._hostDashboardService.getIncomeStatistics(
             this.selectedIncomeStatisticsDateInterval,
-            this.selectedDateRange[0],
-            this.selectedDateRange[1])
+            moment(this.selectedDateRange[0]),
+            moment(this.selectedDateRange[1]))
             .subscribe(result => {
                 this.incomeStatisticsData = this.normalizeIncomeStatisticsData(result.incomeStatistics);
                 this.incomeStatisticsHasData = _.filter(this.incomeStatisticsData[0].series, data => data.value > 0).length > 0;

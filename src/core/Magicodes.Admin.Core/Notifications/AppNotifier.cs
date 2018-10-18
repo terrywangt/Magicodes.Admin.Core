@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Abp;
 using Abp.Localization;
@@ -52,6 +53,20 @@ namespace Magicodes.Admin.Notifications
 
             notificationData["tenancyName"] = tenant.TenancyName;
             await _notificationPublisher.PublishAsync(AppNotificationNames.NewTenantRegistered, notificationData);
+        }
+
+        public async Task GdprDataPrepared(UserIdentifier user, Guid binaryObjectId)
+        {
+            var notificationData = new LocalizableMessageNotificationData(
+                new LocalizableString(
+                    "GdprDataPreparedNotificationMessage",
+                    AdminConsts.LocalizationSourceName
+                )
+            );
+
+            notificationData["binaryObjectId"] = binaryObjectId;
+
+            await _notificationPublisher.PublishAsync(AppNotificationNames.GdprDataPrepared, notificationData, userIds: new[] { user });
         }
 
         //This is for test purposes

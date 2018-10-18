@@ -801,5 +801,16 @@
     <text name="NotificationDeleteWarningMessage">This notification will be deleted</text>
     <text name="ProcessingWithThreeDot">Processing...</text>
     <text name="ThereIsNoSuchImageFileWithGivenToken">There is no image with given token</text>
+    <text name="YouAreNotLinkedToAnyAccount">You are not linked to any account</text>
+    <text name="DownloadCollectedData">Download collected data</text>
+    <text name="GdprDataPrepareStartedNotification">We are preparing your data. You will be notified when your data is prepared.</text>
+    <text name="GdprDataPreparedNotificationMessage">Your data is prepared, click here to download.</text>
+    <text name="ChatMessage_From">From</text>
+    <text name="ChatMessage_To">To</text>
+    <text name="ReadState">Read state</text>
+    <text name="You">You</text>
+    <text name="Anonymous">Anonymous</text>
+    <text name="Messages">Messages</text>
+    <text name="ThisNotificationDoesntBelongToYou">This notification doesn't belong to you.</text>
   </texts>
 </localizationDictionary>

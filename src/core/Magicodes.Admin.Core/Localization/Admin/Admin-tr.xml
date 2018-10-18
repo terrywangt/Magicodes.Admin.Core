@@ -799,5 +799,16 @@
     <text name="NotificationDeleteWarningMessage">Bu bildirim silinecektir</text>
     <text name="ProcessingWithThreeDot">İşleniyor...</text>
     <text name="ThereIsNoSuchImageFileWithGivenToken">Bu kod ile ilişkili bir resim dosyası yok</text>
+    <text name="YouAreNotLinkedToAnyAccount">Herhangi bir hesaba bağlı değilsiniz</text>
+    <text name="DownloadCollectedData">Bilgilerini indir</text>
+    <text name="GdprDataPrepareStartedNotification">Verilerinizi hazırlıyoruz. Verileriniz hazır olduğunda size haber vereceğiz.</text>
+    <text name="GdprDataPreparedNotificationMessage">Verileriniz hazırlandı, indirmek için tıklayın.</text>
+    <text name="ChatMessage_From">Gönderen</text>
+    <text name="ChatMessage_To">Alan</text>
+    <text name="ReadState">Okunma durumu</text>
+    <text name="You">Sen</text>
+    <text name="Anonymous">İsimsiz</text>
+    <text name="Messages">Mesajlar</text>
+    <text name="ThisNotificationDoesntBelongToYou">Bu bildirim size ait değil.</text>
   </texts>
 </localizationDictionary>

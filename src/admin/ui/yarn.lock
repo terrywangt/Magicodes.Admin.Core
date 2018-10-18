@@ -180,20 +180,6 @@
   dependencies:
     tslib "^1.9.0"
 
-"@angular/material-moment-adapter@^6.4.7":
-  version "6.4.7"
-  resolved "https://registry.yarnpkg.com/@angular/material-moment-adapter/-/material-moment-adapter-6.4.7.tgz#1c047d76cbc396816ea588133ec499712242c228"
-  dependencies:
-    tslib "^1.7.1"
-
-"@angular/material@^6.4.7":
-  version "6.4.7"
-  resolved "https://registry.yarnpkg.com/@angular/material/-/material-6.4.7.tgz#3c8f2d6a6a7904d97be29e06a84ffb62a8da6c16"
-  dependencies:
-    tslib "^1.7.1"
-  optionalDependencies:
-    parse5 "^5.0.0"
-
 "@angular/platform-browser-dynamic@^6.1.8":
   version "6.1.8"
   resolved "https://registry.yarnpkg.com/@angular/platform-browser-dynamic/-/platform-browser-dynamic-6.1.8.tgz#a0c523857e9e55343e6e1747052141d870d4e870"
@@ -4614,9 +4600,9 @@ next-tick@1:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/next-tick/-/next-tick-1.0.0.tgz#ca86d1fe8828169b0120208e3dc8424b9db8342c"
 
-ng-recaptcha@^4.0.0-beta.1:
-  version "4.0.0-beta.1"
-  resolved "https://registry.yarnpkg.com/ng-recaptcha/-/ng-recaptcha-4.0.0-beta.1.tgz#68f80c8f136718230d401ff2d5486bc83e043e99"
+ng-recaptcha@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/ng-recaptcha/-/ng-recaptcha-4.0.0.tgz#26380b556e477a6a3ecd4a7d0127da3a7f3ef978"
   optionalDependencies:
     "@types/grecaptcha" "^2.0.33"
 
@@ -5145,10 +5131,6 @@ parse-json@^4.0.0:
 parse5@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/parse5/-/parse5-4.0.0.tgz#6d78656e3da8d78b4ec0b906f7c08ef1dfe3f608"
-
-parse5@^5.0.0:
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/parse5/-/parse5-5.1.0.tgz#c59341c9723f414c452975564c7c00a68d58acd2"
 
 parseqs@0.0.5:
   version "0.0.5"

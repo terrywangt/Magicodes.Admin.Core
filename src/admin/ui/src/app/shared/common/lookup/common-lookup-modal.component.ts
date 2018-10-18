@@ -54,7 +54,7 @@ export class CommonLookupModalComponent extends AppComponentBase {
     }
 
     configure(options: ICommonLookupModalOptions): void {
-        this.options = _.merge(options, CommonLookupModalComponent.defaultOptions, { title: this.l('SelectAnItem') });
+        this.options = _.merge(CommonLookupModalComponent.defaultOptions, { title: this.l('SelectAnItem') }, options);
     }
 
     show(): void {

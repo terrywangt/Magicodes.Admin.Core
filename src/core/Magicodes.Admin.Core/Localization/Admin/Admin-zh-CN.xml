@@ -768,7 +768,7 @@
     <text name="AliSignType" value="签名算法" />
     <text name="IsKeyFromFile" value="是否从文件读取公私钥" />
     <text name="IsKeyFromFileExplain" value="如果勾选 ，那么公私钥应该配置为密钥文件路径" />
-    
+
     <!-- 2018-09-03 短信验证码配置 -->
     <text name="SmsCodeSettings" value="短信配置" />
     <text name="AliSmsCode" value="阿里云短信" />
@@ -779,7 +779,7 @@
     <text name="SignName" value="短信签名" />
     <text name="TemplateCode" value="短信模板" />
     <text name="TemplateParam" value="模板中JSON串" />
-    
+
     <!-- 2018-09-11 发票配置 -->
     <text name="Invoice" value="发票" />
     <text name="InvoiceInformation" value="发票信息" />
@@ -792,15 +792,15 @@
     <text name="Appearance" value="外观" />
     <text name="ApplicationLogo" value="应用logo" />
     <text name="CustomCSS" value="客户定制系统" />
-  
 
-    <!--2018-09-10 存储配置-->  
+
+    <!--2018-09-10 存储配置-->
     <text name="StorageSettings" value="存储配置" />
     <text name="AliStorage" value="阿里云存储" />
     <text name="AliStorageSetting" value="阿里云存储配置" />
     <text name="AliStorageInformation" value="阿里云存储配置信息" />
     <text name="EndPoint" value="地域节点" />
-  
+
     <!--交易日志-->
     <text name="TransactionLog" value="交易日志" />
     <text name="Currency" value="金额" />
@@ -814,26 +814,38 @@
     <text name="TransactionId" value="支付订单号" />
     <text name="PayTime" value="支付完成时间" />
     <text name="Exception" value="异常信息" />
-  
-    <!--终端-->  
+
+    <!--终端-->
     <text name="Unknown" value="未知" />
     <text name="Android" value="Android" />
     <text name="Iphone" value="Iphone" />
-    <text name="Ipad" value="Ipad" /> 
+    <text name="Ipad" value="Ipad" />
     <text name="MacOS" value="MacOS" />
     <text name="WindowsXP" value="WindowsXP" />
     <text name="WindowsVista" value="WindowsVista" />
     <text name="Windows7" value="Windows7" />
     <text name="Windows8" value="Windows8" />
-    <text name="Windows10" value="Windows10" /> 
-    
-    <!--交易状态-->  
+    <text name="Windows10" value="Windows10" />
+
+    <!--交易状态-->
     <text name="NotPay" value="未支付" />
     <text name="PayError" value="支付失败" />
-    <text name="PendingRefund" value="待退款" /> 
+    <text name="PendingRefund" value="待退款" />
     <text name="Refunded" value="已退款" />
 
     <text name="PleaseSelectProperSort" value="请选择正确的分类" />
+    <!--V6.1-->
+    <text name="YouAreNotLinkedToAnyAccount">您没有链接到任何帐户</text>
+    <text name="DownloadCollectedData">下载收集的数据</text>
+    <text name="GdprDataPrepareStartedNotification">我们正在准备数据。准备好数据后，您会收到通知。</text>
+    <text name="GdprDataPreparedNotificationMessage">您的数据已准备就绪，请点击此处下载。</text>
+    <text name="ChatMessage_From">从</text>
+    <text name="ChatMessage_To">到</text>
+    <text name="ReadState">阅读状态</text>
+    <text name="You">你</text>
+    <text name="Anonymous">匿名</text>
+    <text name="Messages">消息</text>
+    <text name="ThisNotificationDoesntBelongToYou">此通知不属于您。</text>
 
   </texts>
 </localizationDictionary>

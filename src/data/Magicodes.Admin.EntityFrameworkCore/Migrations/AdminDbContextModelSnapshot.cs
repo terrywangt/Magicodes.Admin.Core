@@ -15,7 +15,7 @@ namespace Magicodes.Admin.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.3-rtm-32065")
+                .HasAnnotation("ProductVersion", "2.1.1-rtm-30846")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -952,6 +952,8 @@ namespace Magicodes.Admin.Migrations
                     b.Property<string>("AuthenticationSource")
                         .HasMaxLength(64);
 
+                    b.Property<int>("Balance");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasMaxLength(128);
@@ -970,6 +972,8 @@ namespace Magicodes.Admin.Migrations
 
                     b.Property<string>("EmailConfirmationCode")
                         .HasMaxLength(328);
+
+                    b.Property<int>("FrozenAmount");
 
                     b.Property<string>("GoogleAuthenticatorKey");
 
@@ -995,7 +999,7 @@ namespace Magicodes.Admin.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(32);
+                        .HasMaxLength(64);
 
                     b.Property<string>("NormalizedEmailAddress")
                         .IsRequired()
@@ -1028,7 +1032,7 @@ namespace Magicodes.Admin.Migrations
 
                     b.Property<string>("Surname")
                         .IsRequired()
-                        .HasMaxLength(32);
+                        .HasMaxLength(64);
 
                     b.Property<int?>("TenantId");
 
@@ -1807,24 +1811,6 @@ namespace Magicodes.Admin.Migrations
                     b.HasOne("Magicodes.Admin.Authorization.Users.User", "LastModifierUser")
                         .WithMany()
                         .HasForeignKey("LastModifierUserId");
-
-                    b.OwnsOne("Magicodes.Admin.Authorization.Users.Wallet", "Wallet", b1 =>
-                        {
-                            b1.Property<long>("UserId")
-                                .ValueGeneratedOnAdd()
-                                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                            b1.Property<int>("Balance");
-
-                            b1.Property<int>("FrozenAmount");
-
-                            b1.ToTable("AbpUsers");
-
-                            b1.HasOne("Magicodes.Admin.Authorization.Users.User")
-                                .WithOne("Wallet")
-                                .HasForeignKey("Magicodes.Admin.Authorization.Users.Wallet", "UserId")
-                                .OnDelete(DeleteBehavior.Cascade);
-                        });
                 });
 
             modelBuilder.Entity("Magicodes.Admin.Core.Custom.Attachments.ObjectAttachmentInfo", b =>
