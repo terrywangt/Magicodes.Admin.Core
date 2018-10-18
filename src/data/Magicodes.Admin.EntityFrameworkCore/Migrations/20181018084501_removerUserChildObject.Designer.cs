@@ -4,14 +4,16 @@ using Magicodes.Admin.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Magicodes.Admin.Migrations
 {
     [DbContext(typeof(AdminDbContext))]
-    partial class AdminDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181018084501_removerUserChildObject")]
+    partial class removerUserChildObject
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -952,8 +954,6 @@ namespace Magicodes.Admin.Migrations
                     b.Property<string>("AuthenticationSource")
                         .HasMaxLength(64);
 
-                    b.Property<int>("Balance");
-
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasMaxLength(128);
@@ -972,8 +972,6 @@ namespace Magicodes.Admin.Migrations
 
                     b.Property<string>("EmailConfirmationCode")
                         .HasMaxLength(328);
-
-                    b.Property<int>("FrozenAmount");
 
                     b.Property<string>("GoogleAuthenticatorKey");
 

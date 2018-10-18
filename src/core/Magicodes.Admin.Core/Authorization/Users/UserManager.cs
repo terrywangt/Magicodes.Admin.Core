@@ -1,4 +1,8 @@
-﻿using Abp;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Abp;
 using Abp.Authorization;
 using Abp.Authorization.Users;
 using Abp.Configuration;
@@ -13,10 +17,7 @@ using Magicodes.Admin.Authorization.Roles;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 
 namespace Magicodes.Admin.Authorization.Users
 {
@@ -148,11 +149,11 @@ namespace Magicodes.Admin.Authorization.Users
                 throw new UserFriendlyException("用户信息异常！");
             }
 
-            if (totalFee < 0 && user.Wallet.Balance + totalFee < 0)
+            if (totalFee < 0 && user.Balance + totalFee < 0)
             {
                 throw new UserFriendlyException("余额不足！");
             }
-            user.Wallet.Balance += totalFee * 100;
+            user.Balance += totalFee * 100;
         }
 
         /// <summary>

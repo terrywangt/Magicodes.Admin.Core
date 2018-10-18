@@ -20,16 +20,26 @@ namespace Magicodes.Admin.Authorization.Users
 
         public string GoogleAuthenticatorKey { get; set; }
 
+        #region 钱包
         /// <summary>
-        /// 钱包
+        /// 余额（以分为单位）
         /// </summary>
-        public Wallet Wallet { get; set; }
+        public int Balance { get; set; }
+
+        /// <summary>
+        /// 冻结金额（以分为单位）
+        /// </summary>
+        public int FrozenAmount { get; set; }
+        #endregion
+
+
 
         public User()
         {
             IsLockoutEnabled = true;
             IsTwoFactorEnabled = true;
-            Wallet = new Wallet();
+            Balance = 0;
+            FrozenAmount = 0;
         }
 
         /// <summary>
