@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Abp;
 using Abp.Notifications;
 using Magicodes.Admin.Authorization.Users;
@@ -13,6 +14,8 @@ namespace Magicodes.Admin.Notifications
         Task NewUserRegisteredAsync(User user);
 
         Task NewTenantRegisteredAsync(Tenant tenant);
+
+        Task GdprDataPrepared(UserIdentifier user, Guid binaryObjectId);
 
         Task SendMessageAsync(UserIdentifier user, string message, NotificationSeverity severity = NotificationSeverity.Info);
     }
