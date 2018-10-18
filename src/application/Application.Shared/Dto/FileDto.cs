@@ -8,7 +8,6 @@ namespace Magicodes.Admin.Dto
         [Required]
         public string FileName { get; set; }
 
-        [Required]
         public string FileType { get; set; }
 
         [Required]
