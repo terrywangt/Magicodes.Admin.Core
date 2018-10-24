@@ -34,7 +34,7 @@ export class NgxBootstrapDatePickerConfigService {
                 import(`ngx-bootstrap/chronos/i18n/${supportedLocale}.js`)
                 .then(module => {
                     if(supportedLocale=='zh-cn'){
-                        defineLocale(abp.localization.currentLanguage.name, module[`zhCnLocale`]);
+                        defineLocale(supportedLocale, module[`zhCnLocale`]);
                     }else{
                         defineLocale(abp.localization.currentLanguage.name, module[`${abp.localization.currentLanguage.name}Locale`]);
                     }
