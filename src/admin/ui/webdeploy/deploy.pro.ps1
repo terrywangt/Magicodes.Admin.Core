@@ -8,7 +8,7 @@ param(
     $userName = "",
     $password = "",
     $configPath = "deploy.pro.config",
-    $siteUrl = "" 
+    $siteUrl = ""
 )
 
 function prompt { '心莱科技: ' + (get-location) + '> '}
@@ -22,7 +22,7 @@ $target = [io.Path]::Combine($rootDir, "dist")
 #--------------------------------------------------------------------------------------------------------------------------------------------
 
 #----------------------------------------------------编译前端脚本----------------------------------------------------------------------------
-npm run publish-pro
+#npm run publish-pro
 
 $webConfigPath = [io.Path]::Combine($rootDir, "web.config")
 Copy-Item -Path $webConfigPath -Destination $target -Force
