@@ -123,29 +123,7 @@
 
                             <ng-template pTemplate="body" let-record="$implicit">
                                 <tr>
-                                    <!-- <td style="width: 130px">
-                                        <div class="btn-group dropdown" normalizePosition>
-                                            <button class="dropdown-toggle btn btn-sm btn-primary"
-                                                    data-toggle="dropdown"
-                                                    aria-haspopup="true"
-                                                    aria-expanded="false">
-                                                <i class="fa fa-cog"></i><span class="caret"></span> {{l("Actions")}}
-                                            </button>
-                                            <ul class="dropdown-menu" *ngIf="!record.isDeleted">
-                                                <li>
-                                                    <a (click)="editTransactionLog(record.id)">{{l('Edit')}}</a>
-                                                </li>
-                                                <li>
-                                                    <a (click)="deleteTransactionLog(record.id)">{{l('Delete')}}</a>
-                                                </li>
-                                            </ul>
-                                            <ul class="dropdown-menu" *ngIf="record.isDeleted">
-                                                <li>
-                                                    <a (click)="restore(record.id)">{{l('Restore')}}</a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </td> -->
+
                                     <td style="width:200px">{{record.cultureValue}}</td>
                                     <td style="width:200px">
                                         {{ record.creationTime ? (record.creationTime | momentFormat:'L LT') : '-'}}

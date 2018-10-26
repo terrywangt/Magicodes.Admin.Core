@@ -98,21 +98,18 @@
                                 <tr>
 
                                     <td style="width: 130px">
-                                        <div class="btn-group dropdown" normalizePosition>
-                                            <button class="dropdown-toggle btn btn-sm btn-primary" data-toggle="dropdown"
-                                                aria-haspopup="true" aria-expanded="false">
+                                        <div class="btn-group dropdown" dropdown container="body">
+                                            <button dropdownToggle class="dropdown-toggle btn btn-sm btn-primary">
                                                 <i class="fa fa-cog"></i><span class="caret"></span> {{l("Actions")}}
                                             </button>
-                                            <ul class="dropdown-menu" *ngIf="!record.isDeleted">
-                                                <li>
+                                            <ul class="dropdown-menu" *dropdownMenu>
+                                                <li *ngIf="!record.isDeleted">
                                                     <a (click)="editArticleSourceInfo(record.id)">{{l('Edit')}}</a>
                                                 </li>
-                                                <li>
+                                                <li *ngIf="!record.isDeleted">
                                                     <a (click)="deleteArticleSourceInfo(record.id)">{{l('Delete')}}</a>
                                                 </li>
-                                            </ul>
-                                            <ul class="dropdown-menu" *ngIf="record.isDeleted">
-                                                <li>
+                                                <li *ngIf="record.isDeleted">
                                                     <a (click)="restore(record.id)">{{l('Restore')}}</a>
                                                 </li>
                                             </ul>
