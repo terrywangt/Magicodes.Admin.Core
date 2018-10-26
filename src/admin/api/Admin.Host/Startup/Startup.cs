@@ -20,6 +20,7 @@ using PaulMiami.AspNetCore.Mvc.Recaptcha;
 using System;
 using System.IO;
 using System.Linq;
+using Magicodes.Admin.Web.Configuration;
 using ILoggerFactory = Microsoft.Extensions.Logging.ILoggerFactory;
 
 namespace Magicodes.Admin.Web.Startup
@@ -91,6 +92,9 @@ namespace Magicodes.Admin.Web.Startup
             //Configure Abp and Dependency Injection
             return services.AddAbp<AdminWebHostModule>(options =>
             {
+                options.IocManager.Register<IAppConfigurationAccessor, AppConfigurationAccessor>(DependencyLifeStyle
+                    .Singleton);
+
                 //Configure Log4Net logging
                 options.IocManager.IocContainer.AddFacility<LoggingFacility>(
                     f => f.UseAbpLog4Net().WithConfig("log4net.config")
