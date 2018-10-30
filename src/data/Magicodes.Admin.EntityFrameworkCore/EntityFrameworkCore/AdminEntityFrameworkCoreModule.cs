@@ -28,6 +28,19 @@ namespace Magicodes.Admin.EntityFrameworkCore
 
         public override void PreInitialize()
         {
+            var isUseRowNumber = true;
+            //判断是否注册（单元测试时无法在此时注册）
+            if (IocManager.IsRegistered<IAppConfigurationAccessor>())
+            {
+                using (var configurationAccessorObj = IocManager.ResolveAsDisposable<IAppConfigurationAccessor>())
+                {
+                    //从配置文件获取是否使用RowNumber进行分页
+                    isUseRowNumber = Convert.ToBoolean(configurationAccessorObj.Object.Configuration["Database:IsUseRowNumber"] ?? "true");
+                }
+            }
+
+            
+
             if (!SkipDbContextRegistration)
             {
                 Configuration.Modules.AbpEfCore().AddDbContext<AdminDbContext>(options =>
@@ -38,7 +51,7 @@ namespace Magicodes.Admin.EntityFrameworkCore
                     }
                     else
                     {
-                        AdminDbContextConfigurer.Configure(options.DbContextOptions, options.ConnectionString);
+                        AdminDbContextConfigurer.Configure(options.DbContextOptions, options.ConnectionString, isUseRowNumber);
                     }
                 });
             }
@@ -54,16 +67,13 @@ namespace Magicodes.Admin.EntityFrameworkCore
             Configuration.CustomConfigProviders.Add(new EntityHistoryConfigProvider(Configuration));
         }
 
-        public override void Initialize()
-        {
-            IocManager.RegisterAssemblyByConvention(typeof(AdminEntityFrameworkCoreModule).GetAssembly());
-        }
+        public override void Initialize() => IocManager.RegisterAssemblyByConvention(typeof(AdminEntityFrameworkCoreModule).GetAssembly());
 
         public override void PostInitialize()
         {
-            var configurationAccessor = IocManager.Resolve<IAppConfigurationAccessor>();
             using (var scope = IocManager.CreateScope())
-            { 
+            {
+                var configurationAccessor = IocManager.Resolve<IAppConfigurationAccessor>();
                 if (!SkipDbSeed && scope.Resolve<DatabaseCheckHelper>().Exist(configurationAccessor.Configuration["ConnectionStrings:Default"]))
                 {
                     //系统启动时自动执行迁移

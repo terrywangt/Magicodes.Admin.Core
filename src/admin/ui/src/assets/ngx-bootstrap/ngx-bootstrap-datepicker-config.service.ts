@@ -31,7 +31,15 @@ export class NgxBootstrapDatePickerConfigService {
 
         import(`ngx-bootstrap/chronos/i18n/${supportedLocale}.js`)
             .then(module => {
-                defineLocale(abp.localization.currentLanguage.name, module[`${abp.localization.currentLanguage.name}Locale`]);
+                import(`ngx-bootstrap/chronos/i18n/${supportedLocale}.js`)
+                .then(module => {
+                    if(supportedLocale=='zh-cn'){
+                        defineLocale(supportedLocale, module[`zhCnLocale`]);
+                    }else{
+                        defineLocale(abp.localization.currentLanguage.name, module[`${abp.localization.currentLanguage.name}Locale`]);
+                    }
+                });
+                // defineLocale(abp.localization.currentLanguage.name, module[`${abp.localization.currentLanguage.name}Locale`]);
             });
     }
 }

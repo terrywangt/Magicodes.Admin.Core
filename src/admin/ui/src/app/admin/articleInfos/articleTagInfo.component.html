@@ -107,26 +107,15 @@
 											<tr>
 
 												<td style="width: 130px">
-													<div class="btn-group dropdown" normalizePosition>
-														<button class="dropdown-toggle btn btn-sm btn-primary" data-toggle="dropdown" aria-haspopup="true"
-														 aria-expanded="false">
-															<i class="fa fa-cog"></i><span class="caret"></span> {{l("Actions")}}
-														</button>
-														<ul class="dropdown-menu" *ngIf="!record.isDeleted">
-															<li>
-																<a (click)="editArticleTagInfo(record.id)">{{l('Edit')}}</a>
-															</li>
-															<li>
-																<a (click)="deleteArticleTagInfo(record.id)">{{l('Delete')}}</a>
-															</li>
-														</ul>
-														<ul class="dropdown-menu" *ngIf="record.isDeleted">
-															<li>
-																<a (click)="restore(record.id)">{{l('Restore')}}</a>
-															</li>
-														</ul>
-
-													</div>
+													<button class="btn btn-sm btn-primary" *ngIf="!record.isDeleted" (click)="editArticleTagInfo(record.id)">
+														{{l('Edit')}}
+													</button>
+													<button class="btn btn-sm" *ngIf="!record.isDeleted" (click)="deleteArticleTagInfo(record.id)">
+														{{l('Delete')}}
+													</button>
+													<button class="btn btn-sm btn-primary" *ngIf="record.isDeleted" (click)="restore(record.id)">
+														{{l('Restore')}}
+													</button>
 												</td>
 												<td style="width:200px">{{record.articleInfo}}</td>
 												<td style="width:200px">{{record.name}}</td>

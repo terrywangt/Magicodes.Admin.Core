@@ -103,7 +103,7 @@
                             <ng-template pTemplate="header" let-columns>
                                 <tr>
                                     <th style="width:110px"></th>
-                                    <th style="width:130px">{{l('Actions')}}</th>
+                                    <th style="width:200px">{{l('Actions')}}</th>
                                     <th [ttSortableColumn]="title" style="width:200px">{{l('Title')}}
                                         <p-treeTableSortIcon field="title"></p-treeTableSortIcon>
                                     </th>
@@ -130,7 +130,21 @@
                                     <td style="width: 110px">
                                         <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
                                     </td>
-                                    <td style="width: 130px">
+                                    <td style="width: 200px">
+                                        <button class="btn btn-sm btn-primary" *ngIf="!rowData.isDeleted" (click)="editColumnInfo(rowData.id)">
+                                            {{l('Edit')}}
+                                        </button>
+                                        <button class="btn btn-sm" *ngIf="!rowData.isDeleted" (click)="deleteColumnInfo(rowData.id)">
+                                            {{l('Delete')}}
+                                        </button>
+                                        <button class="btn btn-sm btn-primary" *ngIf="!rowData.isDeleted" (click)="fileUploadModal.show(rowData.id)">
+                                            {{l('PictureManage')}}
+                                        </button>
+                                        <button class="btn btn-sm btn-primary" *ngIf="rowData.isDeleted" (click)="restore(rowData.id)">
+                                            {{l('Restore')}}
+                                        </button>
+                                    </td>
+                                    <!-- <td style="width: 130px">
                                         <div class="btn-group dropdown" normalizePosition>
                                             <button class="dropdown-toggle btn btn-sm btn-primary" data-toggle="dropdown"
                                                 aria-haspopup="true" aria-expanded="false">
@@ -154,7 +168,7 @@
                                                 </li>
                                             </ul>
                                         </div>
-                                    </td>
+                                    </td> -->
                                     <td style="width:200px">{{rowData.title}}</td>
                                     <td style="width:200px">
                                         <p-inputSwitch (onChange)="handleIsActiveSwitch($event,rowData.id)" [(ngModel)]="rowData.isActive"></p-inputSwitch>
@@ -187,8 +201,8 @@
                             (onRowReorder)="getReorder($event)">
                             <ng-template pTemplate="header">
                                 <tr>
-                                    <th style="width:30px"></th>
-                                    <th style="width:130px">{{l('Actions')}}</th>
+                                    <!-- <th style="width:30px"></th> -->
+                                    <th style="width:200px">{{l('Actions')}}</th>
                                     <th pSortableColumn="title" style="width:200px">{{l('Title')}}
                                         <p-sortIcon field="title"></p-sortIcon>
                                     </th>
@@ -213,34 +227,23 @@
 
                             <ng-template pTemplate="body" let-record="$implicit" let-index="rowIndex">
                                 <tr [pReorderableRow]="index">
-                                    <td style="width:30px">
+                                    <!-- <td style="width:30px">
                                         <i class="fa fa-arrows" title="{{l('DragAndDropSortTip')}}"
                                             pReorderableRowHandle></i>
-                                    </td>
-                                    <td style="width: 130px">
-                                        <div class="btn-group dropdown" normalizePosition>
-                                            <button class="dropdown-toggle btn btn-sm btn-primary" data-toggle="dropdown"
-                                                aria-haspopup="true" aria-expanded="false">
-                                                <i class="fa fa-cog"></i>
-                                                <span class="caret"></span> {{l("Actions")}}
-                                            </button>
-                                            <ul class="dropdown-menu" *ngIf="!record.isDeleted">
-                                                <li>
-                                                    <a (click)="editColumnInfo(record.id)">{{l('Edit')}}</a>
-                                                </li>
-                                                <li>
-                                                    <a (click)="deleteColumnInfo(record.id)">{{l('Delete')}}</a>
-                                                </li>
-                                                <li>
-                                                    <a (click)="fileUploadModal.show(record.id)">{{l('PictureManage')}}</a>
-                                                </li>
-                                            </ul>
-                                            <ul class="dropdown-menu" *ngIf="record.isDeleted">
-                                                <li>
-                                                    <a (click)="restore(record.id)">{{l('Restore')}}</a>
-                                                </li>
-                                            </ul>
-                                        </div>
+                                    </td> -->
+                                    <td style="width: 200px">
+                                        <button class="btn btn-sm btn-primary" *ngIf="!record.isDeleted" (click)="editColumnInfo(record.id)">
+                                            {{l('Edit')}}
+                                        </button>
+                                        <button class="btn btn-sm" *ngIf="!record.isDeleted" (click)="deleteColumnInfo(record.id)">
+                                            {{l('Delete')}}
+                                        </button>
+                                        <button class="btn btn-sm btn-primary" *ngIf="!record.isDeleted" (click)="fileUploadModal.show(record.id)">
+                                            {{l('PictureManage')}}
+                                        </button>
+                                        <button class="btn btn-sm btn-primary" *ngIf="record.isDeleted" (click)="restore(record.id)">
+                                            {{l('Restore')}}
+                                        </button>
                                     </td>
                                     <td style="width:200px">{{record.title}}</td>
                                     <td style="width:200px">
