@@ -4,12 +4,12 @@ using Abp.AspNetZeroCore.Web.Authentication.JwtBearer;
 using Abp.Castle.Logging.Log4Net;
 using Abp.Dependency;
 using Abp.Extensions;
-using Abp.PlugIns;
 using Castle.Facilities.Logging;
 using Magicodes.Admin.Configuration;
 using Magicodes.Admin.EntityFrameworkCore;
 using Magicodes.Admin.Identity;
 using Magicodes.Admin.Web.Chat.SignalR;
+using Magicodes.Admin.Web.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -18,9 +18,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PaulMiami.AspNetCore.Mvc.Recaptcha;
 using System;
-using System.IO;
 using System.Linq;
-using Magicodes.Admin.Web.Configuration;
+using Abp.Castle.Logging.NLog;
 using ILoggerFactory = Microsoft.Extensions.Logging.ILoggerFactory;
 
 namespace Magicodes.Admin.Web.Startup
@@ -97,10 +96,21 @@ namespace Magicodes.Admin.Web.Startup
 
                 //Configure Log4Net logging
                 options.IocManager.IocContainer.AddFacility<LoggingFacility>(
-                    f => f.UseAbpLog4Net().WithConfig("log4net.config")
-                );
+                    f =>
+                    {
+                        var logType = _appConfiguration["Abp:LogType"];
+                        if (logType != null && logType == "NLog")
+                        {
+                            f.UseAbpNLog().WithConfig("nlog.config");
+                        }
+                        else
+                        {
+                            f.UseAbpLog4Net().WithConfig("log4net.config");
+                        }
+                    });
 
-                options.PlugInSources.AddFolder(Path.Combine(_hostingEnvironment.WebRootPath, "Plugins"), SearchOption.AllDirectories);
+                //默认不启动插件目录（不推荐插件模式）
+                //options.PlugInSources.AddFolder(Path.Combine(_hostingEnvironment.WebRootPath, "Plugins"), SearchOption.AllDirectories);
             });
         }
 

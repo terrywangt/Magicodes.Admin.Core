@@ -51,6 +51,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Magicodes.Pay", "src\unity\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Magicodes.Sms", "src\unity\Magicodes.Sms\Magicodes.Sms.csproj", "{DE9B120F-FD37-4B14-95A1-4FFEDDACD6B9}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Abp.Castle.NLog", "src\unity\Abp.Castle.NLog\Abp.Castle.NLog.csproj", "{71DBD97D-9842-4221-91EA-07ADED5FB2CB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -113,6 +115,10 @@ Global
 		{DE9B120F-FD37-4B14-95A1-4FFEDDACD6B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE9B120F-FD37-4B14-95A1-4FFEDDACD6B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DE9B120F-FD37-4B14-95A1-4FFEDDACD6B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71DBD97D-9842-4221-91EA-07ADED5FB2CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71DBD97D-9842-4221-91EA-07ADED5FB2CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71DBD97D-9842-4221-91EA-07ADED5FB2CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71DBD97D-9842-4221-91EA-07ADED5FB2CB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -132,6 +138,7 @@ Global
 		{43255C32-31CC-471B-BB77-DF685626B807} = {8C63EF1F-3A85-4724-95B6-DD4B32C41C15}
 		{575473C3-FF42-4FDD-B5D2-C9308A7F81B2} = {8C63EF1F-3A85-4724-95B6-DD4B32C41C15}
 		{DE9B120F-FD37-4B14-95A1-4FFEDDACD6B9} = {8C63EF1F-3A85-4724-95B6-DD4B32C41C15}
+		{71DBD97D-9842-4221-91EA-07ADED5FB2CB} = {8C63EF1F-3A85-4724-95B6-DD4B32C41C15}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {23CD4D4B-B131-473D-9ECB-5DD96E739671}

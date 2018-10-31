@@ -3,7 +3,7 @@ version: '2'
 services:
 
     magicodes_host:
-        image: magicodes/admin.host
+        image: ccr.ccs.tencentyun.com/magicodes/admin.host
         environment:
             - ASPNETCORE_ENVIRONMENT=Staging
         ports:
@@ -12,7 +12,7 @@ services:
             - "./Host-Logs:/app/App_Data/Logs"
 
     magicodes_ui:
-        image: magicodes/admin.ui
+        image: ccr.ccs.tencentyun.com/magicodes/admin.ui
         ports:
             - "9902:80"
         volumes:
