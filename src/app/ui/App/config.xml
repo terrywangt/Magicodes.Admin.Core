@@ -97,14 +97,4 @@
     <plugin name="cordova-android-support-gradle-release" spec="^1.4.4">
         <variable name="ANDROID_SUPPORT_VERSION" value="27.+" />
     </plugin>
-    <engine name="android" spec="7.0.0" />
-    <engine name="ios" spec="4.5.5" />
-    <!-- 执行 【ionic cordova plugin add cordova-plugin-adam-alipay --variable APP_ID=[支付宝APPID]】添加-->
-    <!-- <plugin name="cordova-plugin-adam-alipay" spec="^2.0.4">
-        <variable name="APP_ID" value="" />
-    </plugin>
-    <!-- 执行 【ionic cordova plugin add cordova-plugin-adam-wechat --variable WECHATAPPID=[微信WECHATAPPID]】添加-->
-    <!--<plugin name="cordova-plugin-adam-wechat" spec="^3.0.5">
-        <variable name="WECHATAPPID" value="" />
-    </plugin> -->
 </widget>
