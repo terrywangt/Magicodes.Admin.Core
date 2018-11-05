@@ -4,14 +4,16 @@ using Magicodes.Admin.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Magicodes.Admin.Migrations
 {
     [DbContext(typeof(AdminDbContext))]
-    partial class AdminDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181105014927_Update_ColumnInfoAndArticleInfo")]
+    partial class Update_ColumnInfoAndArticleInfo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1157,8 +1159,6 @@ namespace Magicodes.Admin.Migrations
 
                     b.Property<long>("AttachmentInfoId");
 
-                    b.Property<bool>("IsCover");
-
                     b.Property<long>("ObjectId");
 
                     b.Property<int>("ObjectType");
@@ -1216,6 +1216,8 @@ namespace Magicodes.Admin.Migrations
                     b.Property<string>("Content")
                         .IsRequired();
 
+                    b.Property<long?>("Cover");
+
                     b.Property<DateTime>("CreationTime");
 
                     b.Property<long?>("CreatorUserId");
@@ -1232,8 +1234,6 @@ namespace Magicodes.Admin.Migrations
                     b.Property<bool>("IsDeleted");
 
                     b.Property<bool>("IsNeedAuthorizeAccess");
-
-                    b.Property<bool>("IsStatic");
 
                     b.Property<string>("KeyWords")
                         .HasMaxLength(200);
@@ -1355,7 +1355,9 @@ namespace Magicodes.Admin.Migrations
                         .IsRequired()
                         .HasMaxLength(50);
 
-                    b.Property<int>("ColumnType");
+                    b.Property<int>("ColumnTypes");
+
+                    b.Property<long?>("Cover");
 
                     b.Property<DateTime>("CreationTime");
 
@@ -1379,8 +1381,6 @@ namespace Magicodes.Admin.Migrations
                     b.Property<bool>("IsDeleted");
 
                     b.Property<bool>("IsNeedAuthorizeAccess");
-
-                    b.Property<bool>("IsStatic");
 
                     b.Property<string>("KeyWords")
                         .HasMaxLength(200);

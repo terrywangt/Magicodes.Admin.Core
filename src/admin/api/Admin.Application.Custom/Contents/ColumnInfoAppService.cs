@@ -222,6 +222,8 @@ namespace Admin.Application.Custom.Contents
             }
             var columnInfo = new ColumnInfo()
             {
+                Code = GetCode(),
+                ParentId = input.ColumnInfo.ParentId,
                 Title = input.ColumnInfo.Title,
                 SortNo = input.ColumnInfo.SortNo,
                 IsActive = input.ColumnInfo.IsActive,
@@ -230,6 +232,9 @@ namespace Admin.Application.Custom.Contents
                 Introduction = input.ColumnInfo.Introduction,
                 IconCls = input.ColumnInfo.IconCls,
                 Url = input.ColumnInfo.Url,
+                MaxItemCount = input.ColumnInfo.MaxItemCount,
+                ColumnType = input.ColumnInfo.ColumnType,
+                IsStatic = input.ColumnInfo.IsStatic,
                 CreatorUserId = AbpSession.UserId,
                 CreationTime = Clock.Now,
                 TenantId = AbpSession.TenantId
@@ -257,6 +262,8 @@ namespace Admin.Application.Custom.Contents
                     throw new UserFriendlyException(L("TitleExist"));
                 }
             }
+
+            columnInfo.ParentId = input.ColumnInfo.ParentId;
             columnInfo.Title = input.ColumnInfo.Title;
             columnInfo.SortNo = input.ColumnInfo.SortNo;
             columnInfo.IsActive = input.ColumnInfo.IsActive;
@@ -265,6 +272,9 @@ namespace Admin.Application.Custom.Contents
             columnInfo.Introduction = input.ColumnInfo.Introduction;
             columnInfo.IconCls = input.ColumnInfo.IconCls;
             columnInfo.Url = input.ColumnInfo.Url;
+            columnInfo.MaxItemCount = input.ColumnInfo.MaxItemCount;
+            columnInfo.ColumnType = input.ColumnInfo.ColumnType;
+            columnInfo.IsStatic = input.ColumnInfo.IsStatic;
         }
 
         /// <summary>
@@ -317,6 +327,20 @@ namespace Admin.Application.Custom.Contents
             columnInfo.IsNeedAuthorizeAccess = input.SwitchValue;
         }
 
-
+        /// <summary>
+        /// 获取选择列表
+        /// </summary>
+        public async Task<List<GetDataComboItemDto<long>>> GetColumnInfoDataComboItems()
+        {
+            var list = await _columnInfoRepository.GetAll()
+                //.Where(p => !p.IsActive)
+                .OrderByDescending(p => p.Id)
+                .Select(p => new { p.Id, p.Title }).ToListAsync();
+            return list.Select(p => new GetDataComboItemDto<long>()
+            {
+                DisplayName = p.Title,
+                Value = p.Id
+            }).ToList();
+        }
     }
 }

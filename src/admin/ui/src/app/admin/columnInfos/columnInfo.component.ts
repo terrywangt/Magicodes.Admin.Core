@@ -268,4 +268,27 @@ export class ColumnInfosComponent extends AppComponentBase implements OnInit {
 
     }
 
+    
+	/**
+     * 刷新Table
+     */
+    RefreshTable() {
+        if (this.isShowTreeTable) {
+            this.getList();
+        } else {
+            this.getColumnInfos();
+        }
+    }
+
+    getColumnTypeText(value: number) {
+        return this.l(ColumnTypeEnum[value]);
+    }
+
+}
+
+
+//定义列表枚举字段，以便友好化展示
+enum ColumnTypeEnum {
+    Html = 0,
+    Image = 1
 }

@@ -26,5 +26,10 @@ namespace Magicodes.Admin.Core.Custom.Attachments
         /// 对象类型
         /// </summary>
         public AttachmentObjectTypes ObjectType { get; set; }
+
+        /// <summary>
+        /// 是否是封面
+        /// </summary>
+        public bool IsCover { get; set; }
     }
 }

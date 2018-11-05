@@ -105,6 +105,9 @@
                                     <th pSortableColumn="title" style="width:200px">{{l('Title')}}
                                         <p-sortIcon field="title"></p-sortIcon>
                                     </th>
+                                    <th pSortableColumn="code" style="width:200px">{{l('Code')}}
+                                        <p-sortIcon field="code"></p-sortIcon>
+                                    </th>
                                     <th pSortableColumn="publisher" style="width:200px">{{l('Publisher')}}
                                         <p-sortIcon field="publisher"></p-sortIcon>
                                     </th>
@@ -129,6 +132,7 @@
                                     <th pSortableColumn="staticPageUrl" style="width:200px">{{l('StaticPageUrl')}}
                                         <p-sortIcon field="staticPageUrl"></p-sortIcon>
                                     </th>
+                                    <th style="width:200px">{{l('Cover')}}</th>
                                     <th style="width:600px">{{l('PictureManage')}}</th>
                                     <th pSortableColumn="articleTagInfos" style="width:200px">{{l('ArticleTagInfos')}}
                                         <p-sortIcon field="articleTagInfos"></p-sortIcon>
@@ -156,10 +160,10 @@
                                                 <i class="fa fa-cog"></i><span class="caret"></span> {{l("Actions")}}
                                             </button>
                                             <ul class="dropdown-menu" *dropdownMenu>
-                                                <li *ngIf="!record.isDeleted">
+                                                <li *ngIf="!record.isDeleted && !record.isStatic">
                                                     <a href="javascript:;" *ngIf="permission.isGranted('Pages.ArticleInfo.Edit')" (click)="editArticleInfo(record.id)">{{l('Edit')}}</a>
                                                 </li>
-                                                <li *ngIf="!record.isDeleted">
+                                                <li *ngIf="!record.isDeleted && !record.isStatic">
                                                     <a href="javascript:;" *ngIf="permission.isGranted('Pages.ArticleInfo.Delete')" (click)="deleteArticleInfo(record.id)">{{l('Delete')}}</a>
                                                 </li>
                                                 <li *ngIf="!record.isDeleted">
@@ -174,7 +178,15 @@
                                             </ul>
                                         </div>
                                     </td>
-                                    <td style="width:200px">{{record.title}}</td>
+                                    <td style="width:200px">
+                                        {{record.title}}
+                                        <span *ngIf="record.isStatic" class="m-badge m-badge--brand m-badge--wide"
+                                            data-toggle="tooltip" title="{{l('StaticArticleInfo_Tooltip')}}"
+                                            data-placement="top">
+                                            {{l('Static')}}
+                                        </span>
+                                    </td>
+                                    <td style="width:200px">{{record.code}}</td>
                                     <td style="width:200px">{{record.publisher}}</td>
                                     <td style="width:200px">{{record.columnInfo}}</td>
                                     <td style="width:200px">{{record.articleSourceInfo}}</td>
@@ -190,8 +202,12 @@
                                     </td>
                                     <td style="width:200px">{{record.seoTitle}}</td>
                                     <td style="width:200px">{{record.staticPageUrl}}</td>
+                                    <td style="width:200px">
+                                            <object-imageList objectTypeName="ArticleInfo" [(objectId)]="record.id"
+                                            isCover="true"></object-imageList>
+                                    </td>
                                     <td style="width:600px">
-                                        <object-imageList objectTypeName="ArticleInfo" [(objectId)]="record.id"></object-imageList>
+                                        <object-imageList objectTypeName="ArticleInfo" [(objectId)]="record.id" isCover="false"></object-imageList>
                                     </td>
                                     <td style="width:200px">{{record.articleTagInfos}}</td>
                                     <td style="width:200px">{{record.url}}</td>

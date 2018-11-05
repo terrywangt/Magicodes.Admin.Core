@@ -164,5 +164,15 @@ namespace Admin.Application.Custom
                     break;
             }
         }
+
+        /// <summary>
+        /// 获取编号
+        /// </summary>
+        /// <param name="codeHeader">编号头部</param>
+        protected string GetCode(string codeHeader=null)
+        {
+            var guid = Guid.NewGuid().ToString("N").ToUpper();
+            return codeHeader.IsNullOrWhiteSpace() ? guid : $"{codeHeader}{guid}";
+        }
     }
 }

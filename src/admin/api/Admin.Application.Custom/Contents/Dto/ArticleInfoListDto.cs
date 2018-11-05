@@ -13,9 +13,13 @@ namespace Admin.Application.Custom.Contents.Dto
     [AutoMapFrom(typeof(ArticleInfo))]
     public partial class ArticleInfoListDto : EntityDto<long>
     {
-		/// <summary>
-		/// 标题
-		/// </summary>
+        /// <summary>
+        ///     编码
+        /// </summary>
+        public string Code { get; set; }
+        /// <summary>
+        /// 标题
+        /// </summary>
         public string Title { get; set; }
 		/// <summary>
 		/// 发布人（机构）
@@ -84,5 +88,10 @@ namespace Admin.Application.Custom.Contents.Dto
         /// 是否已删除
         /// </summary>
         public bool IsDeleted { get; set; }
+
+        /// <summary>
+        ///     是否静态
+        /// </summary>
+        public bool IsStatic { get; set; }
     }
 }

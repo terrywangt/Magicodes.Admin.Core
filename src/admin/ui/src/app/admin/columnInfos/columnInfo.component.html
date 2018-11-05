@@ -98,8 +98,8 @@
                 <!--<Primeng-TreeTable-Start>-->
                 <div class="row align-items-center" *ngIf="isShowTreeTable">
                     <div class="primeng-datatable-container">
-                        <p-treeTable [value]="list" [paginator]="false" [lazy]="false" [loading]="loading"
-                            (onNodeExpand)="onNodeExpand($event)">
+                        <p-treeTable [value]="list" [paginator]="false" [lazy]="false" [loading]="loading" [scrollable]="true"
+                            [style]="{width:'100%'}" (onNodeExpand)="onNodeExpand($event)">
                             <ng-template pTemplate="header" let-columns>
                                 <tr>
                                     <th style="width:110px"></th>
@@ -107,15 +107,19 @@
                                     <th [ttSortableColumn]="title" style="width:200px">{{l('Title')}}
                                         <p-treeTableSortIcon field="title"></p-treeTableSortIcon>
                                     </th>
+                                    <th [ttSortableColumn]="code" style="width:300px">{{l('Code')}}
+                                        <p-treeTableSortIcon field="code"></p-treeTableSortIcon>
+                                    </th>
+                                    <th [ttSortableColumn]="columnType" style="width:150px">{{l('ColumnType')}}
+                                        <p-treeTableSortIcon field="columnType"></p-treeTableSortIcon>
+                                    </th>
                                     <th [ttSortableColumn]="isActive" style="width:200px">{{l('IsActive')}}
                                         <p-treeTableSortIcon field="isActive"></p-treeTableSortIcon>
                                     </th>
                                     <th [ttSortableColumn]="isNeedAuthorizeAccess" style="width:200px">{{l('IsNeedAuthorizeAccess')}}
                                         <p-treeTableSortIcon field="isNeedAuthorizeAccess"></p-treeTableSortIcon>
                                     </th>
-                                    <th [ttSortableColumn]="iconCls" style="width:200px">{{l('IconCls')}}
-                                        <p-treeTableSortIcon field="iconCls"></p-treeTableSortIcon>
-                                    </th>
+                                    <th style="width:200px">{{l('Cover')}}</th>
                                     <th style="width:600px">{{l('PictureManage')}}</th>
                                     <th [ttSortableColumn]="url" style="width:200px">{{l('Url')}}
                                         <p-treeTableSortIcon field="url"></p-treeTableSortIcon>
@@ -131,10 +135,12 @@
                                         <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
                                     </td>
                                     <td style="width: 200px">
-                                        <button class="btn btn-sm btn-primary" *ngIf="!rowData.isDeleted" (click)="editColumnInfo(rowData.id)">
+                                        <button class="btn btn-sm btn-primary" *ngIf="!rowData.isDeleted && !rowData.isStatic"
+                                            (click)="editColumnInfo(rowData.id)">
                                             {{l('Edit')}}
                                         </button>
-                                        <button class="btn btn-sm" *ngIf="!rowData.isDeleted" (click)="deleteColumnInfo(rowData.id)">
+                                        <button class="btn btn-sm" *ngIf="!rowData.isDeleted && !rowData.isStatic"
+                                            (click)="deleteColumnInfo(rowData.id)">
                                             {{l('Delete')}}
                                         </button>
                                         <button class="btn btn-sm btn-primary" *ngIf="!rowData.isDeleted" (click)="fileUploadModal.show(rowData.id)">
@@ -169,7 +175,20 @@
                                             </ul>
                                         </div>
                                     </td> -->
-                                    <td style="width:200px">{{rowData.title}}</td>
+                                    <td style="width:200px">
+                                        {{rowData.title}}
+                                        <span *ngIf="rowData.isStatic" class="m-badge m-badge--brand m-badge--wide"
+                                            data-toggle="tooltip" title="{{l('StaticColumnInfo_Tooltip')}}"
+                                            data-placement="top">
+                                            {{l('Static')}}
+                                        </span>
+                                    </td>
+                                    <td style="width:300px">
+                                        {{rowData.code}}
+                                    </td>
+                                    <td style="width:150px">
+                                        {{getColumnTypeText(rowData.columnType)}}
+                                    </td>
                                     <td style="width:200px">
                                         <p-inputSwitch (onChange)="handleIsActiveSwitch($event,rowData.id)" [(ngModel)]="rowData.isActive"></p-inputSwitch>
                                     </td>
@@ -177,9 +196,13 @@
                                         <p-inputSwitch (onChange)="handleIsNeedAuthorizeAccessSwitch($event,rowData.id)"
                                             [(ngModel)]="rowData.isNeedAuthorizeAccess"></p-inputSwitch>
                                     </td>
-                                    <td style="width:200px">{{rowData.iconCls}}</td>
+                                    <td style="width:200px">
+                                        <object-imageList objectTypeName="ColumnInfo" [(objectId)]="rowData.id"
+                                            isCover="true"></object-imageList>
+                                    </td>
                                     <td style="width:600px">
-                                        <object-imageList objectTypeName="ColumnInfo" [(objectId)]="rowData.id"></object-imageList>
+                                        <object-imageList objectTypeName="ColumnInfo" [(objectId)]="rowData.id"
+                                            isCover="false"></object-imageList>
                                     </td>
                                     <td style="width:200px">{{rowData.url}}</td>
                                     <td style="width:200px">
@@ -206,15 +229,19 @@
                                     <th pSortableColumn="title" style="width:200px">{{l('Title')}}
                                         <p-sortIcon field="title"></p-sortIcon>
                                     </th>
+                                    <th pSortableColumn="code" style="width:200px">{{l('Code')}}
+                                        <p-sortIcon field="code"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="columnType" style="width:200px">{{l('ColumnType')}}
+                                        <p-sortIcon field="columnType"></p-sortIcon>
+                                    </th>
                                     <th pSortableColumn="isActive" style="width:200px">{{l('IsActive')}}
                                         <p-sortIcon field="isActive"></p-sortIcon>
                                     </th>
                                     <th pSortableColumn="isNeedAuthorizeAccess" style="width:200px">{{l('IsNeedAuthorizeAccess')}}
                                         <p-sortIcon field="isNeedAuthorizeAccess"></p-sortIcon>
                                     </th>
-                                    <th pSortableColumn="iconCls" style="width:200px">{{l('IconCls')}}
-                                        <p-sortIcon field="iconCls"></p-sortIcon>
-                                    </th>
+                                    <th style="width:200px">{{l('Cover')}}</th>
                                     <th style="width:600px">{{l('PictureManage')}}</th>
                                     <th pSortableColumn="url" style="width:200px">{{l('Url')}}
                                         <p-sortIcon field="url"></p-sortIcon>
@@ -232,10 +259,12 @@
                                             pReorderableRowHandle></i>
                                     </td> -->
                                     <td style="width: 200px">
-                                        <button class="btn btn-sm btn-primary" *ngIf="!record.isDeleted" (click)="editColumnInfo(record.id)">
+                                        <button class="btn btn-sm btn-primary" *ngIf="!record.isDeleted && !record.isStatic"
+                                            (click)="editColumnInfo(record.id)">
                                             {{l('Edit')}}
                                         </button>
-                                        <button class="btn btn-sm" *ngIf="!record.isDeleted" (click)="deleteColumnInfo(record.id)">
+                                        <button class="btn btn-sm" *ngIf="!record.isDeleted && !record.isStatic"
+                                            (click)="deleteColumnInfo(record.id)">
                                             {{l('Delete')}}
                                         </button>
                                         <button class="btn btn-sm btn-primary" *ngIf="!record.isDeleted" (click)="fileUploadModal.show(record.id)">
@@ -245,7 +274,20 @@
                                             {{l('Restore')}}
                                         </button>
                                     </td>
-                                    <td style="width:200px">{{record.title}}</td>
+                                    <td style="width:200px">
+                                        {{record.title}}
+                                        <span *ngIf="record.isStatic" class="m-badge m-badge--brand m-badge--wide"
+                                            data-toggle="tooltip" title="{{l('StaticColumnInfo_Tooltip')}}"
+                                            data-placement="top">
+                                            {{l('Static')}}
+                                        </span>
+                                    </td>
+                                    <td style="width:200px">
+                                        {{record.code}}
+                                    </td>
+                                    <td style="width:150px">
+                                        {{getColumnTypeText(record.columnType)}}
+                                    </td>
                                     <td style="width:200px">
                                         <p-inputSwitch (onChange)="handleIsActiveSwitch($event,record.id)" name="IsActive"
                                             [(ngModel)]="record.isActive"></p-inputSwitch>
@@ -254,9 +296,12 @@
                                         <p-inputSwitch (onChange)="handleIsNeedAuthorizeAccessSwitch($event,record.id)"
                                             name="IsActive" [(ngModel)]="record.isNeedAuthorizeAccess"></p-inputSwitch>
                                     </td>
-                                    <td style="width:200px">{{record.iconCls}}</td>
+                                    <td style="width:200px">
+                                            <object-imageList objectTypeName="ColumnInfo" [(objectId)]="rowData.id"
+                                            isCover="true"></object-imageList>
+                                    </td>
                                     <td style="width:600px">
-                                        <object-imageList objectTypeName="ColumnInfo" [(objectId)]="record.id"></object-imageList>
+                                        <object-imageList objectTypeName="ColumnInfo" [(objectId)]="record.id" isCover="false"></object-imageList>
                                     </td>
                                     <td style="width:200px">{{record.url}}</td>
                                     <td style="width:200px">
@@ -287,6 +332,6 @@
         </div>
     </div>
 
-    <createOrEditColumnInfoModal #createOrEditColumnInfoModal (modalSave)="getColumnInfos()"></createOrEditColumnInfoModal>
+    <createOrEditColumnInfoModal #createOrEditColumnInfoModal (modalSave)="RefreshTable()"></createOrEditColumnInfoModal>
     <fileUploadModal #fileUploadModal objectTypeName="ColumnInfo"></fileUploadModal>
 </div>

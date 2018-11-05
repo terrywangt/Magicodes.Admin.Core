@@ -15,10 +15,10 @@ namespace Admin.Application.Custom.Contents.Dto
     [AutoMapFrom(typeof(ArticleInfo))]
     public class ArticleInfoEditDto : EntityDto<long?>
     {
-		/// <summary>
-		/// 标题
-		/// </summary>
-		[Required][MaxLength(50)]
+        /// <summary>
+        /// 标题
+        /// </summary>
+        [Required][MaxLength(50)]
         public string Title { get; set; }
 		/// <summary>
 		/// 发布人（机构）
@@ -77,5 +77,10 @@ namespace Admin.Application.Custom.Contents.Dto
 		/// </summary>
 		[Required]
         public RecommendedTypes RecommendedType { get; set; }
+
+        /// <summary>
+        ///     是否静态
+        /// </summary>
+        public bool IsStatic { get; set; }
     }
 }

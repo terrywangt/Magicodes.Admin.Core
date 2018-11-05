@@ -1,6 +1,6 @@
 ﻿import { Component , ViewChild, Injector, Output, EventEmitter, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
-import { ColumnInfoServiceProxy, CreateOrUpdateColumnInfoDto, ColumnInfoEditDto} from '@shared/service-proxies/service-proxies';
+import { ColumnInfoServiceProxy, CreateOrUpdateColumnInfoDto, ColumnInfoEditDto,GetDataComboItemDtoOfInt64} from '@shared/service-proxies/service-proxies';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import * as _ from 'lodash';
 import { Data } from '@angular/router/src/config';
@@ -18,6 +18,7 @@ export class CreateOrEditColumnInfoModalComponent extends AppComponentBase {
     saving = false;
 
     formModel: ColumnInfoEditDto = new ColumnInfoEditDto();
+    columnInfoComboItemDtoList: GetDataComboItemDtoOfInt64[];
 
     constructor(
         injector: Injector,
@@ -28,6 +29,10 @@ export class CreateOrEditColumnInfoModalComponent extends AppComponentBase {
     }
 
     onShown(): void {
+        this._columnInfoService.getColumnInfoDataComboItems()
+            .subscribe((result) => {
+                this.columnInfoComboItemDtoList = result;
+            });
     }
 
     show(id?: number): void {

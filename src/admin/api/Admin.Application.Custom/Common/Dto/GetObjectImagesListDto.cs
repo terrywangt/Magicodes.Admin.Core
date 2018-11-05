@@ -24,5 +24,10 @@ namespace Admin.Application.Custom.Common.Dto
         /// 网络路径
         /// </summary>
         public string Url { get; set; }
+
+        /// <summary>
+        /// 是否封面
+        /// </summary>
+        public bool IsCover { get; set; }
     }
 }

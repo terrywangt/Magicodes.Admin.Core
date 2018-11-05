@@ -4,14 +4,16 @@ using Magicodes.Admin.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Magicodes.Admin.Migrations
 {
     [DbContext(typeof(AdminDbContext))]
-    partial class AdminDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181105022015_Update_ColumnInfoType")]
+    partial class Update_ColumnInfoType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1157,8 +1159,6 @@ namespace Magicodes.Admin.Migrations
 
                     b.Property<long>("AttachmentInfoId");
 
-                    b.Property<bool>("IsCover");
-
                     b.Property<long>("ObjectId");
 
                     b.Property<int>("ObjectType");
@@ -1215,6 +1215,8 @@ namespace Magicodes.Admin.Migrations
 
                     b.Property<string>("Content")
                         .IsRequired();
+
+                    b.Property<long?>("Cover");
 
                     b.Property<DateTime>("CreationTime");
 
@@ -1356,6 +1358,8 @@ namespace Magicodes.Admin.Migrations
                         .HasMaxLength(50);
 
                     b.Property<int>("ColumnType");
+
+                    b.Property<long?>("Cover");
 
                     b.Property<DateTime>("CreationTime");
 

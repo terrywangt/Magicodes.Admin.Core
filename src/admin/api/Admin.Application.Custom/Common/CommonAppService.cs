@@ -7,9 +7,11 @@ using Abp.AutoMapper;
 using Abp.Configuration;
 using Abp.Domain.Repositories;
 using Abp.Reflection.Extensions;
+using Abp.UI;
 using Admin.Application.Custom.Common.Dto;
 using Magicodes.Admin.Core.Custom;
 using Magicodes.Admin.Core.Custom.Attachments;
+using Magicodes.Admin.Core.Custom.Contents;
 using Magicodes.Admin.Core.Custom.LogInfos;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,15 +25,19 @@ namespace Admin.Application.Custom.Common
         private readonly IRepository<ObjectAttachmentInfo, long> _objectAttachmentInfoRepository;
         private readonly ISettingManager _settingManager;
         private readonly IRepository<TransactionLog, long> _transactionLogRepository;
+        private readonly IRepository<ColumnInfo, long> _columnInfoRepository;
+
 
         public CommonAppService(
             IRepository<ObjectAttachmentInfo, long> objectAttachmentInfoRepository
             , ISettingManager settingManager
-            , IRepository<TransactionLog, long> transactionLogRepository)
+            , IRepository<TransactionLog, long> transactionLogRepository, 
+            IRepository<ColumnInfo, long> columnInfoRepository)
         {
             _objectAttachmentInfoRepository = objectAttachmentInfoRepository;
             _settingManager = settingManager;
             _transactionLogRepository = transactionLogRepository;
+            _columnInfoRepository = columnInfoRepository;
         }
 
         /// <summary>
@@ -67,10 +73,44 @@ namespace Admin.Application.Custom.Common
         {
             var objectType = Enum.Parse<AttachmentObjectTypes>(input.ObjectType);
             var list = await _objectAttachmentInfoRepository.GetAllIncluding(p => p.AttachmentInfo)
-                .Where(p => p.ObjectId == input.ObjectId && p.ObjectType == objectType && p.AttachmentInfo.AttachmentType == AttachmentTypes.Image)
-                .Select(p => p.AttachmentInfo)
-                .ToListAsync();
-            return list.MapTo<List<GetObjectImagesListDto>>();
+                .Where(p => p.ObjectId == input.ObjectId && p.ObjectType == objectType &&
+                            p.AttachmentInfo.AttachmentType == AttachmentTypes.Image)
+                .Select(p => new GetObjectImagesListDto
+                {
+                    Id = p.AttachmentInfo.Id,
+                    Name = p.AttachmentInfo.Name,
+                    FileLength = p.AttachmentInfo.FileLength,
+                    Url = p.AttachmentInfo.Url,
+                    IsCover = p.IsCover
+                }).ToListAsync();
+            return list;
+        }
+
+        /// <summary>
+        /// 获取对象封面图片
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public async Task<GetObjectImagesListDto> GetObjectCoverImage(SetCoverInputDto input)
+        {
+            var objectType = Enum.Parse<AttachmentObjectTypes>(input.ObjectType);
+            var objectAttachmentInfo = await _objectAttachmentInfoRepository.GetAllIncluding(p => p.AttachmentInfo)
+                .Where(p =>
+                    p.ObjectId == input.ObjectId && p.ObjectType == objectType &&
+                    p.AttachmentInfo.AttachmentType == AttachmentTypes.Image)
+                .FirstOrDefaultAsync(a => a.IsCover);
+            if (objectAttachmentInfo == null)
+            {
+                return  new GetObjectImagesListDto();
+            }
+            return new GetObjectImagesListDto
+            {
+                Id = objectAttachmentInfo.AttachmentInfo.Id,
+                Name = objectAttachmentInfo.AttachmentInfo.Name,
+                FileLength = objectAttachmentInfo.AttachmentInfo.FileLength,
+                Url = objectAttachmentInfo.AttachmentInfo.Url,
+                IsCover = objectAttachmentInfo.IsCover
+            };
         }
 
         /// <summary>
@@ -92,6 +132,13 @@ namespace Admin.Application.Custom.Common
         public async Task AddObjectAttachmentInfos(AddObjectAttachmentInfosInput input)
         {
             var objectType = Enum.Parse<AttachmentObjectTypes>(input.ObjectType);
+            if (objectType == AttachmentObjectTypes.ColumnInfo)
+            {
+                if (!CheckMaxItemCount(input))
+                {
+                    throw new UserFriendlyException(L("ExceedTheMaxCount"));
+                }
+            }
             var attachmentInfos = await _objectAttachmentInfoRepository.GetAll().Where(p => p.ObjectId == input.ObjectId && p.ObjectType == objectType).ToListAsync();
             var objectAttachmentInfos = input.AttachmentInfoIds.Select(p => new ObjectAttachmentInfo
             {
@@ -104,6 +151,45 @@ namespace Admin.Application.Custom.Common
                 if (attachmentInfos == null || attachmentInfos.Count == 0 || (attachmentInfos.All(p => p.AttachmentInfoId != objectAttachmentInfo.AttachmentInfoId)))
                     await _objectAttachmentInfoRepository.InsertAsync(objectAttachmentInfo);
             }
+        }
+
+        /// <summary>
+        /// 设置封面
+        /// </summary>
+        /// <param name="input">The input.</param>
+        /// <returns></returns>
+        public async Task SetCover(SetCoverInputDto input)
+        {
+            var objectType = Enum.Parse<AttachmentObjectTypes>(input.ObjectType);
+            var objectAttachmentInfos = await _objectAttachmentInfoRepository.GetAllIncluding(p => p.AttachmentInfo)
+                .Where(p =>
+                    p.ObjectId == input.ObjectId && p.ObjectType == objectType &&
+                    p.AttachmentInfo.AttachmentType == AttachmentTypes.Image)
+                .ToListAsync();
+
+            var objectAttachment = objectAttachmentInfos.FirstOrDefault(a => a.IsCover);
+            if (objectAttachment != null)
+            {
+                objectAttachment.IsCover = false;
+            }
+            var setObjectAttachment =
+                objectAttachmentInfos.FirstOrDefault(a => a.AttachmentInfo.Url == input.AttachmentUrl);
+            if (setObjectAttachment == null)
+            {
+                throw new UserFriendlyException();
+            }
+            setObjectAttachment.IsCover = true;
+        }
+
+        private bool CheckMaxItemCount(AddObjectAttachmentInfosInput input)
+        {
+            var columnInfoMaxItemCount = _columnInfoRepository.Get(input.ObjectId).MaxItemCount;
+            if (!columnInfoMaxItemCount.HasValue)
+            {
+                return true;
+            }
+            var columnInfoCurrentCount = _objectAttachmentInfoRepository.GetAll().Count(a => a.ObjectId == input.ObjectId);
+            return columnInfoMaxItemCount > columnInfoCurrentCount;
         }
     }
 }

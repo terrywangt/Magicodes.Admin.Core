@@ -15,10 +15,14 @@ namespace Admin.Application.Custom.Contents.Dto
     [AutoMapFrom(typeof(ColumnInfo))]
     public class ColumnInfoEditDto : EntityDto<long?>
     {
-		/// <summary>
-		/// 标题
-		/// </summary>
-		[Required][MaxLength(50)]
+        /// <summary>
+        ///     父级Id
+        /// </summary>
+        public long ParentId { get; set; }
+        /// <summary>
+        /// 标题
+        /// </summary>
+        [Required][MaxLength(50)]
         public string Title { get; set; }
 		/// <summary>
 		/// 排序号
@@ -55,5 +59,21 @@ namespace Admin.Application.Custom.Contents.Dto
 		/// </summary>
 		[MaxLength(255)]
         public string Url { get; set; }
+
+        /// <summary>
+        ///     栏目类型
+        /// </summary>
+        [Required]
+        public ColumnTypes ColumnType { get; set; }
+
+        /// <summary>
+        ///     最大子项数量
+        /// </summary>
+        public int? MaxItemCount { get; set; }
+
+        /// <summary>
+        ///     是否静态
+        /// </summary>
+        public bool IsStatic { get; set; }
     }
 }

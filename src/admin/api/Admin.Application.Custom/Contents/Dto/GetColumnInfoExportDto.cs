@@ -16,10 +16,15 @@ namespace Admin.Application.Custom.Contents.Dto
     [AutoMapFrom(typeof(ColumnInfo))]
     public class ColumnInfoExportDto
     {
-		/// <summary>
-		/// 标题
-		/// </summary>
-		[ExporterHeader(DisplayName = "标题", IsAutoFit = true)]
+        /// <summary>
+        ///     编码
+        /// </summary>
+        public string Code { get; set; }
+
+        /// <summary>
+        /// 标题
+        /// </summary>
+        [ExporterHeader(DisplayName = "标题", IsAutoFit = true)]
         public string Title { get; set; }
 
 		/// <summary>
@@ -39,6 +44,11 @@ namespace Admin.Application.Custom.Contents.Dto
 		/// </summary>
 		[ExporterHeader(Format="yyyy-MM-dd HH:mm:ss")]
         public DateTime CreationTime { get; set; }
+
+        /// <summary>
+        ///     是否静态
+        /// </summary>
+        public bool IsStatic { get; set; }
 
     }
 }

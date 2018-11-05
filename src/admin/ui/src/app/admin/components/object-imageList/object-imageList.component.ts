@@ -12,6 +12,7 @@ import { finalize } from 'rxjs/operators';
 export class ObjectImageListComponent extends AppComponentBase {
     @Input() objectTypeName: string;
     @Input() objectId: number;
+    @Input() isCover: string;
     @ViewChild('op') op: ModalDirective;
     images: any[] = [];
     overlayModel: any;
@@ -29,13 +30,26 @@ export class ObjectImageListComponent extends AppComponentBase {
 
     load(): void {
         this.images = [];
-        this._commonService.getObjectImages(this.objectTypeName, this.objectId)
-            .pipe()
-            .subscribe((result) => {
-                result.forEach(element => {
-                    this.images.push({ source: element.url, thumbnail: element.url, title: element.name });
+      
+        if (this.isCover=="false") {
+            this._commonService.getObjectImages(this.objectTypeName, this.objectId)
+                .pipe()
+                .subscribe((result) => {
+                    result.forEach(element => {
+                        this.images.push({ source: element.url, thumbnail: element.url, title: element.name });
+                    });
                 });
-            });
+        } else {
+            this._commonService.getObjectCoverImage(this.objectTypeName, this.objectId, undefined)
+                .pipe()
+                .subscribe((result) => {
+                    if(result.id>0)
+                    {
+                        this.images.push({ source: result.url, thumbnail: result.url, title: result.name });
+                    }
+                   
+                });
+        }
     }
 
     show(img: any): void {

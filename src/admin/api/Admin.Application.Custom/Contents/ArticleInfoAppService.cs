@@ -207,6 +207,10 @@ namespace Admin.Application.Custom.Contents
                 input.ArticleInfo.Content = await _editorHelper.ConvertBase64ImagesForContent(input.ArticleInfo.Content);
             }
 
+            if (!CheckMaxItemCount(input))
+            {
+                throw new UserFriendlyException(L("ExceedTheMaxCount"));
+            }
             if (!input.ArticleInfo.Id.HasValue)
             {
                 await CreateArticleInfoAsync(input);
@@ -244,6 +248,7 @@ namespace Admin.Application.Custom.Contents
             }
             var articleInfo = new ArticleInfo()
             {
+                Code = GetCode(),
                 Title = input.ArticleInfo.Title,
                 Publisher = input.ArticleInfo.Publisher,
                 ColumnInfoId = input.ArticleInfo.ColumnInfoId,
@@ -257,6 +262,7 @@ namespace Admin.Application.Custom.Contents
                 Introduction = input.ArticleInfo.Introduction,
                 StaticPageUrl = input.ArticleInfo.StaticPageUrl,
                 Url = input.ArticleInfo.Url,
+                IsStatic = input.ArticleInfo.IsStatic,
                 RecommendedType = input.ArticleInfo.RecommendedType,
                 CreatorUserId = AbpSession.UserId,
                 CreationTime = Clock.Now,
@@ -299,6 +305,7 @@ namespace Admin.Application.Custom.Contents
             articleInfo.StaticPageUrl = input.ArticleInfo.StaticPageUrl;
             articleInfo.Url = input.ArticleInfo.Url;
             articleInfo.RecommendedType = input.ArticleInfo.RecommendedType;
+            articleInfo.IsStatic = input.ArticleInfo.IsStatic;
         }
 
         /// <summary>
@@ -323,7 +330,7 @@ namespace Admin.Application.Custom.Contents
         /// </summary>
         public async Task<List<GetDataComboItemDto<long>>> GetColumnInfoDataComboItems()
         {
-            var list = await _columnInfoRepository.GetAll()
+            var list = await _columnInfoRepository.GetAll().Where(a=>a.ColumnType == ColumnTypes.Html)
             //.Where(p => !p.IsActive)
             .OrderByDescending(p => p.Id)
             .Select(p => new { p.Id, p.Title }).ToListAsync();
@@ -376,6 +383,15 @@ namespace Admin.Application.Custom.Contents
             articleInfo.IsNeedAuthorizeAccess = input.SwitchValue;
         }
 
-
+        private bool CheckMaxItemCount(CreateOrUpdateArticleInfoDto input)
+        {
+            var columnInfoMaxItemCount = _columnInfoRepository.Get(input.ArticleInfo.ColumnInfoId).MaxItemCount;
+            if (!columnInfoMaxItemCount.HasValue)
+            {
+                return true;
+            }
+            var columnInfoCurrentCount = _articleInfoRepository.GetAll().Count(a => a.ColumnInfoId == input.ArticleInfo.ColumnInfoId);
+            return columnInfoMaxItemCount > columnInfoCurrentCount;
+        }
     }
 }

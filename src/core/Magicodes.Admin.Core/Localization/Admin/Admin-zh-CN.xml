@@ -846,6 +846,16 @@
     <text name="Anonymous">匿名</text>
     <text name="Messages">消息</text>
     <text name="ThisNotificationDoesntBelongToYou">此通知不属于您。</text>
-
+    
+    <!--CMS加强-->
+    <text name="ColumnType">栏目类型</text>
+    <text name="MaxItemCount">最大子项数量</text>
+    <text name="Html">Html文本</text>
+    <text name="Image">图片</text>
+    <text name="IsStatic">是否系统默认</text>
+    <text name="StaticColumnInfo_Tooltip">不能删除系统栏目</text>
+    <text name="StaticArticleInfo_Tooltip">不能删除系统文章</text>
+    <text name="ExceedTheMaxCount">超出栏目子项最大数量</text>
+    <text name="ArticleTagInfo">文章标签</text>
   </texts>
 </localizationDictionary>

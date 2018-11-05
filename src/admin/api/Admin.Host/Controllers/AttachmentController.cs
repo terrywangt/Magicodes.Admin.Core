@@ -15,6 +15,7 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using Magicodes.Admin.Core.Custom.Attachments;
+using Magicodes.Admin.Core.Custom.Contents;
 using Magicodes.Admin.Dto;
 using Magicodes.Unity;
 using Magicodes.Unity.Storage;
@@ -26,7 +27,8 @@ namespace Magicodes.Admin.Web.Controllers
         private readonly IRepository<AttachmentInfo, long> _attachmentInfoRepository;
         private readonly IStorageManager _storageManager;
 
-        public AttachmentController(IRepository<AttachmentInfo, long> attachmentInfoRepository, IStorageManager storageManager)
+        public AttachmentController(IRepository<AttachmentInfo, long> attachmentInfoRepository, 
+            IStorageManager storageManager)
         {
             this._attachmentInfoRepository = attachmentInfoRepository;
             _storageManager = storageManager;

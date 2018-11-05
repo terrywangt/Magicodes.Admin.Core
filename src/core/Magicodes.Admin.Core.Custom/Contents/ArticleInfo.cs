@@ -13,6 +13,14 @@ namespace Magicodes.Admin.Core.Custom.Contents
     public class ArticleInfo : EntityBase<long>, IPassivable
     {
         /// <summary>
+        ///     编码
+        /// </summary>
+        [Display(Name = "编码")]
+        [Required]
+        [MaxLength(50)]
+        public string Code { get; set; }
+
+        /// <summary>
         /// 标题
         /// </summary>
         [Display(Name = "标题")]
@@ -104,13 +112,6 @@ namespace Magicodes.Admin.Core.Custom.Contents
         #endregion
 
         /// <summary>
-        /// 封面
-        /// </summary>
-        [DataType(DataType.ImageUrl)]
-        [Display(Name = "封面")]
-        public long? Cover { get; set; }
-
-        /// <summary>
         /// 标签
         /// </summary>
         [Display(Name = "标签")]
@@ -135,5 +136,12 @@ namespace Magicodes.Admin.Core.Custom.Contents
         /// </summary>
         [Display(Name = "访问数", Prompt = "ignore[form]")]
         public long ViewCount { get; set; }
+
+        /// <summary>
+        ///     是否静态
+        /// </summary>
+        [Display(Name = "是否静态")]
+        [DefaultValue(false)]
+        public bool IsStatic { get; set; }
     }
 }

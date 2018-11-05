@@ -3343,6 +3343,63 @@ export class ColumnInfoServiceProxy {
     }
 
     /**
+     * 获取选择列表
+     * @return Success
+     */
+    getColumnInfoDataComboItems(): Observable<GetDataComboItemDtoOfInt64[]> {
+        let url_ = this.baseUrl + "/api/services/app/ColumnInfo/GetColumnInfoDataComboItems";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetColumnInfoDataComboItems(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetColumnInfoDataComboItems(<any>response_);
+                } catch (e) {
+                    return <Observable<GetDataComboItemDtoOfInt64[]>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<GetDataComboItemDtoOfInt64[]>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetColumnInfoDataComboItems(response: HttpResponseBase): Observable<GetDataComboItemDtoOfInt64[]> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData200 && resultData200.constructor === Array) {
+                result200 = [];
+                for (let item of resultData200)
+                    result200.push(GetDataComboItemDtoOfInt64.fromJS(item));
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<GetDataComboItemDtoOfInt64[]>(<any>null);
+    }
+
+    /**
      * 获取栏目 TreeTable列表
      * @param parentId (optional) 父级Id
      * @param isOnlyGetRecycleData (optional) 是否仅获取回收站数据
@@ -3539,6 +3596,68 @@ export class CommonServiceProxy {
     }
 
     /**
+     * 获取对象封面图片
+     * @param objectType (optional) 对象类型
+     * @param objectId (optional) 对象Id
+     * @param attachmentUrl (optional) 附件Url
+     * @return Success
+     */
+    getObjectCoverImage(objectType: string | null | undefined, objectId: number | null | undefined, attachmentUrl: string | null | undefined): Observable<GetObjectImagesListDto> {
+        let url_ = this.baseUrl + "/api/services/app/Common/GetObjectCoverImage?";
+        if (objectType !== undefined)
+            url_ += "ObjectType=" + encodeURIComponent("" + objectType) + "&"; 
+        if (objectId !== undefined)
+            url_ += "ObjectId=" + encodeURIComponent("" + objectId) + "&"; 
+        if (attachmentUrl !== undefined)
+            url_ += "AttachmentUrl=" + encodeURIComponent("" + attachmentUrl) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetObjectCoverImage(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetObjectCoverImage(<any>response_);
+                } catch (e) {
+                    return <Observable<GetObjectImagesListDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<GetObjectImagesListDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetObjectCoverImage(response: HttpResponseBase): Observable<GetObjectImagesListDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? GetObjectImagesListDto.fromJS(resultData200) : new GetObjectImagesListDto();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<GetObjectImagesListDto>(<any>null);
+    }
+
+    /**
      * 移除对象附件
      * @param ids (optional) 主键Id数组
      * @param objectType (optional) 附件类型
@@ -3628,6 +3747,59 @@ export class CommonServiceProxy {
     }
 
     protected processAddObjectAttachmentInfos(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+
+    /**
+     * 设置封面
+     * @param input (optional) The input.
+     * @return Success
+     */
+    setCover(input: SetCoverInputDto | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/Common/SetCover";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(input);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processSetCover(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processSetCover(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processSetCover(response: HttpResponseBase): Observable<void> {
         const status = response.status;
         const responseBlob = 
             response instanceof HttpResponse ? response.body : 
@@ -12442,6 +12614,8 @@ export interface IPagedResultDtoOfArticleInfoListDto {
 
 /** 文章列表Dto */
 export class ArticleInfoListDto implements IArticleInfoListDto {
+    /** 编码 */
+    code!: string | undefined;
     /** 标题 */
     title!: string | undefined;
     /** 发布人（机构） */
@@ -12480,6 +12654,8 @@ export class ArticleInfoListDto implements IArticleInfoListDto {
     creationTime!: moment.Moment | undefined;
     /** 是否已删除 */
     isDeleted!: boolean | undefined;
+    /** 是否静态 */
+    isStatic!: boolean | undefined;
     id!: number | undefined;
 
     constructor(data?: IArticleInfoListDto) {
@@ -12493,6 +12669,7 @@ export class ArticleInfoListDto implements IArticleInfoListDto {
 
     init(data?: any) {
         if (data) {
+            this.code = data["code"];
             this.title = data["title"];
             this.publisher = data["publisher"];
             this.columnInfo = data["columnInfo"];
@@ -12508,6 +12685,7 @@ export class ArticleInfoListDto implements IArticleInfoListDto {
             this.viewCount = data["viewCount"];
             this.creationTime = data["creationTime"] ? moment(data["creationTime"].toString()) : <any>undefined;
             this.isDeleted = data["isDeleted"];
+            this.isStatic = data["isStatic"];
             this.id = data["id"];
         }
     }
@@ -12521,6 +12699,7 @@ export class ArticleInfoListDto implements IArticleInfoListDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["code"] = this.code;
         data["title"] = this.title;
         data["publisher"] = this.publisher;
         data["columnInfo"] = this.columnInfo;
@@ -12536,6 +12715,7 @@ export class ArticleInfoListDto implements IArticleInfoListDto {
         data["viewCount"] = this.viewCount;
         data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
         data["isDeleted"] = this.isDeleted;
+        data["isStatic"] = this.isStatic;
         data["id"] = this.id;
         return data; 
     }
@@ -12543,6 +12723,8 @@ export class ArticleInfoListDto implements IArticleInfoListDto {
 
 /** 文章列表Dto */
 export interface IArticleInfoListDto {
+    /** 编码 */
+    code: string | undefined;
     /** 标题 */
     title: string | undefined;
     /** 发布人（机构） */
@@ -12581,6 +12763,8 @@ export interface IArticleInfoListDto {
     creationTime: moment.Moment | undefined;
     /** 是否已删除 */
     isDeleted: boolean | undefined;
+    /** 是否静态 */
+    isStatic: boolean | undefined;
     id: number | undefined;
 }
 
@@ -12694,6 +12878,8 @@ export class ArticleInfoEditDto implements IArticleInfoEditDto {
     url!: string | undefined;
     /** 推荐类型 */
     recommendedType!: ArticleInfoEditDtoRecommendedType;
+    /** 是否静态 */
+    isStatic!: boolean | undefined;
     id!: number | undefined;
 
     constructor(data?: IArticleInfoEditDto) {
@@ -12721,6 +12907,7 @@ export class ArticleInfoEditDto implements IArticleInfoEditDto {
             this.staticPageUrl = data["staticPageUrl"];
             this.url = data["url"];
             this.recommendedType = data["recommendedType"];
+            this.isStatic = data["isStatic"];
             this.id = data["id"];
         }
     }
@@ -12748,6 +12935,7 @@ export class ArticleInfoEditDto implements IArticleInfoEditDto {
         data["staticPageUrl"] = this.staticPageUrl;
         data["url"] = this.url;
         data["recommendedType"] = this.recommendedType;
+        data["isStatic"] = this.isStatic;
         data["id"] = this.id;
         return data; 
     }
@@ -12781,6 +12969,8 @@ export interface IArticleInfoEditDto {
     url: string | undefined;
     /** 推荐类型 */
     recommendedType: ArticleInfoEditDtoRecommendedType;
+    /** 是否静态 */
+    isStatic: boolean | undefined;
     id: number | undefined;
 }
 
@@ -14165,6 +14355,8 @@ export interface IPagedResultDtoOfColumnInfoListDto {
 
 /** 栏目列表Dto */
 export class ColumnInfoListDto implements IColumnInfoListDto {
+    /** 编码 */
+    code!: string | undefined;
     /** 标题 */
     title!: string | undefined;
     /** 是否启用 */
@@ -14181,6 +14373,12 @@ export class ColumnInfoListDto implements IColumnInfoListDto {
     creationTime!: moment.Moment | undefined;
     /** 是否已删除 */
     isDeleted!: boolean | undefined;
+    /** 栏目类型 */
+    columnType!: ColumnInfoListDtoColumnType | undefined;
+    /** 最大子项数量 */
+    maxItemCount!: number | undefined;
+    /** 是否静态 */
+    isStatic!: boolean | undefined;
     id!: number | undefined;
 
     constructor(data?: IColumnInfoListDto) {
@@ -14194,6 +14392,7 @@ export class ColumnInfoListDto implements IColumnInfoListDto {
 
     init(data?: any) {
         if (data) {
+            this.code = data["code"];
             this.title = data["title"];
             this.isActive = data["isActive"];
             this.isNeedAuthorizeAccess = data["isNeedAuthorizeAccess"];
@@ -14202,6 +14401,9 @@ export class ColumnInfoListDto implements IColumnInfoListDto {
             this.url = data["url"];
             this.creationTime = data["creationTime"] ? moment(data["creationTime"].toString()) : <any>undefined;
             this.isDeleted = data["isDeleted"];
+            this.columnType = data["columnType"];
+            this.maxItemCount = data["maxItemCount"];
+            this.isStatic = data["isStatic"];
             this.id = data["id"];
         }
     }
@@ -14215,6 +14417,7 @@ export class ColumnInfoListDto implements IColumnInfoListDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["code"] = this.code;
         data["title"] = this.title;
         data["isActive"] = this.isActive;
         data["isNeedAuthorizeAccess"] = this.isNeedAuthorizeAccess;
@@ -14223,6 +14426,9 @@ export class ColumnInfoListDto implements IColumnInfoListDto {
         data["url"] = this.url;
         data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
         data["isDeleted"] = this.isDeleted;
+        data["columnType"] = this.columnType;
+        data["maxItemCount"] = this.maxItemCount;
+        data["isStatic"] = this.isStatic;
         data["id"] = this.id;
         return data; 
     }
@@ -14230,6 +14436,8 @@ export class ColumnInfoListDto implements IColumnInfoListDto {
 
 /** 栏目列表Dto */
 export interface IColumnInfoListDto {
+    /** 编码 */
+    code: string | undefined;
     /** 标题 */
     title: string | undefined;
     /** 是否启用 */
@@ -14246,6 +14454,12 @@ export interface IColumnInfoListDto {
     creationTime: moment.Moment | undefined;
     /** 是否已删除 */
     isDeleted: boolean | undefined;
+    /** 栏目类型 */
+    columnType: ColumnInfoListDtoColumnType | undefined;
+    /** 最大子项数量 */
+    maxItemCount: number | undefined;
+    /** 是否静态 */
+    isStatic: boolean | undefined;
     id: number | undefined;
 }
 
@@ -14289,6 +14503,8 @@ export interface IGetColumnInfoForEditOutput {
 
 /** 栏目编辑Dto */
 export class ColumnInfoEditDto implements IColumnInfoEditDto {
+    /** 父级Id */
+    parentId!: number | undefined;
     /** 标题 */
     title!: string;
     /** 排序号 */
@@ -14305,6 +14521,12 @@ export class ColumnInfoEditDto implements IColumnInfoEditDto {
     iconCls!: string | undefined;
     /** 链接 */
     url!: string | undefined;
+    /** 栏目类型 */
+    columnType!: ColumnInfoEditDtoColumnType;
+    /** 最大子项数量 */
+    maxItemCount!: number | undefined;
+    /** 是否静态 */
+    isStatic!: boolean | undefined;
     id!: number | undefined;
 
     constructor(data?: IColumnInfoEditDto) {
@@ -14318,6 +14540,7 @@ export class ColumnInfoEditDto implements IColumnInfoEditDto {
 
     init(data?: any) {
         if (data) {
+            this.parentId = data["parentId"];
             this.title = data["title"];
             this.sortNo = data["sortNo"];
             this.isActive = data["isActive"];
@@ -14326,6 +14549,9 @@ export class ColumnInfoEditDto implements IColumnInfoEditDto {
             this.introduction = data["introduction"];
             this.iconCls = data["iconCls"];
             this.url = data["url"];
+            this.columnType = data["columnType"];
+            this.maxItemCount = data["maxItemCount"];
+            this.isStatic = data["isStatic"];
             this.id = data["id"];
         }
     }
@@ -14339,6 +14565,7 @@ export class ColumnInfoEditDto implements IColumnInfoEditDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["parentId"] = this.parentId;
         data["title"] = this.title;
         data["sortNo"] = this.sortNo;
         data["isActive"] = this.isActive;
@@ -14347,6 +14574,9 @@ export class ColumnInfoEditDto implements IColumnInfoEditDto {
         data["introduction"] = this.introduction;
         data["iconCls"] = this.iconCls;
         data["url"] = this.url;
+        data["columnType"] = this.columnType;
+        data["maxItemCount"] = this.maxItemCount;
+        data["isStatic"] = this.isStatic;
         data["id"] = this.id;
         return data; 
     }
@@ -14354,6 +14584,8 @@ export class ColumnInfoEditDto implements IColumnInfoEditDto {
 
 /** 栏目编辑Dto */
 export interface IColumnInfoEditDto {
+    /** 父级Id */
+    parentId: number | undefined;
     /** 标题 */
     title: string;
     /** 排序号 */
@@ -14370,6 +14602,12 @@ export interface IColumnInfoEditDto {
     iconCls: string | undefined;
     /** 链接 */
     url: string | undefined;
+    /** 栏目类型 */
+    columnType: ColumnInfoEditDtoColumnType;
+    /** 最大子项数量 */
+    maxItemCount: number | undefined;
+    /** 是否静态 */
+    isStatic: boolean | undefined;
     id: number | undefined;
 }
 
@@ -14552,12 +14790,10 @@ export interface ITreeTableRowDtoOfColumnInfo {
 
 /** 栏目 */
 export class ColumnInfo implements IColumnInfo {
+    /** 编码 */
+    code!: string;
     /** 标题 */
     title!: string;
-    /** 排序号 */
-    sortNo!: number | undefined;
-    /** 是否启用 */
-    isActive!: boolean | undefined;
     /** 授权访问 */
     isNeedAuthorizeAccess!: boolean | undefined;
     /** 描述 */
@@ -14572,6 +14808,16 @@ export class ColumnInfo implements IColumnInfo {
     cover!: number | undefined;
     /** 链接 */
     url!: string | undefined;
+    /** 栏目类型 */
+    columnType!: ColumnInfoColumnType;
+    /** 最大子项数量 */
+    maxItemCount!: number | undefined;
+    /** 是否静态 */
+    isStatic!: boolean | undefined;
+    /** 是否启用 */
+    isActive!: boolean | undefined;
+    /** 排序号 */
+    sortNo!: number | undefined;
     /** 标题 */
     seoTitle!: string | undefined;
     /** 关键字 */
@@ -14604,15 +14850,15 @@ export class ColumnInfo implements IColumnInfo {
             }
         }
         if (!data) {
+            this.isStatic = false;
             this.isActive = true;
         }
     }
 
     init(data?: any) {
         if (data) {
+            this.code = data["code"];
             this.title = data["title"];
-            this.sortNo = data["sortNo"];
-            this.isActive = data["isActive"] !== undefined ? data["isActive"] : true;
             this.isNeedAuthorizeAccess = data["isNeedAuthorizeAccess"];
             this.description = data["description"];
             this.introduction = data["introduction"];
@@ -14620,6 +14866,11 @@ export class ColumnInfo implements IColumnInfo {
             this.iconCls = data["iconCls"];
             this.cover = data["cover"];
             this.url = data["url"];
+            this.columnType = data["columnType"];
+            this.maxItemCount = data["maxItemCount"];
+            this.isStatic = data["isStatic"] !== undefined ? data["isStatic"] : false;
+            this.isActive = data["isActive"] !== undefined ? data["isActive"] : true;
+            this.sortNo = data["sortNo"];
             this.seoTitle = data["seoTitle"];
             this.keyWords = data["keyWords"];
             this.alias = data["alias"];
@@ -14644,9 +14895,8 @@ export class ColumnInfo implements IColumnInfo {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["code"] = this.code;
         data["title"] = this.title;
-        data["sortNo"] = this.sortNo;
-        data["isActive"] = this.isActive;
         data["isNeedAuthorizeAccess"] = this.isNeedAuthorizeAccess;
         data["description"] = this.description;
         data["introduction"] = this.introduction;
@@ -14654,6 +14904,11 @@ export class ColumnInfo implements IColumnInfo {
         data["iconCls"] = this.iconCls;
         data["cover"] = this.cover;
         data["url"] = this.url;
+        data["columnType"] = this.columnType;
+        data["maxItemCount"] = this.maxItemCount;
+        data["isStatic"] = this.isStatic;
+        data["isActive"] = this.isActive;
+        data["sortNo"] = this.sortNo;
         data["seoTitle"] = this.seoTitle;
         data["keyWords"] = this.keyWords;
         data["alias"] = this.alias;
@@ -14672,12 +14927,10 @@ export class ColumnInfo implements IColumnInfo {
 
 /** 栏目 */
 export interface IColumnInfo {
+    /** 编码 */
+    code: string;
     /** 标题 */
     title: string;
-    /** 排序号 */
-    sortNo: number | undefined;
-    /** 是否启用 */
-    isActive: boolean | undefined;
     /** 授权访问 */
     isNeedAuthorizeAccess: boolean | undefined;
     /** 描述 */
@@ -14692,6 +14945,16 @@ export interface IColumnInfo {
     cover: number | undefined;
     /** 链接 */
     url: string | undefined;
+    /** 栏目类型 */
+    columnType: ColumnInfoColumnType;
+    /** 最大子项数量 */
+    maxItemCount: number | undefined;
+    /** 是否静态 */
+    isStatic: boolean | undefined;
+    /** 是否启用 */
+    isActive: boolean | undefined;
+    /** 排序号 */
+    sortNo: number | undefined;
     /** 标题 */
     seoTitle: string | undefined;
     /** 关键字 */
@@ -14772,6 +15035,8 @@ export class GetObjectImagesListDto implements IGetObjectImagesListDto {
     fileLength!: number | undefined;
     /** 网络路径 */
     url!: string | undefined;
+    /** 是否封面 */
+    isCover!: boolean | undefined;
 
     constructor(data?: IGetObjectImagesListDto) {
         if (data) {
@@ -14788,6 +15053,7 @@ export class GetObjectImagesListDto implements IGetObjectImagesListDto {
             this.name = data["name"];
             this.fileLength = data["fileLength"];
             this.url = data["url"];
+            this.isCover = data["isCover"];
         }
     }
 
@@ -14804,6 +15070,7 @@ export class GetObjectImagesListDto implements IGetObjectImagesListDto {
         data["name"] = this.name;
         data["fileLength"] = this.fileLength;
         data["url"] = this.url;
+        data["isCover"] = this.isCover;
         return data; 
     }
 }
@@ -14817,6 +15084,8 @@ export interface IGetObjectImagesListDto {
     fileLength: number | undefined;
     /** 网络路径 */
     url: string | undefined;
+    /** 是否封面 */
+    isCover: boolean | undefined;
 }
 
 /** 更新附件绑定关系 */
@@ -14877,6 +15146,56 @@ export interface IAddObjectAttachmentInfosInput {
     objectId: number | undefined;
     /** 附件Id */
     attachmentInfoIds: number[] | undefined;
+}
+
+export class SetCoverInputDto implements ISetCoverInputDto {
+    /** 对象类型 */
+    objectType!: string | undefined;
+    /** 对象Id */
+    objectId!: number | undefined;
+    /** 附件Url */
+    attachmentUrl!: string | undefined;
+
+    constructor(data?: ISetCoverInputDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.objectType = data["objectType"];
+            this.objectId = data["objectId"];
+            this.attachmentUrl = data["attachmentUrl"];
+        }
+    }
+
+    static fromJS(data: any): SetCoverInputDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new SetCoverInputDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["objectType"] = this.objectType;
+        data["objectId"] = this.objectId;
+        data["attachmentUrl"] = this.attachmentUrl;
+        return data; 
+    }
+}
+
+export interface ISetCoverInputDto {
+    /** 对象类型 */
+    objectType: string | undefined;
+    /** 对象Id */
+    objectId: number | undefined;
+    /** 附件Url */
+    attachmentUrl: string | undefined;
 }
 
 export class ListResultDtoOfSubscribableEditionComboboxItemDto implements IListResultDtoOfSubscribableEditionComboboxItemDto {
@@ -24092,7 +24411,22 @@ export enum ChatMessageDtoReceiverReadState {
     _2 = 2, 
 }
 
+export enum ColumnInfoListDtoColumnType {
+    _0 = 0, 
+    _1 = 1, 
+}
+
+export enum ColumnInfoEditDtoColumnType {
+    _0 = 0, 
+    _1 = 1, 
+}
+
 export enum MoveToInputDtoOfInt64MoveToPosition {
+    _0 = 0, 
+    _1 = 1, 
+}
+
+export enum ColumnInfoColumnType {
     _0 = 0, 
     _1 = 1, 
 }

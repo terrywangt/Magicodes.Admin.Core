@@ -13,9 +13,14 @@ namespace Admin.Application.Custom.Contents.Dto
     [AutoMapFrom(typeof(ColumnInfo))]
     public partial class ColumnInfoListDto : EntityDto<long>
     {
-		/// <summary>
-		/// 标题
-		/// </summary>
+        /// <summary>
+        ///     编码
+        /// </summary>
+        public string Code { get; set; }
+
+        /// <summary>
+        /// 标题
+        /// </summary>
         public string Title { get; set; }
 		/// <summary>
 		/// 是否启用
@@ -48,5 +53,20 @@ namespace Admin.Application.Custom.Contents.Dto
         /// 是否已删除
         /// </summary>
         public bool IsDeleted { get; set; }
+
+        /// <summary>
+        ///     栏目类型
+        /// </summary>
+        public ColumnTypes ColumnType { get; set; }
+
+        /// <summary>
+        ///     最大子项数量
+        /// </summary>
+        public int? MaxItemCount { get; set; }
+
+        /// <summary>
+        ///     是否静态
+        /// </summary>
+        public bool IsStatic { get; set; }
     }
 }
