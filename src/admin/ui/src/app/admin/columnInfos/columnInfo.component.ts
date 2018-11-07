@@ -1,22 +1,26 @@
-﻿import { Data } from '@angular/router/src/config';
-import { Component, Injector, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+﻿import {
+    Component,
+    Injector,
+    OnInit,
+    ViewChild,
+    ViewEncapsulation
+} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ImpersonationService } from '@app/admin/users/impersonation.service';
-import { CommonLookupModalComponent } from '@app/shared/common/lookup/common-lookup-modal.component';
 import { appModuleAnimation } from '@shared/animations/routerTransition';
 import { AppComponentBase } from '@shared/common/app-component-base';
-import { EntityDtoOfInt64, FindUsersInput, NameValueDto, SwitchEntityInputDtoOfInt64, MoveToInputDtoOfInt64, MoveToInputDtoOfInt64MoveToPosition } from '@shared/service-proxies/service-proxies';
+import {
+    SwitchEntityInputDtoOfInt64,
+    MoveToInputDtoOfInt64,
+    MoveToInputDtoOfInt64MoveToPosition
+} from '@shared/service-proxies/service-proxies';
 import * as moment from 'moment';
 import { LazyLoadEvent } from 'primeng/components/common/lazyloadevent';
 import { Paginator } from 'primeng/components/paginator/paginator';
 import { Table } from 'primeng/components/table/table';
 import { FileDownloadService } from '@shared/utils/file-download.service';
-import { InputSwitchModule } from 'primeng/inputswitch';
 import { ColumnInfoServiceProxy } from '@shared/service-proxies/service-proxies';
 import { CreateOrEditColumnInfoModalComponent } from './create-or-edit-columnInfo-modal.component';
 import { TreeNode } from 'primeng/api';
-import { TreeTableModule } from 'primeng/treetable';
-
 
 export interface TreeNode {
     data?: any;
@@ -30,27 +34,39 @@ export interface TreeNode {
     encapsulation: ViewEncapsulation.None,
     animations: [appModuleAnimation()]
 })
-
 export class ColumnInfosComponent extends AppComponentBase implements OnInit {
-    @ViewChild('dataTable') dataTable: Table;
-    @ViewChild('paginator') paginator: Paginator;
-    @ViewChild('createOrEditColumnInfoModal') createOrEditColumnInfoModal: CreateOrEditColumnInfoModalComponent;
-    public createDateRange: moment.Moment[] = [moment().startOf('day'), moment().endOf('day')];
-    public updateDateRange: moment.Moment[] = [moment().startOf('day'), moment().endOf('day')];
+    @ViewChild('dataTable')
+    dataTable: Table;
+    @ViewChild('paginator')
+    paginator: Paginator;
+    @ViewChild('createOrEditColumnInfoModal')
+    createOrEditColumnInfoModal: CreateOrEditColumnInfoModalComponent;
     advancedFiltersAreShown = false;
     list: TreeNode[] = [];
     loading = false;
     isShowTreeTable = true;
-    model: {
-        //是否仅获取回收站数据
+    creationDateRange: Date[] = [
+        moment()
+            .startOf('day')
+            .toDate(),
+        moment()
+            .endOf('day')
+            .toDate()
+    ];
+    updateDateRange: Date[] = [
+        moment()
+            .startOf('day')
+            .toDate(),
+        moment()
+            .add(30, 'days')
+            .endOf('day')
+            .toDate()
+    ];
+    filters: {
         isOnlyGetRecycleData: boolean;
         filterText: string;
         creationDateRangeActive: boolean;
-        creationDateStart: moment.Moment;
-        creationDateEnd: moment.Moment;
-        subscriptionEndDateRangeActive: boolean;
-        subscriptionEndDateStart: moment.Moment;
-        subscriptionEndDateEnd: moment.Moment;
+        updateDateRangeActive: boolean;
         isActive: string;
         isNeedAuthorizeAccess: string;
     } = <any>{};
@@ -59,47 +75,70 @@ export class ColumnInfosComponent extends AppComponentBase implements OnInit {
         injector: Injector,
         private _activatedRoute: ActivatedRoute,
         private _fileDownloadService: FileDownloadService,
-
-        private _columnInfoService: ColumnInfoServiceProxy,
-
+        private _columnInfoService: ColumnInfoServiceProxy
     ) {
         super(injector);
         this.setFiltersFromRoute();
     }
 
     setFiltersFromRoute(): void {
-        const self = this;
-        if (self._activatedRoute.snapshot.queryParams['subscriptionEndDateStart'] != null) {
-            self.model.subscriptionEndDateRangeActive = true;
-            self.model.subscriptionEndDateStart = moment(this._activatedRoute.snapshot.queryParams['subscriptionEndDateStart']);
+        if (
+            this._activatedRoute.snapshot.queryParams['creationDateStart'] !=
+            null
+        ) {
+            this.filters.creationDateRangeActive = true;
+            this.creationDateRange[0] = moment(
+                this._activatedRoute.snapshot.queryParams['creationDateStart']
+            ).toDate();
         } else {
-            self.model.subscriptionEndDateStart = moment().startOf('day');
+            this.creationDateRange[0] = moment()
+                .add(-7, 'days')
+                .startOf('day')
+                .toDate();
+        }
+        if (
+            this._activatedRoute.snapshot.queryParams['creationDateEnd'] != null
+        ) {
+            this.filters.creationDateRangeActive = true;
+            this.creationDateRange[1] = moment(
+                this._activatedRoute.snapshot.queryParams['creationDateEnd']
+            ).toDate();
+        } else {
+            this.creationDateRange[1] = moment()
+                .endOf('day')
+                .toDate();
         }
 
-        if (self._activatedRoute.snapshot.queryParams['subscriptionEndDateEnd'] != null) {
-            self.model.subscriptionEndDateRangeActive = true;
-            self.model.subscriptionEndDateEnd = moment(this._activatedRoute.snapshot.queryParams['subscriptionEndDateEnd']);
+        if (
+            this._activatedRoute.snapshot.queryParams['updateDateStart'] != null
+        ) {
+            this.filters.updateDateRangeActive = true;
+            this.updateDateRange[0] = moment(
+                this._activatedRoute.snapshot.queryParams['updateDateStart']
+            ).toDate();
         } else {
-            self.model.subscriptionEndDateEnd = moment().add(30, 'days').endOf('day');
+            this.updateDateRange[0] = moment()
+                .add(-7, 'days')
+                .startOf('day')
+                .toDate();
         }
-        if (self._activatedRoute.snapshot.queryParams['creationDateStart'] != null) {
-            self.model.creationDateRangeActive = true;
-            self.model.creationDateStart = moment(self._activatedRoute.snapshot.queryParams['creationDateStart']);
+        if (
+            this._activatedRoute.snapshot.queryParams['updateDateStart'] != null
+        ) {
+            this.filters.updateDateRangeActive = true;
+            this.updateDateRange[1] = moment(
+                this._activatedRoute.snapshot.queryParams['updateDateStart']
+            ).toDate();
         } else {
-            self.model.creationDateStart = moment().add(-7, 'days').startOf('day');
-        }
-
-        if (self._activatedRoute.snapshot.queryParams['creationDateEnd'] != null) {
-            self.model.creationDateRangeActive = true;
-            self.model.creationDateEnd = moment(self._activatedRoute.snapshot.queryParams['creationDateEnd']);
-        } else {
-            self.model.creationDateEnd = moment().endOf('day');
+            this.updateDateRange[1] = moment()
+                .endOf('day')
+                .toDate();
         }
     }
 
     ngOnInit(): void {
-        const self = this;
-        self.model.filterText = self._activatedRoute.snapshot.queryParams['filterText'] || '';
+        this.filters.filterText =
+            this._activatedRoute.snapshot.queryParams['filterText'] || '';
         this.getList();
     }
 
@@ -108,99 +147,132 @@ export class ColumnInfosComponent extends AppComponentBase implements OnInit {
     }
 
     getColumnInfos(event?: LazyLoadEvent) {
-        const self = this;
-        if (self.primengTableHelper.shouldResetPaging(event)) {
-            self.paginator.changePage(0);
+        if (this.primengTableHelper.shouldResetPaging(event)) {
+            this.paginator.changePage(0);
             return;
         }
-        self.primengTableHelper.showLoadingIndicator();
+        this.primengTableHelper.showLoadingIndicator();
 
-        self._columnInfoService.getColumnInfos(
-            self.model.isOnlyGetRecycleData ? self.model.isOnlyGetRecycleData : false,
-            self.model.creationDateRangeActive ? self.model.creationDateStart : undefined,
-            self.model.creationDateRangeActive ? self.model.creationDateEnd : undefined,
-            self.model.subscriptionEndDateRangeActive ? self.model.subscriptionEndDateStart : undefined,
-            self.model.subscriptionEndDateRangeActive ? self.model.subscriptionEndDateEnd : undefined,
-            self.model.filterText,
-            self.dataTable == undefined ? undefined : self.primengTableHelper.getSorting(self.dataTable),
-            self.paginator == undefined ? 10 : self.primengTableHelper.getMaxResultCount(self.paginator, event),
-            self.paginator == undefined ? 0 : self.primengTableHelper.getSkipCount(self.paginator, event)
-        ).subscribe(result => {
-            self.primengTableHelper.totalRecordsCount = result.totalCount;
-            self.primengTableHelper.records = result.items;
-            self.primengTableHelper.hideLoadingIndicator();
-        });
+        this._columnInfoService
+            .getColumnInfos(
+                this.filters.isOnlyGetRecycleData
+                    ? this.filters.isOnlyGetRecycleData
+                    : false,
+                this.filters.creationDateRangeActive
+                    ? moment(this.creationDateRange[0])
+                    : undefined,
+                this.filters.creationDateRangeActive
+                    ? moment(this.creationDateRange[1])
+                    : undefined,
+                this.filters.updateDateRangeActive
+                    ? moment(this.updateDateRange[0])
+                    : undefined,
+                this.filters.updateDateRangeActive
+                    ? moment(this.updateDateRange[1])
+                    : undefined,
+                this.filters.filterText,
+                this.dataTable == undefined
+                    ? undefined
+                    : this.primengTableHelper.getSorting(this.dataTable),
+                this.paginator == undefined
+                    ? 10
+                    : this.primengTableHelper.getMaxResultCount(
+                          this.paginator,
+                          event
+                      ),
+                this.paginator == undefined
+                    ? 0
+                    : this.primengTableHelper.getSkipCount(
+                          this.paginator,
+                          event
+                      )
+            )
+            .subscribe(result => {
+                this.primengTableHelper.totalRecordsCount = result.totalCount;
+                this.primengTableHelper.records = result.items;
+                this.primengTableHelper.hideLoadingIndicator();
+            });
     }
 
     //获取回收站数据
     getRecycleData(): void {
-        this.model.isOnlyGetRecycleData = !this.model.isOnlyGetRecycleData;
+        this.filters.isOnlyGetRecycleData = !this.filters.isOnlyGetRecycleData;
         this.getColumnInfos();
     }
     //恢复数据
     restore(id: number): void {
-        const self = this;
-        self.message.confirm(
-            self.l('AreYouSure'),
-            self.l('RestoreWarningMessage'),
+        this.message.confirm(
+            this.l('AreYouSure'),
+            this.l('RestoreWarningMessage'),
             isConfirmed => {
                 if (isConfirmed) {
-                    self._columnInfoService.restoreColumnInfo(id).subscribe(() => {
-                        self.reloadPage();
-                        self.notify.success(self.l('SuccessfullyRestore'));
-                    });
+                    this._columnInfoService
+                        .restoreColumnInfo(id)
+                        .subscribe(() => {
+                            this.reloadPage();
+                            this.notify.success(this.l('SuccessfullyRestore'));
+                        });
                 }
             }
         );
     }
     createColumnInfo(): void {
-        const self = this;
-        self.createOrEditColumnInfoModal.show();
+        this.createOrEditColumnInfoModal.show();
     }
 
     editColumnInfo(id: number): void {
-        const self = this;
-        self.createOrEditColumnInfoModal.show(id);
+        this.createOrEditColumnInfoModal.show(id);
     }
 
     deleteColumnInfo(id: number): void {
-        const self = this;
-        self.message.confirm(
-            self.l('AreYouSure'),
-            self.l('DeleteWarningMessage'),
+        this.message.confirm(
+            this.l('AreYouSure'),
+            this.l('DeleteWarningMessage'),
             isConfirmed => {
                 if (isConfirmed) {
-                    self._columnInfoService.deleteColumnInfo(id).subscribe(() => {
-                        self.reloadPage();
-                        self.notify.success(self.l('SuccessfullyDeleted'));
-                    });
+                    this._columnInfoService
+                        .deleteColumnInfo(id)
+                        .subscribe(() => {
+                            this.reloadPage();
+                            this.notify.success(this.l('SuccessfullyDeleted'));
+                        });
                 }
             }
         );
     }
 
     reloadPage(): void {
-        const self = this;
-        self.paginator.changePage(self.paginator.getPage());
+        this.paginator.changePage(this.paginator.getPage());
     }
 
     exportToExcel(): void {
-        const self = this;
-        self._columnInfoService.getColumnInfosToExcel(
-            self.model.isOnlyGetRecycleData,
-            self.model.subscriptionEndDateRangeActive ? self.model.subscriptionEndDateStart : undefined,
-            self.model.subscriptionEndDateRangeActive ? self.model.subscriptionEndDateEnd : undefined,
-            self.model.creationDateRangeActive ? self.model.creationDateStart : undefined,
-            self.model.creationDateRangeActive ? self.model.creationDateEnd : undefined,
-            self.model.filterText,
-            undefined,
-            1000,
-            0).subscribe(result => {
-                self._fileDownloadService.downloadTempFile(result);
+        this._columnInfoService
+            .getColumnInfosToExcel(
+                this.filters.isOnlyGetRecycleData,
+                this.filters.creationDateRangeActive
+                    ? moment(this.creationDateRange[0])
+                    : undefined,
+                this.filters.creationDateRangeActive
+                    ? moment(this.creationDateRange[1])
+                    : undefined,
+                this.filters.updateDateRangeActive
+                    ? moment(this.updateDateRange[0])
+                    : undefined,
+                this.filters.updateDateRangeActive
+                    ? moment(this.updateDateRange[1])
+                    : undefined,
+                this.filters.filterText,
+                undefined,
+                1000,
+                0
+            )
+            .subscribe(result => {
+                this._fileDownloadService.downloadTempFile(result);
             });
     }
     getReorder(event) {
-        var sourceIndex, targetIndex = 0;
+        var sourceIndex,
+            targetIndex = 0;
         var dropIndex = event.dropIndex;
         var input = new MoveToInputDtoOfInt64();
         //拖到最顶部
@@ -219,40 +291,43 @@ export class ColumnInfosComponent extends AppComponentBase implements OnInit {
         this._columnInfoService.moveTo(input).subscribe();
     }
     handleIsActiveSwitch(event, id: number) {
-        const self = this;
         const input = new SwitchEntityInputDtoOfInt64();
         input.id = id;
         input.switchValue = event.checked;
-        self._columnInfoService.updateIsActiveSwitchAsync(input).subscribe(result => {
-            self.notify.success(self.l('SuccessfulOperation'));
-        })
+        this._columnInfoService
+            .updateIsActiveSwitchAsync(input)
+            .subscribe(result => {
+                this.notify.success(this.l('SuccessfulOperation'));
+            });
     }
     handleIsNeedAuthorizeAccessSwitch(event, id: number) {
-        const self = this;
         const input = new SwitchEntityInputDtoOfInt64();
         input.id = id;
         input.switchValue = event.checked;
-        self._columnInfoService.updateIsNeedAuthorizeAccessSwitchAsync(input).subscribe(result => {
-            self.notify.success(self.l('SuccessfulOperation'));
-        })
+        this._columnInfoService
+            .updateIsNeedAuthorizeAccessSwitchAsync(input)
+            .subscribe(result => {
+                this.notify.success(this.l('SuccessfulOperation'));
+            });
     }
-
 
     getList(node?) {
         this.loading = true;
-        this._columnInfoService.getChildrenColumnInfos(node ? node.data.id : undefined, false)
-            .subscribe(result => {
-                if (node) {
-                    node.children = <TreeNode[]>result.data;
-                } else {
-                    this.list = <TreeNode[]>result.data;
+        this._columnInfoService
+            .getChildrenColumnInfos(node ? node.data.id : undefined, false)
+            .subscribe(
+                result => {
+                    if (node) {
+                        node.children = <TreeNode[]>result.data;
+                    } else {
+                        this.list = <TreeNode[]>result.data;
+                    }
+                },
+                error => {},
+                () => {
+                    this.loading = false;
                 }
-            }, error => {
-
-            }, () => {
-                this.loading = false;
-            });
-
+            );
     }
 
     onNodeExpand(event) {
@@ -260,16 +335,17 @@ export class ColumnInfosComponent extends AppComponentBase implements OnInit {
             this.getList(event.node);
         } else {
             event.node.children.forEach(element => {
-                if (typeof (element.children) === 'undefined' || element.children.length <= 0) {
+                if (
+                    typeof element.children === 'undefined' ||
+                    element.children.length <= 0
+                ) {
                     this.getList(element);
                 }
             });
         }
-
     }
 
-    
-	/**
+    /**
      * 刷新Table
      */
     RefreshTable() {
@@ -283,9 +359,7 @@ export class ColumnInfosComponent extends AppComponentBase implements OnInit {
     getColumnTypeText(value: number) {
         return this.l(ColumnTypeEnum[value]);
     }
-
 }
-
 
 //定义列表枚举字段，以便友好化展示
 enum ColumnTypeEnum {

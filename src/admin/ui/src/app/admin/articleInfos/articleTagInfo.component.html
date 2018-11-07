@@ -2,7 +2,7 @@
  aria-labelledby="RelationModal" aria-hidden="true" [config]="{backdrop: 'static'}">
 	<div class="modal-dialog modal-lg" style="min-width: 1200px !important;min-height: 8000px !important;">
 		<div class="modal-content">
-			<form *ngIf="active" #editForm="ngForm" novalidate (ngSubmit)="save()">
+			<form *ngIf="active" #editForm="ngForm" novalidate>
 				<div class="m-subheader ">
 					<div class="d-flex align-items-center">
 						<div class="mr-auto col-xs-6">
@@ -22,7 +22,7 @@
 								<i class="fa fa-refresh"></i> {{l("Refresh")}}
 							</button>
 							<button type="button" class="btn default" (click)="getRecycleData()">
-								<i class="fa fa-recycle"></i> {{model.isOnlyGetRecycleData?l('Close'):l('RecycleBin')}}
+								<i class="fa fa-recycle"></i> {{filters.isOnlyGetRecycleData?l('Close'):l('RecycleBin')}}
 							</button>
 							<button type="button" class="close" (click)="close()" aria-label="Close" style="margin-left:15px;">
 								<span aria-hidden="true">&times;</span>
@@ -39,7 +39,7 @@
 										<div class="row m--margin-bottom-10">
 											<label>{{l("Filter")}}</label>
 											<div class="input-group">
-												<input [(ngModel)]="model.filterText" name="Filter" class="form-control" placeholder="{{l('SearchWithThreeDot')}}"
+												<input [(ngModel)]="filters.filterText" name="Filter" class="form-control" placeholder="{{l('SearchWithThreeDot')}}"
 												 type="text">
 											</div>
 										</div>
@@ -48,25 +48,29 @@
 										<div class="col-xl-6">
 											<div class="m-checkbox-list">
 												<label class="m-checkbox">
-													<input type="checkbox" [(ngModel)]="model.creationDateRangeActive" id="model_CreateDateRange" name="CreateDateRange"
-													 value="true"> {{l('CreateDateRange')}}
+													<input type="checkbox" [(ngModel)]="filters.creationDateRangeActive" id="articleTable_CreationDateRangeActive"
+													 name="CreationDateRangeActive" value="true">
+													{{l('CreationTime')}}
 													<span></span>
 												</label>
 											</div>
-
-											<input class="form-control" id="CreateDateRange" name="CreateDateRange" #drp="bsDaterangepicker"
-											 bsDaterangepicker dateRangePickerInitialValue [(ngModel)]="createDateRange">
+											<input class="form-control" name="CreationDateRange" [attr.disabled]="!filters.creationDateRangeActive ? 'disabled' : null"
+											 #drpCreationDateRange="bsDaterangepicker" bsDaterangepicker dateRangePickerInitialValue readonly="readonly"
+											 [(ngModel)]="creationDateRange">
 										</div>
+
 										<div class="col-xl-6">
 											<div class="m-checkbox-list">
 												<label class="m-checkbox">
-													<input type="checkbox" [(ngModel)]="model.subscriptionEndDateRangeActive" id="model_updateDateRange" name="UpdateDateRange"
-													 value="true"> {{l('UpdateDateRange')}}
+													<input type="checkbox" [(ngModel)]="filters.updateDateRangeActive" id="articleTable_UpdateDateRangeActive"
+													 name="UpdateDateRangeActive" value="true">
+													{{l('UpdateDateRange')}}
 													<span></span>
 												</label>
 											</div>
-											<input class="form-control" id="UpdateDateRange" name="UpdateDateRange" #drp="bsDaterangepicker"
-											 bsDaterangepicker dateRangePickerInitialValue [(ngModel)]="updateDateRange">
+											<input class="form-control" name="UpdateDateRange" [attr.disabled]="!filters.updateDateRangeActive ? 'disabled' : null"
+											 #drpCreationDateRange="bsDaterangepicker" bsDaterangepicker dateRangePickerInitialValue readonly="readonly"
+											 [(ngModel)]="updateDateRange">
 										</div>
 									</div>
 									<div class="row m--margin-bottom-10">

@@ -11,12 +11,11 @@ import { finalize } from 'rxjs/operators';
     selector: 'createOrEditArticleSourceInfoModal',
     templateUrl: './create-or-edit-articleSourceInfo-modal.component.html'
 })
-export class CreateOrEditArticleSourceInfoModalComponent extends AppComponentBase {   
+export class CreateOrEditArticleSourceInfoModalComponent extends AppComponentBase {
     @ViewChild('createOrEditModal') modal: ModalDirective;
     @Output() modalSave: EventEmitter<any> = new EventEmitter<any>();
     active = false;
     saving = false;
-
     formModel: ArticleSourceInfoEditDto = new ArticleSourceInfoEditDto();
 
     constructor(
@@ -36,8 +35,8 @@ export class CreateOrEditArticleSourceInfoModalComponent extends AppComponentBas
         this._changeDetector.detectChanges();
         this.formModel.id = id;
         this._articleSourceInfoService.getArticleSourceInfoForEdit(id).subscribe(result => {
-            this.formModel = result.articleSourceInfo;     
-            this.modal.show();               
+            this.formModel = result.articleSourceInfo;
+            this.modal.show();
         });
     }
 

@@ -37,16 +37,17 @@
 									<data-combo *ngIf="articleSourceInfoComboItemDtoList" [(selectedValue)]="formModel.articleSourceInfoId"
 									 [values]="articleSourceInfoComboItemDtoList"></data-combo>
 								</div>
+
 								<div class="form-group form-md-line-input form-md-floating-label no-hint col-xl-6">
-									<label>{{l("ReleaseTime")}} </label>
-									<input type="datetime" #ReleaseTimeDatePicker name="ReleaseTimeDatePicker" class="form-control" [required]="false"
-									 [ngClass]="{'edited': formModel.releaseTime}">
+									<label for="ReleaseTimeDate">{{l("ReleaseTime")}}</label>
+									<!-- <input id="ReleaseTimeDate" type="text" #SubscriptionEndDateUtc name="ReleaseTimeDateUtc" class="form-control"
+									 bsDatepicker [(ngModel)]="formModel.releaseTime" autocomplete="off"> -->
+
+									<input id="ReleaseTimeDateUtc" type="datetime" #ReleaseTimeDateUtc name="ReleaseTimeDateUtc" class="form-control"
+									 [ngClass]="{'edited':formModel.releaseTime}" (bsValueChange)="releaseTimeDateChange($event)" bsDatepicker
+									 [(ngModel)]="formModel.releaseTime">
 								</div>
-								<div class="form-group form-md-line-input form-md-floating-label no-hint col-xl-6">
-									<label>{{l("ArticleTagInfos")}} </label>
-									<input class="form-control" type="text" name="ArticleTagInfos" [ngClass]="{'edited': formModel.articleTagInfos}"
-									 [(ngModel)]="formModel.articleTagInfos" [required]="false" maxlength="" minlength="">
-								</div>
+
 								<div class="form-group form-md-line-input form-md-floating-label no-hint col-xl-6">
 									<label>{{l("RecommendedType")}} *</label>
 									<enum-combo [(selectedValue)]="formModel.recommendedType" fullName="Magicodes.Admin.Core.Custom.Contents.RecommendedTypes"></enum-combo>

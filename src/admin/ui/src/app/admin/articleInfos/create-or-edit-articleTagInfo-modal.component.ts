@@ -11,12 +11,11 @@ import { finalize } from 'rxjs/operators';
     selector: 'createOrEditArticleInfoArticleTagInfoModal',
     templateUrl: './create-or-edit-articleTagInfo-modal.component.html'
 })
-export class ArticleInfoArticleTagInfoCreateOrEditModalComponent extends AppComponentBase {   
+export class ArticleInfoArticleTagInfoCreateOrEditModalComponent extends AppComponentBase {
     @ViewChild('createOrEditModal') modal: ModalDirective;
     @Output() modalSave: EventEmitter<any> = new EventEmitter<any>();
     active = false;
     saving = false;
-
     formModel: ArticleTagInfoEditDto = new ArticleTagInfoEditDto();
 	articleInfoComboItemDtoList: GetDataComboItemDtoOfInt64[];
 
@@ -31,11 +30,8 @@ export class ArticleInfoArticleTagInfoCreateOrEditModalComponent extends AppComp
     onShown(): void {
 		this._articleTagInfoService.getArticleInfoDataComboItems()
 			.subscribe((result) => {
-                /**
-                 * ������������ʱ�����ҳ�����
-                 */
 				this.articleInfoComboItemDtoList = result;
-			});	
+			});
     }
 
     show(id?: number): void {
@@ -45,11 +41,11 @@ export class ArticleInfoArticleTagInfoCreateOrEditModalComponent extends AppComp
         if (id) {
             this.formModel.id = id;
             this._articleTagInfoService.getArticleTagInfoForEdit(id).subscribe(result => {
-                this.formModel = result.articleTagInfo;     
-                this.modal.show();               
+                this.formModel = result.articleTagInfo;
+                this.modal.show();
             });
         }else
-		    this.modal.show();        
+		    this.modal.show();
     }
 
     save(): void {

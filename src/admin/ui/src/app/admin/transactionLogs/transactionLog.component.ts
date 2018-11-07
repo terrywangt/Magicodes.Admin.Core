@@ -1,10 +1,22 @@
-﻿import { Component, Injector, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+﻿import {
+    Component,
+    Injector,
+    OnInit,
+    ViewChild,
+    ViewEncapsulation
+} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ImpersonationService } from '@app/admin/users/impersonation.service';
 import { CommonLookupModalComponent } from '@app/shared/common/lookup/common-lookup-modal.component';
 import { appModuleAnimation } from '@shared/animations/routerTransition';
 import { AppComponentBase } from '@shared/common/app-component-base';
-import { EntityDtoOfInt64, FindUsersInput, NameValueDto, SwitchEntityInputDtoOfInt64, CommonServiceProxy,} from '@shared/service-proxies/service-proxies';
+import {
+    EntityDtoOfInt64,
+    FindUsersInput,
+    NameValueDto,
+    SwitchEntityInputDtoOfInt64,
+    CommonServiceProxy
+} from '@shared/service-proxies/service-proxies';
 import * as moment from 'moment';
 import { LazyLoadEvent } from 'primeng/components/common/lazyloadevent';
 import { Paginator } from 'primeng/components/paginator/paginator';
@@ -20,140 +32,186 @@ import { StylingFlags } from '../../../../node_modules/@angular/core/src/render3
     encapsulation: ViewEncapsulation.None,
     animations: [appModuleAnimation()]
 })
+export class TransactionLogsComponent extends AppComponentBase
+    implements OnInit {
+    @ViewChild('dataTable')
+    dataTable: Table;
+    @ViewChild('paginator')
+    paginator: Paginator;
+    @ViewChild('createOrEditTransactionLogModal')
+    createOrEditTransactionLogModal: CreateOrEditTransactionLogModalComponent;
+    subscriptionDateRange: Date[] = [
+        moment()
+            .startOf('day')
+            .toDate(),
+        moment()
+            .add(30, 'days')
+            .endOf('day')
+            .toDate()
+    ];
+    creationDateRange: Date[] = [
+        moment()
+            .startOf('day')
+            .toDate(),
+        moment()
+            .endOf('day')
+            .toDate()
+    ];
 
-export class TransactionLogsComponent extends AppComponentBase implements OnInit {
-    @ViewChild('dataTable') dataTable: Table;
-    @ViewChild('paginator') paginator: Paginator;
-    @ViewChild('createOrEditTransactionLogModal') createOrEditTransactionLogModal: CreateOrEditTransactionLogModalComponent;
-
-	advancedFiltersAreShown = false;
-	model: {
+    advancedFiltersAreShown = false;
+    filters: {
         //是否仅获取回收站数据
         isOnlyGetRecycleData: boolean;
         filterText: string;
-		creationDateRangeActive: boolean;
+        creationDateRangeActive: boolean;
         creationDateStart: moment.Moment;
         creationDateEnd: moment.Moment;
-		isFreeze: string;
+        isFreeze: string;
     } = <any>{};
 
-	constructor(
+    constructor(
         injector: Injector,
         private _activatedRoute: ActivatedRoute,
         private _fileDownloadService: FileDownloadService,
         private _commonService: CommonServiceProxy,
-		private _transactionLogService: TransactionLogServiceProxy,
-
+        private _transactionLogService: TransactionLogServiceProxy
     ) {
         super(injector);
         this.setFiltersFromRoute();
     }
 
-	setFiltersFromRoute(): void {
-		const self = this;
-        if (self._activatedRoute.snapshot.queryParams['creationDateStart'] != null) {
-            self.model.creationDateRangeActive = true;
-            self.model.creationDateStart = moment(self._activatedRoute.snapshot.queryParams['creationDateStart']);
+    setFiltersFromRoute(): void {
+        if (
+            this._activatedRoute.snapshot.queryParams['creationDateStart'] !=
+            null
+        ) {
+            this.filters.creationDateRangeActive = true;
+            this.creationDateRange[0] = moment(
+                this._activatedRoute.snapshot.queryParams['creationDateStart']
+            ).toDate();
         } else {
-            self.model.creationDateStart = moment().add(-7, 'days').startOf('day');
+            this.creationDateRange[0] = moment()
+                .add(-7, 'days')
+                .startOf('day')
+                .toDate();
         }
 
-        if (self._activatedRoute.snapshot.queryParams['creationDateEnd'] != null) {
-            self.model.creationDateRangeActive = true;
-            self.model.creationDateEnd = moment(self._activatedRoute.snapshot.queryParams['creationDateEnd']);
+        if (
+            this._activatedRoute.snapshot.queryParams['creationDateEnd'] != null
+        ) {
+            this.filters.creationDateRangeActive = true;
+            this.creationDateRange[1] = moment(
+                this._activatedRoute.snapshot.queryParams['creationDateEnd']
+            ).toDate();
         } else {
-            self.model.creationDateEnd = moment().endOf('day');
+            this.creationDateRange[1] = moment()
+                .endOf('day')
+                .toDate();
         }
     }
 
-	ngOnInit(): void {
-		const self = this;
-        self.model.filterText = self._activatedRoute.snapshot.queryParams['filterText'] || '';
+    ngOnInit(): void {
+        this.filters.filterText =
+            this._activatedRoute.snapshot.queryParams['filterText'] || '';
     }
 
-	getTransactionLogs(event?: LazyLoadEvent) {
-		const self = this;
-        if (self.primengTableHelper.shouldResetPaging(event)) {
-            self.paginator.changePage(0);
+    getTransactionLogs(event?: LazyLoadEvent) {
+        if (this.primengTableHelper.shouldResetPaging(event)) {
+            this.paginator.changePage(0);
             return;
         }
-        self.primengTableHelper.showLoadingIndicator();
+        this.primengTableHelper.showLoadingIndicator();
 
-        self._transactionLogService.getTransactionLogs(
-            self.model.isOnlyGetRecycleData ? self.model.isOnlyGetRecycleData : false,
-			self.model.creationDateRangeActive ? self.model.creationDateStart : undefined,
-			self.model.creationDateRangeActive ? self.model.creationDateEnd : undefined,
-            self.model.filterText,
-            self.primengTableHelper.getSorting(self.dataTable),
-            self.primengTableHelper.getMaxResultCount(self.paginator, event),
-            self.primengTableHelper.getSkipCount(self.paginator, event)
-        ).subscribe(result => {
-            self.primengTableHelper.totalRecordsCount = result.totalCount;
-            console.log(result.items);
-            self.primengTableHelper.records = result.items;
-            self.primengTableHelper.hideLoadingIndicator();
-        });
+        this._transactionLogService
+            .getTransactionLogs(
+                this.filters.isOnlyGetRecycleData
+                    ? this.filters.isOnlyGetRecycleData
+                    : false,
+                this.filters.creationDateRangeActive
+                    ? moment(this.creationDateRange[0])
+                    : undefined,
+                this.filters.creationDateRangeActive
+                    ? moment(this.creationDateRange[1])
+                    : undefined,
+                this.filters.filterText,
+                this.primengTableHelper.getSorting(this.dataTable),
+                this.primengTableHelper.getMaxResultCount(
+                    this.paginator,
+                    event
+                ),
+                this.primengTableHelper.getSkipCount(this.paginator, event)
+            )
+            .subscribe(result => {
+                this.primengTableHelper.totalRecordsCount = result.totalCount;
+                this.primengTableHelper.records = result.items;
+                this.primengTableHelper.hideLoadingIndicator();
+            });
     }
 
     //获取回收站数据
     getRecycleData(): void {
-        this.model.isOnlyGetRecycleData = !this.model.isOnlyGetRecycleData;
+        this.filters.isOnlyGetRecycleData = !this.filters.isOnlyGetRecycleData;
         this.getTransactionLogs();
     }
-	createTransactionLog(): void {
-		const self = this;
-        self.createOrEditTransactionLogModal.show();
+    createTransactionLog(): void {
+        this.createOrEditTransactionLogModal.show();
     }
 
-	editTransactionLog(id:number): void {
-		const self = this;
-        self.createOrEditTransactionLogModal.show(id);
+    editTransactionLog(id: number): void {
+        this.createOrEditTransactionLogModal.show(id);
     }
 
-	deleteTransactionLog(id: number): void {
-		const self = this;
-		self.message.confirm(
-            self.l('AreYouSure'),
-            self.l('DeleteWarningMessage'),
+    deleteTransactionLog(id: number): void {
+        this.message.confirm(
+            this.l('AreYouSure'),
+            this.l('DeleteWarningMessage'),
             isConfirmed => {
                 if (isConfirmed) {
-                    self._transactionLogService.deleteTransactionLog(id).subscribe(() => {
-                        self.reloadPage();
-                        self.notify.success(self.l('SuccessfullyDeleted'));
-                    });
+                    this._transactionLogService
+                        .deleteTransactionLog(id)
+                        .subscribe(() => {
+                            this.reloadPage();
+                            this.notify.success(this.l('SuccessfullyDeleted'));
+                        });
                 }
             }
         );
     }
 
-	reloadPage(): void {
-		const self = this;
-        self.paginator.changePage(self.paginator.getPage());
+    reloadPage(): void {
+        this.paginator.changePage(this.paginator.getPage());
     }
 
-	exportToExcel(): void {
-        const self = this;
-        self._transactionLogService.getTransactionLogsToExcel(
-            self.model.isOnlyGetRecycleData,
-			self.model.creationDateRangeActive ? self.model.creationDateStart : undefined,
-			self.model.creationDateRangeActive ? self.model.creationDateEnd : undefined,
-            self.model.filterText,
-            undefined,
-            1000,
-            0).subscribe(result => {
-                self._fileDownloadService.downloadTempFile(result);
+    exportToExcel(): void {
+        this._transactionLogService
+            .getTransactionLogsToExcel(
+                this.filters.isOnlyGetRecycleData,
+                this.filters.creationDateRangeActive
+                    ? moment(this.creationDateRange[0])
+                    : undefined,
+                this.filters.creationDateRangeActive
+                    ? moment(this.creationDateRange[1])
+                    : undefined,
+                this.filters.filterText,
+                undefined,
+                1000,
+                0
+            )
+            .subscribe(result => {
+                this._fileDownloadService.downloadTempFile(result);
             });
     }
 
-	handleIsFreezeSwitch(event, id: number){
-			const self = this;
-			const input = new SwitchEntityInputDtoOfInt64();
-			input.id = id;
-			input.switchValue = event.checked;
-			self._transactionLogService.updateIsFreezeSwitchAsync(input).subscribe(result => {
-                self.notify.success(self.l('SuccessfulOperation'));
-			})
-		}
+    handleIsFreezeSwitch(event, id: number) {
+        const input = new SwitchEntityInputDtoOfInt64();
+        input.id = id;
+        input.switchValue = event.checked;
+        this._transactionLogService
+            .updateIsFreezeSwitchAsync(input)
+            .subscribe(result => {
+                this.notify.success(this.l('SuccessfulOperation'));
+            });
+    }
 
     getPayChannelText(value: number) {
         return this.l(PayChannelEnum[value]);

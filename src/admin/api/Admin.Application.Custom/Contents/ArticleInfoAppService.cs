@@ -1,4 +1,5 @@
-﻿using Abp.Application.Services.Dto;
+﻿using System;
+using Abp.Application.Services.Dto;
 using Abp.AspNetZeroCore.Net;
 using Abp.Authorization;
 using Abp.AutoMapper;
@@ -246,6 +247,7 @@ namespace Admin.Application.Custom.Contents
             {
                 throw new UserFriendlyException(L("TitleExist"));
             }
+
             var articleInfo = new ArticleInfo()
             {
                 Code = GetCode(),
@@ -253,7 +255,7 @@ namespace Admin.Application.Custom.Contents
                 Publisher = input.ArticleInfo.Publisher,
                 ColumnInfoId = input.ArticleInfo.ColumnInfoId,
                 ArticleSourceInfoId = input.ArticleInfo.ArticleSourceInfoId,
-                ReleaseTime = input.ArticleInfo.ReleaseTime,
+                ReleaseTime = input.ArticleInfo.ReleaseTime?.ToLocalTime(),
                 Content = input.ArticleInfo.Content,
                 IsActive = input.ArticleInfo.IsActive,
                 IsNeedAuthorizeAccess = input.ArticleInfo.IsNeedAuthorizeAccess,
@@ -295,7 +297,7 @@ namespace Admin.Application.Custom.Contents
             articleInfo.Publisher = input.ArticleInfo.Publisher;
             articleInfo.ColumnInfoId = input.ArticleInfo.ColumnInfoId;
             articleInfo.ArticleSourceInfoId = input.ArticleInfo.ArticleSourceInfoId;
-            articleInfo.ReleaseTime = input.ArticleInfo.ReleaseTime;
+            articleInfo.ReleaseTime = input.ArticleInfo.ReleaseTime?.ToLocalTime();
             articleInfo.Content = input.ArticleInfo.Content;
             articleInfo.IsActive = input.ArticleInfo.IsActive;
             articleInfo.IsNeedAuthorizeAccess = input.ArticleInfo.IsNeedAuthorizeAccess;
