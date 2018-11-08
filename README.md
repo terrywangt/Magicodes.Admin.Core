@@ -30,6 +30,14 @@ Magicodes.Admin，是心莱科技团队打造的一套高效率、易扩展、�
 * 小程序UI Demo
 * 更多解决方案和案例
 
+## Demo
+
+已通过腾讯云Docker容器托管:
+http://demo.admin.xin-lai.com
+
+* 账号：Admin
+* 密码：123456abcD
+
 ## 开发组件、套件、解决方案、理念
 
 目前框架中包含以下开发组件、套件、解决方案、理念：
@@ -80,15 +88,6 @@ Magicodes.Admin，是心莱科技团队打造的一套高效率、易扩展、�
 * **配套项目/产品开发流程（<https://gitee.com/xl_wenqiang/xinlai_devprocess>）**
 
 加QQ群 **85318032** 获取最新动态和文档。
-
-## Demo
-已通过腾讯云Docker容器托管:
-http://demo.admin.xin-lai.com
-
-* 账号：Admin
-* 密码：123456abcD
-
->注意：演示环境不一定是最新代码_
 
 ## 生成服务
 
