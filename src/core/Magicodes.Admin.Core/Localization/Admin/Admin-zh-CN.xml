@@ -852,9 +852,9 @@
     <text name="MaxItemCount">最大子项数量</text>
     <text name="Html">Html文本</text>
     <text name="Image">图片</text>
-    <text name="IsStatic">是否系统默认</text>
-    <text name="StaticColumnInfo_Tooltip">不能删除系统栏目</text>
-    <text name="StaticArticleInfo_Tooltip">不能删除系统文章</text>
+    <text name="IsStatic">是否为静态属性(创建后无法删除)</text>
+    <text name="StaticColumnInfo_Tooltip">不能删除静态栏目</text>
+    <text name="StaticArticleInfo_Tooltip">不能删除静态文章</text>
     <text name="ExceedTheMaxCount">超出栏目子项最大数量</text>
     <text name="ArticleTagInfo">文章标签</text>
   </texts>
