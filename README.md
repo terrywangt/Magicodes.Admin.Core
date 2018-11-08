@@ -1,7 +1,9 @@
 # Magicodes.Admin
 
 <!-- ![关注订阅号](./res/订阅号.jpg) -->
-![活动](./res/activity.jpg)
+## 说明
+
+Magicodes.Admin，是心莱科技团队打造的一套高效率、易扩展、基础设施强大、代码生成完备、理念和技术先进的敏捷开发框架，同时也是一套分布式（**即将提供微服务架构参考**）、跨平台（**linux、Docker容器支持，即将提供腾讯云容器托管教程**）、多终端（包括**Android、IOS、H5、小程序、微信公众号**）支持的统一开发框架和解决方案。框架基于.NET Core 2.1、Angular、Ionic、EF Core、ABP和ASP.NET Zero，并在其基础上进行了封装和完善，并且编写了相关的工具（代码生成）、组件（云存储、支付、微信等等）、生成服务。
 
 ## 官方订阅号
 
@@ -14,12 +16,12 @@
 * 解决方案
 * 编程心得和理念
 
-## 说明
-
-Magicodes.Admin，是心莱科技团队打造的一套高效率、易扩展、基础设施强大、代码生成完备、理念和技术先进的敏捷开发框架，同时也是一套分布式（**即将提供微服务架构参考**）、跨平台（**linux、Docker容器支持，即将提供腾讯云容器托管教程**）、多终端（包括**Android、IOS、H5、小程序、微信公众号**）支持的统一开发框架和解决方案。框架基于.NET Core 2.1、Angular、Ionic、EF Core、ABP和ASP.NET Zero，并在其基础上进行了封装和完善，并且编写了相关的工具（代码生成）、组件（云存储、支付、微信等等）、生成模板。
+<img src="./res/activity.jpg" width="400" />
 
 ## VNext
 
+* 拆分架构和仓库,以便更易于使用
+* 存储组件支持腾讯云存储
 * 新版后台UI
 * 微服务架构支持
 * MySQL支持配置简化
@@ -59,7 +61,7 @@ Magicodes.Admin，是心莱科技团队打造的一套高效率、易扩展、�
 * 即时消息（SignalR）
 * ORM和数据迁移(Entity Framework Core)
 * **通用导入导出（Magicodes.ExporterAndImporter）**
-* **通用存储（Magicodes.Storage，支持本地存储和阿里云存储）**
+* **通用存储（Magicodes.Storage，支持本地存储,阿里云存储,腾讯云存储）**
 * 全国行政区域抓取和初始化（Magicodes.Districts）
 * **移动端统一开发解决方案和模板（Angular+Ionic）**
 * 前后端分离
@@ -80,8 +82,8 @@ Magicodes.Admin，是心莱科技团队打造的一套高效率、易扩展、�
 加QQ群 **85318032** 获取最新动态和文档。
 
 ## Demo
-
-<https://demoadmin.xin-lai.com>
+已通过腾讯云Docker容器托管:
+http://demo.admin.xin-lai.com
 
 * 账号：Admin
 * 密码：123456abcD
