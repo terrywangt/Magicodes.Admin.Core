@@ -1,31 +1,23 @@
-﻿using System;
-using System.IO;
-using System.Text;
-using Abp.AspNetCore;
-using Abp.AspNetCore.Configuration;
-using Abp.AspNetCore.SignalR;
-using Abp.AspNetZeroCore.Licensing;
+﻿using Abp.AspNetCore.SignalR;
 using Abp.AspNetZeroCore.Web;
-using Abp.Configuration.Startup;
-using Abp.Dependency;
 using Abp.Hangfire;
-using Abp.Hangfire.Configuration;
-using Abp.IO;
+using Abp.Localization.Dictionaries;
+using Abp.Localization.Dictionaries.Xml;
 using Abp.Modules;
 using Abp.Reflection.Extensions;
 using Abp.Runtime.Caching.Redis;
 using Abp.Zero.Configuration;
-using Castle.Core.Internal;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
-using Magicodes.Admin.Chat;
 using Magicodes.Admin.Configuration;
 using Magicodes.Admin.EntityFrameworkCore;
 using Magicodes.Admin.Web.Authentication.JwtBearer;
 using Magicodes.Admin.Web.Authentication.TwoFactor;
-using Magicodes.Admin.Web.Chat.SignalR;
-using Magicodes.Admin.Web.Configuration;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using System;
+using System.IO;
+using System.Linq;
+using System.Text;
 
 namespace Magicodes.Admin.Web
 {
@@ -79,6 +71,8 @@ namespace Magicodes.Admin.Web
             //    options.ConnectionString = _appConfiguration["Abp:RedisCache:ConnectionString"];
             //    options.DatabaseId = _appConfiguration.GetValue<int>("Abp:RedisCache:DatabaseId");
             //});
+
+            SetLocalizationFromWebRootXml(Path.Combine(_env.WebRootPath, $"Localization"));
         }
 
         private void ConfigureTokenAuth()
@@ -93,33 +87,50 @@ namespace Magicodes.Admin.Web
             tokenAuthConfig.Expiration = TimeSpan.FromDays(1);
         }
 
-        public override void Initialize()
-        {
-            IocManager.RegisterAssemblyByConvention(typeof(AdminWebCoreModule).GetAssembly());
-        }
+        public override void Initialize() => IocManager.RegisterAssemblyByConvention(typeof(AdminWebCoreModule).GetAssembly());
 
-        public override void PostInitialize()
-        {
-            SetAppFolders();
-        }
+        public override void PostInitialize() => SetAppFolders();
 
         private void SetAppFolders()
         {
             var appFolders = IocManager.Resolve<AppFolders>();
 
             appFolders.SampleProfileImagesFolder = Path.Combine(_env.WebRootPath, $"Common{Path.DirectorySeparatorChar}Images{Path.DirectorySeparatorChar}SampleProfilePics");
-            appFolders.WebLogsFolder = Path.Combine(_env.ContentRootPath, $"App_Data{Path.DirectorySeparatorChar}Logs");
 
-#if NET461
-            if (_env.IsDevelopment())
+            var webLogsPath = Path.Combine(_env.ContentRootPath, $"App_Data{Path.DirectorySeparatorChar}Logs");
+            Directory.CreateDirectory(webLogsPath);
+            appFolders.WebLogsFolder = webLogsPath;
+
+        }
+
+        /// <summary>
+        /// 从WebRoot初始化多语言
+        /// </summary>
+        /// <param name="localizationFolder"></param>
+        private void SetLocalizationFromWebRootXml(string localizationFolder)
+        {
+            if (!Directory.Exists(localizationFolder))
             {
-                var currentAssemblyDirectoryPath = typeof(AdminWebCoreModule).GetAssembly().GetDirectoryPathOrNull();
-                if (currentAssemblyDirectoryPath != null)
-                {
-                    appFolders.WebLogsFolder = Path.Combine(currentAssemblyDirectoryPath, $"App_Data{Path.DirectorySeparatorChar}Logs");
-                }
+                return;
             }
-#endif
+
+            var adminPath = Path.Combine(localizationFolder, AdminConsts.LocalizationSourceName);
+
+            if (!Directory.Exists(adminPath))
+            {
+                return;
+            }
+            Configuration.Localization.Sources.Remove(Configuration.Localization.Sources.First(p => p.Name == AdminConsts.LocalizationSourceName));
+            Configuration.Localization.Sources.Add(
+                new DictionaryBasedLocalizationSource(
+                    AdminConsts.LocalizationSourceName,
+                    new XmlFileLocalizationDictionaryProvider(
+                        adminPath
+                    )
+                )
+            );
+            //TODO:Abp,AbpWeb,AbpZero,App
+
         }
     }
 }

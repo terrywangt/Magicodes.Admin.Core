@@ -16,6 +16,8 @@ param(
     $noCreateDocker = $False,
     # 调试模式，以输出配置参数
     $debug = $False,
+    #是否推送
+    $isPush = $True,
     #Host工程配置文件
     $hostConfigFile="appsettings.json"
 )
@@ -126,11 +128,14 @@ function PublicNgFolder {
     & ng build --prod
     Copy-Item (Join-Path $ngFolder "dist") (Join-Path $outputFolder "ng/") -Recurse
     Copy-Item (Join-Path $ngFolder "Dockerfile") (Join-Path $outputFolder "ng")
+    # 复制nginx配置文件
+    Copy-Item (Join-Path $outputFolder "nginx.conf") (Join-Path $outputFolder "ng")
 
-    # Change UI configuration
-    $ngConfigPath = Join-Path $outputFolder "ng/assets/appconfig.json"
-    (Get-Content $ngConfigPath) -replace "22742", "9901" | Set-Content $ngConfigPath
-    (Get-Content $ngConfigPath) -replace "4200", "9902" | Set-Content $ngConfigPath
+    # # Change UI configuration
+    # $ngConfigPath = Join-Path $outputFolder "ng/assets/appconfig.json"
+    # (Get-Content $ngConfigPath) -replace "22742", "9901" | Set-Content $ngConfigPath
+    # (Get-Content $ngConfigPath) -replace "4200", "9902" | Set-Content $ngConfigPath
+
 }
 
 
@@ -189,7 +194,9 @@ if(!$noCreateDocker)
     #复制Docker Compose文件
     CopyDockerCompose
 }
-#推送Docker镜像
-PushDockerImage
-
+if($isPush)
+{
+    #推送Docker镜像
+    PushDockerImage
+}
 Set-Location $buildFolder
