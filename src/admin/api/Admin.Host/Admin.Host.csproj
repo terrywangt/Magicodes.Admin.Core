@@ -57,7 +57,6 @@
   <ItemGroup>
     <Folder Include="Properties\PublishProfiles\" />
     <Folder Include="wwwroot\Plugins\" />
-    <Folder Include="wwwroot\Localization\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\unity\Abp.Castle.NLog\Abp.Castle.NLog.csproj" />

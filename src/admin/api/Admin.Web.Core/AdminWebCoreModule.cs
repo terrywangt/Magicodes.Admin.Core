@@ -129,7 +129,18 @@ namespace Magicodes.Admin.Web
                     )
                 )
             );
-            //TODO:Abp,AbpWeb,AbpZero,App
+
+            //移除Abp源,添加自己的语言定义
+            Configuration.Localization.Sources.Remove(Configuration.Localization.Sources.First(p => p.Name == "Abp"));
+            Configuration.Localization.Sources.Add(
+                new DictionaryBasedLocalizationSource(
+                    "Abp",
+                    new XmlFileLocalizationDictionaryProvider(
+                        Path.Combine(localizationFolder, "Abp")
+                    )
+                )
+            );
+            //TODO:AbpWeb,AbpZero,App
 
         }
     }
