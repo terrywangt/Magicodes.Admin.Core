@@ -30,6 +30,11 @@ Magicodes.Admin，是心莱科技团队打造的一套高效率、易扩展、�
 * 小程序UI Demo
 * 更多解决方案和案例
 
+正在进行以下拆分：
+- 将App/UI迁移到 https://gitee.com/magicodes/Magicodes.App
+- 小程序框架将 在https://gitee.com/magicodes/Magicodes.Miniprogram 添加
+- 新版UI将在 https://gitee.com/magicodes/Magicodes.Admin.UI 搭建。
+
 ## Demo
 
 已通过腾讯云Docker容器托管:
@@ -91,8 +96,7 @@ http://demo.admin.xin-lai.com
 
 ## 生成服务
 
- 高级版附送代码生成工具以及相关源代码。**目前线上生成服务Beta版一上线，在内测阶段。**
-![生成结构图](./res/代码生成.png)
+ 高级版附送代码生成工具以及相关源代码。**目前线上生成服务Beta版一上线，在内测阶段，仅提供给高级版客户。**
 
 ## 授权文档下载：
 
@@ -104,7 +108,7 @@ http://demo.admin.xin-lai.com
 * 高级版代码和基础版代码一致
 * 提供技术支持、售后支持
 * 提供代码线上生成服务（Beta版本已推出，已支持后台生成，即将支持API、小程序、APP生成）
-* 提供高清视频教程
+* 提供高清视频教程和整体文档
 * 提供一定案例（App、小程序（小程序商城））
 * 提供完整的软硬件架构指导（比如容器部署和运维支持）
 
