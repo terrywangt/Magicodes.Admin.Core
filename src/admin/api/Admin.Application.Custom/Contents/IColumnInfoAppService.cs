@@ -37,5 +37,11 @@ namespace Admin.Application.Custom.Contents
 		/// 导出栏目
 		/// </summary>
         Task<FileDto> GetColumnInfosToExcel(GetColumnInfosInput input);
+
+        /// <summary>
+        /// 删除所有
+        /// </summary>
+        /// <returns></returns>
+        Task DeleteAll();
     }
 }

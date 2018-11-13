@@ -11,11 +11,16 @@ using Magicodes.Admin.Configuration;
 using Magicodes.Admin.EntityHistory;
 using Magicodes.Admin.Migrations.Seed;
 using System;
+using System.Collections.Generic;
+using System.Reflection;
+using Abp.Dapper;
+using AutoMapper;
 
 namespace Magicodes.Admin.EntityFrameworkCore
 {
     [DependsOn(
         typeof(AbpZeroCoreEntityFrameworkCoreModule),
+        typeof(AbpDapperModule),
         typeof(AdminCoreModule),
         typeof(AbpZeroCoreIdentityServerEntityFrameworkCoreModule)
         )]
@@ -67,7 +72,12 @@ namespace Magicodes.Admin.EntityFrameworkCore
             Configuration.CustomConfigProviders.Add(new EntityHistoryConfigProvider(Configuration));
         }
 
-        public override void Initialize() => IocManager.RegisterAssemblyByConvention(typeof(AdminEntityFrameworkCoreModule).GetAssembly());
+        public override void Initialize()
+        {
+            IocManager.RegisterAssemblyByConvention(typeof(AdminEntityFrameworkCoreModule).GetAssembly());
+            DapperExtensions.DapperExtensions.SetMappingAssemblies(new List<Assembly> { typeof(AdminEntityFrameworkCoreModule).GetAssembly() });
+            
+        }
 
         public override void PostInitialize()
         {

@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<localizationDictionary culture="zh-CN">
+  <texts>
+    <text name="InternalServerError">出现意外错误，请刷新或重试！</text>
+  </texts>
+</localizationDictionary>

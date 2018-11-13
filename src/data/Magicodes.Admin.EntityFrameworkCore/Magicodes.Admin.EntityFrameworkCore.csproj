@@ -9,6 +9,7 @@
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Abp.Dapper" Version="4.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.1.0" />

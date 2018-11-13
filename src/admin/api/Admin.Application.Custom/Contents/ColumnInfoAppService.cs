@@ -1,30 +1,27 @@
-﻿using System;
+﻿using Abp.Application.Services.Dto;
+using Abp.AspNetZeroCore.Net;
+using Abp.Authorization;
+using Abp.AutoMapper;
+using Abp.Dapper.Repositories;
+using Abp.Domain.Repositories;
+using Abp.Domain.Uow;
+using Abp.Extensions;
+using Abp.Linq.Extensions;
+using Abp.Runtime.Session;
+using Abp.Timing;
+using Abp.UI;
+using Admin.Application.Custom.Contents.Dto;
+using Magicodes.Admin.Authorization;
+using Magicodes.Admin.Core.Custom.Contents;
+using Magicodes.Admin.Dto;
+using Magicodes.Admin.Storage;
+using Magicodes.ExporterAndImporter.Core;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
-using Abp;
-using Abp.UI;
-using Abp.Extensions;
-using Abp.Linq.Extensions;
-using Abp.Domain.Repositories;
-using Abp.Application.Services.Dto;
-using Microsoft.EntityFrameworkCore;
-using Abp.Authorization;
-using Abp.AutoMapper;
-using Abp.Runtime.Session;
-using Abp.Timing;
-using Magicodes.Admin.Authorization;
-using Admin.Application.Custom.Contents.Dto;
-using Magicodes.Admin.Core.Custom.Contents;
-using Magicodes.ExporterAndImporter.Core;
-using Abp.AspNetZeroCore.Net;
-using Magicodes.Admin.Dto;
-using Abp.Domain.Uow;
-using Magicodes.Admin;
-using Magicodes.Admin.Storage;
 
 
 namespace Admin.Application.Custom.Contents
@@ -39,6 +36,7 @@ namespace Admin.Application.Custom.Contents
         private readonly IRepository<ColumnInfo, long> _columnInfoRepository;
         private readonly IExporter _excelExporter;
         private readonly ITempFileCacheManager _tempFileCacheManager;
+        private readonly IDapperRepository<ColumnInfo, long> _columnInfoDapperRepository;
 
         /// <summary>
         /// 
@@ -46,11 +44,13 @@ namespace Admin.Application.Custom.Contents
         public ColumnInfoAppService(
             IRepository<ColumnInfo, long> columnInfoRepository,
             IExporter excelExporter,
-            ITempFileCacheManager tempFileCacheManager) : base()
+            ITempFileCacheManager tempFileCacheManager,
+            IDapperRepository<ColumnInfo, long> columnInfoDapperRepository) : base()
         {
             _columnInfoRepository = columnInfoRepository;
             _excelExporter = excelExporter;
             _tempFileCacheManager = tempFileCacheManager;
+            _columnInfoDapperRepository = columnInfoDapperRepository;
         }
 
         /// <summary>
@@ -64,7 +64,9 @@ namespace Admin.Application.Custom.Contents
 
                 //仅加载已删除的数据
                 if (isLoadSoftDeleteData)
+                {
                     query = query.Where(p => p.IsDeleted);
+                }
 
                 var resultCount = await query.CountAsync();
                 var results = await query
@@ -100,7 +102,10 @@ namespace Admin.Application.Custom.Contents
 
                 var exportListDtos = results.MapTo<List<ColumnInfoExportDto>>();
                 if (exportListDtos.Count == 0)
+                {
                     throw new UserFriendlyException(L("NoDataToExport"));
+                }
+
                 return exportListDtos;
             }
 
@@ -122,6 +127,16 @@ namespace Admin.Application.Custom.Contents
             _tempFileCacheManager.SetFile(fileDto.FileToken, byteArray);
             return fileDto;
         }
+
+        /// <summary>
+        /// 删除所有
+        /// </summary>
+        /// <returns></returns>
+        public async Task DeleteAll()
+        {
+            await _columnInfoDapperRepository.ExecuteAsync("update ColumnInfos set IsDeleted = 1 where TenantId=@TenantId", new { AbpSession.TenantId });
+        }
+
 
         /// <summary>
         /// 
@@ -298,10 +313,7 @@ namespace Admin.Application.Custom.Contents
         /// <param name="input">输入参数</param>
         /// <returns></returns>
         [AbpAuthorize(AppPermissions.Pages_ColumnInfo_Edit)]
-        public async Task MoveTo(MoveToInputDto<long> input)
-        {
-            await base.MoveTo(_columnInfoRepository, input);
-        }
+        public async Task MoveTo(MoveToInputDto<long> input) => await base.MoveTo(_columnInfoRepository, input);
 
         /// <summary>
         /// IsActive开关服务
