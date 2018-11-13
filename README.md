@@ -89,6 +89,7 @@ http://demo.admin.xin-lai.com
 * **代码生成（后台服务、后台UI功能、多语言定义、权限定义、移动端服务）**
 * **一键部署（后台服务、前台服务、后台前端）**
 * **接口调用代码生成（nswag，后台前端和移动端前端）**
+* **支持Dapper，作为ORM辅助库**
 * **升级工具**
 * **配套项目/产品开发流程（<https://gitee.com/xl_wenqiang/xinlai_devprocess>）**
 
