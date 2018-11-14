@@ -142,3 +142,4 @@ src/admin/ui/webdeploy/deploy.dev.config
 documents/教程/教程.7z
 /build/appsettings.json
 src/admin/ui/dist.7z
+/build/localoutputs

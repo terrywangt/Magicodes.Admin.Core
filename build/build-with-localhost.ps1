@@ -1,25 +1,13 @@
 ﻿# 参数
 param(
-    # 配置文件
-    $configPath = "tencentyun.config",
-    # 用户名
-    $script:tsUserName = "",
-    # 密码
-    $script:tsPassword = "",
-    # Host镜像名称
-    $script:tsImageHostName = "",
-    # UI镜像名称
-    $script:tsImageUiName = "",
     # 不编译不执行打包
     $noBuild = $False,
     # 不创建Docker镜像（便于直接推送）
     $noCreateDocker = $False,
     # 调试模式，以输出配置参数
     $debug = $False,
-    #是否推送
-    $isPush = $True,
     #Host工程配置文件
-    $hostConfigFile="appsettings.json"
+    $hostConfigFile="appsettings.local.json"
 )
 
 # 路径变量
@@ -29,10 +17,9 @@ $invocation = (Get-Variable MyInvocation).Value
 $buildFolder = Split-Path $invocation.MyCommand.Path
 $slnFolder = [io.Directory]::GetParent($buildFolder);
 
-$outputFolder = Join-Path $buildFolder "tsoutputs"
+$outputFolder = Join-Path $buildFolder "localoutputs"
 $webHostFolder = Join-Path $slnFolder "src/admin/api/Admin.Host"
 $ngFolder = Join-Path $slnFolder "src/admin/ui"
-
 
 function LogDebug {
     param (
@@ -54,48 +41,11 @@ if($debug)
     Write-Host $outputFolder
 }
 
-# 设置参数
-function SetConfigFromFile {
-    if (![String]::IsNullOrEmpty($configPath)) {
-        Write-Host '从配置文件中获取配置'
-        $config = @{}
-        $path = [io.Path]::Combine($buildFolder, $configPath)
-        if (![io.File]::Exists($path)) {
-            $host.UI.WriteErrorLine('配置文件不存在，请定义！')
-            return;
-        }
-
-        Get-Content -Path $path |
-            Where-Object { $_ -like '*=*' } |
-            ForEach-Object {
-            $infos = $_ -split '='
-            $key = $infos[0].Trim()
-            $value = $infos[1].Trim()
-            $config.$key = $value
-        }
-
-        $script:tsUserName = $config.tsUserName;
-        $script:tsPassword = $config.tsPassword;
-        $script:tsImageHostName = $config.tsImageHostName;
-        $script:tsImageUiName = $config.tsImageUiName;
-        if($debug)
-        {
-            Write-Host $script:tsUserName
-            Write-Host $script:tsPassword
-            Write-Host $script:tsImageHostName
-            Write-Host $script:tsImageUiName
-            Write-Host $script:SqlConnectionString
-        }
-    }
-}
-
-
 ## 清理 ######################################################################
 function ClearOutputFolder {
     Remove-Item $outputFolder -Force -Recurse -ErrorAction Ignore
     New-Item -Path $outputFolder -ItemType Directory
 }
-
 
 ## 还原Nuget包 #####################################################
 function RestoreSlnFolder {
@@ -116,7 +66,7 @@ function PublishWebHostFolder {
         $configFilePath=Join-Path $buildFolder $hostConfigFile;
         if([io.File]::Exists($configFilePath))
         {
-            Copy-Item $configFilePath $hostOutputPath
+            Copy-Item $configFilePath (Join-Path $hostOutputPath "appsettings.json")
         }
     }
 }
@@ -125,16 +75,14 @@ function PublishWebHostFolder {
 function PublicNgFolder {
     Set-Location $ngFolder
     & yarn
-    & ng build --prod
+    & ng build --prod --configuration=hmr
     Copy-Item (Join-Path $ngFolder "dist") (Join-Path $outputFolder "ng/") -Recurse
     Copy-Item (Join-Path $ngFolder "Dockerfile") (Join-Path $outputFolder "ng")
-    # 复制nginx配置文件
-    Copy-Item (Join-Path $outputFolder "nginx.conf") (Join-Path $outputFolder "ng")
 
-    # # Change UI configuration
-    # $ngConfigPath = Join-Path $outputFolder "ng/assets/appconfig.json"
-    # (Get-Content $ngConfigPath) -replace "22742", "9901" | Set-Content $ngConfigPath
-    # (Get-Content $ngConfigPath) -replace "4200", "9902" | Set-Content $ngConfigPath
+    # Change UI configuration
+    $ngConfigPath = Join-Path $outputFolder "ng/assets/appconfig.json"
+    (Get-Content $ngConfigPath) -replace "22742", "9901" | Set-Content $ngConfigPath
+    (Get-Content $ngConfigPath) -replace "4200", "9902" | Set-Content $ngConfigPath
 
 }
 
@@ -150,6 +98,9 @@ function CreateDocker {
     # Angular UI
     Set-Location (Join-Path $outputFolder "ng")
 
+    # 复制nginx配置文件
+    Copy-Item (Join-Path $outputFolder "nginx.conf") (Join-Path $outputFolder "ng")
+
     ## docker rmi magicodes/ng -f
     docker build ./ -t ccr.ccs.tencentyun.com/magicodes/admin.ui
 }
@@ -161,20 +112,8 @@ function CopyDockerCompose {
     Set-Location $outputFolder
 }
 
-## 推送Docker文件
-function PushDockerImage {
-    Write-Host '准备推送...'
-    docker login --username $tsUserName --password $tsPassword ccr.ccs.tencentyun.com
-    Write-Host '已登录，正在推送...'
-
-    docker push $tsImageHostName
-    docker push $tsImageUiName
-}
-
 # 执行
 
-#从配置文件读取变量
-SetConfigFromFile
 #判断是否需要编译
 if (!$nobuild) {
     #清理输出目录
@@ -195,9 +134,10 @@ if(!$noCreateDocker)
     #创建Docker镜像
     CreateDocker
 }
-if($isPush)
-{
-    #推送Docker镜像
-    PushDockerImage
-}
+Set-Location $outputFolder
+docker-compose up -d
 Set-Location $buildFolder
+
+# 移除命令
+# cd ./localoutputs
+# docker-compose down -v --rmi local

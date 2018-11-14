@@ -18,6 +18,9 @@ Magicodes.Admin，是心莱科技团队打造的一套高效率、易扩展、�
 
 <img src="./res/activity.jpg" width="400" />
 
+## 开发日志
+https://gitee.com/xl_wenqiang/Magicodes.Admin.Core/commits/develop
+
 ## VNext
 
 * 拆分架构和仓库,以便更易于使用
