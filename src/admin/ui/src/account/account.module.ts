@@ -32,6 +32,7 @@ import { TenantRegistrationHelperService } from './register/tenant-registration-
 import { TenantChangeModalComponent } from './shared/tenant-change-modal.component';
 import { TenantChangeComponent } from './shared/tenant-change.component';
 import { OAuthModule } from 'angular-oauth2-oidc';
+import { SendWeChatCodeComponent } from './login/send-wechat-code.component';
 
 @NgModule({
     imports: [
@@ -67,7 +68,8 @@ import { OAuthModule } from 'angular-oauth2-oidc';
         BuyComponent,
         UpgradeOrExtendComponent,
         PaymentGatewaysComponent,
-        PayPalComponent
+        PayPalComponent,
+        SendWeChatCodeComponent
     ],
     providers: [
         LoginService,

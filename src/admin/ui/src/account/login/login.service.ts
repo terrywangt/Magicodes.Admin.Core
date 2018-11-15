@@ -16,6 +16,7 @@ import { OAuthService, AuthConfig } from 'angular-oauth2-oidc';
 declare const FB: any; // Facebook API
 declare const gapi: any; // Facebook API
 declare const WL: any; // Microsoft API
+declare const WxLogin: any; // Microsoft API
 
 export class ExternalLoginProvider extends ExternalLoginProviderInfoModel {
 
@@ -23,6 +24,7 @@ export class ExternalLoginProvider extends ExternalLoginProviderInfoModel {
     static readonly GOOGLE: string = 'Google';
     static readonly MICROSOFT: string = 'Microsoft';
     static readonly OPENID: string = 'OpenIdConnect';
+    static readonly WECHAT: string = 'WeChat';
 
     icon: string;
     initialized = false;
@@ -259,6 +261,11 @@ export class LoginService {
             const authConfig = this.getOpenIdConnectConfig(loginProvider);
             this.oauthService.configure(authConfig);
             this.oauthService.initImplicitFlow('openIdConnect=1');
+        } else if (loginProvider.name === ExternalLoginProvider.WECHAT) {
+            this._tokenAuthService.getWeChatAuthUrl("http://devdemo.xin-lai.com/account/send-wechat-code",undefined)
+            .subscribe((result) => {
+                window.location.href = result;
+            });
         }
     }
 

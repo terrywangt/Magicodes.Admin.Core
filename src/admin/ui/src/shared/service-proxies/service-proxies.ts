@@ -2971,6 +2971,55 @@ export class ColumnInfoServiceProxy {
     }
 
     /**
+     * 删除所有
+     * @return Success
+     */
+    deleteAll(): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/ColumnInfo/DeleteAll";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDeleteAll(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDeleteAll(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processDeleteAll(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+
+    /**
      * 获取栏目
      * @param id (optional) 
      * @return Success
@@ -10301,6 +10350,64 @@ export class TokenAuthServiceProxy {
     }
 
     /**
+     * @param url (optional) 
+     * @param state (optional) 
+     * @return Success
+     */
+    getWeChatAuthUrl(url: string | null | undefined, state: string | null | undefined): Observable<string> {
+        let url_ = this.baseUrl + "/api/TokenAuth/GetWeChatAuthUrl?";
+        if (url !== undefined)
+            url_ += "url=" + encodeURIComponent("" + url) + "&"; 
+        if (state !== undefined)
+            url_ += "state=" + encodeURIComponent("" + state) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetWeChatAuthUrl(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetWeChatAuthUrl(<any>response_);
+                } catch (e) {
+                    return <Observable<string>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<string>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetWeChatAuthUrl(response: HttpResponseBase): Observable<string> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<string>(<any>null);
+    }
+
+    /**
      * @param model (optional) 
      * @return Success
      */
@@ -10335,6 +10442,62 @@ export class TokenAuthServiceProxy {
     }
 
     protected processExternalAuthenticate(response: HttpResponseBase): Observable<ExternalAuthenticateResultModel> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? ExternalAuthenticateResultModel.fromJS(resultData200) : new ExternalAuthenticateResultModel();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ExternalAuthenticateResultModel>(<any>null);
+    }
+
+    /**
+     * @param model (optional) 
+     * @return Success
+     */
+    weChatAuthenticate(model: ExternalAuthenticateModel | null | undefined): Observable<ExternalAuthenticateResultModel> {
+        let url_ = this.baseUrl + "/api/TokenAuth/WeChatAuthenticate";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(model);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processWeChatAuthenticate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processWeChatAuthenticate(<any>response_);
+                } catch (e) {
+                    return <Observable<ExternalAuthenticateResultModel>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ExternalAuthenticateResultModel>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processWeChatAuthenticate(response: HttpResponseBase): Observable<ExternalAuthenticateResultModel> {
         const status = response.status;
         const responseBlob = 
             response instanceof HttpResponse ? response.body : 
@@ -14804,8 +14967,6 @@ export class ColumnInfo implements IColumnInfo {
     parentId!: number | undefined;
     /** 小图标 */
     iconCls!: string | undefined;
-    /** 封面 */
-    cover!: number | undefined;
     /** 链接 */
     url!: string | undefined;
     /** 栏目类型 */
@@ -14864,7 +15025,6 @@ export class ColumnInfo implements IColumnInfo {
             this.introduction = data["introduction"];
             this.parentId = data["parentId"];
             this.iconCls = data["iconCls"];
-            this.cover = data["cover"];
             this.url = data["url"];
             this.columnType = data["columnType"];
             this.maxItemCount = data["maxItemCount"];
@@ -14902,7 +15062,6 @@ export class ColumnInfo implements IColumnInfo {
         data["introduction"] = this.introduction;
         data["parentId"] = this.parentId;
         data["iconCls"] = this.iconCls;
-        data["cover"] = this.cover;
         data["url"] = this.url;
         data["columnType"] = this.columnType;
         data["maxItemCount"] = this.maxItemCount;
@@ -14941,8 +15100,6 @@ export interface IColumnInfo {
     parentId: number | undefined;
     /** 小图标 */
     iconCls: string | undefined;
-    /** 封面 */
-    cover: number | undefined;
     /** 链接 */
     url: string | undefined;
     /** 栏目类型 */

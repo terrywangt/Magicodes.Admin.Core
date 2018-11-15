@@ -857,5 +857,8 @@
     <text name="StaticArticleInfo_Tooltip">不能删除静态文章</text>
     <text name="ExceedTheMaxCount">超出栏目子项最大数量</text>
     <text name="ArticleTagInfo">文章标签</text>
+
+    <!--微信扫码支付-->
+    <text name="PleaseWaitToConfirmYourAuthenticate">请等待验证你的授权请求</text>
   </texts>
 </localizationDictionary>

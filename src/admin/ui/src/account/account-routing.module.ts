@@ -16,6 +16,7 @@ import { RegisterTenantResultComponent } from './register/register-tenant-result
 import { RegisterTenantComponent } from './register/register-tenant.component';
 import { RegisterComponent } from './register/register.component';
 import { SelectEditionComponent } from './register/select-edition.component';
+import { SendWeChatCodeComponent } from './login/send-wechat-code.component';
 
 @NgModule({
     imports: [
@@ -39,7 +40,8 @@ import { SelectEditionComponent } from './register/select-edition.component';
                     { path: 'buy', component: BuyComponent },
                     { path: 'extend', component: UpgradeOrExtendComponent },
                     { path: 'upgrade', component: UpgradeOrExtendComponent },
-                    { path: 'select-edition', component: SelectEditionComponent }
+                    { path: 'select-edition', component: SelectEditionComponent },
+                    { path: 'send-wechat-code', component: SendWeChatCodeComponent }
                 ]
             }
         ])

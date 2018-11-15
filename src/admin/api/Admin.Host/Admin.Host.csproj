@@ -38,6 +38,7 @@
   <ItemGroup>
     <PackageReference Include="Magicodes.Storage.Core" Version="2.0.1" />
     <PackageReference Include="Magicodes.Storage.Local.Core" Version="2.0.2" />
+    <PackageReference Include="Magicodes.WeChat.SDK.Core" Version="2.1.5" />
     <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.1.2" />
@@ -68,4 +69,5 @@
     <ProjectReference Include="..\Admin.Application\Admin.Application.csproj" />
     <ProjectReference Include="..\Admin.Web.Core\Admin.Web.Core.csproj" />
   </ItemGroup>
+  <ProjectExtensions><VisualStudio><UserProperties appsettings_1production_1json__JSONSchema="" appsettings_1Staging_1json__JSONSchema="" /></VisualStudio></ProjectExtensions>
 </Project>

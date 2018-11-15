@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Abp.AspNetZeroCore;
 using Abp.AspNetZeroCore.Web.Authentication.External;
 using Abp.AspNetZeroCore.Web.Authentication.External.Facebook;
@@ -20,8 +21,12 @@ using Abp.AspNetCore.Configuration;
 using Admin.Application.Custom;
 using Magicodes.Admin.Friendships;
 using Magicodes.Admin.Chat;
+using Magicodes.Admin.Web.Authentication.External;
+using Magicodes.Admin.Web.Configuration;
 using Magicodes.Unity;
 using Magicodes.Sms;
+using Magicodes.WeChat.SDK;
+using Magicodes.WeChat.SDK.Builder;
 
 namespace Magicodes.Admin.Web.Startup
 {
@@ -87,8 +92,10 @@ namespace Magicodes.Admin.Web.Startup
                 workManager.Add(IocManager.Resolve<SubscriptionExpirationCheckWorker>());
                 workManager.Add(IocManager.Resolve<SubscriptionExpireEmailNotifierWorker>());
             }
-            
+
             ConfigureExternalAuthProviders();
+
+            ConfigureWeChatSdk();
 
 
             IocManager.RegisterIfNot<IChatCommunicator, NullChatCommunicator>();
@@ -96,9 +103,39 @@ namespace Magicodes.Admin.Web.Startup
             IocManager.Resolve<ChatUserStateWatcher>().Initialize();
         }
 
+        private void ConfigureWeChatSdk()
+        {
+            WeChatSDKBuilder.Create()
+                .WithLoggerAction((tag, message) => { Console.WriteLine(string.Format("Tag:{0}\tMessage:{1}", tag, message)); })
+                .Register(WeChatFrameworkFuncTypes.GetKey, model => _appConfiguration["Authentication:WeChat:AppId"])
+                .Register(WeChatFrameworkFuncTypes.Config_GetWeChatConfigByKey,
+                    model =>
+                    {
+                        var arg = model as WeChatApiCallbackFuncArgInfo;
+                        return new WeChatConfig
+                        {
+                            AppId = _appConfiguration["Authentication:WeChat:AppId"],
+                            AppSecret = _appConfiguration["Authentication:WeChat:AppSecret"]
+                        };
+                    })
+                .Build();
+        }
+
         private void ConfigureExternalAuthProviders()
         {
             var externalAuthConfiguration = IocManager.Resolve<ExternalAuthConfiguration>();
+
+            if (bool.Parse(_appConfiguration["Authentication:WeChat:IsEnabled"]))
+            {
+                externalAuthConfiguration.Providers.Add(
+                    new ExternalLoginProviderInfo(
+                        WeChatAuthProviderApi.Name,
+                        _appConfiguration["Authentication:WeChat:AppId"],
+                        _appConfiguration["Authentication:WeChat:AppSecret"],
+                        typeof(WeChatAuthProviderApi)
+                    )
+                );
+            }
 
             if (bool.Parse(_appConfiguration["Authentication:OpenId:IsEnabled"]))
             {

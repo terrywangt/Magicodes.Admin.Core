@@ -69,6 +69,7 @@ export class LoginComponent extends AppComponentBase implements OnInit {
     }
 
     externalLogin(provider: ExternalLoginProvider) {
+        console.log(provider);
         this.loginService.externalAuthenticate(provider);
     }
 }

@@ -37,6 +37,9 @@ using Magicodes.Admin.Web.Models.TokenAuth;
 using Magicodes.Admin.Authorization.Impersonation;
 using Magicodes.Admin.Identity;
 using Magicodes.Admin.Notifications;
+using Magicodes.Admin.Web.Authentication.External;
+using Magicodes.WeChat.SDK.Apis.OAuth;
+using Magicodes.WeChat.SDK.Apis.Token;
 
 namespace Magicodes.Admin.Web.Controllers
 {
@@ -260,6 +263,15 @@ namespace Magicodes.Admin.Web.Controllers
             return ObjectMapper.Map<List<ExternalLoginProviderInfoModel>>(_externalAuthConfiguration.Providers);
         }
 
+
+        [HttpGet]
+        public Task<string> GetWeChatAuthUrl(string url, string state = "")
+        {
+            var oauthApi = new OAuthApi();
+            var result = oauthApi.GetScanCodeAuthorizeUrl(url, state,OAuthScopes.snsapi_login);
+            return Task.FromResult(result);
+        }
+
         [HttpPost]
         public async Task<ExternalAuthenticateResultModel> ExternalAuthenticate([FromBody] ExternalAuthenticateModel model)
         {
@@ -267,6 +279,77 @@ namespace Magicodes.Admin.Web.Controllers
 
             var loginResult = await _logInManager.LoginAsync(new UserLoginInfo(model.AuthProvider, model.ProviderKey, model.AuthProvider), GetTenancyNameOrNull());
 
+            switch (loginResult.Result)
+            {
+                case AbpLoginResultType.Success:
+                    {
+                        var accessToken = CreateAccessToken(await CreateJwtClaims(loginResult.Identity, loginResult.User));
+
+                        var returnUrl = model.ReturnUrl;
+
+                        if (model.SingleSignIn.HasValue && model.SingleSignIn.Value && loginResult.Result == AbpLoginResultType.Success)
+                        {
+                            loginResult.User.SetSignInToken();
+                            returnUrl = AddSingleSignInParametersToReturnUrl(model.ReturnUrl, loginResult.User.SignInToken, loginResult.User.Id, loginResult.User.TenantId);
+                        }
+
+                        return new ExternalAuthenticateResultModel
+                        {
+                            AccessToken = accessToken,
+                            EncryptedAccessToken = GetEncrpyedAccessToken(accessToken),
+                            ExpireInSeconds = (int)_configuration.Expiration.TotalSeconds,
+                            ReturnUrl = returnUrl
+                        };
+                    }
+                case AbpLoginResultType.UnknownExternalLogin:
+                    {
+                        var newUser = await RegisterExternalUserAsync(externalUser);
+                        if (!newUser.IsActive)
+                        {
+                            return new ExternalAuthenticateResultModel
+                            {
+                                WaitingForActivation = true
+                            };
+                        }
+
+                        //Try to login again with newly registered user!
+                        loginResult = await _logInManager.LoginAsync(new UserLoginInfo(model.AuthProvider, model.ProviderKey, model.AuthProvider), GetTenancyNameOrNull());
+                        if (loginResult.Result != AbpLoginResultType.Success)
+                        {
+                            throw _abpLoginResultTypeHelper.CreateExceptionForFailedLoginAttempt(
+                                loginResult.Result,
+                                model.ProviderKey,
+                                GetTenancyNameOrNull()
+                            );
+                        }
+
+                        var accessToken = CreateAccessToken(await CreateJwtClaims(loginResult.Identity, loginResult.User));
+                        return new ExternalAuthenticateResultModel
+                        {
+                            AccessToken = accessToken,
+                            EncryptedAccessToken = GetEncrpyedAccessToken(accessToken),
+                            ExpireInSeconds = (int)_configuration.Expiration.TotalSeconds
+                        };
+                    }
+                default:
+                    {
+                        throw _abpLoginResultTypeHelper.CreateExceptionForFailedLoginAttempt(
+                            loginResult.Result,
+                            model.ProviderKey,
+                            GetTenancyNameOrNull()
+                        );
+                    }
+            }
+        }
+
+        [HttpPost]
+        public async Task<ExternalAuthenticateResultModel> WeChatAuthenticate([FromBody] ExternalAuthenticateModel model)
+        {
+            var externalUser = await GetExternalUserInfo(model);
+            Logger.Info($"用户模型:{Newtonsoft.Json.JsonConvert.SerializeObject(externalUser)}");
+            Logger.Debug(Newtonsoft.Json.JsonConvert.SerializeObject(new UserLoginInfo(model.AuthProvider, externalUser.ProviderKey, model.AuthProvider) ) + GetTenancyNameOrNull());
+            var loginResult = await _logInManager.LoginAsync(new UserLoginInfo(model.AuthProvider, externalUser.ProviderKey, model.AuthProvider), GetTenancyNameOrNull());
+            Logger.Debug(loginResult.Result.ToString());
             switch (loginResult.Result)
             {
                 case AbpLoginResultType.Success:
@@ -382,10 +465,10 @@ namespace Magicodes.Admin.Web.Controllers
         private async Task<ExternalAuthUserInfo> GetExternalUserInfo(ExternalAuthenticateModel model)
         {
             var userInfo = await _externalAuthManager.GetUserInfo(model.AuthProvider, model.ProviderAccessCode);
-            if (userInfo.ProviderKey != model.ProviderKey)
-            {
-                throw new UserFriendlyException(L("CouldNotValidateExternalUser"));
-            }
+            //if (userInfo.ProviderKey != model.ProviderKey)
+            //{
+            //    throw new UserFriendlyException(L("CouldNotValidateExternalUser"));
+            //}
 
             return userInfo;
         }
