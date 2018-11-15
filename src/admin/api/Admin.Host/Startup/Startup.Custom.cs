@@ -12,7 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.IO;
-using ILoggerFactory = Microsoft.Extensions.Logging.ILoggerFactory;
+using Microsoft.Extensions.Logging;
 
 namespace Magicodes.Admin.Web.Startup
 {
@@ -24,6 +24,7 @@ namespace Magicodes.Admin.Web.Startup
         /// <param name="services"></param>
         partial void ConfigureCustomServices(IServiceCollection services)
         {
+            _logger.LogInformation($"IdentityServer:IsEnabled:{_appConfiguration["IdentityServer:IsEnabled"]}");
             //Identity server
             if (bool.Parse(_appConfiguration["IdentityServer:IsEnabled"]))
             {
@@ -32,7 +33,7 @@ namespace Magicodes.Admin.Web.Startup
 
             //添加自定义API文档生成(支持文档配置)
             services.AddCustomSwaggerGen(_appConfiguration, _hostingEnvironment);
-
+            _logger.LogInformation($"Abp:Hangfire:IsEnabled:{_appConfiguration["Abp:Hangfire:IsEnabled"]}");
             //仅在后台服务启用
             if (!_appConfiguration["Abp:Hangfire:IsEnabled"].IsNullOrEmpty() && Convert.ToBoolean(_appConfiguration["Abp:Hangfire:IsEnabled"]))
             {

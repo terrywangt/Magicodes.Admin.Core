@@ -18,8 +18,14 @@ param(
     $debug = $False,
     #是否推送
     $isPush = $True,
-    #Host工程配置文件
-    $hostConfigFile="appsettings.json"
+    #Host工程配置文件（存在即替换），用于Docker环境，建议传递自定义参数以便使用不同的配置来支持开发、测试和生成环境
+    $hostConfigFile="appsettings.json",
+    #Angular UI工程应用配置文件（存在即替换），用于Docker环境，建议传递自定义参数以便使用不同的配置来支持开发、测试和生成环境
+    $appConfigFile="appconfig.json",
+    #推送类型（ALL、HOST、NG）
+    $pushType="ALL",
+    #镜像版本
+    $script:imageVersion="latest"
 )
 
 # 路径变量
@@ -45,14 +51,11 @@ function LogDebug {
 }
 
 LogDebug $buildFolder
-
-if($debug)
-{
-    Write-Host $slnFolder
-    Write-Host $webHostFolder
-    Write-Host $ngFolder
-    Write-Host $outputFolder
-}
+LogDebug $slnFolder
+LogDebug $webHostFolder
+LogDebug $ngFolder
+LogDebug "outputFolder:$outputFolder"
+LogDebug "pushType:$pushType"
 
 # 设置参数
 function SetConfigFromFile {
@@ -78,13 +81,14 @@ function SetConfigFromFile {
         $script:tsPassword = $config.tsPassword;
         $script:tsImageHostName = $config.tsImageHostName;
         $script:tsImageUiName = $config.tsImageUiName;
+        $script:imageVersion= $config.imageVersion;
         if($debug)
         {
-            Write-Host $script:tsUserName
-            Write-Host $script:tsPassword
-            Write-Host $script:tsImageHostName
-            Write-Host $script:tsImageUiName
-            Write-Host $script:SqlConnectionString
+            LogDebug "tsUserName:$script:tsUserName"
+            LogDebug "tsPassword:$script:tsPassword"
+            LogDebug $script:tsImageHostName
+            LogDebug $script:tsImageUiName
+            LogDebug $script:SqlConnectionString
         }
     }
 }
@@ -117,6 +121,9 @@ function PublishWebHostFolder {
         if([io.File]::Exists($configFilePath))
         {
             Copy-Item $configFilePath $hostOutputPath
+            # Remove-Item  -Path (Join-Path $hostOutputPath "appsettings.production.json")
+            # Remove-Item  -Path (Join-Path $hostOutputPath "appsettings.Staging.json")
+            # Remove-Item  -Path (Join-Path $hostOutputPath "appsettings.development.json")
         }
     }
 }
@@ -125,50 +132,62 @@ function PublishWebHostFolder {
 function PublicNgFolder {
     Set-Location $ngFolder
     & yarn
-    & ng build --prod
+    & ng build --prod --configuration=production
     Copy-Item (Join-Path $ngFolder "dist") (Join-Path $outputFolder "ng/") -Recurse
     Copy-Item (Join-Path $ngFolder "Dockerfile") (Join-Path $outputFolder "ng")
+
+    Copy-Item (Join-Path $slnFolder "docker/tsng/*.*") $outputFolder
     # 复制nginx配置文件
     Copy-Item (Join-Path $outputFolder "nginx.conf") (Join-Path $outputFolder "ng")
+    Copy-Item (Join-Path $outputFolder "*.key") (Join-Path $outputFolder "ng")
+    Copy-Item (Join-Path $outputFolder "*.crt") (Join-Path $outputFolder "ng")
 
-    # # Change UI configuration
-    # $ngConfigPath = Join-Path $outputFolder "ng/assets/appconfig.json"
-    # (Get-Content $ngConfigPath) -replace "22742", "9901" | Set-Content $ngConfigPath
-    # (Get-Content $ngConfigPath) -replace "4200", "9902" | Set-Content $ngConfigPath
-
+    if(![String]::IsNullOrEmpty($appConfigFile))
+    {
+        $configFilePath=Join-Path $buildFolder $appConfigFile;
+        if([io.File]::Exists($configFilePath))
+        {
+            Copy-Item $configFilePath (Join-Path $outputFolder "ng/assets/appconfig.json")
+        }
+    }
 }
 
 
 ## 创建 DOCKER 镜像 #######################################################
 function CreateDocker {
-    # Host
-    Set-Location (Join-Path $outputFolder "Host")
 
-    ## docker rmi magicodes/host -f
-    docker build ./ -t ccr.ccs.tencentyun.com/magicodes/admin.host
+    if(($pushType -eq "ALL") -or ($pushType -eq "HOST"))
+    {
+        # Host
+        Set-Location (Join-Path $outputFolder "Host")
 
-    # Angular UI
-    Set-Location (Join-Path $outputFolder "ng")
+        # docker rmi magicodes/host -f
+        docker build ./ -t $tsImageHostName
+    }
+    if(($pushType -eq "ALL") -or  ($pushType -eq "NG"))
+    {
+        # Angular UI
+        Set-Location (Join-Path $outputFolder "ng")
 
-    ## docker rmi magicodes/ng -f
-    docker build ./ -t ccr.ccs.tencentyun.com/magicodes/admin.ui
+        # docker rmi ccr.ccs.tencentyun.com/magicodes/admin.ui -f
+        docker build ./ -t $tsImageUiName
+    }
 }
 
-
-## DOCKER COMPOSE 文件 #######################################################
-function CopyDockerCompose {
-    Copy-Item (Join-Path $slnFolder "docker/tsng/*.*") $outputFolder
-    Set-Location $outputFolder
-}
 
 ## 推送Docker文件
 function PushDockerImage {
     Write-Host '准备推送...'
     docker login --username $tsUserName --password $tsPassword ccr.ccs.tencentyun.com
     Write-Host '已登录，正在推送...'
-
-    docker push $tsImageHostName
-    docker push $tsImageUiName
+    if(($pushType -eq "ALL") -or ($pushType -eq "HOST"))
+    {
+        docker push "${tsImageHostName}:${imageVersion}"
+    }
+    if(($pushType -eq "ALL") -or ($pushType -eq "NG"))
+    {
+        docker push "${tsImageUiName}:${imageVersion}"
+    }
 }
 
 # 执行
@@ -179,25 +198,25 @@ SetConfigFromFile
 if (!$nobuild) {
     #清理输出目录
     ClearOutputFolder
-    #还原包
-    RestoreSlnFolder
-    #发布Host工程
-    PublishWebHostFolder
-    #发布Angular前端工程
-    PublicNgFolder
+    if(($pushType -eq "ALL") -or  ($pushType -eq "HOST"))
+    {
+        #还原包
+        RestoreSlnFolder
+        #发布Host工程
+        PublishWebHostFolder
+    }
+    if(($pushType -eq "ALL") -or  ($pushType -eq "NG"))
+    {
+        #发布Angular前端工程
+        PublicNgFolder
+    }
 }
 #判断是否需要创建Docker镜像
 if(!$noCreateDocker)
 {
-    #复制Docker Compose文件
-    CopyDockerCompose
-
     #创建Docker镜像
     CreateDocker
 }
-if($isPush)
-{
-    #推送Docker镜像
-    PushDockerImage
-}
+#推送Docker镜像
+PushDockerImage
 Set-Location $buildFolder

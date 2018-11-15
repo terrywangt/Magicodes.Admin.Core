@@ -20,21 +20,25 @@ using PaulMiami.AspNetCore.Mvc.Recaptcha;
 using System;
 using System.Linq;
 using Abp.Castle.Logging.NLog;
+using Microsoft.Extensions.Logging;
 using ILoggerFactory = Microsoft.Extensions.Logging.ILoggerFactory;
 
 namespace Magicodes.Admin.Web.Startup
 {
     public partial class Startup
     {
+        private readonly ILogger _logger;
         private const string DefaultCorsPolicyName = "localhost";
 
         private readonly IConfigurationRoot _appConfiguration;
         private readonly IHostingEnvironment _hostingEnvironment;
 
-        public Startup(IHostingEnvironment env)
+        public Startup(IHostingEnvironment env, ILogger<Startup> logger)
         {
             _hostingEnvironment = env;
             _appConfiguration = env.GetAppConfiguration();
+            _logger = logger;
+            _logger.LogInformation($"运行环境:{env.EnvironmentName}");
         }
 
         /// <summary>
@@ -81,12 +85,12 @@ namespace Magicodes.Admin.Web.Startup
 
             ConfigureCustomServices(services);
 
-            //Recaptcha
-            services.AddRecaptcha(new RecaptchaOptions
-            {
-                SiteKey = _appConfiguration["Recaptcha:SiteKey"],
-                SecretKey = _appConfiguration["Recaptcha:SecretKey"]
-            });
+            ////Recaptcha
+            //services.AddRecaptcha(new RecaptchaOptions
+            //{
+            //    SiteKey = _appConfiguration["Recaptcha:SiteKey"],
+            //    SecretKey = _appConfiguration["Recaptcha:SecretKey"]
+            //});
 
             //Configure Abp and Dependency Injection
             return services.AddAbp<AdminWebHostModule>(options =>
@@ -99,6 +103,7 @@ namespace Magicodes.Admin.Web.Startup
                     f =>
                     {
                         var logType = _appConfiguration["Abp:LogType"];
+                        _logger.LogInformation($"LogType:{logType}");
                         if (logType != null && logType == "NLog")
                         {
                             f.UseAbpNLog().WithConfig("nlog.config");
