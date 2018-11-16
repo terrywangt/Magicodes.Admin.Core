@@ -59,8 +59,6 @@ namespace Magicodes.Admin.Web
                 ConfigureTokenAuth();
             }
 
-            //Configuration.ReplaceService<IAppConfigurationAccessor, AppConfigurationAccessor>();
-
             //Uncomment this line to use Hangfire instead of default background job manager (remember also to uncomment related lines in Startup.cs file(s)).
             //Configuration.BackgroundJobs.UseHangfire();
 

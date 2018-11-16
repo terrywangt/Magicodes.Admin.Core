@@ -2,6 +2,7 @@ using Abp.AspNetCore;
 using Abp.AspNetCore.SignalR.Hubs;
 using Abp.AspNetZeroCore.Web.Authentication.JwtBearer;
 using Abp.Castle.Logging.Log4Net;
+using Abp.Castle.Logging.NLog;
 using Abp.Dependency;
 using Abp.Extensions;
 using Castle.Facilities.Logging;
@@ -16,11 +17,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Cors.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using PaulMiami.AspNetCore.Mvc.Recaptcha;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
-using Abp.Castle.Logging.NLog;
-using Microsoft.Extensions.Logging;
 using ILoggerFactory = Microsoft.Extensions.Logging.ILoggerFactory;
 
 namespace Magicodes.Admin.Web.Startup
@@ -57,7 +56,12 @@ namespace Magicodes.Admin.Web.Startup
                 options.Filters.Add(new CorsAuthorizationFilterFactory(DefaultCorsPolicyName));
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1); ;
 
-            services.AddSignalR(options => { options.EnableDetailedErrors = true; });
+            var sbuilder = services.AddSignalR(options => { options.EnableDetailedErrors = true; });
+
+            if (!_appConfiguration["Abp:SignalRRedisCache:ConnectionString"].IsNullOrWhiteSpace())
+            {
+                sbuilder.AddRedis(_appConfiguration["Abp:SignalRRedisCache:ConnectionString"]);
+            }
 
             //Configure CORS for angular2 UI
             services.AddCors(options =>
@@ -84,13 +88,6 @@ namespace Magicodes.Admin.Web.Startup
             AuthConfigurer.Configure(services, _appConfiguration);
 
             ConfigureCustomServices(services);
-
-            ////Recaptcha
-            //services.AddRecaptcha(new RecaptchaOptions
-            //{
-            //    SiteKey = _appConfiguration["Recaptcha:SiteKey"],
-            //    SecretKey = _appConfiguration["Recaptcha:SecretKey"]
-            //});
 
             //Configure Abp and Dependency Injection
             return services.AddAbp<AdminWebHostModule>(options =>

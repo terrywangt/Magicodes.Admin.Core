@@ -45,6 +45,10 @@ http://demo.admin.xin-lai.com
 * 账号：Admin
 * 密码：123456abcD
 
+也支持https:
+
+https://demoadmin.xin-lai.com
+
 ## 开发组件、套件、解决方案、理念
 
 目前框架中包含以下开发组件、套件、解决方案、理念：
