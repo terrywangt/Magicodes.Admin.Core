@@ -59,7 +59,7 @@ https://demoadmin.xin-lai.com
 * 组织机构
 * 多语言
 * 审计日志（操作审计和数据审计）
-* 缓存
+* 缓存管理（支持内存和Redis）
 * 日志（Log4net、**NLog**、**阿里云日志**）
 * 设置管理器
 * **短信服务（Magicodes.Sms）**
@@ -78,7 +78,12 @@ https://demoadmin.xin-lai.com
 * 数据筛选器（租户筛选器、软删除、是否激活）
 * **跨平台以及Docker支持（目前基于.NET Core 2.1）**
 * 通知系统
-* 即时消息（SignalR）
+* **支持通过配置文件配置Kestrel服务器（比如启用HTTPS，以便更好地支持Docker）**
+* **支持HTTPS重定向**
+* **支持HTTP严格传输安全协议(HSTS)**
+  * 在浏览器将会阻止通过 HTTP 发送的任何通信的域的配置存储。 在浏览器强制通过 HTTPS 进行的所有通信。
+  * 在浏览器可防止用户使用不受信任或无效的证书。 在浏览器禁用允许用户暂时信任此证书的提示。
+* **即时消息（SignalR）支持，并且支持Redis集群**
 * ORM和数据迁移(Entity Framework Core)
 * **通用导入导出（Magicodes.ExporterAndImporter）**
 * **通用存储（Magicodes.Storage，支持本地存储,阿里云存储,腾讯云存储）**

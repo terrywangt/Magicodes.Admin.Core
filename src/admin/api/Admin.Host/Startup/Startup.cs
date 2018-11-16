@@ -13,6 +13,7 @@ using Magicodes.Admin.Web.Chat.SignalR;
 using Magicodes.Admin.Web.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Cors.Internal;
 using Microsoft.Extensions.Configuration;
@@ -87,6 +88,30 @@ namespace Magicodes.Admin.Web.Startup
             IdentityRegistrar.Register(services);
             AuthConfigurer.Configure(services, _appConfiguration);
 
+            if (bool.Parse(_appConfiguration["App:HttpsRedirection"] ?? "false"))
+            {
+                //建议开启，以在浏览器显示安全图标
+                //设置https重定向端口
+                services.AddHttpsRedirection(options =>
+                {
+                    options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
+                    options.HttpsPort = 443;
+                });
+            }
+
+            //是否启用HTTP严格传输安全协议(HSTS)
+            if (bool.Parse(_appConfiguration["App:UseHsts"] ?? "false"))
+            {
+                //services.AddHsts(options =>
+                //{
+                //    options.Preload = true;
+                //    options.IncludeSubDomains = true;
+                //    options.MaxAge = TimeSpan.FromDays(60);
+                //    options.ExcludedHosts.Add("example.com");
+                //});
+            }
+
+
             ConfigureCustomServices(services);
 
             //Configure Abp and Dependency Injection
@@ -150,6 +175,18 @@ namespace Magicodes.Admin.Web.Startup
                 routes.MapHub<AbpCommonHub>("/signalr");
                 routes.MapHub<ChatHub>("/signalr-chat");
             });
+
+            if (bool.Parse(_appConfiguration["App:HttpsRedirection"] ?? "false"))
+            {
+                //建议开启，以在浏览器显示安全图标
+                app.UseHttpsRedirection();
+            }
+
+            //是否启用HTTP严格传输安全协议(HSTS)【开发环境关闭】
+            if (!env.IsDevelopment() && bool.Parse(_appConfiguration["App:UseHsts"] ?? "false"))
+            {
+                app.UseHsts();
+            }
 
             CustomConfigure(app, env, loggerFactory);
 

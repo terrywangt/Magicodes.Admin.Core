@@ -62,13 +62,15 @@ namespace Magicodes.Admin.Web
             //Uncomment this line to use Hangfire instead of default background job manager (remember also to uncomment related lines in Startup.cs file(s)).
             //Configuration.BackgroundJobs.UseHangfire();
 
-            //Uncomment this line to use Redis cache instead of in-memory cache.
-            //See app.config for Redis configuration and connection string
-            //Configuration.Caching.UseRedis(options =>
-            //{
-            //    options.ConnectionString = _appConfiguration["Abp:RedisCache:ConnectionString"];
-            //    options.DatabaseId = _appConfiguration.GetValue<int>("Abp:RedisCache:DatabaseId");
-            //});
+            //使用Redis缓存替换默认的内存缓存
+            if (_appConfiguration["Abp:RedisCache:ConnectionString:IsEnabled"] == "true")
+            {
+                Configuration.Caching.UseRedis(options =>
+                {
+                    options.ConnectionString = _appConfiguration["Abp:RedisCache:ConnectionString"];
+                    options.DatabaseId = _appConfiguration.GetValue<int>("Abp:RedisCache:DatabaseId");
+                });
+            }
 
             SetLocalizationFromWebRootXml(Path.Combine(_env.WebRootPath, $"Localization"));
         }
