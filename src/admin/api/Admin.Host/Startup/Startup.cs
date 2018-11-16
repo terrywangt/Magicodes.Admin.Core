@@ -2,6 +2,7 @@ using Abp.AspNetCore;
 using Abp.AspNetCore.SignalR.Hubs;
 using Abp.AspNetZeroCore.Web.Authentication.JwtBearer;
 using Abp.Castle.Logging.Log4Net;
+using Abp.Castle.Logging.NLog;
 using Abp.Dependency;
 using Abp.Extensions;
 using Castle.Facilities.Logging;
@@ -12,15 +13,14 @@ using Magicodes.Admin.Web.Chat.SignalR;
 using Magicodes.Admin.Web.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Cors.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using PaulMiami.AspNetCore.Mvc.Recaptcha;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
-using Abp.Castle.Logging.NLog;
-using Microsoft.Extensions.Logging;
 using ILoggerFactory = Microsoft.Extensions.Logging.ILoggerFactory;
 
 namespace Magicodes.Admin.Web.Startup
@@ -57,7 +57,12 @@ namespace Magicodes.Admin.Web.Startup
                 options.Filters.Add(new CorsAuthorizationFilterFactory(DefaultCorsPolicyName));
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1); ;
 
-            services.AddSignalR(options => { options.EnableDetailedErrors = true; });
+            var sbuilder = services.AddSignalR(options => { options.EnableDetailedErrors = true; });
+
+            if (!_appConfiguration["Abp:SignalRRedisCache:ConnectionString"].IsNullOrWhiteSpace())
+            {
+                sbuilder.AddRedis(_appConfiguration["Abp:SignalRRedisCache:ConnectionString"]);
+            }
 
             //Configure CORS for angular2 UI
             services.AddCors(options =>
@@ -83,14 +88,31 @@ namespace Magicodes.Admin.Web.Startup
             IdentityRegistrar.Register(services);
             AuthConfigurer.Configure(services, _appConfiguration);
 
-            ConfigureCustomServices(services);
+            if (bool.Parse(_appConfiguration["App:HttpsRedirection"] ?? "false"))
+            {
+                //建议开启，以在浏览器显示安全图标
+                //设置https重定向端口
+                services.AddHttpsRedirection(options =>
+                {
+                    options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
+                    options.HttpsPort = 443;
+                });
+            }
 
-            ////Recaptcha
-            //services.AddRecaptcha(new RecaptchaOptions
-            //{
-            //    SiteKey = _appConfiguration["Recaptcha:SiteKey"],
-            //    SecretKey = _appConfiguration["Recaptcha:SecretKey"]
-            //});
+            //是否启用HTTP严格传输安全协议(HSTS)
+            if (bool.Parse(_appConfiguration["App:UseHsts"] ?? "false"))
+            {
+                //services.AddHsts(options =>
+                //{
+                //    options.Preload = true;
+                //    options.IncludeSubDomains = true;
+                //    options.MaxAge = TimeSpan.FromDays(60);
+                //    options.ExcludedHosts.Add("example.com");
+                //});
+            }
+
+
+            ConfigureCustomServices(services);
 
             //Configure Abp and Dependency Injection
             return services.AddAbp<AdminWebHostModule>(options =>
@@ -153,6 +175,18 @@ namespace Magicodes.Admin.Web.Startup
                 routes.MapHub<AbpCommonHub>("/signalr");
                 routes.MapHub<ChatHub>("/signalr-chat");
             });
+
+            if (bool.Parse(_appConfiguration["App:HttpsRedirection"] ?? "false"))
+            {
+                //建议开启，以在浏览器显示安全图标
+                app.UseHttpsRedirection();
+            }
+
+            //是否启用HTTP严格传输安全协议(HSTS)【开发环境关闭】
+            if (!env.IsDevelopment() && bool.Parse(_appConfiguration["App:UseHsts"] ?? "false"))
+            {
+                app.UseHsts();
+            }
 
             CustomConfigure(app, env, loggerFactory);
 
