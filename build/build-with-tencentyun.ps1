@@ -50,10 +50,10 @@ function LogDebug {
     }
 }
 
-LogDebug $buildFolder
-LogDebug $slnFolder
-LogDebug $webHostFolder
-LogDebug $ngFolder
+LogDebug "buildFolder:$buildFolder"
+LogDebug "slnFolder:$slnFolder"
+LogDebug "webHostFolder:$webHostFolder"
+LogDebug "ngFolder:$ngFolder"
 LogDebug "outputFolder:$outputFolder"
 LogDebug "pushType:$pushType"
 
@@ -147,7 +147,7 @@ function PublicNgFolder {
         $configFilePath=Join-Path $buildFolder $appConfigFile;
         if([io.File]::Exists($configFilePath))
         {
-            Copy-Item $configFilePath (Join-Path $outputFolder "ng/assets/appconfig.json")
+            Copy-Item $configFilePath (Join-Path $outputFolder "ng/assets/appconfig.production.json")
         }
     }
 }
