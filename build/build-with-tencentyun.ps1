@@ -8,6 +8,8 @@ param(
     $script:tsPassword = "",
     # Host镜像名称
     $script:tsImageHostName = "",
+    # AppHost镜像名称
+    $script:tsImageAppHostName = "",
     # UI镜像名称
     $script:tsImageUiName = "",
     # 不编译不执行打包
@@ -22,7 +24,7 @@ param(
     $hostConfigFile="appsettings.json",
     #Angular UI工程应用配置文件（存在即替换），用于Docker环境，建议传递自定义参数以便使用不同的配置来支持开发、测试和生成环境
     $appConfigFile="appconfig.json",
-    #推送类型（ALL、HOST、NG）
+    #推送类型（ALL、HOST、APPHOST、NG）
     $pushType="ALL",
     #镜像版本
     $script:imageVersion="latest"
@@ -37,6 +39,7 @@ $slnFolder = [io.Directory]::GetParent($buildFolder);
 
 $outputFolder = Join-Path $buildFolder "tsoutputs"
 $webHostFolder = Join-Path $slnFolder "src/admin/api/Admin.Host"
+$appHostFolder = Join-Path $slnFolder "src/app/api/App.Host"
 $ngFolder = Join-Path $slnFolder "src/admin/ui"
 
 
@@ -53,6 +56,7 @@ function LogDebug {
 LogDebug "buildFolder:$buildFolder"
 LogDebug "slnFolder:$slnFolder"
 LogDebug "webHostFolder:$webHostFolder"
+LogDebug "appHostFolder:$appHostFolder"
 LogDebug "ngFolder:$ngFolder"
 LogDebug "outputFolder:$outputFolder"
 LogDebug "pushType:$pushType"
@@ -80,6 +84,7 @@ function SetConfigFromFile {
         $script:tsUserName = $config.tsUserName;
         $script:tsPassword = $config.tsPassword;
         $script:tsImageHostName = $config.tsImageHostName;
+        $script:tsImageAppHostName = $config.tsImageAppHostName;
         $script:tsImageUiName = $config.tsImageUiName;
         $script:imageVersion= $config.imageVersion;
         if($debug)
@@ -128,6 +133,24 @@ function PublishWebHostFolder {
     }
 }
 
+## 发布AppHost工程 ###################################################
+function PublishAppHostFolder {
+  Set-Location $appHostFolder
+  dotnet publish --output (Join-Path $outputFolder "AppHost")
+
+  $hostOutputPath = Join-Path $outputFolder "AppHost"
+
+#   if (![String]::IsNullOrEmpty($hostConfigFile)) {
+#     $configFilePath = Join-Path $buildFolder $hostConfigFile;
+#     if ([io.File]::Exists($configFilePath)) {
+#       Copy-Item $configFilePath $hostOutputPath
+#       # Remove-Item  -Path (Join-Path $hostOutputPath "appsettings.production.json")
+#       # Remove-Item  -Path (Join-Path $hostOutputPath "appsettings.Staging.json")
+#       # Remove-Item  -Path (Join-Path $hostOutputPath "appsettings.development.json")
+#     }
+#   }
+}
+
 ## 发布 ANGULAR UI 工程 #################################################
 function PublicNgFolder {
     Set-Location $ngFolder
@@ -164,6 +187,14 @@ function CreateDocker {
         # docker rmi magicodes/host -f
         docker build ./ -t $tsImageHostName
     }
+    if(($pushType -eq "ALL") -or ($pushType -eq "APPHOST"))
+    {
+        # AppHost
+        Set-Location (Join-Path $outputFolder "AppHost")
+
+        # docker rmi magicodes/apphost -f
+        docker build ./ -t $tsImageAppHostName
+    }
     if(($pushType -eq "ALL") -or  ($pushType -eq "NG"))
     {
         # Angular UI
@@ -183,6 +214,10 @@ function PushDockerImage {
     if(($pushType -eq "ALL") -or ($pushType -eq "HOST"))
     {
         docker push "${tsImageHostName}:${imageVersion}"
+    }
+    if(($pushType -eq "ALL") -or ($pushType -eq "APPHOST"))
+    {
+        docker push "${tsImageAppHostName}:${imageVersion}"
     }
     if(($pushType -eq "ALL") -or ($pushType -eq "NG"))
     {
@@ -204,6 +239,13 @@ if (!$nobuild) {
         RestoreSlnFolder
         #发布Host工程
         PublishWebHostFolder
+    }
+    if(($pushType -eq "ALL") -or  ($pushType -eq "APPHOST"))
+    {
+        #还原包
+        RestoreSlnFolder
+        #发布Host工程
+        PublishAppHostFolder
     }
     if(($pushType -eq "ALL") -or  ($pushType -eq "NG"))
     {
