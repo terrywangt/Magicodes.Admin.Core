@@ -29,13 +29,12 @@ https://gitee.com/xl_wenqiang/Magicodes.Admin.Core/commits/develop
 * 微服务架构支持
 * MySQL支持配置简化
 * Docker支持阿里云（目前已经支持腾讯云容器服务）
-* CMS加强
 * 小程序UI Demo
 * 更多解决方案和案例
 
 正在进行以下拆分：
 - 将App/UI迁移到 https://gitee.com/magicodes/Magicodes.App
-- 小程序框架将 在https://gitee.com/magicodes/Magicodes.Miniprogram 添加
+- 小程序UI框架将 在https://gitee.com/magicodes/Magicodes.Miniprogram 添加
 - 新版UI将在 https://gitee.com/magicodes/Magicodes.Admin.UI 搭建。
 
 ## Demo
@@ -63,6 +62,7 @@ http://demo.admin.xin-lai.com
 * **支付（Magicodes.Pay，微信、支付宝）**
 * **微信SDK（Magicodes.WeChat.SDK）**
 * **小程序SDK（Magicodes.WeChat.SDK）**
+* **微信扫码登录**
 * 通用异常处理
 * **领域驱动**
 * **依赖注入**
