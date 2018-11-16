@@ -262,7 +262,7 @@ export class LoginService {
             this.oauthService.configure(authConfig);
             this.oauthService.initImplicitFlow('openIdConnect=1');
         } else if (loginProvider.name === ExternalLoginProvider.WECHAT) {
-            this._tokenAuthService.getWeChatAuthUrl("http://devdemo.xin-lai.com/account/send-wechat-code",undefined)
+            this._tokenAuthService.getWeChatAuthUrl("http://demo.admin.xin-lai.com/account/send-wechat-code",undefined)
             .subscribe((result) => {
                 window.location.href = result;
             });
