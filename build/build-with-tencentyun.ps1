@@ -26,6 +26,8 @@ param(
     $appConfigFile="appconfig.json",
     #推送类型（ALL、HOST、APPHOST、NG）
     $pushType="ALL",
+    #是否执行单元测试
+    $runTest=$False,
     #镜像版本
     $script:imageVersion="latest"
 )
@@ -41,7 +43,6 @@ $outputFolder = Join-Path $buildFolder "tsoutputs"
 $webHostFolder = Join-Path $slnFolder "src/admin/api/Admin.Host"
 $appHostFolder = Join-Path $slnFolder "src/app/api/App.Host"
 $ngFolder = Join-Path $slnFolder "src/admin/ui"
-
 
 function LogDebug {
     param (
@@ -115,8 +116,30 @@ function RestoreSlnFolder {
 
 ## 发布Host工程 ###################################################
 function PublishWebHostFolder {
+    if($runTest -eq $True)
+    {
+        LogDebug "正在执行单元测试"
+        Set-Location (Join-Path $slnFolder "src/admin/api/Admin.Tests")
+        # 执行单元测试
+        # Start-Process -FilePath powershell -ArgumentList "dotnet test" -PassThru -ErrorAction Stop
+       dotnet test
+       if($lastexitcode -eq 1)
+       {
+            Write-Warning "单元测试运行失败，已终止！"
+            Set-Location $buildFolder
+            exit;
+       }
+        # Write-Host $lastexitcode
+    }
     Set-Location $webHostFolder
+
     dotnet publish --output (Join-Path $outputFolder "Host")
+    if($lastexitcode -eq 1)
+    {
+        Write-Warning "部署失败，已终止！"
+        Set-Location $buildFolder
+        exit;
+    }
 
     $hostOutputPath = Join-Path $outputFolder "Host"
 
