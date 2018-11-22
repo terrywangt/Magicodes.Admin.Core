@@ -125,7 +125,7 @@ function PublishWebHostFolder {
        dotnet test
        if($lastexitcode -eq 1)
        {
-            Write-Warning "单元测试运行失败，已终止！"
+            Write-Error "单元测试运行失败，已终止！"
             Set-Location $buildFolder
             exit;
        }
@@ -136,7 +136,7 @@ function PublishWebHostFolder {
     dotnet publish --output (Join-Path $outputFolder "Host")
     if($lastexitcode -eq 1)
     {
-        Write-Warning "部署失败，已终止！"
+        Write-Error "部署失败，已终止！"
         Set-Location $buildFolder
         exit;
     }
@@ -207,7 +207,7 @@ function CreateDocker {
         # Host
         Set-Location (Join-Path $outputFolder "Host")
 
-        # docker rmi magicodes/host -f
+        # docker rmi $tsImageHostName -f
         docker build ./ -t $tsImageHostName
     }
     if(($pushType -eq "ALL") -or ($pushType -eq "APPHOST"))
@@ -215,7 +215,7 @@ function CreateDocker {
         # AppHost
         Set-Location (Join-Path $outputFolder "AppHost")
 
-        # docker rmi magicodes/apphost -f
+        # docker rmi $tsImageAppHostName -f
         docker build ./ -t $tsImageAppHostName
     }
     if(($pushType -eq "ALL") -or  ($pushType -eq "NG"))
@@ -223,7 +223,7 @@ function CreateDocker {
         # Angular UI
         Set-Location (Join-Path $outputFolder "ng")
 
-        # docker rmi ccr.ccs.tencentyun.com/magicodes/admin.ui -f
+        # docker rmi $tsImageUiName -f
         docker build ./ -t $tsImageUiName
     }
 }
