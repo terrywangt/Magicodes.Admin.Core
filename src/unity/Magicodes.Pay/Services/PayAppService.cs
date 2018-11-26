@@ -30,6 +30,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Threading.Tasks;
+using Magicodes.Alipay.Global;
 using AppPayOutput = Magicodes.Pay.WeChat.Pay.Dto.AppPayOutput;
 
 namespace Magicodes.Pay.Services
@@ -53,6 +54,8 @@ namespace Magicodes.Pay.Services
         public WeChatPayApi WeChatPayApi { get; set; }
 
         public IAlipayAppService AlipayAppService { get; set; }
+
+        public IGlobalAlipayAppService GlobalAlipayAppService { get; set; }
 
         private readonly TransactionLogHelper _transactionLogHelper;
 
@@ -91,6 +94,7 @@ namespace Magicodes.Pay.Services
             {
                 exception = ex;
             }
+            //创建交易日志
             await CreateToPayTransactionInfo(input, exception);
             if (exception != null)
             {
@@ -123,6 +127,36 @@ namespace Magicodes.Pay.Services
             {
                 var appPayOutput = await AlipayAppService.AppPay(appPayInput);
                 return appPayOutput.Response.Body;
+            }
+            catch (Exception ex)
+            {
+                throw new UserFriendlyException(ex.Message);
+            }
+        }
+
+        /// <summary>
+        ///     支付宝APP支付
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [HttpPost("AppPay/GlobalAlipay")]
+        public async Task<PayOutput> GlobalAlipay(AppPayInput input)
+        {
+            if (GlobalAlipayAppService == null)
+            {
+                throw new UserFriendlyException("支付未开放，请联系管理员！");
+            }
+            var payInput = new Alipay.Global.Dto.PayInput
+            {
+                Body = input.Body,
+                Subject = input.Subject,
+                TradeNo = input.OutTradeNo,
+                //PassbackParams = input.CustomData,
+                TotalFee = input.TotalAmount,
+            };
+            try
+            {
+                return await GlobalAlipayAppService.Pay(payInput);
             }
             catch (Exception ex)
             {

@@ -18,6 +18,11 @@
         /// <summary>
         /// 余额支付
         /// </summary>
-        BalancePay = 2
+        BalancePay = 2,
+
+        /// <summary>
+        /// 国际支付宝
+        /// </summary>
+        GlobalAlipay = 3
     }
 }

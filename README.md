@@ -62,16 +62,16 @@ https://demoadmin.xin-lai.com
 * 缓存管理（支持内存和Redis）
 * 日志（Log4net、**NLog**、**阿里云日志**）
 * 设置管理器
-* **短信服务（Magicodes.Sms）**
-* **支付（Magicodes.Pay，微信、支付宝）**
-* **微信SDK（Magicodes.WeChat.SDK）**
-* **小程序SDK（Magicodes.WeChat.SDK）**
-* **微信扫码登录**
+* **短信服务（Magicodes.Sms【https://github.com/xin-lai/Magicodes.Sms】）**
+* **支付（使用Magicodes.Pay【https://github.com/xin-lai/Magicodes.Pay】，微信、支付宝、国际支付宝）**
+* **微信SDK（Magicodes.WeChat.SDK【https://github.com/xin-lai/Magicodes.WeChat.SDK】）**
+* **小程序SDK（Magicodes.WeChat.SDK【https://github.com/xin-lai/Magicodes.WeChat.SDK】）**
+* **微信扫码登录（Magicodes.WeChat.SDK【https://github.com/xin-lai/Magicodes.WeChat.SDK】）**
 * 通用异常处理
 * **领域驱动**
 * **依赖注入**
 * **接口权限以及授权**
-* **在线接口文档（Magicodes.SwaggerUI+Swagger UI）**
+* **在线接口文档（Magicodes.SwaggerUI+Swagger UI【https://github.com/xin-lai/Magicodes.SwaggerUI】）**
 * 数据验证
 * 调度任务（Quartz）
 * 后台任务（Hangfire）
@@ -85,9 +85,9 @@ https://demoadmin.xin-lai.com
   * 在浏览器可防止用户使用不受信任或无效的证书。 在浏览器禁用允许用户暂时信任此证书的提示。
 * **即时消息（SignalR）支持，并且支持Redis集群**
 * ORM和数据迁移(Entity Framework Core)
-* **通用导入导出（Magicodes.ExporterAndImporter）**
-* **通用存储（Magicodes.Storage，支持本地存储,阿里云存储,腾讯云存储）**
-* 全国行政区域抓取和初始化（Magicodes.Districts）
+* **通用导入导出（Magicodes.ExporterAndImporter【https://github.com/xin-lai/Magicodes.ExporterAndImporter】）**
+* **通用存储（Magicodes.Storage，支持本地存储,阿里云存储,腾讯云存储【https://github.com/xin-lai/Magicodes.Storage】）**
+* 全国行政区域抓取和初始化（Magicodes.Districts【https://github.com/xin-lai/Magicodes.Districts】）
 * **移动端统一开发解决方案和模板（Angular+Ionic）**
 * 前后端分离
 * **后台前端解决方案和UI（Angular、primeng、bootstrap）**

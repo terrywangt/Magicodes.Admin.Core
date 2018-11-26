@@ -65,6 +65,26 @@ namespace Magicodes.Pay.Log
         public IAbpSession AbpSession { get; set; }
 
         /// <summary>
+        /// 根据交易单号获取自定义数据
+        /// </summary>
+        /// <param name="outTradeNo"></param>
+        /// <returns></returns>
+        public string GetCustomDataByOutTradeNo(string outTradeNo) => GetTransactionLogByOutTradeNo(outTradeNo)?.CustomData;
+
+        /// <summary>
+        /// 根据交易单号获取交易日志信息
+        /// </summary>
+        /// <param name="outTradeNo"></param>
+        /// <returns></returns>
+        public TransactionLog GetTransactionLogByOutTradeNo(string outTradeNo)
+        {
+            using (var uow = _unitOfWorkManager.Begin(TransactionScopeOption.Suppress))
+            {
+                return _transactionLogRepository.FirstOrDefault(p => p.OutTradeNo == outTradeNo);
+            }
+        }
+
+        /// <summary>
         ///     创建交易日志
         /// </summary>
         /// <param name="transactionInfo"></param>
@@ -139,6 +159,12 @@ namespace Magicodes.Pay.Log
                 if (logInfo == null)
                 {
                     Logger.Error("交易订单号为 " + outTradeNo + " 不存在！");
+                    return;
+                }
+
+                if (logInfo.TransactionState == TransactionStates.Success && logInfo.PayTime.HasValue)
+                {
+                    Logger.Error($"outTradeNo: {outTradeNo} ，transactionId：{transactionId} 的订单已经完成了交易，请不要重新发起操作！");
                     return;
                 }
                 try

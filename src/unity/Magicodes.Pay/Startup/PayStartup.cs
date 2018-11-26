@@ -24,6 +24,8 @@ using Castle.Core.Logging;
 using Magicodes.Admin.Configuration;
 using Magicodes.Alipay;
 using Magicodes.Alipay.Builder;
+using Magicodes.Alipay.Global;
+using Magicodes.Pay.Log;
 using Magicodes.Pay.PaymentCallbacks;
 using Magicodes.Pay.WeChat;
 using Magicodes.Pay.WeChat.Builder;
@@ -40,7 +42,7 @@ namespace Magicodes.Pay.Startup
     public class PayStartup
     {
         /// <summary>
-        ///     配置微信小程序
+        ///     配置微信、小程序、支付
         /// </summary>
         public static async Task ConfigAsync(ILogger logger, IIocManager iocManager, IConfigurationRoot config, ISettingManager settingManager)
         {
@@ -59,43 +61,29 @@ namespace Magicodes.Pay.Startup
 
             #region 支付配置
 
-            #region 微信支付
+            var weChatPayConfig = await WeChatPayConfig(LogAction, iocManager, config, settingManager);
+            var alipaySettings = await AlipayConfig(LogAction, iocManager, config, settingManager);
 
-            WeChatPayConfig weChatPayConfig = null;
-
-            if (Convert.ToBoolean(await settingManager.GetSettingValueAsync(AppSettings.WeChatPayManagement.IsActive)))
+            #region 支付回调配置
+            if (weChatPayConfig != null || alipaySettings != null)
             {
-                weChatPayConfig = new WeChatPayConfig()
-                {
-                    PayAppId = await settingManager.GetSettingValueAsync(AppSettings.WeChatPayManagement.AppId),
-                    MchId = await settingManager.GetSettingValueAsync(AppSettings.WeChatPayManagement.MchId),
-                    PayNotifyUrl = await settingManager.GetSettingValueAsync(AppSettings.WeChatPayManagement.PayNotifyUrl),
-                    TenPayKey = await settingManager.GetSettingValueAsync(AppSettings.WeChatPayManagement.TenPayKey),
-                };
-            }
-            else if (!config["WeChat:Pay:IsEnabled"].IsNullOrWhiteSpace() && Convert.ToBoolean(config["WeChat:Pay:IsEnabled"]))
-            {
-                weChatPayConfig = new WeChatPayConfig
-                {
-                    MchId = config["WeChat:Pay:MchId"],
-                    PayNotifyUrl = config["WeChat:Pay:NotifyUrl"],
-                    TenPayKey = config["WeChat:Pay:TenPayKey"],
-                    PayAppId = config["WeChat:Pay:AppId"]
-                };
-            }
-            if (weChatPayConfig != null)
-            {
-                //微信支付配置
-                WeChatPayBuilder.Create()
-                    //设置日志记录
-                    .WithLoggerAction(LogAction)
-                    .RegisterGetPayConfigFunc(() => weChatPayConfig).Build();
-
-                //注册微信支付API
-                iocManager.Register<WeChatPayApi>(DependencyLifeStyle.Transient);
+                PayNotifyConfig(LogAction, iocManager);
             }
             #endregion
 
+            #endregion
+        }
+
+        /// <summary>
+        /// 支付宝支付配置
+        /// </summary>
+        /// <param name="logAction"></param>
+        /// <param name="iocManager"></param>
+        /// <param name="config"></param>
+        /// <param name="settingManager"></param>
+        /// <returns></returns>
+        private static async Task<AlipaySettings> AlipayConfig(Action<string, string> logAction, IIocManager iocManager, IConfigurationRoot config, ISettingManager settingManager)
+        {
             #region 支付宝支付
             AlipaySettings alipaySettings = null;
             if (Convert.ToBoolean(await settingManager.GetSettingValueAsync(AppSettings.AliPayManagement.IsActive)))
@@ -159,97 +147,182 @@ namespace Magicodes.Pay.Startup
             if (alipaySettings != null)
             {
                 AlipayBuilder.Create()
-                    .WithLoggerAction(LogAction)
+                    .WithLoggerAction(logAction)
                     .RegisterGetPayConfigFunc(() => alipaySettings).Build();
 
                 //注册支付宝支付API
                 iocManager.Register<IAlipayAppService, AlipayAppService>(DependencyLifeStyle.Transient);
             }
             #endregion
+            return alipaySettings;
+        }
 
-            #region 支付回调配置
-            if (weChatPayConfig != null || alipaySettings != null)
+        /// <summary>
+        /// 微信支付配置
+        /// </summary>
+        /// <param name="logAction"></param>
+        /// <param name="iocManager"></param>
+        /// <param name="config"></param>
+        /// <param name="settingManager"></param>
+        /// <returns></returns>
+        private static async Task<WeChatPayConfig> WeChatPayConfig(Action<string, string> logAction, IIocManager iocManager, IConfigurationRoot config, ISettingManager settingManager)
+        {
+            #region 微信支付
+
+            WeChatPayConfig weChatPayConfig = null;
+
+            if (Convert.ToBoolean(await settingManager.GetSettingValueAsync(AppSettings.WeChatPayManagement.IsActive)))
             {
-                void PayAction(string key, string outTradeNo, string transactionId, int totalFee, JObject data)
+                weChatPayConfig = new WeChatPayConfig()
                 {
-                    using (var paymentCallbackManagerObj = iocManager.ResolveAsDisposable<PaymentCallbackManager>())
-                    {
-                        var paymentCallbackManager = paymentCallbackManagerObj?.Object;
-                        if (paymentCallbackManager == null)
-                        {
-                            throw new ApplicationException("支付回调管理器异常，无法执行回调！");
-                        }
-                        AsyncHelper.RunSync(async () => await paymentCallbackManager.ExecuteCallback(key, outTradeNo, transactionId, totalFee, data));
-                    }
-                }
-
-                //支付回调设置
-                PayNotifyBuilder
-                    .Create()
+                    PayAppId = await settingManager.GetSettingValueAsync(AppSettings.WeChatPayManagement.AppId),
+                    MchId = await settingManager.GetSettingValueAsync(AppSettings.WeChatPayManagement.MchId),
+                    PayNotifyUrl = await settingManager.GetSettingValueAsync(AppSettings.WeChatPayManagement.PayNotifyUrl),
+                    TenPayKey = await settingManager.GetSettingValueAsync(AppSettings.WeChatPayManagement.TenPayKey),
+                };
+            }
+            else if (!config["WeChat:Pay:IsEnabled"].IsNullOrWhiteSpace() && Convert.ToBoolean(config["WeChat:Pay:IsEnabled"]))
+            {
+                weChatPayConfig = new WeChatPayConfig
+                {
+                    MchId = config["WeChat:Pay:MchId"],
+                    PayNotifyUrl = config["WeChat:Pay:NotifyUrl"],
+                    TenPayKey = config["WeChat:Pay:TenPayKey"],
+                    PayAppId = config["WeChat:Pay:AppId"]
+                };
+            }
+            if (weChatPayConfig != null)
+            {
+                //微信支付配置
+                WeChatPayBuilder.Create()
                     //设置日志记录
-                    .WithLoggerAction(LogAction).WithPayNotifyFunc(input =>
+                    .WithLoggerAction(logAction)
+                    .RegisterGetPayConfigFunc(() => weChatPayConfig).Build();
+
+                //注册微信支付API
+                iocManager.Register<WeChatPayApi>(DependencyLifeStyle.Transient);
+            }
+            #endregion
+            return weChatPayConfig;
+        }
+
+        /// <summary>
+        /// 支付回调配置
+        /// </summary>
+        /// <param name="logAction"></param>
+        /// <param name="iocManager"></param>
+        private static void PayNotifyConfig(Action<string, string> logAction, IIocManager iocManager)
+        {
+            void PayAction(string key, string outTradeNo, string transactionId, int totalFee, JObject data)
+            {
+                using (var paymentCallbackManagerObj = iocManager.ResolveAsDisposable<PaymentCallbackManager>())
+                {
+                    var paymentCallbackManager = paymentCallbackManagerObj?.Object;
+                    if (paymentCallbackManager == null)
                     {
-                        switch (input.Provider)
-                        {
-                            case "wechat":
-                                {
-                                    using (var obj = iocManager.ResolveAsDisposable<WeChatPayApi>())
-                                    {
-                                        var api = obj.Object;
-                                        return api.PayNotifyHandler(input.Request.Body, (output, error) =>
-                                        {
-                                            //获取微信支付自定义数据
-                                            if (string.IsNullOrWhiteSpace(output.Attach))
-                                            {
-                                                throw new UserFriendlyException("自定义参数不允许为空！");
-                                            }
+                        throw new ApplicationException("支付回调管理器异常，无法执行回调！");
+                    }
+                    AsyncHelper.RunSync(async () => await paymentCallbackManager.ExecuteCallback(key, outTradeNo, transactionId, totalFee, data));
+                }
+            }
 
-                                            var data = JsonConvert.DeserializeObject<JObject>(output.Attach);
-                                            var key = data["key"]?.ToString();
-                                            var outTradeNo = output.OutTradeNo;
-                                            var totalFee = int.Parse(output.TotalFee);
-                                            PayAction(key, outTradeNo, output.TransactionId, totalFee, data);
-                                        });
-                                    }
 
-                                }
-                            case "alipay":
+            //支付回调设置
+            PayNotifyBuilder
+                .Create()
+                //设置日志记录
+                .WithLoggerAction(logAction).WithPayNotifyFunc(input =>
+                {
+                    switch (input.Provider)
+                    {
+                        case "wechat":
+                            {
+                                using (var obj = iocManager.ResolveAsDisposable<WeChatPayApi>())
                                 {
-                                    using (var obj = iocManager.ResolveAsDisposable<IAlipayAppService>())
+                                    var api = obj.Object;
+                                    return api.PayNotifyHandler(input.Request.Body, (output, error) =>
                                     {
-                                        var api = obj.Object;
-                                        
-                                        var dictionary = input.Request.Form.ToDictionary(p => p.Key, p2 => p2.Value.FirstOrDefault()?.ToString());
-                                        //签名校验
-                                        if (!api.PayNotifyHandler(dictionary))
-                                        {
-                                            throw new UserFriendlyException("支付宝支付签名错误！");
-                                        }
-                                        var outTradeNo = input.Request.Form["out_trade_no"];
-                                        var tradeNo = input.Request.Form["trade_no"];
-                                        var charset = input.Request.Form["charset"];
-                                        var totalFee = (int)(decimal.Parse(input.Request.Form["total_fee"]) * 100);
-                                        var businessParams = input.Request.Form["business_params"];
-                                        if (string.IsNullOrWhiteSpace(businessParams))
+                                        //获取微信支付自定义数据
+                                        if (string.IsNullOrWhiteSpace(output.Attach))
                                         {
                                             throw new UserFriendlyException("自定义参数不允许为空！");
                                         }
-                                        var data = JsonConvert.DeserializeObject<JObject>(businessParams);
+
+                                        var data = JsonConvert.DeserializeObject<JObject>(output.Attach);
+                                        var key = data["key"]?.ToString();
+                                        var outTradeNo = output.OutTradeNo;
+                                        var totalFee = int.Parse(output.TotalFee);
+                                        PayAction(key, outTradeNo, output.TransactionId, totalFee, data);
+                                    });
+                                }
+
+                            }
+                        case "alipay":
+                            {
+                                using (var obj = iocManager.ResolveAsDisposable<IAlipayAppService>())
+                                {
+                                    var api = obj.Object;
+
+                                    var dictionary = input.Request.Form.ToDictionary(p => p.Key, p2 => p2.Value.FirstOrDefault()?.ToString());
+                                    //签名校验
+                                    if (!api.PayNotifyHandler(dictionary))
+                                    {
+                                        throw new UserFriendlyException("支付宝支付签名错误！");
+                                    }
+                                    var outTradeNo = input.Request.Form["out_trade_no"];
+                                    var tradeNo = input.Request.Form["trade_no"];
+                                    var charset = input.Request.Form["charset"];
+                                    var totalFee = (int)(decimal.Parse(input.Request.Form["total_fee"]) * 100);
+                                    var businessParams = input.Request.Form["business_params"];
+                                    if (string.IsNullOrWhiteSpace(businessParams))
+                                    {
+                                        throw new UserFriendlyException("自定义参数不允许为空！");
+                                    }
+                                    var data = JsonConvert.DeserializeObject<JObject>(businessParams);
+                                    var key = data["key"]?.ToString();
+                                    PayAction(key, outTradeNo, tradeNo, totalFee, data);
+                                    return Task.FromResult("success");
+                                }
+                            }
+                        //国际支付宝
+                        case "global.alipay":
+                            {
+                                using (var obj = iocManager.ResolveAsDisposable<IGlobalAlipayAppService>())
+                                {
+                                    var api = obj.Object;
+
+                                    var dictionary = input.Request.Form.ToDictionary(p => p.Key, p2 => p2.Value.FirstOrDefault()?.ToString());
+                                    //签名校验
+                                    if (!api.PayNotifyHandler(dictionary))
+                                    {
+                                        throw new UserFriendlyException("支付宝支付签名错误！");
+                                    }
+                                    var outTradeNo = input.Request.Form["out_trade_no"];
+                                    var tradeNo = input.Request.Form["trade_no"];
+                                    var charset = input.Request.Form["charset"];
+                                    var totalFee = (int)(Convert.ToDecimal(input.Request.Form["total_fee"]) * 100);
+                                    //交易状态
+                                    string tradeStatus = input.Request.Form["trade_status"];
+                                    using (var transactionLogHelperObj = iocManager.ResolveAsDisposable<TransactionLogHelper>())
+                                    {
+                                        var customData = transactionLogHelperObj.Object.GetCustomDataByOutTradeNo(outTradeNo);
+                                        if (string.IsNullOrWhiteSpace(customData))
+                                        {
+                                            throw new UserFriendlyException("自定义参数不允许为空！");
+                                        }
+                                        var data = JsonConvert.DeserializeObject<JObject>(customData);
                                         var key = data["key"]?.ToString();
                                         PayAction(key, outTradeNo, tradeNo, totalFee, data);
-                                        return Task.FromResult("success");
                                     }
+                                    return Task.FromResult("success");
                                 }
-                            default:
-                                break;
-                        }
+                            }
+                        default:
+                            break;
+                    }
 
-                        return null;
-                    }).Build();
-            }
-            #endregion
-
-            #endregion
+                    return null;
+                }).Build();
         }
     }
 }

@@ -44,6 +44,11 @@ namespace Magicodes.Pay.PaymentCallbacks
                 //更新交易日志
                 await _transactionLogHelper.UpdateAsync(outTradeNo, transactionId, async (unitOfWork, loginfo) =>
                  {
+                     //TODO:金额比较
+                     //if (loginfo.Currency.CurrencyValue == totalFee)
+                     //{
+                         
+                     //}
                      switch (key)
                      {
                          case "订单支付":
