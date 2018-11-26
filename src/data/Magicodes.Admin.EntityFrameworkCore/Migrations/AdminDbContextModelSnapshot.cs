@@ -1393,6 +1393,8 @@ namespace Magicodes.Admin.Migrations
 
                     b.Property<long>("ParentId");
 
+                    b.Property<int>("Position");
+
                     b.Property<string>("SeoTitle")
                         .HasMaxLength(50);
 

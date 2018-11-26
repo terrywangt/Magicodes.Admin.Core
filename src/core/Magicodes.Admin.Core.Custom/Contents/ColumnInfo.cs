@@ -102,6 +102,12 @@ namespace Magicodes.Admin.Core.Custom.Contents
         [Display(Name = "排序号")]
         public long? SortNo { get; set; }
 
+        /// <summary>
+        /// 栏目位置
+        /// </summary>
+        [Display(Name = "栏目位置")]
+        public PositionEnum Position { get; set; }
+
         #region SEO
 
         /// <summary>

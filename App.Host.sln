@@ -9,6 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0.Documents", "0.Documents"
 		documents\Magicodes.Admin推荐开发环境.png = documents\Magicodes.Admin推荐开发环境.png
 		README.md = README.md
 		documents\开发环境要求.xmind = documents\开发环境要求.xmind
+		documents\文章显示接口_V1.xmind = documents\文章显示接口_V1.xmind
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.Shared", "src\application\Application.Shared\Application.Shared.csproj", "{3F41646F-95B2-4B28-9216-2B93754A0896}"
@@ -43,9 +44,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5.Unity", "5.Unity", "{1A5E
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Magicodes.Unity", "src\unity\Magicodes.Unity\Magicodes.Unity.csproj", "{11AF3CEE-0073-4017-B378-A4090BB85E37}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magicodes.Pay", "src\unity\Magicodes.Pay\Magicodes.Pay.csproj", "{0A6E2B80-34CC-4CC2-9A34-C6E8E1D87063}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Magicodes.Pay", "src\unity\Magicodes.Pay\Magicodes.Pay.csproj", "{0A6E2B80-34CC-4CC2-9A34-C6E8E1D87063}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magicodes.Sms", "src\unity\Magicodes.Sms\Magicodes.Sms.csproj", "{75ED56B9-32C3-4C84-A9CA-BA1D4627013A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Magicodes.Sms", "src\unity\Magicodes.Sms\Magicodes.Sms.csproj", "{75ED56B9-32C3-4C84-A9CA-BA1D4627013A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
