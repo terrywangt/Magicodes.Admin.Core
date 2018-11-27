@@ -47,10 +47,10 @@ namespace Magicodes.Pay
         }
         public override void PostInitialize()
         {
-            ISettingManager settingManager = IocManager.Resolve<ISettingManager>();
+            var settingManager = IocManager.Resolve<ISettingManager>();
 
             var appConfiguration = IocManager.Resolve<IAppConfigurationAccessor>().Configuration;
-            //配置支付\短信等
+            //配置支付
             PayStartup.ConfigAsync(Logger, IocManager, appConfiguration, settingManager).Wait();
             //注册支付回调控制器
             IocManager.Register<PayNotifyController>(DependencyLifeStyle.Transient);

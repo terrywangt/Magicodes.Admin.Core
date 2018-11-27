@@ -1,8 +1,10 @@
 ﻿using Abp.Application.Services;
 using Abp.Authorization;
 using Abp.Configuration;
+using Abp.Dependency;
 using Magicodes.Admin.Authorization;
 using Magicodes.Admin.Configuration.Pay.Dto;
+using Magicodes.Pay.Startup;
 using System;
 using System.Threading.Tasks;
 
@@ -12,16 +14,22 @@ namespace Magicodes.Admin.Configuration.Pay
     [AbpAuthorize(AppPermissions.Pages_Administration_Pay_Settings)]
     public class PaySettingsAppService : ApplicationService, IPaySettingsAppService
     {
-        public PaySettingsAppService(
-            ISettingDefinitionManager settingDefinitionManager) : base()
-        {
+        private readonly IAppConfigurationAccessor _appConfigurationAccessor;
+        private readonly IIocManager _iocManager;
 
+        public PaySettingsAppService(
+            ISettingDefinitionManager settingDefinitionManager,
+            IAppConfigurationAccessor appConfigurationAccessor, IIocManager iocManager) : base()
+        {
+            _appConfigurationAccessor = appConfigurationAccessor;
+            _iocManager = iocManager;
         }
 
         public async Task<PaySettingEditDto> GetAllSettings() => new PaySettingEditDto
         {
             WeChatPay = await GetWeChatSettingsAsync(),
-            AliPay = await GetAliPaySettingsAsync()
+            AliPay = await GetAliPaySettingsAsync(),
+            GlobalAliPay = await GetGlobalAliPaySettingsAsync()
         };
 
         private async Task<WeChatPaySettingEditDto> GetWeChatSettingsAsync() => new WeChatPaySettingEditDto
@@ -47,11 +55,26 @@ namespace Magicodes.Admin.Configuration.Pay
             IsActive = Convert.ToBoolean(await SettingManager.GetSettingValueAsync(AppSettings.AliPayManagement.IsActive))
         };
 
+        private async Task<GlobalAlipaySettingEditDto> GetGlobalAliPaySettingsAsync() => new GlobalAlipaySettingEditDto
+        {
+            Key = await SettingManager.GetSettingValueAsync(AppSettings.GlobalAliPayManagement.Key),
+            Partner = await SettingManager.GetSettingValueAsync(AppSettings.GlobalAliPayManagement.Partner),
+            Gatewayurl = await SettingManager.GetSettingValueAsync(AppSettings.GlobalAliPayManagement.Gatewayurl),
+            Notify = await SettingManager.GetSettingValueAsync(AppSettings.GlobalAliPayManagement.Notify),
+            ReturnUrl = await SettingManager.GetSettingValueAsync(AppSettings.GlobalAliPayManagement.ReturnUrl),
+            Currency = await SettingManager.GetSettingValueAsync(AppSettings.GlobalAliPayManagement.Currency),
+            IsActive = Convert.ToBoolean(await SettingManager.GetSettingValueAsync(AppSettings.AliPayManagement.IsActive))
+        };
+
 
         public async Task UpdateAllSettings(PaySettingEditDto input)
         {
             await UpdateWeChatSettingsAsync(input.WeChatPay);
             await UpdateAliSettingsAsync(input.AliPay);
+            await UpdateGlobalAliSettingsAsync(input.GlobalAliPay);
+
+            //配置支付
+            await PayStartup.ConfigAsync(Logger, _iocManager, _appConfigurationAccessor.Configuration, SettingManager);
         }
 
         private async Task UpdateWeChatSettingsAsync(WeChatPaySettingEditDto input)
@@ -94,6 +117,17 @@ namespace Magicodes.Admin.Configuration.Pay
             await SaveSettings(AppSettings.AliPayManagement.SignType, input.SignType);
             await SaveSettings(AppSettings.AliPayManagement.IsKeyFromFile, Convert.ToString(input.IsKeyFromFile));
             await SaveSettings(AppSettings.AliPayManagement.IsActive, Convert.ToString(input.IsActive));
+        }
+
+        private async Task UpdateGlobalAliSettingsAsync(GlobalAlipaySettingEditDto input)
+        {
+            await SaveSettings(AppSettings.GlobalAliPayManagement.Key, input.Key);
+            await SaveSettings(AppSettings.GlobalAliPayManagement.Partner, input.Partner);
+            await SaveSettings(AppSettings.GlobalAliPayManagement.Gatewayurl, input.Gatewayurl);
+            await SaveSettings(AppSettings.GlobalAliPayManagement.Notify, input.Notify);
+            await SaveSettings(AppSettings.GlobalAliPayManagement.ReturnUrl, input.ReturnUrl);
+            await SaveSettings(AppSettings.GlobalAliPayManagement.Currency, input.Currency);
+            await SaveSettings(AppSettings.GlobalAliPayManagement.IsActive, Convert.ToString(input.IsActive));
         }
     }
 }

@@ -19452,6 +19452,7 @@ export interface ISubscriptionPaymentListDto {
 export class PaySettingEditDto implements IPaySettingEditDto {
     weChatPay!: WeChatPaySettingEditDto | undefined;
     aliPay!: AliPaySettingEditDto | undefined;
+    globalAliPay!: GlobalAlipaySettingEditDto | undefined;
 
     constructor(data?: IPaySettingEditDto) {
         if (data) {
@@ -19466,6 +19467,7 @@ export class PaySettingEditDto implements IPaySettingEditDto {
         if (data) {
             this.weChatPay = data["weChatPay"] ? WeChatPaySettingEditDto.fromJS(data["weChatPay"]) : <any>undefined;
             this.aliPay = data["aliPay"] ? AliPaySettingEditDto.fromJS(data["aliPay"]) : <any>undefined;
+            this.globalAliPay = data["globalAliPay"] ? GlobalAlipaySettingEditDto.fromJS(data["globalAliPay"]) : <any>undefined;
         }
     }
 
@@ -19480,6 +19482,7 @@ export class PaySettingEditDto implements IPaySettingEditDto {
         data = typeof data === 'object' ? data : {};
         data["weChatPay"] = this.weChatPay ? this.weChatPay.toJSON() : <any>undefined;
         data["aliPay"] = this.aliPay ? this.aliPay.toJSON() : <any>undefined;
+        data["globalAliPay"] = this.globalAliPay ? this.globalAliPay.toJSON() : <any>undefined;
         return data; 
     }
 }
@@ -19487,6 +19490,7 @@ export class PaySettingEditDto implements IPaySettingEditDto {
 export interface IPaySettingEditDto {
     weChatPay: WeChatPaySettingEditDto | undefined;
     aliPay: AliPaySettingEditDto | undefined;
+    globalAliPay: GlobalAlipaySettingEditDto | undefined;
 }
 
 export class WeChatPaySettingEditDto implements IWeChatPaySettingEditDto {
@@ -19614,6 +19618,66 @@ export interface IAliPaySettingEditDto {
     notify: string | undefined;
     signType: string | undefined;
     isKeyFromFile: boolean | undefined;
+    isActive: boolean | undefined;
+}
+
+export class GlobalAlipaySettingEditDto implements IGlobalAlipaySettingEditDto {
+    key!: string | undefined;
+    partner!: string | undefined;
+    gatewayurl!: string | undefined;
+    notify!: string | undefined;
+    returnUrl!: string | undefined;
+    currency!: string | undefined;
+    isActive!: boolean | undefined;
+
+    constructor(data?: IGlobalAlipaySettingEditDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.key = data["key"];
+            this.partner = data["partner"];
+            this.gatewayurl = data["gatewayurl"];
+            this.notify = data["notify"];
+            this.returnUrl = data["returnUrl"];
+            this.currency = data["currency"];
+            this.isActive = data["isActive"];
+        }
+    }
+
+    static fromJS(data: any): GlobalAlipaySettingEditDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new GlobalAlipaySettingEditDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["key"] = this.key;
+        data["partner"] = this.partner;
+        data["gatewayurl"] = this.gatewayurl;
+        data["notify"] = this.notify;
+        data["returnUrl"] = this.returnUrl;
+        data["currency"] = this.currency;
+        data["isActive"] = this.isActive;
+        return data; 
+    }
+}
+
+export interface IGlobalAlipaySettingEditDto {
+    key: string | undefined;
+    partner: string | undefined;
+    gatewayurl: string | undefined;
+    notify: string | undefined;
+    returnUrl: string | undefined;
+    currency: string | undefined;
     isActive: boolean | undefined;
 }
 
@@ -24704,6 +24768,7 @@ export enum TransactionLogListDtoPayChannel {
     _0 = 0, 
     _1 = 1, 
     _2 = 2, 
+    _3 = 3, 
 }
 
 export enum TransactionLogListDtoTerminal {
@@ -24731,6 +24796,7 @@ export enum TransactionLogEditDtoPayChannel {
     _0 = 0, 
     _1 = 1, 
     _2 = 2, 
+    _3 = 3, 
 }
 
 export enum TransactionLogEditDtoTerminal {

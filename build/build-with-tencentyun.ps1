@@ -149,9 +149,12 @@ function PublishWebHostFolder {
         if([io.File]::Exists($configFilePath))
         {
             Copy-Item $configFilePath $hostOutputPath
+            Write-Host "已成功覆盖Host配置文件"
             # Remove-Item  -Path (Join-Path $hostOutputPath "appsettings.production.json")
             # Remove-Item  -Path (Join-Path $hostOutputPath "appsettings.Staging.json")
             # Remove-Item  -Path (Join-Path $hostOutputPath "appsettings.development.json")
+        }else {
+             Write-Host "配置文件${configFilePath}不存在"
         }
     }
 }

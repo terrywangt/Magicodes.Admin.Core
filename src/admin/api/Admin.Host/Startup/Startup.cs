@@ -111,34 +111,52 @@ namespace Magicodes.Admin.Web.Startup
                 //});
             }
 
-
-            ConfigureCustomServices(services);
-
-            //Configure Abp and Dependency Injection
-            return services.AddAbp<AdminWebHostModule>(options =>
+            try
             {
-                options.IocManager.Register<IAppConfigurationAccessor, AppConfigurationAccessor>(DependencyLifeStyle
-                    .Singleton);
+                _logger.LogWarning("ConfigureCustomServices  Begin...");
+                ConfigureCustomServices(services);
+                _logger.LogWarning("ConfigureCustomServices  End...");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("执行ConfigureCustomServices出现错误", ex);
+            }
 
-                //Configure Log4Net logging
-                options.IocManager.IocContainer.AddFacility<LoggingFacility>(
-                    f =>
-                    {
-                        var logType = _appConfiguration["Abp:LogType"];
-                        _logger.LogInformation($"LogType:{logType}");
-                        if (logType != null && logType == "NLog")
-                        {
-                            f.UseAbpNLog().WithConfig("nlog.config");
-                        }
-                        else
-                        {
-                            f.UseAbpLog4Net().WithConfig("log4net.config");
-                        }
-                    });
+            try
+            {
+                _logger.LogWarning("abp  Begin...");
+                //配置ABP以及相关模块依赖
+                return services.AddAbp<AdminWebHostModule>(options =>
+                {
+                    options.IocManager.Register<IAppConfigurationAccessor, AppConfigurationAccessor>(DependencyLifeStyle
+                        .Singleton);
 
-                //默认不启动插件目录（不推荐插件模式）
-                //options.PlugInSources.AddFolder(Path.Combine(_hostingEnvironment.WebRootPath, "Plugins"), SearchOption.AllDirectories);
-            });
+                    //配置日志
+                    options.IocManager.IocContainer.AddFacility<LoggingFacility>(
+                        f =>
+                        {
+                            var logType = _appConfiguration["Abp:LogType"];
+                            _logger.LogInformation($"LogType:{logType}");
+                            if (logType != null && logType == "NLog")
+                            {
+                                f.UseAbpNLog().WithConfig("nlog.config");
+                            }
+                            else
+                            {
+                                f.UseAbpLog4Net().WithConfig("log4net.config");
+                            }
+                        });
+
+                    //默认不启动插件目录（不推荐插件模式）
+                    //options.PlugInSources.AddFolder(Path.Combine(_hostingEnvironment.WebRootPath, "Plugins"), SearchOption.AllDirectories);
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("配置Abp出现错误", ex);
+                return null;
+            }
+
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
@@ -178,6 +196,7 @@ namespace Magicodes.Admin.Web.Startup
 
             if (bool.Parse(_appConfiguration["App:HttpsRedirection"] ?? "false"))
             {
+                _logger.LogWarning("准备启用HTTS跳转...");
                 //建议开启，以在浏览器显示安全图标
                 app.UseHttpsRedirection();
             }
@@ -185,10 +204,27 @@ namespace Magicodes.Admin.Web.Startup
             //是否启用HTTP严格传输安全协议(HSTS)【开发环境关闭】
             if (!env.IsDevelopment() && bool.Parse(_appConfiguration["App:UseHsts"] ?? "false"))
             {
-                app.UseHsts();
+                _logger.LogWarning("准备启用HSTS...");
+                try
+                {
+                    app.UseHsts();
+                    _logger.LogWarning("成功启用HSTS...");
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError("启用HSTS出现错误", ex);
+                }
             }
 
-            CustomConfigure(app, env, loggerFactory);
+            try
+            {
+                _logger.LogWarning("应用自定义配置...");
+                CustomConfigure(app, env, loggerFactory);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("应用自定义配置出现错误", ex);
+            }
 
         }
     }

@@ -103,6 +103,50 @@
                             </label>
                         </div>
                     </tab>
+                    <tab *ngIf="true" heading="{{l('GlobalAliPay')}}" customClass="m-tabs__item">
+                        <h5>{{l("GlobalAliPayInformation")}}</h5>
+                        <div class="m-checkbox-list">
+                            <label for="globalAliPay_IsActive" class="m-checkbox">
+                                <input id="globalAliPay_IsActive" type="checkbox" name="globalAliPay_IsActive" [(ngModel)]="paySettings.globalAliPay.isActive">
+                                {{l("IsActive")}}({{l("PayIsActiveExplain")}})
+                                <span></span>
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label for="globalAliPay_Key">{{l("globalAliPay_Key")}}</label>
+                            <input id="globalAliPay_Key" type="text" name="globalAliPay_Key" class="form-control" [ngClass]="{'edited':paySettings.globalAliPay.key}"
+                                [(ngModel)]="paySettings.globalAliPay.key" maxlength="32">
+                        </div>
+                        <div class="form-group">
+                            <label for="globalAliPay_Partner">{{l("globalAliPay_Partner")}}</label>
+                            <input id="globalAliPay_Partner" type="text" name="globalAliPay_Partner" class="form-control" [ngClass]="{'edited':paySettings.globalAliPay.partner}"
+                            [(ngModel)]="paySettings.globalAliPay.partner" maxlength="32">
+                        </div>
+                        <div class="form-group">
+                            <label for="globalAliPay_Gatewayurl">{{l("AliGatewayurl")}}</label>
+                            <textarea id="globalAliPay_Gatewayurl" rows="2" name="globalAliPay_Gatewayurl" class="form-control" [ngClass]="{'edited':paySettings.globalAliPay.gatewayurl}"
+                                [(ngModel)]="paySettings.globalAliPay.gatewayurl" maxlength="200">
+                            </textarea>
+                        </div>
+                        <div class="form-mgroup">
+                            <label for="globalAliPay_Notify">{{l("globalAliPay_Notify")}}</label>
+                            <textarea id="globalAliPay_Notify" rows="2" name="globalAliPay_Notify" class="form-control" [ngClass]="{'edited':paySettings.globalAliPay.notify}"
+                                [(ngModel)]="paySettings.globalAliPay.notify" maxlength="200">
+                            </textarea>
+                        </div>
+                        <div class="form-mgroup">
+                            <label for="globalAliPay_ReturnUrl">{{l("globalAliPay_ReturnUrl")}}</label>
+                            <textarea id="globalAliPay_ReturnUrl" rows="2" name="globalAliPay_ReturnUrl" class="form-control" [ngClass]="{'edited':paySettings.globalAliPay.returnUrl}"
+                                [(ngModel)]="paySettings.globalAliPay.returnUrl" maxlength="200">
+                                                    </textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="globalAliPay_Currency">{{l("globalAliPay_Currency")}}</label>
+                            <input id="globalAliPay_Currency" type="text" name="globalAliPay_Currency" class="form-control" [ngClass]="{'edited':paySettings.globalAliPay.currency}"
+                                [(ngModel)]="paySettings.globalAliPay.currency">
+                        </div>
+                    </tab>
                 </tabset>
             </div>
         </div>

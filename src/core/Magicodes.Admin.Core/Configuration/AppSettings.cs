@@ -101,6 +101,9 @@ namespace Magicodes.Admin.Configuration
             public const string IsActive = "App.WeChatPayManagement.IsActive";
         }
 
+        /// <summary>
+        /// 支付宝配置
+        /// </summary>
         public static class AliPayManagement
         {
             public const string AppId = "App.AliPayManagement.AppId";
@@ -114,6 +117,42 @@ namespace Magicodes.Admin.Configuration
             public const string SignType = "App.AliPayManagement.SignType";
             public const string IsKeyFromFile = "App.AliPayManagement.IsKeyFromFile";
             public const string IsActive = "App.AliPayManagement.IsActive";
+        }
+
+        /// <summary>
+        /// 国际支付宝配置
+        /// </summary>
+        public static class GlobalAliPayManagement
+        {
+            /// <summary>
+            /// MD5密钥，安全检验码，由数字和字母组成的32位字符串，查看地址：https://b.alipay.com/order/pidAndKey.htm
+            /// </summary>
+            public const string Key = "App.GlobalAliPayManagement.Key";
+            /// <summary>
+            /// 合作商户uid(合作身份者ID，签约账号，以2088开头由16位纯数字组成的字符串，查看地址：https://b.alipay.com/order/pidAndKey.htm)
+            /// </summary>
+            public const string Partner = "App.GlobalAliPayManagement.Partner";
+            /// <summary>
+            /// 支付宝网关
+            /// </summary>
+            public const string Gatewayurl = "App.GlobalAliPayManagement.Gatewayurl";
+
+            /// <summary>
+            /// 服务器异步通知页面路径，需http://格式的完整路径，不能加?id=123这类自定义参数,必须外网可以正常访问
+            /// </summary>
+            public const string Notify = "App.GlobalAliPayManagement.Notify";
+
+            /// <summary>
+            /// 页面跳转同步通知页面路径，需http://格式的完整路径，不能加?id=123这类自定义参数，必须外网可以正常访问
+            /// </summary>
+            public const string ReturnUrl = "App.GlobalAliPayManagement.ReturnUrl";
+
+            /// <summary>
+            /// 结算币种
+            /// </summary>
+            public const string Currency = "App.GlobalAliPayManagement.Currency";
+
+            public const string IsActive = "App.GlobalAliPayManagement.IsActive";
         }
 
         public static class AliSmsCodeManagement

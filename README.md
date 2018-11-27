@@ -40,14 +40,12 @@ https://gitee.com/xl_wenqiang/Magicodes.Admin.Core/commits/develop
 ## Demo
 
 已通过腾讯云Docker容器托管:
-http://demo.admin.xin-lai.com
+
+https://demoadmin.xin-lai.com
 
 * 账号：Admin
 * 密码：123456abcD
 
-也支持https:
-
-https://demoadmin.xin-lai.com
 
 ## 开发组件、套件、解决方案、理念
 

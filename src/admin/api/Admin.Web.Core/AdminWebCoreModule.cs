@@ -120,7 +120,7 @@ namespace Magicodes.Admin.Web
             {
                 return;
             }
-            Configuration.Localization.Sources.Remove(Configuration.Localization.Sources.First(p => p.Name == AdminConsts.LocalizationSourceName));
+            
             Configuration.Localization.Sources.Add(
                 new DictionaryBasedLocalizationSource(
                     AdminConsts.LocalizationSourceName,

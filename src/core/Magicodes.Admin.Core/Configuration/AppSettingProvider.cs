@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Abp.Configuration;
+﻿using Abp.Configuration;
 using Abp.Zero.Configuration;
 using Microsoft.Extensions.Configuration;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Magicodes.Admin.Configuration
 {
@@ -15,10 +14,7 @@ namespace Magicodes.Admin.Configuration
     {
         private readonly IConfigurationRoot _appConfiguration;
 
-        public AppSettingProvider(IAppConfigurationAccessor configurationAccessor)
-        {
-            _appConfiguration = configurationAccessor.Configuration;
-        }
+        public AppSettingProvider(IAppConfigurationAccessor configurationAccessor) => _appConfiguration = configurationAccessor.Configuration;
 
         public override IEnumerable<SettingDefinition> GetSettingDefinitions(SettingDefinitionProviderContext context)
         {
@@ -29,9 +25,7 @@ namespace Magicodes.Admin.Configuration
                 .Union(GetSmsCodeSettings()).Union(GetStorageCodeSettings());
         }
 
-        private IEnumerable<SettingDefinition> GetHostSettings()
-        {
-            return new[] {
+        private IEnumerable<SettingDefinition> GetHostSettings() => new[] {
                 new SettingDefinition(AppSettings.TenantManagement.AllowSelfRegistration, GetFromAppSettings(AppSettings.TenantManagement.AllowSelfRegistration, "true"), isVisibleToClients: true),
                 new SettingDefinition(AppSettings.TenantManagement.IsNewRegisteredTenantActiveByDefault, GetFromAppSettings(AppSettings.TenantManagement.IsNewRegisteredTenantActiveByDefault, "false")),
                 new SettingDefinition(AppSettings.TenantManagement.UseCaptchaOnRegistration, GetFromAppSettings(AppSettings.TenantManagement.UseCaptchaOnRegistration, "true"), isVisibleToClients: true),
@@ -72,17 +66,20 @@ namespace Magicodes.Admin.Configuration
 
                 new SettingDefinition(AppSettings.UiManagement.Theme, GetFromAppSettings(AppSettings.UiManagement.Theme, "default"),isVisibleToClients: true, scopes: SettingScopes.All)
             };
-        }
 
-        private IEnumerable<SettingDefinition> GetPaySettings()
-        {
-            return new[] {
+        private SettingDefinition GetDefaultSettingDefinition(string key, string defaultValue = "", SettingScopes settingScopes = SettingScopes.Tenant | SettingScopes.Application) => new SettingDefinition(key,
+                GetFromAppSettings(key, defaultValue),
+                scopes: settingScopes);
+
+        private SettingDefinition[] GetPaySettings() => new[] {
+                //微信支付设置
                 new SettingDefinition(AppSettings.WeChatPayManagement.AppId, GetFromAppSettings(AppSettings.WeChatPayManagement.AppId, ""),scopes: SettingScopes.Tenant|SettingScopes.Application),
                 new SettingDefinition(AppSettings.WeChatPayManagement.MchId, GetFromAppSettings(AppSettings.WeChatPayManagement.MchId, ""),scopes: SettingScopes.Tenant|SettingScopes.Application),
                 new SettingDefinition(AppSettings.WeChatPayManagement.TenPayKey, GetFromAppSettings(AppSettings.WeChatPayManagement.TenPayKey, ""),scopes: SettingScopes.Tenant|SettingScopes.Application),
                 new SettingDefinition(AppSettings.WeChatPayManagement.PayNotifyUrl, GetFromAppSettings(AppSettings.WeChatPayManagement.PayNotifyUrl, ""),scopes: SettingScopes.Tenant|SettingScopes.Application),
                 new SettingDefinition(AppSettings.WeChatPayManagement.IsActive, GetFromAppSettings(AppSettings.WeChatPayManagement.IsActive, "false"),scopes: SettingScopes.Tenant|SettingScopes.Application),
 
+                //支付宝支付设置
                 new SettingDefinition(AppSettings.AliPayManagement.AppId, GetFromAppSettings(AppSettings.AliPayManagement.AppId, ""),scopes: SettingScopes.Tenant|SettingScopes.Application),
                 new SettingDefinition(AppSettings.AliPayManagement.Uid, GetFromAppSettings(AppSettings.AliPayManagement.Uid, ""),scopes: SettingScopes.Tenant|SettingScopes.Application),
                 new SettingDefinition(AppSettings.AliPayManagement.Gatewayurl, GetFromAppSettings(AppSettings.AliPayManagement.Gatewayurl, "https://openapi.alipay.com/gateway.do"),scopes: SettingScopes.Tenant|SettingScopes.Application),
@@ -95,12 +92,17 @@ namespace Magicodes.Admin.Configuration
                 new SettingDefinition(AppSettings.AliPayManagement.IsKeyFromFile, GetFromAppSettings(AppSettings.AliPayManagement.IsKeyFromFile, "false"),scopes: SettingScopes.Tenant|SettingScopes.Application),
                 new SettingDefinition(AppSettings.AliPayManagement.IsActive, GetFromAppSettings(AppSettings.AliPayManagement.IsActive, "false"),scopes: SettingScopes.Tenant|SettingScopes.Application),
 
+                //国际支付宝设置
+                GetDefaultSettingDefinition(AppSettings.GlobalAliPayManagement.IsActive,"false"),
+                GetDefaultSettingDefinition(AppSettings.GlobalAliPayManagement.Key),
+                GetDefaultSettingDefinition(AppSettings.GlobalAliPayManagement.Partner),
+                GetDefaultSettingDefinition(AppSettings.GlobalAliPayManagement.Gatewayurl,"https://mapi.alipay.com/gateway.do"),
+                GetDefaultSettingDefinition(AppSettings.GlobalAliPayManagement.Notify),
+                GetDefaultSettingDefinition(AppSettings.GlobalAliPayManagement.ReturnUrl),
+                GetDefaultSettingDefinition(AppSettings.GlobalAliPayManagement.Currency,"USD"),
             };
-        }
 
-        private IEnumerable<SettingDefinition> GetTenantSettings()
-        {
-            return new[]
+        private IEnumerable<SettingDefinition> GetTenantSettings() => new[]
             {
                 new SettingDefinition(AppSettings.UserManagement.AllowSelfRegistration, GetFromAppSettings(AppSettings.UserManagement.AllowSelfRegistration, "true"), scopes: SettingScopes.Tenant, isVisibleToClients: true),
                 new SettingDefinition(AppSettings.UserManagement.IsNewRegisteredUserActiveByDefault, GetFromAppSettings(AppSettings.UserManagement.IsNewRegisteredUserActiveByDefault, "false"), scopes: SettingScopes.Tenant),
@@ -114,29 +116,17 @@ namespace Magicodes.Admin.Configuration
 
 
             };
-        }
 
-        private IEnumerable<SettingDefinition> GetSharedSettings()
-        {
-            return new[]
+        private IEnumerable<SettingDefinition> GetSharedSettings() => new[]
             {
                 new SettingDefinition(AppSettings.UserManagement.TwoFactorLogin.IsGoogleAuthenticatorEnabled, GetFromAppSettings(AppSettings.UserManagement.TwoFactorLogin.IsGoogleAuthenticatorEnabled, "false"), scopes: SettingScopes.Application | SettingScopes.Tenant, isVisibleToClients: true)
             };
-        }
 
-        private string GetFromAppSettings(string name, string defaultValue = null)
-        {
-            return GetFromSettings("App:" + name, defaultValue);
-        }
+        private string GetFromAppSettings(string name, string defaultValue = null) => GetFromSettings("App:" + name, defaultValue);
 
-        private string GetFromSettings(string name, string defaultValue = null)
-        {
-            return _appConfiguration[name] ?? defaultValue;
-        }
+        private string GetFromSettings(string name, string defaultValue = null) => _appConfiguration[name] ?? defaultValue;
 
-        private IEnumerable<SettingDefinition> GetSmsCodeSettings()
-        {
-            return new[] {
+        private IEnumerable<SettingDefinition> GetSmsCodeSettings() => new[] {
                 new SettingDefinition(AppSettings.AliSmsCodeManagement.IsEnabled, GetFromAppSettings(AppSettings.AliSmsCodeManagement.IsEnabled, "false"),scopes: SettingScopes.Tenant|SettingScopes.Application),
                 new SettingDefinition(AppSettings.AliSmsCodeManagement.AccessKeyId, GetFromAppSettings(AppSettings.AliSmsCodeManagement.AccessKeyId, ""),scopes: SettingScopes.Tenant|SettingScopes.Application),
                 new SettingDefinition(AppSettings.AliSmsCodeManagement.AccessKeySecret, GetFromAppSettings(AppSettings.AliSmsCodeManagement.AccessKeySecret, ""),scopes: SettingScopes.Tenant|SettingScopes.Application),
@@ -144,16 +134,12 @@ namespace Magicodes.Admin.Configuration
                 new SettingDefinition(AppSettings.AliSmsCodeManagement.TemplateCode, GetFromAppSettings(AppSettings.AliSmsCodeManagement.TemplateCode, ""),scopes: SettingScopes.Tenant|SettingScopes.Application),
                 new SettingDefinition(AppSettings.AliSmsCodeManagement.TemplateParam, GetFromAppSettings(AppSettings.AliSmsCodeManagement.TemplateParam, ""),scopes: SettingScopes.Tenant|SettingScopes.Application)
             };
-        }
 
-        private IEnumerable<SettingDefinition> GetStorageCodeSettings()
-        {
-            return new[] {
+        private IEnumerable<SettingDefinition> GetStorageCodeSettings() => new[] {
                 new SettingDefinition(AppSettings.AliStorageManagement.IsEnabled, GetFromAppSettings(AppSettings.AliStorageManagement.IsEnabled, "false"),scopes: SettingScopes.Tenant|SettingScopes.Application),
                 new SettingDefinition(AppSettings.AliStorageManagement.AccessKeyId, GetFromAppSettings(AppSettings.AliStorageManagement.AccessKeyId, ""),scopes: SettingScopes.Tenant|SettingScopes.Application),
                 new SettingDefinition(AppSettings.AliStorageManagement.AccessKeySecret, GetFromAppSettings(AppSettings.AliStorageManagement.AccessKeySecret, ""),scopes: SettingScopes.Tenant|SettingScopes.Application),
                 new SettingDefinition(AppSettings.AliStorageManagement.EndPoint, GetFromAppSettings(AppSettings.AliStorageManagement.EndPoint, ""),scopes: SettingScopes.Tenant|SettingScopes.Application),
             };
-        }
     }
 }

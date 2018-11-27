@@ -14,7 +14,7 @@ namespace Magicodes.Admin.Localization
                 new DictionaryBasedLocalizationSource(
                     AdminConsts.AppLocalizationSourceName,
                     new XmlEmbeddedFileLocalizationDictionaryProvider(
-                        typeof(AdminLocalizationConfigurer).GetAssembly(),
+                        typeof(AppLocalizationConfigurer).GetAssembly(),
                         "Magicodes.Admin.Localization.App"
                     )
                 )

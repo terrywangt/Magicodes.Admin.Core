@@ -860,5 +860,15 @@
 
     <!--微信扫码支付-->
     <text name="PleaseWaitToConfirmYourAuthenticate">请等待验证你的授权请求</text>
+    
+    <!--国际支付宝-->
+    <text name="GlobalAliPay">国际支付宝</text>
+    <text name="GlobalAliPayInformation">国际支付宝配置信息</text>
+    <text name="globalAliPay_Key">key(安全检验码)</text>
+    <text name="globalAliPay_Partner">合作商户uid</text>
+    <text name="globalAliPay_Gatewayurl">支付宝网关</text>
+    <text name="globalAliPay_Notify">服务器异步通知路径(需http://格式的完整路径，不能加?id=123这类自定义参数,必须外网可以正常访问)</text>
+    <text name="globalAliPay_ReturnUrl">页面跳转同步通知页面路径(需http://格式的完整路径，不能加?id=123这类自定义参数，必须外网可以正常访问)</text>
+    <text name="globalAliPay_Currency">结算币种</text>
   </texts>
 </localizationDictionary>

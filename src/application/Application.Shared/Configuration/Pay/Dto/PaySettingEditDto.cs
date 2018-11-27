@@ -17,5 +17,10 @@ namespace Magicodes.Admin.Configuration.Pay.Dto
         /// 阿里支付
         /// </summary>
         public AliPaySettingEditDto AliPay { get; set; }
+
+        /// <summary>
+        /// 国际支付宝配置
+        /// </summary>
+        public GlobalAlipaySettingEditDto GlobalAliPay { get; set; }
     }
 }

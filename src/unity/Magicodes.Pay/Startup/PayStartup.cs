@@ -25,6 +25,7 @@ using Magicodes.Admin.Configuration;
 using Magicodes.Alipay;
 using Magicodes.Alipay.Builder;
 using Magicodes.Alipay.Global;
+using Magicodes.Alipay.Global.Builder;
 using Magicodes.Pay.Log;
 using Magicodes.Pay.PaymentCallbacks;
 using Magicodes.Pay.WeChat;
@@ -42,7 +43,7 @@ namespace Magicodes.Pay.Startup
     public class PayStartup
     {
         /// <summary>
-        ///     配置微信、小程序、支付
+        ///     配置支付
         /// </summary>
         public static async Task ConfigAsync(ILogger logger, IIocManager iocManager, IConfigurationRoot config, ISettingManager settingManager)
         {
@@ -63,9 +64,10 @@ namespace Magicodes.Pay.Startup
 
             var weChatPayConfig = await WeChatPayConfig(LogAction, iocManager, config, settingManager);
             var alipaySettings = await AlipayConfig(LogAction, iocManager, config, settingManager);
+            var globalAlipaySettings = await GlobalAlipayConfig(LogAction, iocManager, config, settingManager);
 
             #region 支付回调配置
-            if (weChatPayConfig != null || alipaySettings != null)
+            if (weChatPayConfig != null || alipaySettings != null || globalAlipaySettings != null)
             {
                 PayNotifyConfig(LogAction, iocManager);
             }
@@ -151,7 +153,60 @@ namespace Magicodes.Pay.Startup
                     .RegisterGetPayConfigFunc(() => alipaySettings).Build();
 
                 //注册支付宝支付API
-                iocManager.Register<IAlipayAppService, AlipayAppService>(DependencyLifeStyle.Transient);
+                if (!iocManager.IsRegistered<IAlipayAppService>())
+                    iocManager.Register<IAlipayAppService, AlipayAppService>(DependencyLifeStyle.Transient);
+            }
+            #endregion
+            return alipaySettings;
+        }
+
+        /// <summary>
+        /// 国际支付宝支付配置
+        /// </summary>
+        /// <param name="logAction"></param>
+        /// <param name="iocManager"></param>
+        /// <param name="config"></param>
+        /// <param name="settingManager"></param>
+        /// <returns></returns>
+        private static async Task<IGlobalAlipaySettings> GlobalAlipayConfig(Action<string, string> logAction, IIocManager iocManager, IConfigurationRoot config, ISettingManager settingManager)
+        {
+            #region 支付宝支付
+            IGlobalAlipaySettings alipaySettings = null;
+            if (Convert.ToBoolean(await settingManager.GetSettingValueAsync(AppSettings.GlobalAliPayManagement.IsActive)))
+            {
+                alipaySettings = new GlobalAlipaySettings
+                {
+                    Key = await settingManager.GetSettingValueAsync(AppSettings.GlobalAliPayManagement.Key),
+                    Partner = await settingManager.GetSettingValueAsync(AppSettings.GlobalAliPayManagement.Partner),
+                    Gatewayurl = await settingManager.GetSettingValueAsync(AppSettings.GlobalAliPayManagement.Gatewayurl),
+                    Notify = await settingManager.GetSettingValueAsync(AppSettings.GlobalAliPayManagement.Notify),
+                    ReturnUrl = await settingManager.GetSettingValueAsync(AppSettings.GlobalAliPayManagement.ReturnUrl),
+                    Currency = await settingManager.GetSettingValueAsync(AppSettings.GlobalAliPayManagement.Currency),
+                };
+            }
+            else if (!config["GlobalAlipay:IsEnabled"].IsNullOrWhiteSpace() && Convert.ToBoolean(config["Alipay:IsEnabled"]))
+            {
+                alipaySettings = new GlobalAlipaySettings
+                {
+                    Key = config["GlobalAlipay:Key"],
+                    Partner = config["GlobalAlipay:Partner"],
+                    Gatewayurl = config["GlobalAlipay:Gatewayurl"],
+                    Notify = config["GlobalAlipay:Notify"],
+                    ReturnUrl = config["GlobalAlipay:ReturnUrl"],
+                    Currency = config["GlobalAlipay:Currency"],
+                };
+
+            }
+
+            if (alipaySettings != null)
+            {
+                GlobalAlipayBuilder.Create()
+                    .WithLoggerAction(logAction)
+                    .RegisterGetPayConfigFunc(() => alipaySettings).Build();
+
+                //注册支付宝支付API
+                if (!iocManager.IsRegistered<IGlobalAlipayAppService>())
+                    iocManager.Register<IGlobalAlipayAppService, GlobalAlipayAppService>(DependencyLifeStyle.Transient);
             }
             #endregion
             return alipaySettings;
@@ -200,7 +255,10 @@ namespace Magicodes.Pay.Startup
                     .RegisterGetPayConfigFunc(() => weChatPayConfig).Build();
 
                 //注册微信支付API
-                iocManager.Register<WeChatPayApi>(DependencyLifeStyle.Transient);
+                if (!iocManager.IsRegistered<WeChatPayApi>())
+                {
+                    iocManager.Register<WeChatPayApi>(DependencyLifeStyle.Transient);
+                }
             }
             #endregion
             return weChatPayConfig;

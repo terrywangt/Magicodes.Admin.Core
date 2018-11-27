@@ -6,6 +6,8 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0.Documents", "0.Documents", "{4FB3F191-AC0D-4D7F-959D-720E2D5DE350}"
 	ProjectSection(SolutionItems) = preProject
 		common.props = common.props
+		docker-compose.override.yml = docker-compose.override.yml
+		docker-compose.yml = docker-compose.yml
 		documents\Magicodes.Admin推荐开发环境.png = documents\Magicodes.Admin推荐开发环境.png
 		README.md = README.md
 		documents\开发环境要求.xmind = documents\开发环境要求.xmind
@@ -52,6 +54,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Magicodes.Sms", "src\unity\Magicodes.Sms\Magicodes.Sms.csproj", "{DE9B120F-FD37-4B14-95A1-4FFEDDACD6B9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Abp.Castle.NLog", "src\unity\Abp.Castle.NLog\Abp.Castle.NLog.csproj", "{71DBD97D-9842-4221-91EA-07ADED5FB2CB}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{A538963B-D8CB-49B9-9D8C-25998E9AC249}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -119,6 +123,10 @@ Global
 		{71DBD97D-9842-4221-91EA-07ADED5FB2CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{71DBD97D-9842-4221-91EA-07ADED5FB2CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{71DBD97D-9842-4221-91EA-07ADED5FB2CB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A538963B-D8CB-49B9-9D8C-25998E9AC249}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A538963B-D8CB-49B9-9D8C-25998E9AC249}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A538963B-D8CB-49B9-9D8C-25998E9AC249}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A538963B-D8CB-49B9-9D8C-25998E9AC249}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

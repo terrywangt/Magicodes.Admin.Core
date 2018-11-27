@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  admin.host:
+    image: ${DOCKER_REGISTRY-}adminhost
+    build:
+      context: .
+      dockerfile: src/admin/api/Admin.Host/Dockerfile
