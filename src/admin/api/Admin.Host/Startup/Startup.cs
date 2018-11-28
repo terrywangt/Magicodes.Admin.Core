@@ -51,6 +51,7 @@ namespace Magicodes.Admin.Web.Startup
 
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            _logger.LogWarning("Kestrel:" + _appConfiguration.GetSection("Kestrel"));
             //MVC
             services.AddMvc(options =>
             {

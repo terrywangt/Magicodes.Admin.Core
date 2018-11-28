@@ -30,7 +30,10 @@ namespace Magicodes.Admin.Web.Startup
                 .ConfigureLogging((hostingContext, logging) =>
                 {
                     logging.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
+                    //添加控制台日志,Docker环境下请务必启用
                     logging.AddConsole();
+                    //添加调试日志
+                    logging.AddDebug();
                 })
                 .UseStartup<Startup>();
     }
