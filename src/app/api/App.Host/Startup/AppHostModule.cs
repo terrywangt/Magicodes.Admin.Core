@@ -6,6 +6,7 @@ using Abp.AspNetZeroCore.Web;
 using Abp.Configuration.Startup;
 using Abp.Modules;
 using Abp.Reflection.Extensions;
+using Abp.Runtime.Caching.Redis;
 using Abp.Zero.Configuration;
 using App.Host.Authentication.TwoFactor;
 using App.Host.Configuration;
@@ -30,6 +31,7 @@ namespace App.Host.Startup
         typeof(AdminCoreModule),
         typeof(AppCoreModule),
         typeof(AppApplicationModule),
+        typeof(AbpRedisCacheModule),
         typeof(UnityModule)
     )]
     public class AppHostModule : AbpModule
@@ -68,6 +70,17 @@ namespace App.Host.Startup
             });
 
             Configuration.ReplaceService<IAppConfigurationAccessor, AppConfigurationAccessor>();
+
+            //使用Redis缓存替换默认的内存缓存
+            if (_appConfiguration["Abp:RedisCache:ConnectionString:IsEnabled"] == "true")
+            {
+
+                Configuration.Caching.UseRedis(options =>
+                {
+                    options.ConnectionString = _appConfiguration["Abp:RedisCache:ConnectionString"];
+                    options.DatabaseId = _appConfiguration.GetValue<int>("Abp:RedisCache:DatabaseId");
+                });
+            }
         }
 
         public override void Initialize()

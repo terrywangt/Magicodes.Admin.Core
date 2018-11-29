@@ -3,7 +3,7 @@
 <!-- ![关注订阅号](./res/订阅号.jpg) -->
 ## 说明
 
-Magicodes.Admin，是心莱科技团队打造的一套高效率、易扩展、基础设施强大、代码生成完备、理念和技术先进的敏捷开发框架，同时也是一套分布式（**即将提供微服务架构参考**）、跨平台（**linux、Docker容器支持，即将提供腾讯云容器托管教程**）、多终端（包括**Android、IOS、H5、小程序、微信公众号**）支持的统一开发框架和解决方案。框架基于.NET Core 2.1、Angular、Ionic、EF Core、ABP和ASP.NET Zero，并在其基础上进行了封装和完善，并且编写了相关的工具（代码生成）、组件（云存储、支付、微信等等）、生成服务。
+Magicodes.Admin，是心莱科技团队打造的一套高效率、易扩展、基础设施强大、代码生成完备、理念和技术先进的敏捷开发框架，同时也是一套分布式（**即将提供微服务架构参考**）、跨平台（**linux、Docker容器支持，已提供Docker教程和腾讯云容器托管教程**）、多终端（包括**Android、IOS、H5、小程序、微信公众号**）支持的统一开发框架和解决方案。框架基于.NET Core 2.1、Angular、Ionic、EF Core、ABP和ASP.NET Zero，并在其基础上进行了封装和完善，并且编写了相关的工具（代码生成）、组件（云存储、支付、微信等等）、生成服务。
 
 ## 官方订阅号
 
@@ -15,8 +15,6 @@ Magicodes.Admin，是心莱科技团队打造的一套高效率、易扩展、�
 * 模板
 * 解决方案
 * 编程心得和理念
-
-<img src="./res/activity.jpg" width="400" />
 
 ## 开发日志
 https://gitee.com/xl_wenqiang/Magicodes.Admin.Core/commits/develop

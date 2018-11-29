@@ -20,9 +20,11 @@ namespace Magicodes.Admin.Web.Startup
                 .ConfigureAppConfiguration((hostingContext, config) =>
                 {
                     var env = hostingContext.HostingEnvironment;
+                    //根据环境变量加载不同的JSON配置
                     config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                         .AddJsonFile($"appsettings.{env.EnvironmentName}.json",
                             optional: true, reloadOnChange: true);
+                    //从环境变量添加配置
                     config.AddEnvironmentVariables();
                 })
                 .UseSetting(WebHostDefaults.DetailedErrorsKey, "true")
