@@ -96,7 +96,7 @@ namespace Magicodes.App.Application.Contents.Contents
         /// <param name="input"></param>
         /// <returns></returns>
         [AbpAllowAnonymous]
-        [HttpGet("ColumnList")]
+        [HttpGet("ColumnInfo")]
         public async Task<List<GetColumnListDto>> GetColumnList(GetColumnListInput input)
         {
             List<GetColumnListDto> ltOutput = new List<GetColumnListDto>();
@@ -253,7 +253,7 @@ namespace Magicodes.App.Application.Contents.Contents
         /// <param name="input"></param>
         /// <returns></returns>
         [AbpAllowAnonymous]
-        [HttpGet("ArticleList")]
+        [HttpGet("ArticleInfo")]
         public async Task<PagedResultDto<GetArticleListDto>> GetArticleList(GetArticleListInput input)
         {
             var query = _articleInfoRepository.GetAllIncluding(aa => aa.ColumnInfo, aa => aa.ArticleSourceInfo, aa => aa.ArticleTagInfos)
