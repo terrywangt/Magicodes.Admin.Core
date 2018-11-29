@@ -60,34 +60,28 @@ namespace Magicodes.App.Application.Contents.Contents
         [HttpGet("CarouselPictures")]
         public async Task<List<GetCarouselPictureListDto>> GetCarouselPictureList(GetCarouselPictureListInput input)
         {
-            try
+            var query = _columnInfoRepository.GetAll().Where(aa => aa.ColumnType == ColumnTypes.Image);
+
+            switch (input.Position)
             {
-                var query = _columnInfoRepository.GetAll().Where(aa => aa.ColumnType == ColumnTypes.Image);
-
-                switch (input.Position)
-                {
-                    case GetCarouselPictureListInput.PositionEnum.Default:
-                        query = query.Where(aa => aa.Position == PositionEnum.Default);
-                        break;
-                        //... ...
-                }
-
-                var ltOutput = await (from ci in query
-                                      join oa in GetObjectAttachmentInfo(AttachmentObjectTypes.ColumnInfo)
-                                        on ci.Id equals oa.ObjectId
-                                      select new GetCarouselPictureListDto
-                                      {
-                                          ImageUrl = oa.AttachmentInfo.Url,
-                                          Url = ci.Url
-                                      }).ToListAsync();
-
-
-                return ltOutput;
+                case GetCarouselPictureListInput.PositionEnum.Default:
+                    query = query.Where(aa => aa.Position == PositionEnum.Default);
+                    break;
+                    //... ...
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+
+            var ltOutput = await (from ci in query
+                                  join oa in GetObjectAttachmentInfo(AttachmentObjectTypes.ColumnInfo)
+                                    on ci.Id equals oa.ObjectId
+                                  select new GetCarouselPictureListDto
+                                  {
+                                      ImageUrl = oa.AttachmentInfo.Url,
+                                      Url = ci.Url
+                                  }).ToListAsync();
+
+
+            return ltOutput;
+
         }
 
         /// <summary>
