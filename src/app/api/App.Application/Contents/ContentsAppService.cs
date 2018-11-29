@@ -188,7 +188,8 @@ namespace Magicodes.App.Application.Contents.Contents
         public async Task<GetColumnDetailInfoOutput> GetColumnDetailInfo(GetColumnDetailInfoInput input)
         {
             var columnInfo = await _columnInfoRepository.GetAll()
-                                        .FirstOrDefaultAsync(aa => aa.Id == input.ColumnInfoId);
+                                        .FirstOrDefaultAsync(aa => aa.Id == input.Id);
+            
             if (columnInfo != null)
             {
                 GetColumnDetailInfoOutput output = new GetColumnDetailInfoOutput
@@ -354,7 +355,7 @@ namespace Magicodes.App.Application.Contents.Contents
         public async Task<GetArticleDetailInfoOutput> GetArticleDetailInfo(GetArticleDetailInfoInput input)
         {
             var articleInfo = await _articleInfoRepository.GetAllIncluding(aa => aa.ColumnInfo, aa => aa.ArticleSourceInfo, aa => aa.ArticleTagInfos)
-                                                .FirstOrDefaultAsync(aa => aa.Id == input.ArticleInfoId);
+                                                .FirstOrDefaultAsync(aa => aa.Id == input.Id);
             if (articleInfo != null)
             {
                 GetArticleDetailInfoOutput output = new GetArticleDetailInfoOutput

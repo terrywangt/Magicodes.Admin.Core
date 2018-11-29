@@ -46,7 +46,7 @@ namespace Magicodes.App.Application.Contents.Contents.Dto
         public string ArticleSourceInfoName { get; set; }
 
         /// <summary>
-        /// 栏目类型
+        /// 推荐类型
         /// </summary>
         public RecommendedTypesEnum RecommendedTypes { get; set; }
 

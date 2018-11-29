@@ -19,7 +19,7 @@ namespace Magicodes.App.Application.Contents.Contents.Dto
 		/// 文章Id
 		/// </summary>
 		[Required]
-		public long ArticleInfoId { get; set; }
+		public long Id { get; set; }
 
 
     }

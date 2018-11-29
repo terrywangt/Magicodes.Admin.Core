@@ -19,7 +19,7 @@ namespace Magicodes.App.Application.Contents.Contents.Dto
 		/// 栏目Id
 		/// </summary>
 		[Required]
-		public long ColumnInfoId { get; set; }
+		public long Id { get; set; }
 
 
     }
