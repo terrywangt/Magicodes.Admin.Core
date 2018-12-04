@@ -7145,6 +7145,72 @@ export class PaymentServiceProxy {
 }
 
 @Injectable()
+export class ServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    /**
+     * @param tenantId (optional) 
+     * @return Success
+     */
+    payNotify(tenantId: number | null | undefined, provider: string): Observable<void> {
+        let url_ = this.baseUrl + "/PayNotify/{tenantId}/{provider}?";
+        if (provider === undefined || provider === null)
+            throw new Error("The parameter 'provider' must be defined.");
+        url_ = url_.replace("{provider}", encodeURIComponent("" + provider)); 
+        if (tenantId !== undefined)
+            url_ += "tenantId=" + encodeURIComponent("" + tenantId) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processPayNotify(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processPayNotify(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processPayNotify(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+}
+
+@Injectable()
 export class PaySettingsServiceProxy {
     private http: HttpClient;
     private baseUrl: string;
@@ -14979,6 +15045,8 @@ export class ColumnInfo implements IColumnInfo {
     isActive!: boolean | undefined;
     /** 排序号 */
     sortNo!: number | undefined;
+    /** 栏目位置 */
+    position!: ColumnInfoPosition | undefined;
     /** 标题 */
     seoTitle!: string | undefined;
     /** 关键字 */
@@ -15031,6 +15099,7 @@ export class ColumnInfo implements IColumnInfo {
             this.isStatic = data["isStatic"] !== undefined ? data["isStatic"] : false;
             this.isActive = data["isActive"] !== undefined ? data["isActive"] : true;
             this.sortNo = data["sortNo"];
+            this.position = data["position"];
             this.seoTitle = data["seoTitle"];
             this.keyWords = data["keyWords"];
             this.alias = data["alias"];
@@ -15068,6 +15137,7 @@ export class ColumnInfo implements IColumnInfo {
         data["isStatic"] = this.isStatic;
         data["isActive"] = this.isActive;
         data["sortNo"] = this.sortNo;
+        data["position"] = this.position;
         data["seoTitle"] = this.seoTitle;
         data["keyWords"] = this.keyWords;
         data["alias"] = this.alias;
@@ -15112,6 +15182,8 @@ export interface IColumnInfo {
     isActive: boolean | undefined;
     /** 排序号 */
     sortNo: number | undefined;
+    /** 栏目位置 */
+    position: ColumnInfoPosition | undefined;
     /** 标题 */
     seoTitle: string | undefined;
     /** 关键字 */
@@ -19629,6 +19701,7 @@ export class GlobalAlipaySettingEditDto implements IGlobalAlipaySettingEditDto {
     returnUrl!: string | undefined;
     currency!: string | undefined;
     isActive!: boolean | undefined;
+    splitFundSettings!: SplitFundSettingDto[] | undefined;
 
     constructor(data?: IGlobalAlipaySettingEditDto) {
         if (data) {
@@ -19648,6 +19721,11 @@ export class GlobalAlipaySettingEditDto implements IGlobalAlipaySettingEditDto {
             this.returnUrl = data["returnUrl"];
             this.currency = data["currency"];
             this.isActive = data["isActive"];
+            if (data["splitFundSettings"] && data["splitFundSettings"].constructor === Array) {
+                this.splitFundSettings = [];
+                for (let item of data["splitFundSettings"])
+                    this.splitFundSettings.push(SplitFundSettingDto.fromJS(item));
+            }
         }
     }
 
@@ -19667,6 +19745,11 @@ export class GlobalAlipaySettingEditDto implements IGlobalAlipaySettingEditDto {
         data["returnUrl"] = this.returnUrl;
         data["currency"] = this.currency;
         data["isActive"] = this.isActive;
+        if (this.splitFundSettings && this.splitFundSettings.constructor === Array) {
+            data["splitFundSettings"] = [];
+            for (let item of this.splitFundSettings)
+                data["splitFundSettings"].push(item.toJSON());
+        }
         return data; 
     }
 }
@@ -19679,6 +19762,51 @@ export interface IGlobalAlipaySettingEditDto {
     returnUrl: string | undefined;
     currency: string | undefined;
     isActive: boolean | undefined;
+    splitFundSettings: SplitFundSettingDto[] | undefined;
+}
+
+export class SplitFundSettingDto implements ISplitFundSettingDto {
+    transIn!: string;
+    amountRate!: number;
+    desc!: string | undefined;
+
+    constructor(data?: ISplitFundSettingDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.transIn = data["transIn"];
+            this.amountRate = data["amountRate"];
+            this.desc = data["desc"];
+        }
+    }
+
+    static fromJS(data: any): SplitFundSettingDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new SplitFundSettingDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["transIn"] = this.transIn;
+        data["amountRate"] = this.amountRate;
+        data["desc"] = this.desc;
+        return data; 
+    }
+}
+
+export interface ISplitFundSettingDto {
+    transIn: string;
+    amountRate: number;
+    desc: string | undefined;
 }
 
 export class ListResultDtoOfFlatPermissionWithLevelDto implements IListResultDtoOfFlatPermissionWithLevelDto {
@@ -24650,6 +24778,10 @@ export enum MoveToInputDtoOfInt64MoveToPosition {
 export enum ColumnInfoColumnType {
     _0 = 0, 
     _1 = 1, 
+}
+
+export enum ColumnInfoPosition {
+    _0 = 0, 
 }
 
 export enum UserNotificationState {

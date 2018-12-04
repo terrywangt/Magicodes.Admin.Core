@@ -1,0 +1,46 @@
+﻿<div bsModal #editModal="bs-modal" (onShown)="onShown()" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="editModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #splitFundInfoForm="ngForm" novalidate (ngSubmit)="save()">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <span>{{l("Edit")}}</span>
+                    </h5>
+                    <button type="button" class="close" (click)="close()" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group form-md-line-input form-md-floating-label no-hint col-xl-12">
+                            <label>{{l("TransIn")}}{{l("TransInExplain")}}*</label>
+                            <input id="TransIn" #transInInput="ngModel" class="form-control" type="text" [ngClass]="{'edited':formModel.transIn}"
+                                name="transIn" [(ngModel)]="formModel.transIn" #TransIn="ngModel" required pattern="^[0-9]{16}$" maxlength="16">
+                            <validation-messages [formCtrl]="transInInput"></validation-messages>
+                        </div>
+                        <div class="form-group form-md-line-input form-md-floating-label no-hint col-xl-12">
+                            <label>{{l("AmountRate")}}{{l("AmountRateExplain")}}*</label>
+                            <input id="AmountRate" #amountRateInput="ngModel" class="form-control" type="number" [ngClass]="{'edited':formModel.amountRate}"
+                                name="amountRate" [(ngModel)]="formModel.amountRate" #amountRate="ngModel" min="0" max="1" step="0.1" required
+                                pattern="^[0-1]{1}[.]{0,}[0-9]{0,}$">
+                            <validation-messages [formCtrl]="amountRateInput"></validation-messages>
+                        </div>
+                        <div class="form-group form-md-line-input form-md-floating-label no-hint col-xl-12">
+                            <label>{{l("Desc")}}</label>
+                            <textarea class="form-control" name="Desc" [ngClass]="{'edited': formModel.desc}" [(ngModel)]="formModel.desc"
+                                [required]="false" maxlength="200"[style]="{'height':'300px'}">
+                            </textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" [disabled]="saving" class="btn btn-secondary" (click)="close()">{{l("Cancel")}}</button>
+                    <button type="submit" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')" [disabled]="!splitFundInfoForm.form.valid"
+                        class="btn btn-primary"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

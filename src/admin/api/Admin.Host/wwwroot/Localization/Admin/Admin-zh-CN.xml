@@ -870,5 +870,16 @@
     <text name="globalAliPay_Notify">服务器异步通知路径(需http://格式的完整路径，不能加?id=123这类自定义参数,必须外网可以正常访问)</text>
     <text name="globalAliPay_ReturnUrl">页面跳转同步通知页面路径(需http://格式的完整路径，不能加?id=123这类自定义参数，必须外网可以正常访问)</text>
     <text name="globalAliPay_Currency">结算币种</text>
+    <text name="splitFund">分账信息</text>
+    <text name="InvalidPattern">请输入正确的值</text>
+    <text name="TransIn">账户Id</text>
+    <text name="AmountRate">分账比例</text>
+    <text name="Desc">描述</text>
+    <text name="TransInExplain">(接受分账资金的支付宝账户ID。 以2088开头的纯16位数字)</text>
+    <text name="AmountRateExplain">(只能是0-1之间的小数,包含0和1)</text>
+    <text name="TransInExistPleaseReplace">账户Id已存在请更换</text>
+    <text name="CreateSuccessfully">创建成功</text>
+    <text name="EditSuccessfully">修改成功</text>
+
   </texts>
 </localizationDictionary>

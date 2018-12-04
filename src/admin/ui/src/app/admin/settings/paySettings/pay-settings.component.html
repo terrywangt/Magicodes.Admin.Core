@@ -138,17 +138,88 @@
                             <label for="globalAliPay_ReturnUrl">{{l("globalAliPay_ReturnUrl")}}</label>
                             <textarea id="globalAliPay_ReturnUrl" rows="2" name="globalAliPay_ReturnUrl" class="form-control" [ngClass]="{'edited':paySettings.globalAliPay.returnUrl}"
                                 [(ngModel)]="paySettings.globalAliPay.returnUrl" maxlength="200">
-                                                    </textarea>
+                            </textarea>
                         </div>
 
                         <div class="form-group">
                             <label for="globalAliPay_Currency">{{l("globalAliPay_Currency")}}</label>
-                            <input id="globalAliPay_Currency" type="text" name="globalAliPay_Currency" class="form-control" [ngClass]="{'edited':paySettings.globalAliPay.currency}"
-                                [(ngModel)]="paySettings.globalAliPay.currency">
+                            <input id="globalAliPay_Currency" type="text" name="globalAliPay_Currency" class="form-control" [ngClass]="{'edited':paySettings.globalAliPay.currency}" [(ngModel)]="paySettings.globalAliPay.currency">
+                        </div>
+
+                        <div class="form-mgroup">
+                            <div class="form-mgroup">
+                                <div class="d-flex align-items-center">
+                                    <div class="mr-auto col-xs-6">
+                                        <h6 class="m-subheader__title m-subheader__title--separator">
+                                            <span>{{l("splitFund")}}</span>
+                                        </h6>
+                                    </div>
+                                    <div *ngIf="splitFunds.length<=4" class="col-sm-6 text-right">
+                                        <button class="btn btn-primary blue" (click)="createSplitFundInfo()">
+                                            <i class="fa fa-plus"></i>{{l("Create")}}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="primeng-datatable-container" [busyIf]="primengTableHelper.isLoading" style="margin-top:10px;">
+                                <p-table #dataTable (onLazyLoad)="getSplitFunds($event)"  [value]="primengTableHelper.records" rows="{{primengTableHelper.defaultRecordsCountPerPage}}"
+                                    [paginator]="false" [lazy]="true" [scrollable]="true" ScrollWidth="100%" [responsive]="primengTableHelper.isResponsive"
+                                    [resizableColumns]="primengTableHelper.resizableColumns">
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th>{{l('Actions')}}</th>
+                                            <th>
+                                                {{l('TransIn')}}
+                                            </th>
+                                            <th>
+                                                {{l('AmountRate')}}
+                                            </th>
+                                            <th>
+                                                {{l('Desc')}}
+                                            </th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-record="$implicit">
+                                        <tr>
+                                            <td>
+                                                <div class="btn-group dropdown" dropdown container="body">
+                                                    <button dropdownToggle class="dropdown-toggle btn btn-sm btn-primary">
+                                                        <i class="fa fa-cog"></i><span class="caret"></span> {{l("Actions")}}
+                                                    </button>
+                                                    <ul class="dropdown-menu" *dropdownMenu>
+                                                        <li>
+                                                            <a href="javascript:;" (click)="editSplitFund(record)">{{l('Edit')}}</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="javascript:;" (click)="deleteSplitFund(record)">{{l('Delete')}}</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                {{record.transIn}}
+                                            </td>
+                                            <td>
+                                                {{record.amountRate}}
+                                            </td>
+                                            <td>
+                                                {{record.desc}}
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                                <div class="primeng-no-data" *ngIf="primengTableHelper.totalRecordsCount == 0">
+                                    {{l('NoData')}}
+                                </div>
+                            </div>
+                            <!--<Primeng-TurboTable-End>-->
                         </div>
                     </tab>
                 </tabset>
             </div>
         </div>
     </div>
+    <createSplitFundInfoModal #createSplitFundInfoModal (modalSave)="createCallback($event)"></createSplitFundInfoModal>
+    <editSplitFundInfoModal #editSplitFundInfoModal></editSplitFundInfoModal>
 </div>
+

@@ -11,7 +11,7 @@ import { MaintenanceComponent } from './maintenance/maintenance.component';
 import { OrganizationUnitsComponent } from './organization-units/organization-units.component';
 import { RolesComponent } from './roles/roles.component';
 import { HostSettingsComponent } from './settings/host-settings.component';
-import { PaySettingsComponent } from './settings/pay-settings.component';
+import { PaySettingsComponent } from './settings/paySettings/pay-settings.component';
 import { SmsCodeSettingsComponent } from './settings/smsCode-settings.component';
 import { TenantSettingsComponent } from './settings/tenant-settings.component';
 import { InvoiceComponent } from './subscription-management/invoice/invoice.component';

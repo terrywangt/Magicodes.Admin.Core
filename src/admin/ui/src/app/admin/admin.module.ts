@@ -5,9 +5,26 @@ import { AppCommonModule } from '@app/shared/common/app-common.module';
 import { UtilsModule } from '@shared/utils/utils.module';
 import { AddMemberModalComponent } from 'app/admin/organization-units/add-member-modal.component';
 import { FileUploadModule } from 'ng2-file-upload';
-import { ModalModule, PopoverModule, TabsModule, TooltipModule, BsDropdownModule } from 'ngx-bootstrap';
-import { BsDatepickerModule, BsDatepickerConfig, BsDaterangepickerConfig, BsLocaleService } from 'ngx-bootstrap/datepicker';
-import { AutoCompleteModule, EditorModule, FileUploadModule as PrimeNgFileUploadModule, InputMaskModule, PaginatorModule } from 'primeng/primeng';
+import {
+    ModalModule,
+    PopoverModule,
+    TabsModule,
+    TooltipModule,
+    BsDropdownModule
+} from 'ngx-bootstrap';
+import {
+    BsDatepickerModule,
+    BsDatepickerConfig,
+    BsDaterangepickerConfig,
+    BsLocaleService
+} from 'ngx-bootstrap/datepicker';
+import {
+    AutoCompleteModule,
+    EditorModule,
+    FileUploadModule as PrimeNgFileUploadModule,
+    InputMaskModule,
+    PaginatorModule
+} from 'primeng/primeng';
 import { TableModule } from 'primeng/table';
 import { LightboxModule } from 'primeng/lightbox';
 import { OverlayPanelModule } from 'primeng/overlayPanel';
@@ -46,7 +63,9 @@ import { CreateOrEditRoleModalComponent } from './roles/create-or-edit-role-moda
 import { RolesComponent } from './roles/roles.component';
 import { HostSettingsComponent } from './settings/host-settings.component';
 import { TenantSettingsComponent } from './settings/tenant-settings.component';
-import { PaySettingsComponent } from './settings/pay-settings.component';
+import { PaySettingsComponent } from './settings/paySettings/pay-settings.component';
+import { CreateSplitFundInfoModalComponent } from './settings/paySettings/create-splitFundInfo-modal.component';
+import { EditSplitFundInfoModalComponent } from './settings/paySettings/edit-splitFundInfo-modal.component';
 import { SmsCodeSettingsComponent } from './settings/smsCode-settings.component';
 import { EditionComboComponent } from './shared/edition-combo.component';
 import { FeatureTreeComponent } from './shared/feature-tree.component';
@@ -145,6 +164,8 @@ NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
         EntityChangeDetailModalComponent,
         HostSettingsComponent,
         PaySettingsComponent,
+        CreateSplitFundInfoModalComponent,
+        EditSplitFundInfoModalComponent,
         SmsCodeSettingsComponent,
         StorageSettingsComponent,
         InstallComponent,
@@ -189,15 +210,23 @@ NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
         ColumnInfosComponent,
         CreateOrEditColumnInfoModalComponent
     ],
-    exports: [
-        AddMemberModalComponent
-    ],
+    exports: [AddMemberModalComponent],
     providers: [
         ImpersonationService,
         TreeDragDropService,
-        { provide: BsDatepickerConfig, useFactory: NgxBootstrapDatePickerConfigService.getDatepickerConfig },
-        { provide: BsDaterangepickerConfig, useFactory: NgxBootstrapDatePickerConfigService.getDaterangepickerConfig },
-        { provide: BsLocaleService, useFactory: NgxBootstrapDatePickerConfigService.getDatepickerLocale }
+        {
+            provide: BsDatepickerConfig,
+            useFactory: NgxBootstrapDatePickerConfigService.getDatepickerConfig
+        },
+        {
+            provide: BsDaterangepickerConfig,
+            useFactory:
+                NgxBootstrapDatePickerConfigService.getDaterangepickerConfig
+        },
+        {
+            provide: BsLocaleService,
+            useFactory: NgxBootstrapDatePickerConfigService.getDatepickerLocale
+        }
     ]
 })
-export class AdminModule { }
+export class AdminModule {}
