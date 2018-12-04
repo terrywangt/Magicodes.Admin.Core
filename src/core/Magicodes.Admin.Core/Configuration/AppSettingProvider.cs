@@ -100,6 +100,7 @@ namespace Magicodes.Admin.Configuration
                 GetDefaultSettingDefinition(AppSettings.GlobalAliPayManagement.Notify),
                 GetDefaultSettingDefinition(AppSettings.GlobalAliPayManagement.ReturnUrl),
                 GetDefaultSettingDefinition(AppSettings.GlobalAliPayManagement.Currency,"USD"),
+                GetDefaultSettingDefinition(AppSettings.GlobalAliPayManagement.SplitFundSettings,"[]"),
             };
 
         private IEnumerable<SettingDefinition> GetTenantSettings() => new[]

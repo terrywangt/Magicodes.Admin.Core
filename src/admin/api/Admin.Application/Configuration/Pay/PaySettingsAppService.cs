@@ -2,10 +2,13 @@
 using Abp.Authorization;
 using Abp.Configuration;
 using Abp.Dependency;
+using Abp.Extensions;
 using Magicodes.Admin.Authorization;
 using Magicodes.Admin.Configuration.Pay.Dto;
 using Magicodes.Pay.Startup;
+using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Magicodes.Admin.Configuration.Pay
@@ -55,16 +58,31 @@ namespace Magicodes.Admin.Configuration.Pay
             IsActive = Convert.ToBoolean(await SettingManager.GetSettingValueAsync(AppSettings.AliPayManagement.IsActive))
         };
 
-        private async Task<GlobalAlipaySettingEditDto> GetGlobalAliPaySettingsAsync() => new GlobalAlipaySettingEditDto
+        /// <summary>
+        /// 获取国际支付宝设置
+        /// </summary>
+        /// <returns></returns>
+        private async Task<GlobalAlipaySettingEditDto> GetGlobalAliPaySettingsAsync()
         {
-            Key = await SettingManager.GetSettingValueAsync(AppSettings.GlobalAliPayManagement.Key),
-            Partner = await SettingManager.GetSettingValueAsync(AppSettings.GlobalAliPayManagement.Partner),
-            Gatewayurl = await SettingManager.GetSettingValueAsync(AppSettings.GlobalAliPayManagement.Gatewayurl),
-            Notify = await SettingManager.GetSettingValueAsync(AppSettings.GlobalAliPayManagement.Notify),
-            ReturnUrl = await SettingManager.GetSettingValueAsync(AppSettings.GlobalAliPayManagement.ReturnUrl),
-            Currency = await SettingManager.GetSettingValueAsync(AppSettings.GlobalAliPayManagement.Currency),
-            IsActive = Convert.ToBoolean(await SettingManager.GetSettingValueAsync(AppSettings.AliPayManagement.IsActive))
-        };
+            var dto = new GlobalAlipaySettingEditDto
+            {
+                Key = await SettingManager.GetSettingValueAsync(AppSettings.GlobalAliPayManagement.Key),
+                Partner = await SettingManager.GetSettingValueAsync(AppSettings.GlobalAliPayManagement.Partner),
+                Gatewayurl = await SettingManager.GetSettingValueAsync(AppSettings.GlobalAliPayManagement.Gatewayurl),
+                Notify = await SettingManager.GetSettingValueAsync(AppSettings.GlobalAliPayManagement.Notify),
+                ReturnUrl = await SettingManager.GetSettingValueAsync(AppSettings.GlobalAliPayManagement.ReturnUrl),
+                Currency = await SettingManager.GetSettingValueAsync(AppSettings.GlobalAliPayManagement.Currency),
+                IsActive = Convert.ToBoolean(
+                    await SettingManager.GetSettingValueAsync(AppSettings.GlobalAliPayManagement.IsActive))
+            };
+            var splitFundSettingsString =
+                await SettingManager.GetSettingValueAsync(AppSettings.GlobalAliPayManagement.SplitFundSettings);
+            if (!splitFundSettingsString.IsNullOrWhiteSpace())
+            {
+                dto.SplitFundSettings = JsonConvert.DeserializeObject<List<SplitFundSettingDto>>(splitFundSettingsString);
+            }
+            return dto;
+        }
 
 
         public async Task UpdateAllSettings(PaySettingEditDto input)
@@ -128,6 +146,11 @@ namespace Magicodes.Admin.Configuration.Pay
             await SaveSettings(AppSettings.GlobalAliPayManagement.ReturnUrl, input.ReturnUrl);
             await SaveSettings(AppSettings.GlobalAliPayManagement.Currency, input.Currency);
             await SaveSettings(AppSettings.GlobalAliPayManagement.IsActive, Convert.ToString(input.IsActive));
+
+            if (input.SplitFundSettings != null && input.SplitFundSettings.Count > 0)
+            {
+                await SaveSettings(AppSettings.GlobalAliPayManagement.SplitFundSettings, JsonConvert.SerializeObject(input.SplitFundSettings));
+            }
         }
     }
 }

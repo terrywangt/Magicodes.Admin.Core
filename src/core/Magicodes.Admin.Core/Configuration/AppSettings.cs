@@ -153,6 +153,11 @@ namespace Magicodes.Admin.Configuration
             public const string Currency = "App.GlobalAliPayManagement.Currency";
 
             public const string IsActive = "App.GlobalAliPayManagement.IsActive";
+
+            /// <summary>
+            /// ∑÷’À–≈œ¢
+            /// </summary>
+            public const string SplitFundSettings = "App.GlobalAliPayManagement.SplitFundSettings";
         }
 
         public static class AliSmsCodeManagement

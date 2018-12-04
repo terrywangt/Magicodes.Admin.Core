@@ -6,6 +6,11 @@ namespace Magicodes.Admin.Configuration.Pay.Dto
 {
     public class GlobalAlipaySettingEditDto
     {
+        public GlobalAlipaySettingEditDto()
+        {
+            SplitFundSettings = new List<SplitFundSettingDto>();
+        }
+
         /// <summary>
         ///     Gets or sets the Key
         ///     MD5密钥，安全检验码，由数字和字母组成的32位字符串，查看地址：https://b.alipay.com/order/pidAndKey.htm
@@ -44,5 +49,10 @@ namespace Magicodes.Admin.Configuration.Pay.Dto
         /// 是否启用
         /// </summary>
         public bool IsActive { get; set; }
+
+        /// <summary>
+        /// 分账信息
+        /// </summary>
+        public List<SplitFundSettingDto> SplitFundSettings { get; set; }
     }
 }
