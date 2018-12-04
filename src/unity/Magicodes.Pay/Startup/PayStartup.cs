@@ -35,8 +35,10 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Magicodes.Alipay.Global.Dto;
 
 namespace Magicodes.Pay.Startup
 {
@@ -183,6 +185,12 @@ namespace Magicodes.Pay.Startup
                     ReturnUrl = await settingManager.GetSettingValueAsync(AppSettings.GlobalAliPayManagement.ReturnUrl),
                     Currency = await settingManager.GetSettingValueAsync(AppSettings.GlobalAliPayManagement.Currency),
                 };
+                var splitFundSettingsString =
+                    await settingManager.GetSettingValueAsync(AppSettings.GlobalAliPayManagement.SplitFundSettings);
+                if (!splitFundSettingsString.IsNullOrWhiteSpace())
+                {
+                    alipaySettings.SplitFundInfo = JsonConvert.DeserializeObject<List<SplitFundSettingInfoDto>>(splitFundSettingsString);
+                }
             }
             else if (!config["GlobalAlipay:IsEnabled"].IsNullOrWhiteSpace() && Convert.ToBoolean(config["Alipay:IsEnabled"]))
             {
@@ -195,6 +203,11 @@ namespace Magicodes.Pay.Startup
                     ReturnUrl = config["GlobalAlipay:ReturnUrl"],
                     Currency = config["GlobalAlipay:Currency"],
                 };
+                var splitFundSettingsString = config["GlobalAlipay:SplitFundInfo"];
+                if (!splitFundSettingsString.IsNullOrWhiteSpace())
+                {
+                    alipaySettings.SplitFundInfo = JsonConvert.DeserializeObject<List<SplitFundSettingInfoDto>>(splitFundSettingsString);
+                }
 
             }
 

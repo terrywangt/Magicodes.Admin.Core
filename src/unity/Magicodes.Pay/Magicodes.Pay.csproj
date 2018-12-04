@@ -3,7 +3,7 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Magicodes.Alipay.Global" Version="0.0.3" />
+    <PackageReference Include="Magicodes.Alipay.Global" Version="0.0.5" />
     <PackageReference Include="Magicodes.Pay.WeChat" Version="1.0.4" />
     <PackageReference Include="Magicodes.PayNotify" Version="0.0.5" />
     <PackageReference Include="Magicodes.Alipay" Version="7.0.7" />
