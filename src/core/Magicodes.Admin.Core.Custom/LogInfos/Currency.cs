@@ -22,10 +22,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using AutoMapper.Internal;
 
 namespace Magicodes.Admin.Core.Custom.LogInfos
 {
@@ -37,100 +35,51 @@ namespace Magicodes.Admin.Core.Custom.LogInfos
     public class Currency
     {
         /// <summary>
-        /// 区域名称
+        /// 货币符号
         /// </summary>
-        [MaxLength(10)]
-        public string CultureName { get; internal set; } //区域(例如：en-us)
-
-        private CultureInfo _culture;
+        [MaxLength(5)]
+        public string Symbol { get; internal set; }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="culture"></param>
+        /// <param name="symbol">货币符号</param>
         /// <param name="currencyValue"></param>
-        public Currency(CultureInfo culture, decimal currencyValue)
+        public Currency(decimal currencyValue, string symbol = "CNY")
         {
-            if (culture == null)
-            {
-                throw new ArgumentNullException(nameof(culture));
-            }
-
-            CultureName = culture.Name;
-            _culture = culture;
+            Symbol = symbol;
             CurrencyValue = currencyValue;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="cultureName"></param>
-        /// <param name="currencyValue"></param>
-        public Currency(string cultureName, decimal currencyValue)
-        {
-            CultureName = cultureName;
-            _culture = null;
-            CurrencyValue = currencyValue;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        [NotMapped]
-        public CultureInfo Culture
-        {
-            get
-            {
-                if (CultureName == null)
-                {
-                    return null;
-                }
-
-                if (_culture != null)
-                {
-                    return _culture;
-                }
-
-                _culture = CultureInfo.CreateSpecificCulture(CultureName);
-                return _culture;
-            }
-        }
         /// <summary>
         /// 值
         /// </summary>
         public decimal CurrencyValue { get; internal set; }
-        
+
         /// <summary>
-        /// 
+        /// 是否为NULL
         /// </summary>
         [NotMapped]
-        public bool IsNull => CultureName == null;
+        public bool IsNull => string.IsNullOrEmpty(Symbol);
 
         /// <summary>
-        /// 
+        /// NUll
         /// </summary>
-        public static Currency Null => new Currency((string)null, 0);
+        public static Currency Null => new Currency(0, null);
 
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        public override string ToString() => IsNull ? string.Empty : string.Format(Culture, "{0:c}", CurrencyValue);
+        public override string ToString() => IsNull ? "0" : $"{CurrencyValue} {Symbol}";
 
         /// <summary>
-        /// 
+        /// 转换金额
         /// </summary>
         /// <param name="currencyStr"></param>
+        /// <param name="symbol"></param>
         /// <returns></returns>
-        public static Currency Parse(string currencyStr) => ParseWithCulture(currencyStr, CultureInfo.CurrentUICulture);
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="currencyStr"></param>
-        /// <param name="culture"></param>
-        /// <returns></returns>
-        public static Currency ParseWithCulture(string currencyStr, CultureInfo culture)
+        public static Currency Parse(string currencyStr, string symbol = "CNY")
         {
             if (string.IsNullOrWhiteSpace(currencyStr))
             {
@@ -145,13 +94,7 @@ namespace Magicodes.Admin.Core.Custom.LogInfos
             {
             }
 
-            if (digitPos < stringValue.Length)
-            {
-                return new Currency(culture, decimal.Parse(
-                    stringValue.Substring(digitPos), culture));
-            }
-
-            return Null;
+            return digitPos < stringValue.Length ? new Currency(decimal.Parse(stringValue.Substring(digitPos)), symbol) : Null;
         }
 
         /// <summary>
@@ -168,9 +111,12 @@ namespace Magicodes.Admin.Core.Custom.LogInfos
         public override bool Equals(object obj)
         {
             if (obj == null)
+            {
                 return false;
-            var propertiesForCompare = this.GetPropertiesForCompare();
-            return !((IEnumerable<PropertyInfo>)propertiesForCompare).Any<PropertyInfo>() || ((IEnumerable<PropertyInfo>)propertiesForCompare).All<PropertyInfo>((Func<PropertyInfo, bool>)(property => object.Equals(property.GetValue((object)this, (object[])null), property.GetValue(obj, (object[])null))));
+            }
+
+            var propertiesForCompare = GetPropertiesForCompare();
+            return !((IEnumerable<PropertyInfo>)propertiesForCompare).Any<PropertyInfo>() || ((IEnumerable<PropertyInfo>)propertiesForCompare).All<PropertyInfo>(property => object.Equals(property.GetValue(this, null), property.GetValue(obj, null)));
         }
 
         /// <summary>
@@ -191,7 +137,7 @@ namespace Magicodes.Admin.Core.Custom.LogInfos
                 return false;
             }
 
-            return x.Equals((object)y);
+            return x.Equals(y);
         }
 
         /// <summary>
@@ -202,15 +148,9 @@ namespace Magicodes.Admin.Core.Custom.LogInfos
         /// <returns></returns>
         public static bool operator !=(Currency x, Currency y) => !(x == y);
 
-        private PropertyInfo[] GetPropertiesForCompare()
-        {
-            return ((IEnumerable<PropertyInfo>)this.GetType().GetTypeInfo().GetProperties()).Where<PropertyInfo>((Func<PropertyInfo, bool>)(t => GetSingleAttributeOrDefault<IgnoreOnCompareAttribute>((MemberInfo)t, (IgnoreOnCompareAttribute)null, true) == null)).ToArray<PropertyInfo>();
-        }
+        private PropertyInfo[] GetPropertiesForCompare() => ((IEnumerable<PropertyInfo>)GetType().GetTypeInfo().GetProperties()).Where<PropertyInfo>(t => GetSingleAttributeOrDefault<IgnoreOnCompareAttribute>(t, null, true) == null).ToArray<PropertyInfo>();
 
         private static TAttribute GetSingleAttributeOrDefault<TAttribute>(MemberInfo memberInfo, TAttribute defaultValue = default(TAttribute), bool inherit = true)
-            where TAttribute : Attribute
-        {
-            return memberInfo.IsDefined(typeof(TAttribute), inherit) ? memberInfo.GetCustomAttributes(typeof(TAttribute), inherit).Cast<TAttribute>().First() : defaultValue;
-        }
+            where TAttribute : Attribute => memberInfo.IsDefined(typeof(TAttribute), inherit) ? memberInfo.GetCustomAttributes(typeof(TAttribute), inherit).Cast<TAttribute>().First() : defaultValue;
     }
 }

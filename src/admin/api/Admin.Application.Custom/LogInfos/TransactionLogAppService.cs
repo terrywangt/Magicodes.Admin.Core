@@ -148,45 +148,6 @@ namespace Admin.Application.Custom.LogInfos
         }
 
 		/// <summary>
-		/// 获取交易日志
-		/// </summary>
-        [AbpAuthorize(AppPermissions.Pages_TransactionLog_Create, AppPermissions.Pages_TransactionLog_Edit)]
-        public async Task<GetTransactionLogForEditOutput> GetTransactionLogForEdit(NullableIdDto<long> input)
-        {
-            TransactionLogEditDto editDto;
-            if (input.Id.HasValue)
-            {
-                var info = await _transactionLogRepository.GetAsync(input.Id.Value);
-                editDto = info.MapTo<TransactionLogEditDto>();
-            }
-            else
-            {
-                editDto = new TransactionLogEditDto();
-
-            }
-            return new GetTransactionLogForEditOutput
-            {
-                TransactionLog = editDto
-            };
-        }
-
-		/// <summary>
-		/// 创建或者编辑交易日志
-		/// </summary>
-        [AbpAuthorize(AppPermissions.Pages_TransactionLog_Create, AppPermissions.Pages_TransactionLog_Edit)]
-        public async Task CreateOrUpdateTransactionLog(CreateOrUpdateTransactionLogDto input)
-        {
-            if (!input.TransactionLog.Id.HasValue)
-            {
-                await CreateTransactionLogAsync(input);
-            }
-            else
-            {
-                await UpdateTransactionLogAsync(input);
-            }
-        }
-
-		/// <summary>
 		/// 删除交易日志
 		/// </summary>
         [AbpAuthorize(AppPermissions.Pages_TransactionLog_Delete)]
@@ -194,62 +155,6 @@ namespace Admin.Application.Custom.LogInfos
         {
             var transactionLog = await _transactionLogRepository.GetAsync(input.Id);
             await _transactionLogRepository.DeleteAsync(transactionLog);
-        }
-
-        /// <summary>
-        /// 创建
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        [AbpAuthorize(AppPermissions.Pages_TransactionLog_Create)]
-        protected virtual async Task CreateTransactionLogAsync(CreateOrUpdateTransactionLogDto input)
-        {
-            var CurrencyName = _settingManager.GetSettingValueAsync("Abp.Localization.DefaultLanguageName").Result;
-            var transactionLog = new TransactionLog()
-            {
-                Currency = new Currency(CurrencyName, input.TransactionLog.Amount),
-                ClientIpAddress = input.TransactionLog.ClientIpAddress,
-                ClientName = input.TransactionLog.ClientName,
-                IsFreeze = input.TransactionLog.IsFreeze,
-                PayChannel = input.TransactionLog.PayChannel,
-                Terminal = input.TransactionLog.Terminal,
-                TransactionState = input.TransactionLog.TransactionState,
-                CustomData = input.TransactionLog.CustomData,
-                OutTradeNo = input.TransactionLog.OutTradeNo,
-                PayTime = input.TransactionLog.PayTime,
-                Exception = input.TransactionLog.Exception,
-                CreatorUserId = AbpSession.UserId,
-                CreationTime = Clock.Now,
-                TenantId = AbpSession.TenantId
-            };
-            await _transactionLogRepository.InsertAsync(transactionLog);
-
-        }
-
-
-        /// <summary>
-        /// 修改
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        [AbpAuthorize(AppPermissions.Pages_TransactionLog_Edit)]
-        protected virtual async Task UpdateTransactionLogAsync(CreateOrUpdateTransactionLogDto input)
-        {
-            var CurrencyName = _settingManager.GetSettingValueAsync("Abp.Localization.DefaultLanguageName").Result;
-            Debug.Assert(input.TransactionLog.Id != null, "必须设置input.TransactionLog.Id的值");
-
-            var transactionLog = await _transactionLogRepository.GetAsync(input.TransactionLog.Id.Value);
-            transactionLog.Currency = new Currency(CurrencyName, input.TransactionLog.Amount);
-            transactionLog.ClientIpAddress = input.TransactionLog.ClientIpAddress;
-            transactionLog.ClientName = input.TransactionLog.ClientName;
-            transactionLog.IsFreeze = input.TransactionLog.IsFreeze;
-            transactionLog.PayChannel = input.TransactionLog.PayChannel;
-            transactionLog.Terminal = input.TransactionLog.Terminal;
-            transactionLog.TransactionState = input.TransactionLog.TransactionState;
-            transactionLog.CustomData = input.TransactionLog.CustomData;
-            transactionLog.OutTradeNo = input.TransactionLog.OutTradeNo;
-            transactionLog.PayTime = input.TransactionLog.PayTime;
-            transactionLog.Exception = input.TransactionLog.Exception;
         }
 
 

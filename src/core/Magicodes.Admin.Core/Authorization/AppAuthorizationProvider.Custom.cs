@@ -19,7 +19,7 @@ namespace Magicodes.Admin.Authorization
 
             #region TransactionLog【交易日志】
             var transactionLog = root.CreateChildPermission(AppPermissions.Pages_TransactionLog, L("TransactionLog"));
-            transactionLog.CreateChildPermission(AppPermissions.Pages_TransactionLog_Create, L("CreateNew"));
+            //transactionLog.CreateChildPermission(AppPermissions.Pages_TransactionLog_Create, L("CreateNew"));
             transactionLog.CreateChildPermission(AppPermissions.Pages_TransactionLog_Edit, L("Edit"));
             transactionLog.CreateChildPermission(AppPermissions.Pages_TransactionLog_Delete, L("Delete"));
             transactionLog.CreateChildPermission(AppPermissions.Pages_TransactionLog_Restore, L("Restore"));

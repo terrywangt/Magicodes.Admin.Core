@@ -12,7 +12,7 @@ namespace Magicodes.Admin.Authorization
 
         public const string Pages_TransactionLog = "Pages.TransactionLog";
 
-        public const string Pages_TransactionLog_Create = "Pages.TransactionLog.Create";
+        //public const string Pages_TransactionLog_Create = "Pages.TransactionLog.Create";
 
         public const string Pages_TransactionLog_Edit = "Pages.TransactionLog.Edit";
 

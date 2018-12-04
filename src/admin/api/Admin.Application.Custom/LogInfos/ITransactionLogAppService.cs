@@ -18,16 +18,6 @@ namespace Admin.Application.Custom.LogInfos
         Task<PagedResultDto<TransactionLogListDto>> GetTransactionLogs(GetTransactionLogsInput input);
 
 		/// <summary>
-		/// 获取交易日志
-		/// </summary>
-        Task<GetTransactionLogForEditOutput> GetTransactionLogForEdit(NullableIdDto<long> input);
-
-		/// <summary>
-		/// 创建或编辑交易日志
-		/// </summary>
-        Task CreateOrUpdateTransactionLog(CreateOrUpdateTransactionLogDto input);
-
-		/// <summary>
 		/// 删除交易日志
 		/// </summary>
         Task DeleteTransactionLog(EntityDto<long> input);

@@ -88,15 +88,16 @@ namespace Magicodes.Pay.Log
         ///     创建交易日志
         /// </summary>
         /// <param name="transactionInfo"></param>
+        /// <param name="symbol">货币符号</param>
         /// <returns></returns>
-        public TransactionLog CreateTransactionLog(TransactionInfo transactionInfo)
+        public TransactionLog CreateTransactionLog(TransactionInfo transactionInfo, string symbol = "CNY")
         {
             var cultureName = _settingManager.GetSettingValueAsync("Abp.Localization.DefaultLanguageName").Result;
             var log = new TransactionLog
             {
                 TenantId = AbpSession.TenantId,
                 CreatorUserId = AbpSession.UserId,
-                Currency = new Currency(cultureName, transactionInfo.Amount),
+                Currency = new Currency(transactionInfo.Amount, symbol),
                 Name = transactionInfo.Subject,
                 CustomData = transactionInfo.CustomData,
                 OutTradeNo = transactionInfo.OutTradeNo,

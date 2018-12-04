@@ -22,7 +22,9 @@ using Abp.UI;
 using Magicodes.Admin.Authorization.Users;
 using Magicodes.Admin.Core.Custom.LogInfos;
 using Magicodes.Alipay;
+using Magicodes.Alipay.Global;
 using Magicodes.Pay.Log;
+using Magicodes.Pay.PaymentCallbacks;
 using Magicodes.Pay.Services.Dto;
 using Magicodes.Pay.WeChat;
 using Microsoft.AspNetCore.Mvc;
@@ -30,7 +32,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Threading.Tasks;
-using Magicodes.Alipay.Global;
 using AppPayOutput = Magicodes.Pay.WeChat.Pay.Dto.AppPayOutput;
 
 namespace Magicodes.Pay.Services
@@ -43,12 +44,15 @@ namespace Magicodes.Pay.Services
     public class PayAppService : IPayAppService
     {
         private readonly IClientInfoProvider _clientInfoProvider;
+        private readonly PaymentCallbackManager _paymentCallbackManager;
         public UserManager UserManager { get; set; }
 
-        public PayAppService(IClientInfoProvider clientInfoProvider, TransactionLogHelper transactionLogHelper)
+
+        public PayAppService(IClientInfoProvider clientInfoProvider, TransactionLogHelper transactionLogHelper, PaymentCallbackManager paymentCallbackManager)
         {
             _clientInfoProvider = clientInfoProvider;
             _transactionLogHelper = transactionLogHelper;
+            _paymentCallbackManager = paymentCallbackManager;
         }
 
         public WeChatPayApi WeChatPayApi { get; set; }
@@ -75,6 +79,7 @@ namespace Magicodes.Pay.Services
 
             try
             {
+                //TODO:添加客户端请求头判断,支持自动使用PC/H5/APP等支付
                 switch (input.PayChannel)
                 {
                     case PayChannels.WeChatPay:
@@ -82,6 +87,9 @@ namespace Magicodes.Pay.Services
                         break;
                     case PayChannels.AliPay:
                         output = await AliAppPay(input);
+                        break;
+                    case PayChannels.GlobalAlipay:
+                        output = await GlobalAlipay(input);
                         break;
                     case PayChannels.BalancePay:
                         await BalancePay(input);
@@ -94,12 +102,17 @@ namespace Magicodes.Pay.Services
             {
                 exception = ex;
             }
-            //创建交易日志
-            await CreateToPayTransactionInfo(input, exception);
-            if (exception != null)
+
+            if (input.PayChannel != PayChannels.BalancePay)
             {
-                throw new UserFriendlyException("支付异常，请联系客服人员或稍后再试！");
+                //创建交易日志
+                await CreateToPayTransactionInfo(input, exception);
+                if (exception != null)
+                {
+                    throw new UserFriendlyException("支付异常，请联系客服人员或稍后再试！");
+                }
             }
+
             return output;
         }
 
@@ -108,8 +121,8 @@ namespace Magicodes.Pay.Services
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        [HttpPost("AppPay/Alipay")]
-        public async Task<string> AliAppPay(AppPayInput input)
+        //[HttpPost("AppPay/Alipay")]
+        protected async Task<string> AliAppPay(AppPayInput input)
         {
             if (AlipayAppService == null)
             {
@@ -139,8 +152,8 @@ namespace Magicodes.Pay.Services
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        [HttpPost("AppPay/GlobalAlipay")]
-        public async Task<PayOutput> GlobalAlipay(AppPayInput input)
+        //[HttpPost("AppPay/GlobalAlipay")]
+        protected async Task<PayOutput> GlobalAlipay(AppPayInput input)
         {
             if (GlobalAlipayAppService == null)
             {
@@ -169,8 +182,8 @@ namespace Magicodes.Pay.Services
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        [HttpPost("AppPay/WeChat")]
-        public Task<AppPayOutput> WeChatAppPay(AppPayInput input)
+        //[HttpPost("AppPay/WeChat")]
+        protected Task<AppPayOutput> WeChatAppPay(AppPayInput input)
         {
             if (WeChatPayApi == null)
             {
@@ -200,44 +213,27 @@ namespace Magicodes.Pay.Services
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task BalancePay(PayInput input)
+        protected async Task BalancePay(PayInput input)
         {
             var data = JsonConvert.DeserializeObject<JObject>(input.CustomData);
-            var code = data["code"]?.ToString();
             var uid = data["uid"]?.ToString();
+            var log = await CreateToPayTransactionInfo(input);
 
-            if (data["key"]?.ToString() == "订单支付")
-            {
-                //await _orderManager.UpdateOrderPayStatus(code, input.TotalAmount);
-            }
-            else
+            if (data["key"]?.ToString() == "系统充值")
             {
                 throw new UserFriendlyException("余额支付不支持此业务！");
             }
+
             var userIdentifer = UserIdentifier.Parse(uid);
             await UserManager.UpdateRechargeInfo(userIdentifer, (int)(-input.TotalAmount * 100));
-
-            var transactionInfo = new TransactionInfo()
-            {
-                Amount = input.TotalAmount,
-                CustomData = input.CustomData,
-                OutTradeNo = input.OutTradeNo ?? GenerateOutTradeNo(),
-                PayChannel = input.PayChannel,
-                Subject = input.Subject,
-                TransactionState = TransactionStates.NotPay,
-                //TransactionId = "",
-                Exception = null,
-                PayTime = Clock.Now,
-            };
-            var transactionLog = _transactionLogHelper.CreateTransactionLog(transactionInfo);
-            await _transactionLogHelper.SaveAsync(transactionLog);
+            await _paymentCallbackManager.ExecuteCallback(data["key"]?.ToString(), log.OutTradeNo, log.TransactionId, (int)(input.TotalAmount * 100), data);
         }
 
         /// <summary>
         /// 创建交易日志
         /// </summary>
         /// <returns></returns>
-        private async Task CreateToPayTransactionInfo(PayInput input, Exception exception = null)
+        private async Task<TransactionLog> CreateToPayTransactionInfo(PayInput input, Exception exception = null)
         {
             var transactionInfo = new TransactionInfo()
             {
@@ -250,8 +246,19 @@ namespace Magicodes.Pay.Services
                 //TransactionId = "",
                 Exception = exception
             };
-            var transactionLog = _transactionLogHelper.CreateTransactionLog(transactionInfo);
+            TransactionLog transactionLog = null;
+            if (input.PayChannel == PayChannels.GlobalAlipay)
+            {
+                //添加货币符号，以支持国际支付
+                var config = Magicodes.Alipay.Global.GlobalAlipayAppService.GetPayConfigFunc();
+                transactionLog = _transactionLogHelper.CreateTransactionLog(transactionInfo, config.Currency);
+            }
+            else
+            {
+                transactionLog = _transactionLogHelper.CreateTransactionLog(transactionInfo);
+            }
             await _transactionLogHelper.SaveAsync(transactionLog);
+            return transactionLog;
         }
 
         /// <summary>

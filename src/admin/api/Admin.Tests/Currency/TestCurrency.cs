@@ -1,20 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Shouldly;
 using Xunit;
 
 namespace Magicodes.Admin.Tests.Currency
 {
-    public class TestCurrency: AppTestBase
+    public class TestCurrency : AppTestBase
     {
         [Fact]
         public void TestCurrencyToString()
         {
-            Core.Custom.LogInfos.Currency currency = new Core.Custom.LogInfos.Currency("zh-CN", 300);
-            var cn = currency.ToString();
+            var currency = new Core.Custom.LogInfos.Currency(300);
+            currency.ToString().ShouldBe("300 CNY");
 
-            Core.Custom.LogInfos.Currency currency1 = new Core.Custom.LogInfos.Currency("en-us", 300);
-            var us = currency1.ToString();
+            var currency1 = new Core.Custom.LogInfos.Currency(300, "USD");
+            currency1.ToString().ShouldBe("300 USD");
+
         }
     }
 }
