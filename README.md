@@ -56,7 +56,9 @@ https://gitee.com/xl_wenqiang/Magicodes.Admin.Core/commits/develop
 ## Demo
 
 已通过腾讯云Docker容器托管:
+即将提供开发版和正式版演示环境
 
+开发版(开发版本可能出现问题导致无法打开):
 https://demoadmin.xin-lai.com
 
 * 账号：Admin
@@ -124,6 +126,14 @@ https://demoadmin.xin-lai.com
 ## 生成服务
 
  高级版附送代码生成工具以及相关源代码。**目前线上生成服务Beta版一上线，在内测阶段，仅提供给高级版客户。**
+ 
+ 界面预览:
+
+<img src="res/cloud1.jpg">
+<img src="res/cloud2.jpg">
+<img src="res/cloud4.png">
+<img src="res/cloud3.png">
+
 
 ## 授权文档下载：
 
