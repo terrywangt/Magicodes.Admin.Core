@@ -1,8 +1,15 @@
+# Ê¹ÓÃÔËĞĞÊ±¾µÏñ
 FROM microsoft/dotnet:2.1-aspnetcore-runtime
 
+# ÉèÖÃ¹¤×÷Ä¿Â¼£¬CD
 WORKDIR /app
-COPY . .
-# å®‰è£…libgdiplusåº“
+
+# °²×°libgdiplus¿â£¬ÓÃÓÚExcelµ¼³ö
 RUN apt-get update && apt-get install -y libgdiplus
+
+# ¸´ÖÆ
+COPY . .
+
+# 
 ENTRYPOINT ["dotnet", "Magicodes.Admin.Web.Host.dll"]
 

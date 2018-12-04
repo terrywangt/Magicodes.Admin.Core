@@ -88,20 +88,18 @@ function SetConfigFromFile {
         $script:tsImageAppHostName = $config.tsImageAppHostName;
         $script:tsImageUiName = $config.tsImageUiName;
         $script:imageVersion= $config.imageVersion;
-        if($debug)
-        {
-            LogDebug "tsUserName:$script:tsUserName"
-            LogDebug "tsPassword:$script:tsPassword"
-            LogDebug $script:tsImageHostName
-            LogDebug $script:tsImageUiName
-            LogDebug $script:SqlConnectionString
-        }
+        LogDebug "tsUserName:$script:tsUserName"
+        LogDebug "tsPassword:$script:tsPassword"
+        LogDebug $script:tsImageHostName
+        LogDebug $script:tsImageUiName
+        LogDebug $script:SqlConnectionString
     }
 }
 
 
 ## 清理 ######################################################################
 function ClearOutputFolder {
+    LogDebug "正在清理输出目录"
     Remove-Item $outputFolder -Force -Recurse -ErrorAction Ignore
     New-Item -Path $outputFolder -ItemType Directory
 }
@@ -109,6 +107,7 @@ function ClearOutputFolder {
 
 ## 还原Nuget包 #####################################################
 function RestoreSlnFolder {
+    LogDebug "正在还原包"
     Set-Location $slnFolder
     dotnet restore
 }
@@ -129,19 +128,23 @@ function PublishWebHostFolder {
             Set-Location $buildFolder
             exit;
        }
-        # Write-Host $lastexitcode
     }
     Set-Location $webHostFolder
 
+    LogDebug "正在发布输出文件"
     dotnet publish --output (Join-Path $outputFolder "Host")
     if($lastexitcode -eq 1)
     {
-        Write-Error "部署失败，已终止！"
+        Write-Error "发布失败，已终止！"
         Set-Location $buildFolder
         exit;
     }
 
     $hostOutputPath = Join-Path $outputFolder "Host"
+
+    LogDebug "正在复制docker/host相关配置"
+    # 复制dockerfile等配置或想覆盖的自定义配置（比如运行时的dockerfile）
+    Copy-Item (Join-Path $slnFolder "docker/host/*") $hostOutputPath
 
     if(![String]::IsNullOrEmpty($hostConfigFile))
     {
@@ -149,47 +152,47 @@ function PublishWebHostFolder {
         if([io.File]::Exists($configFilePath))
         {
             Copy-Item $configFilePath $hostOutputPath
-            Write-Host "已成功覆盖Host配置文件"
-            # Remove-Item  -Path (Join-Path $hostOutputPath "appsettings.production.json")
-            # Remove-Item  -Path (Join-Path $hostOutputPath "appsettings.Staging.json")
-            # Remove-Item  -Path (Join-Path $hostOutputPath "appsettings.development.json")
+            LogDebug "已成功覆盖Host配置文件"
         }else {
              Write-Host "配置文件${configFilePath}不存在"
         }
     }
+
+
 }
 
 ## 发布AppHost工程 ###################################################
 function PublishAppHostFolder {
-  Set-Location $appHostFolder
-  dotnet publish --output (Join-Path $outputFolder "AppHost")
+    Set-Location $appHostFolder
+    LogDebug "正在发布输出文件"
+    dotnet publish --output (Join-Path $outputFolder "AppHost")
+    if($lastexitcode -eq 1)
+    {
+        Write-Error "发布失败，已终止！"
+        Set-Location $buildFolder
+        exit;
+    }
 
-  $hostOutputPath = Join-Path $outputFolder "AppHost"
+    $hostOutputPath = Join-Path $outputFolder "AppHost"
 
-#   if (![String]::IsNullOrEmpty($hostConfigFile)) {
-#     $configFilePath = Join-Path $buildFolder $hostConfigFile;
-#     if ([io.File]::Exists($configFilePath)) {
-#       Copy-Item $configFilePath $hostOutputPath
-#       # Remove-Item  -Path (Join-Path $hostOutputPath "appsettings.production.json")
-#       # Remove-Item  -Path (Join-Path $hostOutputPath "appsettings.Staging.json")
-#       # Remove-Item  -Path (Join-Path $hostOutputPath "appsettings.development.json")
-#     }
-#   }
+    LogDebug "正在复制docker/appHost"
+    # 复制dockerfile等配置或想覆盖的自定义配置（比如运行时的dockerfile）
+    Copy-Item (Join-Path $slnFolder "docker/appHost/*") $hostOutputPath
 }
 
 ## 发布 ANGULAR UI 工程 #################################################
 function PublicNgFolder {
+    LogDebug "正在发布Angular工程"
+
     Set-Location $ngFolder
     & yarn
     & ng build --prod --configuration=production
     Copy-Item (Join-Path $ngFolder "dist") (Join-Path $outputFolder "ng/") -Recurse
     Copy-Item (Join-Path $ngFolder "Dockerfile") (Join-Path $outputFolder "ng")
 
-    Copy-Item (Join-Path $slnFolder "docker/tsng/*.*") $outputFolder
-    # 复制nginx配置文件
-    Copy-Item (Join-Path $outputFolder "nginx.conf") (Join-Path $outputFolder "ng")
-    Copy-Item (Join-Path $outputFolder "*.key") (Join-Path $outputFolder "ng")
-    Copy-Item (Join-Path $outputFolder "*.crt") (Join-Path $outputFolder "ng")
+    LogDebug "正在覆盖docker/ng 相关配置"
+    # 复制nginx配置文件、SSL证书等
+    Copy-Item (Join-Path $slnFolder "docker/ng/*.*") (Join-Path $outputFolder "ng")
 
     if(![String]::IsNullOrEmpty($appConfigFile))
     {
@@ -197,6 +200,7 @@ function PublicNgFolder {
         if([io.File]::Exists($configFilePath))
         {
             Copy-Item $configFilePath (Join-Path $outputFolder "ng/assets/appconfig.production.json")
+            LogDebug "已覆盖 ng/assets/appconfig.production.json 配置文件"
         }
     }
 }
@@ -204,7 +208,7 @@ function PublicNgFolder {
 
 ## 创建 DOCKER 镜像 #######################################################
 function CreateDocker {
-
+    LogDebug "正在创建相关镜像"
     if(($pushType -eq "ALL") -or ($pushType -eq "HOST"))
     {
         # Host
@@ -212,6 +216,8 @@ function CreateDocker {
 
         # docker rmi $tsImageHostName -f
         docker build ./ -t $tsImageHostName
+
+        LogDebug "已创建$tsImageHostName"
     }
     if(($pushType -eq "ALL") -or ($pushType -eq "APPHOST"))
     {
@@ -220,6 +226,8 @@ function CreateDocker {
 
         # docker rmi $tsImageAppHostName -f
         docker build ./ -t $tsImageAppHostName
+
+        LogDebug "已创建$tsImageAppHostName"
     }
     if(($pushType -eq "ALL") -or  ($pushType -eq "NG"))
     {
@@ -228,15 +236,17 @@ function CreateDocker {
 
         # docker rmi $tsImageUiName -f
         docker build ./ -t $tsImageUiName
+
+        LogDebug "已创建$tsImageUiName"
     }
 }
 
 
 ## 推送Docker文件
 function PushDockerImage {
-    Write-Host '准备推送...'
+    LogDebug "正在推送镜像"
     docker login --username $tsUserName --password $tsPassword ccr.ccs.tencentyun.com
-    Write-Host '已登录，正在推送...'
+    LogDebug "已登录，正在推送..."
     if(($pushType -eq "ALL") -or ($pushType -eq "HOST"))
     {
         docker push "${tsImageHostName}:${imageVersion}"
@@ -259,6 +269,8 @@ SetConfigFromFile
 if (!$nobuild) {
     #清理输出目录
     ClearOutputFolder
+    LogDebug "正在复制compose相关配置"
+    Copy-Item (Join-Path $slnFolder "docker/compose/*.*") $outputFolder
     if(($pushType -eq "ALL") -or  ($pushType -eq "HOST"))
     {
         #还原包
