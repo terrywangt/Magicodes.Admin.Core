@@ -5,9 +5,9 @@
     <RootNamespace>Magicodes.Admin</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Abp" Version="3.9.0" />
-    <PackageReference Include="Abp.Zero.Common" Version="3.9.0" />
-    <PackageReference Include="Abp.ZeroCore" Version="3.9.0" />
+    <PackageReference Include="Abp" Version="4.0.2" />
+    <PackageReference Include="Abp.Zero.Common" Version="4.0.2" />
+    <PackageReference Include="Abp.ZeroCore" Version="4.0.2" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Update="NETStandard.Library" Version="2.0.3" />

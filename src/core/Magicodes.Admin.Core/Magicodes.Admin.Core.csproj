@@ -14,19 +14,19 @@
     <RootNamespace>Magicodes.Admin</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="2.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="2.2.0" />
     <PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="3.3.1" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
-    <PackageReference Include="TimeZoneConverter" Version="2.4.1" />
-    <PackageReference Include="Abp.AspNetZeroCore" Version="1.1.8" />
+    <PackageReference Include="TimeZoneConverter" Version="2.4.2" />
+    <PackageReference Include="Abp.AspNetZeroCore" Version="1.1.9" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Abp.ZeroCore.IdentityServer4.EntityFrameworkCore" Version="3.9.0" />
-    <PackageReference Include="Abp.AutoMapper" Version="3.9.0" />
-    <PackageReference Include="Abp.MailKit" Version="3.9.0" />
-    <PackageReference Include="Abp.Zero.Ldap" Version="3.9.0" />
+    <PackageReference Include="Abp.ZeroCore.IdentityServer4.EntityFrameworkCore" Version="4.0.2" />
+    <PackageReference Include="Abp.AutoMapper" Version="4.0.2" />
+    <PackageReference Include="Abp.MailKit" Version="4.0.2" />
+    <PackageReference Include="Abp.Zero.Ldap" Version="4.0.2" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />

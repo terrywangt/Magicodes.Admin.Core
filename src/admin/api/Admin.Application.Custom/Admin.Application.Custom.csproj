@@ -11,7 +11,7 @@
   <ItemGroup>
     <!--<PackageReference Include="Abp.AspNetCore" Version="3.7.2" />-->
     <PackageReference Include="Magicodes.ExporterAndImporter.Excel" Version="0.0.8" />
-    <PackageReference Include="Abp.Dapper" Version="4.0.1" />
+    <PackageReference Include="Abp.Dapper" Version="4.0.2" />
   </ItemGroup>
 
   <ItemGroup>

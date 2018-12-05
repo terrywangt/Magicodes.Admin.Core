@@ -62,6 +62,7 @@ namespace Magicodes.Admin.Web.Startup
 
             if (!_appConfiguration["Abp:SignalRRedisCache:ConnectionString"].IsNullOrWhiteSpace())
             {
+                _logger.LogWarning("Abp:SignalRRedisCache:ConnectionString:" + _appConfiguration["Abp:SignalRRedisCache:ConnectionString"]);
                 sbuilder.AddRedis(_appConfiguration["Abp:SignalRRedisCache:ConnectionString"]);
             }
 
@@ -189,10 +190,14 @@ namespace Magicodes.Admin.Web.Startup
                 }
             }
 
+            app.UseWebSockets();
             app.UseSignalR(routes =>
             {
                 routes.MapHub<AbpCommonHub>("/signalr");
                 routes.MapHub<ChatHub>("/signalr-chat");
+                // //Ê¹ÓÃ³¤ÂÖÑ¯
+                // routes.MapHub<AbpCommonHub>("/signalr", otp => otp.Transports = Microsoft.AspNetCore.Http.Connections.HttpTransportType.LongPolling);
+                //routes.MapHub<ChatHub>("/signalr-chat", otp => otp.Transports = Microsoft.AspNetCore.Http.Connections.HttpTransportType.LongPolling);
             });
 
             if (bool.Parse(_appConfiguration["App:HttpsRedirection"] ?? "false"))

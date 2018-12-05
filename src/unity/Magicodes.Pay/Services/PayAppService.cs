@@ -32,6 +32,8 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Threading.Tasks;
+using Abp.Json;
+using Castle.Core.Logging;
 using AppPayOutput = Magicodes.Pay.WeChat.Pay.Dto.AppPayOutput;
 
 namespace Magicodes.Pay.Services
@@ -46,6 +48,7 @@ namespace Magicodes.Pay.Services
         private readonly IClientInfoProvider _clientInfoProvider;
         private readonly PaymentCallbackManager _paymentCallbackManager;
         public UserManager UserManager { get; set; }
+        public ILogger Logger { get; set; }
 
 
         public PayAppService(IClientInfoProvider clientInfoProvider, TransactionLogHelper transactionLogHelper, PaymentCallbackManager paymentCallbackManager)
@@ -53,6 +56,7 @@ namespace Magicodes.Pay.Services
             _clientInfoProvider = clientInfoProvider;
             _transactionLogHelper = transactionLogHelper;
             _paymentCallbackManager = paymentCallbackManager;
+            Logger = NullLogger.Instance;
         }
 
         public WeChatPayApi WeChatPayApi { get; set; }
@@ -70,6 +74,7 @@ namespace Magicodes.Pay.Services
         /// <returns></returns>
         public async Task<object> Pay(PayInput input)
         {
+            Logger.Debug("准备发起支付：" + input.ToJsonString());
             object output = null;
             Exception exception = null;
             if (input.OutTradeNo == null)
@@ -109,6 +114,7 @@ namespace Magicodes.Pay.Services
                 await CreateToPayTransactionInfo(input, exception);
                 if (exception != null)
                 {
+                    Logger.Error("支付失败！", exception);
                     throw new UserFriendlyException("支付异常，请联系客服人员或稍后再试！");
                 }
             }
