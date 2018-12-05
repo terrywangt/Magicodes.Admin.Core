@@ -88,6 +88,11 @@ export class PaySettingsComponent extends AppComponentBase
             this.primengTableHelper.records = this.splitFunds;
             console.log(this.primengTableHelper.records);
             this.primengTableHelper.hideLoadingIndicator();
+        }else{
+            this.primengTableHelper.totalRecordsCount = 0;
+            this.primengTableHelper.records = [];
+            console.log(this.primengTableHelper.records);
+            this.primengTableHelper.hideLoadingIndicator();
         }
     }
 

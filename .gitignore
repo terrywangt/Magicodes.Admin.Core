@@ -149,3 +149,5 @@ src/admin/ui/dist.7z
 /src/admin/api/Admin.Host/xin-lai.com.pfx
 /docker/ng/xin-lai.com.key
 /docker/ng/xin-lai.com_bundle.crt
+docker/host/xin-lai.com.key
+docker/host/xin-lai.com_bundle.crt
