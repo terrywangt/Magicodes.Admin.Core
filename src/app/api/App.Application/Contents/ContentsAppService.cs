@@ -96,6 +96,7 @@ namespace Magicodes.App.Application.Contents.Contents
             List<GetColumnListDto> ltOutput = new List<GetColumnListDto>();
 
             var query = _columnInfoRepository.GetAll();
+
             switch (input.Position)
             {
                 case GetColumnListInput.PositionEnum.Default:
@@ -122,7 +123,8 @@ namespace Magicodes.App.Application.Contents.Contents
                                     Introduction = ci.Introduction,
                                     IconCls = ci.IconCls,
                                     Position = ci.Position,
-                                    ColumnType = ci.ColumnType
+                                    ColumnType = ci.ColumnType,
+                                    Code = ci.Code
                                 }).ToListAsync();
 
             ltOutput = output.Select(aa => new GetColumnListDto
@@ -133,6 +135,7 @@ namespace Magicodes.App.Application.Contents.Contents
                 IconCls = aa.IconCls,
                 Position = GetColumnListDtoPosition(aa.Position),
                 ColumnType = GetColumnListDtoColumnType(aa.ColumnType),
+                Code = aa.Code
             }).ToList();
 
 
@@ -181,15 +184,25 @@ namespace Magicodes.App.Application.Contents.Contents
         [HttpGet("ColumnInfo/{Id}")]
         public async Task<GetColumnDetailInfoOutput> GetColumnDetailInfo(GetColumnDetailInfoInput input)
         {
-            var columnInfo = await _columnInfoRepository.GetAll()
-                                        .FirstOrDefaultAsync(aa => aa.Id == input.Id);
-            
+            var query = _columnInfoRepository.GetAll();
+            ColumnInfo columnInfo = null;
+
+            if (input.Id.HasValue)
+            {
+                columnInfo = await query.FirstOrDefaultAsync(aa => aa.Id == input.Id);
+            }
+            else if (!string.IsNullOrWhiteSpace(input.Code))
+            {
+                columnInfo = await query.FirstOrDefaultAsync(aa => aa.Code == input.Code);
+            }
+
             if (columnInfo != null)
             {
                 GetColumnDetailInfoOutput output = new GetColumnDetailInfoOutput
                 {
                     ColumnInfoId = columnInfo.Id,
                     Title = columnInfo.Title,
+                    Code = columnInfo.Code,
                     Introduction = columnInfo.Introduction,
                     Description = columnInfo.Description,
                     Url = columnInfo.Url,
@@ -250,8 +263,16 @@ namespace Magicodes.App.Application.Contents.Contents
         [HttpGet("ArticleInfo")]
         public async Task<PagedResultDto<GetArticleListDto>> GetArticleList(GetArticleListInput input)
         {
-            var query = _articleInfoRepository.GetAllIncluding(aa => aa.ColumnInfo, aa => aa.ArticleSourceInfo, aa => aa.ArticleTagInfos)
-                                                .Where(aa => aa.ColumnInfoId == input.ColumnInfoId);
+            var query = _articleInfoRepository.GetAllIncluding(aa => aa.ColumnInfo, aa => aa.ArticleSourceInfo, aa => aa.ArticleTagInfos);
+            if (input.ColumnInfoId.HasValue)
+            {
+                query = query.Where(aa => aa.ColumnInfoId == input.ColumnInfoId);
+            }
+            else if (!string.IsNullOrWhiteSpace(input.ColumnInfoCode))
+            {
+                query = query.Where(aa => aa.ColumnInfo.Code == input.ColumnInfoCode);
+            }
+
             if (!string.IsNullOrWhiteSpace(input.KeyWord))
             {
                 query = query.Where(aa => aa.Title.Contains(input.KeyWord) || aa.ColumnInfo.Title.Contains(input.KeyWord));
@@ -291,6 +312,7 @@ namespace Magicodes.App.Application.Contents.Contents
                               {
                                   ArticleInfoId = aa.Id,
                                   Title = aa.Title,
+                                  ThumbnailUrl = tt != null ? tt.AttachmentInfo.Url : "",
                                   Publisher = aa.Publisher,
                                   ColumnInfoTitle = aa.ColumnInfo.Title,
                                   ArticleSourceInfoName = aa.ArticleSourceInfo.Name,
@@ -304,6 +326,7 @@ namespace Magicodes.App.Application.Contents.Contents
             {
                 ArticleInfoId = aa.ArticleInfoId,
                 Title = aa.Title,
+                ThumbnailUrl = aa.ThumbnailUrl,
                 Publisher = aa.Publisher,
                 ColumnInfoTitle = aa.ColumnInfoTitle,
                 ArticleSourceInfoName = aa.ArticleSourceInfoName,

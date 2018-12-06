@@ -27,6 +27,11 @@ namespace Magicodes.App.Application.Contents.Contents.Dto
         public string Introduction { get; set; }
 
         /// <summary>
+        /// 栏目编码
+        /// </summary>
+        public string Code { get; set; }
+
+        /// <summary>
         /// 位置
         /// </summary>
         public PositionEnum Position { get; set; }

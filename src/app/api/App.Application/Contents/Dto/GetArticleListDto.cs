@@ -22,6 +22,11 @@ namespace Magicodes.App.Application.Contents.Contents.Dto
         public string Title { get; set; }
 
         /// <summary>
+        /// 缩略图地址
+        /// </summary>
+        public string ThumbnailUrl { get; set; }
+        
+        /// <summary>
         /// 发布人（机构）
         /// </summary>
         public string Publisher { get; set; }

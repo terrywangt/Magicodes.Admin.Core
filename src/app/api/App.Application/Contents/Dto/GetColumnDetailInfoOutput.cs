@@ -32,6 +32,11 @@ namespace Magicodes.App.Application.Contents.Contents.Dto
         public string Description { get; set; }
 
         /// <summary>
+        /// 栏目编码
+        /// </summary>
+        public string Code { get; set; }
+
+        /// <summary>
         /// 链接
         /// </summary>
         public string Url { get; set; }
@@ -58,6 +63,7 @@ namespace Magicodes.App.Application.Contents.Contents.Dto
             /// 首页
             /// </summary>
             Default = 0, 
+
         }
 
         public enum ColumnTypeEnum
@@ -66,7 +72,6 @@ namespace Magicodes.App.Application.Contents.Contents.Dto
             /// Html文本
             /// </summary>
             Html = 1, 
-
             /// <summary>
             /// 图片
             /// </summary>

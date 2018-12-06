@@ -18,8 +18,12 @@ namespace Magicodes.App.Application.Contents.Contents.Dto
 		/// <summary>
 		/// 栏目Id
 		/// </summary>
-		[Required]
-		public long ColumnInfoId { get; set; }
+		public long? ColumnInfoId { get; set; }
+
+		/// <summary>
+		/// 栏目编码
+		/// </summary>
+		public string ColumnInfoCode { get; set; }
 
 		/// <summary>
 		/// 关键字(模糊查询用)
