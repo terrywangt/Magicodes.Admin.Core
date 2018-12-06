@@ -20,6 +20,10 @@ namespace Magicodes.App.Application.Contents.Contents.Dto
 		/// </summary>
 		[Required]
 		public long Id { get; set; }
+        /// <summary>
+        /// 文章编号
+        /// </summary>
+        public string Code { get; set; }
 
 
     }

@@ -312,6 +312,7 @@ namespace Magicodes.App.Application.Contents.Contents
                               {
                                   ArticleInfoId = aa.Id,
                                   Title = aa.Title,
+                                  Intro = aa.Content.Length > 20 ? $"{aa.Content.Substring(0, 20)}..." : "",
                                   ThumbnailUrl = tt != null ? tt.AttachmentInfo.Url : "",
                                   Publisher = aa.Publisher,
                                   ColumnInfoTitle = aa.ColumnInfo.Title,
@@ -326,6 +327,7 @@ namespace Magicodes.App.Application.Contents.Contents
             {
                 ArticleInfoId = aa.ArticleInfoId,
                 Title = aa.Title,
+                Intro = aa.Intro,
                 ThumbnailUrl = aa.ThumbnailUrl,
                 Publisher = aa.Publisher,
                 ColumnInfoTitle = aa.ColumnInfoTitle,
@@ -371,8 +373,17 @@ namespace Magicodes.App.Application.Contents.Contents
         [HttpGet("ArticleInfo/{Id}")]
         public async Task<GetArticleDetailInfoOutput> GetArticleDetailInfo(GetArticleDetailInfoInput input)
         {
-            var articleInfo = await _articleInfoRepository.GetAllIncluding(aa => aa.ColumnInfo, aa => aa.ArticleSourceInfo, aa => aa.ArticleTagInfos)
-                                                .FirstOrDefaultAsync(aa => aa.Id == input.Id);
+            ArticleInfo articleInfo = null;
+            if (input.Id == 0)
+            {
+                articleInfo = await _articleInfoRepository.GetAllIncluding(aa => aa.ColumnInfo, aa => aa.ArticleSourceInfo, aa => aa.ArticleTagInfos)
+                                        .FirstOrDefaultAsync(aa => aa.Code == input.Code);
+            }
+            else
+            {
+                articleInfo = await _articleInfoRepository.GetAllIncluding(aa => aa.ColumnInfo, aa => aa.ArticleSourceInfo, aa => aa.ArticleTagInfos)
+                                                    .FirstOrDefaultAsync(aa => aa.Id == input.Id);
+            }
             if (articleInfo != null)
             {
                 GetArticleDetailInfoOutput output = new GetArticleDetailInfoOutput

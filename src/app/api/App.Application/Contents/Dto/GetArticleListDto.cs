@@ -22,6 +22,11 @@ namespace Magicodes.App.Application.Contents.Contents.Dto
         public string Title { get; set; }
 
         /// <summary>
+        /// 简介
+        /// </summary>
+        public string Intro { get; set; }
+
+        /// <summary>
         /// 缩略图地址
         /// </summary>
         public string ThumbnailUrl { get; set; }
@@ -47,7 +52,7 @@ namespace Magicodes.App.Application.Contents.Contents.Dto
         public RecommendedTypesEnum RecommendedTypes { get; set; }
 
         /// <summary>
-        /// 栏目名称
+        /// 发布日期
         /// </summary>
         public DateTime? ReleaseTime { get; set; }
 
