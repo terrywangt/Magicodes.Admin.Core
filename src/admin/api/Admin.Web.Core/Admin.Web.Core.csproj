@@ -15,7 +15,7 @@
     <ProjectReference Include="..\Admin.Application\Admin.Application.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Magicodes.SwaggerUI" Version="1.7.3" />
+    <PackageReference Include="Magicodes.SwaggerUI" Version="1.7.4" />
     <PackageReference Include="Abp.AspNetCore.SignalR" Version="4.0.2" />
     <PackageReference Include="Abp.AspNetZeroCore.Web" Version="1.1.9" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="2.2.0" />

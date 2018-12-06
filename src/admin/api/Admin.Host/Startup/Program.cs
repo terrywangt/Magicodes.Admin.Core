@@ -13,8 +13,8 @@ namespace Magicodes.Admin.Web.Startup
                 .UseKestrel((context, opt) =>
                 {
                     opt.AddServerHeader = false;
-                    //从配置文件读取配置
-                    opt.Configure(context.Configuration.GetSection("Kestrel"));
+                    ////从配置文件读取配置
+                    //opt.Configure(context.Configuration.GetSection("Kestrel"));
                 })
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .ConfigureAppConfiguration((hostingContext, config) =>

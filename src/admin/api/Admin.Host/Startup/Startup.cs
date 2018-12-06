@@ -51,7 +51,6 @@ namespace Magicodes.Admin.Web.Startup
 
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            _logger.LogWarning("Kestrel:" + _appConfiguration.GetSection("Kestrel"));
             //MVC
             services.AddMvc(options =>
             {
@@ -66,7 +65,7 @@ namespace Magicodes.Admin.Web.Startup
                 sbuilder.AddRedis(_appConfiguration["Abp:SignalRRedisCache:ConnectionString"]);
             }
 
-            //Configure CORS for angular2 UI
+            //Configure CORS for APP
             services.AddCors(options =>
             {
                 options.AddPolicy(DefaultCorsPolicyName, builder =>
@@ -190,13 +189,13 @@ namespace Magicodes.Admin.Web.Startup
                 }
             }
 
-            app.UseWebSockets();
+            //app.UseWebSockets();
             app.UseSignalR(routes =>
             {
                 routes.MapHub<AbpCommonHub>("/signalr");
                 routes.MapHub<ChatHub>("/signalr-chat");
-                // //使用长轮询
-                // routes.MapHub<AbpCommonHub>("/signalr", otp => otp.Transports = Microsoft.AspNetCore.Http.Connections.HttpTransportType.LongPolling);
+                ////使用长轮询
+                //routes.MapHub<AbpCommonHub>("/signalr", otp => otp.Transports = Microsoft.AspNetCore.Http.Connections.HttpTransportType.LongPolling);
                 //routes.MapHub<ChatHub>("/signalr-chat", otp => otp.Transports = Microsoft.AspNetCore.Http.Connections.HttpTransportType.LongPolling);
             });
 
