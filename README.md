@@ -64,6 +64,8 @@ https://demoadmin.xin-lai.com
 * 账号：Admin
 * 密码：123456abcD
 
+APP接口地址：
+https://demoappapi.xin-lai.com
 
 ## 开发组件、套件、解决方案、理念
 

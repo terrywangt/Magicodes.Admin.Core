@@ -48,7 +48,7 @@
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.2.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0" />
     <PackageReference Include="Abp.Castle.Log4Net" Version="4.0.2" />
-    <PackageReference Include="Magicodes.SwaggerUI" Version="1.7.3" />
+    <PackageReference Include="Magicodes.SwaggerUI" Version="1.7.4" />
     <PackageReference Include="Abp.AspNetZeroCore.Web" Version="1.1.9" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="2.2.0" />
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
