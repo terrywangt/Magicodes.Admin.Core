@@ -19,6 +19,7 @@ using Magicodes.App.Application.Contents.Contents.Dto;
 using Magicodes.Admin.Core.Custom.Attachments;
 using Magicodes.Admin.Core.Custom.Contents;
 using static Magicodes.App.Application.Contents.Contents.Dto.GetArticleDetailInfoOutput;
+using Magicodes.Unity.Editor;
 
 namespace Magicodes.App.Application.Contents.Contents
 {
@@ -33,6 +34,7 @@ namespace Magicodes.App.Application.Contents.Contents
         private readonly IRepository<ArticleInfo, long> _articleInfoRepository;
         private readonly IRepository<ColumnInfo, long> _columnInfoRepository;
         private readonly IRepository<ObjectAttachmentInfo, long> _objectAttachmentInfoRepository;
+        private readonly EditorHelper _editorHelper;
 
         /// <summary>
         /// 
@@ -42,11 +44,13 @@ namespace Magicodes.App.Application.Contents.Contents
         /// <param name="objectAttachmentInfoRepository"></param>
         public ContentsAppService(IRepository<ArticleInfo, long> articleInfoRepository,
                                      IRepository<ColumnInfo, long> columnInfoRepository,
-                                     IRepository<ObjectAttachmentInfo, long> objectAttachmentInfoRepository)
+                                     IRepository<ObjectAttachmentInfo, long> objectAttachmentInfoRepository,
+                                     EditorHelper editorHelper)
         {
             this._articleInfoRepository = articleInfoRepository;
             this._columnInfoRepository = columnInfoRepository;
             this._objectAttachmentInfoRepository = objectAttachmentInfoRepository;
+            this._editorHelper = editorHelper;
         }
 
         #endregion 
@@ -327,7 +331,7 @@ namespace Magicodes.App.Application.Contents.Contents
             {
                 ArticleInfoId = aa.ArticleInfoId,
                 Title = aa.Title,
-                Intro = aa.Intro,
+                Intro = _editorHelper.ClearHTML(aa.Intro),
                 ThumbnailUrl = aa.ThumbnailUrl,
                 Publisher = aa.Publisher,
                 ColumnInfoTitle = aa.ColumnInfoTitle,
