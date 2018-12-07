@@ -81,7 +81,7 @@ https://demoappapi.xin-lai.com
 * 日志（Log4net、**NLog**、**阿里云日志**）
 * 设置管理器
 * **短信服务（Magicodes.Sms【https://github.com/xin-lai/Magicodes.Sms】）**
-* **支付（使用Magicodes.Pay【https://github.com/xin-lai/Magicodes.Pay】，微信、支付宝、国际支付宝）**
+* **支付、统一支付回调（使用Magicodes.Pay【https://github.com/xin-lai/Magicodes.Pay】，支持微信、支付宝、国际支付宝支付和分账）**
 * **微信SDK（Magicodes.WeChat.SDK【https://github.com/xin-lai/Magicodes.WeChat.SDK】）**
 * **小程序SDK（Magicodes.WeChat.SDK【https://github.com/xin-lai/Magicodes.WeChat.SDK】）**
 * **微信扫码登录（Magicodes.WeChat.SDK【https://github.com/xin-lai/Magicodes.WeChat.SDK】）**
@@ -94,7 +94,7 @@ https://demoappapi.xin-lai.com
 * 调度任务（Quartz）
 * 后台任务（Hangfire）
 * 数据筛选器（租户筛选器、软删除、是否激活）
-* **跨平台以及Docker支持（目前基于.NET Core 2.1）**
+* **跨平台以及Docker支持（目前基于.NET Core 2.1），支持Visual Studio Tools for Docker**
 * 通知系统
 * **支持通过配置文件配置Kestrel服务器（比如启用HTTPS，以便更好地支持Docker）**
 * **支持HTTPS重定向**
