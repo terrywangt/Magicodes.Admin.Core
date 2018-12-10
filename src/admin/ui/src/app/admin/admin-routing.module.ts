@@ -24,7 +24,7 @@ import { ArticleSourceInfosComponent } from './articleSourceInfos/articleSourceI
 import { ColumnInfosComponent } from './columnInfos/columnInfo.component';
 import { StorageSettingsComponent } from './settings/storage-settings.component';
 import { TransactionLogsComponent } from './transactionLogs/transactionLog.component';
-
+import { MiniProgramSettingsComponent } from './settings/miniProgram-settings.component';
 @NgModule({
     imports: [
         RouterModule.forChild([
@@ -54,6 +54,7 @@ import { TransactionLogsComponent } from './transactionLogs/transactionLog.compo
                     { path: 'articleSourceInfo', component: ArticleSourceInfosComponent },
                     { path: 'columnInfo', component: ColumnInfosComponent },
                     { path: 'storageSettings', component: StorageSettingsComponent },
+                    { path: 'miniProgramSettings', component:MiniProgramSettingsComponent},
                     { path: 'transactionLog', component: TransactionLogsComponent }
                 ]
             }

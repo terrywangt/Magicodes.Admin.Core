@@ -22,7 +22,7 @@ namespace Magicodes.Admin.Configuration
             context.Manager.GetSettingDefinition(AbpZeroSettingNames.UserManagement.TwoFactorLogin.IsEnabled).DefaultValue = false.ToString().ToLowerInvariant();
 
             return GetHostSettings().Union(GetTenantSettings()).Union(GetSharedSettings()).Union(GetPaySettings())
-                .Union(GetSmsCodeSettings()).Union(GetStorageCodeSettings());
+                .Union(GetSmsCodeSettings()).Union(GetStorageCodeSettings()).Union(GetMiniProgramSettings());
         }
 
         private IEnumerable<SettingDefinition> GetHostSettings() => new[] {
@@ -70,7 +70,13 @@ namespace Magicodes.Admin.Configuration
         private SettingDefinition GetDefaultSettingDefinition(string key, string defaultValue = "", SettingScopes settingScopes = SettingScopes.Tenant | SettingScopes.Application) => new SettingDefinition(key,
                 GetFromAppSettings(key, defaultValue),
                 scopes: settingScopes);
-
+        private IEnumerable<SettingDefinition> GetMiniProgramSettings()
+        {
+            return new[] {
+                new SettingDefinition(AppSettings.WeChatMiniProgram.AppId, GetFromAppSettings(AppSettings.WeChatMiniProgram.AppId, ""),scopes: SettingScopes.Tenant|SettingScopes.Application),
+                new SettingDefinition(AppSettings.WeChatMiniProgram.AppSecret, GetFromAppSettings(AppSettings.WeChatMiniProgram.AppSecret, ""),scopes: SettingScopes.Tenant|SettingScopes.Application)
+            };
+        }
         private SettingDefinition[] GetPaySettings() => new[] {
                 //微信支付设置
                 new SettingDefinition(AppSettings.WeChatPayManagement.AppId, GetFromAppSettings(AppSettings.WeChatPayManagement.AppId, ""),scopes: SettingScopes.Tenant|SettingScopes.Application),

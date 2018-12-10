@@ -65,6 +65,8 @@ namespace Magicodes.Admin.Authorization
 
             administration.CreateChildPermission(AppPermissions.Pages_Administration_Storage_Settings, L("StorageSettings"));
 
+            administration.CreateChildPermission(AppPermissions.Pages_Administration_MiniProgram_Settings, L("MiniProgram"));
+
             //TENANT-SPECIFIC PERMISSIONS
 
             pages.CreateChildPermission(AppPermissions.Pages_Tenant_Dashboard, L("Dashboard"), multiTenancySides: MultiTenancySides.Tenant);

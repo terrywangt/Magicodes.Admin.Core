@@ -1,0 +1,36 @@
+<div [@routerTransition]>
+    <div class="m-subheader">
+        <div class="d-flex align-items-center">
+            <div class="mr-auto col-sm-12 col-md-6">
+                <h3 class="m-subheader__title m-subheader__title--separator">
+                    <span>{{l("MiniProgramSetting")}}</span>
+                </h3>
+                <span class="m-section__sub">
+                    {{l("SettingsHeaderInfo")}}
+                </span>
+            </div>
+            <div class="col-sm-12 col-md-6 text-right">
+                <button class="btn btn-primary" (click)="saveAll()"><i class="la la-floppy-o"></i> {{l("SaveAll")}}</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="m-content">
+        <div class="m-portlet m-portlet--mobile">
+            <div class="m-portlet__body">
+                <tabset class="tab-container"  *ngIf="miniProgramSettings" >
+                    <tab *ngIf="true" heading="{{l('WeChatMiniProgramSetting')}}" customClass="m-tabs__item">
+                        <div class="form-group">
+                            <label for="weChatMiniProgram_AppId">{{l("AppId")}}</label>
+                            <input id="weChatMiniProgram_AppId" type="text" name="weChatMiniProgram_AppId" class="form-control" [ngClass]="{'edited':miniProgramSettings.weChatMiniProgram.appId}" [(ngModel)]="miniProgramSettings.weChatMiniProgram.appId" maxlength="64">
+                        </div>
+                        <div class="form-group">
+                            <label for="weChatMiniProgram_AppSecret">{{l("AppSecret")}}</label>
+                            <input id="weChatMiniProgram_AppSecret" type="text" name="weChatMiniProgram_AppSecret" class="form-control" [ngClass]="{'edited':miniProgramSettings.weChatMiniProgram.appSecret}" [(ngModel)]="miniProgramSettings.weChatMiniProgram.appSecret" maxlength="64">
+                        </div>
+                    </tab>
+                </tabset>
+            </div>
+        </div>
+    </div>
+</div>

@@ -35,8 +35,8 @@ export class AppNavigationService {
                 new AppMenuItem('Settings', 'Pages.Administration.Tenant.Settings', 'flaticon-settings', '/app/admin/tenantSettings'),
                 new AppMenuItem('PaySettings', 'Pages.Administration.Pay.Settings', 'fa fa-cny', '/app/admin/paySettings'),
                 new AppMenuItem('SmsCodeSettings', 'Pages.Administration.SmsCode.Settings', 'fa fa-comments', '/app/admin/smsCodeSettings'),
-                new AppMenuItem('StorageSettings', 'Pages.Administration.Storage.Settings', 'fa fa-database', '/app/admin/storageSettings')
-            ]),
+                new AppMenuItem('MiniProgramSetting', 'Pages.Administration.MiniProgram.Settings', 'fa fa-eraser', '/app/admin/miniProgramSettings')
+                ]),
             // new AppMenuItem('DemoUiComponents', 'Pages.DemoUiComponents', 'flaticon-shapes', '/app/admin/demo-ui-components'),
             new AppMenuItem('TransactionLog', 'Pages.TransactionLog', 'flaticon-shapes', '/app/admin/transactionLog'),
             new AppMenuItem('Contents', '', 'fa fa-newspaper-o', '', [

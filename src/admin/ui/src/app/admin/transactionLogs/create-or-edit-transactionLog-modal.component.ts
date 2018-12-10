@@ -1,6 +1,7 @@
 ﻿import { Component, ViewChild, Injector, Output, EventEmitter, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
-import { TransactionLogServiceProxy, CreateOrUpdateTransactionLogDto, TransactionLogEditDto } from '@shared/service-proxies/service-proxies';
+// import { TransactionLogServiceProxy, CreateOrUpdateTransactionLogDto, TransactionLogEditDto } from '@shared/service-proxies/service-proxies';
+import { TransactionLogServiceProxy} from '@shared/service-proxies/service-proxies';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import * as _ from 'lodash';
 import { Data } from '@angular/router/src/config';
@@ -20,7 +21,7 @@ export class CreateOrEditTransactionLogModalComponent extends AppComponentBase {
 
     public createDateRange: moment.Moment[] = [moment().startOf('day'), moment().endOf('day')];
     public updateDateRange: moment.Moment[] = [moment().startOf('day'), moment().endOf('day')];
-    formModel: TransactionLogEditDto = new TransactionLogEditDto();
+    // formModel: TransactionLogEditDto = new TransactionLogEditDto();
 
     constructor(
         injector: Injector,
@@ -39,28 +40,28 @@ export class CreateOrEditTransactionLogModalComponent extends AppComponentBase {
     }
 
     show(id?: number): void {
-        this.formModel = new TransactionLogEditDto();
-        this.active = true;
-        this._changeDetector.detectChanges();
-        this.formModel.id = id;
-        this._transactionLogService.getTransactionLogForEdit(id).subscribe(result => {
-            this.formModel = result.transactionLog;
-            this.modal.show();
-        });
+        // this.formModel = new TransactionLogEditDto();
+        // this.active = true;
+        // this._changeDetector.detectChanges();
+        // this.formModel.id = id;
+        // this._transactionLogService.getTransactionLogForEdit(id).subscribe(result => {
+        //     this.formModel = result.transactionLog;
+        //     this.modal.show();
+        // });
     }
 
     save(): void {
-        const createOrEditInput = new CreateOrUpdateTransactionLogDto();
-        createOrEditInput.transactionLog = this.formModel;
-        //createOrEditInput.transactionLog.payTime = $(this.PayTimeDatePicker.nativeElement).data('DateTimePicker').date();
-        this.saving = true;
-        this._transactionLogService.createOrUpdateTransactionLog(createOrEditInput)
-            .pipe(finalize(() => this.saving = false))
-            .subscribe(() => {
-                this.notify.info(this.l('SavedSuccessfully'));
-                this.close();
-                this.modalSave.emit(true);
-            });
+        // const createOrEditInput = new CreateOrUpdateTransactionLogDto();
+        // createOrEditInput.transactionLog = this.formModel;
+        // //createOrEditInput.transactionLog.payTime = $(this.PayTimeDatePicker.nativeElement).data('DateTimePicker').date();
+        // this.saving = true;
+        // this._transactionLogService.createOrUpdateTransactionLog(createOrEditInput)
+        //     .pipe(finalize(() => this.saving = false))
+        //     .subscribe(() => {
+        //         this.notify.info(this.l('SavedSuccessfully'));
+        //         this.close();
+        //         this.modalSave.emit(true);
+        //     });
     }
 
     close(): void {

@@ -8,6 +8,10 @@ namespace Magicodes.Admin.Authorization
     /// </summary>
     public partial class AppPermissions
     {
+        #region【小程序配置】
+        public const string Pages_Administration_MiniProgram_Settings = "Pages.Administration.MiniProgram.Settings";
+        #endregion
+
         #region TransactionLog【交易日志】
 
         public const string Pages_TransactionLog = "Pages.TransactionLog";

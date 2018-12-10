@@ -6016,6 +6016,122 @@ export class LanguageServiceProxy {
 }
 
 @Injectable()
+export class MiniProgramSettingsServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    /**
+     * @return Success
+     */
+    getAllSettings(): Observable<MiniProgramSettingsEditDto> {
+        let url_ = this.baseUrl + "/api/services/app/MiniProgramSettings/GetAllSettings";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAllSettings(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllSettings(<any>response_);
+                } catch (e) {
+                    return <Observable<MiniProgramSettingsEditDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<MiniProgramSettingsEditDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetAllSettings(response: HttpResponseBase): Observable<MiniProgramSettingsEditDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? MiniProgramSettingsEditDto.fromJS(resultData200) : new MiniProgramSettingsEditDto();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<MiniProgramSettingsEditDto>(<any>null);
+    }
+
+    /**
+     * @param input (optional) 
+     * @return Success
+     */
+    updateAllSettings(input: MiniProgramSettingsEditDto | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/MiniProgramSettings/UpdateAllSettings";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(input);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdateAllSettings(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdateAllSettings(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processUpdateAllSettings(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+}
+
+@Injectable()
 export class NotificationServiceProxy {
     private http: HttpClient;
     private baseUrl: string;
@@ -10797,115 +10913,6 @@ export class TransactionLogServiceProxy {
             }));
         }
         return _observableOf<FileDto>(<any>null);
-    }
-
-    /**
-     * 获取交易日志
-     * @param id (optional) 
-     * @return Success
-     */
-    getTransactionLogForEdit(id: number | null | undefined): Observable<GetTransactionLogForEditOutput> {
-        let url_ = this.baseUrl + "/api/services/app/TransactionLog/GetTransactionLogForEdit?";
-        if (id !== undefined)
-            url_ += "Id=" + encodeURIComponent("" + id) + "&"; 
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ : any = {
-            observe: "response",
-            responseType: "blob",
-            headers: new HttpHeaders({
-                "Content-Type": "application/json", 
-                "Accept": "application/json"
-            })
-        };
-
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetTransactionLogForEdit(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processGetTransactionLogForEdit(<any>response_);
-                } catch (e) {
-                    return <Observable<GetTransactionLogForEditOutput>><any>_observableThrow(e);
-                }
-            } else
-                return <Observable<GetTransactionLogForEditOutput>><any>_observableThrow(response_);
-        }));
-    }
-
-    protected processGetTransactionLogForEdit(response: HttpResponseBase): Observable<GetTransactionLogForEditOutput> {
-        const status = response.status;
-        const responseBlob = 
-            response instanceof HttpResponse ? response.body : 
-            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = resultData200 ? GetTransactionLogForEditOutput.fromJS(resultData200) : new GetTransactionLogForEditOutput();
-            return _observableOf(result200);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf<GetTransactionLogForEditOutput>(<any>null);
-    }
-
-    /**
-     * 创建或者编辑交易日志
-     * @param input (optional) 
-     * @return Success
-     */
-    createOrUpdateTransactionLog(input: CreateOrUpdateTransactionLogDto | null | undefined): Observable<void> {
-        let url_ = this.baseUrl + "/api/services/app/TransactionLog/CreateOrUpdateTransactionLog";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(input);
-
-        let options_ : any = {
-            body: content_,
-            observe: "response",
-            responseType: "blob",
-            headers: new HttpHeaders({
-                "Content-Type": "application/json", 
-            })
-        };
-
-        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processCreateOrUpdateTransactionLog(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processCreateOrUpdateTransactionLog(<any>response_);
-                } catch (e) {
-                    return <Observable<void>><any>_observableThrow(e);
-                }
-            } else
-                return <Observable<void>><any>_observableThrow(response_);
-        }));
-    }
-
-    protected processCreateOrUpdateTransactionLog(response: HttpResponseBase): Observable<void> {
-        const status = response.status;
-        const responseBlob = 
-            response instanceof HttpResponse ? response.body : 
-            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return _observableOf<void>(<any>null);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf<void>(<any>null);
     }
 
     /**
@@ -18233,6 +18240,82 @@ export interface IUpdateLanguageTextInput {
     value: string;
 }
 
+export class MiniProgramSettingsEditDto implements IMiniProgramSettingsEditDto {
+    weChatMiniProgram!: WeChatMiniProgramSettingsEditDto | undefined;
+
+    constructor(data?: IMiniProgramSettingsEditDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.weChatMiniProgram = data["weChatMiniProgram"] ? WeChatMiniProgramSettingsEditDto.fromJS(data["weChatMiniProgram"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): MiniProgramSettingsEditDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new MiniProgramSettingsEditDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["weChatMiniProgram"] = this.weChatMiniProgram ? this.weChatMiniProgram.toJSON() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IMiniProgramSettingsEditDto {
+    weChatMiniProgram: WeChatMiniProgramSettingsEditDto | undefined;
+}
+
+export class WeChatMiniProgramSettingsEditDto implements IWeChatMiniProgramSettingsEditDto {
+    appId!: string;
+    appSecret!: string;
+
+    constructor(data?: IWeChatMiniProgramSettingsEditDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.appId = data["appId"];
+            this.appSecret = data["appSecret"];
+        }
+    }
+
+    static fromJS(data: any): WeChatMiniProgramSettingsEditDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new WeChatMiniProgramSettingsEditDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["appId"] = this.appId;
+        data["appSecret"] = this.appSecret;
+        return data; 
+    }
+}
+
+export interface IWeChatMiniProgramSettingsEditDto {
+    appId: string;
+    appSecret: string;
+}
+
 export class GetNotificationsOutput implements IGetNotificationsOutput {
     unreadCount!: number | undefined;
     totalCount!: number | undefined;
@@ -23136,189 +23219,6 @@ export interface ITransactionLogListDto {
     id: number | undefined;
 }
 
-/** 交易日志���༭���ģ�� */
-export class GetTransactionLogForEditOutput implements IGetTransactionLogForEditOutput {
-    transactionLog!: TransactionLogEditDto | undefined;
-
-    constructor(data?: IGetTransactionLogForEditOutput) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.transactionLog = data["transactionLog"] ? TransactionLogEditDto.fromJS(data["transactionLog"]) : <any>undefined;
-        }
-    }
-
-    static fromJS(data: any): GetTransactionLogForEditOutput {
-        data = typeof data === 'object' ? data : {};
-        let result = new GetTransactionLogForEditOutput();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["transactionLog"] = this.transactionLog ? this.transactionLog.toJSON() : <any>undefined;
-        return data; 
-    }
-}
-
-/** 交易日志���༭���ģ�� */
-export interface IGetTransactionLogForEditOutput {
-    transactionLog: TransactionLogEditDto | undefined;
-}
-
-/** 交易日志编辑Dto */
-export class TransactionLogEditDto implements ITransactionLogEditDto {
-    /** 金额 */
-    amount!: number;
-    /** 客户端Ip */
-    clientIpAddress!: string | undefined;
-    /** 客户端名称 */
-    clientName!: string | undefined;
-    /** 是否冻结 */
-    isFreeze!: boolean | undefined;
-    /** 支付渠道 */
-    payChannel!: TransactionLogEditDtoPayChannel;
-    /** 终端 */
-    terminal!: TransactionLogEditDtoTerminal;
-    /** 交易状态 */
-    transactionState!: TransactionLogEditDtoTransactionState;
-    /** 自定义数据 */
-    customData!: string | undefined;
-    /** 交易单号 */
-    outTradeNo!: string | undefined;
-    /** 支付完成时间 */
-    payTime!: moment.Moment | undefined;
-    /** 异常信息 */
-    exception!: string | undefined;
-    id!: number | undefined;
-
-    constructor(data?: ITransactionLogEditDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.amount = data["amount"];
-            this.clientIpAddress = data["clientIpAddress"];
-            this.clientName = data["clientName"];
-            this.isFreeze = data["isFreeze"];
-            this.payChannel = data["payChannel"];
-            this.terminal = data["terminal"];
-            this.transactionState = data["transactionState"];
-            this.customData = data["customData"];
-            this.outTradeNo = data["outTradeNo"];
-            this.payTime = data["payTime"] ? moment(data["payTime"].toString()) : <any>undefined;
-            this.exception = data["exception"];
-            this.id = data["id"];
-        }
-    }
-
-    static fromJS(data: any): TransactionLogEditDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new TransactionLogEditDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["amount"] = this.amount;
-        data["clientIpAddress"] = this.clientIpAddress;
-        data["clientName"] = this.clientName;
-        data["isFreeze"] = this.isFreeze;
-        data["payChannel"] = this.payChannel;
-        data["terminal"] = this.terminal;
-        data["transactionState"] = this.transactionState;
-        data["customData"] = this.customData;
-        data["outTradeNo"] = this.outTradeNo;
-        data["payTime"] = this.payTime ? this.payTime.toISOString() : <any>undefined;
-        data["exception"] = this.exception;
-        data["id"] = this.id;
-        return data; 
-    }
-}
-
-/** 交易日志编辑Dto */
-export interface ITransactionLogEditDto {
-    /** 金额 */
-    amount: number;
-    /** 客户端Ip */
-    clientIpAddress: string | undefined;
-    /** 客户端名称 */
-    clientName: string | undefined;
-    /** 是否冻结 */
-    isFreeze: boolean | undefined;
-    /** 支付渠道 */
-    payChannel: TransactionLogEditDtoPayChannel;
-    /** 终端 */
-    terminal: TransactionLogEditDtoTerminal;
-    /** 交易状态 */
-    transactionState: TransactionLogEditDtoTransactionState;
-    /** 自定义数据 */
-    customData: string | undefined;
-    /** 交易单号 */
-    outTradeNo: string | undefined;
-    /** 支付完成时间 */
-    payTime: moment.Moment | undefined;
-    /** 异常信息 */
-    exception: string | undefined;
-    id: number | undefined;
-}
-
-/** 交易日志创建或者编辑Dto */
-export class CreateOrUpdateTransactionLogDto implements ICreateOrUpdateTransactionLogDto {
-    transactionLog!: TransactionLogEditDto;
-
-    constructor(data?: ICreateOrUpdateTransactionLogDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-        if (!data) {
-            this.transactionLog = new TransactionLogEditDto();
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.transactionLog = data["transactionLog"] ? TransactionLogEditDto.fromJS(data["transactionLog"]) : new TransactionLogEditDto();
-        }
-    }
-
-    static fromJS(data: any): CreateOrUpdateTransactionLogDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new CreateOrUpdateTransactionLogDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["transactionLog"] = this.transactionLog ? this.transactionLog.toJSON() : <any>undefined;
-        return data; 
-    }
-}
-
-/** 交易日志创建或者编辑Dto */
-export interface ICreateOrUpdateTransactionLogDto {
-    transactionLog: TransactionLogEditDto;
-}
-
 export class TreeOutputDto implements ITreeOutputDto {
     data!: TreeItemDto[] | undefined;
 
@@ -24917,34 +24817,6 @@ export enum TransactionLogListDtoTerminal {
 }
 
 export enum TransactionLogListDtoTransactionState {
-    _0 = 0, 
-    _1 = 1, 
-    _2 = 2, 
-    _3 = 3, 
-    _4 = 4, 
-}
-
-export enum TransactionLogEditDtoPayChannel {
-    _0 = 0, 
-    _1 = 1, 
-    _2 = 2, 
-    _3 = 3, 
-}
-
-export enum TransactionLogEditDtoTerminal {
-    _0 = 0, 
-    _1 = 1, 
-    _2 = 2, 
-    _3 = 3, 
-    _4 = 4, 
-    _5 = 5, 
-    _6 = 6, 
-    _7 = 7, 
-    _8 = 8, 
-    _9 = 9, 
-}
-
-export enum TransactionLogEditDtoTransactionState {
     _0 = 0, 
     _1 = 1, 
     _2 = 2, 

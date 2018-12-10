@@ -103,6 +103,7 @@ import { CreateOrEditArticleSourceInfoModalComponent } from './articleSourceInfo
 import { ColumnInfosComponent } from './columnInfos/columnInfo.component';
 import { CreateOrEditColumnInfoModalComponent } from './columnInfos/create-or-edit-columnInfo-modal.component';
 import { StorageSettingsComponent } from './settings/storage-settings.component';
+import { MiniProgramSettingsComponent } from './settings/miniProgram-settings.component';
 import { TransactionLogsComponent } from './transactionLogs/transactionLog.component';
 import { CreateOrEditTransactionLogModalComponent } from './transactionLogs/create-or-edit-transactionLog-modal.component';
 import { ColumnInfoTreeSelectComponent } from './appComponents/columnInfoTreeSelect/columnInfo-tree-select.component';
@@ -168,6 +169,7 @@ NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
         EditSplitFundInfoModalComponent,
         SmsCodeSettingsComponent,
         StorageSettingsComponent,
+        MiniProgramSettingsComponent,
         InstallComponent,
         MaintenanceComponent,
         EditionsComponent,
