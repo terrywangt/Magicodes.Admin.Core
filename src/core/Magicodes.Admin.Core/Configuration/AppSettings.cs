@@ -17,12 +17,6 @@ namespace Magicodes.Admin.Configuration
 
         }
 
-        public static class WeChatMiniProgram
-        {
-            public const string AppId = "App.WeChatMiniProgram.AppId";
-            public const string AppSecret = "App.WeChatMiniProgram.AppSecret";
-        }
-
         public static class UiManagement
         {
             public const string LayoutType = "App.UiManagement.LayoutType";
@@ -96,6 +90,13 @@ namespace Magicodes.Admin.Configuration
         public static class CacheKeys
         {
             public const string TenantRegistrationCache = "TenantRegistrationCache";
+        }
+
+        public static class WeChatMiniProgram
+        {
+            public const string IsActive = "App.WeChatMiniProgram.IsActive";
+            public const string AppId = "App.WeChatMiniProgram.AppId";
+            public const string AppSecret = "App.WeChatMiniProgram.AppSecret";
         }
 
         public static class WeChatPayManagement

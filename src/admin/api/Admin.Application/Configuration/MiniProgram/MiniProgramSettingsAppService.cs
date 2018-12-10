@@ -1,9 +1,10 @@
 ﻿using Abp.Application.Services;
 using Abp.Authorization;
 using Abp.Configuration;
+using Abp.Dependency;
 using Magicodes.Admin.Authorization;
-using Magicodes.Admin.Configuration.MiniProgram;
 using Magicodes.Admin.Configuration.MiniProgram.Dto;
+using Magicodes.MiniProgram.Startup;
 using System.Threading.Tasks;
 
 namespace Magicodes.Admin.Configuration.MiniProgram
@@ -11,11 +12,13 @@ namespace Magicodes.Admin.Configuration.MiniProgram
     [AbpAuthorize(AppPermissions.Pages_Administration_MiniProgram_Settings)]
     public class MiniProgramSettingsAppService : ApplicationService, IMiniProgramSettingsAppService
     {
+        private readonly IIocManager _iocManager;
+        private readonly IAppConfigurationAccessor _appConfigurationAccessor;
         public MiniProgramSettingsAppService(
-            ISettingDefinitionManager settingDefinitionManager
-        ) : base()
+            ISettingDefinitionManager settingDefinitionManager, IIocManager iocManager, IAppConfigurationAccessor appConfigurationAccessor) : base()
         {
-
+            _iocManager = iocManager;
+            _appConfigurationAccessor = appConfigurationAccessor;
         }
 
         public async Task<MiniProgramSettingsEditDto> GetAllSettings() => new MiniProgramSettingsEditDto
@@ -33,6 +36,8 @@ namespace Magicodes.Admin.Configuration.MiniProgram
         public async Task UpdateAllSettings(MiniProgramSettingsEditDto input)
         {
             await UpdateWeChatMiniProgramAsync(input.WeChatMiniProgram);
+            //配置支付
+            MiniProgramStartup.Config(Logger, _iocManager, _appConfigurationAccessor.Configuration, SettingManager);
         }
 
         private async Task UpdateWeChatMiniProgramAsync(WeChatMiniProgramSettingsEditDto input)

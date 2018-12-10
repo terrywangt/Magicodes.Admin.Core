@@ -20,6 +20,7 @@
     <ProjectReference Include="..\..\..\application\Application.Shared\Application.Shared.csproj" />
     <ProjectReference Include="..\..\..\core\Magicodes.Admin.Core\Magicodes.Admin.Core.csproj" />
     <ProjectReference Include="..\..\..\data\Magicodes.Admin.EntityFrameworkCore\Magicodes.Admin.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\..\..\unity\Magicodes.MiniProgram\Magicodes.MiniProgram.csproj" />
     <ProjectReference Include="..\..\..\unity\Magicodes.Pay\Magicodes.Pay.csproj" />
   </ItemGroup>
   <ItemGroup>
