@@ -880,7 +880,7 @@
     <text name="TransInExistPleaseReplace">账户Id已存在请更换</text>
     <text name="CreateSuccessfully">创建成功</text>
     <text name="EditSuccessfully">修改成功</text>
-    <!--2018-12-7-->
+    <!--2018-12-7 小程序配置相关-->
     <text name="MiniProgramSetting" value="小程序配置" />
     <text name="WeChatMiniProgramSetting" value="微信小程序" />
   </texts>

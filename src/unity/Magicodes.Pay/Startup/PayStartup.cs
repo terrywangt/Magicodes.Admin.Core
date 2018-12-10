@@ -39,6 +39,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Magicodes.Alipay.Global.Dto;
+using Magicodes.Pay.WeChat.Config;
 
 namespace Magicodes.Pay.Startup
 {
@@ -233,15 +234,15 @@ namespace Magicodes.Pay.Startup
         /// <param name="config"></param>
         /// <param name="settingManager"></param>
         /// <returns></returns>
-        private static async Task<WeChatPayConfig> WeChatPayConfig(Action<string, string> logAction, IIocManager iocManager, IConfigurationRoot config, ISettingManager settingManager)
+        private static async Task<DefaultWeChatPayConfig> WeChatPayConfig(Action<string, string> logAction, IIocManager iocManager, IConfigurationRoot config, ISettingManager settingManager)
         {
             #region 微信支付
 
-            WeChatPayConfig weChatPayConfig = null;
+            DefaultWeChatPayConfig weChatPayConfig = null;
 
             if (Convert.ToBoolean(await settingManager.GetSettingValueAsync(AppSettings.WeChatPayManagement.IsActive)))
             {
-                weChatPayConfig = new WeChatPayConfig()
+                weChatPayConfig = new DefaultWeChatPayConfig()
                 {
                     PayAppId = await settingManager.GetSettingValueAsync(AppSettings.WeChatPayManagement.AppId),
                     MchId = await settingManager.GetSettingValueAsync(AppSettings.WeChatPayManagement.MchId),
@@ -251,7 +252,7 @@ namespace Magicodes.Pay.Startup
             }
             else if (!config["WeChat:Pay:IsEnabled"].IsNullOrWhiteSpace() && Convert.ToBoolean(config["WeChat:Pay:IsEnabled"]))
             {
-                weChatPayConfig = new WeChatPayConfig
+                weChatPayConfig = new DefaultWeChatPayConfig
                 {
                     MchId = config["WeChat:Pay:MchId"],
                     PayNotifyUrl = config["WeChat:Pay:NotifyUrl"],
