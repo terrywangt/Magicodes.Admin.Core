@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Abp.Application.Services;
 using Abp.Application.Services.Dto;
-using Magicodes.App.Application.Contents.Contents.Dto;
 using Magicodes.App.Application.Contents.Dto;
 
 namespace Magicodes.App.Application.Contents

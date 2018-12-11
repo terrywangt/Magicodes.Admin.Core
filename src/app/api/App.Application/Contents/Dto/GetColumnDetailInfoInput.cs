@@ -8,7 +8,7 @@
         /// <summary>
         /// 栏目Id
         /// </summary>
-        public long? Id { get; set; }
+        public long Id { get; set; }
         /// <summary>
         /// 栏目编码
         /// </summary>

@@ -9,8 +9,7 @@ using Abp.Linq.Extensions;
 using Abp.UI;
 using Magicodes.Admin.Core.Custom.Attachments;
 using Magicodes.Admin.Core.Custom.Contents;
-using Magicodes.App.Application.Contents.Contents;
-using Magicodes.App.Application.Contents.Contents.Dto;
+using Magicodes.App.Application.Contents;
 using Magicodes.App.Application.Contents.Dto;
 using Magicodes.Unity.Editor;
 using Microsoft.AspNetCore.Mvc;
@@ -180,19 +179,19 @@ namespace Magicodes.App.Application.Contents
         /// <param name="input"></param>
         /// <returns></returns>
         [AbpAllowAnonymous]
-        [HttpGet("ColumnInfo/{Id？}")]
+        [HttpGet("ColumnInfo/{Id}")]
         public async Task<GetColumnDetailInfoOutput> GetColumnDetailInfo(GetColumnDetailInfoInput input)
         {
             var query = _columnInfoRepository.GetAll();
             ColumnInfo columnInfo = null;
 
-            if (input.Id.HasValue)
-            {
-                columnInfo = await query.FirstOrDefaultAsync(aa => aa.Id == input.Id);
-            }
-            else if (!string.IsNullOrWhiteSpace(input.Code))
+            if (input.Id == 0)
             {
                 columnInfo = await query.FirstOrDefaultAsync(aa => aa.Code == input.Code);
+            }
+            else
+            {
+                columnInfo = await query.FirstOrDefaultAsync(aa => aa.Id == input.Id);
             }
 
             if (columnInfo != null)

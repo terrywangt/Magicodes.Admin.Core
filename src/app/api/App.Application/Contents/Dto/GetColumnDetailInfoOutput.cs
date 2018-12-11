@@ -4,7 +4,7 @@ using Abp.Domain.Entities.Auditing;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Magicodes.App.Application.Contents.Contents.Dto
+namespace Magicodes.App.Application.Contents.Dto
 {
     /// <summary>
     /// 栏目详情接口 输出参数

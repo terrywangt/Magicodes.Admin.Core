@@ -7,7 +7,7 @@ using Magicodes.Admin.Dto;
 using Abp.Runtime.Validation;
 using Abp.Extensions;
 
-namespace Magicodes.App.Application.Contents.Contents.Dto
+namespace Magicodes.App.Application.Contents.Dto
 {
     /// <summary>
     /// 文章列表接口 输入参数

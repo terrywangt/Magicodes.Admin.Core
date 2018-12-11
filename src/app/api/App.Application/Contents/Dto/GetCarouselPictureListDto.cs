@@ -4,7 +4,7 @@ using Abp.Domain.Entities.Auditing;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Magicodes.App.Application.Contents.Contents.Dto
+namespace Magicodes.App.Application.Contents.Dto
 {
     /// <summary>
     /// 获取轮询图 输出参数
