@@ -1,27 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
-using System.Text;
 using System.Threading.Tasks;
-using Abp.Application.Services;
-using Abp.Authorization;
-using Abp.Dependency;
-using Abp.Domain.Repositories;
-using Abp.Domain.Uow;
-using Abp.Linq.Extensions;
-using Abp.Timing;
-using Abp.UI;
 using Abp.Application.Services.Dto;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Magicodes.App.Application.Contents.Contents.Dto;
+using Abp.Authorization;
+using Abp.Domain.Repositories;
+using Abp.Linq.Extensions;
+using Abp.UI;
 using Magicodes.Admin.Core.Custom.Attachments;
 using Magicodes.Admin.Core.Custom.Contents;
-using static Magicodes.App.Application.Contents.Contents.Dto.GetArticleDetailInfoOutput;
+using Magicodes.App.Application.Contents.Contents;
+using Magicodes.App.Application.Contents.Contents.Dto;
+using Magicodes.App.Application.Contents.Dto;
 using Magicodes.Unity.Editor;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
-namespace Magicodes.App.Application.Contents.Contents
+namespace Magicodes.App.Application.Contents
 {
     /// <summary>
     /// 内容相关
@@ -185,7 +180,7 @@ namespace Magicodes.App.Application.Contents.Contents
         /// <param name="input"></param>
         /// <returns></returns>
         [AbpAllowAnonymous]
-        [HttpGet("ColumnInfo/{Id}")]
+        [HttpGet("ColumnInfo/{Id？}")]
         public async Task<GetColumnDetailInfoOutput> GetColumnDetailInfo(GetColumnDetailInfoInput input)
         {
             var query = _columnInfoRepository.GetAll();
@@ -400,7 +395,7 @@ namespace Magicodes.App.Application.Contents.Contents
                     ArticleSourceInfoName = articleInfo.ArticleSourceInfo.Name,
                     RecommendedTypes = GetArticleDetailInfoOutputRecType(articleInfo.RecommendedType),
                     ReleaseTime = articleInfo.ReleaseTime,
-                    ArticleTagInfos = articleInfo.ArticleTagInfos.Select(aa => new ArticleTagInfosDto
+                    ArticleTagInfos = articleInfo.ArticleTagInfos.Select(aa => new GetArticleDetailInfoOutput.ArticleTagInfosDto
                     {
                         ArticleTagInfoId = aa.Id,
                         ArticleTagInfoName = aa.Name

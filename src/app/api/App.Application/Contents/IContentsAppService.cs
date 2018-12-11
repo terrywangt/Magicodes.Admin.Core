@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Abp.Application.Services;
 using Abp.Application.Services.Dto;
 using Magicodes.App.Application.Contents.Contents.Dto;
+using Magicodes.App.Application.Contents.Dto;
 
-namespace Magicodes.App.Application.Contents.Contents
+namespace Magicodes.App.Application.Contents
 {
     /// <summary>
     /// 内容相关
