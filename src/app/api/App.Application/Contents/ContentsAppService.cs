@@ -371,7 +371,7 @@ namespace Magicodes.App.Application.Contents
         [HttpGet("ArticleInfo/{Id}")]
         public async Task<GetArticleDetailInfoOutput> GetArticleDetailInfo(GetArticleDetailInfoInput input)
         {
-            ArticleInfo articleInfo = null;
+            ArticleInfo articleInfo;
             if (input.Id == 0)
             {
                 articleInfo = await _articleInfoRepository.GetAllIncluding(aa => aa.ColumnInfo, aa => aa.ArticleSourceInfo, aa => aa.ArticleTagInfos)
@@ -427,10 +427,8 @@ namespace Magicodes.App.Application.Contents
 
                 return output;
             }
-            else
-            {
-                throw new UserFriendlyException("文章详情不存在!");
-            }
+
+            throw new UserFriendlyException("文章详情不存在!");
         }
 
         private IQueryable<ObjectAttachmentInfo> GetObjectAttachmentInfo(AttachmentObjectTypes type)
