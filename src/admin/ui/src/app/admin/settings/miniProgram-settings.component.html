@@ -20,6 +20,13 @@
             <div class="m-portlet__body">
                 <tabset class="tab-container"  *ngIf="miniProgramSettings" >
                     <tab *ngIf="true" heading="{{l('WeChatMiniProgramSetting')}}" customClass="m-tabs__item">
+                        <div class="m-checkbox-list">
+                            <label for="weChatMinProgram_IsActive" class="m-checkbox">
+                                <input id="weChatMinProgram_IsActive" type="checkbox" name="weChatMinProgram_IsActive" [(ngModel)]="miniProgramSettings.weChatMiniProgram.isActive">
+                                {{l("IsActive")}}({{l("WeChatMiniProgramSetting")}})
+                                <span></span>
+                            </label>
+                        </div>
                         <div class="form-group">
                             <label for="weChatMiniProgram_AppId">{{l("AppId")}}</label>
                             <input id="weChatMiniProgram_AppId" type="text" name="weChatMiniProgram_AppId" class="form-control" [ngClass]="{'edited':miniProgramSettings.weChatMiniProgram.appId}" [(ngModel)]="miniProgramSettings.weChatMiniProgram.appId" maxlength="64">

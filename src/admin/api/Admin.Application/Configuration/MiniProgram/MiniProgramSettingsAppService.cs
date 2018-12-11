@@ -5,6 +5,7 @@ using Abp.Dependency;
 using Magicodes.Admin.Authorization;
 using Magicodes.Admin.Configuration.MiniProgram.Dto;
 using Magicodes.MiniProgram.Startup;
+using System;
 using System.Threading.Tasks;
 
 namespace Magicodes.Admin.Configuration.MiniProgram
@@ -29,8 +30,8 @@ namespace Magicodes.Admin.Configuration.MiniProgram
         private async Task<WeChatMiniProgramSettingsEditDto> GetWeChatMiniProgramSettingsAsync() => new WeChatMiniProgramSettingsEditDto
         {
             AppId = await SettingManager.GetSettingValueAsync(AppSettings.WeChatMiniProgram.AppId),
-            AppSecret =
-                  await SettingManager.GetSettingValueAsync(AppSettings.WeChatMiniProgram.AppSecret)
+            AppSecret = await SettingManager.GetSettingValueAsync(AppSettings.WeChatMiniProgram.AppSecret),
+            IsActive = Convert.ToBoolean(await SettingManager.GetSettingValueAsync(AppSettings.WeChatMiniProgram.IsActive))
         };
 
         public async Task UpdateAllSettings(MiniProgramSettingsEditDto input)
@@ -44,6 +45,7 @@ namespace Magicodes.Admin.Configuration.MiniProgram
         {
             await SaveSettings(AppSettings.WeChatMiniProgram.AppId, input.AppId);
             await SaveSettings(AppSettings.WeChatMiniProgram.AppSecret, input.AppSecret);
+            await SaveSettings(AppSettings.WeChatMiniProgram.IsActive, Convert.ToString(input.IsActive));
         }
 
         /// <summary>

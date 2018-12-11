@@ -18279,6 +18279,7 @@ export interface IMiniProgramSettingsEditDto {
 export class WeChatMiniProgramSettingsEditDto implements IWeChatMiniProgramSettingsEditDto {
     appId!: string;
     appSecret!: string;
+    isActive!: boolean;
 
     constructor(data?: IWeChatMiniProgramSettingsEditDto) {
         if (data) {
@@ -18293,6 +18294,7 @@ export class WeChatMiniProgramSettingsEditDto implements IWeChatMiniProgramSetti
         if (data) {
             this.appId = data["appId"];
             this.appSecret = data["appSecret"];
+            this.isActive = data["isActive"];
         }
     }
 
@@ -18307,6 +18309,7 @@ export class WeChatMiniProgramSettingsEditDto implements IWeChatMiniProgramSetti
         data = typeof data === 'object' ? data : {};
         data["appId"] = this.appId;
         data["appSecret"] = this.appSecret;
+        data["isActive"] = this.isActive;
         return data; 
     }
 }
@@ -18314,6 +18317,7 @@ export class WeChatMiniProgramSettingsEditDto implements IWeChatMiniProgramSetti
 export interface IWeChatMiniProgramSettingsEditDto {
     appId: string;
     appSecret: string;
+    isActive: boolean;
 }
 
 export class GetNotificationsOutput implements IGetNotificationsOutput {

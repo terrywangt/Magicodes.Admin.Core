@@ -74,7 +74,8 @@ namespace Magicodes.Admin.Configuration
         {
             return new[] {
                 new SettingDefinition(AppSettings.WeChatMiniProgram.AppId, GetFromAppSettings(AppSettings.WeChatMiniProgram.AppId, ""),scopes: SettingScopes.Tenant|SettingScopes.Application),
-                new SettingDefinition(AppSettings.WeChatMiniProgram.AppSecret, GetFromAppSettings(AppSettings.WeChatMiniProgram.AppSecret, ""),scopes: SettingScopes.Tenant|SettingScopes.Application)
+                new SettingDefinition(AppSettings.WeChatMiniProgram.AppSecret, GetFromAppSettings(AppSettings.WeChatMiniProgram.AppSecret, ""),scopes: SettingScopes.Tenant|SettingScopes.Application),
+                new SettingDefinition(AppSettings.WeChatMiniProgram.IsActive, GetFromAppSettings(AppSettings.WeChatMiniProgram.IsActive, "false"),scopes: SettingScopes.Tenant|SettingScopes.Application),
             };
         }
         private SettingDefinition[] GetPaySettings() => new[] {
