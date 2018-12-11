@@ -247,11 +247,15 @@ namespace Magicodes.App.Application.Users
             var output = new AppRegisterOrLoginOutput();
             using (var unitOfWork = _unitOfWorkManager.Begin())
             {
-                var user = _userManager.Users.FirstOrDefault(p => p.PhoneNumber == phone);
-                if (user != null)
+                User user;
+                if (phone != null)
                 {
-                    await BindAndTokenAuth(openId, unionId, platform, output, user, unitOfWork);
-                    return output;
+                    user = _userManager.Users.FirstOrDefault(p => p.PhoneNumber == phone);
+                    if (user != null)
+                    {
+                        await BindAndTokenAuth(openId, unionId, platform, output, user, unitOfWork);
+                        return output;
+                    }
                 }
 
                 var hasPhone = !phone.IsNullOrEmpty();
