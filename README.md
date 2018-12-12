@@ -58,8 +58,13 @@ https://gitee.com/xl_wenqiang/Magicodes.Admin.Core/commits/develop
 已通过腾讯云Docker容器托管:
 即将提供开发版和正式版演示环境
 
-开发版(开发版本可能出现问题导致无法打开):
-https://demoadmin.xin-lai.com
+正在配置CI
+
+* 开发版（Develop分支）(可能会出现问题导致无法打开):
+  * https://devdemoadmin.xin-lai.com
+  
+* 稳定版
+  * https://demoadmin.xin-lai.com
 
 * 账号：Admin
 * 密码：123456abcD
