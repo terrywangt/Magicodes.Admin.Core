@@ -1,7 +1,0 @@
-{
-  "name": "fenxiao",
-  "integrations": {
-    "cordova": {}
-  },
-  "type": "ionic-angular"
-}
