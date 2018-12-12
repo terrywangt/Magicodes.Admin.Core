@@ -1,9 +1,8 @@
 ﻿using Abp.Timing;
-using Admin.Application.Custom.Contents;
-using Magicodes.Admin.Core.Custom.Contents;
 using Shouldly;
 using System.Linq;
 using System.Threading.Tasks;
+using Magicodes.Admin.Contents;
 using Xunit;
 
 namespace Magicodes.Admin.Tests.Contents

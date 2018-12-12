@@ -14,11 +14,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using Magicodes.Admin.Core.Custom.Attachments;
-using Magicodes.Admin.Core.Custom.Contents;
+using Magicodes.Admin.Attachments;
 using Magicodes.Admin.Dto;
 using Magicodes.Unity;
 using Magicodes.Unity.Storage;
+using AttachmentSorts = Magicodes.Admin.Attachments.AttachmentSorts;
 
 namespace Magicodes.Admin.Web.Controllers
 {
@@ -58,7 +58,7 @@ namespace Magicodes.Admin.Web.Controllers
                         throw new UserFriendlyException(L("File_SizeLimit_Error"));
                     }
 
-                    if (!Enum.TryParse(input.AttachmentSort.ToString(), false, out Core.Custom.Attachments.AttachmentSorts result))
+                    if (!Enum.TryParse(input.AttachmentSort.ToString(), false, out AttachmentSorts result))
                     {
                         throw new UserFriendlyException(L("PleaseSelectProperSort"));
                     }
@@ -96,7 +96,7 @@ namespace Magicodes.Admin.Web.Controllers
                                 ContainerName = blobInfo.Container,
                                 AttachmentType = attachmentType,
                                 ContentMD5 = blobInfo.ContentMD5,
-                                AttachmentSorts = (Core.Custom.Attachments.AttachmentSorts)input.AttachmentSort
+                                AttachmentSorts = (AttachmentSorts)input.AttachmentSort
                             };
                             _attachmentInfoRepository.Insert(attach);
                             filesOutput.Add(attach);

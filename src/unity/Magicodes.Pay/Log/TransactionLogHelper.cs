@@ -23,10 +23,10 @@ using Abp.Extensions;
 using Abp.Runtime.Session;
 using Abp.Timing;
 using Castle.Core.Logging;
-using Magicodes.Admin.Core.Custom.LogInfos;
 using System;
 using System.Threading.Tasks;
 using System.Transactions;
+using Magicodes.Admin.LogInfos;
 
 namespace Magicodes.Pay.Log
 {

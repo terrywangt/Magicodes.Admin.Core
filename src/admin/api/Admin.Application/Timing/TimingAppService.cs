@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Abp.Application.Services.Dto;
 using Abp.Configuration;
 using Magicodes.Admin.Timing.Dto;
-using TimeZoneConverter;
 
 namespace Magicodes.Admin.Timing
 {

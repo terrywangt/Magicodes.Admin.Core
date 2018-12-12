@@ -15,6 +15,7 @@
   <ItemGroup>
     <!--注意不能使用1.5.4的版本，在Docker环境下存在Gdip异常-->
     <PackageReference Include="EPPlus.Core" Version="1.5.2" />
+    <PackageReference Include="Magicodes.ExporterAndImporter.Excel" Version="0.0.8" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\application\Application.Shared\Application.Shared.csproj" />
@@ -22,6 +23,7 @@
     <ProjectReference Include="..\..\..\data\Magicodes.Admin.EntityFrameworkCore\Magicodes.Admin.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\..\unity\Magicodes.MiniProgram\Magicodes.MiniProgram.csproj" />
     <ProjectReference Include="..\..\..\unity\Magicodes.Pay\Magicodes.Pay.csproj" />
+    <ProjectReference Include="..\..\..\unity\Magicodes.Unity\Magicodes.Unity.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Transactions" />

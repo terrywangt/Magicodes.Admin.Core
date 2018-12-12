@@ -6,7 +6,7 @@ using Abp.Dependency;
 using Abp.Domain.Repositories;
 using Abp.Runtime.Session;
 using Abp.Timing;
-using Magicodes.Admin.Core.Custom.Attachments;
+using Magicodes.Admin.Attachments;
 using Magicodes.Unity.Storage;
 
 namespace Magicodes.Unity.Editor

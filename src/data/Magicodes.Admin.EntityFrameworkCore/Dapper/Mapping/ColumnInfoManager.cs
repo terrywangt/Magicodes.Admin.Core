@@ -1,5 +1,5 @@
 ﻿using DapperExtensions.Mapper;
-using Magicodes.Admin.Core.Custom.Contents;
+using Magicodes.Admin.Contents;
 
 namespace Magicodes.Admin.Dapper.Mapping
 {

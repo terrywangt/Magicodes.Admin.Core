@@ -1,4 +1,4 @@
-﻿using Magicodes.Admin.Core.Custom.LogInfos;
+﻿using Magicodes.Admin.LogInfos;
 
 namespace Magicodes.Pay.Services.Dto
 {

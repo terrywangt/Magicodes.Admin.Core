@@ -1,11 +1,15 @@
 ﻿using Abp.IdentityServer4;
 using Abp.Zero.EntityFrameworkCore;
+using Magicodes.Admin.Attachments;
+using Magicodes.Admin.Authorization.OpenId;
 using Microsoft.EntityFrameworkCore;
 using Magicodes.Admin.Authorization.Roles;
 using Magicodes.Admin.Authorization.Users;
 using Magicodes.Admin.Chat;
+using Magicodes.Admin.Contents;
 using Magicodes.Admin.Editions;
 using Magicodes.Admin.Friendships;
+using Magicodes.Admin.LogInfos;
 using Magicodes.Admin.MultiTenancy;
 using Magicodes.Admin.MultiTenancy.Accounting;
 using Magicodes.Admin.MultiTenancy.Payments;
@@ -30,6 +34,23 @@ namespace Magicodes.Admin.EntityFrameworkCore
         public virtual DbSet<Invoice> Invoices { get; set; }
 
         public virtual DbSet<PersistedGrantEntity> PersistedGrants { get; set; }
+
+        public virtual DbSet<AttachmentInfo> AttachmentInfos { get; set; }
+
+        public virtual DbSet<ObjectAttachmentInfo> ObjectAttachmentInfos { get; set; }
+
+        public virtual DbSet<ArticleInfo> ArticleInfos { get; set; }
+
+        public virtual DbSet<ArticleSourceInfo> ArticleSourceInfos { get; set; }
+
+        public virtual DbSet<ArticleTagInfo> ArticleTagInfos { get; set; }
+
+        public virtual DbSet<ColumnInfo> ColumnInfos { get; set; }
+
+        public virtual DbSet<AppUserOpenId> AppUserOpenIds { get; set; }
+
+        public virtual DbSet<TransactionLog> TransactionLogs { get; set; }
+
 
         public AdminDbContext(DbContextOptions<AdminDbContext> options)
             : base(options)

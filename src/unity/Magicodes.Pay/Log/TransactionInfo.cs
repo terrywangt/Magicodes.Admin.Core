@@ -17,7 +17,7 @@
 
 using System;
 using System.ComponentModel.DataAnnotations;
-using Magicodes.Admin.Core.Custom.LogInfos;
+using Magicodes.Admin.LogInfos;
 
 namespace Magicodes.Pay.Log
 {

@@ -2,28 +2,26 @@
 using Abp.AutoMapper;
 using Abp.Dependency;
 using Abp.Modules;
-using Admin.Application.Custom.Contents.Dto;
+using Admin.Application.Custom.AutoMapper;
+using Magicodes.Admin.Authorization;
 using Magicodes.Admin.Core.Custom;
-using Magicodes.Admin.Core.Custom.Contents;
+using Magicodes.Admin.Core.Custom.Authorization;
 using Magicodes.ExporterAndImporter.Core;
 
 namespace Admin.Application.Custom
 {
     [DependsOn(
-       typeof(AppCoreModule),
-       typeof(AbpAutoMapperModule)
+       typeof(AppCoreModule)
        )]
     public class AdminAppModule : AbpModule
     {
         public override void PreInitialize()
         {
-            Configuration.Modules.AbpAutoMapper().Configurators.Add(config =>
-            {
-                config.CreateMap<ArticleInfo, ArticleInfoListDto>()
-                    .ForMember(dto => dto.ColumnInfo, options => options.MapFrom(p => p.ColumnInfo.Title))
-                    .ForMember(dto => dto.ArticleSourceInfo, options => options.MapFrom(p => p.ArticleSourceInfo.Name));
+            //Adding authorization providers
+            Configuration.Authorization.Providers.Add<AppCustomAuthorizationProvider>();
 
-            });
+            //Adding custom AutoMapper configuration
+            Configuration.Modules.AbpAutoMapper().Configurators.Add(AdminAppDtoMapper.CreateMappings);
         }
 
         public override void Initialize()

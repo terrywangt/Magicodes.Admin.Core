@@ -8,10 +8,10 @@ namespace Magicodes.Admin.Tests.Currency
         [Fact]
         public void TestCurrencyToString()
         {
-            var currency = new Core.Custom.LogInfos.Currency(300);
+            var currency = new LogInfos.Currency(300);
             currency.ToString().ShouldBe("300 CNY");
 
-            var currency1 = new Core.Custom.LogInfos.Currency(300, "USD");
+            var currency1 = new LogInfos.Currency(300, "USD");
             currency1.ToString().ShouldBe("300 USD");
 
         }

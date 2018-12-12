@@ -20,7 +20,6 @@ using Abp.Auditing;
 using Abp.Timing;
 using Abp.UI;
 using Magicodes.Admin.Authorization.Users;
-using Magicodes.Admin.Core.Custom.LogInfos;
 using Magicodes.Alipay;
 using Magicodes.Alipay.Global;
 using Magicodes.Pay.Log;
@@ -34,6 +33,7 @@ using System;
 using System.Threading.Tasks;
 using Abp.Json;
 using Castle.Core.Logging;
+using Magicodes.Admin.LogInfos;
 using AppPayOutput = Magicodes.Pay.WeChat.Pay.Dto.AppPayOutput;
 
 namespace Magicodes.Pay.Services

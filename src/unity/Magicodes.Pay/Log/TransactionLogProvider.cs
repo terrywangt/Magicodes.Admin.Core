@@ -19,7 +19,7 @@ using System;
 using Abp.Auditing;
 using Abp.Dependency;
 using Abp.Extensions;
-using Magicodes.Admin.Core.Custom.LogInfos;
+using Magicodes.Admin.LogInfos;
 
 namespace Magicodes.Pay.Log
 {

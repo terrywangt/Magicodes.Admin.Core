@@ -2,6 +2,7 @@
 using Abp.Modules;
 using Abp.Reflection.Extensions;
 using Magicodes.Admin.Authorization;
+using Magicodes.Admin.AutoMapper;
 
 namespace Magicodes.Admin
 {
@@ -19,7 +20,7 @@ namespace Magicodes.Admin
             Configuration.Authorization.Providers.Add<AppAuthorizationProvider>();
 
             //Adding custom AutoMapper configuration
-            Configuration.Modules.AbpAutoMapper().Configurators.Add(CustomDtoMapper.CreateMappings);
+            Configuration.Modules.AbpAutoMapper().Configurators.Add(AdminDtoMapper.CreateMappings);
         }
 
         public override void Initialize()
