@@ -12,11 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0.Documents", "0.Documents"
 		documents\文章显示接口_V1.xmind = documents\文章显示接口_V1.xmind
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.Shared", "src\application\Application.Shared\Application.Shared.csproj", "{3F41646F-95B2-4B28-9216-2B93754A0896}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Magicodes.Admin.Core", "src\core\Magicodes.Admin.Core\Magicodes.Admin.Core.csproj", "{23F2ABF2-970F-429D-AC5F-BE05E7674230}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Magicodes.Admin.Core.Shared", "src\core\Magicodes.Admin.Core.Shared\Magicodes.Admin.Core.Shared.csproj", "{16113C3D-53C2-498C-9542-62D6EEBA7C5A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Magicodes.Admin.Core.Custom", "src\core\Magicodes.Admin.Core.Custom\Magicodes.Admin.Core.Custom.csproj", "{16B1CFD0-6760-4893-8A67-6FA37070E1A7}"
 EndProject
@@ -50,24 +46,18 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Magicodes.Sms", "src\unity\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Abp.Castle.NLog", "src\unity\Abp.Castle.NLog\Abp.Castle.NLog.csproj", "{DB34BFD4-0A3E-4456-BB82-20F3844547D5}"
 EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{A538963B-D8CB-49B9-9D8C-25998E9AC249}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{3F41646F-95B2-4B28-9216-2B93754A0896}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3F41646F-95B2-4B28-9216-2B93754A0896}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3F41646F-95B2-4B28-9216-2B93754A0896}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3F41646F-95B2-4B28-9216-2B93754A0896}.Release|Any CPU.Build.0 = Release|Any CPU
 		{23F2ABF2-970F-429D-AC5F-BE05E7674230}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{23F2ABF2-970F-429D-AC5F-BE05E7674230}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{23F2ABF2-970F-429D-AC5F-BE05E7674230}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{23F2ABF2-970F-429D-AC5F-BE05E7674230}.Release|Any CPU.Build.0 = Release|Any CPU
-		{16113C3D-53C2-498C-9542-62D6EEBA7C5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{16113C3D-53C2-498C-9542-62D6EEBA7C5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{16113C3D-53C2-498C-9542-62D6EEBA7C5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{16113C3D-53C2-498C-9542-62D6EEBA7C5A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{16B1CFD0-6760-4893-8A67-6FA37070E1A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{16B1CFD0-6760-4893-8A67-6FA37070E1A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{16B1CFD0-6760-4893-8A67-6FA37070E1A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -108,14 +98,16 @@ Global
 		{DB34BFD4-0A3E-4456-BB82-20F3844547D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DB34BFD4-0A3E-4456-BB82-20F3844547D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DB34BFD4-0A3E-4456-BB82-20F3844547D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A538963B-D8CB-49B9-9D8C-25998E9AC249}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A538963B-D8CB-49B9-9D8C-25998E9AC249}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A538963B-D8CB-49B9-9D8C-25998E9AC249}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A538963B-D8CB-49B9-9D8C-25998E9AC249}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{3F41646F-95B2-4B28-9216-2B93754A0896} = {7661E802-A5E9-41F8-8242-8F5420D899B0}
 		{23F2ABF2-970F-429D-AC5F-BE05E7674230} = {03AD10DD-49DC-4604-874F-205522CC1090}
-		{16113C3D-53C2-498C-9542-62D6EEBA7C5A} = {03AD10DD-49DC-4604-874F-205522CC1090}
 		{16B1CFD0-6760-4893-8A67-6FA37070E1A7} = {03AD10DD-49DC-4604-874F-205522CC1090}
 		{C50BEE7E-4BFC-457D-9A71-4ADF4D3E8954} = {71AE5279-9595-4FC1-9213-B5B70B3D77D0}
 		{3A8F2FD9-58CD-40F0-A9D0-BAD7C1BB83C9} = {71AE5279-9595-4FC1-9213-B5B70B3D77D0}

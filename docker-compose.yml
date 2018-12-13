@@ -6,3 +6,9 @@ services:
     build:
       context: .
       dockerfile: src/admin/api/Admin.Host/Dockerfile
+
+  app.host:
+      image: ${DOCKER_REGISTRY-}apphost
+      build:
+        context: .
+        dockerfile: src/app/api/App.Host/Dockerfile
