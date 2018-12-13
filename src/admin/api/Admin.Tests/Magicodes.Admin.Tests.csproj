@@ -30,7 +30,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\core\Magicodes.Admin.Core.Custom\Magicodes.Admin.Core.Custom.csproj" />
-    <ProjectReference Include="..\..\..\core\Magicodes.Admin.Core.Shared\Magicodes.Admin.Core.Shared.csproj" />
     <ProjectReference Include="..\..\..\core\Magicodes.Admin.Core\Magicodes.Admin.Core.csproj" />
     <ProjectReference Include="..\..\..\data\Magicodes.Admin.EntityFrameworkCore\Magicodes.Admin.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\Admin.Application.Custom\Admin.Application.Custom.csproj" />

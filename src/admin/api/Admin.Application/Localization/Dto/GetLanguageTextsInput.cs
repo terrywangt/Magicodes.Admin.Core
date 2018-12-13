@@ -4,7 +4,7 @@ using Abp.Extensions;
 using Abp.Localization;
 using Abp.Runtime.Validation;
 
-namespace Magicodes.Admin.Localization
+namespace Magicodes.Admin.Localization.Dto
 {
     public class GetLanguageTextsInput : IPagedResultRequest, ISortedResultRequest, IShouldNormalize
     {
