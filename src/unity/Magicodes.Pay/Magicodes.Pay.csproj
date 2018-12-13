@@ -9,7 +9,6 @@
     <PackageReference Include="Magicodes.Alipay" Version="7.0.7" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\core\Magicodes.Admin.Core.Custom\Magicodes.Admin.Core.Custom.csproj" />
     <ProjectReference Include="..\..\core\Magicodes.Admin.Core\Magicodes.Admin.Core.csproj" />
   </ItemGroup>
 </Project>

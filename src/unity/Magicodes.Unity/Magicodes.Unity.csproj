@@ -9,7 +9,6 @@
     <PackageReference Include="Magicodes.Storage.Local.Core" Version="2.0.2" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\core\Magicodes.Admin.Core.Custom\Magicodes.Admin.Core.Custom.csproj" />
     <ProjectReference Include="..\..\core\Magicodes.Admin.Core\Magicodes.Admin.Core.csproj" />
   </ItemGroup>
   <ItemGroup>

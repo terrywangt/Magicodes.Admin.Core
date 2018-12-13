@@ -8,7 +8,7 @@ using Abp.Domain.Repositories;
 using Abp.Timing;
 using Abp.UI;
 using Abp.Web.Models;
-using Magicodes.Admin.Core.Custom.Attachments;
+using Magicodes.Admin.Attachments;
 using Magicodes.Admin.Dto;
 using Magicodes.Storage.Core;
 using Magicodes.Unity.Storage;
@@ -52,7 +52,7 @@ namespace App.Host.Controllers
                         throw new UserFriendlyException(L("File_SizeLimit_Error"));
                     }
 
-                    if (!Enum.TryParse(input.AttachmentSort.ToString(), false, out Magicodes.Admin.Core.Custom.Attachments.AttachmentSorts result))
+                    if (!Enum.TryParse(input.AttachmentSort.ToString(), false, out Magicodes.Admin.Attachments.AttachmentSorts result))
                     {
                         throw new UserFriendlyException(L("PleaseSelectProperSort"));
                     }
@@ -90,7 +90,7 @@ namespace App.Host.Controllers
                                 ContainerName = blobInfo.Container,
                                 AttachmentType = attachmentType,
                                 ContentMD5 = blobInfo.ContentMD5,
-                                AttachmentSorts = (Magicodes.Admin.Core.Custom.Attachments.AttachmentSorts)input.AttachmentSort
+                                AttachmentSorts = (Magicodes.Admin.Attachments.AttachmentSorts)input.AttachmentSort
                             };
                             _attachmentInfoRepository.Insert(attach);
                             filesOutput.Add(attach);
