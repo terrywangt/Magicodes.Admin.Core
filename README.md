@@ -61,10 +61,14 @@ https://gitee.com/xl_wenqiang/Magicodes.Admin.Core/commits/develop
 正在配置CI
 
 * 开发版（Develop分支）(可能会出现问题导致无法打开):
-  * https://devdemoadmin.xin-lai.com
+  * 后台：https://devdemoadmin.xin-lai.com
+  * 后台接口：
+  * APP接口：
   
 * 稳定版
-  * https://demoadmin.xin-lai.com
+  * 后台：https://demoadmin.xin-lai.com
+  * 后台接口：
+  * APP接口：
 
 * 账号：Admin
 * 密码：123456abcD
