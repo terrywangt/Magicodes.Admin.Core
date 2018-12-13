@@ -1,5 +1,5 @@
-﻿using Magicodes.Admin.Core.Custom.LogInfos;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using Magicodes.Admin.LogInfos;
 
 namespace Magicodes.App.Application.Payments.Dto
 {

@@ -3,7 +3,6 @@ using Abp.AutoMapper;
 using Abp.Domain.Entities.Auditing;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Magicodes.Admin.Dto;
 using Abp.Runtime.Validation;
 using Abp.Extensions;
 

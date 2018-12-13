@@ -29,6 +29,7 @@ using Abp.Extensions;
 using Abp.Runtime.Caching;
 using Abp.Timing;
 using Abp.UI;
+using Magicodes.Admin.Authorization.OpenId;
 using Magicodes.Admin.Authorization.Users;
 using Magicodes.Admin.Core.Custom.Authorization;
 using Magicodes.Admin.Identity;
