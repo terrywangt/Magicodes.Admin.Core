@@ -5,27 +5,22 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Cms.Host.Models;
+using Magicodes.Admin.Contents;
 
 namespace Cms.Host.Controllers
 {
     public class HomeController : Controller
     {
+
+       //// private IColumnInfoAppService _columnInfoAppService;
+
+       // public HomeController(IColumnInfoAppService columnInfoAppService)
+       // {
+       //     _columnInfoAppService = columnInfoAppService;
+       // }
+
         public IActionResult Index()
         {
-            return View();
-        }
-
-        public IActionResult Column()
-        {
-            ViewData["Message"] = "Your application description page.";
-
-            return View();
-        }
-
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
-
             return View();
         }
 
