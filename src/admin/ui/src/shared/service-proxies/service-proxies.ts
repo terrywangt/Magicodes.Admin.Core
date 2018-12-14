@@ -583,13 +583,12 @@ export class ArticleInfoServiceProxy {
     }
 
     /**
-     * 获取文章列表
-     * @param isOnlyGetRecycleData (optional) 是否仅获取回收站数据
-     * @param creationDateStart (optional) 创建开始时间
-     * @param creationDateEnd (optional) 创建结束时间
-     * @param modificationTimeStart (optional) 修改开始时间
-     * @param modificationTimeEnd (optional) 修改结束时间
-     * @param filter (optional) 关键字
+     * @param isOnlyGetRecycleData (optional) 
+     * @param creationDateStart (optional) 
+     * @param creationDateEnd (optional) 
+     * @param modificationTimeStart (optional) 
+     * @param modificationTimeEnd (optional) 
+     * @param filter (optional) 
      * @param sorting (optional) 
      * @param maxResultCount (optional) 
      * @param skipCount (optional) 
@@ -663,13 +662,12 @@ export class ArticleInfoServiceProxy {
     }
 
     /**
-     * 导出文章
-     * @param isOnlyGetRecycleData (optional) 是否仅获取回收站数据
-     * @param creationDateStart (optional) 创建开始时间
-     * @param creationDateEnd (optional) 创建结束时间
-     * @param modificationTimeStart (optional) 修改开始时间
-     * @param modificationTimeEnd (optional) 修改结束时间
-     * @param filter (optional) 关键字
+     * @param isOnlyGetRecycleData (optional) 
+     * @param creationDateStart (optional) 
+     * @param creationDateEnd (optional) 
+     * @param modificationTimeStart (optional) 
+     * @param modificationTimeEnd (optional) 
+     * @param filter (optional) 
      * @param sorting (optional) 
      * @param maxResultCount (optional) 
      * @param skipCount (optional) 
@@ -743,7 +741,6 @@ export class ArticleInfoServiceProxy {
     }
 
     /**
-     * 获取文章
      * @param id (optional) 
      * @return Success
      */
@@ -799,7 +796,6 @@ export class ArticleInfoServiceProxy {
     }
 
     /**
-     * 创建或者编辑文章
      * @param input (optional) 
      * @return Success
      */
@@ -852,7 +848,6 @@ export class ArticleInfoServiceProxy {
     }
 
     /**
-     * 删除文章
      * @param id (optional) 
      * @return Success
      */
@@ -904,7 +899,6 @@ export class ArticleInfoServiceProxy {
     }
 
     /**
-     * 恢复
      * @param id (optional) 
      * @return Success
      */
@@ -956,7 +950,6 @@ export class ArticleInfoServiceProxy {
     }
 
     /**
-     * 获取选择列表
      * @return Success
      */
     getColumnInfoDataComboItems(): Observable<GetDataComboItemDtoOfInt64[]> {
@@ -1013,7 +1006,6 @@ export class ArticleInfoServiceProxy {
     }
 
     /**
-     * 获取选择列表
      * @return Success
      */
     getArticleSourceInfoDataComboItems(): Observable<GetDataComboItemDtoOfInt64[]> {
@@ -1070,8 +1062,7 @@ export class ArticleInfoServiceProxy {
     }
 
     /**
-     * IsActive开关服务
-     * @param input (optional) 开关输入参数
+     * @param input (optional) 
      * @return Success
      */
     updateIsActiveSwitchAsync(input: SwitchEntityInputDtoOfInt64 | null | undefined): Observable<void> {
@@ -1123,8 +1114,7 @@ export class ArticleInfoServiceProxy {
     }
 
     /**
-     * IsNeedAuthorizeAccess开关服务
-     * @param input (optional) 开关输入参数
+     * @param input (optional) 
      * @return Success
      */
     updateIsNeedAuthorizeAccessSwitchAsync(input: SwitchEntityInputDtoOfInt64 | null | undefined): Observable<void> {
@@ -1188,14 +1178,13 @@ export class ArticleInfoArticleTagInfoServiceProxy {
     }
 
     /**
-     * 获取列表
      * @param articleInfoId (optional) 
-     * @param isOnlyGetRecycleData (optional) 是否仅获取回收站数据
-     * @param creationDateStart (optional) 创建开始时间
-     * @param creationDateEnd (optional) 创建结束时间
-     * @param modificationTimeStart (optional) 修改开始时间
-     * @param modificationTimeEnd (optional) 修改结束时间
-     * @param filter (optional) 关键字
+     * @param isOnlyGetRecycleData (optional) 
+     * @param creationDateStart (optional) 
+     * @param creationDateEnd (optional) 
+     * @param modificationTimeStart (optional) 
+     * @param modificationTimeEnd (optional) 
+     * @param filter (optional) 
      * @param sorting (optional) 
      * @param maxResultCount (optional) 
      * @param skipCount (optional) 
@@ -1271,14 +1260,13 @@ export class ArticleInfoArticleTagInfoServiceProxy {
     }
 
     /**
-     * 导出
      * @param articleInfoId (optional) 
-     * @param isOnlyGetRecycleData (optional) 是否仅获取回收站数据
-     * @param creationDateStart (optional) 创建开始时间
-     * @param creationDateEnd (optional) 创建结束时间
-     * @param modificationTimeStart (optional) 修改开始时间
-     * @param modificationTimeEnd (optional) 修改结束时间
-     * @param filter (optional) 关键字
+     * @param isOnlyGetRecycleData (optional) 
+     * @param creationDateStart (optional) 
+     * @param creationDateEnd (optional) 
+     * @param modificationTimeStart (optional) 
+     * @param modificationTimeEnd (optional) 
+     * @param filter (optional) 
      * @param sorting (optional) 
      * @param maxResultCount (optional) 
      * @param skipCount (optional) 
@@ -1354,7 +1342,6 @@ export class ArticleInfoArticleTagInfoServiceProxy {
     }
 
     /**
-     * 获取
      * @param id (optional) 
      * @return Success
      */
@@ -1410,7 +1397,6 @@ export class ArticleInfoArticleTagInfoServiceProxy {
     }
 
     /**
-     * 创建或者编辑
      * @param input (optional) 
      * @return Success
      */
@@ -1463,7 +1449,6 @@ export class ArticleInfoArticleTagInfoServiceProxy {
     }
 
     /**
-     * 删除
      * @param id (optional) 
      * @return Success
      */
@@ -1515,7 +1500,6 @@ export class ArticleInfoArticleTagInfoServiceProxy {
     }
 
     /**
-     * 恢复
      * @param id (optional) 
      * @return Success
      */
@@ -1567,7 +1551,6 @@ export class ArticleInfoArticleTagInfoServiceProxy {
     }
 
     /**
-     * 获取选择列表
      * @return Success
      */
     getArticleInfoDataComboItems(): Observable<GetDataComboItemDtoOfInt64[]> {
@@ -1636,13 +1619,12 @@ export class ArticleSourceInfoServiceProxy {
     }
 
     /**
-     * 获取文章来源列表
-     * @param isOnlyGetRecycleData (optional) 是否仅获取回收站数据
-     * @param creationDateStart (optional) 创建开始时间
-     * @param creationDateEnd (optional) 创建结束时间
-     * @param modificationTimeStart (optional) 修改开始时间
-     * @param modificationTimeEnd (optional) 修改结束时间
-     * @param filter (optional) 关键字
+     * @param isOnlyGetRecycleData (optional) 
+     * @param creationDateStart (optional) 
+     * @param creationDateEnd (optional) 
+     * @param modificationTimeStart (optional) 
+     * @param modificationTimeEnd (optional) 
+     * @param filter (optional) 
      * @param sorting (optional) 
      * @param maxResultCount (optional) 
      * @param skipCount (optional) 
@@ -1716,13 +1698,12 @@ export class ArticleSourceInfoServiceProxy {
     }
 
     /**
-     * 导出文章来源
-     * @param isOnlyGetRecycleData (optional) 是否仅获取回收站数据
-     * @param creationDateStart (optional) 创建开始时间
-     * @param creationDateEnd (optional) 创建结束时间
-     * @param modificationTimeStart (optional) 修改开始时间
-     * @param modificationTimeEnd (optional) 修改结束时间
-     * @param filter (optional) 关键字
+     * @param isOnlyGetRecycleData (optional) 
+     * @param creationDateStart (optional) 
+     * @param creationDateEnd (optional) 
+     * @param modificationTimeStart (optional) 
+     * @param modificationTimeEnd (optional) 
+     * @param filter (optional) 
      * @param sorting (optional) 
      * @param maxResultCount (optional) 
      * @param skipCount (optional) 
@@ -1796,7 +1777,6 @@ export class ArticleSourceInfoServiceProxy {
     }
 
     /**
-     * 获取文章来源
      * @param id (optional) 
      * @return Success
      */
@@ -1852,7 +1832,6 @@ export class ArticleSourceInfoServiceProxy {
     }
 
     /**
-     * 创建或者编辑文章来源
      * @param input (optional) 
      * @return Success
      */
@@ -1905,7 +1884,6 @@ export class ArticleSourceInfoServiceProxy {
     }
 
     /**
-     * 删除文章来源
      * @param id (optional) 
      * @return Success
      */
@@ -1957,7 +1935,6 @@ export class ArticleSourceInfoServiceProxy {
     }
 
     /**
-     * 恢复
      * @param id (optional) 
      * @return Success
      */
@@ -2811,13 +2788,12 @@ export class ColumnInfoServiceProxy {
     }
 
     /**
-     * 获取栏目列表
-     * @param isOnlyGetRecycleData (optional) 是否仅获取回收站数据
-     * @param creationDateStart (optional) 创建开始时间
-     * @param creationDateEnd (optional) 创建结束时间
-     * @param modificationTimeStart (optional) 修改开始时间
-     * @param modificationTimeEnd (optional) 修改结束时间
-     * @param filter (optional) 关键字
+     * @param isOnlyGetRecycleData (optional) 
+     * @param creationDateStart (optional) 
+     * @param creationDateEnd (optional) 
+     * @param modificationTimeStart (optional) 
+     * @param modificationTimeEnd (optional) 
+     * @param filter (optional) 
      * @param sorting (optional) 
      * @param maxResultCount (optional) 
      * @param skipCount (optional) 
@@ -2891,13 +2867,12 @@ export class ColumnInfoServiceProxy {
     }
 
     /**
-     * 导出栏目
-     * @param isOnlyGetRecycleData (optional) 是否仅获取回收站数据
-     * @param creationDateStart (optional) 创建开始时间
-     * @param creationDateEnd (optional) 创建结束时间
-     * @param modificationTimeStart (optional) 修改开始时间
-     * @param modificationTimeEnd (optional) 修改结束时间
-     * @param filter (optional) 关键字
+     * @param isOnlyGetRecycleData (optional) 
+     * @param creationDateStart (optional) 
+     * @param creationDateEnd (optional) 
+     * @param modificationTimeStart (optional) 
+     * @param modificationTimeEnd (optional) 
+     * @param filter (optional) 
      * @param sorting (optional) 
      * @param maxResultCount (optional) 
      * @param skipCount (optional) 
@@ -2971,7 +2946,6 @@ export class ColumnInfoServiceProxy {
     }
 
     /**
-     * 删除所有
      * @return Success
      */
     deleteAll(): Observable<void> {
@@ -3020,7 +2994,6 @@ export class ColumnInfoServiceProxy {
     }
 
     /**
-     * 获取栏目
      * @param id (optional) 
      * @return Success
      */
@@ -3076,7 +3049,6 @@ export class ColumnInfoServiceProxy {
     }
 
     /**
-     * 创建或者编辑栏目
      * @param input (optional) 
      * @return Success
      */
@@ -3129,7 +3101,6 @@ export class ColumnInfoServiceProxy {
     }
 
     /**
-     * 删除栏目
      * @param id (optional) 
      * @return Success
      */
@@ -3181,7 +3152,6 @@ export class ColumnInfoServiceProxy {
     }
 
     /**
-     * 恢复
      * @param id (optional) 
      * @return Success
      */
@@ -3233,8 +3203,7 @@ export class ColumnInfoServiceProxy {
     }
 
     /**
-     * 拖拽排序
-     * @param input (optional) 输入参数
+     * @param input (optional) 
      * @return Success
      */
     moveTo(input: MoveToInputDtoOfInt64 | null | undefined): Observable<void> {
@@ -3286,8 +3255,7 @@ export class ColumnInfoServiceProxy {
     }
 
     /**
-     * IsActive开关服务
-     * @param input (optional) 开关输入参数
+     * @param input (optional) 
      * @return Success
      */
     updateIsActiveSwitchAsync(input: SwitchEntityInputDtoOfInt64 | null | undefined): Observable<void> {
@@ -3339,8 +3307,7 @@ export class ColumnInfoServiceProxy {
     }
 
     /**
-     * IsNeedAuthorizeAccess开关服务
-     * @param input (optional) 开关输入参数
+     * @param input (optional) 
      * @return Success
      */
     updateIsNeedAuthorizeAccessSwitchAsync(input: SwitchEntityInputDtoOfInt64 | null | undefined): Observable<void> {
@@ -3392,7 +3359,6 @@ export class ColumnInfoServiceProxy {
     }
 
     /**
-     * 获取选择列表
      * @return Success
      */
     getColumnInfoDataComboItems(): Observable<GetDataComboItemDtoOfInt64[]> {
@@ -3449,9 +3415,8 @@ export class ColumnInfoServiceProxy {
     }
 
     /**
-     * 获取栏目 TreeTable列表
-     * @param parentId (optional) 父级Id
-     * @param isOnlyGetRecycleData (optional) 是否仅获取回收站数据
+     * @param parentId (optional) 
+     * @param isOnlyGetRecycleData (optional) 
      * @return Success
      */
     getChildrenColumnInfos(parentId: number | null | undefined, isOnlyGetRecycleData: boolean | null | undefined): Observable<TreeTableOutputDtoOfColumnInfo> {
@@ -3520,8 +3485,6 @@ export class CommonServiceProxy {
     }
 
     /**
-     * 获取枚举值列表
-     * @param fullName 类型全名
      * @return Success
      */
     getEnumValuesList(fullName: string): Observable<GetEnumValuesListDto[]> {
@@ -3582,9 +3545,8 @@ export class CommonServiceProxy {
     }
 
     /**
-     * 获取对象图片列表
-     * @param objectType (optional) 对象类型
-     * @param objectId (optional) 对象Id
+     * @param objectType (optional) 
+     * @param objectId (optional) 
      * @return Success
      */
     getObjectImages(objectType: string | null | undefined, objectId: number | null | undefined): Observable<GetObjectImagesListDto[]> {
@@ -3645,10 +3607,9 @@ export class CommonServiceProxy {
     }
 
     /**
-     * 获取对象封面图片
-     * @param objectType (optional) 对象类型
-     * @param objectId (optional) 对象Id
-     * @param attachmentUrl (optional) 附件Url
+     * @param objectType (optional) 
+     * @param objectId (optional) 
+     * @param attachmentUrl (optional) 
      * @return Success
      */
     getObjectCoverImage(objectType: string | null | undefined, objectId: number | null | undefined, attachmentUrl: string | null | undefined): Observable<GetObjectImagesListDto> {
@@ -3707,9 +3668,8 @@ export class CommonServiceProxy {
     }
 
     /**
-     * 移除对象附件
-     * @param ids (optional) 主键Id数组
-     * @param objectType (optional) 附件类型
+     * @param ids (optional) 
+     * @param objectType (optional) 
      * @return Success
      */
     removeObjectAttachments(ids: number[] | null | undefined, objectType: string | null | undefined): Observable<void> {
@@ -3762,7 +3722,6 @@ export class CommonServiceProxy {
     }
 
     /**
-     * 添加附件关联
      * @param input (optional) 
      * @return Success
      */
@@ -3815,8 +3774,7 @@ export class CommonServiceProxy {
     }
 
     /**
-     * 设置封面
-     * @param input (optional) The input.
+     * @param input (optional) 
      * @return Success
      */
     setCover(input: SetCoverInputDto | null | undefined): Observable<void> {
@@ -10768,11 +10726,10 @@ export class TransactionLogServiceProxy {
     }
 
     /**
-     * 获取交易日志列表
-     * @param isOnlyGetRecycleData (optional) 是否仅获取回收站数据
-     * @param creationDateStart (optional) 创建开始时间
-     * @param creationDateEnd (optional) 创建结束时间
-     * @param filter (optional) 关键字
+     * @param isOnlyGetRecycleData (optional) 
+     * @param creationDateStart (optional) 
+     * @param creationDateEnd (optional) 
+     * @param filter (optional) 
      * @param sorting (optional) 
      * @param maxResultCount (optional) 
      * @param skipCount (optional) 
@@ -10842,11 +10799,10 @@ export class TransactionLogServiceProxy {
     }
 
     /**
-     * 导出交易日志
-     * @param isOnlyGetRecycleData (optional) 是否仅获取回收站数据
-     * @param creationDateStart (optional) 创建开始时间
-     * @param creationDateEnd (optional) 创建结束时间
-     * @param filter (optional) 关键字
+     * @param isOnlyGetRecycleData (optional) 
+     * @param creationDateStart (optional) 
+     * @param creationDateEnd (optional) 
+     * @param filter (optional) 
      * @param sorting (optional) 
      * @param maxResultCount (optional) 
      * @param skipCount (optional) 
@@ -10916,7 +10872,6 @@ export class TransactionLogServiceProxy {
     }
 
     /**
-     * 删除交易日志
      * @param id (optional) 
      * @return Success
      */
@@ -10968,8 +10923,7 @@ export class TransactionLogServiceProxy {
     }
 
     /**
-     * IsFreeze开关服务
-     * @param input (optional) 开关输入参数
+     * @param input (optional) 
      * @return Success
      */
     updateIsFreezeSwitchAsync(input: SwitchEntityInputDtoOfInt64 | null | undefined): Observable<void> {
@@ -11033,7 +10987,6 @@ export class TreeServiceProxy {
     }
 
     /**
-     * 获取栏目 树级列表
      * @param parentId (optional) 
      * @return Success
      */
@@ -12848,49 +12801,23 @@ export interface IPagedResultDtoOfArticleInfoListDto {
     items: ArticleInfoListDto[] | undefined;
 }
 
-/** 文章列表Dto */
 export class ArticleInfoListDto implements IArticleInfoListDto {
-    /** 编码 */
     code!: string | undefined;
-    /** 标题 */
     title!: string | undefined;
-    /** 发布人（机构） */
     publisher!: string | undefined;
-    /** 栏目信息
-<code>
-请配置AutoMap：
-.ForMember(dto =&gt; dto.ColumnInfo, options =&gt; options.MapFrom(p =&gt; p.ColumnInfo.Title))
-</code> */
     columnInfo!: string | undefined;
-    /** 文章来源
-<code>
-请配置AutoMap：
-.ForMember(dto =&gt; dto.ArticleSourceInfo, options =&gt; options.MapFrom(p =&gt; p.ArticleSourceInfo.Name))
-</code> */
     articleSourceInfo!: string | undefined;
-    /** 发布时间 */
     releaseTime!: moment.Moment | undefined;
-    /** 是否启用 */
     isActive!: boolean | undefined;
-    /** 授权访问 */
     isNeedAuthorizeAccess!: boolean | undefined;
-    /** 标题 */
     seoTitle!: string | undefined;
-    /** 静态页路径 */
     staticPageUrl!: string | undefined;
-    /** 图片URL */
     imageUrl!: string | undefined;
-    /** 链接 */
     url!: string | undefined;
-    /** 推荐类型 */
     recommendedType!: ArticleInfoListDtoRecommendedType | undefined;
-    /** 访问数 */
     viewCount!: number | undefined;
-    /** 创建时间 */
     creationTime!: moment.Moment | undefined;
-    /** 是否已删除 */
     isDeleted!: boolean | undefined;
-    /** 是否静态 */
     isStatic!: boolean | undefined;
     id!: number | undefined;
 
@@ -12957,49 +12884,23 @@ export class ArticleInfoListDto implements IArticleInfoListDto {
     }
 }
 
-/** 文章列表Dto */
 export interface IArticleInfoListDto {
-    /** 编码 */
     code: string | undefined;
-    /** 标题 */
     title: string | undefined;
-    /** 发布人（机构） */
     publisher: string | undefined;
-    /** 栏目信息
-<code>
-请配置AutoMap：
-.ForMember(dto =&gt; dto.ColumnInfo, options =&gt; options.MapFrom(p =&gt; p.ColumnInfo.Title))
-</code> */
     columnInfo: string | undefined;
-    /** 文章来源
-<code>
-请配置AutoMap：
-.ForMember(dto =&gt; dto.ArticleSourceInfo, options =&gt; options.MapFrom(p =&gt; p.ArticleSourceInfo.Name))
-</code> */
     articleSourceInfo: string | undefined;
-    /** 发布时间 */
     releaseTime: moment.Moment | undefined;
-    /** 是否启用 */
     isActive: boolean | undefined;
-    /** 授权访问 */
     isNeedAuthorizeAccess: boolean | undefined;
-    /** 标题 */
     seoTitle: string | undefined;
-    /** 静态页路径 */
     staticPageUrl: string | undefined;
-    /** 图片URL */
     imageUrl: string | undefined;
-    /** 链接 */
     url: string | undefined;
-    /** 推荐类型 */
     recommendedType: ArticleInfoListDtoRecommendedType | undefined;
-    /** 访问数 */
     viewCount: number | undefined;
-    /** 创建时间 */
     creationTime: moment.Moment | undefined;
-    /** 是否已删除 */
     isDeleted: boolean | undefined;
-    /** 是否静态 */
     isStatic: boolean | undefined;
     id: number | undefined;
 }
@@ -13048,7 +12949,6 @@ export interface IFileDto {
     fileToken: string;
 }
 
-/** 文章���༭���ģ�� */
 export class GetArticleInfoForEditOutput implements IGetArticleInfoForEditOutput {
     articleInfo!: ArticleInfoEditDto | undefined;
 
@@ -13081,40 +12981,25 @@ export class GetArticleInfoForEditOutput implements IGetArticleInfoForEditOutput
     }
 }
 
-/** 文章���༭���ģ�� */
 export interface IGetArticleInfoForEditOutput {
     articleInfo: ArticleInfoEditDto | undefined;
 }
 
-/** 文章编辑Dto */
 export class ArticleInfoEditDto implements IArticleInfoEditDto {
-    /** 标题 */
     title!: string;
-    /** 发布人（机构） */
     publisher!: string;
     columnInfoId!: number | undefined;
     articleSourceInfoId!: number | undefined;
-    /** 发布时间 */
     releaseTime!: moment.Moment | undefined;
-    /** 内容 */
     content!: string;
-    /** 是否启用 */
     isActive!: boolean | undefined;
-    /** 授权访问 */
     isNeedAuthorizeAccess!: boolean | undefined;
-    /** 标题 */
     seoTitle!: string | undefined;
-    /** 关键字（多个以逗号隔开） */
     keyWords!: string | undefined;
-    /** 简介 */
     introduction!: string | undefined;
-    /** 静态页路径 */
     staticPageUrl!: string | undefined;
-    /** 链接 */
     url!: string | undefined;
-    /** 推荐类型 */
     recommendedType!: ArticleInfoEditDtoRecommendedType;
-    /** 是否静态 */
     isStatic!: boolean | undefined;
     id!: number | undefined;
 
@@ -13177,40 +13062,25 @@ export class ArticleInfoEditDto implements IArticleInfoEditDto {
     }
 }
 
-/** 文章编辑Dto */
 export interface IArticleInfoEditDto {
-    /** 标题 */
     title: string;
-    /** 发布人（机构） */
     publisher: string;
     columnInfoId: number | undefined;
     articleSourceInfoId: number | undefined;
-    /** 发布时间 */
     releaseTime: moment.Moment | undefined;
-    /** 内容 */
     content: string;
-    /** 是否启用 */
     isActive: boolean | undefined;
-    /** 授权访问 */
     isNeedAuthorizeAccess: boolean | undefined;
-    /** 标题 */
     seoTitle: string | undefined;
-    /** 关键字（多个以逗号隔开） */
     keyWords: string | undefined;
-    /** 简介 */
     introduction: string | undefined;
-    /** 静态页路径 */
     staticPageUrl: string | undefined;
-    /** 链接 */
     url: string | undefined;
-    /** 推荐类型 */
     recommendedType: ArticleInfoEditDtoRecommendedType;
-    /** 是否静态 */
     isStatic: boolean | undefined;
     id: number | undefined;
 }
 
-/** 文章创建或者编辑Dto */
 export class CreateOrUpdateArticleInfoDto implements ICreateOrUpdateArticleInfoDto {
     articleInfo!: ArticleInfoEditDto;
 
@@ -13246,7 +13116,6 @@ export class CreateOrUpdateArticleInfoDto implements ICreateOrUpdateArticleInfoD
     }
 }
 
-/** 文章创建或者编辑Dto */
 export interface ICreateOrUpdateArticleInfoDto {
     articleInfo: ArticleInfoEditDto;
 }
@@ -13379,18 +13248,10 @@ export interface IPagedResultDtoOfArticleTagInfoListDto {
     items: ArticleTagInfoListDto[] | undefined;
 }
 
-/** 列表Dto */
 export class ArticleTagInfoListDto implements IArticleTagInfoListDto {
-    /** <code>
-            请配置AutoMap：
-            .ForMember(dto =&gt; dto.ArticleInfo, options =&gt; options.MapFrom(p =&gt; p.ArticleInfo.Title))
-            </code> */
     articleInfo!: string | undefined;
-    /** 名称 */
     name!: string | undefined;
-    /** 创建时间 */
     creationTime!: moment.Moment | undefined;
-    /** 是否已删除 */
     isDeleted!: boolean | undefined;
     id!: number | undefined;
 
@@ -13431,23 +13292,14 @@ export class ArticleTagInfoListDto implements IArticleTagInfoListDto {
     }
 }
 
-/** 列表Dto */
 export interface IArticleTagInfoListDto {
-    /** <code>
-            请配置AutoMap：
-            .ForMember(dto =&gt; dto.ArticleInfo, options =&gt; options.MapFrom(p =&gt; p.ArticleInfo.Title))
-            </code> */
     articleInfo: string | undefined;
-    /** 名称 */
     name: string | undefined;
-    /** 创建时间 */
     creationTime: moment.Moment | undefined;
-    /** 是否已删除 */
     isDeleted: boolean | undefined;
     id: number | undefined;
 }
 
-/** ���༭���ģ�� */
 export class GetArticleTagInfoForEditOutput implements IGetArticleTagInfoForEditOutput {
     articleTagInfo!: ArticleTagInfoEditDto | undefined;
 
@@ -13480,15 +13332,12 @@ export class GetArticleTagInfoForEditOutput implements IGetArticleTagInfoForEdit
     }
 }
 
-/** ���༭���ģ�� */
 export interface IGetArticleTagInfoForEditOutput {
     articleTagInfo: ArticleTagInfoEditDto | undefined;
 }
 
-/** 编辑Dto */
 export class ArticleTagInfoEditDto implements IArticleTagInfoEditDto {
     articleInfoId!: number | undefined;
-    /** 名称 */
     name!: string;
     id!: number | undefined;
 
@@ -13525,15 +13374,12 @@ export class ArticleTagInfoEditDto implements IArticleTagInfoEditDto {
     }
 }
 
-/** 编辑Dto */
 export interface IArticleTagInfoEditDto {
     articleInfoId: number | undefined;
-    /** 名称 */
     name: string;
     id: number | undefined;
 }
 
-/** 创建或者编辑Dto */
 export class CreateOrUpdateArticleInfoArticleTagInfoDto implements ICreateOrUpdateArticleInfoArticleTagInfoDto {
     articleTagInfo!: ArticleTagInfoEditDto;
 
@@ -13569,7 +13415,6 @@ export class CreateOrUpdateArticleInfoArticleTagInfoDto implements ICreateOrUpda
     }
 }
 
-/** 创建或者编辑Dto */
 export interface ICreateOrUpdateArticleInfoArticleTagInfoDto {
     articleTagInfo: ArticleTagInfoEditDto;
 }
@@ -13622,13 +13467,9 @@ export interface IPagedResultDtoOfArticleSourceInfoListDto {
     items: ArticleSourceInfoListDto[] | undefined;
 }
 
-/** 文章来源列表Dto */
 export class ArticleSourceInfoListDto implements IArticleSourceInfoListDto {
-    /** 名称 */
     name!: string | undefined;
-    /** 创建时间 */
     creationTime!: moment.Moment | undefined;
-    /** 是否已删除 */
     isDeleted!: boolean | undefined;
     id!: number | undefined;
 
@@ -13667,18 +13508,13 @@ export class ArticleSourceInfoListDto implements IArticleSourceInfoListDto {
     }
 }
 
-/** 文章来源列表Dto */
 export interface IArticleSourceInfoListDto {
-    /** 名称 */
     name: string | undefined;
-    /** 创建时间 */
     creationTime: moment.Moment | undefined;
-    /** 是否已删除 */
     isDeleted: boolean | undefined;
     id: number | undefined;
 }
 
-/** 文章来源���༭���ģ�� */
 export class GetArticleSourceInfoForEditOutput implements IGetArticleSourceInfoForEditOutput {
     articleSourceInfo!: ArticleSourceInfoEditDto | undefined;
 
@@ -13711,14 +13547,11 @@ export class GetArticleSourceInfoForEditOutput implements IGetArticleSourceInfoF
     }
 }
 
-/** 文章来源���༭���ģ�� */
 export interface IGetArticleSourceInfoForEditOutput {
     articleSourceInfo: ArticleSourceInfoEditDto | undefined;
 }
 
-/** 文章来源编辑Dto */
 export class ArticleSourceInfoEditDto implements IArticleSourceInfoEditDto {
-    /** 名称 */
     name!: string;
     id!: number | undefined;
 
@@ -13753,14 +13586,11 @@ export class ArticleSourceInfoEditDto implements IArticleSourceInfoEditDto {
     }
 }
 
-/** 文章来源编辑Dto */
 export interface IArticleSourceInfoEditDto {
-    /** 名称 */
     name: string;
     id: number | undefined;
 }
 
-/** 文章来源创建或者编辑Dto */
 export class CreateOrUpdateArticleSourceInfoDto implements ICreateOrUpdateArticleSourceInfoDto {
     articleSourceInfo!: ArticleSourceInfoEditDto;
 
@@ -13796,7 +13626,6 @@ export class CreateOrUpdateArticleSourceInfoDto implements ICreateOrUpdateArticl
     }
 }
 
-/** 文章来源创建或者编辑Dto */
 export interface ICreateOrUpdateArticleSourceInfoDto {
     articleSourceInfo: ArticleSourceInfoEditDto;
 }
@@ -14589,31 +14418,18 @@ export interface IPagedResultDtoOfColumnInfoListDto {
     items: ColumnInfoListDto[] | undefined;
 }
 
-/** 栏目列表Dto */
 export class ColumnInfoListDto implements IColumnInfoListDto {
-    /** 编码 */
     code!: string | undefined;
-    /** 标题 */
     title!: string | undefined;
-    /** 是否启用 */
     isActive!: boolean | undefined;
-    /** 授权访问 */
     isNeedAuthorizeAccess!: boolean | undefined;
-    /** 小图标 */
     iconCls!: string | undefined;
-    /** 图片URL */
     imageUrl!: string | undefined;
-    /** 链接 */
     url!: string | undefined;
-    /** 创建时间 */
     creationTime!: moment.Moment | undefined;
-    /** 是否已删除 */
     isDeleted!: boolean | undefined;
-    /** 栏目类型 */
     columnType!: ColumnInfoListDtoColumnType | undefined;
-    /** 最大子项数量 */
     maxItemCount!: number | undefined;
-    /** 是否静态 */
     isStatic!: boolean | undefined;
     id!: number | undefined;
 
@@ -14670,36 +14486,22 @@ export class ColumnInfoListDto implements IColumnInfoListDto {
     }
 }
 
-/** 栏目列表Dto */
 export interface IColumnInfoListDto {
-    /** 编码 */
     code: string | undefined;
-    /** 标题 */
     title: string | undefined;
-    /** 是否启用 */
     isActive: boolean | undefined;
-    /** 授权访问 */
     isNeedAuthorizeAccess: boolean | undefined;
-    /** 小图标 */
     iconCls: string | undefined;
-    /** 图片URL */
     imageUrl: string | undefined;
-    /** 链接 */
     url: string | undefined;
-    /** 创建时间 */
     creationTime: moment.Moment | undefined;
-    /** 是否已删除 */
     isDeleted: boolean | undefined;
-    /** 栏目类型 */
     columnType: ColumnInfoListDtoColumnType | undefined;
-    /** 最大子项数量 */
     maxItemCount: number | undefined;
-    /** 是否静态 */
     isStatic: boolean | undefined;
     id: number | undefined;
 }
 
-/** 栏目���༭���ģ�� */
 export class GetColumnInfoForEditOutput implements IGetColumnInfoForEditOutput {
     columnInfo!: ColumnInfoEditDto | undefined;
 
@@ -14732,36 +14534,22 @@ export class GetColumnInfoForEditOutput implements IGetColumnInfoForEditOutput {
     }
 }
 
-/** 栏目���༭���ģ�� */
 export interface IGetColumnInfoForEditOutput {
     columnInfo: ColumnInfoEditDto | undefined;
 }
 
-/** 栏目编辑Dto */
 export class ColumnInfoEditDto implements IColumnInfoEditDto {
-    /** 父级Id */
     parentId!: number | undefined;
-    /** 标题 */
     title!: string;
-    /** 排序号 */
     sortNo!: number | undefined;
-    /** 是否启用 */
     isActive!: boolean | undefined;
-    /** 授权访问 */
     isNeedAuthorizeAccess!: boolean | undefined;
-    /** 描述 */
     description!: string | undefined;
-    /** 简介 */
     introduction!: string | undefined;
-    /** 小图标 */
     iconCls!: string | undefined;
-    /** 链接 */
     url!: string | undefined;
-    /** 栏目类型 */
     columnType!: ColumnInfoEditDtoColumnType;
-    /** 最大子项数量 */
     maxItemCount!: number | undefined;
-    /** 是否静态 */
     isStatic!: boolean | undefined;
     id!: number | undefined;
 
@@ -14818,36 +14606,22 @@ export class ColumnInfoEditDto implements IColumnInfoEditDto {
     }
 }
 
-/** 栏目编辑Dto */
 export interface IColumnInfoEditDto {
-    /** 父级Id */
     parentId: number | undefined;
-    /** 标题 */
     title: string;
-    /** 排序号 */
     sortNo: number | undefined;
-    /** 是否启用 */
     isActive: boolean | undefined;
-    /** 授权访问 */
     isNeedAuthorizeAccess: boolean | undefined;
-    /** 描述 */
     description: string | undefined;
-    /** 简介 */
     introduction: string | undefined;
-    /** 小图标 */
     iconCls: string | undefined;
-    /** 链接 */
     url: string | undefined;
-    /** 栏目类型 */
     columnType: ColumnInfoEditDtoColumnType;
-    /** 最大子项数量 */
     maxItemCount: number | undefined;
-    /** 是否静态 */
     isStatic: boolean | undefined;
     id: number | undefined;
 }
 
-/** 栏目创建或者编辑Dto */
 export class CreateOrUpdateColumnInfoDto implements ICreateOrUpdateColumnInfoDto {
     columnInfo!: ColumnInfoEditDto;
 
@@ -14883,7 +14657,6 @@ export class CreateOrUpdateColumnInfoDto implements ICreateOrUpdateColumnInfoDto
     }
 }
 
-/** 栏目创建或者编辑Dto */
 export interface ICreateOrUpdateColumnInfoDto {
     columnInfo: ColumnInfoEditDto;
 }
@@ -15024,57 +14797,31 @@ export interface ITreeTableRowDtoOfColumnInfo {
     children: TreeTableRowDtoOfColumnInfo[] | undefined;
 }
 
-/** 栏目 */
 export class ColumnInfo implements IColumnInfo {
-    /** 编码 */
     code!: string;
-    /** 标题 */
     title!: string;
-    /** 授权访问 */
     isNeedAuthorizeAccess!: boolean | undefined;
-    /** 描述 */
     description!: string | undefined;
-    /** 简介 */
     introduction!: string | undefined;
-    /** 父级Id */
     parentId!: number | undefined;
-    /** 小图标 */
     iconCls!: string | undefined;
-    /** 链接 */
     url!: string | undefined;
-    /** 栏目类型 */
     columnType!: ColumnInfoColumnType;
-    /** 最大子项数量 */
     maxItemCount!: number | undefined;
-    /** 是否静态 */
     isStatic!: boolean | undefined;
-    /** 是否启用 */
     isActive!: boolean | undefined;
-    /** 排序号 */
     sortNo!: number | undefined;
-    /** 栏目位置 */
     position!: ColumnInfoPosition | undefined;
-    /** 标题 */
     seoTitle!: string | undefined;
-    /** 关键字 */
     keyWords!: string | undefined;
-    /** 别名 */
     alias!: string | undefined;
-    /** 创建者UserId */
     creatorUserId!: number | undefined;
-    /** 创建时间 */
     creationTime!: moment.Moment | undefined;
-    /** 最后修改者UserId */
     lastModifierUserId!: number | undefined;
-    /** 最后修改时间 */
     lastModificationTime!: moment.Moment | undefined;
-    /** 删除者UserId */
     deleterUserId!: number | undefined;
-    /** 删除时间 */
     deletionTime!: moment.Moment | undefined;
-    /** 是否删除 */
     isDeleted!: boolean | undefined;
-    /** 租户Id */
     tenantId!: number | undefined;
     id!: number | undefined;
 
@@ -15161,66 +14908,37 @@ export class ColumnInfo implements IColumnInfo {
     }
 }
 
-/** 栏目 */
 export interface IColumnInfo {
-    /** 编码 */
     code: string;
-    /** 标题 */
     title: string;
-    /** 授权访问 */
     isNeedAuthorizeAccess: boolean | undefined;
-    /** 描述 */
     description: string | undefined;
-    /** 简介 */
     introduction: string | undefined;
-    /** 父级Id */
     parentId: number | undefined;
-    /** 小图标 */
     iconCls: string | undefined;
-    /** 链接 */
     url: string | undefined;
-    /** 栏目类型 */
     columnType: ColumnInfoColumnType;
-    /** 最大子项数量 */
     maxItemCount: number | undefined;
-    /** 是否静态 */
     isStatic: boolean | undefined;
-    /** 是否启用 */
     isActive: boolean | undefined;
-    /** 排序号 */
     sortNo: number | undefined;
-    /** 栏目位置 */
     position: ColumnInfoPosition | undefined;
-    /** 标题 */
     seoTitle: string | undefined;
-    /** 关键字 */
     keyWords: string | undefined;
-    /** 别名 */
     alias: string | undefined;
-    /** 创建者UserId */
     creatorUserId: number | undefined;
-    /** 创建时间 */
     creationTime: moment.Moment | undefined;
-    /** 最后修改者UserId */
     lastModifierUserId: number | undefined;
-    /** 最后修改时间 */
     lastModificationTime: moment.Moment | undefined;
-    /** 删除者UserId */
     deleterUserId: number | undefined;
-    /** 删除时间 */
     deletionTime: moment.Moment | undefined;
-    /** 是否删除 */
     isDeleted: boolean | undefined;
-    /** 租户Id */
     tenantId: number | undefined;
     id: number | undefined;
 }
 
-/** 获取枚举值 */
 export class GetEnumValuesListDto implements IGetEnumValuesListDto {
-    /** 显示名（会进行语言处理） */
     displayName!: string | undefined;
-    /** 值 */
     value!: number | undefined;
 
     constructor(data?: IGetEnumValuesListDto) {
@@ -15254,24 +14972,16 @@ export class GetEnumValuesListDto implements IGetEnumValuesListDto {
     }
 }
 
-/** 获取枚举值 */
 export interface IGetEnumValuesListDto {
-    /** 显示名（会进行语言处理） */
     displayName: string | undefined;
-    /** 值 */
     value: number | undefined;
 }
 
-/** 图片显示Dto */
 export class GetObjectImagesListDto implements IGetObjectImagesListDto {
     id!: number | undefined;
-    /** 名称 */
     name!: string | undefined;
-    /** 文件大小 */
     fileLength!: number | undefined;
-    /** 网络路径 */
     url!: string | undefined;
-    /** 是否封面 */
     isCover!: boolean | undefined;
 
     constructor(data?: IGetObjectImagesListDto) {
@@ -15311,26 +15021,17 @@ export class GetObjectImagesListDto implements IGetObjectImagesListDto {
     }
 }
 
-/** 图片显示Dto */
 export interface IGetObjectImagesListDto {
     id: number | undefined;
-    /** 名称 */
     name: string | undefined;
-    /** 文件大小 */
     fileLength: number | undefined;
-    /** 网络路径 */
     url: string | undefined;
-    /** 是否封面 */
     isCover: boolean | undefined;
 }
 
-/** 更新附件绑定关系 */
 export class AddObjectAttachmentInfosInput implements IAddObjectAttachmentInfosInput {
-    /** 对象类型 */
     objectType!: string | undefined;
-    /** 对象Id */
     objectId!: number | undefined;
-    /** 附件Id */
     attachmentInfoIds!: number[] | undefined;
 
     constructor(data?: IAddObjectAttachmentInfosInput) {
@@ -15374,22 +15075,15 @@ export class AddObjectAttachmentInfosInput implements IAddObjectAttachmentInfosI
     }
 }
 
-/** 更新附件绑定关系 */
 export interface IAddObjectAttachmentInfosInput {
-    /** 对象类型 */
     objectType: string | undefined;
-    /** 对象Id */
     objectId: number | undefined;
-    /** 附件Id */
     attachmentInfoIds: number[] | undefined;
 }
 
 export class SetCoverInputDto implements ISetCoverInputDto {
-    /** 对象类型 */
     objectType!: string | undefined;
-    /** 对象Id */
     objectId!: number | undefined;
-    /** 附件Url */
     attachmentUrl!: string | undefined;
 
     constructor(data?: ISetCoverInputDto) {
@@ -15426,11 +15120,8 @@ export class SetCoverInputDto implements ISetCoverInputDto {
 }
 
 export interface ISetCoverInputDto {
-    /** 对象类型 */
     objectType: string | undefined;
-    /** 对象Id */
     objectId: number | undefined;
-    /** 附件Url */
     attachmentUrl: string | undefined;
 }
 
@@ -23107,33 +22798,19 @@ export interface IPagedResultDtoOfTransactionLogListDto {
     items: TransactionLogListDto[] | undefined;
 }
 
-/** 交易日志列表Dto */
 export class TransactionLogListDto implements ITransactionLogListDto {
-    /** 区域名称 */
     cultureValue!: string | undefined;
-    /** 创建时间 */
     creationTime!: moment.Moment | undefined;
-    /** 客户端Ip */
     clientIpAddress!: string | undefined;
-    /** 客户端名称 */
     clientName!: string | undefined;
-    /** 是否冻结 */
     isFreeze!: boolean | undefined;
-    /** 支付渠道 */
     payChannel!: TransactionLogListDtoPayChannel | undefined;
-    /** 终端 */
     terminal!: TransactionLogListDtoTerminal | undefined;
-    /** 交易状态 */
     transactionState!: TransactionLogListDtoTransactionState | undefined;
-    /** 自定义数据 */
     customData!: string | undefined;
-    /** 交易单号 */
     outTradeNo!: string | undefined;
-    /** 支付完成时间 */
     payTime!: moment.Moment | undefined;
-    /** 异常信息 */
     exception!: string | undefined;
-    /** 是否已删除 */
     isDeleted!: boolean | undefined;
     id!: number | undefined;
 
@@ -23192,33 +22869,19 @@ export class TransactionLogListDto implements ITransactionLogListDto {
     }
 }
 
-/** 交易日志列表Dto */
 export interface ITransactionLogListDto {
-    /** 区域名称 */
     cultureValue: string | undefined;
-    /** 创建时间 */
     creationTime: moment.Moment | undefined;
-    /** 客户端Ip */
     clientIpAddress: string | undefined;
-    /** 客户端名称 */
     clientName: string | undefined;
-    /** 是否冻结 */
     isFreeze: boolean | undefined;
-    /** 支付渠道 */
     payChannel: TransactionLogListDtoPayChannel | undefined;
-    /** 终端 */
     terminal: TransactionLogListDtoTerminal | undefined;
-    /** 交易状态 */
     transactionState: TransactionLogListDtoTransactionState | undefined;
-    /** 自定义数据 */
     customData: string | undefined;
-    /** 交易单号 */
     outTradeNo: string | undefined;
-    /** 支付完成时间 */
     payTime: moment.Moment | undefined;
-    /** 异常信息 */
     exception: string | undefined;
-    /** 是否已删除 */
     isDeleted: boolean | undefined;
     id: number | undefined;
 }

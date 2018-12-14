@@ -142,5 +142,13 @@ namespace Magicodes.App.Application
                 return AsyncHelper.RunSync(func);
             }
         }
+
+        /// <summary>
+        /// 重新本地化方法，移除权限
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        [AbpAllowAnonymous]
+        protected override string L(string name) => base.L(name);
     }
 }
