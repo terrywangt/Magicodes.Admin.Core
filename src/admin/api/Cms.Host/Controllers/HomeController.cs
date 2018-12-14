@@ -14,12 +14,13 @@ namespace Cms.Host.Controllers
     public class HomeController : AbpController
     {
 
-        private readonly IRepository<ColumnInfo, long> _columnInfoRepository;
+        private readonly IColumnInfoAppService _columnInfoAppService;
 
-        public HomeController(IRepository<ColumnInfo, long> columnInfoRepository)
+        public HomeController(IColumnInfoAppService columnInfoAppService)
         {
-            _columnInfoRepository = columnInfoRepository;
+            _columnInfoAppService = columnInfoAppService;
         }
+
 
         public IActionResult Index()
         {
