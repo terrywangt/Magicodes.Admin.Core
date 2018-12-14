@@ -27,7 +27,7 @@ namespace Magicodes.Admin.Contents
     /// <summary>
     /// 栏目
     /// </summary>
-    [AbpAuthorize(AppPermissions.Pages_ColumnInfo)]
+    //[AbpAuthorize(AppPermissions.Pages_ColumnInfo)]
     public partial class ColumnInfoAppService : AppServiceBase, IColumnInfoAppService
     {
 
@@ -54,6 +54,7 @@ namespace Magicodes.Admin.Contents
         /// <summary>
         /// 获取栏目列表
         /// </summary>
+        [AbpAllowAnonymous]
         public async Task<PagedResultDto<ColumnInfoListDto>> GetColumnInfos(GetColumnInfosInput input)
         {
             async Task<PagedResultDto<ColumnInfoListDto>> getListFunc(bool isLoadSoftDeleteData)
