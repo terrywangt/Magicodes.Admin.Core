@@ -2,7 +2,9 @@
 
 using System;
 using System.Collections.Generic;
+using Abp.AspNetCore.Configuration;
 using Abp.AspNetZeroCore;
+using Abp.AspNetZeroCore.Web;
 using Abp.Configuration.Startup;
 using Abp.Dependency;
 using Abp.Modules;
@@ -25,7 +27,11 @@ using Abp.Runtime.Caching.Redis;
 namespace Cms.Host.Startup
 {
     [DependsOn(
+        typeof(AdminEntityFrameworkCoreModule),
+        typeof(AbpAspNetZeroCoreWebModule),
+        typeof(AdminCoreModule),
         typeof(AdminApplicationModule),
+        typeof(AbpRedisCacheModule),
         typeof(UnityModule)
     )]
     public class CmsHostModule : AbpModule
@@ -43,6 +49,10 @@ namespace Cms.Host.Startup
         public override void PreInitialize()
         {
             Configuration.Modules.AspNetZero().LicenseCode = _appConfiguration["AbpZeroLicenseCode"];
+            Configuration.Modules.AbpAspNetCore()
+                .CreateControllersForAppServices(
+                    typeof(CmsHostModule).GetAssembly(), "app"
+                );
             Configuration.DefaultNameOrConnectionString = _appConfiguration.GetConnectionString(
                 AdminConsts.ConnectionStringName
             );
@@ -69,7 +79,6 @@ namespace Cms.Host.Startup
 
         public override void PostInitialize()
         {
-            IocManager.Resolve<IColumnInfoAppService>();
         }
     }
 }

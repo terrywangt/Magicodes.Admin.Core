@@ -3,21 +3,23 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Abp.AspNetCore.Mvc.Controllers;
+using Abp.Domain.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Cms.Host.Models;
 using Magicodes.Admin.Contents;
 
 namespace Cms.Host.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : AbpController
     {
 
-       //// private IColumnInfoAppService _columnInfoAppService;
+        private readonly IRepository<ColumnInfo, long> _columnInfoRepository;
 
-       // public HomeController(IColumnInfoAppService columnInfoAppService)
-       // {
-       //     _columnInfoAppService = columnInfoAppService;
-       // }
+        public HomeController(IRepository<ColumnInfo, long> columnInfoRepository)
+        {
+            _columnInfoRepository = columnInfoRepository;
+        }
 
         public IActionResult Index()
         {

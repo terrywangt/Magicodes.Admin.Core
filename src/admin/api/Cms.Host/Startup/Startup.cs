@@ -5,9 +5,12 @@ using Abp.AspNetCore;
 using Abp.AspNetZeroCore.Web.Authentication.JwtBearer;
 using Abp.Castle.Logging.Log4Net;
 using Abp.Castle.Logging.NLog;
+using Abp.Dependency;
+using Abp.Domain.Repositories;
 using Abp.Extensions;
 using Castle.Facilities.Logging;
 using Magicodes.Admin.Configuration;
+using Magicodes.Admin.Contents;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -21,6 +24,8 @@ namespace Cms.Host.Startup
 {
     public class Startup
     {
+        private const string DefaultCorsPolicyName = "localhost";
+
         private readonly IConfigurationRoot _appConfiguration;
         private readonly IHostingEnvironment _hostingEnvironment;
         private readonly ILogger _logger;
@@ -48,8 +53,10 @@ namespace Cms.Host.Startup
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(new CorsAuthorizationFilterFactory(DefaultCorsPolicyName));
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             try
             {
@@ -80,8 +87,6 @@ namespace Cms.Host.Startup
                 return null;
             }
 
-            //配置ABP以及相关模块依赖
-            //services.AddAbp<>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -109,5 +114,6 @@ namespace Cms.Host.Startup
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
         }
+
     }
 }
