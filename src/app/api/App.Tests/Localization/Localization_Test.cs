@@ -9,7 +9,10 @@ namespace App.Tests.Localization
     {
         private readonly IAppLanguageAppService _languageAppService;
 
-        public Localization_Test() => _languageAppService = Resolve<IAppLanguageAppService>();
+        public Localization_Test()
+        {
+            _languageAppService = Resolve<IAppLanguageAppService>();
+        }
 
         [Theory(DisplayName = "获得语言文本")]
         [InlineData(null)]

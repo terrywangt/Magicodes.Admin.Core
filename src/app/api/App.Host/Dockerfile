@@ -4,6 +4,8 @@ EXPOSE 80
 
 FROM microsoft/dotnet:2.1-sdk AS build
 WORKDIR /src
+
+
 COPY src/app/api/App.Host/App.Host.csproj src/app/api/App.Host/
 COPY src/unity/Abp.Castle.NLog/Abp.Castle.NLog.csproj src/unity/Abp.Castle.NLog/
 COPY src/app/api/App.Application/App.Application.csproj src/app/api/App.Application/
@@ -15,6 +17,9 @@ COPY src/unity/Magicodes.Unity/Magicodes.Unity.csproj src/unity/Magicodes.Unity/
 COPY src/unity/Magicodes.Pay/Magicodes.Pay.csproj src/unity/Magicodes.Pay/
 RUN dotnet restore src/app/api/App.Host/App.Host.csproj
 COPY . .
+
+RUN dotnet test src/app/api/App.Tests/App.Tests.csproj
+
 WORKDIR /src/src/app/api/App.Host
 RUN dotnet build App.Host.csproj -c Release -o /app
 

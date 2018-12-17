@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<localizationDictionary culture="zh-CN">
+  <texts>
+    <!-- 2018-09-13 APP接口找回密码 -->
+    <text name="InvalidPhoneNumber" value="无效的手机号码" />
+    <text name="UserIsNotActive" value="用户未激活或已被禁用" />
+    <text name="SmsRepeatSendTip" value="请勿重复发送！如未收到验证码，请稍后再试！" />
+    <text name="SmsSendError" value="短信发送失败，请重试或联系管理员！" />
+    <text name="WrongSmsVerificationCode" value="短信验证码不正确，请重新输入！" />
+  </texts>
+</localizationDictionary>

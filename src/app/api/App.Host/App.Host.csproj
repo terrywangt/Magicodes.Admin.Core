@@ -24,6 +24,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="wwwroot\Localization\App\App-zh-CN.xml" />
+    <None Include="wwwroot\Localization\App\App.xml" />
+    <None Include="wwwroot\Localization\App\READ_ME.txt" />
     <None Update="Dockerfile">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
