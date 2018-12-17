@@ -72,11 +72,14 @@ namespace Cms.Host.Controllers
             {
                 return View(_columnInfoDtos.FirstOrDefault(a => a.Url == url));
             }
-            else
+
+            if(_articleInfoDtos.Any(a => a.Url == url))
             {
                 return View(_articleInfoDtos.FirstOrDefault(a => a.Url == url));
             }
-           
+
+            return NotFound();
+
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
