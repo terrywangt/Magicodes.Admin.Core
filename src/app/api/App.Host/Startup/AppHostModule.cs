@@ -1,9 +1,13 @@
 ﻿using System;
+using System.IO;
+using System.Linq;
 using System.Text;
 using Abp.AspNetCore.Configuration;
 using Abp.AspNetZeroCore;
 using Abp.AspNetZeroCore.Web;
 using Abp.Configuration.Startup;
+using Abp.Localization.Dictionaries;
+using Abp.Localization.Dictionaries.Xml;
 using Abp.Modules;
 using Abp.Reflection.Extensions;
 using Abp.Runtime.Caching.Redis;
@@ -81,6 +85,8 @@ namespace App.Host.Startup
                     options.DatabaseId = _appConfiguration.GetValue<int>("Abp:RedisCache:DatabaseId");
                 });
             }
+
+            SetLocalizationFromWebRootXml(Path.Combine(_env.WebRootPath, "Localization"));
         }
 
         public override void Initialize()
@@ -90,6 +96,58 @@ namespace App.Host.Startup
 
         public override void PostInitialize()
         {
+
+        }
+
+        /// <summary>
+        /// 从WebRoot初始化多语言
+        /// </summary>
+        /// <param name="localizationFolder"></param>
+        private void SetLocalizationFromWebRootXml(string localizationFolder)
+        {
+            if (!Directory.Exists(localizationFolder))
+            {
+                return;
+            }
+
+            var appPath = Path.Combine(localizationFolder, AdminConsts.AppLocalizationSourceName);
+
+            if (!Directory.Exists(appPath))
+            {
+                return;
+            }
+
+            Configuration.Localization.Sources.Add(
+                new DictionaryBasedLocalizationSource(
+                    AdminConsts.AppLocalizationSourceName,
+                    new XmlFileLocalizationDictionaryProvider(
+                        appPath
+                    )
+                )
+            );
+
+            //移除Abp源,添加自己的语言定义
+            Configuration.Localization.Sources.Remove(Configuration.Localization.Sources.First(p => p.Name == "Abp"));
+            Configuration.Localization.Sources.Add(
+                new DictionaryBasedLocalizationSource(
+                    "Abp",
+                    new XmlFileLocalizationDictionaryProvider(
+                        Path.Combine(localizationFolder, "Abp")
+                    )
+                )
+            );
+
+            //移除Abp源,添加自己的语言定义
+            Configuration.Localization.Sources.Remove(Configuration.Localization.Sources.First(p => p.Name == "AbpWeb"));
+            Configuration.Localization.Sources.Add(
+                new DictionaryBasedLocalizationSource(
+                    "AbpWeb",
+                    new XmlFileLocalizationDictionaryProvider(
+                        Path.Combine(localizationFolder, "AbpWeb")
+                    )
+                )
+            );
+            //TODO:AbpZero
 
         }
     }

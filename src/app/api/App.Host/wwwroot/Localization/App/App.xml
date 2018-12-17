@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<localizationDictionary culture="en">
+  <texts>
+    <!-- 2018-09-13 APP接口找回密码 -->
+    <text name="InvalidPhoneNumber" value="Invalid phone number" />
+    <text name="UserIsNotActive" value="User is not active" />
+    <text name="SmsRepeatSendTip" value="Do not send again! If you do not receive the verification code, please try again later!" />
+    <text name="SmsSendError" value="SMS failed to send, please try again or contact the administrator!" />
+    <text name="WrongSmsVerificationCode" value="Wrong verification code !" />
+  </texts>
+</localizationDictionary>

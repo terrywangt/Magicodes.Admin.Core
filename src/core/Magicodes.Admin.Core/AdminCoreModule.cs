@@ -51,8 +51,6 @@ namespace Magicodes.Admin
             Configuration.Modules.Zero().EntityTypes.Role = typeof(Role);
             Configuration.Modules.Zero().EntityTypes.User = typeof(User);
 
-            AppLocalizationConfigurer.Configure(Configuration.Localization);
-
             //Adding feature providers
             Configuration.Features.Providers.Add<AppFeatureProvider>();
 

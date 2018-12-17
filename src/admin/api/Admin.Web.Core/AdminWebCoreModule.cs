@@ -72,7 +72,7 @@ namespace Magicodes.Admin.Web
                 });
             }
 
-            SetLocalizationFromWebRootXml(Path.Combine(_env.WebRootPath, $"Localization"));
+            SetLocalizationFromWebRootXml(Path.Combine(_env.WebRootPath, "Localization"));
         }
 
         private void ConfigureTokenAuth()
