@@ -3,6 +3,7 @@ using Abp.AspNetCore.Configuration;
 using Abp.AspNetZeroCore;
 using Abp.AspNetZeroCore.Web;
 using Abp.Configuration.Startup;
+using Abp.Dependency;
 using Abp.Modules;
 using Abp.Reflection.Extensions;
 using Abp.Runtime.Caching.Redis;
@@ -11,6 +12,7 @@ using Cms.Host.Configuration;
 using Magicodes.Admin;
 using Magicodes.Admin.Configuration;
 using Magicodes.Admin.EntityFrameworkCore;
+using Magicodes.ExporterAndImporter.Core;
 using Magicodes.Unity;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -65,6 +67,8 @@ namespace Cms.Host.Startup
         public override void Initialize()
         {
             IocManager.RegisterAssemblyByConvention(typeof(CmsHostModule).GetAssembly());
+            IocManager.Register<IExporter, Magicodes.ExporterAndImporter.Excel.ExcelExporter>(DependencyLifeStyle.Transient);
+
         }
 
         public override void PostInitialize()

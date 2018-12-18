@@ -1,4 +1,4 @@
-﻿@model List<Cms.Host.Controllers.CmsInfoDto>
+﻿@model Abp.Application.Services.Dto.PagedResultDto<Magicodes.Admin.Contents.Dto.ColumnInfoListDto>
 
 @{
     ViewData["Title"] = "栏目";
@@ -6,9 +6,4 @@
 
 <div class="text-center">
     <h1 class="display-4">栏目</h1>
-    @foreach (var item in Model)
-    {
-        <a href="/Home/Detail?url=@item.Url">@item.Title</a>
-
-    }
 </div>

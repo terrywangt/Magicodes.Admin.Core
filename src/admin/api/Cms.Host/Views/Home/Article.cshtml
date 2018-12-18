@@ -1,11 +1,1 @@
-﻿@model List<Cms.Host.Controllers.CmsInfoDto>
-
-@{
-    ViewData["Title"] = "文章";
-}
-<h1>@ViewData["Title"]</h1>
-
-@foreach (var item in Model)
-{
-<a href="/Home/Article?cid=@item.Id">@item.Title</a>
-}
+﻿

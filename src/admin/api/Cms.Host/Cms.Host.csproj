@@ -11,8 +11,9 @@
     <PackageReference Include="Abp.AspNetZeroCore.Web" Version="1.1.9" />
     <PackageReference Include="Abp.Castle.Log4Net" Version="4.0.2" />
     <PackageReference Include="Abp.RedisCache" Version="4.0.2" />
+    <PackageReference Include="Magicodes.ExporterAndImporter.Excel" Version="0.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.Antiforgery" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <!--<PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />-->
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Core" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.2.0" />
