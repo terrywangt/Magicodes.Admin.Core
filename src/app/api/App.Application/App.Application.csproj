@@ -29,6 +29,6 @@
   </ItemGroup>
   <PropertyGroup>
     <DefineConstants>FEATURE_LDAP;FEATURE_SIGNALR</DefineConstants>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
   </PropertyGroup>
 </Project>
