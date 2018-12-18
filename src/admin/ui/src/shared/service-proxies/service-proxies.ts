@@ -20777,6 +20777,7 @@ export interface IAliSmsCodeSettingEditDto {
 
 export class StorageSettingEditDto implements IStorageSettingEditDto {
     aliStorageSetting!: AliStorageSettingEditDto | undefined;
+    tencentStorageSetting!: TencentStorageSettingEditDto | undefined;
 
     constructor(data?: IStorageSettingEditDto) {
         if (data) {
@@ -20790,6 +20791,7 @@ export class StorageSettingEditDto implements IStorageSettingEditDto {
     init(data?: any) {
         if (data) {
             this.aliStorageSetting = data["aliStorageSetting"] ? AliStorageSettingEditDto.fromJS(data["aliStorageSetting"]) : <any>undefined;
+            this.tencentStorageSetting = data["tencentStorageSetting"] ? TencentStorageSettingEditDto.fromJS(data["tencentStorageSetting"]) : <any>undefined;
         }
     }
 
@@ -20803,18 +20805,20 @@ export class StorageSettingEditDto implements IStorageSettingEditDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["aliStorageSetting"] = this.aliStorageSetting ? this.aliStorageSetting.toJSON() : <any>undefined;
+        data["tencentStorageSetting"] = this.tencentStorageSetting ? this.tencentStorageSetting.toJSON() : <any>undefined;
         return data; 
     }
 }
 
 export interface IStorageSettingEditDto {
     aliStorageSetting: AliStorageSettingEditDto | undefined;
+    tencentStorageSetting: TencentStorageSettingEditDto | undefined;
 }
 
 export class AliStorageSettingEditDto implements IAliStorageSettingEditDto {
-    isEnabled!: boolean;
-    accessKeyId!: string;
-    accessKeySecret!: string;
+    isEnabled!: boolean | undefined;
+    accessKeyId!: string | undefined;
+    accessKeySecret!: string | undefined;
     endPoint!: string | undefined;
 
     constructor(data?: IAliStorageSettingEditDto) {
@@ -20853,10 +20857,66 @@ export class AliStorageSettingEditDto implements IAliStorageSettingEditDto {
 }
 
 export interface IAliStorageSettingEditDto {
-    isEnabled: boolean;
-    accessKeyId: string;
-    accessKeySecret: string;
+    isEnabled: boolean | undefined;
+    accessKeyId: string | undefined;
+    accessKeySecret: string | undefined;
     endPoint: string | undefined;
+}
+
+export class TencentStorageSettingEditDto implements ITencentStorageSettingEditDto {
+    isEnabled!: boolean | undefined;
+    appId!: string | undefined;
+    secretId!: string | undefined;
+    secretKey!: string | undefined;
+    region!: string | undefined;
+    bucketName!: string | undefined;
+
+    constructor(data?: ITencentStorageSettingEditDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.isEnabled = data["isEnabled"];
+            this.appId = data["appId"];
+            this.secretId = data["secretId"];
+            this.secretKey = data["secretKey"];
+            this.region = data["region"];
+            this.bucketName = data["bucketName"];
+        }
+    }
+
+    static fromJS(data: any): TencentStorageSettingEditDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new TencentStorageSettingEditDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isEnabled"] = this.isEnabled;
+        data["appId"] = this.appId;
+        data["secretId"] = this.secretId;
+        data["secretKey"] = this.secretKey;
+        data["region"] = this.region;
+        data["bucketName"] = this.bucketName;
+        return data; 
+    }
+}
+
+export interface ITencentStorageSettingEditDto {
+    isEnabled: boolean | undefined;
+    appId: string | undefined;
+    secretId: string | undefined;
+    secretKey: string | undefined;
+    region: string | undefined;
+    bucketName: string | undefined;
 }
 
 export class PagedResultDtoOfTenantListDto implements IPagedResultDtoOfTenantListDto {

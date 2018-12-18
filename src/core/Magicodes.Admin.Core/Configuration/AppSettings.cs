@@ -109,6 +109,24 @@ namespace Magicodes.Admin.Configuration
         }
 
         /// <summary>
+        /// Ã⁄—∂‘∆¥Ê¥¢≈‰÷√
+        /// </summary>
+        public static class TencentStorageManagement
+        {
+            public const string IsEnabled = "App.TencentStorageManagement.IsEnabled";
+
+            public const string AppId = "App.TencentStorageManagement.AppId";
+
+            public const string SecretId = "App.TencentStorageManagement.SecretId";
+
+            public const string SecretKey = "App.TencentStorageManagement.SecretKey";
+
+            public const string Region = "App.TencentStorageManagement.Region";
+
+            public const string BucketName = "App.TencentStorageManagement.BucketName";
+        }
+
+        /// <summary>
         /// ÷ß∏∂±¶≈‰÷√
         /// </summary>
         public static class AliPayManagement
