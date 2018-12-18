@@ -7,6 +7,7 @@
     <PackageReference Include="Magicodes.Storage.AliyunOss.Core" Version="1.0.1" />
     <PackageReference Include="Magicodes.Storage.Core" Version="2.0.1" />
     <PackageReference Include="Magicodes.Storage.Local.Core" Version="2.0.2" />
+    <PackageReference Include="Magicodes.Storage.Tencent.Core" Version="1.0.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\core\Magicodes.Admin.Core\Magicodes.Admin.Core.csproj" />

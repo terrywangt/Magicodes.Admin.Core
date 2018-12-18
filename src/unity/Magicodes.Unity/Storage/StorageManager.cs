@@ -6,6 +6,7 @@ using Magicodes.Admin.Configuration;
 using Magicodes.Storage.AliyunOss.Core;
 using Magicodes.Storage.Core;
 using Magicodes.Storage.Local.Core;
+using Magicodes.Storage.Tencent.Core;
 using Microsoft.AspNetCore.Hosting;
 using System;
 using System.IO;
@@ -73,8 +74,9 @@ namespace Magicodes.Unity.Storage
 
                         if (Convert.ToBoolean(_settingManager.GetSettingValueAsync(AppSettings.AliStorageManagement.IsEnabled).Result))
                         {
-                            aliyunOssConfig = new AliyunOssConfig() {
-                                AccessKeyId =  _settingManager.GetSettingValueAsync(AppSettings.AliStorageManagement.AccessKeyId).Result,
+                            aliyunOssConfig = new AliyunOssConfig()
+                            {
+                                AccessKeyId = _settingManager.GetSettingValueAsync(AppSettings.AliStorageManagement.AccessKeyId).Result,
                                 AccessKeySecret = _settingManager.GetSettingValueAsync(AppSettings.AliStorageManagement.AccessKeySecret).Result,
                                 Endpoint = _settingManager.GetSettingValueAsync(AppSettings.AliStorageManagement.EndPoint).Result
                             };
@@ -105,7 +107,56 @@ namespace Magicodes.Unity.Storage
                         StorageProvider = new AliyunOssStorageProvider(aliyunOssConfig);
                         break;
                     }
-                //TODO:腾讯云支持
+                case "TencentCosStorageProvider":
+                    {
+                        TencentCosConfig tencentCosConfig;
+
+                        if (Convert.ToBoolean(_settingManager.GetSettingValueAsync(AppSettings.TencentStorageManagement.IsEnabled).Result))
+                        {
+                            tencentCosConfig = new TencentCosConfig()
+                            {
+                                AppId = _settingManager.GetSettingValueAsync(AppSettings.TencentStorageManagement.AppId).Result,
+                                BucketName = _settingManager.GetSettingValueAsync(AppSettings.TencentStorageManagement.BucketName).Result,
+                                Region = _settingManager.GetSettingValueAsync(AppSettings.TencentStorageManagement.Region).Result,
+                                SecretId = _settingManager.GetSettingValueAsync(AppSettings.TencentStorageManagement.SecretId).Result,
+                                SecretKey = _settingManager.GetSettingValueAsync(AppSettings.TencentStorageManagement.SecretKey).Result
+                            };
+                        }
+                        else
+                        {
+                            tencentCosConfig = new TencentCosConfig()
+                            {
+                                AppId = _appConfiguration.Configuration["StorageProvider:TencentCosStorageProvider:AppId"],
+                                BucketName = _appConfiguration.Configuration["StorageProvider:TencentCosStorageProvider:BucketName"],
+                                Region = _appConfiguration.Configuration["StorageProvider:TencentCosStorageProvider:Region"],
+                                SecretId = _appConfiguration.Configuration["StorageProvider:TencentCosStorageProvider:SecretId"],
+                                SecretKey = _appConfiguration.Configuration["StorageProvider:TencentCosStorageProvider:SecretKey"]
+                            };
+                        }
+
+                        if (tencentCosConfig.AppId.IsNullOrWhiteSpace())
+                        {
+                            throw new UserFriendlyException("TencentCosStorageProvider AppId is null!");
+                        }
+                        if (tencentCosConfig.BucketName.IsNullOrWhiteSpace())
+                        {
+                            throw new UserFriendlyException("TencentCosStorageProvider BucketName is null!");
+                        }
+                        if (tencentCosConfig.Region.IsNullOrWhiteSpace())
+                        {
+                            throw new UserFriendlyException("TencentCosStorageProvider Region is null!");
+                        }
+                        if (tencentCosConfig.SecretId.IsNullOrWhiteSpace())
+                        {
+                            throw new UserFriendlyException("TencentCosStorageProvider SecretId is null!");
+                        }
+                        if (tencentCosConfig.SecretKey.IsNullOrWhiteSpace())
+                        {
+                            throw new UserFriendlyException("TencentCosStorageProvider SecretKey is null!");
+                        }
+                        StorageProvider = new TencentStorageProvider(tencentCosConfig);
+                        break;
+                    }
                 default:
                     break;
             }

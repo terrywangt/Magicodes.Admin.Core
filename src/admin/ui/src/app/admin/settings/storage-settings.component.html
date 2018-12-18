@@ -41,6 +41,36 @@
                             <input id="aliStorage_EndPoint" type="text" name="aliStorage_EndPoint" class="form-control" [ngClass]="{'edited':storageSettings.aliStorageSetting.endPoint}" [(ngModel)]="storageSettings.aliStorageSetting.endPoint" maxlength="64">
                         </div>
                     </tab>
+
+                    <tab *ngIf="true" heading="{{l('TencentStorage')}}" customClass="m-tabs__item">
+                        <div class="m-checkbox-list">
+                            <label for="tencentStorage_IsEnabled" class="m-checkbox">
+                                <input id="tencentStorage_IsEnabled" type="checkbox" name="tencentStorage_IsEnabled" [(ngModel)]="storageSettings.tencentStorageSetting.isEnabled">
+                                {{l("IsEnabled")}}({{l("TencentStorageSettings")}})
+                                <span></span>
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label for="tencentStorage_appId">{{l("AppId")}}</label>
+                            <input id="tencentStorage_appId" type="text" name="tencentStorage_appId" class="form-control" [ngClass]="{'edited':storageSettings.tencentStorageSetting.appId}" [(ngModel)]="storageSettings.tencentStorageSetting.appId" maxlength="64">
+                        </div>
+                        <div class="form-group">
+                            <label for="tencentStorage_secretId">{{l("SecretId")}}</label>
+                            <input id="tencentStorage_secretId" type="text" name="tencentStorage_secretId" class="form-control" [ngClass]="{'edited':storageSettings.tencentStorageSetting.secretId}" [(ngModel)]="storageSettings.tencentStorageSetting.secretId" maxlength="64">
+                        </div>
+                        <div class="form-group">
+                            <label for="tencentStorage_secretKey">{{l("SecretKey")}}</label>
+                            <input id="tencentStorage_secretKey" type="text" name="tencentStorage_secretKey" class="form-control" [ngClass]="{'edited':storageSettings.tencentStorageSetting.secretKey}" [(ngModel)]="storageSettings.tencentStorageSetting.secretKey" maxlength="64">
+                        </div>
+                        <div class="form-group">
+                            <label for="tencentStorage_region">{{l("Region")}}</label>
+                            <input id="tencentStorage_region" type="text" name="tencentStorage_region" class="form-control" [ngClass]="{'edited':storageSettings.tencentStorageSetting.region}" [(ngModel)]="storageSettings.tencentStorageSetting.region" maxlength="64">
+                        </div>
+                        <div class="form-group">
+                            <label for="tencentStorage_bucketName">{{l("BucketName")}}</label>
+                            <input id="tencentStorage_bucketName" type="text" name="tencentStorage_bucketName" class="form-control" [ngClass]="{'edited':storageSettings.tencentStorageSetting.bucketName}" [(ngModel)]="storageSettings.tencentStorageSetting.bucketName" maxlength="64">
+                        </div>
+                    </tab>
                 </tabset>
             </div>
         </div>
