@@ -1,28 +1,20 @@
-﻿
-
-using System;
-using System.Collections.Generic;
+﻿using Abp.AspNetCore;
 using Abp.AspNetCore.Configuration;
 using Abp.AspNetZeroCore;
 using Abp.AspNetZeroCore.Web;
 using Abp.Configuration.Startup;
-using Abp.Dependency;
 using Abp.Modules;
 using Abp.Reflection.Extensions;
-using Abp.Threading.BackgroundWorkers;
+using Abp.Runtime.Caching.Redis;
 using Abp.Zero.Configuration;
 using Cms.Host.Configuration;
 using Magicodes.Admin;
-using Magicodes.Admin.Chat;
 using Magicodes.Admin.Configuration;
-using Magicodes.Admin.Contents;
+using Magicodes.Admin.Core.Custom;
 using Magicodes.Admin.EntityFrameworkCore;
-using Magicodes.Admin.Friendships;
-using Magicodes.Admin.MultiTenancy;
 using Magicodes.Unity;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Abp.Runtime.Caching.Redis;
 
 namespace Cms.Host.Startup
 {
@@ -30,14 +22,17 @@ namespace Cms.Host.Startup
         typeof(AdminEntityFrameworkCoreModule),
         typeof(AbpAspNetZeroCoreWebModule),
         typeof(AdminCoreModule),
+        typeof(AppCoreModule),
         typeof(AdminApplicationModule),
+        //typeof(AbpAspNetCoreModule),
         typeof(AbpRedisCacheModule),
         typeof(UnityModule)
     )]
     public class CmsHostModule : AbpModule
     {
-        private readonly IHostingEnvironment _env;
         private readonly IConfigurationRoot _appConfiguration;
+        private readonly IHostingEnvironment _env;
+
 
         public CmsHostModule(
             IHostingEnvironment env)
@@ -49,27 +44,13 @@ namespace Cms.Host.Startup
         public override void PreInitialize()
         {
             Configuration.Modules.AspNetZero().LicenseCode = _appConfiguration["AbpZeroLicenseCode"];
-            Configuration.Modules.AbpAspNetCore()
-                .CreateControllersForAppServices(
-                    typeof(CmsHostModule).GetAssembly(), "app"
-                );
             Configuration.DefaultNameOrConnectionString = _appConfiguration.GetConnectionString(
                 AdminConsts.ConnectionStringName
             );
+            //Use database for language management
             Configuration.Modules.Zero().LanguageManagement.EnableDbLocalization();
 
             Configuration.ReplaceService<IAppConfigurationAccessor, AppConfigurationAccessor>();
-
-            //使用Redis缓存替换默认的内存缓存
-            if (_appConfiguration["Abp:RedisCache:ConnectionString:IsEnabled"] == "true")
-            {
-
-                Configuration.Caching.UseRedis(options =>
-                {
-                    options.ConnectionString = _appConfiguration["Abp:RedisCache:ConnectionString"];
-                    options.DatabaseId = _appConfiguration.GetValue<int>("Abp:RedisCache:DatabaseId");
-                });
-            }
         }
 
         public override void Initialize()
