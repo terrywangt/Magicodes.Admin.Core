@@ -20,5 +20,5 @@
   <ItemGroup>
     <ProjectReference Include="..\..\core\Magicodes.Admin.Core\Magicodes.Admin.Core.csproj" />
   </ItemGroup>
-  
+
 </Project>

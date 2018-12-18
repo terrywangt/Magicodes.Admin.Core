@@ -10,7 +10,6 @@ using Abp.Zero.Configuration;
 using Cms.Host.Configuration;
 using Magicodes.Admin;
 using Magicodes.Admin.Configuration;
-using Magicodes.Admin.Core.Custom;
 using Magicodes.Admin.EntityFrameworkCore;
 using Magicodes.Unity;
 using Microsoft.AspNetCore.Hosting;
@@ -22,9 +21,7 @@ namespace Cms.Host.Startup
         typeof(AdminEntityFrameworkCoreModule),
         typeof(AbpAspNetZeroCoreWebModule),
         typeof(AdminCoreModule),
-        typeof(AppCoreModule),
         typeof(AdminApplicationModule),
-        //typeof(AbpAspNetCoreModule),
         typeof(AbpRedisCacheModule),
         typeof(UnityModule)
     )]
@@ -47,10 +44,22 @@ namespace Cms.Host.Startup
             Configuration.DefaultNameOrConnectionString = _appConfiguration.GetConnectionString(
                 AdminConsts.ConnectionStringName
             );
+
             //Use database for language management
             Configuration.Modules.Zero().LanguageManagement.EnableDbLocalization();
-
+            
             Configuration.ReplaceService<IAppConfigurationAccessor, AppConfigurationAccessor>();
+
+            //使用Redis缓存替换默认的内存缓存
+            if (_appConfiguration["Abp:RedisCache:ConnectionString:IsEnabled"] == "true")
+            {
+
+                Configuration.Caching.UseRedis(options =>
+                {
+                    options.ConnectionString = _appConfiguration["Abp:RedisCache:ConnectionString"];
+                    options.DatabaseId = _appConfiguration.GetValue<int>("Abp:RedisCache:DatabaseId");
+                });
+            }
         }
 
         public override void Initialize()

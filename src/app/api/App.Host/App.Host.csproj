@@ -70,7 +70,7 @@
     <ProjectReference Include="..\..\..\unity\Abp.Castle.NLog\Abp.Castle.NLog.csproj" />
     <ProjectReference Include="..\App.Application\App.Application.csproj" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <Content Update="wwwroot\swagger\ui\abp.swagger.js">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>

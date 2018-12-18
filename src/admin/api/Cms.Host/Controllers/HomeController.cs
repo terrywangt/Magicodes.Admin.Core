@@ -13,8 +13,6 @@ namespace Cms.Host.Controllers
     public class HomeController : AbpController
     {
 
-
-
         public IActionResult Index()
         {
             return Content("Test");
