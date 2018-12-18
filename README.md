@@ -66,6 +66,7 @@ https://gitee.com/xl_wenqiang/Magicodes.Admin.Core/commits/develop
 | Magicodes.Storage.Core | [![NuGet](https://buildstats.info/nuget/Magicodes.Storage.Core)](https://www.nuget.org/packages/Magicodes.Storage.Core) |
 | Magicodes.Storage.AliyunOss.Core | [![NuGet](https://buildstats.info/nuget/Magicodes.Storage.AliyunOss.Core)](https://www.nuget.org/packages/Magicodes.Storage.AliyunOss.Core) |
 | Magicodes.Storage.Local.Core | [![NuGet](https://buildstats.info/nuget/Magicodes.Storage.Local.Core)](https://www.nuget.org/packages/Magicodes.Storage.Local.Core) |
+| Magicodes.Storage.Tencent.Core | [![NuGet](https://buildstats.info/nuget/Magicodes.Storage.Tencent.Core)](https://www.nuget.org/packages/Magicodes.Storage.Tencent.Core) |
 | Magicodes.WeChat.SDK.Core | [![NuGet](https://buildstats.info/nuget/Magicodes.WeChat.SDK.Core)](https://www.nuget.org/packages/Magicodes.WeChat.SDK.Core) |
 | Magicodes.SwaggerUI | [![NuGet](https://buildstats.info/nuget/Magicodes.SwaggerUI)](https://www.nuget.org/packages/Magicodes.SwaggerUI) |
 | Magicodes.ExporterAndImporter.Excel | [![NuGet](https://buildstats.info/nuget/Magicodes.ExporterAndImporter.Excel)](https://www.nuget.org/packages/Magicodes.ExporterAndImporter.Excel) |
