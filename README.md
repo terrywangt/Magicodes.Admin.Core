@@ -53,6 +53,24 @@ https://gitee.com/xl_wenqiang/Magicodes.Admin.Core/commits/develop
 - 小程序UI框架将 在https://gitee.com/magicodes/Magicodes.Miniprogram 添加
 - 新版UI将在 https://gitee.com/magicodes/Magicodes.Admin.UI 搭建。
 
+## 相关官方Nuget
+
+| 名称     |      Nuget      | 
+|----------|:-------------:|
+| Magicodes.Alipay  |  [![NuGet](https://buildstats.info/nuget/Magicodes.Alipay)](https://www.nuget.org/packages/Magicodes.Alipay) |
+| Magicodes.Alipay.Global |    [![NuGet](https://buildstats.info/nuget/Magicodes.Alipay.Global)](https://www.nuget.org/packages/Magicodes.Alipay.Global)   |
+| Magicodes.Pay.WeChat | [![NuGet](https://buildstats.info/nuget/Magicodes.Pay.WeChat)](https://www.nuget.org/packages/Magicodes.Pay.WeChat) |
+| Magicodes.PayNotify | [![NuGet](https://buildstats.info/nuget/Magicodes.PayNotify)](https://www.nuget.org/packages/Magicodes.PayNotify) |
+| Magicodes.WeChat.MiniProgram | [![NuGet](https://buildstats.info/nuget/Magicodes.WeChat.MiniProgram)](https://www.nuget.org/packages/Magicodes.WeChat.MiniProgram) |
+| Magicodes.Sms.Aliyun | [![NuGet](https://buildstats.info/nuget/Magicodes.Sms.Aliyun)](https://www.nuget.org/packages/Magicodes.Sms.Aliyun) |
+| Magicodes.Storage.Core | [![NuGet](https://buildstats.info/nuget/Magicodes.Storage.Core)](https://www.nuget.org/packages/Magicodes.Storage.Core) |
+| Magicodes.Storage.AliyunOss.Core | [![NuGet](https://buildstats.info/nuget/Magicodes.Storage.AliyunOss.Core)](https://www.nuget.org/packages/Magicodes.Storage.AliyunOss.Core) |
+| Magicodes.Storage.Local.Core | [![NuGet](https://buildstats.info/nuget/Magicodes.Storage.Local.Core)](https://www.nuget.org/packages/Magicodes.Storage.Local.Core) |
+| Magicodes.WeChat.SDK.Core | [![NuGet](https://buildstats.info/nuget/Magicodes.WeChat.SDK.Core)](https://www.nuget.org/packages/Magicodes.WeChat.SDK.Core) |
+| Magicodes.SwaggerUI | [![NuGet](https://buildstats.info/nuget/Magicodes.SwaggerUI)](https://www.nuget.org/packages/Magicodes.SwaggerUI) |
+| Magicodes.ExporterAndImporter.Excel | [![NuGet](https://buildstats.info/nuget/Magicodes.ExporterAndImporter.Excel)](https://www.nuget.org/packages/Magicodes.ExporterAndImporter.Excel) |
+| Magicodes.ExporterAndImporter.Core | [![NuGet](https://buildstats.info/nuget/Magicodes.ExporterAndImporter.Core)](https://www.nuget.org/packages/Magicodes.ExporterAndImporter.Core) |
+
 ## Demo
 
 已通过腾讯云Docker容器托管:
