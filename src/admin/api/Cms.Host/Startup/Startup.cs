@@ -54,13 +54,8 @@ namespace Cms.Host.Startup
             });
 
 
-            services.AddScoped<IColumnInfoAppService, ColumnInfoAppService>();
-            //services.AddScoped(typeof(Lazy<>), typeof(LazyLoader<>)); 也可以，区别不大
-            services.BuildServiceProvider();
-            //using (var scope = .CreateScope())
-            //{
-            //    scope.ServiceProvider.GetService<Lazy<IRepository<ColumnInfo, long>>>();
-            //}
+            //services.AddScoped<IColumnInfoAppService, ColumnInfoAppService>();
+            //services.BuildServiceProvider();
 
             services.AddMvc(options =>
             {
@@ -118,6 +113,7 @@ namespace Cms.Host.Startup
 
             app.UseMvc(routes =>
             {
+                routes.Routes.Add(new RouteProvider(app.ApplicationServices));
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
