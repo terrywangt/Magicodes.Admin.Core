@@ -3,15 +3,15 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
-    <AssemblyName>Magicodes.Admin.Core</AssemblyName>
-    <PackageId>Magicodes.Admin.Core</PackageId>
+    <AssemblyName>Magicodes.Admin.Core.Custom</AssemblyName>
+    <PackageId>Magicodes.Admin.Core.Custom</PackageId>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <UserSecretsId>Magicodes-Admin-894FDFC1-6482-4A56-926A-3C46C9FE0329</UserSecretsId>
-    <RootNamespace>Magicodes.Admin</RootNamespace>
+    <RootNamespace>Magicodes.Admin.Custom</RootNamespace>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>

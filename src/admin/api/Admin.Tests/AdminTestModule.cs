@@ -10,7 +10,6 @@ using Abp.Net.Mail;
 using Abp.Organizations;
 using Abp.TestBase;
 using Abp.Zero.Configuration;
-using Admin.Application.Custom;
 using Castle.MicroKernel.Registration;
 using Microsoft.Extensions.Configuration;
 using Magicodes.Admin.Authorization.Roles;
@@ -30,7 +29,6 @@ namespace Magicodes.Admin.Tests
 {
     [DependsOn(
         typeof(AdminApplicationModule),
-        typeof(AdminAppModule),
         typeof(AdminEntityFrameworkCoreModule),
         typeof(AbpTestBaseModule))]
     public class AdminTestModule : AbpModule
