@@ -883,5 +883,13 @@
     <!--2018-12-7 小程序配置相关-->
     <text name="MiniProgramSetting" value="小程序配置" />
     <text name="WeChatMiniProgramSetting" value="微信小程序" />
+    <!--2018-12-17 腾讯云存储配置-->
+    <text name="AppId" value="应用ID" />
+    <text name="SecretId" value="秘钥id" />
+    <text name="SecretKey" value="秘钥Key" />
+    <text name="Region" value="区域" />
+    <text name="BucketName" value="存储桶名称" />
+    <text name="TencentStorage" value="腾讯云存储"/>
+    <text name="TencentStorageSettings" value="腾讯云存储配置"/>
   </texts>
 </localizationDictionary>

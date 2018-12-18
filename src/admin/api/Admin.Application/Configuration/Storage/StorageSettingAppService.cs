@@ -18,7 +18,19 @@ namespace Magicodes.Admin.Configuration.Storage
 
         public async Task<StorageSettingEditDto> GetAllSettings() => new StorageSettingEditDto
         {
-            AliStorageSetting = await GetAliStorageSettingsAsync()
+            AliStorageSetting = await GetAliStorageSettingsAsync(),
+            TencentStorageSetting = await GetTencentStorageSettingsAsync()
+        };
+
+        private async Task<TencentStorageSettingEditDto> GetTencentStorageSettingsAsync() => new TencentStorageSettingEditDto
+        {
+            IsEnabled = Convert.ToBoolean(
+                await SettingManager.GetSettingValueAsync(AppSettings.TencentStorageManagement.IsEnabled)),
+            AppId = await SettingManager.GetSettingValueAsync(AppSettings.TencentStorageManagement.AppId),
+            BucketName = await SettingManager.GetSettingValueAsync(AppSettings.TencentStorageManagement.BucketName),
+            Region = await SettingManager.GetSettingValueAsync(AppSettings.TencentStorageManagement.Region),
+            SecretId = await SettingManager.GetSettingValueAsync(AppSettings.TencentStorageManagement.SecretId),
+            SecretKey = await SettingManager.GetSettingValueAsync(AppSettings.TencentStorageManagement.SecretKey),
         };
 
         private async Task<AliStorageSettingEditDto> GetAliStorageSettingsAsync() => new AliStorageSettingEditDto
@@ -34,6 +46,18 @@ namespace Magicodes.Admin.Configuration.Storage
         public async Task UpdateAllSettings(StorageSettingEditDto input)
         {
             await UpdateAliStorageSettingsAsync(input.AliStorageSetting);
+            await UpdateTencentStorageSettingsAsync(input.TencentStorageSetting);
+
+        }
+
+        private async Task UpdateTencentStorageSettingsAsync(TencentStorageSettingEditDto input)
+        {
+            await SaveSettings(AppSettings.TencentStorageManagement.IsEnabled, input.IsEnabled.ToString());
+            await SaveSettings(AppSettings.TencentStorageManagement.AppId, input.AppId);
+            await SaveSettings(AppSettings.TencentStorageManagement.SecretId, input.SecretId);
+            await SaveSettings(AppSettings.TencentStorageManagement.SecretKey, input.SecretKey);
+            await SaveSettings(AppSettings.TencentStorageManagement.Region, input.Region);
+            await SaveSettings(AppSettings.TencentStorageManagement.BucketName, input.BucketName);
         }
 
         private async Task UpdateAliStorageSettingsAsync(AliStorageSettingEditDto input)

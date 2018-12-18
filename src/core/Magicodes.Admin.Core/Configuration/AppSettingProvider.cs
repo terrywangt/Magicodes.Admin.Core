@@ -144,10 +144,19 @@ namespace Magicodes.Admin.Configuration
             };
 
         private IEnumerable<SettingDefinition> GetStorageCodeSettings() => new[] {
+                //阿里
                 new SettingDefinition(AppSettings.AliStorageManagement.IsEnabled, GetFromAppSettings(AppSettings.AliStorageManagement.IsEnabled, "false"),scopes: SettingScopes.Tenant|SettingScopes.Application),
                 new SettingDefinition(AppSettings.AliStorageManagement.AccessKeyId, GetFromAppSettings(AppSettings.AliStorageManagement.AccessKeyId, ""),scopes: SettingScopes.Tenant|SettingScopes.Application),
                 new SettingDefinition(AppSettings.AliStorageManagement.AccessKeySecret, GetFromAppSettings(AppSettings.AliStorageManagement.AccessKeySecret, ""),scopes: SettingScopes.Tenant|SettingScopes.Application),
                 new SettingDefinition(AppSettings.AliStorageManagement.EndPoint, GetFromAppSettings(AppSettings.AliStorageManagement.EndPoint, ""),scopes: SettingScopes.Tenant|SettingScopes.Application),
-            };
+
+                //腾讯
+                new SettingDefinition(AppSettings.TencentStorageManagement.IsEnabled, GetFromAppSettings(AppSettings.TencentStorageManagement.IsEnabled, "false"),scopes: SettingScopes.Tenant|SettingScopes.Application),
+                new SettingDefinition(AppSettings.TencentStorageManagement.AppId, GetFromAppSettings(AppSettings.TencentStorageManagement.AppId, ""),scopes: SettingScopes.Tenant|SettingScopes.Application),
+                new SettingDefinition(AppSettings.TencentStorageManagement.SecretId, GetFromAppSettings(AppSettings.TencentStorageManagement.SecretId, ""),scopes: SettingScopes.Tenant|SettingScopes.Application),
+                new SettingDefinition(AppSettings.TencentStorageManagement.SecretKey, GetFromAppSettings(AppSettings.TencentStorageManagement.SecretKey, ""),scopes: SettingScopes.Tenant|SettingScopes.Application),
+                new SettingDefinition(AppSettings.TencentStorageManagement.Region, GetFromAppSettings(AppSettings.TencentStorageManagement.Region, ""),scopes: SettingScopes.Tenant|SettingScopes.Application),
+                new SettingDefinition(AppSettings.TencentStorageManagement.BucketName, GetFromAppSettings(AppSettings.TencentStorageManagement.BucketName, ""),scopes: SettingScopes.Tenant|SettingScopes.Application),
+        };
     }
 }
