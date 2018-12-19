@@ -12,6 +12,9 @@
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <RootNamespace>Magicodes.Admin</RootNamespace>
   </PropertyGroup>
+  <PropertyGroup>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+  </PropertyGroup>
   <ItemGroup>
     <!--注意不能使用1.5.4的版本，在Docker环境下存在Gdip异常-->
     <PackageReference Include="EPPlus.Core" Version="1.5.2" />

@@ -74,18 +74,18 @@ https://gitee.com/xl_wenqiang/Magicodes.Admin.Core/commits/develop
 
 ## Demo
 
-已通过腾讯云Docker容器托管:
+已通过腾讯云Docker容器托管，并且使用Azure Pipelines实现持续集成（CI）:
 
 * 开发版（Develop分支）(可能会出现问题导致无法打开):
-  * 后台：https://devdemoadmin.xin-lai.com  
-  * 后台接口：     [![Build status](https://codelove1314.visualstudio.com/Magicodes.Admin/_apis/build/status/Docker-CI-AdminHost)](https://codelove1314.visualstudio.com/Magicodes.Admin/_apis/build/status/Docker-CI-AdminHost?branchName=develop)
-  * APP接口：     [![Build status](https://codelove1314.visualstudio.com/Magicodes.Admin/_apis/build/status/Docker-CI-AppHost)](https://codelove1314.visualstudio.com/Magicodes.Admin/_apis/build/status/Docker-CI-AppHost?branchName=develop)  
+  * 后台：<https://devdemoadmin.xin-lai.com>  
+  * 后台接口：<https://devdemoadminapi.xin-lai.com> [![Build status](https://codelove1314.visualstudio.com/Magicodes.Admin/_apis/build/status/Docker-CI-AdminHost)](https://codelove1314.visualstudio.com/Magicodes.Admin/_apis/build/status/Docker-CI-AdminHost?branchName=develop)
+  * APP接口：<https://devdemoappapi.xin-lai.com> [![Build status](https://codelove1314.visualstudio.com/Magicodes.Admin/_apis/build/status/Docker-CI-AppHost)](https://codelove1314.visualstudio.com/Magicodes.Admin/_apis/build/status/Docker-CI-AppHost?branchName=develop)  
   
 
 * 稳定版
-  * 后台：https://demoadmin.xin-lai.com
-  * 后台接口：      [![Build status](https://codelove1314.visualstudio.com/Magicodes.Admin/_apis/build/status/Docker-CI-AdminHost)](https://codelove1314.visualstudio.com/Magicodes.Admin/_apis/build/status/Docker-CI-AdminHost?branchName=master)
-  * APP接口：      [![Build status](https://codelove1314.visualstudio.com/Magicodes.Admin/_apis/build/status/Docker-CI-AppHost)](https://codelove1314.visualstudio.com/Magicodes.Admin/_apis/build/status/Docker-CI-AppHost?branchName=master)    
+  * 后台：<https://demoadmin.xin-lai.com>
+  * 后台接口：<https://demoadminapi.xin-lai.com> [![Build status](https://codelove1314.visualstudio.com/Magicodes.Admin/_apis/build/status/Docker-CI-AdminHost)](https://codelove1314.visualstudio.com/Magicodes.Admin/_apis/build/status/Docker-CI-AdminHost?branchName=master)
+  * APP接口：<https://demoappapi.xin-lai.com> [![Build status](https://codelove1314.visualstudio.com/Magicodes.Admin/_apis/build/status/Docker-CI-AppHost)](https://codelove1314.visualstudio.com/Magicodes.Admin/_apis/build/status/Docker-CI-AppHost?branchName=master)    
 
 
 * 账号：Admin
