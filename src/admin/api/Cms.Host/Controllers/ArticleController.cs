@@ -31,19 +31,17 @@ namespace Cms.Host.Controllers
             return View(articleInfos);
         }
 
-        public async Task<IActionResult> Detail(long id)
+        public async Task<IActionResult> Detail(string url)
         {
-            var input = new NullableIdDto<long>
-            {
-                Id = id
-            };
+
             GetArticleInfoForEditOutput articleInfo;
-            var articleInfoCache = await _cacheManager.GetCache<long, GetArticleInfoForEditOutput>("ArticleInfo").GetOrDefaultAsync(id);
+            var articleInfoCache = await _cacheManager.GetCache<string, GetArticleInfoForEditOutput>("ArticleInfo").GetOrDefaultAsync(url);
             if (articleInfoCache == null)
             {
-                articleInfo = await _articleInfoAppService.GetArticleInfoForEdit(input);
-                await _cacheManager.GetCache<long, GetArticleInfoForEditOutput>("ArticleInfo")
-                    .SetAsync(id, articleInfo);
+                articleInfo = await _articleInfoAppService.GetArticleInfoByStaticUrl(url);
+                if (articleInfo == null) return NotFound();
+                await _cacheManager.GetCache<string, GetArticleInfoForEditOutput>("ArticleInfo")
+                    .SetAsync(url, articleInfo);
             }
             else
             {

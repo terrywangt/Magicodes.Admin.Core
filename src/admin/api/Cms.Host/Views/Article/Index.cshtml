@@ -8,7 +8,7 @@
         @foreach (var item in Model.Items)
         {
             <li class="list-group-item">
-                @Html.ActionLink(item.Title,"Detail","Article",new {id=item.Id})
+                <a href="/Article/@item.StaticPageUrl">@item.Title</a>
             </li>
         }
     </ul>

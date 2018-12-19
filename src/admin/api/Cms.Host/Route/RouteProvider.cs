@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Abp.Extensions;
 using Microsoft.AspNetCore.Mvc.Internal;
@@ -21,9 +22,16 @@ namespace Cms.Host.Route
             var requestedUrl = context.HttpContext.Request.Path.Value.TrimEnd('/');
             if (!requestedUrl.IsNullOrWhiteSpace() && requestedUrl.EndsWith(".html"))
             {
-                context.RouteData.Values["controller"] = "Home";
-                context.RouteData.Values["action"] = "StaticRouter";
-                context.RouteData.Values["url"] = requestedUrl;
+                var split = requestedUrl.Split('/');
+                if (split.Length > 0)
+                {
+                    if (split[1].ToLower() == "article")
+                    {
+                        context.RouteData.Values["controller"] = "Article";
+                        context.RouteData.Values["action"] = "Detail";
+                        context.RouteData.Values["url"] = split.Last();
+                    }
+                }
             }
 
             await _mvcRoute.RouteAsync(context);
