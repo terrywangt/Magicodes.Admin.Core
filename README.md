@@ -91,9 +91,6 @@ https://gitee.com/xl_wenqiang/Magicodes.Admin.Core/commits/develop
 * 账号：Admin
 * 密码：123456abcD
 
-APP接口地址：
-https://demoappapi.xin-lai.com
-
 ## 开发组件、套件、解决方案、理念
 
 目前框架中包含以下开发组件、套件、解决方案、理念：
