@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Abp.Application.Services;
 using Abp.Application.Services.Dto;
 using Magicodes.Admin.Contents.Dto;
@@ -41,5 +42,18 @@ namespace Magicodes.Admin.Contents
         /// </summary>
         /// <returns></returns>
         Task DeleteAll();
+
+        /// <summary>
+        /// 获取树结构
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        Task<TreeTableOutputDto<ColumnInfo>> GetChildrenColumnInfos(GetChildrenColumnInfosInput input);
+
+        /// <summary>
+        /// 获取导航栏目
+        /// </summary>
+        /// <returns></returns>
+        Task<List<ColumnInfoListDto>> GetNavColumnInfos();
     }
 }

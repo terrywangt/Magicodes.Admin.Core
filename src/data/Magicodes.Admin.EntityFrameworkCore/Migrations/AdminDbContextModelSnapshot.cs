@@ -15,7 +15,7 @@ namespace Magicodes.Admin.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.4-rtm-31024")
+                .HasAnnotation("ProductVersion", "2.2.0-rtm-35687")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -886,6 +886,109 @@ namespace Magicodes.Admin.Migrations
                     b.ToTable("AbpOrganizationUnits");
                 });
 
+            modelBuilder.Entity("Magicodes.Admin.Attachments.AttachmentInfo", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AttachmentSorts");
+
+                    b.Property<int>("AttachmentType");
+
+                    b.Property<string>("BlobName")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("ContainerName")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("ContentMD5")
+                        .HasMaxLength(32);
+
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasMaxLength(20);
+
+                    b.Property<DateTime>("CreationTime");
+
+                    b.Property<long?>("CreatorUserId");
+
+                    b.Property<long?>("DeleterUserId");
+
+                    b.Property<DateTime?>("DeletionTime");
+
+                    b.Property<long>("FileLength");
+
+                    b.Property<bool>("IsDeleted");
+
+                    b.Property<DateTime?>("LastModificationTime");
+
+                    b.Property<long?>("LastModifierUserId");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.Property<int?>("TenantId");
+
+                    b.Property<string>("Url")
+                        .HasMaxLength(255);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AttachmentInfos");
+                });
+
+            modelBuilder.Entity("Magicodes.Admin.Attachments.ObjectAttachmentInfo", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<long>("AttachmentInfoId");
+
+                    b.Property<bool>("IsCover");
+
+                    b.Property<long>("ObjectId");
+
+                    b.Property<int>("ObjectType");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AttachmentInfoId");
+
+                    b.ToTable("ObjectAttachmentInfos");
+                });
+
+            modelBuilder.Entity("Magicodes.Admin.Authorization.OpenId.AppUserOpenId", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreationTime");
+
+                    b.Property<int>("From");
+
+                    b.Property<DateTime?>("LastModificationTime");
+
+                    b.Property<string>("OpenId")
+                        .HasMaxLength(50);
+
+                    b.Property<int?>("TenantId");
+
+                    b.Property<string>("UnionId")
+                        .HasMaxLength(50);
+
+                    b.Property<long>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AppUserOpenIds");
+                });
+
             modelBuilder.Entity("Magicodes.Admin.Authorization.Roles.Role", b =>
                 {
                     b.Property<int>("Id")
@@ -1096,110 +1199,7 @@ namespace Magicodes.Admin.Migrations
                     b.ToTable("AppChatMessages");
                 });
 
-            modelBuilder.Entity("Magicodes.Admin.Core.Custom.Attachments.AttachmentInfo", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("AttachmentSorts");
-
-                    b.Property<int>("AttachmentType");
-
-                    b.Property<string>("BlobName")
-                        .HasMaxLength(50);
-
-                    b.Property<string>("ContainerName")
-                        .HasMaxLength(50);
-
-                    b.Property<string>("ContentMD5")
-                        .HasMaxLength(32);
-
-                    b.Property<string>("ContentType")
-                        .IsRequired()
-                        .HasMaxLength(20);
-
-                    b.Property<DateTime>("CreationTime");
-
-                    b.Property<long?>("CreatorUserId");
-
-                    b.Property<long?>("DeleterUserId");
-
-                    b.Property<DateTime?>("DeletionTime");
-
-                    b.Property<long>("FileLength");
-
-                    b.Property<bool>("IsDeleted");
-
-                    b.Property<DateTime?>("LastModificationTime");
-
-                    b.Property<long?>("LastModifierUserId");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50);
-
-                    b.Property<int?>("TenantId");
-
-                    b.Property<string>("Url")
-                        .HasMaxLength(255);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AttachmentInfos");
-                });
-
-            modelBuilder.Entity("Magicodes.Admin.Core.Custom.Attachments.ObjectAttachmentInfo", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<long>("AttachmentInfoId");
-
-                    b.Property<bool>("IsCover");
-
-                    b.Property<long>("ObjectId");
-
-                    b.Property<int>("ObjectType");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AttachmentInfoId");
-
-                    b.ToTable("ObjectAttachmentInfos");
-                });
-
-            modelBuilder.Entity("Magicodes.Admin.Core.Custom.Authorization.AppUserOpenId", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreationTime");
-
-                    b.Property<int>("From");
-
-                    b.Property<DateTime?>("LastModificationTime");
-
-                    b.Property<string>("OpenId")
-                        .HasMaxLength(50);
-
-                    b.Property<int?>("TenantId");
-
-                    b.Property<string>("UnionId")
-                        .HasMaxLength(50);
-
-                    b.Property<long>("UserId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("AppUserOpenIds");
-                });
-
-            modelBuilder.Entity("Magicodes.Admin.Core.Custom.Contents.ArticleInfo", b =>
+            modelBuilder.Entity("Magicodes.Admin.Contents.ArticleInfo", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -1276,7 +1276,7 @@ namespace Magicodes.Admin.Migrations
                     b.ToTable("ArticleInfos");
                 });
 
-            modelBuilder.Entity("Magicodes.Admin.Core.Custom.Contents.ArticleSourceInfo", b =>
+            modelBuilder.Entity("Magicodes.Admin.Contents.ArticleSourceInfo", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -1307,7 +1307,7 @@ namespace Magicodes.Admin.Migrations
                     b.ToTable("ArticleSourceInfos");
                 });
 
-            modelBuilder.Entity("Magicodes.Admin.Core.Custom.Contents.ArticleTagInfo", b =>
+            modelBuilder.Entity("Magicodes.Admin.Contents.ArticleTagInfo", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -1342,7 +1342,7 @@ namespace Magicodes.Admin.Migrations
                     b.ToTable("ArticleTagInfos");
                 });
 
-            modelBuilder.Entity("Magicodes.Admin.Core.Custom.Contents.ColumnInfo", b =>
+            modelBuilder.Entity("Magicodes.Admin.Contents.ColumnInfo", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -1378,6 +1378,8 @@ namespace Magicodes.Admin.Migrations
 
                     b.Property<bool>("IsDeleted");
 
+                    b.Property<bool>("IsNav");
+
                     b.Property<bool>("IsNeedAuthorizeAccess");
 
                     b.Property<bool>("IsStatic");
@@ -1400,6 +1402,9 @@ namespace Magicodes.Admin.Migrations
 
                     b.Property<long?>("SortNo");
 
+                    b.Property<string>("StaticPageUrl")
+                        .HasMaxLength(200);
+
                     b.Property<int?>("TenantId");
 
                     b.Property<string>("Title")
@@ -1414,7 +1419,46 @@ namespace Magicodes.Admin.Migrations
                     b.ToTable("ColumnInfos");
                 });
 
-            modelBuilder.Entity("Magicodes.Admin.Core.Custom.LogInfos.TransactionLog", b =>
+            modelBuilder.Entity("Magicodes.Admin.Friendships.Friendship", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreationTime");
+
+                    b.Property<Guid?>("FriendProfilePictureId");
+
+                    b.Property<string>("FriendTenancyName");
+
+                    b.Property<int?>("FriendTenantId");
+
+                    b.Property<long>("FriendUserId");
+
+                    b.Property<string>("FriendUserName")
+                        .IsRequired()
+                        .HasMaxLength(256);
+
+                    b.Property<int>("State");
+
+                    b.Property<int?>("TenantId");
+
+                    b.Property<long>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FriendTenantId", "FriendUserId");
+
+                    b.HasIndex("FriendTenantId", "UserId");
+
+                    b.HasIndex("TenantId", "FriendUserId");
+
+                    b.HasIndex("TenantId", "UserId");
+
+                    b.ToTable("AppFriendships");
+                });
+
+            modelBuilder.Entity("Magicodes.Admin.LogInfos.TransactionLog", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -1460,45 +1504,6 @@ namespace Magicodes.Admin.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("TransactionLogs");
-                });
-
-            modelBuilder.Entity("Magicodes.Admin.Friendships.Friendship", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreationTime");
-
-                    b.Property<Guid?>("FriendProfilePictureId");
-
-                    b.Property<string>("FriendTenancyName");
-
-                    b.Property<int?>("FriendTenantId");
-
-                    b.Property<long>("FriendUserId");
-
-                    b.Property<string>("FriendUserName")
-                        .IsRequired()
-                        .HasMaxLength(256);
-
-                    b.Property<int>("State");
-
-                    b.Property<int?>("TenantId");
-
-                    b.Property<long>("UserId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FriendTenantId", "FriendUserId");
-
-                    b.HasIndex("FriendTenantId", "UserId");
-
-                    b.HasIndex("TenantId", "FriendUserId");
-
-                    b.HasIndex("TenantId", "UserId");
-
-                    b.ToTable("AppFriendships");
                 });
 
             modelBuilder.Entity("Magicodes.Admin.MultiTenancy.Accounting.Invoice", b =>
@@ -1695,7 +1700,6 @@ namespace Magicodes.Admin.Migrations
                 {
                     b.HasBaseType("Abp.Application.Features.FeatureSetting");
 
-
                     b.HasIndex("TenantId", "Name");
 
                     b.ToTable("AbpFeatures");
@@ -1799,6 +1803,22 @@ namespace Magicodes.Admin.Migrations
                         .HasForeignKey("ParentId");
                 });
 
+            modelBuilder.Entity("Magicodes.Admin.Attachments.ObjectAttachmentInfo", b =>
+                {
+                    b.HasOne("Magicodes.Admin.Attachments.AttachmentInfo", "AttachmentInfo")
+                        .WithMany()
+                        .HasForeignKey("AttachmentInfoId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Magicodes.Admin.Authorization.OpenId.AppUserOpenId", b =>
+                {
+                    b.HasOne("Magicodes.Admin.Authorization.Users.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("Magicodes.Admin.Authorization.Roles.Role", b =>
                 {
                     b.HasOne("Magicodes.Admin.Authorization.Users.User", "CreatorUser")
@@ -1829,45 +1849,29 @@ namespace Magicodes.Admin.Migrations
                         .HasForeignKey("LastModifierUserId");
                 });
 
-            modelBuilder.Entity("Magicodes.Admin.Core.Custom.Attachments.ObjectAttachmentInfo", b =>
+            modelBuilder.Entity("Magicodes.Admin.Contents.ArticleInfo", b =>
                 {
-                    b.HasOne("Magicodes.Admin.Core.Custom.Attachments.AttachmentInfo", "AttachmentInfo")
-                        .WithMany()
-                        .HasForeignKey("AttachmentInfoId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Magicodes.Admin.Core.Custom.Authorization.AppUserOpenId", b =>
-                {
-                    b.HasOne("Magicodes.Admin.Authorization.Users.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Magicodes.Admin.Core.Custom.Contents.ArticleInfo", b =>
-                {
-                    b.HasOne("Magicodes.Admin.Core.Custom.Contents.ArticleSourceInfo", "ArticleSourceInfo")
+                    b.HasOne("Magicodes.Admin.Contents.ArticleSourceInfo", "ArticleSourceInfo")
                         .WithMany()
                         .HasForeignKey("ArticleSourceInfoId");
 
-                    b.HasOne("Magicodes.Admin.Core.Custom.Contents.ColumnInfo", "ColumnInfo")
+                    b.HasOne("Magicodes.Admin.Contents.ColumnInfo", "ColumnInfo")
                         .WithMany()
                         .HasForeignKey("ColumnInfoId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Magicodes.Admin.Core.Custom.Contents.ArticleTagInfo", b =>
+            modelBuilder.Entity("Magicodes.Admin.Contents.ArticleTagInfo", b =>
                 {
-                    b.HasOne("Magicodes.Admin.Core.Custom.Contents.ArticleInfo", "ArticleInfo")
+                    b.HasOne("Magicodes.Admin.Contents.ArticleInfo", "ArticleInfo")
                         .WithMany("ArticleTagInfos")
                         .HasForeignKey("ArticleInfoId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Magicodes.Admin.Core.Custom.LogInfos.TransactionLog", b =>
+            modelBuilder.Entity("Magicodes.Admin.LogInfos.TransactionLog", b =>
                 {
-                    b.OwnsOne("Magicodes.Admin.Core.Custom.LogInfos.Currency", "Currency", b1 =>
+                    b.OwnsOne("Magicodes.Admin.LogInfos.Currency", "Currency", b1 =>
                         {
                             b1.Property<long>("TransactionLogId")
                                 .ValueGeneratedOnAdd()
@@ -1878,11 +1882,13 @@ namespace Magicodes.Admin.Migrations
                             b1.Property<string>("Symbol")
                                 .HasMaxLength(5);
 
+                            b1.HasKey("TransactionLogId");
+
                             b1.ToTable("TransactionLogs");
 
-                            b1.HasOne("Magicodes.Admin.Core.Custom.LogInfos.TransactionLog")
+                            b1.HasOne("Magicodes.Admin.LogInfos.TransactionLog")
                                 .WithOne("Currency")
-                                .HasForeignKey("Magicodes.Admin.Core.Custom.LogInfos.Currency", "TransactionLogId")
+                                .HasForeignKey("Magicodes.Admin.LogInfos.Currency", "TransactionLogId")
                                 .OnDelete(DeleteBehavior.Cascade);
                         });
                 });

@@ -11,12 +11,14 @@ namespace Cms.Host.Controllers
     public class ArticleController : AbpController
     {
         private readonly IArticleInfoAppService _articleInfoAppService;
+        private readonly IColumnInfoAppService _columnInfoAppService;
         private readonly ICacheManager _cacheManager;
 
-        public ArticleController(IArticleInfoAppService articleInfoAppService, ICacheManager cacheManager)
+        public ArticleController(IArticleInfoAppService articleInfoAppService, ICacheManager cacheManager, IColumnInfoAppService columnInfoAppService)
         {
             _articleInfoAppService = articleInfoAppService;
             _cacheManager = cacheManager;
+            _columnInfoAppService = columnInfoAppService;
         }
 
         public async Task<IActionResult> Index(long? cid)
@@ -28,6 +30,12 @@ namespace Cms.Host.Controllers
                 ColumnId = cid
             };
             var articleInfos = await _articleInfoAppService.GetArticleInfos(getArticleInfosInput);
+            var navs = await _columnInfoAppService.GetChildrenColumnInfos(new GetChildrenColumnInfosInput
+            {
+                IsNav = true,
+                IsOnlyGetRecycleData = false
+            });
+            ViewData["Nav"] = navs.Data;
             return View(articleInfos);
         }
 

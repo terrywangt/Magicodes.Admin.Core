@@ -1,0 +1,46 @@
+﻿@using Magicodes.Admin.Contents
+@using Magicodes.Admin.Dto
+@{
+    var navs = ViewData["Nav"] as ICollection<TreeTableRowDto<ColumnInfo>>;
+}
+<div class="ed_header_bottom">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-md-3 col-sm-3">
+                <div class="pro_logo">
+                    <a href="index.html"><img src="~/images/header/Logo_yellow.png" alt="logo" /></a>
+                </div>
+            </div>
+            <div class="col-lg-9 col-md-9 col-sm-9">
+                <div class="pro_menu_toggle navbar-toggle" data-toggle="collapse" data-target="#ed_menu">
+                    Menu
+                    <i class="fa fa-bars"></i>
+                </div>
+                <div class="pro_menu">
+                    <ul class="collapse navbar-collapse" id="ed_menu">
+
+                        @foreach (var nav in navs)
+                        {
+                            <li>
+                                <a href="@nav.Data.Url">
+                                    @nav.Data.Title
+                                </a>
+                                @if (nav.Children.Count > 0)
+                                {
+                                    <ul class="sub-menu">
+                                        @foreach (var item in nav.Children)
+                                        {
+                                            <li>
+                                                <a href="@item.Data.Url">@item.Data.Title</a>
+                                            </li>
+                                        }
+                                    </ul>
+                                }
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

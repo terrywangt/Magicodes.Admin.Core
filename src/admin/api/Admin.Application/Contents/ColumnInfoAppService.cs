@@ -15,6 +15,7 @@ using Abp.Linq.Extensions;
 using Abp.Runtime.Session;
 using Abp.Timing;
 using Abp.UI;
+using JetBrains.Annotations;
 using Magicodes.Admin.Authorization;
 using Magicodes.Admin.Contents.Dto;
 using Magicodes.Admin.Dto;
@@ -187,6 +188,16 @@ namespace Magicodes.Admin.Contents
             {
                 ColumnInfo = editDto
             };
+        }
+
+        /// <summary>
+        /// 获取栏目
+        /// </summary>
+        [AbpAllowAnonymous]
+        public async Task<List<ColumnInfoListDto>> GetNavColumnInfos()
+        {
+            var results = await _columnInfoRepository.GetAll().Where(a => a.IsNav).ToListAsync();
+            return results.MapTo<List<ColumnInfoListDto>>();
         }
 
         /// <summary>

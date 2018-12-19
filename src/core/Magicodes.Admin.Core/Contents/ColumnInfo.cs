@@ -90,6 +90,13 @@ namespace Magicodes.Admin.Contents
         public bool IsStatic { get; set; }
 
         /// <summary>
+        ///     是否静态
+        /// </summary>
+        [Display(Name = "是否导航")]
+        [DefaultValue(false)]
+        public bool IsNav { get; set; }
+
+        /// <summary>
         ///     是否启用
         /// </summary>
         [Display(Name = "是否启用")]
@@ -131,6 +138,13 @@ namespace Magicodes.Admin.Contents
         [Display(Name = "别名", GroupName = "SEO")]
         [MaxLength(200)]
         public string Alias { get; set; }
+
+        /// <summary>
+        /// 静态页路径
+        /// </summary>
+        [Display(Name = "静态页路径", GroupName = "SEO")]
+        [MaxLength(200)]
+        public string StaticPageUrl { get; set; }
 
         #endregion
     }
