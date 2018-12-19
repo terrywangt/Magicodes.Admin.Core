@@ -35,5 +35,12 @@ namespace Magicodes.Admin.Contents
 		/// 导出文章
 		/// </summary>
         Task<FileDto> GetArticleInfosToExcel(GetArticleInfosInput input);
+
+        /// <summary>
+        /// 获取文章（根据静态地址）
+        /// </summary>
+        /// <param name="staticUrl"></param>
+        /// <returns></returns>
+        Task<GetArticleInfoForEditOutput> GetArticleInfoByStaticUrl(string staticUrl);
     }
 }

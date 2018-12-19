@@ -5,6 +5,7 @@ VisualStudioVersion = 15.0.27130.2024
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0.Documents", "0.Documents", "{4FB3F191-AC0D-4D7F-959D-720E2D5DE350}"
 	ProjectSection(SolutionItems) = preProject
+		src\admin\api\Admin.Application\Contents\ColumnInfoAppService.cs = src\admin\api\Admin.Application\Contents\ColumnInfoAppService.cs
 		common.props = common.props
 		docker-compose.override.yml = docker-compose.override.yml
 		docker-compose.yml = docker-compose.yml
@@ -45,7 +46,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Magicodes.MiniProgram", "sr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Magicodes.Admin.Core.Custom", "src\core\Magicodes.Admin.Core.Custom\Magicodes.Admin.Core.Custom.csproj", "{2CBA53BF-EB9F-4D92-AF88-0C8C50DAC973}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cms.Host", "src\admin\api\Cms.Host\Cms.Host.csproj", "{1730B78A-4DA7-41C1-8862-67C97372DABA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cms.Host", "src\admin\api\Cms.Host\Cms.Host.csproj", "{1730B78A-4DA7-41C1-8862-67C97372DABA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

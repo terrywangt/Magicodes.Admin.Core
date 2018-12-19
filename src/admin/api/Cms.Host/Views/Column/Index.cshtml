@@ -1,0 +1,16 @@
+﻿@model Abp.Application.Services.Dto.PagedResultDto<Magicodes.Admin.Contents.Dto.ColumnInfoListDto>
+
+@{
+    ViewData["Title"] = "栏目列表";
+}
+<div>
+    <ul class="list-group">
+        @foreach (var item in Model.Items)
+        {
+            <li class="list-group-item">
+                @Html.ActionLink(item.Title,"Index", "Article", new {cid=item.Id})
+            </li>
+        }
+    </ul>
+</div>
+

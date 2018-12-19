@@ -4,6 +4,7 @@ using Abp.AspNetCore;
 using Abp.Castle.Logging.Log4Net;
 using Abp.Domain.Repositories;
 using Castle.Facilities.Logging;
+using Cms.Host.Route;
 using Magicodes.Admin.Configuration;
 using Magicodes.Admin.Contents;
 using Microsoft.AspNetCore.Builder;

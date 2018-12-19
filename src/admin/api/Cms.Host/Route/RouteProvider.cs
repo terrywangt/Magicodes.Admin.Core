@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.Internal;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Cms.Host
+namespace Cms.Host.Route
 {
     public class RouteProvider : IRouter
     {
@@ -22,7 +22,7 @@ namespace Cms.Host
             if (!requestedUrl.IsNullOrWhiteSpace() && requestedUrl.EndsWith(".html"))
             {
                 context.RouteData.Values["controller"] = "Home";
-                context.RouteData.Values["action"] = "Detail";
+                context.RouteData.Values["action"] = "StaticRouter";
                 context.RouteData.Values["url"] = requestedUrl;
             }
 

@@ -1,9 +1,25 @@
 ﻿@model Abp.Application.Services.Dto.PagedResultDto<Magicodes.Admin.Contents.Dto.ColumnInfoListDto>
 
 @{
-    ViewData["Title"] = "栏目";
+    ViewData["Title"] = "Magicodes.Home";
 }
+<div class="flex-c">
+    <div class="text-center">
+        <h1>Magicodes.Cms</h1>
+        <div class="con">
+            @Html.ActionLink("栏目", "Index", "Column")|
+            @Html.ActionLink("文章", "Index", "Article")
+        </div>
 
-<div class="text-center">
-    <h1 class="display-4">栏目</h1>
+    </div>
 </div>
+
+<style type="text/css">
+    .text-center {
+        margin-top: 30%;
+    }
+    .con a {
+        font-weight: bold;
+        margin: 20px;
+    }
+</style>

@@ -15,10 +15,15 @@ namespace Magicodes.Admin.Contents.Dto
         /// </summary>
 		public bool IsOnlyGetRecycleData { get; set; }
 
-		
-		/// <summary>
-		/// 创建开始时间
-		/// </summary>
+        /// <summary>
+        /// 栏目ID
+        /// </summary>
+        public long? ColumnId { get; set; }
+
+
+        /// <summary>
+        /// 创建开始时间
+        /// </summary>
         public DateTime? CreationDateStart { get; set; }
         
 		/// <summary>

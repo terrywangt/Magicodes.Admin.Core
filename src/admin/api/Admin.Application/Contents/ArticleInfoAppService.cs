@@ -29,7 +29,7 @@ namespace Magicodes.Admin.Contents
     /// <summary>
     /// 文章
     /// </summary>
-    [AbpAuthorize(AppPermissions.Pages_ArticleInfo)]
+    //[AbpAuthorize(AppPermissions.Pages_ArticleInfo)]
     public partial class ArticleInfoAppService : AppServiceBase, IArticleInfoAppService
     {
 
@@ -70,6 +70,7 @@ namespace Magicodes.Admin.Contents
         /// <summary>
         /// 获取文章列表
         /// </summary>
+        [AbpAllowAnonymous]
         public async Task<PagedResultDto<ArticleInfoListDto>> GetArticleInfos(GetArticleInfosInput input)
         {
             async Task<PagedResultDto<ArticleInfoListDto>> getListFunc(bool isLoadSoftDeleteData)
@@ -148,6 +149,12 @@ namespace Magicodes.Admin.Contents
         {
             var query = _articleInfoRepository.GetAllIncluding(p => p.ColumnInfo, p => p.ArticleSourceInfo);
 
+            //栏目Id搜索
+            query = query
+                .WhereIf(
+                    input.ColumnId.HasValue,
+                    p => p.ColumnInfoId == input.ColumnId);
+
             //关键字搜索
             query = query
                     .WhereIf(
@@ -172,7 +179,7 @@ namespace Magicodes.Admin.Contents
         /// <summary>
         /// 获取文章
         /// </summary>
-        [AbpAuthorize(AppPermissions.Pages_ArticleInfo_Create, AppPermissions.Pages_ArticleInfo_Edit)]
+        [AbpAllowAnonymous]
         public async Task<GetArticleInfoForEditOutput> GetArticleInfoForEdit(NullableIdDto<long> input)
         {
             ArticleInfoEditDto editDto;
@@ -189,6 +196,26 @@ namespace Magicodes.Admin.Contents
             return new GetArticleInfoForEditOutput
             {
                 ArticleInfo = editDto
+            };
+        }
+
+
+        /// <summary>
+        /// 获取文章（根据静态地址）
+        /// </summary>
+        /// <param name="staticUrl"></param>
+        /// <returns></returns>
+        [AbpAllowAnonymous]
+        public async Task<GetArticleInfoForEditOutput> GetArticleInfoByStaticUrl(string staticUrl)
+        {
+            var info = await _articleInfoRepository.FirstOrDefaultAsync(a => a.StaticPageUrl == staticUrl);
+            if (info == null)
+            {
+                return null;
+            }
+            return new GetArticleInfoForEditOutput
+            {
+                ArticleInfo = info.MapTo<ArticleInfoEditDto>()
             };
         }
 
@@ -328,7 +355,7 @@ namespace Magicodes.Admin.Contents
         /// </summary>
         public async Task<List<GetDataComboItemDto<long>>> GetColumnInfoDataComboItems()
         {
-            var list = await _columnInfoRepository.GetAll().Where(a=>a.ColumnType == ColumnTypes.Html)
+            var list = await _columnInfoRepository.GetAll().Where(a => a.ColumnType == ColumnTypes.Html)
             //.Where(p => !p.IsActive)
             .OrderByDescending(p => p.Id)
             .Select(p => new { p.Id, p.Title }).ToListAsync();

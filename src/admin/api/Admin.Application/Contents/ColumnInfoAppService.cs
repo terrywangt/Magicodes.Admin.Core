@@ -127,6 +127,7 @@ namespace Magicodes.Admin.Contents
             return fileDto;
         }
 
+
         /// <summary>
         /// 删除所有
         /// </summary>
@@ -168,7 +169,7 @@ namespace Magicodes.Admin.Contents
         /// <summary>
         /// 获取栏目
         /// </summary>
-        [AbpAuthorize(AppPermissions.Pages_ColumnInfo_Create, AppPermissions.Pages_ColumnInfo_Edit)]
+        [AbpAllowAnonymous]
         public async Task<GetColumnInfoForEditOutput> GetColumnInfoForEdit(NullableIdDto<long> input)
         {
             ColumnInfoEditDto editDto;

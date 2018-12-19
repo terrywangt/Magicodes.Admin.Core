@@ -1,0 +1,14 @@
+﻿@model Magicodes.Admin.Contents.Dto.GetArticleInfoForEditOutput
+
+@{
+    ViewData["Title"] = "Detail";
+}
+<meta name="keywords" content="@Model.ArticleInfo.KeyWords">
+<meta name="description" content="@Model.ArticleInfo.KeyWords">
+<h1 class="text-center">@Model.ArticleInfo.Title</h1>
+<p style="color: #6c757d;">@Model.ArticleInfo.KeyWords</p>
+<p style="color: #6c757d;">@Model.ArticleInfo.Publisher   @Model.ArticleInfo.ReleaseTime</p>
+<p style="color: #6c757d;">本文地址: @Model.ArticleInfo.StaticPageUrl</p>
+
+<br />
+<div>@Html.Raw(Model.ArticleInfo.Content)</div>
