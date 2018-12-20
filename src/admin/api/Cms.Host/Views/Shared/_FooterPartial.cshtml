@@ -24,27 +24,30 @@
                         </div>
                     </div>
                 </div>
-                @foreach (var footerNav in footerNavs)
+                @if (footerNavs?.Count > 0)
                 {
-                    <div class="col-lg-3 col-md-3 col-sm-12">
-                        <div class="widget text-widget">
-                            <h4 class="widget-title">@footerNav.Data.Title</h4>
-                            @if (footerNav.Children.Count > 0)
-                            {
-                                <div class="ed_footer_menu">
-                                    <ul>
-                                        @foreach (var footerNavChild in footerNav.Children)
-                                        {
-                                            <li><a href="@footerNavChild.Data.Url">@footerNavChild.Data.Title</a></li> 
-                                        }
-                                    </ul>
-                                </div>
-                            }
-                            
+                    foreach (var footerNav in footerNavs)
+                    {
+                        <div class="col-lg-3 col-md-3 col-sm-12">
+                            <div class="widget text-widget">
+                                <h4 class="widget-title">@footerNav.Data.Title</h4>
+                                @if (footerNav.Children.Count > 0)
+                                {
+                                    <div class="ed_footer_menu">
+                                        <ul>
+                                            @foreach (var footerNavChild in footerNav.Children)
+                                            {
+                                                <li><a href="@footerNavChild.Data.Url">@footerNavChild.Data.Title</a></li>
+                                            }
+                                        </ul>
+                                    </div>
+                                }
+
+                            </div>
                         </div>
-                    </div>
+                    }
                 }
-                
+
                 <div class="col-lg-3 col-md-3 col-sm-12">
                     <div class="widget text-widget">
                         <h4 class="widget-title">我们地址</h4>
