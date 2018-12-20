@@ -33,12 +33,12 @@ namespace Cms.Host.Controllers
                 MaxResultCount = 1000
             };
             var columnInfos = await _columnInfoAppService.GetColumnInfos(getColumnInfosInput);
-            var navs = await _columnInfoAppService.GetChildrenColumnInfos(new GetChildrenColumnInfosInput
+            var headerNavs = await _columnInfoAppService.GetChildrenColumnInfos(new GetChildrenColumnInfosInput
             {
-                IsNav = true,
+                IsHeaderNav = true,
                 IsOnlyGetRecycleData = false
             });
-            ViewData["Nav"] = navs; 
+            //ViewData["Nav"] = navs; 
             return View(columnInfos);
         }
     }

@@ -1,16 +1,65 @@
-﻿@*@model Abp.Application.Services.Dto.PagedResultDto<Magicodes.Admin.Contents.Dto.ArticleInfoListDto>
+﻿@model Abp.Application.Services.Dto.PagedResultDto<Magicodes.Admin.Contents.Dto.ArticleInfoListDto>
 
 @{
     ViewData["Title"] = "文章列表";
 }
-<div>
-    <ul class="list-group">
-        @foreach (var item in Model.Items)
-        {
-            <li class="list-group-item">
-                <a href="/Article/@item.StaticPageUrl">@item.Title</a>
-            </li>
-        }
-    </ul>
-</div>*@
-
+<!--Breadcrumb start-->
+<div class="ed_pagetitle">
+    <div class="ed_img_overlay"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12">
+                <div class="page_title">
+                    <h2>@Model.Items[0].ColumnInfo</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Breadcrumb end-->
+<!--Blog content start-->
+<div class="ed_transprentbg ed_toppadder90 ed_bottompadder90">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12">
+                <div class="row">
+                    <div class="ed_blog_all_item ed_blog_all_item_second">
+                        @foreach (var item in Model.Items)
+                        {
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="ed_blog_item ed_bottompadder50">
+                                    <div class="ed_blog_image">
+                                        <a href="/Article/@item.StaticPageUrl"><img src="http://placehold.it/555X298" alt="blog image" /></a>
+                                    </div>
+                                    <div class="ed_blog_info">
+                                        <h2><a href="/Article/@item.StaticPageUrl">@item.Title</a></h2>
+                                        <ul>
+                                            <li><a href="#"><i class="fa fa-user"></i> @item.Publisher</a></li>
+                                            <li><a href="#"><i class="fa fa-clock-o"></i> @item.ReleaseTime</a></li>
+                                            <li><a href="#"><i class="fa fa-comment-o"></i> @item.ViewCount 查看</a></li>
+                                        </ul>
+                                        <p class="ed_bottompadder10">@item.Introduction</p>
+                                        <a href="/Article/@item.StaticPageUrl" class="btn ed_btn ed_orange">查看详情</a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        <div class="col-lg-12">
+                            <div class="ed_blog_bottom_pagination">
+                                <nav>
+                                    <ul class="pagination">
+                                        <li class="active"><a href="#">1</a></li>
+                                        <li><a href="#">2</a></li>
+                                        <li><a href="#">3</a></li>
+                                        <li><a href="#">Next <span class="sr-only">(current)</span></a></li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Blog content end-->

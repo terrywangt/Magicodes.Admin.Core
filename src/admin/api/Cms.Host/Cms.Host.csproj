@@ -49,7 +49,6 @@
 
 
   <ItemGroup>
-    <Folder Include="Common\" />
     <Folder Include="wwwroot\images\blog\" />
     <Folder Include="wwwroot\images\slider\" />
   </ItemGroup>

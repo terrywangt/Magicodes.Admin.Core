@@ -191,12 +191,22 @@ namespace Magicodes.Admin.Contents
         }
 
         /// <summary>
-        /// 获取栏目
+        /// 获取头部栏目
         /// </summary>
         [AbpAllowAnonymous]
-        public async Task<List<ColumnInfoListDto>> GetNavColumnInfos()
+        public async Task<List<ColumnInfoListDto>> GetHearderNavColumnInfos()
         {
-            var results = await _columnInfoRepository.GetAll().Where(a => a.IsNav).ToListAsync();
+            var results = await _columnInfoRepository.GetAll().Where(a => a.IsHeaderNav).ToListAsync();
+            return results.MapTo<List<ColumnInfoListDto>>();
+        }
+
+        /// <summary>
+        /// 获取脚部栏目
+        /// </summary>
+        [AbpAllowAnonymous]
+        public async Task<List<ColumnInfoListDto>> GetFooterNavColumnInfos()
+        {
+            var results = await _columnInfoRepository.GetAll().Where(a => a.IsHeaderNav).ToListAsync();
             return results.MapTo<List<ColumnInfoListDto>>();
         }
 
