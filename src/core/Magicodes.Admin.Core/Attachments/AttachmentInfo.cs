@@ -18,7 +18,7 @@ namespace Magicodes.Admin.Attachments
         /// <summary>
         /// 内容类型
         /// </summary>
-        [MaxLength(20)]
+        [MaxLength(120)]
         [Required]
         [Display(Name = "内容类型")]
         public string ContentType { get; set; }
