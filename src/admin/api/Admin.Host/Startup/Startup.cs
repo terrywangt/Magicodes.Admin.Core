@@ -21,6 +21,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
+using Abp.Json;
 using ILoggerFactory = Microsoft.Extensions.Logging.ILoggerFactory;
 
 namespace Magicodes.Admin.Web.Startup
@@ -39,6 +40,8 @@ namespace Magicodes.Admin.Web.Startup
             _appConfiguration = env.GetAppConfiguration();
             _logger = logger;
             _logger.LogInformation($"运行环境:{env.EnvironmentName}");
+            //输出配置
+            _logger.LogDebug(_appConfiguration.GetChildren().ToList().ToJsonString());
         }
 
         /// <summary>
