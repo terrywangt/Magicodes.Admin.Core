@@ -12,7 +12,8 @@
       "commandName": "IISExpress",
       "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        //"Abp__SignalRRedisCache__ConnectionString": "redis://:crs-j2v5buzk:xinlai123456abcD@172.16.16.4:6379"
       }
     },
     "Magicodes.Admin.Web.Host": {
@@ -20,7 +21,8 @@
       "launchBrowser": true,
       "launchUrl": "http://localhost:2000",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        //"Abp__SignalRRedisCache__ConnectionString": "redis://:crs-j2v5buzk:xinlai123456abcD@172.16.16.4:6379"
       }
     },
     "Docker": {

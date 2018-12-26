@@ -39,9 +39,14 @@ namespace Magicodes.Admin.Web.Startup
             _hostingEnvironment = env;
             _appConfiguration = env.GetAppConfiguration();
             _logger = logger;
-            _logger.LogInformation($"运行环境:{env.EnvironmentName}");
-            //输出配置
-            _logger.LogDebug(_appConfiguration.GetChildren().ToList().ToJsonString());
+            //打印主要配置信息
+            _logger.LogInformation($"Environment:{env.EnvironmentName}{Environment.NewLine}" +
+                                   $"ConnectionString:{_appConfiguration["ConnectionStrings:Default"]}{Environment.NewLine}" +
+                                   $"RedisCache:IsEnabled:{_appConfiguration["Abp:RedisCache:IsEnabled"]}  ConnectionString:{_appConfiguration["Abp:RedisCache:ConnectionString"]}{Environment.NewLine}" +
+                                   $"SignalRRedisCache:{_appConfiguration["Abp:SignalRRedisCache:ConnectionString"]}{Environment.NewLine}" +
+                                   $"HTTPS:HttpsRedirection:{_appConfiguration["App:HttpsRedirection"]}  UseHsts:{_appConfiguration["App:UseHsts"]}{Environment.NewLine}" +
+                                   $"CorsOrigins:{_appConfiguration["App:CorsOrigins"]}{Environment.NewLine}");
+            
         }
 
         /// <summary>
