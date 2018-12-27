@@ -40,7 +40,8 @@ namespace Magicodes.Admin.Configuration.Storage
             AccessKeyId = await SettingManager.GetSettingValueAsync(AppSettings.AliStorageManagement.AccessKeyId),
             AccessKeySecret =
                 await SettingManager.GetSettingValueAsync(AppSettings.AliStorageManagement.AccessKeySecret),
-            EndPoint = await SettingManager.GetSettingValueAsync(AppSettings.AliStorageManagement.EndPoint)
+            EndPoint = await SettingManager.GetSettingValueAsync(AppSettings.AliStorageManagement.EndPoint),
+            BucketName = await SettingManager.GetSettingValueAsync(AppSettings.AliStorageManagement.BucketName),
         };
 
         public async Task UpdateAllSettings(StorageSettingEditDto input)
@@ -66,6 +67,7 @@ namespace Magicodes.Admin.Configuration.Storage
             await SaveSettings(AppSettings.AliStorageManagement.AccessKeyId, input.AccessKeyId);
             await SaveSettings(AppSettings.AliStorageManagement.AccessKeySecret, input.AccessKeySecret);
             await SaveSettings(AppSettings.AliStorageManagement.EndPoint, input.EndPoint);
+            await SaveSettings(AppSettings.AliStorageManagement.BucketName, input.BucketName);
         }
 
         /// <summary>

@@ -78,7 +78,8 @@ namespace Magicodes.Unity.Storage
                             {
                                 AccessKeyId = _settingManager.GetSettingValueAsync(AppSettings.AliStorageManagement.AccessKeyId).Result,
                                 AccessKeySecret = _settingManager.GetSettingValueAsync(AppSettings.AliStorageManagement.AccessKeySecret).Result,
-                                Endpoint = _settingManager.GetSettingValueAsync(AppSettings.AliStorageManagement.EndPoint).Result
+                                Endpoint = _settingManager.GetSettingValueAsync(AppSettings.AliStorageManagement.EndPoint).Result,
+                                BucketName = _settingManager.GetSettingValueAsync(AppSettings.AliStorageManagement.BucketName).Result
                             };
                         }
                         else
@@ -87,7 +88,8 @@ namespace Magicodes.Unity.Storage
                             {
                                 AccessKeyId = _appConfiguration.Configuration["StorageProvider:AliyunOssStorageProvider:AccessKeyId"],
                                 AccessKeySecret = _appConfiguration.Configuration["StorageProvider:AliyunOssStorageProvider:AccessKeySecret"],
-                                Endpoint = _appConfiguration.Configuration["StorageProvider:AliyunOssStorageProvider:Endpoint"]
+                                Endpoint = _appConfiguration.Configuration["StorageProvider:AliyunOssStorageProvider:Endpoint"],
+                                BucketName = _appConfiguration.Configuration["StorageProvider:AliyunOssStorageProvider:BucketName"]
                             };
                         }
 
@@ -103,7 +105,10 @@ namespace Magicodes.Unity.Storage
                         {
                             throw new UserFriendlyException("AliyunOssStorageProvider endpoint is null!");
                         }
-
+                        if (aliyunOssConfig.BucketName.IsNullOrWhiteSpace())
+                        {
+                            throw new UserFriendlyException("AliyunOssStorageProvider bucketName is null!");
+                        }
                         StorageProvider = new AliyunOssStorageProvider(aliyunOssConfig);
                         break;
                     }
