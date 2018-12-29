@@ -149,6 +149,7 @@ namespace Magicodes.Admin.Configuration
                 new SettingDefinition(AppSettings.AliStorageManagement.AccessKeyId, GetFromAppSettings(AppSettings.AliStorageManagement.AccessKeyId, ""),scopes: SettingScopes.Tenant|SettingScopes.Application),
                 new SettingDefinition(AppSettings.AliStorageManagement.AccessKeySecret, GetFromAppSettings(AppSettings.AliStorageManagement.AccessKeySecret, ""),scopes: SettingScopes.Tenant|SettingScopes.Application),
                 new SettingDefinition(AppSettings.AliStorageManagement.EndPoint, GetFromAppSettings(AppSettings.AliStorageManagement.EndPoint, ""),scopes: SettingScopes.Tenant|SettingScopes.Application),
+                new SettingDefinition(AppSettings.AliStorageManagement.BucketName, GetFromAppSettings(AppSettings.AliStorageManagement.BucketName, ""),scopes: SettingScopes.Tenant|SettingScopes.Application),
 
                 //腾讯
                 new SettingDefinition(AppSettings.TencentStorageManagement.IsEnabled, GetFromAppSettings(AppSettings.TencentStorageManagement.IsEnabled, "false"),scopes: SettingScopes.Tenant|SettingScopes.Application),

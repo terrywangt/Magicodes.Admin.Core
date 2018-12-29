@@ -209,6 +209,8 @@ namespace Magicodes.Admin.Configuration
             public const string AccessKeySecret = "App.AliStorageManagement.AccessKeySecret";
 
             public const string EndPoint = "App.AliStorageManagement.EndPoint";
+
+            public const string BucketName = "App.AliStorageManagement.BucketName";
         }
     }
 }
