@@ -270,6 +270,8 @@ namespace Magicodes.Admin.Contents
                 Url = input.ColumnInfo.Url,
                 MaxItemCount = input.ColumnInfo.MaxItemCount,
                 ColumnType = input.ColumnInfo.ColumnType,
+                IsFooterNav = input.ColumnInfo.IsFooterNav,
+                IsHeaderNav = input.ColumnInfo.IsHeaderNav,
                 IsStatic = input.ColumnInfo.IsStatic,
                 CreatorUserId = AbpSession.UserId,
                 CreationTime = Clock.Now,
@@ -311,6 +313,8 @@ namespace Magicodes.Admin.Contents
             columnInfo.MaxItemCount = input.ColumnInfo.MaxItemCount;
             columnInfo.ColumnType = input.ColumnInfo.ColumnType;
             columnInfo.IsStatic = input.ColumnInfo.IsStatic;
+            columnInfo.IsFooterNav = input.ColumnInfo.IsFooterNav;
+            columnInfo.IsHeaderNav = input.ColumnInfo.IsHeaderNav;
         }
 
         /// <summary>

@@ -31,13 +31,36 @@
             <div class="m-portlet__body">
                 <div class="m-form m-form--label-align-right">
                     <form (submit)="getColumnInfos()" autocomplete="off">
-                        <div class="form-body">
-                            <div class="row m--margin-bottom-10">
+                        <div class="row">
+                            <div class="col-xl-6">
                                 <label>{{l("Filter")}}</label>
                                 <div class="input-group">
                                     <input [(ngModel)]="filters.filterText" name="Filter" class="form-control"
                                         placeholder="{{l('SearchWithThreeDot')}}" type="text">
                                 </div>
+                            </div>
+                            <div class="col-xl-6">
+                                <label>{{l("Parent")}}</label>
+                                <div class="input-group">
+                                    <input [(ngModel)]="filters.parentId" name="ParentId" class="form-control" placeholder="{{l('SearchWithThreeDot')}}"
+                                        type="text">
+                                </div>
+                            </div>
+                            <div class="col-xl-6" style="margin-top: 15px;">
+                                <label class="m-checkbox">
+                                    <input [disabled]="filters.isFooterNav" (click)="onCheckbox()" id="EditColumnInfo_IsHeaderNav" type="checkbox"
+                                        name="IsHeaderNav" [(ngModel)]="filters.isHeaderNav" [required]="false">
+                                    {{l("IsHeaderNav")}}
+                                    <span></span>
+                                </label>
+                            </div>
+                            <div class="col-xl-6" style="margin-top: 15px;">
+                                <label class="m-checkbox">
+                                    <input #IsFooterNav id="EditColumnInfo_IsFooterNav" type="checkbox" name="IsFooterNav" [(ngModel)]="filters.isFooterNav"
+                                        [required]="false">
+                                    {{l("IsFooterNav")}}
+                                    <span></span>
+                                </label>
                             </div>
                         </div>
                         <div *ngIf="advancedFiltersAreShown" class="row">
@@ -108,27 +131,27 @@
                                 <tr>
                                     <th style="width:110px"></th>
                                     <th style="width:200px">{{l('Actions')}}</th>
-                                    <th [ttSortableColumn]="title" style="width:200px">{{l('Title')}}
+                                    <th [ttSortableColumn]="'title'" style="width:200px">{{l('Title')}}
                                         <p-treeTableSortIcon field="title"></p-treeTableSortIcon>
                                     </th>
-                                    <th [ttSortableColumn]="code" style="width:300px">{{l('Code')}}
+                                    <th [ttSortableColumn]="'code'" style="width:300px">{{l('Code')}}
                                         <p-treeTableSortIcon field="code"></p-treeTableSortIcon>
                                     </th>
-                                    <th [ttSortableColumn]="columnType" style="width:150px">{{l('ColumnType')}}
+                                    <th [ttSortableColumn]="'columnType'" style="width:150px">{{l('ColumnType')}}
                                         <p-treeTableSortIcon field="columnType"></p-treeTableSortIcon>
                                     </th>
-                                    <th [ttSortableColumn]="isActive" style="width:200px">{{l('IsActive')}}
+                                    <th [ttSortableColumn]="'isActive'" style="width:200px">{{l('IsActive')}}
                                         <p-treeTableSortIcon field="isActive"></p-treeTableSortIcon>
                                     </th>
-                                    <th [ttSortableColumn]="isNeedAuthorizeAccess" style="width:200px">{{l('IsNeedAuthorizeAccess')}}
+                                    <th [ttSortableColumn]="'isNeedAuthorizeAccess'" style="width:200px">{{l('IsNeedAuthorizeAccess')}}
                                         <p-treeTableSortIcon field="isNeedAuthorizeAccess"></p-treeTableSortIcon>
                                     </th>
                                     <th style="width:200px">{{l('Cover')}}</th>
                                     <th style="width:600px">{{l('PictureManage')}}</th>
-                                    <th [ttSortableColumn]="url" style="width:200px">{{l('Url')}}
+                                    <th [ttSortableColumn]="'url'" style="width:200px">{{l('Url')}}
                                         <p-treeTableSortIcon field="url"></p-treeTableSortIcon>
                                     </th>
-                                    <th [ttSortableColumn]="creationTime" style="width:200px">{{l('CreationTime')}}
+                                    <th [ttSortableColumn]="'creationTime'" style="width:200px">{{l('CreationTime')}}
                                         <p-treeTableSortIcon field="creationTime"></p-treeTableSortIcon>
                                     </th>
                                 </tr>
@@ -301,7 +324,7 @@
                                             name="IsActive" [(ngModel)]="record.isNeedAuthorizeAccess"></p-inputSwitch>
                                     </td>
                                     <td style="width:200px">
-                                            <object-imageList objectTypeName="ColumnInfo" [(objectId)]="rowData.id"
+                                            <object-imageList objectTypeName="ColumnInfo" [(objectId)]="record.id"
                                             isCover="true"></object-imageList>
                                     </td>
                                     <td style="width:600px">

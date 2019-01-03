@@ -15451,6 +15451,10 @@ export class ColumnInfoEditDto implements IColumnInfoEditDto {
     maxItemCount!: number | undefined;
     /** 是否静态 */
     isStatic!: boolean | undefined;
+    /** 是否为头部导航 */
+    isHeaderNav!: boolean | undefined;
+    /** 是否为脚部导航 */
+    isFooterNav!: boolean | undefined;
     id!: number | undefined;
 
     constructor(data?: IColumnInfoEditDto) {
@@ -15476,6 +15480,8 @@ export class ColumnInfoEditDto implements IColumnInfoEditDto {
             this.columnType = data["columnType"];
             this.maxItemCount = data["maxItemCount"];
             this.isStatic = data["isStatic"];
+            this.isHeaderNav = data["isHeaderNav"];
+            this.isFooterNav = data["isFooterNav"];
             this.id = data["id"];
         }
     }
@@ -15501,6 +15507,8 @@ export class ColumnInfoEditDto implements IColumnInfoEditDto {
         data["columnType"] = this.columnType;
         data["maxItemCount"] = this.maxItemCount;
         data["isStatic"] = this.isStatic;
+        data["isHeaderNav"] = this.isHeaderNav;
+        data["isFooterNav"] = this.isFooterNav;
         data["id"] = this.id;
         return data; 
     }
@@ -15532,6 +15540,10 @@ export interface IColumnInfoEditDto {
     maxItemCount: number | undefined;
     /** 是否静态 */
     isStatic: boolean | undefined;
+    /** 是否为头部导航 */
+    isHeaderNav: boolean | undefined;
+    /** 是否为脚部导航 */
+    isFooterNav: boolean | undefined;
     id: number | undefined;
 }
 

@@ -28,13 +28,17 @@
             <div class="m-portlet__body">
                 <div class="m-form m-form--label-align-right">
                     <form (submit)="getArticleInfos()" autocomplete="off">
-                        <div class="form-body">
-                            <div class="row m--margin-bottom-10">
+                        <div class="form-body row">
+                            <div class="col-xl-6">
                                 <label>{{l("Filter")}}</label>
                                 <div class="input-group">
                                     <input [(ngModel)]="filters.filterText" name="Filter" class="form-control"
                                         placeholder="{{l('SearchWithThreeDot')}}" type="text">
                                 </div>
+                            </div>
+                            <div class="col-xl-6">
+                                <label>{{l("ColumnInfo")}}</label>
+                                <data-combo [(selectedValue)]="filters.columnInfoId" [values]="columnInfoComboItemDtoList"></data-combo>
                             </div>
                         </div>
                         <div *ngIf="advancedFiltersAreShown" class="row">

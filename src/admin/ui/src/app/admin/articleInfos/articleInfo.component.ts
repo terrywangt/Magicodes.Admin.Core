@@ -14,9 +14,11 @@ import { LazyLoadEvent } from 'primeng/components/common/lazyloadevent';
 import { Paginator } from 'primeng/components/paginator/paginator';
 import { Table } from 'primeng/components/table/table';
 import { FileDownloadService } from '@shared/utils/file-download.service';
-import { ArticleInfoServiceProxy } from '@shared/service-proxies/service-proxies';
+import {
+    ArticleInfoServiceProxy,
+    GetDataComboItemDtoOfInt64
+} from '@shared/service-proxies/service-proxies';
 import { CreateOrEditArticleInfoModalComponent } from './create-or-edit-articleInfo-modal.component';
-
 import { ArticleInfoArticleTagInfoComponent } from './articleTagInfo.component';
 
 @Component({
@@ -33,6 +35,7 @@ export class ArticleInfosComponent extends AppComponentBase implements OnInit {
     createOrEditArticleInfoModal: CreateOrEditArticleInfoModalComponent;
     @ViewChild('ArticleTagInfoModal')
     articleTagInfoModal: ArticleInfoArticleTagInfoComponent;
+    columnInfoComboItemDtoList: GetDataComboItemDtoOfInt64[];
     advancedFiltersAreShown = false;
     creationDateRange: Date[] = [
         moment()
@@ -55,6 +58,7 @@ export class ArticleInfosComponent extends AppComponentBase implements OnInit {
     filters: {
         //是否仅获取回收站数据
         isOnlyGetRecycleData: boolean;
+        columnInfoId: number;
         filterText: string;
         creationDateRangeActive: boolean;
         updateDateRangeActive: boolean;
@@ -130,6 +134,12 @@ export class ArticleInfosComponent extends AppComponentBase implements OnInit {
     ngOnInit(): void {
         this.filters.filterText =
             this._activatedRoute.snapshot.queryParams['filterText'] || '';
+
+        this._articleInfoService
+            .getColumnInfoDataComboItems()
+            .subscribe(result => {
+                this.columnInfoComboItemDtoList = result;
+            });
     }
 
     getArticleInfos(event?: LazyLoadEvent) {
@@ -145,6 +155,7 @@ export class ArticleInfosComponent extends AppComponentBase implements OnInit {
                 this.filters.isOnlyGetRecycleData
                     ? this.filters.isOnlyGetRecycleData
                     : false,
+                this.filters.columnInfoId,
                 this.filters.creationDateRangeActive
                     ? moment(this.creationDateRange[0])
                     : undefined,
@@ -227,6 +238,7 @@ export class ArticleInfosComponent extends AppComponentBase implements OnInit {
         this._articleInfoService
             .getArticleInfosToExcel(
                 this.filters.isOnlyGetRecycleData,
+                this.filters.columnInfoId,
                 this.filters.creationDateRangeActive
                     ? moment(this.creationDateRange[0])
                     : undefined,

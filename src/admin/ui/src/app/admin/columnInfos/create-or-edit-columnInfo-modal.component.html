@@ -32,7 +32,7 @@
 						</div>
 						<div class="form-group form-md-line-input form-md-floating-label no-hint col-xl-6">
 							<label>{{l("ColumnType")}} *</label>
-							<enum-combo [(selectedValue)]="formModel.columnType" fullName="Magicodes.Admin.Core.Custom.Contents.ColumnTypes"></enum-combo>
+							<enum-combo [(selectedValue)]="formModel.columnType" fullName="Magicodes.Admin.Contents.ColumnTypes"></enum-combo>
 						</div>
 						<div class="form-group form-md-line-input form-md-floating-label no-hint col-xl-6">
 							<label>{{l("MaxItemCount")}} </label>
@@ -44,6 +44,24 @@
 							<input class="form-control" type="number" name="SortNo" [ngClass]="{'edited': formModel.sortNo}" [(ngModel)]="formModel.sortNo"
 							 [required]="false" maxlength="" minlength="">
 						</div>
+
+						<div class="form-group form-md-line-input form-md-floating-label no-hint col-xl-6" style="margin-top: 35px;">
+							<label class="m-checkbox">
+								<input [disabled]="formModel.isFooterNav" (click)="onCheckbox()" id="EditColumnInfo_IsHeaderNav" type="checkbox" name="IsHeaderNav"
+								 [(ngModel)]="formModel.isHeaderNav" [required]="false">
+								{{l("IsHeaderNav")}}
+								<span></span>
+							</label>
+						</div>
+						<div class="form-group form-md-line-input form-md-floating-label no-hint col-xl-6" style="margin-top: 35px;">
+							<label class="m-checkbox">
+								<input #IsFooterNav id="EditColumnInfo_IsFooterNav" type="checkbox" name="IsFooterNav" [(ngModel)]="formModel.isFooterNav"
+								 [required]="false">
+								{{l("IsFooterNav")}}
+								<span></span>
+							</label>
+						</div>
+
 						<div class="form-group form-md-line-input form-md-floating-label no-hint col-xl-12">
 							<label>{{l("Url")}} </label>
 							<input class="form-control" type="url" name="Url" [ngClass]="{'edited': formModel.url}" [(ngModel)]="formModel.url"
