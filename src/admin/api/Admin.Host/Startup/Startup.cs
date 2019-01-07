@@ -137,6 +137,7 @@ namespace Magicodes.Admin.Web.Startup
                 //配置ABP以及相关模块依赖
                 return services.AddAbp<AdminWebHostModule>(options =>
                 {
+
                     options.IocManager.Register<IAppConfigurationAccessor, AppConfigurationAccessor>(DependencyLifeStyle
                         .Singleton);
 

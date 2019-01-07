@@ -63,9 +63,8 @@ namespace Magicodes.Admin.Web
             //Configuration.BackgroundJobs.UseHangfire();
 
             //使用Redis缓存替换默认的内存缓存
-            if (_appConfiguration["Abp:RedisCache:IsEnabled"] == "true")
+            if (Convert.ToBoolean(_appConfiguration["Abp:RedisCache:IsEnabled"] ?? "false"))
             {
-                
                 Configuration.Caching.UseRedis(options =>
                 {
                     options.ConnectionString = _appConfiguration["Abp:RedisCache:ConnectionString"];
@@ -121,7 +120,7 @@ namespace Magicodes.Admin.Web
             {
                 return;
             }
-            
+
             Configuration.Localization.Sources.Add(
                 new DictionaryBasedLocalizationSource(
                     AdminConsts.LocalizationSourceName,
