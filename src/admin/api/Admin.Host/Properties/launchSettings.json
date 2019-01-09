@@ -19,7 +19,7 @@
     "Magicodes.Admin.Web.Host": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "http://localhost:2000",
+      "launchUrl": "http://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         //"Abp__SignalRRedisCache__ConnectionString": "redis://:crs-j2v5buzk:xinlai123456abcD@172.16.16.4:6379"
