@@ -55,7 +55,7 @@ https://gitee.com/xl_wenqiang/Magicodes.Admin.Core/commits/develop
 
 ## 相关官方Nuget
 
-| 名称     |      Nuget      | 
+| 名称     |      Nuget      |
 |----------|:-------------:|
 | Magicodes.Alipay  |  [![NuGet](https://buildstats.info/nuget/Magicodes.Alipay)](https://www.nuget.org/packages/Magicodes.Alipay) |
 | Magicodes.Alipay.Global |    [![NuGet](https://buildstats.info/nuget/Magicodes.Alipay.Global)](https://www.nuget.org/packages/Magicodes.Alipay.Global)   |
@@ -77,15 +77,15 @@ https://gitee.com/xl_wenqiang/Magicodes.Admin.Core/commits/develop
 已通过腾讯云Docker容器托管，并且使用Azure Pipelines实现持续集成（CI）:
 
 * 开发版（Develop分支）(可能会出现问题导致无法打开):
-  * 后台：<https://devdemoadmin.xin-lai.com>  
+  * 后台：<https://devdemoadmin.xin-lai.com>
   * 后台接口：<https://devdemoadminapi.xin-lai.com> [![Build status](https://codelove1314.visualstudio.com/Magicodes.Admin/_apis/build/status/Docker-CI-AdminHost?branchName=develop)](https://codelove1314.visualstudio.com/Magicodes.Admin/_apis/build/status/Docker-CI-AdminHost?branchName=develop)
-  * APP接口：<https://devdemoappapi.xin-lai.com> [![Build status](https://codelove1314.visualstudio.com/Magicodes.Admin/_apis/build/status/Docker-CI-AppHost?branchName=develop)](https://codelove1314.visualstudio.com/Magicodes.Admin/_apis/build/status/Docker-CI-AppHost?branchName=develop)  
-  
+  <!-- * APP接口：<https://devdemoappapi.xin-lai.com> [![Build status](https://codelove1314.visualstudio.com/Magicodes.Admin/_apis/build/status/Docker-CI-AppHost?branchName=develop)](https://codelove1314.visualstudio.com/Magicodes.Admin/_apis/build/status/Docker-CI-AppHost?branchName=develop)
+   -->
 
 * 稳定版
-  * 后台：<https://demoadmin.xin-lai.com>
+  * 后台：<https://	demoadmin.xin-lai.com>
   * 后台接口：<https://demoadminapi.xin-lai.com> [![Build status](https://codelove1314.visualstudio.com/Magicodes.Admin/_apis/build/status/Docker-CI-AdminHost?branchName=master)](https://codelove1314.visualstudio.com/Magicodes.Admin/_apis/build/status/Docker-CI-AdminHost?branchName=master)
-  * APP接口：<https://demoappapi.xin-lai.com> [![Build status](https://codelove1314.visualstudio.com/Magicodes.Admin/_apis/build/status/Docker-CI-AppHost?branchName=master)](https://codelove1314.visualstudio.com/Magicodes.Admin/_apis/build/status/Docker-CI-AppHost?branchName=master)    
+  <!-- * APP接口：<https://demoappapi.xin-lai.com> [![Build status](https://codelove1314.visualstudio.com/Magicodes.Admin/_apis/build/status/Docker-CI-AppHost?branchName=master)](https://codelove1314.visualstudio.com/Magicodes.Admin/_apis/build/status/Docker-CI-AppHost?branchName=master)     -->
 
 
 * 账号：Admin
@@ -152,7 +152,7 @@ https://gitee.com/xl_wenqiang/Magicodes.Admin.Core/commits/develop
 ## 生成服务
 
  高级版附送代码生成工具以及相关源代码。**目前线上生成服务Beta版一上线，在内测阶段，仅提供给高级版客户。**
- 
+
  界面预览:
 
 <img src="res/cloud1.jpg">
