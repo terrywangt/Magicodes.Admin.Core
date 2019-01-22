@@ -60,7 +60,8 @@ namespace Magicodes.Admin.Migrations.Seed.Tenants
                 adminUser = User.CreateTenantAdminUser(_tenantId, "admin@defaulttenant.com");
                 adminUser.Password = new PasswordHasher<User>(new OptionsWrapper<PasswordHasherOptions>(new PasswordHasherOptions())).HashPassword(adminUser, "123456abcD");
                 adminUser.IsEmailConfirmed = true;
-                adminUser.ShouldChangePasswordOnNextLogin = true;
+                //TODO:为了兼容新版UI先将改为false
+                adminUser.ShouldChangePasswordOnNextLogin = false;
                 adminUser.IsActive = true;
 
                 _context.Users.Add(adminUser);
