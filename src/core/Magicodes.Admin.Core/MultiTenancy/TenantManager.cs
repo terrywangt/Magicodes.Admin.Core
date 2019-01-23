@@ -44,7 +44,7 @@ namespace Magicodes.Admin.MultiTenancy
         private readonly IPasswordHasher<User> _passwordHasher;
         private readonly IRepository<SubscriptionPayment, long> _subscriptionPaymentRepository;
         private readonly IRepository<SubscribableEdition> _subscribableEditionRepository;
-
+        
         public TenantManager(
             IRepository<Tenant> tenantRepository,
             IRepository<TenantFeatureSetting, long> tenantFeatureRepository,
@@ -120,7 +120,7 @@ namespace Magicodes.Admin.MultiTenancy
                 _abpZeroDbMigrator.CreateOrMigrateForTenant(tenant);
 
                 //We are working entities of new tenant, so changing tenant filter
-                using (_unitOfWorkManager.Current.SetTenantId(tenant.Id))
+                 using (_unitOfWorkManager.Current.SetTenantId(tenant.Id))
                 {
                     //Create static roles for new tenant
                     CheckErrors(await _roleManager.CreateStaticRoles(tenant.Id));
@@ -196,7 +196,7 @@ namespace Magicodes.Admin.MultiTenancy
 
             return newTenantId;
         }
-
+        
         public async Task CheckEditionAsync(int? editionId, bool isInTrialPeriod)
         {
             if (!editionId.HasValue || !isInTrialPeriod)
