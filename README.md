@@ -39,7 +39,6 @@ https://gitee.com/xl_wenqiang/Magicodes.Admin.Core/commits/develop
 ## VNext
 
 * 拆分架构和仓库,以便更易于使用
-* 存储组件支持腾讯云存储
 * 新版后台UI
 * 微服务架构支持
 * MySQL支持配置简化
@@ -165,6 +164,34 @@ https://gitee.com/xl_wenqiang/Magicodes.Admin.Core/commits/develop
 ![推荐开发环境](./documents/Magicodes.Admin推荐开发环境.png)
 
 已升级到到.NET Core 2.1，请先下载SDK：<https://www.microsoft.com/net/download/windows>
+
+## 云产品推荐
+
+### 腾讯云产品推荐
+ 
+腾讯云产品推荐
+如果是新用户专属大礼包：<a title="点此打开" href="https://cloud.tencent.com/redirect.php?redirect=1025&amp;cps_key=c0b7a3c05fd76fb24478cbfed8d010df&amp;from=console" target="_blank">点此打开</a>
+
+<a href="https://cloud.tencent.com/redirect.php?redirect=1014&amp;cps_key=c0b7a3c05fd76fb24478cbfed8d010df&amp;from=console" target="_blank">秒杀活动</a>
+
+<a href="https://cloud.tencent.com/redirect.php?redirect=1001&amp;cps_key=c0b7a3c05fd76fb24478cbfed8d010df&amp;from=console" target="_blank">云服务器</a>
+
+<a href="https://cloud.tencent.com/redirect.php?redirect=1034&amp;cps_key=c0b7a3c05fd76fb24478cbfed8d010df&amp;from=console" target="_blank">MySQL</a>
+
+<a href="https://cloud.tencent.com/redirect.php?redirect=1016&amp;cps_key=c0b7a3c05fd76fb24478cbfed8d010df&amp;from=console" target="_blank">Redis</a>
+
+<a href="https://cloud.tencent.com/redirect.php?redirect=1020&amp;cps_key=c0b7a3c05fd76fb24478cbfed8d010df&amp;from=console" target="_blank">COS（50G以内免费，可以购买定向资源包）</a>
+
+<a href="https://cloud.tencent.com/redirect.php?redirect=1019&amp;cps_key=c0b7a3c05fd76fb24478cbfed8d010df&amp;from=console" target="_blank">CDN</a>
+
+<a href="https://cloud.tencent.com/redirect.php?redirect=1015&amp;cps_key=c0b7a3c05fd76fb24478cbfed8d010df&amp;from=console" target="_blank">云硬盘</a>
+
+<a href="https://cloud.tencent.com/redirect.php?redirect=1009&amp;cps_key=c0b7a3c05fd76fb24478cbfed8d010df&amp;from=console" target="_blank">SSL证书</a>
+
+容器服务（无需购买，免费）
+
+负载均衡（按量收费）
+
 
 ## 官方博客
 
