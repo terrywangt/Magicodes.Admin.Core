@@ -569,6 +569,115 @@ export class AccountServiceProxy {
         }
         return _observableOf<SwitchToLinkedAccountOutput>(<any>null);
     }
+
+    /**
+     * 根据用户名从缓存获取租户基本信息
+     * @param userName (optional) 
+     * @return Success
+     */
+    getTenantBasisInfoByCache(userName: string | null | undefined): Observable<TenantBasisInfo> {
+        let url_ = this.baseUrl + "/api/services/app/Account/GetTenantBasisInfoByCache?";
+        if (userName !== undefined)
+            url_ += "userName=" + encodeURIComponent("" + userName) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetTenantBasisInfoByCache(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetTenantBasisInfoByCache(<any>response_);
+                } catch (e) {
+                    return <Observable<TenantBasisInfo>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<TenantBasisInfo>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetTenantBasisInfoByCache(response: HttpResponseBase): Observable<TenantBasisInfo> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? TenantBasisInfo.fromJS(resultData200) : new TenantBasisInfo();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<TenantBasisInfo>(<any>null);
+    }
+
+    /**
+     * 获取是否启用租户登陆
+     * @return Success
+     */
+    getIfEnableTenantLogin(): Observable<boolean> {
+        let url_ = this.baseUrl + "/api/services/app/Account/GetIfEnableTenantLogin";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetIfEnableTenantLogin(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetIfEnableTenantLogin(<any>response_);
+                } catch (e) {
+                    return <Observable<boolean>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<boolean>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetIfEnableTenantLogin(response: HttpResponseBase): Observable<boolean> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<boolean>(<any>null);
+    }
 }
 
 @Injectable()
@@ -12986,6 +13095,52 @@ export interface ISwitchToLinkedAccountOutput {
     tenancyName: string | undefined;
 }
 
+/** 租户基本信息 */
+export class TenantBasisInfo implements ITenantBasisInfo {
+    /** 租户Id */
+    id!: number | undefined;
+    /** 租户名称 */
+    name!: string | undefined;
+
+    constructor(data?: ITenantBasisInfo) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.id = data["id"];
+            this.name = data["name"];
+        }
+    }
+
+    static fromJS(data: any): TenantBasisInfo {
+        data = typeof data === 'object' ? data : {};
+        let result = new TenantBasisInfo();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        return data; 
+    }
+}
+
+/** 租户基本信息 */
+export interface ITenantBasisInfo {
+    /** 租户Id */
+    id: number | undefined;
+    /** 租户名称 */
+    name: string | undefined;
+}
+
 export class PagedResultDtoOfArticleInfoListDto implements IPagedResultDtoOfArticleInfoListDto {
     totalCount!: number | undefined;
     items!: ArticleInfoListDto[] | undefined;
@@ -17610,6 +17765,7 @@ export class TenantManagementSettingsEditDto implements ITenantManagementSetting
     isNewRegisteredTenantActiveByDefault!: boolean | undefined;
     useCaptchaOnRegistration!: boolean | undefined;
     defaultEditionId!: number | undefined;
+    useEnableTenantLogin!: boolean | undefined;
 
     constructor(data?: ITenantManagementSettingsEditDto) {
         if (data) {
@@ -17626,6 +17782,7 @@ export class TenantManagementSettingsEditDto implements ITenantManagementSetting
             this.isNewRegisteredTenantActiveByDefault = data["isNewRegisteredTenantActiveByDefault"];
             this.useCaptchaOnRegistration = data["useCaptchaOnRegistration"];
             this.defaultEditionId = data["defaultEditionId"];
+            this.useEnableTenantLogin = data["useEnableTenantLogin"];
         }
     }
 
@@ -17642,6 +17799,7 @@ export class TenantManagementSettingsEditDto implements ITenantManagementSetting
         data["isNewRegisteredTenantActiveByDefault"] = this.isNewRegisteredTenantActiveByDefault;
         data["useCaptchaOnRegistration"] = this.useCaptchaOnRegistration;
         data["defaultEditionId"] = this.defaultEditionId;
+        data["useEnableTenantLogin"] = this.useEnableTenantLogin;
         return data; 
     }
 }
@@ -17651,6 +17809,7 @@ export interface ITenantManagementSettingsEditDto {
     isNewRegisteredTenantActiveByDefault: boolean | undefined;
     useCaptchaOnRegistration: boolean | undefined;
     defaultEditionId: number | undefined;
+    useEnableTenantLogin: boolean | undefined;
 }
 
 export class SecuritySettingsEditDto implements ISecuritySettingsEditDto {

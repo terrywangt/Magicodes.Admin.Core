@@ -10,9 +10,12 @@ using Abp.Authorization.Users;
 using Abp.Domain.Uow;
 using Abp.Extensions;
 using Abp.Linq.Extensions;
+using Abp.Runtime.Caching;
 using Abp.Runtime.Security;
+using Abp.UI;
 using Microsoft.EntityFrameworkCore;
 using Magicodes.Admin.Authorization;
+using Magicodes.Admin.Authorization.Users.Dto;
 using Magicodes.Admin.Editions.Dto;
 using Magicodes.Admin.MultiTenancy.Dto;
 using Magicodes.Admin.Url;
@@ -23,6 +26,7 @@ namespace Magicodes.Admin.MultiTenancy
     public class TenantAppService : AdminAppServiceBase, ITenantAppService
     {
         public IAppUrlService AppUrlService { get; set; }
+        
 
         public TenantAppService()
         {

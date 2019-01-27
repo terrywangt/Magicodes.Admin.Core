@@ -9,5 +9,7 @@ namespace Magicodes.Admin.Configuration.Host.Dto
         public bool UseCaptchaOnRegistration { get; set; }
 
         public int? DefaultEditionId { get; set; }
+
+        public bool UseEnableTenantLogin { get; set; }
     }
 }

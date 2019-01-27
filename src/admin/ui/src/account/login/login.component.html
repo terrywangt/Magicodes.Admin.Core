@@ -7,7 +7,7 @@
     <form #loginForm="ngForm" class="m-login__form m-form login-form" method="post" novalidate (ngSubmit)="login()">
 
         <div class="form-group m-form__group">
-            <input #userNameOrEmailAddressInput="ngModel" [(ngModel)]="loginService.authenticateModel.userNameOrEmailAddress" autoFocus class="form-control m-input" type="text" autocomplete="off" placeholder="{{l('UserNameOrEmail')}} *" name="userNameOrEmailAddress" required />
+            <input #userNameOrEmailAddressInput="ngModel" [(ngModel)]="loginService.authenticateModel.userNameOrEmailAddress" autoFocus class="form-control m-input" type="text" autocomplete="off" placeholder="{{l('UserNameOrEmail')}} *" name="userNameOrEmailAddress" required  (blur)="getCacheTenantInfo(loginService.authenticateModel.userNameOrEmailAddress)" />
             <validation-messages [formCtrl]="userNameOrEmailAddressInput"></validation-messages>
         </div>
 

@@ -15,6 +15,7 @@ using Abp.Extensions;
 using Abp.Linq.Extensions;
 using Abp.Notifications;
 using Abp.Organizations;
+using Abp.Runtime.Caching;
 using Abp.Runtime.Session;
 using Abp.UI;
 using Abp.Zero.Configuration;
@@ -49,6 +50,7 @@ namespace Magicodes.Admin.Authorization.Users
         private readonly IEnumerable<IPasswordValidator<User>> _passwordValidators;
         private readonly IPasswordHasher<User> _passwordHasher;
         private readonly IRepository<OrganizationUnit, long> _organizationUnitRepository;
+        private readonly ICacheManager _cacheManager;
 
         public UserAppService(
             RoleManager roleManager,
@@ -62,7 +64,8 @@ namespace Magicodes.Admin.Authorization.Users
             IUserPolicy userPolicy,
             IEnumerable<IPasswordValidator<User>> passwordValidators,
             IPasswordHasher<User> passwordHasher,
-            IRepository<OrganizationUnit, long> organizationUnitRepository)
+            IRepository<OrganizationUnit, long> organizationUnitRepository, 
+            ICacheManager cacheManager)
         {
             _roleManager = roleManager;
             _userEmailer = userEmailer;
@@ -76,6 +79,7 @@ namespace Magicodes.Admin.Authorization.Users
             _passwordValidators = passwordValidators;
             _passwordHasher = passwordHasher;
             _organizationUnitRepository = organizationUnitRepository;
+            _cacheManager = cacheManager;
 
             AppUrlService = NullAppUrlService.Instance;
         }
@@ -264,6 +268,10 @@ namespace Magicodes.Admin.Authorization.Users
 
             var user = await UserManager.FindByIdAsync(input.User.Id.Value.ToString());
 
+            //TODO: Get current user information from the cache and update
+
+            var query = await _cacheManager.GetCache<string, CacheUser>("CacheUserList").GetOrDefaultAsync($"{user.UserName}");
+            
             //Update user properties
             ObjectMapper.Map(input.User, user); //Passwords is not mapped (see mapping configuration)
 
@@ -294,11 +302,59 @@ namespace Magicodes.Admin.Authorization.Users
                     input.User.Password
                 );
             }
+
+            //TODO:
+            var cacheUser = new CacheUser();
+            if (query != null)
+            {
+                if (user.Name != input.User.Name)
+                {
+                    var result = await _cacheManager.GetCache<string, List<CacheUser>>("CacheUserList").GetOrDefaultAsync($"{input.User.UserName}");
+                    if (result != null)
+                    {
+                        throw new UserFriendlyException(L("UsernameAlreadyExists"));
+                    }
+                    //TODO:Update cache information
+                    cacheUser = new CacheUser()
+                    {
+                        Id = user.Id,
+                        Name = input.User.Name,
+                        TenantId = user.TenantId,
+                        Password = user.Password,
+                        CreationTime = query.CreationTime
+                    };
+                }
+
+                await _cacheManager.GetCache<string, CacheUser>("CacheUserList")
+                    .SetAsync($"{user.Name}", cacheUser);
+            }
+            else
+            {
+                //TODO:Add cache information
+                cacheUser = new CacheUser()
+                {
+                    Id = user.Id,
+                    Name = user.Name,
+                    TenantId = user.TenantId,
+                    Password = user.Password,
+                    CreationTime = user.CreationTime
+                };
+                await _cacheManager.GetCache<string, CacheUser>("CacheUserList")
+                    .SetAsync($"{user.Name}", cacheUser);
+            }
+            
         }
 
         [AbpAuthorize(AppPermissions.Pages_Administration_Users_Create)]
         protected virtual async Task CreateUserAsync(CreateOrUpdateUserInput input)
         {
+            var query = await _cacheManager.GetCache<string, CacheUser>("CacheUserList").GetOrDefaultAsync($"{input.User.UserName}");
+
+            if (query != null)
+            {
+                throw new UserFriendlyException(L("UsernameAlreadyExists"));
+            }
+            
             if (AbpSession.TenantId.HasValue)
             {
                 await _userPolicy.CheckMaxUserCountAsync(AbpSession.GetTenantId());
@@ -352,6 +408,20 @@ namespace Magicodes.Admin.Authorization.Users
                     input.User.Password
                 );
             }
+
+            //TODO:Add cache information
+
+            var cacheUser = new CacheUser()
+            {
+                Id = user.Id,
+                Name = user.Name,
+                TenantId = user.TenantId,
+                Password = user.Password,
+                CreationTime = user.CreationTime
+            };
+
+            await _cacheManager.GetCache<string, CacheUser>("CacheUserList")
+                .SetAsync($"{user.Name}", cacheUser);
         }
 
         private async Task FillRoleNames(List<UserListDto> userListDtos)

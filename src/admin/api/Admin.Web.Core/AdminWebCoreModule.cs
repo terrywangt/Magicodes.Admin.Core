@@ -72,6 +72,12 @@ namespace Magicodes.Admin.Web
                 });
             }
 
+            //配置指定的Cache过期时间为50年
+            Configuration.Caching.Configure("CacheUser", cache =>
+            {
+                cache.DefaultSlidingExpireTime = TimeSpan.FromDays(18250);
+            });
+
             SetLocalizationFromWebRootXml(Path.Combine(_env.WebRootPath, "Localization"));
         }
 

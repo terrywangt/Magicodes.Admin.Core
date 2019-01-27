@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Abp.Application.Services;
 using Magicodes.Admin.Authorization.Accounts.Dto;
+using Magicodes.Admin.MultiTenancy.Dto;
 
 namespace Magicodes.Admin.Authorization.Accounts
 {
@@ -25,5 +26,7 @@ namespace Magicodes.Admin.Authorization.Accounts
         Task<ImpersonateOutput> BackToImpersonator();
 
         Task<SwitchToLinkedAccountOutput> SwitchToLinkedAccount(SwitchToLinkedAccountInput input);
+
+        Task<TenantBasisInfo> GetTenantBasisInfoByCache(string userName);
     }
 }

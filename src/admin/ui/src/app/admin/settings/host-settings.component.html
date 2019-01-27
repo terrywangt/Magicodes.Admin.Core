@@ -50,11 +50,18 @@
                                     {{l("UseCaptchaOnRegistration")}}
                                     <span></span>
                                 </label>
+
+                                <label for="Setting_UseEnableTenantLogin" class="m-checkbox">
+                                    <input id="Setting_UseEnableTenantLogin" type="checkbox" name="UseEnableTenantLogin" [(ngModel)]="hostSettings.tenantManagement.useEnableTenantLogin">
+                                    {{l("WhetherToEnableTenantLogin")}}
+                                    <span></span>
+                                </label>
+
                             </div>
                             <div class="form-group">
                                 <label for="DefaultEditionId">{{l("Edition")}}</label>
                                 <select id="DefaultEditionId" class="form-control" [(ngModel)]="hostSettings.tenantManagement.defaultEditionId">
-                                    <option value="">{{emptyText}}</option>
+                                    <option value="">{{l("EmptyTextTip")}}</option>
                                     <option *ngFor="let edition of editions" [value]="edition.value">{{edition.displayText}}</option>
                                 </select>
                             </div>
