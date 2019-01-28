@@ -21,6 +21,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
+using Abp.Json;
 using ILoggerFactory = Microsoft.Extensions.Logging.ILoggerFactory;
 
 namespace Magicodes.Admin.Web.Startup
@@ -38,7 +39,14 @@ namespace Magicodes.Admin.Web.Startup
             _hostingEnvironment = env;
             _appConfiguration = env.GetAppConfiguration();
             _logger = logger;
-            _logger.LogInformation($"运行环境:{env.EnvironmentName}");
+            //打印主要配置信息
+            _logger.LogInformation($"Environment:{env.EnvironmentName}{Environment.NewLine}" +
+                                   $"ConnectionString:{_appConfiguration["ConnectionStrings:Default"]}{Environment.NewLine}" +
+                                   $"RedisCache:IsEnabled:{_appConfiguration["Abp:RedisCache:IsEnabled"]}  ConnectionString:{_appConfiguration["Abp:RedisCache:ConnectionString"]}{Environment.NewLine}" +
+                                   $"SignalRRedisCache:{_appConfiguration["Abp:SignalRRedisCache:ConnectionString"]}{Environment.NewLine}" +
+                                   $"HTTPS:HttpsRedirection:{_appConfiguration["App:HttpsRedirection"]}  UseHsts:{_appConfiguration["App:UseHsts"]}{Environment.NewLine}" +
+                                   $"CorsOrigins:{_appConfiguration["App:CorsOrigins"]}{Environment.NewLine}");
+            
         }
 
         /// <summary>
@@ -129,6 +137,7 @@ namespace Magicodes.Admin.Web.Startup
                 //配置ABP以及相关模块依赖
                 return services.AddAbp<AdminWebHostModule>(options =>
                 {
+
                     options.IocManager.Register<IAppConfigurationAccessor, AppConfigurationAccessor>(DependencyLifeStyle
                         .Singleton);
 

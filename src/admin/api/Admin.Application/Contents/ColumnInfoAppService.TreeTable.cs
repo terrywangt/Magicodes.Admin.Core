@@ -21,10 +21,11 @@ namespace Magicodes.Admin.Contents
         /// </summary>
         [AbpAllowAnonymous]
         public async Task<TreeTableOutputDto<ColumnInfo>> GetChildrenColumnInfos(GetChildrenColumnInfosInput input)
-        {           
+        {
             var data = await _columnInfoRepository.GetAll()
                 .Where(p => p.ParentId == (input.ParentId ?? 0))
-                .Where(p=>p.IsNav==input.IsNav)
+                .Where(p => p.IsHeaderNav == (input.IsHeaderNav != null))
+                .Where(p => p.IsFooterNav == (input.IsFooterNav != null))
                 .OrderBy(p => p.SortNo).ToListAsync();
             var output = new TreeTableOutputDto<ColumnInfo>()
             {
@@ -36,8 +37,10 @@ namespace Magicodes.Admin.Contents
 
             foreach (var treeItemDto in output.Data)
             {
-                treeItemDto.Children = _columnInfoRepository.GetAll().Where(p => p.ParentId == treeItemDto.Data.Id)
-                    .Where(p => p.IsNav == input.IsNav)
+                treeItemDto.Children = _columnInfoRepository.GetAll()
+                    .Where(p => p.ParentId == treeItemDto.Data.Id)
+                    .Where(p => p.IsHeaderNav == (input.IsHeaderNav != null))
+                    .Where(p => p.IsFooterNav == (input.IsFooterNav != null))
                     .OrderBy(p => p.SortNo)
                     .Select(p => new TreeTableRowDto<ColumnInfo>()
                     {
@@ -46,5 +49,5 @@ namespace Magicodes.Admin.Contents
             }
             return output;
         }
-	}
+    }
 }

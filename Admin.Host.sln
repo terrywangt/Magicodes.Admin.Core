@@ -55,6 +55,8 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Magicodes.MiniProgram", "src\unity\Magicodes.MiniProgram\Magicodes.MiniProgram.csproj", "{3A360DC0-0452-4683-B28E-F82DA16F4B40}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magicodes.WeChat", "src\unity\Magicodes.WeChat\Magicodes.WeChat.csproj", "{320F6699-4EE2-451A-81B7-E36C3EB1CDDA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -121,6 +123,10 @@ Global
 		{3A360DC0-0452-4683-B28E-F82DA16F4B40}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3A360DC0-0452-4683-B28E-F82DA16F4B40}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3A360DC0-0452-4683-B28E-F82DA16F4B40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{320F6699-4EE2-451A-81B7-E36C3EB1CDDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{320F6699-4EE2-451A-81B7-E36C3EB1CDDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{320F6699-4EE2-451A-81B7-E36C3EB1CDDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{320F6699-4EE2-451A-81B7-E36C3EB1CDDA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -140,6 +146,7 @@ Global
 		{DE9B120F-FD37-4B14-95A1-4FFEDDACD6B9} = {8C63EF1F-3A85-4724-95B6-DD4B32C41C15}
 		{71DBD97D-9842-4221-91EA-07ADED5FB2CB} = {8C63EF1F-3A85-4724-95B6-DD4B32C41C15}
 		{3A360DC0-0452-4683-B28E-F82DA16F4B40} = {8C63EF1F-3A85-4724-95B6-DD4B32C41C15}
+		{320F6699-4EE2-451A-81B7-E36C3EB1CDDA} = {8C63EF1F-3A85-4724-95B6-DD4B32C41C15}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {23CD4D4B-B131-473D-9ECB-5DD96E739671}

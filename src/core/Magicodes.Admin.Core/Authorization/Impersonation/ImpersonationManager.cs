@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Abp.MultiTenancy;
+using Abp.Runtime;
 using Abp.Runtime.Caching;
 using Abp.Runtime.Security;
 using Abp.Runtime.Session;
 using Abp.UI;
 using Magicodes.Admin.Authorization.Users;
+using Microsoft.Extensions.Logging;
 
 namespace Magicodes.Admin.Authorization.Impersonation
 {
@@ -38,30 +42,36 @@ namespace Magicodes.Admin.Authorization.Impersonation
                 throw new UserFriendlyException(L("ImpersonationTokenErrorMessage"));
             }
 
-            CheckCurrentTenant(cacheItem.TargetTenantId);
+            //TODO:docker上AbpSession.TenantId取到为null,所以注释掉了验证,启用前台传过来的TenantId
 
-            //Get the user from tenant
-            var user = await _userManager.FindByIdAsync(cacheItem.TargetUserId.ToString());
+            //CheckCurrentTenant(cacheItem.TargetTenantId);
 
-            //Create identity
-
-            var identity = (ClaimsIdentity)(await _principalFactory.CreateAsync(user)).Identity;
-
-            if (!cacheItem.IsBackToImpersonator)
+            using (CurrentUnitOfWork.SetTenantId(cacheItem.TargetTenantId))
             {
-                //Add claims for audit logging
-                if (cacheItem.ImpersonatorTenantId.HasValue)
+                //Get the user from tenant
+                var user = await _userManager.FindByIdAsync(cacheItem.TargetUserId.ToString());
+
+                //Create identity
+
+                var identity = (ClaimsIdentity)(await _principalFactory.CreateAsync(user)).Identity;
+
+                if (!cacheItem.IsBackToImpersonator)
                 {
-                    identity.AddClaim(new Claim(AbpClaimTypes.ImpersonatorTenantId, cacheItem.ImpersonatorTenantId.Value.ToString(CultureInfo.InvariantCulture)));
+                    //Add claims for audit logging
+                    if (cacheItem.ImpersonatorTenantId.HasValue)
+                    {
+                        identity.AddClaim(new Claim(AbpClaimTypes.ImpersonatorTenantId, cacheItem.ImpersonatorTenantId.Value.ToString(CultureInfo.InvariantCulture)));
+                    }
+
+                    identity.AddClaim(new Claim(AbpClaimTypes.ImpersonatorUserId, cacheItem.ImpersonatorUserId.ToString(CultureInfo.InvariantCulture)));
                 }
 
-                identity.AddClaim(new Claim(AbpClaimTypes.ImpersonatorUserId, cacheItem.ImpersonatorUserId.ToString(CultureInfo.InvariantCulture)));
+                //Remove the cache item to prevent re-use
+                await _cacheManager.GetImpersonationCache().RemoveAsync(impersonationToken);
+
+                return new UserAndIdentity(user, identity);
             }
 
-            //Remove the cache item to prevent re-use
-            await _cacheManager.GetImpersonationCache().RemoveAsync(impersonationToken);
-
-            return new UserAndIdentity(user, identity);
         }
 
         public Task<string> GetImpersonationToken(long userId, int? tenantId)

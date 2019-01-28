@@ -61,9 +61,14 @@ namespace Magicodes.Admin.Contents.Dto
         public long? ParentId { get; set; }
 
         /// <summary>
-        /// 父级Id
+        /// 是否为头部导航
         /// </summary>
-        public bool? IsNav { get; set; }
+        public bool? IsHeaderNav { get; set; }
+
+        /// <summary>
+        /// 是否为脚部导航
+        /// </summary>
+        public bool? IsFooterNav { get; set; }
 
         /// <summary>
         /// 是否仅获取回收站数据

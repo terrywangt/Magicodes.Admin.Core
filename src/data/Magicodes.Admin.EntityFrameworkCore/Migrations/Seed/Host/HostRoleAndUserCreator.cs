@@ -52,7 +52,8 @@ namespace Magicodes.Admin.Migrations.Seed.Host
                     Surname = "admin",
                     EmailAddress = "admin@xin-lai.com",
                     IsEmailConfirmed = true,
-                    ShouldChangePasswordOnNextLogin = true,
+                    //TODO:为了兼容新版UI先将改为false
+                    ShouldChangePasswordOnNextLogin = false,
                     IsActive = true,
                     Password = "AOEdQVs7aP4oMpOItKAValbRCfv4t0hwvYa/fP6k4wi0brAQ0cLcOGjpFxE/2sdIeA==" //123456abcD
                 };

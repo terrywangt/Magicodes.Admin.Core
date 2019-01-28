@@ -3,7 +3,7 @@
 <!-- ![关注订阅号](./res/订阅号.jpg) -->
 ## 说明
 
-Magicodes.Admin，是心莱科技团队打造的一套高效率、易扩展、基础设施强大、代码生成完备、理念和技术先进的敏捷开发框架，同时也是一套分布式（**即将提供微服务架构参考**）、跨平台（**linux、Docker容器支持，已提供Docker教程和腾讯云容器托管教程**）、多终端（包括**Android、IOS、H5、小程序、微信公众号**）支持的统一开发框架和解决方案。框架基于.NET Core 2.1、Angular、Ionic、EF Core、ABP和ASP.NET Zero，并在其基础上进行了封装和完善，并且编写了相关的工具（代码生成）、组件（云存储、支付、微信等等）、生成服务。
+Magicodes.Admin，是心莱科技团队打造的一套高效率、易扩展、基础设施强大、代码生成完备、理念和技术先进的敏捷开发框架，同时也是一套分布式、跨平台（**linux、Docker容器支持，已提供Docker教程、腾讯云容器托管教程、Azure DevOps教程**）、多终端（包括**Android、IOS、H5、小程序、微信公众号**）、前后端分离、持续集成（CI）、自动部署、监控支持的统一开发框架和开发解决方案。框架基于.NET Core 2.1、Angular、Ionic、EF Core、ABP和ASP.NET Zero，并在其基础上进行了封装和完善，并且编写了相关的工具（代码生成）、组件（云存储、支付、微信等等）、生成服务。
 
 ## 官方订阅号
 
@@ -39,7 +39,6 @@ https://gitee.com/xl_wenqiang/Magicodes.Admin.Core/commits/develop
 ## VNext
 
 * 拆分架构和仓库,以便更易于使用
-* 存储组件支持腾讯云存储
 * 新版后台UI
 * 微服务架构支持
 * MySQL支持配置简化
@@ -55,7 +54,7 @@ https://gitee.com/xl_wenqiang/Magicodes.Admin.Core/commits/develop
 
 ## 相关官方Nuget
 
-| 名称     |      Nuget      | 
+| 名称     |      Nuget      |
 |----------|:-------------:|
 | Magicodes.Alipay  |  [![NuGet](https://buildstats.info/nuget/Magicodes.Alipay)](https://www.nuget.org/packages/Magicodes.Alipay) |
 | Magicodes.Alipay.Global |    [![NuGet](https://buildstats.info/nuget/Magicodes.Alipay.Global)](https://www.nuget.org/packages/Magicodes.Alipay.Global)   |
@@ -77,15 +76,15 @@ https://gitee.com/xl_wenqiang/Magicodes.Admin.Core/commits/develop
 已通过腾讯云Docker容器托管，并且使用Azure Pipelines实现持续集成（CI）:
 
 * 开发版（Develop分支）(可能会出现问题导致无法打开):
-  * 后台：<https://devdemoadmin.xin-lai.com>  
+  * 后台：<https://devdemoadmin.xin-lai.com>
   * 后台接口：<https://devdemoadminapi.xin-lai.com> [![Build status](https://codelove1314.visualstudio.com/Magicodes.Admin/_apis/build/status/Docker-CI-AdminHost?branchName=develop)](https://codelove1314.visualstudio.com/Magicodes.Admin/_apis/build/status/Docker-CI-AdminHost?branchName=develop)
-  * APP接口：<https://devdemoappapi.xin-lai.com> [![Build status](https://codelove1314.visualstudio.com/Magicodes.Admin/_apis/build/status/Docker-CI-AppHost?branchName=develop)](https://codelove1314.visualstudio.com/Magicodes.Admin/_apis/build/status/Docker-CI-AppHost?branchName=develop)  
-  
+  <!-- * APP接口：<https://devdemoappapi.xin-lai.com> [![Build status](https://codelove1314.visualstudio.com/Magicodes.Admin/_apis/build/status/Docker-CI-AppHost?branchName=develop)](https://codelove1314.visualstudio.com/Magicodes.Admin/_apis/build/status/Docker-CI-AppHost?branchName=develop)
+   -->
 
 * 稳定版
-  * 后台：<https://demoadmin.xin-lai.com>
+  * 后台：<https://	demoadmin.xin-lai.com>
   * 后台接口：<https://demoadminapi.xin-lai.com> [![Build status](https://codelove1314.visualstudio.com/Magicodes.Admin/_apis/build/status/Docker-CI-AdminHost?branchName=master)](https://codelove1314.visualstudio.com/Magicodes.Admin/_apis/build/status/Docker-CI-AdminHost?branchName=master)
-  * APP接口：<https://demoappapi.xin-lai.com> [![Build status](https://codelove1314.visualstudio.com/Magicodes.Admin/_apis/build/status/Docker-CI-AppHost?branchName=master)](https://codelove1314.visualstudio.com/Magicodes.Admin/_apis/build/status/Docker-CI-AppHost?branchName=master)    
+  <!-- * APP接口：<https://demoappapi.xin-lai.com> [![Build status](https://codelove1314.visualstudio.com/Magicodes.Admin/_apis/build/status/Docker-CI-AppHost?branchName=master)](https://codelove1314.visualstudio.com/Magicodes.Admin/_apis/build/status/Docker-CI-AppHost?branchName=master)     -->
 
 
 * 账号：Admin
@@ -152,7 +151,7 @@ https://gitee.com/xl_wenqiang/Magicodes.Admin.Core/commits/develop
 ## 生成服务
 
  高级版附送代码生成工具以及相关源代码。**目前线上生成服务Beta版一上线，在内测阶段，仅提供给高级版客户。**
- 
+
  界面预览:
 
 <img src="res/cloud1.jpg">
@@ -160,29 +159,39 @@ https://gitee.com/xl_wenqiang/Magicodes.Admin.Core/commits/develop
 <img src="res/cloud4.png">
 <img src="res/cloud3.png">
 
-
-## 授权文档下载：
-
-**代码完全开源(无论是否获取了授权)并且允许个人免费商用**
-
-如需正式商用、企业授权、技术支持、高清视频教程、在线生成服务、解决方案咨询等等,请查阅以下文档:
-
-1. [Magicodes.Admin个人版授权合同](Magicodes.Admin个人版授权合同.doc)
-1. [Magicodes.Admin企业版授权合同](Magicodes.Admin企业版授权合同.doc)
-
-个人版(2k/年【活动期间价格】)高级版（5k/年【活动期间价格】）主要提供：
-
-* 提供技术支持、售后支持
-* 提供代码线上生成服务（Beta版本已推出，已支持后台生成，即将支持API、小程序、APP生成）
-* 提供高清视频教程和整体文档
-* 提供一定案例（App、小程序（小程序商城））
-* 提供完整的软硬件架构指导（比如容器部署和运维支持）
-
 ## 推荐开发环境
 
 ![推荐开发环境](./documents/Magicodes.Admin推荐开发环境.png)
 
 已升级到到.NET Core 2.1，请先下载SDK：<https://www.microsoft.com/net/download/windows>
+
+## 云产品推荐
+
+### 腾讯云产品推荐
+ 
+腾讯云产品推荐
+如果是新用户专属大礼包：<a title="点此打开" href="https://cloud.tencent.com/redirect.php?redirect=1025&amp;cps_key=c0b7a3c05fd76fb24478cbfed8d010df&amp;from=console" target="_blank">点此打开</a>
+
+<a href="https://cloud.tencent.com/redirect.php?redirect=1014&amp;cps_key=c0b7a3c05fd76fb24478cbfed8d010df&amp;from=console" target="_blank">秒杀活动</a>
+
+<a href="https://cloud.tencent.com/redirect.php?redirect=1001&amp;cps_key=c0b7a3c05fd76fb24478cbfed8d010df&amp;from=console" target="_blank">云服务器</a>
+
+<a href="https://cloud.tencent.com/redirect.php?redirect=1034&amp;cps_key=c0b7a3c05fd76fb24478cbfed8d010df&amp;from=console" target="_blank">MySQL</a>
+
+<a href="https://cloud.tencent.com/redirect.php?redirect=1016&amp;cps_key=c0b7a3c05fd76fb24478cbfed8d010df&amp;from=console" target="_blank">Redis</a>
+
+<a href="https://cloud.tencent.com/redirect.php?redirect=1020&amp;cps_key=c0b7a3c05fd76fb24478cbfed8d010df&amp;from=console" target="_blank">COS（50G以内免费，可以购买定向资源包）</a>
+
+<a href="https://cloud.tencent.com/redirect.php?redirect=1019&amp;cps_key=c0b7a3c05fd76fb24478cbfed8d010df&amp;from=console" target="_blank">CDN</a>
+
+<a href="https://cloud.tencent.com/redirect.php?redirect=1015&amp;cps_key=c0b7a3c05fd76fb24478cbfed8d010df&amp;from=console" target="_blank">云硬盘</a>
+
+<a href="https://cloud.tencent.com/redirect.php?redirect=1009&amp;cps_key=c0b7a3c05fd76fb24478cbfed8d010df&amp;from=console" target="_blank">SSL证书</a>
+
+容器服务（无需购买，免费）
+
+负载均衡（按量收费）
+
 
 ## 官方博客
 

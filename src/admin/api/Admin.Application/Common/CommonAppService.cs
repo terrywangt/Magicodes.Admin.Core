@@ -9,6 +9,7 @@ using Abp.UI;
 using Magicodes.Admin.Attachments;
 using Magicodes.Admin.Common.Dto;
 using Magicodes.Admin.Contents;
+using Magicodes.Admin.Core.Custom;
 using Magicodes.Admin.LogInfos;
 using Microsoft.EntityFrameworkCore;
 
@@ -43,7 +44,17 @@ namespace Magicodes.Admin.Common
         /// <returns></returns>
         public List<GetEnumValuesListDto> GetEnumValuesList(GetEnumValuesListInput input)
         {
-            var type = typeof(AdminCoreModule).GetAssembly().GetType(input.FullName);
+            Type type = null;
+            if (input.FullName.Contains("Magicodes.Admin.Core.Custom"))
+            {
+
+                type = typeof(AppCoreModule).GetAssembly().GetType(input.FullName);
+            }
+            else
+            {
+                type = typeof(AdminCoreModule).GetAssembly().GetType(input.FullName);
+            }
+            //var type = typeof(AdminCoreModule).GetAssembly().GetType(input.FullName);
             if (!type.IsEnum) return null;
             var names = Enum.GetNames(type);
             var values = Enum.GetValues(type);

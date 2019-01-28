@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Abp.Application.Services.Dto;
 using Abp.AutoMapper;
@@ -78,5 +79,15 @@ namespace Magicodes.Admin.Contents.Dto
         ///     是否静态
         /// </summary>
         public bool IsStatic { get; set; }
+
+        /// <summary>
+        /// 查看数
+        /// </summary>
+        public long ViewCount { get; set; }
+
+        /// <summary>
+        /// 标签
+        /// </summary>
+        public ICollection<ArticleTagInfo> ArticleTagInfos { get; set; }
     }
 }
