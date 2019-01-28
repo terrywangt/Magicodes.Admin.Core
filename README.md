@@ -1,5 +1,5 @@
 # Magicodes.Admin
-
+## 框架来源=>https://gitee.com/xl_wenqiang/Magicodes.Admin.Core
 <!-- ![关注订阅号](./res/订阅号.jpg) -->
 ## 说明
 
