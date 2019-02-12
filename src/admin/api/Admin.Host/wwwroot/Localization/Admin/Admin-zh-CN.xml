@@ -668,6 +668,9 @@
     <text name="UiCustomization_Footer">底部</text>
     <text name="UiCustomization_FixedFooter">固定底部</text>
     <text name="UiCustomizationHeaderInfo">管理和设置自定义布局、颜色和背景等</text>
+    <text name="UsernameAlreadyExists">用户名已经存在</text>
+    <text name="UserDoesNotExist">用户名不存在</text>
+    <text name="WhetherToEnableTenantLogin">是否启用租户登陆</text>
 
     <!--2018-6-4-->
     <text name="ThisFieldIsRequired">请填写此项内容</text>
@@ -857,6 +860,9 @@
     <text name="StaticArticleInfo_Tooltip">不能删除静态文章</text>
     <text name="ExceedTheMaxCount">超出栏目子项最大数量</text>
     <text name="ArticleTagInfo">文章标签</text>
+    <text name="Parent">父级</text>
+    <text name="IsHeaderNav">头部导航</text>
+    <text name="IsFooterNav">底部导航</text>
 
     <!--微信扫码支付-->
     <text name="PleaseWaitToConfirmYourAuthenticate">请等待验证你的授权请求</text>
@@ -891,5 +897,6 @@
     <text name="BucketName" value="存储桶名称" />
     <text name="TencentStorage" value="腾讯云存储"/>
     <text name="TencentStorageSettings" value="腾讯云存储配置"/>
+
   </texts>
 </localizationDictionary>

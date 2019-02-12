@@ -90,11 +90,18 @@ namespace Magicodes.Admin.Contents
         public bool IsStatic { get; set; }
 
         /// <summary>
-        ///     是否静态
+        ///     是否为头部导航
         /// </summary>
-        [Display(Name = "是否导航")]
+        [Display(Name = "是否为头部导航")]
         [DefaultValue(false)]
-        public bool IsNav { get; set; }
+        public bool IsHeaderNav { get; set; }
+
+        /// <summary>
+        ///     是否为脚部导航
+        /// </summary>
+        [Display(Name = "是否为脚部导航")]
+        [DefaultValue(false)]
+        public bool IsFooterNav { get; set; }
 
         /// <summary>
         ///     是否启用

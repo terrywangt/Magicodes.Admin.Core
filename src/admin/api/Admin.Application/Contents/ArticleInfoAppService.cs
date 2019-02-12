@@ -208,7 +208,7 @@ namespace Magicodes.Admin.Contents
         [AbpAllowAnonymous]
         public async Task<GetArticleInfoForEditOutput> GetArticleInfoByStaticUrl(string staticUrl)
         {
-            var info = await _articleInfoRepository.FirstOrDefaultAsync(a => a.StaticPageUrl == staticUrl);
+            var info = await _articleInfoRepository.GetAllIncluding(a=>a.ArticleTagInfos).FirstOrDefaultAsync(a => a.StaticPageUrl == staticUrl);
             if (info == null)
             {
                 return null;

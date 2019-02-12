@@ -2,13 +2,66 @@
 
 @{
     ViewData["Title"] = Model.ArticleInfo.Title;
+    ViewData["Description"] = Model.ArticleInfo.KeyWords;
+    ViewData["Keywords"] = Model.ArticleInfo.KeyWords;
+    ViewData["Author"] = Model.ArticleInfo.Publisher;
 }
-<meta name="keywords" content="@Model.ArticleInfo.KeyWords">
-<meta name="description" content="@Model.ArticleInfo.KeyWords">
-<h1 class="text-center">@Model.ArticleInfo.Title</h1>
-<p style="color: #6c757d;">@Model.ArticleInfo.KeyWords</p>
-<p style="color: #6c757d;">@Model.ArticleInfo.Publisher   @Model.ArticleInfo.ReleaseTime</p>
-<p style="color: #6c757d;">本文地址: @Model.ArticleInfo.StaticPageUrl</p>
-
-<br />
-<div>@Html.Raw(Model.ArticleInfo.Content)</div>
+<!--Breadcrumb start-->
+<div class="ed_pagetitle">
+    <div class="ed_img_overlay"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12">
+                <div class="page_title">
+                    <h2>@Model.ArticleInfo.Title</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Breadcrumb end-->
+<!--Blog content start-->
+<div class="ed_transprentbg ed_toppadder90 ed_bottompadder90">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12">
+                <div class="ed_blog_all_item">
+                    <div class="ed_blog_item ed_bottompadder50">
+                        <div class="ed_blog_image">
+                            <img src="http://placehold.it/1140X612" alt="blog image" />
+                        </div>
+                        <div class="ed_blog_info">
+                            <h2>@Model.ArticleInfo.Title</h2>
+                            <ul>
+                                <li><a href="#"><i class="fa fa-user"></i> @Model.ArticleInfo.Publisher</a></li>
+                                <li><a href="#"><i class="fa fa-clock-o"></i> @Model.ArticleInfo.ReleaseTime</a></li>
+                                <li><a href="#"><i class="fa fa-comment-o"></i> @Model.ArticleInfo.ViewCount 查看</a></li>
+                            </ul>
+                            @Html.Raw(Model.ArticleInfo.Content)
+                        </div>
+                        <div class="ed_blog_tags">
+                            <ul>
+                                <li><i class="fa fa-tags"></i> <a href="#">标签: </a></li>
+                                @foreach (var tag in Model.ArticleInfo.ArticleTagInfos)
+                                {
+                                    <li><a href="#">@tag.Name</a></li>
+                                }
+                            </ul>
+                            <div>
+                                <a href="javascript:;" id="ed_share_wrapper">分享到</a>
+                                <ul id="ed_social_share">
+                                    <li><a href="#" data-toggle="tooltip" data-placement="bottom" title="skype"><i class="fa fa-skype"></i></a></li>
+                                    <li><a href="#" data-toggle="tooltip" data-placement="bottom" title="twitter"><i class="fa fa-twitter"></i></a></li>
+                                    <li><a href="#" data-toggle="tooltip" data-placement="bottom" title="linkedin"><i class="fa fa-linkedin"></i></a></li>
+                                    <li><a href="#" data-toggle="tooltip" data-placement="bottom" title="google-plus"><i class="fa fa-google-plus"></i></a></li>
+                                    <li><a href="#" data-toggle="tooltip" data-placement="bottom" title="facebook"><i class="fa fa-facebook"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Blog content end-->

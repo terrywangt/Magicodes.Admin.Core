@@ -63,7 +63,7 @@ namespace Magicodes.Admin.Web
             //Configuration.BackgroundJobs.UseHangfire();
 
             //使用Redis缓存替换默认的内存缓存
-            if (_appConfiguration["Abp:RedisCache:ConnectionString:IsEnabled"] == "true")
+            if (Convert.ToBoolean(_appConfiguration["Abp:RedisCache:IsEnabled"] ?? "false"))
             {
                 Configuration.Caching.UseRedis(options =>
                 {
@@ -71,6 +71,12 @@ namespace Magicodes.Admin.Web
                     options.DatabaseId = _appConfiguration.GetValue<int>("Abp:RedisCache:DatabaseId");
                 });
             }
+
+            //配置指定的Cache过期时间为50年
+            Configuration.Caching.Configure("CacheUser", cache =>
+            {
+                cache.DefaultSlidingExpireTime = TimeSpan.FromDays(18250);
+            });
 
             SetLocalizationFromWebRootXml(Path.Combine(_env.WebRootPath, "Localization"));
         }
@@ -120,7 +126,7 @@ namespace Magicodes.Admin.Web
             {
                 return;
             }
-            
+
             Configuration.Localization.Sources.Add(
                 new DictionaryBasedLocalizationSource(
                     AdminConsts.LocalizationSourceName,

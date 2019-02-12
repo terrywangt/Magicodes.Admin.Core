@@ -40,6 +40,10 @@
                             <label for="aliStorage_EndPoint">{{l("EndPoint")}}</label>
                             <input id="aliStorage_EndPoint" type="text" name="aliStorage_EndPoint" class="form-control" [ngClass]="{'edited':storageSettings.aliStorageSetting.endPoint}" [(ngModel)]="storageSettings.aliStorageSetting.endPoint" maxlength="64">
                         </div>
+                        <div class="form-group">
+                            <label for="aliStorage_bucketName">{{l("BucketName")}}</label>
+                            <input id="aliStorage_bucketName" type="text" name="aliStorage_BucketName" class="form-control" [ngClass]="{'edited':storageSettings.aliStorageSetting.bucketName}" [(ngModel)]="storageSettings.aliStorageSetting.bucketName" maxlength="64">
+                        </div>
                     </tab>
 
                     <tab *ngIf="true" heading="{{l('TencentStorage')}}" customClass="m-tabs__item">

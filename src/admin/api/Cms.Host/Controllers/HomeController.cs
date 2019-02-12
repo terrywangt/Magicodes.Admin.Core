@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Threading.Tasks;
 using Abp.AspNetCore.Mvc.Controllers;
+using Cms.Host.Common;
 using Cms.Host.Models;
 using Magicodes.Admin.Contents;
 using Magicodes.Admin.Contents.Dto;
@@ -22,13 +23,12 @@ namespace Cms.Host.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var navs = await _columnInfoAppService.GetChildrenColumnInfos(new GetChildrenColumnInfosInput
-            {
-                IsNav = true,
-                IsOnlyGetRecycleData = false
-            });
-            return View(navs);
+            await GetNavs();
+            ViewBag.Source = true;
+            return View();
         }
+
+
 
         public async Task<IActionResult> StaticRouter(string url)
         {
@@ -45,6 +45,24 @@ namespace Cms.Host.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel {RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier});
+        }
+
+        private async Task GetNavs()
+        {
+            var headerNav = await _columnInfoAppService.GetChildrenColumnInfos(new GetChildrenColumnInfosInput
+            {
+                IsHeaderNav = true,
+                IsOnlyGetRecycleData = false
+            });
+            var footerNav = await _columnInfoAppService.GetChildrenColumnInfos(new GetChildrenColumnInfosInput
+            {
+                IsFooterNav = true,
+                IsOnlyGetRecycleData = false
+            });
+            NavHelper.HeaderNav = headerNav.Data;
+            NavHelper.FooterNav = footerNav.Data;
+            ViewData["HeaderNav"] = NavHelper.HeaderNav;
+            ViewData["FooterNav"] = NavHelper.FooterNav;
         }
     }
 }

@@ -57,10 +57,11 @@ namespace Magicodes.Admin.Migrations.Seed.Tenants
             var adminUser = _context.Users.IgnoreQueryFilters().FirstOrDefault(u => u.TenantId == _tenantId && u.UserName == AbpUserBase.AdminUserName);
             if (adminUser == null)
             {
-                adminUser = User.CreateTenantAdminUser(_tenantId, "admin@defaulttenant.com");
+                adminUser = User.CreateTenantAdminUser(_tenantId, "admin@defaulttenant.com", "Default");
                 adminUser.Password = new PasswordHasher<User>(new OptionsWrapper<PasswordHasherOptions>(new PasswordHasherOptions())).HashPassword(adminUser, "123456abcD");
                 adminUser.IsEmailConfirmed = true;
-                adminUser.ShouldChangePasswordOnNextLogin = true;
+                //TODO:为了兼容新版UI先将改为false
+                adminUser.ShouldChangePasswordOnNextLogin = false;
                 adminUser.IsActive = true;
 
                 _context.Users.Add(adminUser);

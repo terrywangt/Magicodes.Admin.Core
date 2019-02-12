@@ -1,22 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using Abp;
 using Abp.Authorization;
 using Abp.Authorization.Users;
 using Abp.Configuration;
+using Abp.Dependency;
 using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
 using Abp.Localization;
 using Abp.Organizations;
 using Abp.Runtime.Caching;
+using Abp.Runtime.Security;
 using Abp.Threading;
 using Abp.UI;
+using Dapper;
 using Magicodes.Admin.Authorization.Roles;
+using Magicodes.Admin.Configuration;
+using Magicodes.Admin.MultiTenancy;
+using Magicodes.Admin.Web;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using MySql.Data.MySqlClient;
 
 
 namespace Magicodes.Admin.Authorization.Users
@@ -166,6 +176,59 @@ namespace Magicodes.Admin.Authorization.Users
         {
             var user = await GetUserOrNullAsync(userIdentifier);
             await UpdateRechargeInfo(totalFee, user);
+        }
+
+        /// <summary>
+        /// 获取到所用数据库所有用户信息
+        /// </summary>
+        /// <returns></returns>
+        public async Task<List<User>> GetAllUsers()
+        {
+            List<User> users = new List<User>();
+
+            List<string> tenantConnectionStrings = new List<string>();
+
+            var configuration = AppConfigurations.Get(WebContentDirectoryFinder.CalculateContentRootFolder(), addUserSecrets: true);
+            
+            using (var connection = new MySqlConnection(configuration.GetConnectionString(AdminConsts.ConnectionStringName)))
+            {
+                await connection.OpenAsync();
+
+                var userSql = "select *from abpusers";
+                var userQuery = await connection.QueryAsync<User>(userSql);
+                users.AddRange(userQuery);
+
+                var tenantSql = "select *from abptenants";
+                var tenantQuery = await connection.QueryAsync<Tenant>(tenantSql);
+                foreach (var item in tenantQuery)
+                {
+                    if (item.ConnectionString != null)
+                    {
+                        tenantConnectionStrings.Add(SimpleStringCipher.Instance.Decrypt(item.ConnectionString));
+                    }
+                }
+
+                await connection.CloseAsync();
+            }
+
+            if (tenantConnectionStrings.Count > 0)
+            {
+                foreach (var item in tenantConnectionStrings)
+                {
+                    using (var connection = new MySqlConnection(item))
+                    {
+                        await connection.OpenAsync();
+
+                        var userSql = "select *from abpusers";
+                        var userQuery = await connection.QueryAsync<User>(userSql);
+                        users.AddRange(userQuery);
+
+                        connection.Close();
+                    }
+                }
+            }
+
+            return users;
         }
     }
 }

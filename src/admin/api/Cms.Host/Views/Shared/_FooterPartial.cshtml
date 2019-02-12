@@ -1,0 +1,78 @@
+﻿@using Magicodes.Admin.Contents
+@using Magicodes.Admin.Dto
+@{
+    var footerNavs = ViewData["FooterNav"] as ICollection<TreeTableRowDto<ColumnInfo>>;
+}
+
+<!--Footer Top section start-->
+<div class="ed_footer_wrapper ed_toppadder60 ed_bottompadder30">
+    <div class="ed_footer_top">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-3 col-sm-12">
+                    <div class="widget text-widget">
+                        <p><a href="index.html"><img src="~/images/footer/F_Logo.png" alt="Footer Logo" /></a></p>
+                        <p>在美国洛杉矶以及俄勒冈建立专业的海外仓库，是一家服务于个人海外网购、代购、电商平台等企业货运，仓储，包装，清关，配送一条龙全套服务的便捷高效物流海淘转运公司.转运123有多年国际物流管理经验，灵活满足海淘用户多样化及个性化的需求。</p>
+                        <div class="ed_sociallink">
+                            <ul>
+                                <li><a href="#" data-toggle="tooltip" data-placement="bottom" title="Facebook"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+                                <li><a href="#" data-toggle="tooltip" data-placement="bottom" title="Google+"><i class="fa fa-google-plus" aria-hidden="true"></i></a></li>
+                                <li><a href="#" data-toggle="tooltip" data-placement="bottom" title="Twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+                                <li><a href="#" data-toggle="tooltip" data-placement="bottom" title="Linkedin"><i class="fa fa-linkedin" aria-hidden="true"></i></a></li>
+                                <li><a href="#" data-toggle="tooltip" data-placement="bottom" title="Whatsapp"><i class="fa fa-whatsapp" aria-hidden="true"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                @if (footerNavs?.Count > 0)
+                {
+                    foreach (var footerNav in footerNavs)
+                    {
+                        <div class="col-lg-3 col-md-3 col-sm-12">
+                            <div class="widget text-widget">
+                                <h4 class="widget-title">@footerNav.Data.Title</h4>
+                                @if (footerNav.Children.Count > 0)
+                                {
+                                    <div class="ed_footer_menu">
+                                        <ul>
+                                            @foreach (var footerNavChild in footerNav.Children)
+                                            {
+                                                <li><a href="@footerNavChild.Data.Url">@footerNavChild.Data.Title</a></li>
+                                            }
+                                        </ul>
+                                    </div>
+                                }
+
+                            </div>
+                        </div>
+                    }
+                }
+
+                <div class="col-lg-3 col-md-3 col-sm-12">
+                    <div class="widget text-widget">
+                        <h4 class="widget-title">我们地址</h4>
+                        <p><i class="fa fa-home" aria-hidden="true"></i> 2760 E PHILADELPHIA ST # B ONTARIO, CA United States 91761-8546</p>
+                        <p><i class="fa fa-envelope" aria-hidden="true"></i><a href="#">info@zhuanyun123.com</a> <a href="#">public@zhuanyun123.com</a></p>
+                        <p><i class="fa fa-phone" aria-hidden="true"></i> 1909-978-9666</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Footer Top section end-->
+<!--Footer Bottom section start-->
+<div class="ed_footer_bottom">
+    <div class="container">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <div class="ed_copy_right">
+                        <p>&copy; Copyright 2018, All Rights Reserved, <a href="www.xim-lai.com">xin-lai</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Footer Bottom section end-->

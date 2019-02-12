@@ -17,19 +17,17 @@ param(
     # 不创建Docker镜像（便于直接推送）
     $noCreateDocker = $False,
     # 调试模式，以输出配置参数
-    $debug = $False,
+    $debug = $True,
     #是否推送
     $isPush = $True,
-    #Host工程配置文件（存在即替换），用于Docker环境，建议传递自定义参数以便使用不同的配置来支持开发、测试和生成环境
-    $hostConfigFile="appsettings.json",
-    #Angular UI工程应用配置文件（存在即替换），用于Docker环境，建议传递自定义参数以便使用不同的配置来支持开发、测试和生成环境
-    $appConfigFile="appconfig.json",
     #推送类型（ALL、HOST、APPHOST、NG）
-    $pushType="ALL",
+    $pushType="APPHOST",
     #是否执行单元测试
     $runTest=$False,
     #镜像版本
-    $script:imageVersion="latest"
+    $script:imageVersion="latest",
+    #NG配置文件的版本（production、development）
+    $ngAppconfig="production"
 )
 
 # 路径变量
@@ -132,7 +130,8 @@ function PublishWebHostFolder {
     Set-Location $webHostFolder
 
     LogDebug "正在发布输出文件"
-    dotnet publish --output (Join-Path $outputFolder "Host")
+    $hostOutputPath = Join-Path $outputFolder "Host"
+    dotnet publish --output $hostOutputPath
     if($lastexitcode -eq 1)
     {
         Write-Error "发布失败，已终止！"
@@ -140,40 +139,23 @@ function PublishWebHostFolder {
         exit;
     }
 
-    $hostOutputPath = Join-Path $outputFolder "Host"
-
     LogDebug "正在复制docker/host相关配置"
     # 复制dockerfile等配置或想覆盖的自定义配置（比如运行时的dockerfile）
     Copy-Item (Join-Path $slnFolder "docker/host/*") $hostOutputPath
-
-    if(![String]::IsNullOrEmpty($hostConfigFile))
-    {
-        $configFilePath=Join-Path $buildFolder $hostConfigFile;
-        if([io.File]::Exists($configFilePath))
-        {
-            Copy-Item $configFilePath $hostOutputPath
-            LogDebug "已成功覆盖Host配置文件"
-        }else {
-             Write-Host "配置文件${configFilePath}不存在"
-        }
-    }
-
-
 }
 
 ## 发布AppHost工程 ###################################################
 function PublishAppHostFolder {
     Set-Location $appHostFolder
     LogDebug "正在发布输出文件"
-    dotnet publish --output (Join-Path $outputFolder "AppHost")
+    $hostOutputPath = Join-Path $outputFolder "AppHost"
+    dotnet publish --output $hostOutputPath
     if($lastexitcode -eq 1)
     {
         Write-Error "发布失败，已终止！"
         Set-Location $buildFolder
         exit;
     }
-
-    $hostOutputPath = Join-Path $outputFolder "AppHost"
 
     LogDebug "正在复制docker/appHost"
     # 复制dockerfile等配置或想覆盖的自定义配置（比如运行时的dockerfile）
@@ -186,23 +168,14 @@ function PublicNgFolder {
 
     Set-Location $ngFolder
     & yarn
-    & ng build --prod --configuration=production
+    & ng build --prod --configuration=$ngAppconfig
     Copy-Item (Join-Path $ngFolder "dist") (Join-Path $outputFolder "ng/") -Recurse
     Copy-Item (Join-Path $ngFolder "Dockerfile") (Join-Path $outputFolder "ng")
 
     LogDebug "正在覆盖docker/ng 相关配置"
-    # 复制nginx配置文件、SSL证书等
-    Copy-Item (Join-Path $slnFolder "docker/ng/*.*") (Join-Path $outputFolder "ng")
-
-    if(![String]::IsNullOrEmpty($appConfigFile))
-    {
-        $configFilePath=Join-Path $buildFolder $appConfigFile;
-        if([io.File]::Exists($configFilePath))
-        {
-            Copy-Item $configFilePath (Join-Path $outputFolder "ng/assets/appconfig.production.json")
-            LogDebug "已覆盖 ng/assets/appconfig.production.json 配置文件"
-        }
-    }
+    LogDebug "$slnFolder"
+    # 复制nginx配置文件
+    Copy-Item (Join-Path $slnFolder "docker/ng/nginx.conf") (Join-Path $outputFolder "ng")
 }
 
 
@@ -217,6 +190,13 @@ function CreateDocker {
         # docker rmi $tsImageHostName -f
         docker build ./ -t $tsImageHostName
 
+        if(!(docker images "${tsImageHostName}"))
+        {
+            Write-Error "发布失败，已终止！ 错误原因：docker中不存在镜像${tsImageHostName}:${imageVersion}"
+            Set-Location $buildFolder
+            exit;
+        }
+
         LogDebug "已创建$tsImageHostName"
     }
     if(($pushType -eq "ALL") -or ($pushType -eq "APPHOST"))
@@ -227,6 +207,14 @@ function CreateDocker {
         # docker rmi $tsImageAppHostName -f
         docker build ./ -t $tsImageAppHostName
 
+        # 判断本地 docker 是否成功创建镜像
+        if(!(docker images "${tsImageAppHostName}"))
+        {
+            Write-Error "发布失败，已终止！错误原因：docker中不存在镜像${tsImageAppHostName}:${imageVersion}"
+            Set-Location $buildFolder
+            exit;
+        }
+
         LogDebug "已创建$tsImageAppHostName"
     }
     if(($pushType -eq "ALL") -or  ($pushType -eq "NG"))
@@ -236,6 +224,12 @@ function CreateDocker {
 
         # docker rmi $tsImageUiName -f
         docker build ./ -t $tsImageUiName
+        if(!(docker images "${tsImageUiName}"))
+        {
+            Write-Error "发布失败，已终止！ 错误原因：docker中不存在镜像${tsImageUiName}:${imageVersion}"
+            Set-Location $buildFolder
+            exit;
+        }
 
         LogDebug "已创建$tsImageUiName"
     }

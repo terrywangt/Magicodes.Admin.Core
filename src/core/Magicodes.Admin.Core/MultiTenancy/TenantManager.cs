@@ -19,6 +19,7 @@ using Magicodes.Admin.Notifications;
 using System;
 using System.Diagnostics;
 using System.Linq.Expressions;
+using Abp.Runtime.Caching;
 using Abp.Runtime.Session;
 using Abp.UI;
 using Microsoft.EntityFrameworkCore;
@@ -44,6 +45,7 @@ namespace Magicodes.Admin.MultiTenancy
         private readonly IPasswordHasher<User> _passwordHasher;
         private readonly IRepository<SubscriptionPayment, long> _subscriptionPaymentRepository;
         private readonly IRepository<SubscribableEdition> _subscribableEditionRepository;
+        private readonly ICacheManager _cacheManager;
 
         public TenantManager(
             IRepository<Tenant> tenantRepository,
@@ -60,7 +62,8 @@ namespace Magicodes.Admin.MultiTenancy
             IAbpZeroDbMigrator abpZeroDbMigrator,
             IPasswordHasher<User> passwordHasher,
             IRepository<SubscriptionPayment, long> subscriptionPaymentRepository,
-            IRepository<SubscribableEdition> subscribableEditionRepository) : base(
+            IRepository<SubscribableEdition> subscribableEditionRepository, 
+            ICacheManager cacheManager) : base(
                 tenantRepository,
                 tenantFeatureRepository,
                 editionManager,
@@ -80,6 +83,7 @@ namespace Magicodes.Admin.MultiTenancy
             _passwordHasher = passwordHasher;
             _subscriptionPaymentRepository = subscriptionPaymentRepository;
             _subscribableEditionRepository = subscribableEditionRepository;
+            _cacheManager = cacheManager;
         }
 
         public async Task<int> CreateWithAdminUserAsync(
@@ -120,7 +124,7 @@ namespace Magicodes.Admin.MultiTenancy
                 _abpZeroDbMigrator.CreateOrMigrateForTenant(tenant);
 
                 //We are working entities of new tenant, so changing tenant filter
-                using (_unitOfWorkManager.Current.SetTenantId(tenant.Id))
+                 using (_unitOfWorkManager.Current.SetTenantId(tenant.Id))
                 {
                     //Create static roles for new tenant
                     CheckErrors(await _roleManager.CreateStaticRoles(tenant.Id));
@@ -136,7 +140,7 @@ namespace Magicodes.Admin.MultiTenancy
                     CheckErrors(await _roleManager.UpdateAsync(userRole));
 
                     //Create admin user for the tenant
-                    var adminUser = User.CreateTenantAdminUser(tenant.Id, adminEmailAddress);
+                    var adminUser = User.CreateTenantAdminUser(tenant.Id, adminEmailAddress,tenant.Name);
                     adminUser.ShouldChangePasswordOnNextLogin = shouldChangePasswordOnNextLogin;
                     adminUser.IsActive = true;
 
@@ -178,6 +182,20 @@ namespace Magicodes.Admin.MultiTenancy
 
                     newTenantId = tenant.Id;
                     newAdminId = adminUser.Id;
+
+                    //TODO:Add cache information
+
+                    var cacheUser = new CacheUser()
+                    {
+                        Id = adminUser.Id,
+                        Name = adminUser.Name,
+                        TenantId = adminUser.TenantId,
+                        Password = adminUser.Password,
+                        CreationTime = adminUser.CreationTime
+                    };
+
+                    await _cacheManager.GetCache<string, CacheUser>("CacheUserList")
+                        .SetAsync($"{adminUser.Name}", cacheUser);
                 }
 
                 await uow.CompleteAsync();
@@ -196,7 +214,7 @@ namespace Magicodes.Admin.MultiTenancy
 
             return newTenantId;
         }
-
+        
         public async Task CheckEditionAsync(int? editionId, bool isInTrialPeriod)
         {
             if (!editionId.HasValue || !isInTrialPeriod)

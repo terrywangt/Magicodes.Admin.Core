@@ -569,6 +569,115 @@ export class AccountServiceProxy {
         }
         return _observableOf<SwitchToLinkedAccountOutput>(<any>null);
     }
+
+    /**
+     * 根据用户名从缓存获取租户基本信息
+     * @param userName (optional) 
+     * @return Success
+     */
+    getTenantBasisInfoByCache(userName: string | null | undefined): Observable<TenantBasisInfo> {
+        let url_ = this.baseUrl + "/api/services/app/Account/GetTenantBasisInfoByCache?";
+        if (userName !== undefined)
+            url_ += "userName=" + encodeURIComponent("" + userName) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetTenantBasisInfoByCache(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetTenantBasisInfoByCache(<any>response_);
+                } catch (e) {
+                    return <Observable<TenantBasisInfo>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<TenantBasisInfo>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetTenantBasisInfoByCache(response: HttpResponseBase): Observable<TenantBasisInfo> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? TenantBasisInfo.fromJS(resultData200) : new TenantBasisInfo();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<TenantBasisInfo>(<any>null);
+    }
+
+    /**
+     * 获取是否启用租户登陆
+     * @return Success
+     */
+    getIfEnableTenantLogin(): Observable<boolean> {
+        let url_ = this.baseUrl + "/api/services/app/Account/GetIfEnableTenantLogin";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetIfEnableTenantLogin(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetIfEnableTenantLogin(<any>response_);
+                } catch (e) {
+                    return <Observable<boolean>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<boolean>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetIfEnableTenantLogin(response: HttpResponseBase): Observable<boolean> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<boolean>(<any>null);
+    }
 }
 
 @Injectable()
@@ -583,21 +692,25 @@ export class ArticleInfoServiceProxy {
     }
 
     /**
-     * @param isOnlyGetRecycleData (optional) 
-     * @param creationDateStart (optional) 
-     * @param creationDateEnd (optional) 
-     * @param modificationTimeStart (optional) 
-     * @param modificationTimeEnd (optional) 
-     * @param filter (optional) 
+     * 获取文章列表
+     * @param isOnlyGetRecycleData (optional) 是否仅获取回收站数据
+     * @param columnId (optional) 栏目ID
+     * @param creationDateStart (optional) 创建开始时间
+     * @param creationDateEnd (optional) 创建结束时间
+     * @param modificationTimeStart (optional) 修改开始时间
+     * @param modificationTimeEnd (optional) 修改结束时间
+     * @param filter (optional) 关键字
      * @param sorting (optional) 
      * @param maxResultCount (optional) 
      * @param skipCount (optional) 
      * @return Success
      */
-    getArticleInfos(isOnlyGetRecycleData: boolean | null | undefined, creationDateStart: moment.Moment | null | undefined, creationDateEnd: moment.Moment | null | undefined, modificationTimeStart: moment.Moment | null | undefined, modificationTimeEnd: moment.Moment | null | undefined, filter: string | null | undefined, sorting: string | null | undefined, maxResultCount: number | null | undefined, skipCount: number | null | undefined): Observable<PagedResultDtoOfArticleInfoListDto> {
+    getArticleInfos(isOnlyGetRecycleData: boolean | null | undefined, columnId: number | null | undefined, creationDateStart: moment.Moment | null | undefined, creationDateEnd: moment.Moment | null | undefined, modificationTimeStart: moment.Moment | null | undefined, modificationTimeEnd: moment.Moment | null | undefined, filter: string | null | undefined, sorting: string | null | undefined, maxResultCount: number | null | undefined, skipCount: number | null | undefined): Observable<PagedResultDtoOfArticleInfoListDto> {
         let url_ = this.baseUrl + "/api/services/app/ArticleInfo/GetArticleInfos?";
         if (isOnlyGetRecycleData !== undefined)
             url_ += "IsOnlyGetRecycleData=" + encodeURIComponent("" + isOnlyGetRecycleData) + "&"; 
+        if (columnId !== undefined)
+            url_ += "ColumnId=" + encodeURIComponent("" + columnId) + "&"; 
         if (creationDateStart !== undefined)
             url_ += "CreationDateStart=" + encodeURIComponent(creationDateStart ? "" + creationDateStart.toJSON() : "") + "&"; 
         if (creationDateEnd !== undefined)
@@ -662,21 +775,25 @@ export class ArticleInfoServiceProxy {
     }
 
     /**
-     * @param isOnlyGetRecycleData (optional) 
-     * @param creationDateStart (optional) 
-     * @param creationDateEnd (optional) 
-     * @param modificationTimeStart (optional) 
-     * @param modificationTimeEnd (optional) 
-     * @param filter (optional) 
+     * 导出文章
+     * @param isOnlyGetRecycleData (optional) 是否仅获取回收站数据
+     * @param columnId (optional) 栏目ID
+     * @param creationDateStart (optional) 创建开始时间
+     * @param creationDateEnd (optional) 创建结束时间
+     * @param modificationTimeStart (optional) 修改开始时间
+     * @param modificationTimeEnd (optional) 修改结束时间
+     * @param filter (optional) 关键字
      * @param sorting (optional) 
      * @param maxResultCount (optional) 
      * @param skipCount (optional) 
      * @return Success
      */
-    getArticleInfosToExcel(isOnlyGetRecycleData: boolean | null | undefined, creationDateStart: moment.Moment | null | undefined, creationDateEnd: moment.Moment | null | undefined, modificationTimeStart: moment.Moment | null | undefined, modificationTimeEnd: moment.Moment | null | undefined, filter: string | null | undefined, sorting: string | null | undefined, maxResultCount: number | null | undefined, skipCount: number | null | undefined): Observable<FileDto> {
+    getArticleInfosToExcel(isOnlyGetRecycleData: boolean | null | undefined, columnId: number | null | undefined, creationDateStart: moment.Moment | null | undefined, creationDateEnd: moment.Moment | null | undefined, modificationTimeStart: moment.Moment | null | undefined, modificationTimeEnd: moment.Moment | null | undefined, filter: string | null | undefined, sorting: string | null | undefined, maxResultCount: number | null | undefined, skipCount: number | null | undefined): Observable<FileDto> {
         let url_ = this.baseUrl + "/api/services/app/ArticleInfo/GetArticleInfosToExcel?";
         if (isOnlyGetRecycleData !== undefined)
             url_ += "IsOnlyGetRecycleData=" + encodeURIComponent("" + isOnlyGetRecycleData) + "&"; 
+        if (columnId !== undefined)
+            url_ += "ColumnId=" + encodeURIComponent("" + columnId) + "&"; 
         if (creationDateStart !== undefined)
             url_ += "CreationDateStart=" + encodeURIComponent(creationDateStart ? "" + creationDateStart.toJSON() : "") + "&"; 
         if (creationDateEnd !== undefined)
@@ -741,6 +858,7 @@ export class ArticleInfoServiceProxy {
     }
 
     /**
+     * 获取文章
      * @param id (optional) 
      * @return Success
      */
@@ -796,6 +914,63 @@ export class ArticleInfoServiceProxy {
     }
 
     /**
+     * 获取文章（根据静态地址）
+     * @param staticUrl (optional) 
+     * @return Success
+     */
+    getArticleInfoByStaticUrl(staticUrl: string | null | undefined): Observable<GetArticleInfoForEditOutput> {
+        let url_ = this.baseUrl + "/api/services/app/ArticleInfo/GetArticleInfoByStaticUrl?";
+        if (staticUrl !== undefined)
+            url_ += "staticUrl=" + encodeURIComponent("" + staticUrl) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetArticleInfoByStaticUrl(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetArticleInfoByStaticUrl(<any>response_);
+                } catch (e) {
+                    return <Observable<GetArticleInfoForEditOutput>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<GetArticleInfoForEditOutput>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetArticleInfoByStaticUrl(response: HttpResponseBase): Observable<GetArticleInfoForEditOutput> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? GetArticleInfoForEditOutput.fromJS(resultData200) : new GetArticleInfoForEditOutput();
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<GetArticleInfoForEditOutput>(<any>null);
+    }
+
+    /**
+     * 创建或者编辑文章
      * @param input (optional) 
      * @return Success
      */
@@ -848,6 +1023,7 @@ export class ArticleInfoServiceProxy {
     }
 
     /**
+     * 删除文章
      * @param id (optional) 
      * @return Success
      */
@@ -899,6 +1075,7 @@ export class ArticleInfoServiceProxy {
     }
 
     /**
+     * 恢复
      * @param id (optional) 
      * @return Success
      */
@@ -950,6 +1127,7 @@ export class ArticleInfoServiceProxy {
     }
 
     /**
+     * 获取选择列表
      * @return Success
      */
     getColumnInfoDataComboItems(): Observable<GetDataComboItemDtoOfInt64[]> {
@@ -1006,6 +1184,7 @@ export class ArticleInfoServiceProxy {
     }
 
     /**
+     * 获取选择列表
      * @return Success
      */
     getArticleSourceInfoDataComboItems(): Observable<GetDataComboItemDtoOfInt64[]> {
@@ -1062,7 +1241,8 @@ export class ArticleInfoServiceProxy {
     }
 
     /**
-     * @param input (optional) 
+     * IsActive开关服务
+     * @param input (optional) 开关输入参数
      * @return Success
      */
     updateIsActiveSwitchAsync(input: SwitchEntityInputDtoOfInt64 | null | undefined): Observable<void> {
@@ -1114,7 +1294,8 @@ export class ArticleInfoServiceProxy {
     }
 
     /**
-     * @param input (optional) 
+     * IsNeedAuthorizeAccess开关服务
+     * @param input (optional) 开关输入参数
      * @return Success
      */
     updateIsNeedAuthorizeAccessSwitchAsync(input: SwitchEntityInputDtoOfInt64 | null | undefined): Observable<void> {
@@ -1178,13 +1359,14 @@ export class ArticleInfoArticleTagInfoServiceProxy {
     }
 
     /**
+     * 获取列表
      * @param articleInfoId (optional) 
-     * @param isOnlyGetRecycleData (optional) 
-     * @param creationDateStart (optional) 
-     * @param creationDateEnd (optional) 
-     * @param modificationTimeStart (optional) 
-     * @param modificationTimeEnd (optional) 
-     * @param filter (optional) 
+     * @param isOnlyGetRecycleData (optional) 是否仅获取回收站数据
+     * @param creationDateStart (optional) 创建开始时间
+     * @param creationDateEnd (optional) 创建结束时间
+     * @param modificationTimeStart (optional) 修改开始时间
+     * @param modificationTimeEnd (optional) 修改结束时间
+     * @param filter (optional) 关键字
      * @param sorting (optional) 
      * @param maxResultCount (optional) 
      * @param skipCount (optional) 
@@ -1260,13 +1442,14 @@ export class ArticleInfoArticleTagInfoServiceProxy {
     }
 
     /**
+     * 导出
      * @param articleInfoId (optional) 
-     * @param isOnlyGetRecycleData (optional) 
-     * @param creationDateStart (optional) 
-     * @param creationDateEnd (optional) 
-     * @param modificationTimeStart (optional) 
-     * @param modificationTimeEnd (optional) 
-     * @param filter (optional) 
+     * @param isOnlyGetRecycleData (optional) 是否仅获取回收站数据
+     * @param creationDateStart (optional) 创建开始时间
+     * @param creationDateEnd (optional) 创建结束时间
+     * @param modificationTimeStart (optional) 修改开始时间
+     * @param modificationTimeEnd (optional) 修改结束时间
+     * @param filter (optional) 关键字
      * @param sorting (optional) 
      * @param maxResultCount (optional) 
      * @param skipCount (optional) 
@@ -1342,6 +1525,7 @@ export class ArticleInfoArticleTagInfoServiceProxy {
     }
 
     /**
+     * 获取
      * @param id (optional) 
      * @return Success
      */
@@ -1397,6 +1581,7 @@ export class ArticleInfoArticleTagInfoServiceProxy {
     }
 
     /**
+     * 创建或者编辑
      * @param input (optional) 
      * @return Success
      */
@@ -1449,6 +1634,7 @@ export class ArticleInfoArticleTagInfoServiceProxy {
     }
 
     /**
+     * 删除
      * @param id (optional) 
      * @return Success
      */
@@ -1500,6 +1686,7 @@ export class ArticleInfoArticleTagInfoServiceProxy {
     }
 
     /**
+     * 恢复
      * @param id (optional) 
      * @return Success
      */
@@ -1551,6 +1738,7 @@ export class ArticleInfoArticleTagInfoServiceProxy {
     }
 
     /**
+     * 获取选择列表
      * @return Success
      */
     getArticleInfoDataComboItems(): Observable<GetDataComboItemDtoOfInt64[]> {
@@ -1619,12 +1807,13 @@ export class ArticleSourceInfoServiceProxy {
     }
 
     /**
-     * @param isOnlyGetRecycleData (optional) 
-     * @param creationDateStart (optional) 
-     * @param creationDateEnd (optional) 
-     * @param modificationTimeStart (optional) 
-     * @param modificationTimeEnd (optional) 
-     * @param filter (optional) 
+     * 获取文章来源列表
+     * @param isOnlyGetRecycleData (optional) 是否仅获取回收站数据
+     * @param creationDateStart (optional) 创建开始时间
+     * @param creationDateEnd (optional) 创建结束时间
+     * @param modificationTimeStart (optional) 修改开始时间
+     * @param modificationTimeEnd (optional) 修改结束时间
+     * @param filter (optional) 关键字
      * @param sorting (optional) 
      * @param maxResultCount (optional) 
      * @param skipCount (optional) 
@@ -1698,12 +1887,13 @@ export class ArticleSourceInfoServiceProxy {
     }
 
     /**
-     * @param isOnlyGetRecycleData (optional) 
-     * @param creationDateStart (optional) 
-     * @param creationDateEnd (optional) 
-     * @param modificationTimeStart (optional) 
-     * @param modificationTimeEnd (optional) 
-     * @param filter (optional) 
+     * 导出文章来源
+     * @param isOnlyGetRecycleData (optional) 是否仅获取回收站数据
+     * @param creationDateStart (optional) 创建开始时间
+     * @param creationDateEnd (optional) 创建结束时间
+     * @param modificationTimeStart (optional) 修改开始时间
+     * @param modificationTimeEnd (optional) 修改结束时间
+     * @param filter (optional) 关键字
      * @param sorting (optional) 
      * @param maxResultCount (optional) 
      * @param skipCount (optional) 
@@ -1777,6 +1967,7 @@ export class ArticleSourceInfoServiceProxy {
     }
 
     /**
+     * 获取文章来源
      * @param id (optional) 
      * @return Success
      */
@@ -1832,6 +2023,7 @@ export class ArticleSourceInfoServiceProxy {
     }
 
     /**
+     * 创建或者编辑文章来源
      * @param input (optional) 
      * @return Success
      */
@@ -1884,6 +2076,7 @@ export class ArticleSourceInfoServiceProxy {
     }
 
     /**
+     * 删除文章来源
      * @param id (optional) 
      * @return Success
      */
@@ -1935,6 +2128,7 @@ export class ArticleSourceInfoServiceProxy {
     }
 
     /**
+     * 恢复
      * @param id (optional) 
      * @return Success
      */
@@ -2788,12 +2982,13 @@ export class ColumnInfoServiceProxy {
     }
 
     /**
-     * @param isOnlyGetRecycleData (optional) 
-     * @param creationDateStart (optional) 
-     * @param creationDateEnd (optional) 
-     * @param modificationTimeStart (optional) 
-     * @param modificationTimeEnd (optional) 
-     * @param filter (optional) 
+     * 获取栏目列表
+     * @param isOnlyGetRecycleData (optional) 是否仅获取回收站数据
+     * @param creationDateStart (optional) 创建开始时间
+     * @param creationDateEnd (optional) 创建结束时间
+     * @param modificationTimeStart (optional) 修改开始时间
+     * @param modificationTimeEnd (optional) 修改结束时间
+     * @param filter (optional) 关键字
      * @param sorting (optional) 
      * @param maxResultCount (optional) 
      * @param skipCount (optional) 
@@ -2867,12 +3062,13 @@ export class ColumnInfoServiceProxy {
     }
 
     /**
-     * @param isOnlyGetRecycleData (optional) 
-     * @param creationDateStart (optional) 
-     * @param creationDateEnd (optional) 
-     * @param modificationTimeStart (optional) 
-     * @param modificationTimeEnd (optional) 
-     * @param filter (optional) 
+     * 导出栏目
+     * @param isOnlyGetRecycleData (optional) 是否仅获取回收站数据
+     * @param creationDateStart (optional) 创建开始时间
+     * @param creationDateEnd (optional) 创建结束时间
+     * @param modificationTimeStart (optional) 修改开始时间
+     * @param modificationTimeEnd (optional) 修改结束时间
+     * @param filter (optional) 关键字
      * @param sorting (optional) 
      * @param maxResultCount (optional) 
      * @param skipCount (optional) 
@@ -2946,6 +3142,7 @@ export class ColumnInfoServiceProxy {
     }
 
     /**
+     * 删除所有
      * @return Success
      */
     deleteAll(): Observable<void> {
@@ -2994,6 +3191,7 @@ export class ColumnInfoServiceProxy {
     }
 
     /**
+     * 获取栏目
      * @param id (optional) 
      * @return Success
      */
@@ -3049,6 +3247,121 @@ export class ColumnInfoServiceProxy {
     }
 
     /**
+     * 获取头部栏目
+     * @return Success
+     */
+    getHearderNavColumnInfos(): Observable<ColumnInfoListDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/ColumnInfo/GetHearderNavColumnInfos";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetHearderNavColumnInfos(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetHearderNavColumnInfos(<any>response_);
+                } catch (e) {
+                    return <Observable<ColumnInfoListDto[]>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ColumnInfoListDto[]>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetHearderNavColumnInfos(response: HttpResponseBase): Observable<ColumnInfoListDto[]> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData200 && resultData200.constructor === Array) {
+                result200 = [];
+                for (let item of resultData200)
+                    result200.push(ColumnInfoListDto.fromJS(item));
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ColumnInfoListDto[]>(<any>null);
+    }
+
+    /**
+     * 获取脚部栏目
+     * @return Success
+     */
+    getFooterNavColumnInfos(): Observable<ColumnInfoListDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/ColumnInfo/GetFooterNavColumnInfos";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetFooterNavColumnInfos(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetFooterNavColumnInfos(<any>response_);
+                } catch (e) {
+                    return <Observable<ColumnInfoListDto[]>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ColumnInfoListDto[]>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetFooterNavColumnInfos(response: HttpResponseBase): Observable<ColumnInfoListDto[]> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData200 && resultData200.constructor === Array) {
+                result200 = [];
+                for (let item of resultData200)
+                    result200.push(ColumnInfoListDto.fromJS(item));
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ColumnInfoListDto[]>(<any>null);
+    }
+
+    /**
+     * 创建或者编辑栏目
      * @param input (optional) 
      * @return Success
      */
@@ -3101,6 +3414,7 @@ export class ColumnInfoServiceProxy {
     }
 
     /**
+     * 删除栏目
      * @param id (optional) 
      * @return Success
      */
@@ -3152,6 +3466,7 @@ export class ColumnInfoServiceProxy {
     }
 
     /**
+     * 恢复
      * @param id (optional) 
      * @return Success
      */
@@ -3203,7 +3518,8 @@ export class ColumnInfoServiceProxy {
     }
 
     /**
-     * @param input (optional) 
+     * 拖拽排序
+     * @param input (optional) 输入参数
      * @return Success
      */
     moveTo(input: MoveToInputDtoOfInt64 | null | undefined): Observable<void> {
@@ -3255,7 +3571,8 @@ export class ColumnInfoServiceProxy {
     }
 
     /**
-     * @param input (optional) 
+     * IsActive开关服务
+     * @param input (optional) 开关输入参数
      * @return Success
      */
     updateIsActiveSwitchAsync(input: SwitchEntityInputDtoOfInt64 | null | undefined): Observable<void> {
@@ -3307,7 +3624,8 @@ export class ColumnInfoServiceProxy {
     }
 
     /**
-     * @param input (optional) 
+     * IsNeedAuthorizeAccess开关服务
+     * @param input (optional) 开关输入参数
      * @return Success
      */
     updateIsNeedAuthorizeAccessSwitchAsync(input: SwitchEntityInputDtoOfInt64 | null | undefined): Observable<void> {
@@ -3359,6 +3677,7 @@ export class ColumnInfoServiceProxy {
     }
 
     /**
+     * 获取选择列表
      * @return Success
      */
     getColumnInfoDataComboItems(): Observable<GetDataComboItemDtoOfInt64[]> {
@@ -3415,14 +3734,21 @@ export class ColumnInfoServiceProxy {
     }
 
     /**
-     * @param parentId (optional) 
-     * @param isOnlyGetRecycleData (optional) 
+     * 获取栏目 TreeTable列表
+     * @param parentId (optional) 父级Id
+     * @param isHeaderNav (optional) 是否为头部导航
+     * @param isFooterNav (optional) 是否为脚部导航
+     * @param isOnlyGetRecycleData (optional) 是否仅获取回收站数据
      * @return Success
      */
-    getChildrenColumnInfos(parentId: number | null | undefined, isOnlyGetRecycleData: boolean | null | undefined): Observable<TreeTableOutputDtoOfColumnInfo> {
+    getChildrenColumnInfos(parentId: number | null | undefined, isHeaderNav: boolean | null | undefined, isFooterNav: boolean | null | undefined, isOnlyGetRecycleData: boolean | null | undefined): Observable<TreeTableOutputDtoOfColumnInfo> {
         let url_ = this.baseUrl + "/api/services/app/ColumnInfo/GetChildrenColumnInfos?";
         if (parentId !== undefined)
             url_ += "ParentId=" + encodeURIComponent("" + parentId) + "&"; 
+        if (isHeaderNav !== undefined)
+            url_ += "IsHeaderNav=" + encodeURIComponent("" + isHeaderNav) + "&"; 
+        if (isFooterNav !== undefined)
+            url_ += "IsFooterNav=" + encodeURIComponent("" + isFooterNav) + "&"; 
         if (isOnlyGetRecycleData !== undefined)
             url_ += "IsOnlyGetRecycleData=" + encodeURIComponent("" + isOnlyGetRecycleData) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
@@ -3485,6 +3811,8 @@ export class CommonServiceProxy {
     }
 
     /**
+     * 获取枚举值列表
+     * @param fullName 类型全名
      * @return Success
      */
     getEnumValuesList(fullName: string): Observable<GetEnumValuesListDto[]> {
@@ -3545,8 +3873,9 @@ export class CommonServiceProxy {
     }
 
     /**
-     * @param objectType (optional) 
-     * @param objectId (optional) 
+     * 获取对象图片列表
+     * @param objectType (optional) 对象类型
+     * @param objectId (optional) 对象Id
      * @return Success
      */
     getObjectImages(objectType: string | null | undefined, objectId: number | null | undefined): Observable<GetObjectImagesListDto[]> {
@@ -3607,9 +3936,10 @@ export class CommonServiceProxy {
     }
 
     /**
-     * @param objectType (optional) 
-     * @param objectId (optional) 
-     * @param attachmentUrl (optional) 
+     * 获取对象封面图片
+     * @param objectType (optional) 对象类型
+     * @param objectId (optional) 对象Id
+     * @param attachmentUrl (optional) 附件Url
      * @return Success
      */
     getObjectCoverImage(objectType: string | null | undefined, objectId: number | null | undefined, attachmentUrl: string | null | undefined): Observable<GetObjectImagesListDto> {
@@ -3668,8 +3998,9 @@ export class CommonServiceProxy {
     }
 
     /**
-     * @param ids (optional) 
-     * @param objectType (optional) 
+     * 移除对象附件
+     * @param ids (optional) 主键Id数组
+     * @param objectType (optional) 附件类型
      * @return Success
      */
     removeObjectAttachments(ids: number[] | null | undefined, objectType: string | null | undefined): Observable<void> {
@@ -3722,6 +4053,7 @@ export class CommonServiceProxy {
     }
 
     /**
+     * 添加附件关联
      * @param input (optional) 
      * @return Success
      */
@@ -3774,7 +4106,8 @@ export class CommonServiceProxy {
     }
 
     /**
-     * @param input (optional) 
+     * 设置封面
+     * @param input (optional) The input.
      * @return Success
      */
     setCover(input: SetCoverInputDto | null | undefined): Observable<void> {
@@ -10726,10 +11059,11 @@ export class TransactionLogServiceProxy {
     }
 
     /**
-     * @param isOnlyGetRecycleData (optional) 
-     * @param creationDateStart (optional) 
-     * @param creationDateEnd (optional) 
-     * @param filter (optional) 
+     * 获取交易日志列表
+     * @param isOnlyGetRecycleData (optional) 是否仅获取回收站数据
+     * @param creationDateStart (optional) 创建开始时间
+     * @param creationDateEnd (optional) 创建结束时间
+     * @param filter (optional) 关键字
      * @param sorting (optional) 
      * @param maxResultCount (optional) 
      * @param skipCount (optional) 
@@ -10799,10 +11133,11 @@ export class TransactionLogServiceProxy {
     }
 
     /**
-     * @param isOnlyGetRecycleData (optional) 
-     * @param creationDateStart (optional) 
-     * @param creationDateEnd (optional) 
-     * @param filter (optional) 
+     * 导出交易日志
+     * @param isOnlyGetRecycleData (optional) 是否仅获取回收站数据
+     * @param creationDateStart (optional) 创建开始时间
+     * @param creationDateEnd (optional) 创建结束时间
+     * @param filter (optional) 关键字
      * @param sorting (optional) 
      * @param maxResultCount (optional) 
      * @param skipCount (optional) 
@@ -10872,6 +11207,7 @@ export class TransactionLogServiceProxy {
     }
 
     /**
+     * 删除交易日志
      * @param id (optional) 
      * @return Success
      */
@@ -10923,7 +11259,8 @@ export class TransactionLogServiceProxy {
     }
 
     /**
-     * @param input (optional) 
+     * IsFreeze开关服务
+     * @param input (optional) 开关输入参数
      * @return Success
      */
     updateIsFreezeSwitchAsync(input: SwitchEntityInputDtoOfInt64 | null | undefined): Observable<void> {
@@ -10987,6 +11324,7 @@ export class TreeServiceProxy {
     }
 
     /**
+     * 获取栏目 树级列表
      * @param parentId (optional) 
      * @return Success
      */
@@ -12423,6 +12761,7 @@ export class ResetPasswordInput implements IResetPasswordInput {
     password!: string | undefined;
     returnUrl!: string | undefined;
     singleSignIn!: string | undefined;
+    /** Encrypted values for {TenantId}, {UserId} and {ResetCode} */
     c!: string | undefined;
 
     constructor(data?: IResetPasswordInput) {
@@ -12470,6 +12809,7 @@ export interface IResetPasswordInput {
     password: string | undefined;
     returnUrl: string | undefined;
     singleSignIn: string | undefined;
+    /** Encrypted values for {TenantId}, {UserId} and {ResetCode} */
     c: string | undefined;
 }
 
@@ -12552,6 +12892,7 @@ export interface ISendEmailActivationLinkInput {
 export class ActivateEmailInput implements IActivateEmailInput {
     userId!: number | undefined;
     confirmationCode!: string | undefined;
+    /** Encrypted values for {TenantId}, {UserId} and {ConfirmationCode} */
     c!: string | undefined;
 
     constructor(data?: IActivateEmailInput) {
@@ -12590,6 +12931,7 @@ export class ActivateEmailInput implements IActivateEmailInput {
 export interface IActivateEmailInput {
     userId: number | undefined;
     confirmationCode: string | undefined;
+    /** Encrypted values for {TenantId}, {UserId} and {ConfirmationCode} */
     c: string | undefined;
 }
 
@@ -12753,6 +13095,52 @@ export interface ISwitchToLinkedAccountOutput {
     tenancyName: string | undefined;
 }
 
+/** 租户基本信息 */
+export class TenantBasisInfo implements ITenantBasisInfo {
+    /** 租户Id */
+    id!: number | undefined;
+    /** 租户名称 */
+    name!: string | undefined;
+
+    constructor(data?: ITenantBasisInfo) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.id = data["id"];
+            this.name = data["name"];
+        }
+    }
+
+    static fromJS(data: any): TenantBasisInfo {
+        data = typeof data === 'object' ? data : {};
+        let result = new TenantBasisInfo();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        return data; 
+    }
+}
+
+/** 租户基本信息 */
+export interface ITenantBasisInfo {
+    /** 租户Id */
+    id: number | undefined;
+    /** 租户名称 */
+    name: string | undefined;
+}
+
 export class PagedResultDtoOfArticleInfoListDto implements IPagedResultDtoOfArticleInfoListDto {
     totalCount!: number | undefined;
     items!: ArticleInfoListDto[] | undefined;
@@ -12801,24 +13189,52 @@ export interface IPagedResultDtoOfArticleInfoListDto {
     items: ArticleInfoListDto[] | undefined;
 }
 
+/** 文章列表Dto */
 export class ArticleInfoListDto implements IArticleInfoListDto {
+    /** 编码 */
     code!: string | undefined;
+    /** 标题 */
     title!: string | undefined;
+    /** 发布人（机构） */
     publisher!: string | undefined;
+    /** 栏目信息
+<code>
+请配置AutoMap：
+.ForMember(dto =&gt; dto.ColumnInfo, options =&gt; options.MapFrom(p =&gt; p.ColumnInfo.Title))
+</code> */
     columnInfo!: string | undefined;
+    /** 文章来源
+<code>
+请配置AutoMap：
+.ForMember(dto =&gt; dto.ArticleSourceInfo, options =&gt; options.MapFrom(p =&gt; p.ArticleSourceInfo.Name))
+</code> */
     articleSourceInfo!: string | undefined;
+    /** 发布时间 */
     releaseTime!: moment.Moment | undefined;
+    /** 是否启用 */
     isActive!: boolean | undefined;
+    /** 授权访问 */
     isNeedAuthorizeAccess!: boolean | undefined;
+    /** 标题 */
     seoTitle!: string | undefined;
+    /** 静态页路径 */
     staticPageUrl!: string | undefined;
+    /** 图片URL */
     imageUrl!: string | undefined;
+    /** 链接 */
     url!: string | undefined;
+    /** 推荐类型 */
     recommendedType!: ArticleInfoListDtoRecommendedType | undefined;
+    /** 访问数 */
     viewCount!: number | undefined;
+    /** 创建时间 */
     creationTime!: moment.Moment | undefined;
+    /** 是否已删除 */
     isDeleted!: boolean | undefined;
+    /** 是否静态 */
     isStatic!: boolean | undefined;
+    /** 简介 */
+    introduction!: string | undefined;
     id!: number | undefined;
 
     constructor(data?: IArticleInfoListDto) {
@@ -12849,6 +13265,7 @@ export class ArticleInfoListDto implements IArticleInfoListDto {
             this.creationTime = data["creationTime"] ? moment(data["creationTime"].toString()) : <any>undefined;
             this.isDeleted = data["isDeleted"];
             this.isStatic = data["isStatic"];
+            this.introduction = data["introduction"];
             this.id = data["id"];
         }
     }
@@ -12879,29 +13296,58 @@ export class ArticleInfoListDto implements IArticleInfoListDto {
         data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
         data["isDeleted"] = this.isDeleted;
         data["isStatic"] = this.isStatic;
+        data["introduction"] = this.introduction;
         data["id"] = this.id;
         return data; 
     }
 }
 
+/** 文章列表Dto */
 export interface IArticleInfoListDto {
+    /** 编码 */
     code: string | undefined;
+    /** 标题 */
     title: string | undefined;
+    /** 发布人（机构） */
     publisher: string | undefined;
+    /** 栏目信息
+<code>
+请配置AutoMap：
+.ForMember(dto =&gt; dto.ColumnInfo, options =&gt; options.MapFrom(p =&gt; p.ColumnInfo.Title))
+</code> */
     columnInfo: string | undefined;
+    /** 文章来源
+<code>
+请配置AutoMap：
+.ForMember(dto =&gt; dto.ArticleSourceInfo, options =&gt; options.MapFrom(p =&gt; p.ArticleSourceInfo.Name))
+</code> */
     articleSourceInfo: string | undefined;
+    /** 发布时间 */
     releaseTime: moment.Moment | undefined;
+    /** 是否启用 */
     isActive: boolean | undefined;
+    /** 授权访问 */
     isNeedAuthorizeAccess: boolean | undefined;
+    /** 标题 */
     seoTitle: string | undefined;
+    /** 静态页路径 */
     staticPageUrl: string | undefined;
+    /** 图片URL */
     imageUrl: string | undefined;
+    /** 链接 */
     url: string | undefined;
+    /** 推荐类型 */
     recommendedType: ArticleInfoListDtoRecommendedType | undefined;
+    /** 访问数 */
     viewCount: number | undefined;
+    /** 创建时间 */
     creationTime: moment.Moment | undefined;
+    /** 是否已删除 */
     isDeleted: boolean | undefined;
+    /** 是否静态 */
     isStatic: boolean | undefined;
+    /** 简介 */
+    introduction: string | undefined;
     id: number | undefined;
 }
 
@@ -12949,6 +13395,7 @@ export interface IFileDto {
     fileToken: string;
 }
 
+/** 文章���༭���ģ�� */
 export class GetArticleInfoForEditOutput implements IGetArticleInfoForEditOutput {
     articleInfo!: ArticleInfoEditDto | undefined;
 
@@ -12981,26 +13428,45 @@ export class GetArticleInfoForEditOutput implements IGetArticleInfoForEditOutput
     }
 }
 
+/** 文章���༭���ģ�� */
 export interface IGetArticleInfoForEditOutput {
     articleInfo: ArticleInfoEditDto | undefined;
 }
 
+/** 文章编辑Dto */
 export class ArticleInfoEditDto implements IArticleInfoEditDto {
+    /** 标题 */
     title!: string;
+    /** 发布人（机构） */
     publisher!: string;
     columnInfoId!: number | undefined;
     articleSourceInfoId!: number | undefined;
+    /** 发布时间 */
     releaseTime!: moment.Moment | undefined;
+    /** 内容 */
     content!: string;
+    /** 是否启用 */
     isActive!: boolean | undefined;
+    /** 授权访问 */
     isNeedAuthorizeAccess!: boolean | undefined;
+    /** 标题 */
     seoTitle!: string | undefined;
+    /** 关键字（多个以逗号隔开） */
     keyWords!: string | undefined;
+    /** 简介 */
     introduction!: string | undefined;
+    /** 静态页路径 */
     staticPageUrl!: string | undefined;
+    /** 链接 */
     url!: string | undefined;
+    /** 推荐类型 */
     recommendedType!: ArticleInfoEditDtoRecommendedType;
+    /** 是否静态 */
     isStatic!: boolean | undefined;
+    /** 查看数 */
+    viewCount!: number | undefined;
+    /** 标签 */
+    articleTagInfos!: ArticleTagInfo[] | undefined;
     id!: number | undefined;
 
     constructor(data?: IArticleInfoEditDto) {
@@ -13029,6 +13495,12 @@ export class ArticleInfoEditDto implements IArticleInfoEditDto {
             this.url = data["url"];
             this.recommendedType = data["recommendedType"];
             this.isStatic = data["isStatic"];
+            this.viewCount = data["viewCount"];
+            if (data["articleTagInfos"] && data["articleTagInfos"].constructor === Array) {
+                this.articleTagInfos = [];
+                for (let item of data["articleTagInfos"])
+                    this.articleTagInfos.push(ArticleTagInfo.fromJS(item));
+            }
             this.id = data["id"];
         }
     }
@@ -13057,16 +13529,270 @@ export class ArticleInfoEditDto implements IArticleInfoEditDto {
         data["url"] = this.url;
         data["recommendedType"] = this.recommendedType;
         data["isStatic"] = this.isStatic;
+        data["viewCount"] = this.viewCount;
+        if (this.articleTagInfos && this.articleTagInfos.constructor === Array) {
+            data["articleTagInfos"] = [];
+            for (let item of this.articleTagInfos)
+                data["articleTagInfos"].push(item.toJSON());
+        }
         data["id"] = this.id;
         return data; 
     }
 }
 
+/** 文章编辑Dto */
 export interface IArticleInfoEditDto {
+    /** 标题 */
     title: string;
+    /** 发布人（机构） */
     publisher: string;
     columnInfoId: number | undefined;
     articleSourceInfoId: number | undefined;
+    /** 发布时间 */
+    releaseTime: moment.Moment | undefined;
+    /** 内容 */
+    content: string;
+    /** 是否启用 */
+    isActive: boolean | undefined;
+    /** 授权访问 */
+    isNeedAuthorizeAccess: boolean | undefined;
+    /** 标题 */
+    seoTitle: string | undefined;
+    /** 关键字（多个以逗号隔开） */
+    keyWords: string | undefined;
+    /** 简介 */
+    introduction: string | undefined;
+    /** 静态页路径 */
+    staticPageUrl: string | undefined;
+    /** 链接 */
+    url: string | undefined;
+    /** 推荐类型 */
+    recommendedType: ArticleInfoEditDtoRecommendedType;
+    /** 是否静态 */
+    isStatic: boolean | undefined;
+    /** 查看数 */
+    viewCount: number | undefined;
+    /** 标签 */
+    articleTagInfos: ArticleTagInfo[] | undefined;
+    id: number | undefined;
+}
+
+export class ArticleTagInfo implements IArticleTagInfo {
+    articleInfo!: ArticleInfo | undefined;
+    articleInfoId!: number | undefined;
+    name!: string;
+    creatorUserId!: number | undefined;
+    creationTime!: moment.Moment | undefined;
+    lastModifierUserId!: number | undefined;
+    lastModificationTime!: moment.Moment | undefined;
+    deleterUserId!: number | undefined;
+    deletionTime!: moment.Moment | undefined;
+    isDeleted!: boolean | undefined;
+    tenantId!: number | undefined;
+    id!: number | undefined;
+
+    constructor(data?: IArticleTagInfo) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.articleInfo = data["articleInfo"] ? ArticleInfo.fromJS(data["articleInfo"]) : <any>undefined;
+            this.articleInfoId = data["articleInfoId"];
+            this.name = data["name"];
+            this.creatorUserId = data["creatorUserId"];
+            this.creationTime = data["creationTime"] ? moment(data["creationTime"].toString()) : <any>undefined;
+            this.lastModifierUserId = data["lastModifierUserId"];
+            this.lastModificationTime = data["lastModificationTime"] ? moment(data["lastModificationTime"].toString()) : <any>undefined;
+            this.deleterUserId = data["deleterUserId"];
+            this.deletionTime = data["deletionTime"] ? moment(data["deletionTime"].toString()) : <any>undefined;
+            this.isDeleted = data["isDeleted"];
+            this.tenantId = data["tenantId"];
+            this.id = data["id"];
+        }
+    }
+
+    static fromJS(data: any): ArticleTagInfo {
+        data = typeof data === 'object' ? data : {};
+        let result = new ArticleTagInfo();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["articleInfo"] = this.articleInfo ? this.articleInfo.toJSON() : <any>undefined;
+        data["articleInfoId"] = this.articleInfoId;
+        data["name"] = this.name;
+        data["creatorUserId"] = this.creatorUserId;
+        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
+        data["lastModifierUserId"] = this.lastModifierUserId;
+        data["lastModificationTime"] = this.lastModificationTime ? this.lastModificationTime.toISOString() : <any>undefined;
+        data["deleterUserId"] = this.deleterUserId;
+        data["deletionTime"] = this.deletionTime ? this.deletionTime.toISOString() : <any>undefined;
+        data["isDeleted"] = this.isDeleted;
+        data["tenantId"] = this.tenantId;
+        data["id"] = this.id;
+        return data; 
+    }
+}
+
+export interface IArticleTagInfo {
+    articleInfo: ArticleInfo | undefined;
+    articleInfoId: number | undefined;
+    name: string;
+    creatorUserId: number | undefined;
+    creationTime: moment.Moment | undefined;
+    lastModifierUserId: number | undefined;
+    lastModificationTime: moment.Moment | undefined;
+    deleterUserId: number | undefined;
+    deletionTime: moment.Moment | undefined;
+    isDeleted: boolean | undefined;
+    tenantId: number | undefined;
+    id: number | undefined;
+}
+
+export class ArticleInfo implements IArticleInfo {
+    code!: string;
+    title!: string;
+    publisher!: string;
+    columnInfoId!: number | undefined;
+    columnInfo!: ColumnInfo | undefined;
+    articleSourceInfoId!: number | undefined;
+    articleSourceInfo!: ArticleSourceInfo | undefined;
+    releaseTime!: moment.Moment | undefined;
+    content!: string;
+    isActive!: boolean | undefined;
+    isNeedAuthorizeAccess!: boolean | undefined;
+    seoTitle!: string | undefined;
+    keyWords!: string | undefined;
+    introduction!: string | undefined;
+    staticPageUrl!: string | undefined;
+    articleTagInfos!: ArticleTagInfo[] | undefined;
+    url!: string | undefined;
+    recommendedType!: ArticleInfoRecommendedType | undefined;
+    viewCount!: number | undefined;
+    isStatic!: boolean | undefined;
+    creatorUserId!: number | undefined;
+    creationTime!: moment.Moment | undefined;
+    lastModifierUserId!: number | undefined;
+    lastModificationTime!: moment.Moment | undefined;
+    deleterUserId!: number | undefined;
+    deletionTime!: moment.Moment | undefined;
+    isDeleted!: boolean | undefined;
+    tenantId!: number | undefined;
+    id!: number | undefined;
+
+    constructor(data?: IArticleInfo) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.isActive = true;
+            this.isStatic = false;
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.code = data["code"];
+            this.title = data["title"];
+            this.publisher = data["publisher"];
+            this.columnInfoId = data["columnInfoId"];
+            this.columnInfo = data["columnInfo"] ? ColumnInfo.fromJS(data["columnInfo"]) : <any>undefined;
+            this.articleSourceInfoId = data["articleSourceInfoId"];
+            this.articleSourceInfo = data["articleSourceInfo"] ? ArticleSourceInfo.fromJS(data["articleSourceInfo"]) : <any>undefined;
+            this.releaseTime = data["releaseTime"] ? moment(data["releaseTime"].toString()) : <any>undefined;
+            this.content = data["content"];
+            this.isActive = data["isActive"] !== undefined ? data["isActive"] : true;
+            this.isNeedAuthorizeAccess = data["isNeedAuthorizeAccess"];
+            this.seoTitle = data["seoTitle"];
+            this.keyWords = data["keyWords"];
+            this.introduction = data["introduction"];
+            this.staticPageUrl = data["staticPageUrl"];
+            if (data["articleTagInfos"] && data["articleTagInfos"].constructor === Array) {
+                this.articleTagInfos = [];
+                for (let item of data["articleTagInfos"])
+                    this.articleTagInfos.push(ArticleTagInfo.fromJS(item));
+            }
+            this.url = data["url"];
+            this.recommendedType = data["recommendedType"];
+            this.viewCount = data["viewCount"];
+            this.isStatic = data["isStatic"] !== undefined ? data["isStatic"] : false;
+            this.creatorUserId = data["creatorUserId"];
+            this.creationTime = data["creationTime"] ? moment(data["creationTime"].toString()) : <any>undefined;
+            this.lastModifierUserId = data["lastModifierUserId"];
+            this.lastModificationTime = data["lastModificationTime"] ? moment(data["lastModificationTime"].toString()) : <any>undefined;
+            this.deleterUserId = data["deleterUserId"];
+            this.deletionTime = data["deletionTime"] ? moment(data["deletionTime"].toString()) : <any>undefined;
+            this.isDeleted = data["isDeleted"];
+            this.tenantId = data["tenantId"];
+            this.id = data["id"];
+        }
+    }
+
+    static fromJS(data: any): ArticleInfo {
+        data = typeof data === 'object' ? data : {};
+        let result = new ArticleInfo();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["code"] = this.code;
+        data["title"] = this.title;
+        data["publisher"] = this.publisher;
+        data["columnInfoId"] = this.columnInfoId;
+        data["columnInfo"] = this.columnInfo ? this.columnInfo.toJSON() : <any>undefined;
+        data["articleSourceInfoId"] = this.articleSourceInfoId;
+        data["articleSourceInfo"] = this.articleSourceInfo ? this.articleSourceInfo.toJSON() : <any>undefined;
+        data["releaseTime"] = this.releaseTime ? this.releaseTime.toISOString() : <any>undefined;
+        data["content"] = this.content;
+        data["isActive"] = this.isActive;
+        data["isNeedAuthorizeAccess"] = this.isNeedAuthorizeAccess;
+        data["seoTitle"] = this.seoTitle;
+        data["keyWords"] = this.keyWords;
+        data["introduction"] = this.introduction;
+        data["staticPageUrl"] = this.staticPageUrl;
+        if (this.articleTagInfos && this.articleTagInfos.constructor === Array) {
+            data["articleTagInfos"] = [];
+            for (let item of this.articleTagInfos)
+                data["articleTagInfos"].push(item.toJSON());
+        }
+        data["url"] = this.url;
+        data["recommendedType"] = this.recommendedType;
+        data["viewCount"] = this.viewCount;
+        data["isStatic"] = this.isStatic;
+        data["creatorUserId"] = this.creatorUserId;
+        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
+        data["lastModifierUserId"] = this.lastModifierUserId;
+        data["lastModificationTime"] = this.lastModificationTime ? this.lastModificationTime.toISOString() : <any>undefined;
+        data["deleterUserId"] = this.deleterUserId;
+        data["deletionTime"] = this.deletionTime ? this.deletionTime.toISOString() : <any>undefined;
+        data["isDeleted"] = this.isDeleted;
+        data["tenantId"] = this.tenantId;
+        data["id"] = this.id;
+        return data; 
+    }
+}
+
+export interface IArticleInfo {
+    code: string;
+    title: string;
+    publisher: string;
+    columnInfoId: number | undefined;
+    columnInfo: ColumnInfo | undefined;
+    articleSourceInfoId: number | undefined;
+    articleSourceInfo: ArticleSourceInfo | undefined;
     releaseTime: moment.Moment | undefined;
     content: string;
     isActive: boolean | undefined;
@@ -13075,12 +13801,249 @@ export interface IArticleInfoEditDto {
     keyWords: string | undefined;
     introduction: string | undefined;
     staticPageUrl: string | undefined;
+    articleTagInfos: ArticleTagInfo[] | undefined;
     url: string | undefined;
-    recommendedType: ArticleInfoEditDtoRecommendedType;
+    recommendedType: ArticleInfoRecommendedType | undefined;
+    viewCount: number | undefined;
     isStatic: boolean | undefined;
+    creatorUserId: number | undefined;
+    creationTime: moment.Moment | undefined;
+    lastModifierUserId: number | undefined;
+    lastModificationTime: moment.Moment | undefined;
+    deleterUserId: number | undefined;
+    deletionTime: moment.Moment | undefined;
+    isDeleted: boolean | undefined;
+    tenantId: number | undefined;
     id: number | undefined;
 }
 
+export class ColumnInfo implements IColumnInfo {
+    code!: string;
+    title!: string;
+    isNeedAuthorizeAccess!: boolean | undefined;
+    description!: string | undefined;
+    introduction!: string | undefined;
+    parentId!: number | undefined;
+    iconCls!: string | undefined;
+    url!: string | undefined;
+    columnType!: ColumnInfoColumnType;
+    maxItemCount!: number | undefined;
+    isStatic!: boolean | undefined;
+    isHeaderNav!: boolean | undefined;
+    isFooterNav!: boolean | undefined;
+    isActive!: boolean | undefined;
+    sortNo!: number | undefined;
+    position!: ColumnInfoPosition | undefined;
+    seoTitle!: string | undefined;
+    keyWords!: string | undefined;
+    alias!: string | undefined;
+    staticPageUrl!: string | undefined;
+    creatorUserId!: number | undefined;
+    creationTime!: moment.Moment | undefined;
+    lastModifierUserId!: number | undefined;
+    lastModificationTime!: moment.Moment | undefined;
+    deleterUserId!: number | undefined;
+    deletionTime!: moment.Moment | undefined;
+    isDeleted!: boolean | undefined;
+    tenantId!: number | undefined;
+    id!: number | undefined;
+
+    constructor(data?: IColumnInfo) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.isStatic = false;
+            this.isHeaderNav = false;
+            this.isFooterNav = false;
+            this.isActive = true;
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.code = data["code"];
+            this.title = data["title"];
+            this.isNeedAuthorizeAccess = data["isNeedAuthorizeAccess"];
+            this.description = data["description"];
+            this.introduction = data["introduction"];
+            this.parentId = data["parentId"];
+            this.iconCls = data["iconCls"];
+            this.url = data["url"];
+            this.columnType = data["columnType"];
+            this.maxItemCount = data["maxItemCount"];
+            this.isStatic = data["isStatic"] !== undefined ? data["isStatic"] : false;
+            this.isHeaderNav = data["isHeaderNav"] !== undefined ? data["isHeaderNav"] : false;
+            this.isFooterNav = data["isFooterNav"] !== undefined ? data["isFooterNav"] : false;
+            this.isActive = data["isActive"] !== undefined ? data["isActive"] : true;
+            this.sortNo = data["sortNo"];
+            this.position = data["position"];
+            this.seoTitle = data["seoTitle"];
+            this.keyWords = data["keyWords"];
+            this.alias = data["alias"];
+            this.staticPageUrl = data["staticPageUrl"];
+            this.creatorUserId = data["creatorUserId"];
+            this.creationTime = data["creationTime"] ? moment(data["creationTime"].toString()) : <any>undefined;
+            this.lastModifierUserId = data["lastModifierUserId"];
+            this.lastModificationTime = data["lastModificationTime"] ? moment(data["lastModificationTime"].toString()) : <any>undefined;
+            this.deleterUserId = data["deleterUserId"];
+            this.deletionTime = data["deletionTime"] ? moment(data["deletionTime"].toString()) : <any>undefined;
+            this.isDeleted = data["isDeleted"];
+            this.tenantId = data["tenantId"];
+            this.id = data["id"];
+        }
+    }
+
+    static fromJS(data: any): ColumnInfo {
+        data = typeof data === 'object' ? data : {};
+        let result = new ColumnInfo();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["code"] = this.code;
+        data["title"] = this.title;
+        data["isNeedAuthorizeAccess"] = this.isNeedAuthorizeAccess;
+        data["description"] = this.description;
+        data["introduction"] = this.introduction;
+        data["parentId"] = this.parentId;
+        data["iconCls"] = this.iconCls;
+        data["url"] = this.url;
+        data["columnType"] = this.columnType;
+        data["maxItemCount"] = this.maxItemCount;
+        data["isStatic"] = this.isStatic;
+        data["isHeaderNav"] = this.isHeaderNav;
+        data["isFooterNav"] = this.isFooterNav;
+        data["isActive"] = this.isActive;
+        data["sortNo"] = this.sortNo;
+        data["position"] = this.position;
+        data["seoTitle"] = this.seoTitle;
+        data["keyWords"] = this.keyWords;
+        data["alias"] = this.alias;
+        data["staticPageUrl"] = this.staticPageUrl;
+        data["creatorUserId"] = this.creatorUserId;
+        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
+        data["lastModifierUserId"] = this.lastModifierUserId;
+        data["lastModificationTime"] = this.lastModificationTime ? this.lastModificationTime.toISOString() : <any>undefined;
+        data["deleterUserId"] = this.deleterUserId;
+        data["deletionTime"] = this.deletionTime ? this.deletionTime.toISOString() : <any>undefined;
+        data["isDeleted"] = this.isDeleted;
+        data["tenantId"] = this.tenantId;
+        data["id"] = this.id;
+        return data; 
+    }
+}
+
+export interface IColumnInfo {
+    code: string;
+    title: string;
+    isNeedAuthorizeAccess: boolean | undefined;
+    description: string | undefined;
+    introduction: string | undefined;
+    parentId: number | undefined;
+    iconCls: string | undefined;
+    url: string | undefined;
+    columnType: ColumnInfoColumnType;
+    maxItemCount: number | undefined;
+    isStatic: boolean | undefined;
+    isHeaderNav: boolean | undefined;
+    isFooterNav: boolean | undefined;
+    isActive: boolean | undefined;
+    sortNo: number | undefined;
+    position: ColumnInfoPosition | undefined;
+    seoTitle: string | undefined;
+    keyWords: string | undefined;
+    alias: string | undefined;
+    staticPageUrl: string | undefined;
+    creatorUserId: number | undefined;
+    creationTime: moment.Moment | undefined;
+    lastModifierUserId: number | undefined;
+    lastModificationTime: moment.Moment | undefined;
+    deleterUserId: number | undefined;
+    deletionTime: moment.Moment | undefined;
+    isDeleted: boolean | undefined;
+    tenantId: number | undefined;
+    id: number | undefined;
+}
+
+export class ArticleSourceInfo implements IArticleSourceInfo {
+    name!: string;
+    creatorUserId!: number | undefined;
+    creationTime!: moment.Moment | undefined;
+    lastModifierUserId!: number | undefined;
+    lastModificationTime!: moment.Moment | undefined;
+    deleterUserId!: number | undefined;
+    deletionTime!: moment.Moment | undefined;
+    isDeleted!: boolean | undefined;
+    tenantId!: number | undefined;
+    id!: number | undefined;
+
+    constructor(data?: IArticleSourceInfo) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.name = data["name"];
+            this.creatorUserId = data["creatorUserId"];
+            this.creationTime = data["creationTime"] ? moment(data["creationTime"].toString()) : <any>undefined;
+            this.lastModifierUserId = data["lastModifierUserId"];
+            this.lastModificationTime = data["lastModificationTime"] ? moment(data["lastModificationTime"].toString()) : <any>undefined;
+            this.deleterUserId = data["deleterUserId"];
+            this.deletionTime = data["deletionTime"] ? moment(data["deletionTime"].toString()) : <any>undefined;
+            this.isDeleted = data["isDeleted"];
+            this.tenantId = data["tenantId"];
+            this.id = data["id"];
+        }
+    }
+
+    static fromJS(data: any): ArticleSourceInfo {
+        data = typeof data === 'object' ? data : {};
+        let result = new ArticleSourceInfo();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["creatorUserId"] = this.creatorUserId;
+        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
+        data["lastModifierUserId"] = this.lastModifierUserId;
+        data["lastModificationTime"] = this.lastModificationTime ? this.lastModificationTime.toISOString() : <any>undefined;
+        data["deleterUserId"] = this.deleterUserId;
+        data["deletionTime"] = this.deletionTime ? this.deletionTime.toISOString() : <any>undefined;
+        data["isDeleted"] = this.isDeleted;
+        data["tenantId"] = this.tenantId;
+        data["id"] = this.id;
+        return data; 
+    }
+}
+
+export interface IArticleSourceInfo {
+    name: string;
+    creatorUserId: number | undefined;
+    creationTime: moment.Moment | undefined;
+    lastModifierUserId: number | undefined;
+    lastModificationTime: moment.Moment | undefined;
+    deleterUserId: number | undefined;
+    deletionTime: moment.Moment | undefined;
+    isDeleted: boolean | undefined;
+    tenantId: number | undefined;
+    id: number | undefined;
+}
+
+/** 文章创建或者编辑Dto */
 export class CreateOrUpdateArticleInfoDto implements ICreateOrUpdateArticleInfoDto {
     articleInfo!: ArticleInfoEditDto;
 
@@ -13116,12 +14079,16 @@ export class CreateOrUpdateArticleInfoDto implements ICreateOrUpdateArticleInfoD
     }
 }
 
+/** 文章创建或者编辑Dto */
 export interface ICreateOrUpdateArticleInfoDto {
     articleInfo: ArticleInfoEditDto;
 }
 
+/** 获取下拉列表 */
 export class GetDataComboItemDtoOfInt64 implements IGetDataComboItemDtoOfInt64 {
+    /** 显示名（会进行语言处理） */
     displayName!: string | undefined;
+    /** 值 */
     value!: number | undefined;
 
     constructor(data?: IGetDataComboItemDtoOfInt64) {
@@ -13155,12 +14122,17 @@ export class GetDataComboItemDtoOfInt64 implements IGetDataComboItemDtoOfInt64 {
     }
 }
 
+/** 获取下拉列表 */
 export interface IGetDataComboItemDtoOfInt64 {
+    /** 显示名（会进行语言处理） */
     displayName: string | undefined;
+    /** 值 */
     value: number | undefined;
 }
 
+/** 开关输入参数Dto */
 export class SwitchEntityInputDtoOfInt64 implements ISwitchEntityInputDtoOfInt64 {
+    /** 开关值（bool类型） */
     switchValue!: boolean | undefined;
     id!: number | undefined;
 
@@ -13195,7 +14167,9 @@ export class SwitchEntityInputDtoOfInt64 implements ISwitchEntityInputDtoOfInt64
     }
 }
 
+/** 开关输入参数Dto */
 export interface ISwitchEntityInputDtoOfInt64 {
+    /** 开关值（bool类型） */
     switchValue: boolean | undefined;
     id: number | undefined;
 }
@@ -13248,10 +14222,18 @@ export interface IPagedResultDtoOfArticleTagInfoListDto {
     items: ArticleTagInfoListDto[] | undefined;
 }
 
+/** 列表Dto */
 export class ArticleTagInfoListDto implements IArticleTagInfoListDto {
+    /** <code>
+            请配置AutoMap：
+            .ForMember(dto =&gt; dto.ArticleInfo, options =&gt; options.MapFrom(p =&gt; p.ArticleInfo.Title))
+            </code> */
     articleInfo!: string | undefined;
+    /** 名称 */
     name!: string | undefined;
+    /** 创建时间 */
     creationTime!: moment.Moment | undefined;
+    /** 是否已删除 */
     isDeleted!: boolean | undefined;
     id!: number | undefined;
 
@@ -13292,14 +14274,23 @@ export class ArticleTagInfoListDto implements IArticleTagInfoListDto {
     }
 }
 
+/** 列表Dto */
 export interface IArticleTagInfoListDto {
+    /** <code>
+            请配置AutoMap：
+            .ForMember(dto =&gt; dto.ArticleInfo, options =&gt; options.MapFrom(p =&gt; p.ArticleInfo.Title))
+            </code> */
     articleInfo: string | undefined;
+    /** 名称 */
     name: string | undefined;
+    /** 创建时间 */
     creationTime: moment.Moment | undefined;
+    /** 是否已删除 */
     isDeleted: boolean | undefined;
     id: number | undefined;
 }
 
+/** ���༭���ģ�� */
 export class GetArticleTagInfoForEditOutput implements IGetArticleTagInfoForEditOutput {
     articleTagInfo!: ArticleTagInfoEditDto | undefined;
 
@@ -13332,12 +14323,15 @@ export class GetArticleTagInfoForEditOutput implements IGetArticleTagInfoForEdit
     }
 }
 
+/** ���༭���ģ�� */
 export interface IGetArticleTagInfoForEditOutput {
     articleTagInfo: ArticleTagInfoEditDto | undefined;
 }
 
+/** 编辑Dto */
 export class ArticleTagInfoEditDto implements IArticleTagInfoEditDto {
     articleInfoId!: number | undefined;
+    /** 名称 */
     name!: string;
     id!: number | undefined;
 
@@ -13374,12 +14368,15 @@ export class ArticleTagInfoEditDto implements IArticleTagInfoEditDto {
     }
 }
 
+/** 编辑Dto */
 export interface IArticleTagInfoEditDto {
     articleInfoId: number | undefined;
+    /** 名称 */
     name: string;
     id: number | undefined;
 }
 
+/** 创建或者编辑Dto */
 export class CreateOrUpdateArticleInfoArticleTagInfoDto implements ICreateOrUpdateArticleInfoArticleTagInfoDto {
     articleTagInfo!: ArticleTagInfoEditDto;
 
@@ -13415,6 +14412,7 @@ export class CreateOrUpdateArticleInfoArticleTagInfoDto implements ICreateOrUpda
     }
 }
 
+/** 创建或者编辑Dto */
 export interface ICreateOrUpdateArticleInfoArticleTagInfoDto {
     articleTagInfo: ArticleTagInfoEditDto;
 }
@@ -13467,9 +14465,13 @@ export interface IPagedResultDtoOfArticleSourceInfoListDto {
     items: ArticleSourceInfoListDto[] | undefined;
 }
 
+/** 文章来源列表Dto */
 export class ArticleSourceInfoListDto implements IArticleSourceInfoListDto {
+    /** 名称 */
     name!: string | undefined;
+    /** 创建时间 */
     creationTime!: moment.Moment | undefined;
+    /** 是否已删除 */
     isDeleted!: boolean | undefined;
     id!: number | undefined;
 
@@ -13508,13 +14510,18 @@ export class ArticleSourceInfoListDto implements IArticleSourceInfoListDto {
     }
 }
 
+/** 文章来源列表Dto */
 export interface IArticleSourceInfoListDto {
+    /** 名称 */
     name: string | undefined;
+    /** 创建时间 */
     creationTime: moment.Moment | undefined;
+    /** 是否已删除 */
     isDeleted: boolean | undefined;
     id: number | undefined;
 }
 
+/** 文章来源���༭���ģ�� */
 export class GetArticleSourceInfoForEditOutput implements IGetArticleSourceInfoForEditOutput {
     articleSourceInfo!: ArticleSourceInfoEditDto | undefined;
 
@@ -13547,11 +14554,14 @@ export class GetArticleSourceInfoForEditOutput implements IGetArticleSourceInfoF
     }
 }
 
+/** 文章来源���༭���ģ�� */
 export interface IGetArticleSourceInfoForEditOutput {
     articleSourceInfo: ArticleSourceInfoEditDto | undefined;
 }
 
+/** 文章来源编辑Dto */
 export class ArticleSourceInfoEditDto implements IArticleSourceInfoEditDto {
+    /** 名称 */
     name!: string;
     id!: number | undefined;
 
@@ -13586,11 +14596,14 @@ export class ArticleSourceInfoEditDto implements IArticleSourceInfoEditDto {
     }
 }
 
+/** 文章来源编辑Dto */
 export interface IArticleSourceInfoEditDto {
+    /** 名称 */
     name: string;
     id: number | undefined;
 }
 
+/** 文章来源创建或者编辑Dto */
 export class CreateOrUpdateArticleSourceInfoDto implements ICreateOrUpdateArticleSourceInfoDto {
     articleSourceInfo!: ArticleSourceInfoEditDto;
 
@@ -13626,6 +14639,7 @@ export class CreateOrUpdateArticleSourceInfoDto implements ICreateOrUpdateArticl
     }
 }
 
+/** 文章来源创建或者编辑Dto */
 export interface ICreateOrUpdateArticleSourceInfoDto {
     articleSourceInfo: ArticleSourceInfoEditDto;
 }
@@ -14418,18 +15432,31 @@ export interface IPagedResultDtoOfColumnInfoListDto {
     items: ColumnInfoListDto[] | undefined;
 }
 
+/** 栏目列表Dto */
 export class ColumnInfoListDto implements IColumnInfoListDto {
+    /** 编码 */
     code!: string | undefined;
+    /** 标题 */
     title!: string | undefined;
+    /** 是否启用 */
     isActive!: boolean | undefined;
+    /** 授权访问 */
     isNeedAuthorizeAccess!: boolean | undefined;
+    /** 小图标 */
     iconCls!: string | undefined;
+    /** 图片URL */
     imageUrl!: string | undefined;
+    /** 链接 */
     url!: string | undefined;
+    /** 创建时间 */
     creationTime!: moment.Moment | undefined;
+    /** 是否已删除 */
     isDeleted!: boolean | undefined;
+    /** 栏目类型 */
     columnType!: ColumnInfoListDtoColumnType | undefined;
+    /** 最大子项数量 */
     maxItemCount!: number | undefined;
+    /** 是否静态 */
     isStatic!: boolean | undefined;
     id!: number | undefined;
 
@@ -14486,22 +15513,36 @@ export class ColumnInfoListDto implements IColumnInfoListDto {
     }
 }
 
+/** 栏目列表Dto */
 export interface IColumnInfoListDto {
+    /** 编码 */
     code: string | undefined;
+    /** 标题 */
     title: string | undefined;
+    /** 是否启用 */
     isActive: boolean | undefined;
+    /** 授权访问 */
     isNeedAuthorizeAccess: boolean | undefined;
+    /** 小图标 */
     iconCls: string | undefined;
+    /** 图片URL */
     imageUrl: string | undefined;
+    /** 链接 */
     url: string | undefined;
+    /** 创建时间 */
     creationTime: moment.Moment | undefined;
+    /** 是否已删除 */
     isDeleted: boolean | undefined;
+    /** 栏目类型 */
     columnType: ColumnInfoListDtoColumnType | undefined;
+    /** 最大子项数量 */
     maxItemCount: number | undefined;
+    /** 是否静态 */
     isStatic: boolean | undefined;
     id: number | undefined;
 }
 
+/** 栏目���༭���ģ�� */
 export class GetColumnInfoForEditOutput implements IGetColumnInfoForEditOutput {
     columnInfo!: ColumnInfoEditDto | undefined;
 
@@ -14534,23 +15575,41 @@ export class GetColumnInfoForEditOutput implements IGetColumnInfoForEditOutput {
     }
 }
 
+/** 栏目���༭���ģ�� */
 export interface IGetColumnInfoForEditOutput {
     columnInfo: ColumnInfoEditDto | undefined;
 }
 
+/** 栏目编辑Dto */
 export class ColumnInfoEditDto implements IColumnInfoEditDto {
+    /** 父级Id */
     parentId!: number | undefined;
+    /** 标题 */
     title!: string;
+    /** 排序号 */
     sortNo!: number | undefined;
+    /** 是否启用 */
     isActive!: boolean | undefined;
+    /** 授权访问 */
     isNeedAuthorizeAccess!: boolean | undefined;
+    /** 描述 */
     description!: string | undefined;
+    /** 简介 */
     introduction!: string | undefined;
+    /** 小图标 */
     iconCls!: string | undefined;
+    /** 链接 */
     url!: string | undefined;
+    /** 栏目类型 */
     columnType!: ColumnInfoEditDtoColumnType;
+    /** 最大子项数量 */
     maxItemCount!: number | undefined;
+    /** 是否静态 */
     isStatic!: boolean | undefined;
+    /** 是否为头部导航 */
+    isHeaderNav!: boolean | undefined;
+    /** 是否为脚部导航 */
+    isFooterNav!: boolean | undefined;
     id!: number | undefined;
 
     constructor(data?: IColumnInfoEditDto) {
@@ -14576,6 +15635,8 @@ export class ColumnInfoEditDto implements IColumnInfoEditDto {
             this.columnType = data["columnType"];
             this.maxItemCount = data["maxItemCount"];
             this.isStatic = data["isStatic"];
+            this.isHeaderNav = data["isHeaderNav"];
+            this.isFooterNav = data["isFooterNav"];
             this.id = data["id"];
         }
     }
@@ -14601,27 +15662,47 @@ export class ColumnInfoEditDto implements IColumnInfoEditDto {
         data["columnType"] = this.columnType;
         data["maxItemCount"] = this.maxItemCount;
         data["isStatic"] = this.isStatic;
+        data["isHeaderNav"] = this.isHeaderNav;
+        data["isFooterNav"] = this.isFooterNav;
         data["id"] = this.id;
         return data; 
     }
 }
 
+/** 栏目编辑Dto */
 export interface IColumnInfoEditDto {
+    /** 父级Id */
     parentId: number | undefined;
+    /** 标题 */
     title: string;
+    /** 排序号 */
     sortNo: number | undefined;
+    /** 是否启用 */
     isActive: boolean | undefined;
+    /** 授权访问 */
     isNeedAuthorizeAccess: boolean | undefined;
+    /** 描述 */
     description: string | undefined;
+    /** 简介 */
     introduction: string | undefined;
+    /** 小图标 */
     iconCls: string | undefined;
+    /** 链接 */
     url: string | undefined;
+    /** 栏目类型 */
     columnType: ColumnInfoEditDtoColumnType;
+    /** 最大子项数量 */
     maxItemCount: number | undefined;
+    /** 是否静态 */
     isStatic: boolean | undefined;
+    /** 是否为头部导航 */
+    isHeaderNav: boolean | undefined;
+    /** 是否为脚部导航 */
+    isFooterNav: boolean | undefined;
     id: number | undefined;
 }
 
+/** 栏目创建或者编辑Dto */
 export class CreateOrUpdateColumnInfoDto implements ICreateOrUpdateColumnInfoDto {
     columnInfo!: ColumnInfoEditDto;
 
@@ -14657,13 +15738,18 @@ export class CreateOrUpdateColumnInfoDto implements ICreateOrUpdateColumnInfoDto
     }
 }
 
+/** 栏目创建或者编辑Dto */
 export interface ICreateOrUpdateColumnInfoDto {
     columnInfo: ColumnInfoEditDto;
 }
 
+/** 排序迁移 */
 export class MoveToInputDtoOfInt64 implements IMoveToInputDtoOfInt64 {
+    /** 源Id */
     sourceId!: number | undefined;
+    /** 目标Id */
     targetId!: number | undefined;
+    /** 移动位置 */
     moveToPosition!: MoveToInputDtoOfInt64MoveToPosition | undefined;
 
     constructor(data?: IMoveToInputDtoOfInt64) {
@@ -14699,13 +15785,19 @@ export class MoveToInputDtoOfInt64 implements IMoveToInputDtoOfInt64 {
     }
 }
 
+/** 排序迁移 */
 export interface IMoveToInputDtoOfInt64 {
+    /** 源Id */
     sourceId: number | undefined;
+    /** 目标Id */
     targetId: number | undefined;
+    /** 移动位置 */
     moveToPosition: MoveToInputDtoOfInt64MoveToPosition | undefined;
 }
 
+/** Tree Table输出结果 */
 export class TreeTableOutputDtoOfColumnInfo implements ITreeTableOutputDtoOfColumnInfo {
+    /** 数据集合 */
     data!: TreeTableRowDtoOfColumnInfo[] | undefined;
 
     constructor(data?: ITreeTableOutputDtoOfColumnInfo) {
@@ -14745,12 +15837,17 @@ export class TreeTableOutputDtoOfColumnInfo implements ITreeTableOutputDtoOfColu
     }
 }
 
+/** Tree Table输出结果 */
 export interface ITreeTableOutputDtoOfColumnInfo {
+    /** 数据集合 */
     data: TreeTableRowDtoOfColumnInfo[] | undefined;
 }
 
+/** Tree Table行数据 */
 export class TreeTableRowDtoOfColumnInfo implements ITreeTableRowDtoOfColumnInfo {
+    /** 数据 */
     data!: ColumnInfo | undefined;
+    /** 子集 */
     children!: TreeTableRowDtoOfColumnInfo[] | undefined;
 
     constructor(data?: ITreeTableRowDtoOfColumnInfo) {
@@ -14792,153 +15889,19 @@ export class TreeTableRowDtoOfColumnInfo implements ITreeTableRowDtoOfColumnInfo
     }
 }
 
+/** Tree Table行数据 */
 export interface ITreeTableRowDtoOfColumnInfo {
+    /** 数据 */
     data: ColumnInfo | undefined;
+    /** 子集 */
     children: TreeTableRowDtoOfColumnInfo[] | undefined;
 }
 
-export class ColumnInfo implements IColumnInfo {
-    code!: string;
-    title!: string;
-    isNeedAuthorizeAccess!: boolean | undefined;
-    description!: string | undefined;
-    introduction!: string | undefined;
-    parentId!: number | undefined;
-    iconCls!: string | undefined;
-    url!: string | undefined;
-    columnType!: ColumnInfoColumnType;
-    maxItemCount!: number | undefined;
-    isStatic!: boolean | undefined;
-    isActive!: boolean | undefined;
-    sortNo!: number | undefined;
-    position!: ColumnInfoPosition | undefined;
-    seoTitle!: string | undefined;
-    keyWords!: string | undefined;
-    alias!: string | undefined;
-    creatorUserId!: number | undefined;
-    creationTime!: moment.Moment | undefined;
-    lastModifierUserId!: number | undefined;
-    lastModificationTime!: moment.Moment | undefined;
-    deleterUserId!: number | undefined;
-    deletionTime!: moment.Moment | undefined;
-    isDeleted!: boolean | undefined;
-    tenantId!: number | undefined;
-    id!: number | undefined;
-
-    constructor(data?: IColumnInfo) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-        if (!data) {
-            this.isStatic = false;
-            this.isActive = true;
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.code = data["code"];
-            this.title = data["title"];
-            this.isNeedAuthorizeAccess = data["isNeedAuthorizeAccess"];
-            this.description = data["description"];
-            this.introduction = data["introduction"];
-            this.parentId = data["parentId"];
-            this.iconCls = data["iconCls"];
-            this.url = data["url"];
-            this.columnType = data["columnType"];
-            this.maxItemCount = data["maxItemCount"];
-            this.isStatic = data["isStatic"] !== undefined ? data["isStatic"] : false;
-            this.isActive = data["isActive"] !== undefined ? data["isActive"] : true;
-            this.sortNo = data["sortNo"];
-            this.position = data["position"];
-            this.seoTitle = data["seoTitle"];
-            this.keyWords = data["keyWords"];
-            this.alias = data["alias"];
-            this.creatorUserId = data["creatorUserId"];
-            this.creationTime = data["creationTime"] ? moment(data["creationTime"].toString()) : <any>undefined;
-            this.lastModifierUserId = data["lastModifierUserId"];
-            this.lastModificationTime = data["lastModificationTime"] ? moment(data["lastModificationTime"].toString()) : <any>undefined;
-            this.deleterUserId = data["deleterUserId"];
-            this.deletionTime = data["deletionTime"] ? moment(data["deletionTime"].toString()) : <any>undefined;
-            this.isDeleted = data["isDeleted"];
-            this.tenantId = data["tenantId"];
-            this.id = data["id"];
-        }
-    }
-
-    static fromJS(data: any): ColumnInfo {
-        data = typeof data === 'object' ? data : {};
-        let result = new ColumnInfo();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["code"] = this.code;
-        data["title"] = this.title;
-        data["isNeedAuthorizeAccess"] = this.isNeedAuthorizeAccess;
-        data["description"] = this.description;
-        data["introduction"] = this.introduction;
-        data["parentId"] = this.parentId;
-        data["iconCls"] = this.iconCls;
-        data["url"] = this.url;
-        data["columnType"] = this.columnType;
-        data["maxItemCount"] = this.maxItemCount;
-        data["isStatic"] = this.isStatic;
-        data["isActive"] = this.isActive;
-        data["sortNo"] = this.sortNo;
-        data["position"] = this.position;
-        data["seoTitle"] = this.seoTitle;
-        data["keyWords"] = this.keyWords;
-        data["alias"] = this.alias;
-        data["creatorUserId"] = this.creatorUserId;
-        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
-        data["lastModifierUserId"] = this.lastModifierUserId;
-        data["lastModificationTime"] = this.lastModificationTime ? this.lastModificationTime.toISOString() : <any>undefined;
-        data["deleterUserId"] = this.deleterUserId;
-        data["deletionTime"] = this.deletionTime ? this.deletionTime.toISOString() : <any>undefined;
-        data["isDeleted"] = this.isDeleted;
-        data["tenantId"] = this.tenantId;
-        data["id"] = this.id;
-        return data; 
-    }
-}
-
-export interface IColumnInfo {
-    code: string;
-    title: string;
-    isNeedAuthorizeAccess: boolean | undefined;
-    description: string | undefined;
-    introduction: string | undefined;
-    parentId: number | undefined;
-    iconCls: string | undefined;
-    url: string | undefined;
-    columnType: ColumnInfoColumnType;
-    maxItemCount: number | undefined;
-    isStatic: boolean | undefined;
-    isActive: boolean | undefined;
-    sortNo: number | undefined;
-    position: ColumnInfoPosition | undefined;
-    seoTitle: string | undefined;
-    keyWords: string | undefined;
-    alias: string | undefined;
-    creatorUserId: number | undefined;
-    creationTime: moment.Moment | undefined;
-    lastModifierUserId: number | undefined;
-    lastModificationTime: moment.Moment | undefined;
-    deleterUserId: number | undefined;
-    deletionTime: moment.Moment | undefined;
-    isDeleted: boolean | undefined;
-    tenantId: number | undefined;
-    id: number | undefined;
-}
-
+/** 获取枚举值 */
 export class GetEnumValuesListDto implements IGetEnumValuesListDto {
+    /** 显示名（会进行语言处理） */
     displayName!: string | undefined;
+    /** 值 */
     value!: number | undefined;
 
     constructor(data?: IGetEnumValuesListDto) {
@@ -14972,16 +15935,24 @@ export class GetEnumValuesListDto implements IGetEnumValuesListDto {
     }
 }
 
+/** 获取枚举值 */
 export interface IGetEnumValuesListDto {
+    /** 显示名（会进行语言处理） */
     displayName: string | undefined;
+    /** 值 */
     value: number | undefined;
 }
 
+/** 图片显示Dto */
 export class GetObjectImagesListDto implements IGetObjectImagesListDto {
     id!: number | undefined;
+    /** 名称 */
     name!: string | undefined;
+    /** 文件大小 */
     fileLength!: number | undefined;
+    /** 网络路径 */
     url!: string | undefined;
+    /** 是否封面 */
     isCover!: boolean | undefined;
 
     constructor(data?: IGetObjectImagesListDto) {
@@ -15021,17 +15992,26 @@ export class GetObjectImagesListDto implements IGetObjectImagesListDto {
     }
 }
 
+/** 图片显示Dto */
 export interface IGetObjectImagesListDto {
     id: number | undefined;
+    /** 名称 */
     name: string | undefined;
+    /** 文件大小 */
     fileLength: number | undefined;
+    /** 网络路径 */
     url: string | undefined;
+    /** 是否封面 */
     isCover: boolean | undefined;
 }
 
+/** 更新附件绑定关系 */
 export class AddObjectAttachmentInfosInput implements IAddObjectAttachmentInfosInput {
+    /** 对象类型 */
     objectType!: string | undefined;
+    /** 对象Id */
     objectId!: number | undefined;
+    /** 附件Id */
     attachmentInfoIds!: number[] | undefined;
 
     constructor(data?: IAddObjectAttachmentInfosInput) {
@@ -15075,15 +16055,22 @@ export class AddObjectAttachmentInfosInput implements IAddObjectAttachmentInfosI
     }
 }
 
+/** 更新附件绑定关系 */
 export interface IAddObjectAttachmentInfosInput {
+    /** 对象类型 */
     objectType: string | undefined;
+    /** 对象Id */
     objectId: number | undefined;
+    /** 附件Id */
     attachmentInfoIds: number[] | undefined;
 }
 
 export class SetCoverInputDto implements ISetCoverInputDto {
+    /** 对象类型 */
     objectType!: string | undefined;
+    /** 对象Id */
     objectId!: number | undefined;
+    /** 附件Url */
     attachmentUrl!: string | undefined;
 
     constructor(data?: ISetCoverInputDto) {
@@ -15120,8 +16107,11 @@ export class SetCoverInputDto implements ISetCoverInputDto {
 }
 
 export interface ISetCoverInputDto {
+    /** 对象类型 */
     objectType: string | undefined;
+    /** 对象Id */
     objectId: number | undefined;
+    /** 附件Url */
     attachmentUrl: string | undefined;
 }
 
@@ -16622,6 +17612,7 @@ export interface IHostSettingsEditDto {
 
 export class GeneralSettingsEditDto implements IGeneralSettingsEditDto {
     timezone!: string | undefined;
+    /** This value is only used for comparing user's timezone to default timezone */
     timezoneForComparison!: string | undefined;
 
     constructor(data?: IGeneralSettingsEditDto) {
@@ -16657,6 +17648,7 @@ export class GeneralSettingsEditDto implements IGeneralSettingsEditDto {
 
 export interface IGeneralSettingsEditDto {
     timezone: string | undefined;
+    /** This value is only used for comparing user's timezone to default timezone */
     timezoneForComparison: string | undefined;
 }
 
@@ -16773,6 +17765,7 @@ export class TenantManagementSettingsEditDto implements ITenantManagementSetting
     isNewRegisteredTenantActiveByDefault!: boolean | undefined;
     useCaptchaOnRegistration!: boolean | undefined;
     defaultEditionId!: number | undefined;
+    useEnableTenantLogin!: boolean | undefined;
 
     constructor(data?: ITenantManagementSettingsEditDto) {
         if (data) {
@@ -16789,6 +17782,7 @@ export class TenantManagementSettingsEditDto implements ITenantManagementSetting
             this.isNewRegisteredTenantActiveByDefault = data["isNewRegisteredTenantActiveByDefault"];
             this.useCaptchaOnRegistration = data["useCaptchaOnRegistration"];
             this.defaultEditionId = data["defaultEditionId"];
+            this.useEnableTenantLogin = data["useEnableTenantLogin"];
         }
     }
 
@@ -16805,6 +17799,7 @@ export class TenantManagementSettingsEditDto implements ITenantManagementSetting
         data["isNewRegisteredTenantActiveByDefault"] = this.isNewRegisteredTenantActiveByDefault;
         data["useCaptchaOnRegistration"] = this.useCaptchaOnRegistration;
         data["defaultEditionId"] = this.defaultEditionId;
+        data["useEnableTenantLogin"] = this.useEnableTenantLogin;
         return data; 
     }
 }
@@ -16814,6 +17809,7 @@ export interface ITenantManagementSettingsEditDto {
     isNewRegisteredTenantActiveByDefault: boolean | undefined;
     useCaptchaOnRegistration: boolean | undefined;
     defaultEditionId: number | undefined;
+    useEnableTenantLogin: boolean | undefined;
 }
 
 export class SecuritySettingsEditDto implements ISecuritySettingsEditDto {
@@ -16869,11 +17865,17 @@ export interface ISecuritySettingsEditDto {
 }
 
 export class HostBillingSettingsEditDto implements IHostBillingSettingsEditDto {
+    /** 抬头名称 */
     legalName!: string | undefined;
+    /** 地址 */
     address!: string | undefined;
+    /** 税号 */
     taxNumber!: string | undefined;
+    /** 联系方式 */
     contact!: string | undefined;
+    /** 银行账户 */
     bankAccount!: string | undefined;
+    /** 开户行 */
     bank!: string | undefined;
 
     constructor(data?: IHostBillingSettingsEditDto) {
@@ -16916,11 +17918,17 @@ export class HostBillingSettingsEditDto implements IHostBillingSettingsEditDto {
 }
 
 export interface IHostBillingSettingsEditDto {
+    /** 抬头名称 */
     legalName: string | undefined;
+    /** 地址 */
     address: string | undefined;
+    /** 税号 */
     taxNumber: string | undefined;
+    /** 联系方式 */
     contact: string | undefined;
+    /** 银行账户 */
     bankAccount: string | undefined;
+    /** 开户行 */
     bank: string | undefined;
 }
 
@@ -17308,8 +18316,11 @@ export class InvoiceDto implements IInvoiceDto {
     tenantLegalName!: string | undefined;
     tenantAddress!: string[] | undefined;
     taxNumber!: string | undefined;
+    /** 联系方式 */
     contact!: string | undefined;
+    /** 银行账户 */
     bankAccount!: string | undefined;
+    /** 开户行 */
     bank!: string | undefined;
     hostLegalName!: string | undefined;
     hostAddress!: string[] | undefined;
@@ -17389,8 +18400,11 @@ export interface IInvoiceDto {
     tenantLegalName: string | undefined;
     tenantAddress: string[] | undefined;
     taxNumber: string | undefined;
+    /** 联系方式 */
     contact: string | undefined;
+    /** 银行账户 */
     bankAccount: string | undefined;
+    /** 开户行 */
     bank: string | undefined;
     hostLegalName: string | undefined;
     hostAddress: string[] | undefined;
@@ -17628,6 +18642,7 @@ export class ApplicationLanguageEditDto implements IApplicationLanguageEditDto {
     id!: number | undefined;
     name!: string;
     icon!: string | undefined;
+    /** Mapped from Language.IsDisabled with using manual mapping in CustomDtoMapper.cs */
     isEnabled!: boolean | undefined;
 
     constructor(data?: IApplicationLanguageEditDto) {
@@ -17669,6 +18684,7 @@ export interface IApplicationLanguageEditDto {
     id: number | undefined;
     name: string;
     icon: string | undefined;
+    /** Mapped from Language.IsDisabled with using manual mapping in CustomDtoMapper.cs */
     isEnabled: boolean | undefined;
 }
 
@@ -17932,6 +18948,7 @@ export interface IUpdateLanguageTextInput {
 }
 
 export class MiniProgramSettingsEditDto implements IMiniProgramSettingsEditDto {
+    /** 微信小程序配置 */
     weChatMiniProgram!: WeChatMiniProgramSettingsEditDto | undefined;
 
     constructor(data?: IMiniProgramSettingsEditDto) {
@@ -17964,12 +18981,16 @@ export class MiniProgramSettingsEditDto implements IMiniProgramSettingsEditDto {
 }
 
 export interface IMiniProgramSettingsEditDto {
+    /** 微信小程序配置 */
     weChatMiniProgram: WeChatMiniProgramSettingsEditDto | undefined;
 }
 
 export class WeChatMiniProgramSettingsEditDto implements IWeChatMiniProgramSettingsEditDto {
+    /** 小程序Id */
     appId!: string;
+    /** 小程序密钥 */
     appSecret!: string;
+    /** 是否启用 */
     isActive!: boolean;
 
     constructor(data?: IWeChatMiniProgramSettingsEditDto) {
@@ -18006,8 +19027,11 @@ export class WeChatMiniProgramSettingsEditDto implements IWeChatMiniProgramSetti
 }
 
 export interface IWeChatMiniProgramSettingsEditDto {
+    /** 小程序Id */
     appId: string;
+    /** 小程序密钥 */
     appSecret: string;
+    /** 是否启用 */
     isActive: boolean;
 }
 
@@ -19300,8 +20324,11 @@ export interface ISubscriptionPaymentListDto {
 }
 
 export class PaySettingEditDto implements IPaySettingEditDto {
+    /** 微信支付 */
     weChatPay!: WeChatPaySettingEditDto | undefined;
+    /** 阿里支付 */
     aliPay!: AliPaySettingEditDto | undefined;
+    /** 国际支付宝配置 */
     globalAliPay!: GlobalAlipaySettingEditDto | undefined;
 
     constructor(data?: IPaySettingEditDto) {
@@ -19338,16 +20365,24 @@ export class PaySettingEditDto implements IPaySettingEditDto {
 }
 
 export interface IPaySettingEditDto {
+    /** 微信支付 */
     weChatPay: WeChatPaySettingEditDto | undefined;
+    /** 阿里支付 */
     aliPay: AliPaySettingEditDto | undefined;
+    /** 国际支付宝配置 */
     globalAliPay: GlobalAlipaySettingEditDto | undefined;
 }
 
 export class WeChatPaySettingEditDto implements IWeChatPaySettingEditDto {
+    /** 支付平台分配给开发者的应用ID */
     appId!: string | undefined;
+    /** 商户Id */
     mchId!: string | undefined;
+    /** 支付回调路径 */
     payNotifyUrl!: string | undefined;
+    /** 支付密钥 */
     tenPayKey!: string | undefined;
+    /** 是否启用 */
     isActive!: boolean | undefined;
 
     constructor(data?: IWeChatPaySettingEditDto) {
@@ -19388,24 +20423,43 @@ export class WeChatPaySettingEditDto implements IWeChatPaySettingEditDto {
 }
 
 export interface IWeChatPaySettingEditDto {
+    /** 支付平台分配给开发者的应用ID */
     appId: string | undefined;
+    /** 商户Id */
     mchId: string | undefined;
+    /** 支付回调路径 */
     payNotifyUrl: string | undefined;
+    /** 支付密钥 */
     tenPayKey: string | undefined;
+    /** 是否启用 */
     isActive: boolean | undefined;
 }
 
 export class AliPaySettingEditDto implements IAliPaySettingEditDto {
+    /** 支付平台分配给开发者的应用ID */
     appId!: string | undefined;
+    /** 合作商户uid */
     uid!: string | undefined;
+    /** 支付宝网关
+默认值:https://openapi.alipay.com/gateway.do */
     gatewayurl!: string | undefined;
+    /** 支付宝公钥,查看地址：https://openhome.alipay.com/platform/keyManage.htm 对应APPID下的支付宝公钥。 */
     alipayPublicKey!: string | undefined;
+    /** 支付宝签名公钥 */
     alipaySignPublicKey!: string | undefined;
+    /** 商户私钥，您的原始格式RSA私钥 */
     privateKey!: string | undefined;
+    /** 请求使用的编码格式，如utf-8,gbk,gb2312等 
+默认值utf-8 */
     charSet!: string | undefined;
+    /** 回调地址 */
     notify!: string | undefined;
+    /** 商户生成签名字符串所使用的签名算法类型，目前支持RSA2和RSA，推荐使用RSA2
+默认值 RSA2 */
     signType!: string | undefined;
+    /** 是否从文件读取公私钥 如果为true ，那么公私钥应该配置为密钥文件路径 */
     isKeyFromFile!: boolean | undefined;
+    /** 是否启用 */
     isActive!: boolean | undefined;
 
     constructor(data?: IAliPaySettingEditDto) {
@@ -19458,27 +20512,53 @@ export class AliPaySettingEditDto implements IAliPaySettingEditDto {
 }
 
 export interface IAliPaySettingEditDto {
+    /** 支付平台分配给开发者的应用ID */
     appId: string | undefined;
+    /** 合作商户uid */
     uid: string | undefined;
+    /** 支付宝网关
+默认值:https://openapi.alipay.com/gateway.do */
     gatewayurl: string | undefined;
+    /** 支付宝公钥,查看地址：https://openhome.alipay.com/platform/keyManage.htm 对应APPID下的支付宝公钥。 */
     alipayPublicKey: string | undefined;
+    /** 支付宝签名公钥 */
     alipaySignPublicKey: string | undefined;
+    /** 商户私钥，您的原始格式RSA私钥 */
     privateKey: string | undefined;
+    /** 请求使用的编码格式，如utf-8,gbk,gb2312等 
+默认值utf-8 */
     charSet: string | undefined;
+    /** 回调地址 */
     notify: string | undefined;
+    /** 商户生成签名字符串所使用的签名算法类型，目前支持RSA2和RSA，推荐使用RSA2
+默认值 RSA2 */
     signType: string | undefined;
+    /** 是否从文件读取公私钥 如果为true ，那么公私钥应该配置为密钥文件路径 */
     isKeyFromFile: boolean | undefined;
+    /** 是否启用 */
     isActive: boolean | undefined;
 }
 
 export class GlobalAlipaySettingEditDto implements IGlobalAlipaySettingEditDto {
+    /** Gets or sets the Key
+MD5密钥，安全检验码，由数字和字母组成的32位字符串，查看地址：https://b.alipay.com/order/pidAndKey.htm */
     key!: string | undefined;
+    /** Gets or sets the Partner
+合作商户uid(合作身份者ID，签约账号，以2088开头由16位纯数字组成的字符串，查看地址：https://b.alipay.com/order/pidAndKey.htm) */
     partner!: string | undefined;
+    /** Gets or sets the Gatewayurl
+支付宝网关 */
     gatewayurl!: string | undefined;
+    /** Gets or sets the Notify
+服务器异步通知页面路径，需http://格式的完整路径，不能加?id=123这类自定义参数,必须外网可以正常访问 */
     notify!: string | undefined;
+    /** 页面跳转同步通知页面路径，需http://格式的完整路径，不能加?id=123这类自定义参数，必须外网可以正常访问 */
     returnUrl!: string | undefined;
+    /** 结算币种 */
     currency!: string | undefined;
+    /** 是否启用 */
     isActive!: boolean | undefined;
+    /** 分账信息 */
     splitFundSettings!: SplitFundSettingDto[] | undefined;
 
     constructor(data?: IGlobalAlipaySettingEditDto) {
@@ -19533,19 +20613,35 @@ export class GlobalAlipaySettingEditDto implements IGlobalAlipaySettingEditDto {
 }
 
 export interface IGlobalAlipaySettingEditDto {
+    /** Gets or sets the Key
+MD5密钥，安全检验码，由数字和字母组成的32位字符串，查看地址：https://b.alipay.com/order/pidAndKey.htm */
     key: string | undefined;
+    /** Gets or sets the Partner
+合作商户uid(合作身份者ID，签约账号，以2088开头由16位纯数字组成的字符串，查看地址：https://b.alipay.com/order/pidAndKey.htm) */
     partner: string | undefined;
+    /** Gets or sets the Gatewayurl
+支付宝网关 */
     gatewayurl: string | undefined;
+    /** Gets or sets the Notify
+服务器异步通知页面路径，需http://格式的完整路径，不能加?id=123这类自定义参数,必须外网可以正常访问 */
     notify: string | undefined;
+    /** 页面跳转同步通知页面路径，需http://格式的完整路径，不能加?id=123这类自定义参数，必须外网可以正常访问 */
     returnUrl: string | undefined;
+    /** 结算币种 */
     currency: string | undefined;
+    /** 是否启用 */
     isActive: boolean | undefined;
+    /** 分账信息 */
     splitFundSettings: SplitFundSettingDto[] | undefined;
 }
 
+/** 分账信息 */
 export class SplitFundSettingDto implements ISplitFundSettingDto {
+    /** 接受分账资金的支付宝账户ID。 以2088开头的纯16位数字。 */
     transIn!: string;
+    /** 分账比率 */
     amountRate!: number;
+    /** 分账描述信息。 */
     desc!: string | undefined;
 
     constructor(data?: ISplitFundSettingDto) {
@@ -19581,9 +20677,13 @@ export class SplitFundSettingDto implements ISplitFundSettingDto {
     }
 }
 
+/** 分账信息 */
 export interface ISplitFundSettingDto {
+    /** 接受分账资金的支付宝账户ID。 以2088开头的纯16位数字。 */
     transIn: string;
+    /** 分账比率 */
     amountRate: number;
+    /** 分账描述信息。 */
     desc: string | undefined;
 }
 
@@ -20720,11 +21820,17 @@ export interface ISmsCodeSettingEditDto {
 }
 
 export class AliSmsCodeSettingEditDto implements IAliSmsCodeSettingEditDto {
+    /** 是否启用 */
     isEnabled!: boolean;
+    /** accessKeyId */
     accessKeyId!: string;
+    /** accessKeySecret */
     accessKeySecret!: string;
+    /** 短信签名-可在短信控制台中找到 */
     signName!: string;
+    /** 短信模板-可在短信控制台中找到，发送国际/港澳台消息时，请使用国际/港澳台短信模版 */
     templateCode!: string;
+    /** 模板中的变量替换JSON串,如模板内容为"亲爱的${name},您的验证码为${code}"时,此处的值为 */
     templateParam!: string | undefined;
 
     constructor(data?: IAliSmsCodeSettingEditDto) {
@@ -20767,16 +21873,24 @@ export class AliSmsCodeSettingEditDto implements IAliSmsCodeSettingEditDto {
 }
 
 export interface IAliSmsCodeSettingEditDto {
+    /** 是否启用 */
     isEnabled: boolean;
+    /** accessKeyId */
     accessKeyId: string;
+    /** accessKeySecret */
     accessKeySecret: string;
+    /** 短信签名-可在短信控制台中找到 */
     signName: string;
+    /** 短信模板-可在短信控制台中找到，发送国际/港澳台消息时，请使用国际/港澳台短信模版 */
     templateCode: string;
+    /** 模板中的变量替换JSON串,如模板内容为"亲爱的${name},您的验证码为${code}"时,此处的值为 */
     templateParam: string | undefined;
 }
 
 export class StorageSettingEditDto implements IStorageSettingEditDto {
+    /** 阿里云存储 */
     aliStorageSetting!: AliStorageSettingEditDto | undefined;
+    /** 腾讯云存储 */
     tencentStorageSetting!: TencentStorageSettingEditDto | undefined;
 
     constructor(data?: IStorageSettingEditDto) {
@@ -20811,15 +21925,24 @@ export class StorageSettingEditDto implements IStorageSettingEditDto {
 }
 
 export interface IStorageSettingEditDto {
+    /** 阿里云存储 */
     aliStorageSetting: AliStorageSettingEditDto | undefined;
+    /** 腾讯云存储 */
     tencentStorageSetting: TencentStorageSettingEditDto | undefined;
 }
 
+/** 阿里云存储配置 */
 export class AliStorageSettingEditDto implements IAliStorageSettingEditDto {
+    /** 是否启用 */
     isEnabled!: boolean | undefined;
+    /** accessKeyId */
     accessKeyId!: string | undefined;
+    /** accessKeySecret */
     accessKeySecret!: string | undefined;
+    /** 地域节点 */
     endPoint!: string | undefined;
+    /** 存储桶名称 */
+    bucketName!: string | undefined;
 
     constructor(data?: IAliStorageSettingEditDto) {
         if (data) {
@@ -20836,6 +21959,7 @@ export class AliStorageSettingEditDto implements IAliStorageSettingEditDto {
             this.accessKeyId = data["accessKeyId"];
             this.accessKeySecret = data["accessKeySecret"];
             this.endPoint = data["endPoint"];
+            this.bucketName = data["bucketName"];
         }
     }
 
@@ -20852,23 +21976,37 @@ export class AliStorageSettingEditDto implements IAliStorageSettingEditDto {
         data["accessKeyId"] = this.accessKeyId;
         data["accessKeySecret"] = this.accessKeySecret;
         data["endPoint"] = this.endPoint;
+        data["bucketName"] = this.bucketName;
         return data; 
     }
 }
 
+/** 阿里云存储配置 */
 export interface IAliStorageSettingEditDto {
+    /** 是否启用 */
     isEnabled: boolean | undefined;
+    /** accessKeyId */
     accessKeyId: string | undefined;
+    /** accessKeySecret */
     accessKeySecret: string | undefined;
+    /** 地域节点 */
     endPoint: string | undefined;
+    /** 存储桶名称 */
+    bucketName: string | undefined;
 }
 
 export class TencentStorageSettingEditDto implements ITencentStorageSettingEditDto {
+    /** 是否启用 */
     isEnabled!: boolean | undefined;
+    /** 应用ID。 */
     appId!: string | undefined;
+    /** 秘钥id */
     secretId!: string | undefined;
+    /** 秘钥Key */
     secretKey!: string | undefined;
+    /** 区域 */
     region!: string | undefined;
+    /** 存储桶名称 */
     bucketName!: string | undefined;
 
     constructor(data?: ITencentStorageSettingEditDto) {
@@ -20911,11 +22049,17 @@ export class TencentStorageSettingEditDto implements ITencentStorageSettingEditD
 }
 
 export interface ITencentStorageSettingEditDto {
+    /** 是否启用 */
     isEnabled: boolean | undefined;
+    /** 应用ID。 */
     appId: string | undefined;
+    /** 秘钥id */
     secretId: string | undefined;
+    /** 秘钥Key */
     secretKey: string | undefined;
+    /** 区域 */
     region: string | undefined;
+    /** 存储桶名称 */
     bucketName: string | undefined;
 }
 
@@ -22283,11 +23427,17 @@ export interface ILdapSettingsEditDto {
 }
 
 export class TenantBillingSettingsEditDto implements ITenantBillingSettingsEditDto {
+    /** 抬头名称 */
     legalName!: string | undefined;
+    /** 地址 */
     address!: string | undefined;
+    /** 税号 */
     taxNumber!: string | undefined;
+    /** 联系方式 */
     contact!: string | undefined;
+    /** 银行账户 */
     bankAccount!: string | undefined;
+    /** 开户行 */
     bank!: string | undefined;
 
     constructor(data?: ITenantBillingSettingsEditDto) {
@@ -22330,11 +23480,17 @@ export class TenantBillingSettingsEditDto implements ITenantBillingSettingsEditD
 }
 
 export interface ITenantBillingSettingsEditDto {
+    /** 抬头名称 */
     legalName: string | undefined;
+    /** 地址 */
     address: string | undefined;
+    /** 税号 */
     taxNumber: string | undefined;
+    /** 联系方式 */
     contact: string | undefined;
+    /** 银行账户 */
     bankAccount: string | undefined;
+    /** 开户行 */
     bank: string | undefined;
 }
 
@@ -22858,19 +24014,33 @@ export interface IPagedResultDtoOfTransactionLogListDto {
     items: TransactionLogListDto[] | undefined;
 }
 
+/** 交易日志列表Dto */
 export class TransactionLogListDto implements ITransactionLogListDto {
+    /** 区域名称 */
     cultureValue!: string | undefined;
+    /** 创建时间 */
     creationTime!: moment.Moment | undefined;
+    /** 客户端Ip */
     clientIpAddress!: string | undefined;
+    /** 客户端名称 */
     clientName!: string | undefined;
+    /** 是否冻结 */
     isFreeze!: boolean | undefined;
+    /** 支付渠道 */
     payChannel!: TransactionLogListDtoPayChannel | undefined;
+    /** 终端 */
     terminal!: TransactionLogListDtoTerminal | undefined;
+    /** 交易状态 */
     transactionState!: TransactionLogListDtoTransactionState | undefined;
+    /** 自定义数据 */
     customData!: string | undefined;
+    /** 交易单号 */
     outTradeNo!: string | undefined;
+    /** 支付完成时间 */
     payTime!: moment.Moment | undefined;
+    /** 异常信息 */
     exception!: string | undefined;
+    /** 是否已删除 */
     isDeleted!: boolean | undefined;
     id!: number | undefined;
 
@@ -22929,24 +24099,40 @@ export class TransactionLogListDto implements ITransactionLogListDto {
     }
 }
 
+/** 交易日志列表Dto */
 export interface ITransactionLogListDto {
+    /** 区域名称 */
     cultureValue: string | undefined;
+    /** 创建时间 */
     creationTime: moment.Moment | undefined;
+    /** 客户端Ip */
     clientIpAddress: string | undefined;
+    /** 客户端名称 */
     clientName: string | undefined;
+    /** 是否冻结 */
     isFreeze: boolean | undefined;
+    /** 支付渠道 */
     payChannel: TransactionLogListDtoPayChannel | undefined;
+    /** 终端 */
     terminal: TransactionLogListDtoTerminal | undefined;
+    /** 交易状态 */
     transactionState: TransactionLogListDtoTransactionState | undefined;
+    /** 自定义数据 */
     customData: string | undefined;
+    /** 交易单号 */
     outTradeNo: string | undefined;
+    /** 支付完成时间 */
     payTime: moment.Moment | undefined;
+    /** 异常信息 */
     exception: string | undefined;
+    /** 是否已删除 */
     isDeleted: boolean | undefined;
     id: number | undefined;
 }
 
+/** Tree输出结果 */
 export class TreeOutputDto implements ITreeOutputDto {
+    /** 数据集合 */
     data!: TreeItemDto[] | undefined;
 
     constructor(data?: ITreeOutputDto) {
@@ -22986,14 +24172,20 @@ export class TreeOutputDto implements ITreeOutputDto {
     }
 }
 
+/** Tree输出结果 */
 export interface ITreeOutputDto {
+    /** 数据集合 */
     data: TreeItemDto[] | undefined;
 }
 
+/** Tree每一项类型定义 */
 export class TreeItemDto implements ITreeItemDto {
     data!: TreeItemDataDto | undefined;
+    /** 是否页节点 */
     leaf!: boolean | undefined;
+    /** 是否展开 */
     expanded!: boolean | undefined;
+    /** 子集 */
     children!: TreeItemDto[] | undefined;
 
     constructor(data?: ITreeItemDto) {
@@ -23039,16 +24231,24 @@ export class TreeItemDto implements ITreeItemDto {
     }
 }
 
+/** Tree每一项类型定义 */
 export interface ITreeItemDto {
     data: TreeItemDataDto | undefined;
+    /** 是否页节点 */
     leaf: boolean | undefined;
+    /** 是否展开 */
     expanded: boolean | undefined;
+    /** 子集 */
     children: TreeItemDto[] | undefined;
 }
 
+/** Tree每一项数据类型定义 */
 export class TreeItemDataDto implements ITreeItemDataDto {
+    /** 标题 */
     title!: string | undefined;
+    /** 主键Id */
     id!: number | undefined;
+    /** 图标 */
     icon!: string | undefined;
 
     constructor(data?: ITreeItemDataDto) {
@@ -23084,9 +24284,13 @@ export class TreeItemDataDto implements ITreeItemDataDto {
     }
 }
 
+/** Tree每一项数据类型定义 */
 export interface ITreeItemDataDto {
+    /** 标题 */
     title: string | undefined;
+    /** 主键Id */
     id: number | undefined;
+    /** 图标 */
     icon: string | undefined;
 }
 
@@ -23591,6 +24795,7 @@ export interface IGetUserForEditOutput {
 }
 
 export class UserEditDto implements IUserEditDto {
+    /** Set null to create a new user. Set user's Id to update a user */
     id!: number | undefined;
     name!: string;
     surname!: string;
@@ -23653,6 +24858,7 @@ export class UserEditDto implements IUserEditDto {
 }
 
 export interface IUserEditDto {
+    /** Set null to create a new user. Set user's Id to update a user */
     id: number | undefined;
     name: string;
     surname: string;
@@ -24361,6 +25567,22 @@ export enum ArticleInfoEditDtoRecommendedType {
     _3 = 3, 
 }
 
+export enum ArticleInfoRecommendedType {
+    _0 = 0, 
+    _1 = 1, 
+    _2 = 2, 
+    _3 = 3, 
+}
+
+export enum ColumnInfoColumnType {
+    _0 = 0, 
+    _1 = 1, 
+}
+
+export enum ColumnInfoPosition {
+    _0 = 0, 
+}
+
 export enum EntityChangeListDtoChangeType {
     _0 = 0, 
     _1 = 1, 
@@ -24400,15 +25622,6 @@ export enum ColumnInfoEditDtoColumnType {
 export enum MoveToInputDtoOfInt64MoveToPosition {
     _0 = 0, 
     _1 = 1, 
-}
-
-export enum ColumnInfoColumnType {
-    _0 = 0, 
-    _1 = 1, 
-}
-
-export enum ColumnInfoPosition {
-    _0 = 0, 
 }
 
 export enum UserNotificationState {

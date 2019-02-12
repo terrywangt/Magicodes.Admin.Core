@@ -602,7 +602,7 @@ namespace Magicodes.Admin.Web.Controllers
         private async Task<AbpLoginResult<Tenant, User>> GetLoginResultAsync(string usernameOrEmailAddress, string password, string tenancyName)
         {
             var loginResult = await _logInManager.LoginAsync(usernameOrEmailAddress, password, tenancyName);
-
+            
             switch (loginResult.Result)
             {
                 case AbpLoginResultType.Success:
@@ -635,33 +635,33 @@ namespace Magicodes.Admin.Web.Controllers
 
         private async Task<IEnumerable<Claim>> CreateJwtClaims(ClaimsIdentity identity, User user, TimeSpan? expiration = null)
         {
-            var tokenValidityKey = Guid.NewGuid().ToString();
-            var claims = identity.Claims.ToList();
-            var nameIdClaim = claims.First(c => c.Type == _identityOptions.ClaimsIdentity.UserIdClaimType);
+                var tokenValidityKey = Guid.NewGuid().ToString();
+                var claims = identity.Claims.ToList();
+                var nameIdClaim = claims.First(c => c.Type == _identityOptions.ClaimsIdentity.UserIdClaimType);
 
-            if (_identityOptions.ClaimsIdentity.UserIdClaimType != JwtRegisteredClaimNames.Sub)
-            {
-                claims.Add(new Claim(JwtRegisteredClaimNames.Sub, nameIdClaim.Value));
-            }
+                if (_identityOptions.ClaimsIdentity.UserIdClaimType != JwtRegisteredClaimNames.Sub)
+                {
+                    claims.Add(new Claim(JwtRegisteredClaimNames.Sub, nameIdClaim.Value));
+                }
 
             var userIdentifier = new UserIdentifier(AbpSession.TenantId, Convert.ToInt64(nameIdClaim.Value));
 
-            claims.AddRange(new[]
-            {
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.Now.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64),
-                new Claim(AppConsts.TokenValidityKey, tokenValidityKey),
-                new Claim(AppConsts.UserIdentifier, userIdentifier.ToUserIdentifierString())
-            });
+                claims.AddRange(new[]
+                {
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                    new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.Now.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64),
+                    new Claim(AppConsts.TokenValidityKey, tokenValidityKey),
+                    new Claim(AppConsts.UserIdentifier, userIdentifier.ToUserIdentifierString())
+                });
 
-            _cacheManager
-                .GetCache(AppConsts.TokenValidityKey)
-                .Set(tokenValidityKey, "");
+                _cacheManager
+                    .GetCache(AppConsts.TokenValidityKey)
+                    .Set(tokenValidityKey, "");
 
-            await _userManager.AddTokenValidityKeyAsync(user, tokenValidityKey,
-                DateTime.UtcNow.Add(expiration ?? _configuration.Expiration));
+                await _userManager.AddTokenValidityKeyAsync(user, tokenValidityKey,
+                    DateTime.UtcNow.Add(expiration ?? _configuration.Expiration));
 
-            return claims;
+                return claims;
         }
 
         private string AddSingleSignInParametersToReturnUrl(string returnUrl, string signInToken, long userId, int? tenantId)

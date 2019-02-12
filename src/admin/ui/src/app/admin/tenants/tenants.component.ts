@@ -125,7 +125,7 @@ export class TenantsComponent extends AppComponentBase implements OnInit {
         //this.impersonateUserLookupModal.tenantId = record.id;
         //this.impersonateUserLookupModal.show();
         let input = new FindUsersInput();
-        input.filter = "admin";
+        input.filter = 'admin';
         input.maxResultCount = 10;
         input.skipCount = 0;
         input.tenantId = record.id;

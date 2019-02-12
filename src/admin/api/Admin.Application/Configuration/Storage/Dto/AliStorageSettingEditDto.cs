@@ -26,5 +26,9 @@ namespace Magicodes.Admin.Configuration.Storage.Dto
         /// 地域节点
         /// </summary>
         public string EndPoint { get; set; }
+        /// <summary>
+        /// 存储桶名称
+        /// </summary>
+        public string BucketName { get; set; }
     }
 }

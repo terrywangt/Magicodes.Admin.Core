@@ -56,7 +56,7 @@ namespace Magicodes.Admin.EntityFrameworkCore
                     }
                     else
                     {
-                        AdminDbContextConfigurer.Configure(options.DbContextOptions, options.ConnectionString, isUseRowNumber);
+                        AdminDbContextConfigurer.Configure(options.DbContextOptions, options.ConnectionString);
                     }
                 });
             }

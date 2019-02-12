@@ -3,6 +3,7 @@
     Injector,
     OnInit,
     ViewChild,
+    ElementRef,
     ViewEncapsulation
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
@@ -41,6 +42,7 @@ export class ColumnInfosComponent extends AppComponentBase implements OnInit {
     paginator: Paginator;
     @ViewChild('createOrEditColumnInfoModal')
     createOrEditColumnInfoModal: CreateOrEditColumnInfoModalComponent;
+    @ViewChild('IsFooterNav') isFooterNav: ElementRef;
     advancedFiltersAreShown = false;
     list: TreeNode[] = [];
     loading = false;
@@ -64,6 +66,9 @@ export class ColumnInfosComponent extends AppComponentBase implements OnInit {
     ];
     filters: {
         isOnlyGetRecycleData: boolean;
+        parentId: number;
+        isFooterNav: boolean;
+        isHeaderNav: boolean;
         filterText: string;
         creationDateRangeActive: boolean;
         updateDateRangeActive: boolean;
@@ -79,6 +84,10 @@ export class ColumnInfosComponent extends AppComponentBase implements OnInit {
     ) {
         super(injector);
         this.setFiltersFromRoute();
+    }
+
+    onCheckbox() {
+        this.isFooterNav.nativeElement.disabled = !this.filters.isHeaderNav;
     }
 
     setFiltersFromRoute(): void {
@@ -139,6 +148,8 @@ export class ColumnInfosComponent extends AppComponentBase implements OnInit {
     ngOnInit(): void {
         this.filters.filterText =
             this._activatedRoute.snapshot.queryParams['filterText'] || '';
+        this.filters.isHeaderNav = true;
+        this.isFooterNav.nativeElement.disabled = !this.filters.isHeaderNav;
         this.getList();
     }
 
@@ -171,16 +182,16 @@ export class ColumnInfosComponent extends AppComponentBase implements OnInit {
                     ? moment(this.updateDateRange[1])
                     : undefined,
                 this.filters.filterText,
-                this.dataTable == undefined
+                this.dataTable === undefined
                     ? undefined
                     : this.primengTableHelper.getSorting(this.dataTable),
-                this.paginator == undefined
+                this.paginator === undefined
                     ? 10
                     : this.primengTableHelper.getMaxResultCount(
                           this.paginator,
                           event
                       ),
-                this.paginator == undefined
+                this.paginator === undefined
                     ? 0
                     : this.primengTableHelper.getSkipCount(
                           this.paginator,
@@ -271,12 +282,12 @@ export class ColumnInfosComponent extends AppComponentBase implements OnInit {
             });
     }
     getReorder(event) {
-        var sourceIndex,
+        let sourceIndex,
             targetIndex = 0;
-        var dropIndex = event.dropIndex;
-        var input = new MoveToInputDtoOfInt64();
+        let dropIndex = event.dropIndex;
+        let input = new MoveToInputDtoOfInt64();
         //拖到最顶部
-        if (dropIndex == 0) {
+        if (dropIndex === 0) {
             sourceIndex = 0;
             targetIndex = 1;
             input.moveToPosition = MoveToInputDtoOfInt64MoveToPosition._0;
@@ -313,8 +324,14 @@ export class ColumnInfosComponent extends AppComponentBase implements OnInit {
 
     getList(node?) {
         this.loading = true;
+        // node ? node.data.id : undefined, false;
         this._columnInfoService
-            .getChildrenColumnInfos(node ? node.data.id : undefined, false)
+            .getChildrenColumnInfos(
+                this.filters.parentId,
+                this.filters.isHeaderNav,
+                this.filters.isFooterNav,
+                this.filters.isOnlyGetRecycleData
+            )
             .subscribe(
                 result => {
                     if (node) {

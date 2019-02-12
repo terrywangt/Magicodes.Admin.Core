@@ -3,20 +3,27 @@ using System.Threading.Tasks;
 using System.Web;
 using Abp.Authorization;
 using Abp.Configuration;
+using Abp.Domain.Repositories;
+using Abp.Domain.Uow;
 using Abp.Extensions;
+using Abp.Runtime.Caching;
 using Abp.Runtime.Security;
 using Abp.Runtime.Session;
+using Abp.Timing;
 using Abp.UI;
 using Abp.Zero.Configuration;
 using Microsoft.AspNetCore.Identity;
 using Magicodes.Admin.Authorization.Accounts.Dto;
 using Magicodes.Admin.Authorization.Impersonation;
 using Magicodes.Admin.Authorization.Users;
+using Magicodes.Admin.Authorization.Users.Dto;
 using Magicodes.Admin.Configuration;
 using Magicodes.Admin.Debugging;
 using Magicodes.Admin.MultiTenancy;
+using Magicodes.Admin.MultiTenancy.Dto;
 using Magicodes.Admin.Security.Recaptcha;
 using Magicodes.Admin.Url;
+using Microsoft.EntityFrameworkCore;
 
 namespace Magicodes.Admin.Authorization.Accounts
 {
@@ -32,6 +39,8 @@ namespace Magicodes.Admin.Authorization.Accounts
         private readonly IUserLinkManager _userLinkManager;
         private readonly IPasswordHasher<User> _passwordHasher;
         private readonly IWebUrlService _webUrlService;
+        private readonly ICacheManager _cacheManager;
+        private readonly IRepository<Setting, long> _settingRepository;
 
         public AccountAppService(
             IUserEmailer userEmailer,
@@ -39,7 +48,9 @@ namespace Magicodes.Admin.Authorization.Accounts
             IImpersonationManager impersonationManager,
             IUserLinkManager userLinkManager,
             IPasswordHasher<User> passwordHasher,
-            IWebUrlService webUrlService)
+            IWebUrlService webUrlService, 
+            ICacheManager cacheManager, 
+            IRepository<Setting, long> settingRepository)
         {
             _userEmailer = userEmailer;
             _userRegistrationManager = userRegistrationManager;
@@ -47,6 +58,8 @@ namespace Magicodes.Admin.Authorization.Accounts
             _userLinkManager = userLinkManager;
             _passwordHasher = passwordHasher;
             _webUrlService = webUrlService;
+            _cacheManager = cacheManager;
+            _settingRepository = settingRepository;
 
             AppUrlService = NullAppUrlService.Instance;
             RecaptchaValidator = NullRecaptchaValidator.Instance;
@@ -242,6 +255,75 @@ namespace Magicodes.Admin.Authorization.Accounts
             }
 
             return user;
+        }
+
+        /// <summary>
+        /// 根据用户名从缓存获取租户基本信息
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <returns></returns>
+        public async Task<TenantBasisInfo> GetTenantBasisInfoByCache(string userName)
+        {
+            var query = await _cacheManager.GetCache<string, CacheUser>("CacheUserList").GetOrDefaultAsync($"{userName}");
+            if (query != null && query.TenantId.HasValue)
+            {
+                var tenant = await TenantManager.GetByIdAsync(query.TenantId.Value);
+                return new TenantBasisInfo()
+                {
+                    Id = tenant.Id,
+                    Name = tenant.Name
+                };
+            }
+            throw new UserFriendlyException(L("UserDoesNotExist"));
+        }
+
+        /// <summary>
+        /// 获取是否启用租户登陆
+        /// </summary>
+        /// <returns></returns>
+        public async Task<bool> GetIfEnableTenantLogin()
+        {
+            var users = await UserManager.GetAllUsers();
+            foreach (var user in users)
+            {
+                //TODO:Add cache information
+
+                var cacheUser = new CacheUser()
+                {
+                    Id = user.Id,
+                    Name = user.Name,
+                    TenantId = user.TenantId,
+                    Password = user.Password,
+                    CreationTime = user.CreationTime
+                };
+
+                await _cacheManager.GetCache<string, CacheUser>("CacheUserList")
+                    .SetAsync($"{user.Name}", cacheUser);
+            }
+            using (UnitOfWorkManager.Current.DisableFilter(AbpDataFilters.MayHaveTenant, AbpDataFilters.MustHaveTenant))
+            {
+                var setting = await
+                    _settingRepository.GetAll().FirstOrDefaultAsync(p =>
+                        p.Name == AppSettings.TenantManagement.UseEnableTenantLogin && p.TenantId == null);
+
+                if (setting == null)
+                {
+                    //TODO:如果不存在默认开始租户模式登陆
+                    return true;
+                }
+
+                var result = await SettingManager.GetSettingValueAsync<bool>(AppSettings.TenantManagement.UseEnableTenantLogin);
+
+                if (setting.Value != result.ToString())
+                {
+                    await SettingManager.ChangeSettingForApplicationAsync(
+                        AppSettings.TenantManagement.UseEnableTenantLogin,
+                        setting.Value.ToLowerInvariant()
+                    );
+                }
+
+                return setting.Value.ToLower() == "true";
+            }
         }
     }
 }

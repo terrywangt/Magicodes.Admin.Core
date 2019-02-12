@@ -191,12 +191,22 @@ namespace Magicodes.Admin.Contents
         }
 
         /// <summary>
-        /// 获取栏目
+        /// 获取头部栏目
         /// </summary>
         [AbpAllowAnonymous]
-        public async Task<List<ColumnInfoListDto>> GetNavColumnInfos()
+        public async Task<List<ColumnInfoListDto>> GetHearderNavColumnInfos()
         {
-            var results = await _columnInfoRepository.GetAll().Where(a => a.IsNav).ToListAsync();
+            var results = await _columnInfoRepository.GetAll().Where(a => a.IsHeaderNav).ToListAsync();
+            return results.MapTo<List<ColumnInfoListDto>>();
+        }
+
+        /// <summary>
+        /// 获取脚部栏目
+        /// </summary>
+        [AbpAllowAnonymous]
+        public async Task<List<ColumnInfoListDto>> GetFooterNavColumnInfos()
+        {
+            var results = await _columnInfoRepository.GetAll().Where(a => a.IsHeaderNav).ToListAsync();
             return results.MapTo<List<ColumnInfoListDto>>();
         }
 
@@ -260,6 +270,8 @@ namespace Magicodes.Admin.Contents
                 Url = input.ColumnInfo.Url,
                 MaxItemCount = input.ColumnInfo.MaxItemCount,
                 ColumnType = input.ColumnInfo.ColumnType,
+                IsFooterNav = input.ColumnInfo.IsFooterNav,
+                IsHeaderNav = input.ColumnInfo.IsHeaderNav,
                 IsStatic = input.ColumnInfo.IsStatic,
                 CreatorUserId = AbpSession.UserId,
                 CreationTime = Clock.Now,
@@ -301,6 +313,8 @@ namespace Magicodes.Admin.Contents
             columnInfo.MaxItemCount = input.ColumnInfo.MaxItemCount;
             columnInfo.ColumnType = input.ColumnInfo.ColumnType;
             columnInfo.IsStatic = input.ColumnInfo.IsStatic;
+            columnInfo.IsFooterNav = input.ColumnInfo.IsFooterNav;
+            columnInfo.IsHeaderNav = input.ColumnInfo.IsHeaderNav;
         }
 
         /// <summary>

@@ -66,6 +66,7 @@ namespace Magicodes.Admin.Configuration
             public const string BillingContact = "App.HostManagement.BillingContact";
             public const string BillingBankAccount = "App.HostManagement.BillingBankAccount";
             public const string BillingBank = "App.HostManagement.BillingBank";
+            public const string UseEnableTenantLogin = "App.TenantManagement.UseEnableTenantLogin";
         }
 
         public static class UserManagement
@@ -209,6 +210,8 @@ namespace Magicodes.Admin.Configuration
             public const string AccessKeySecret = "App.AliStorageManagement.AccessKeySecret";
 
             public const string EndPoint = "App.AliStorageManagement.EndPoint";
+
+            public const string BucketName = "App.AliStorageManagement.BucketName";
         }
     }
 }

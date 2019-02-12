@@ -6,7 +6,14 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppConsts } from '@shared/AppConsts';
 import { UrlHelper } from '@shared/helpers/UrlHelper';
-import { AuthenticateModel, AuthenticateResultModel, ExternalAuthenticateModel, ExternalAuthenticateResultModel, ExternalLoginProviderInfoModel, TokenAuthServiceProxy } from '@shared/service-proxies/service-proxies';
+import {
+    AuthenticateModel,
+    AuthenticateResultModel,
+    ExternalAuthenticateModel,
+    ExternalAuthenticateResultModel,
+    ExternalLoginProviderInfoModel,
+    TokenAuthServiceProxy
+} from '@shared/service-proxies/service-proxies';
 import { ScriptLoaderService } from '@shared/utils/script-loader.service';
 import * as _ from 'lodash';
 import { finalize } from 'rxjs/operators';
@@ -19,7 +26,6 @@ declare const WL: any; // Microsoft API
 declare const WxLogin: any; // Microsoft API
 
 export class ExternalLoginProvider extends ExternalLoginProviderInfoModel {
-
     static readonly FACEBOOK: string = 'Facebook';
     static readonly GOOGLE: string = 'Google';
     static readonly MICROSOFT: string = 'Microsoft';
@@ -51,8 +57,8 @@ export class ExternalLoginProvider extends ExternalLoginProviderInfoModel {
 
 @Injectable()
 export class LoginService {
-
-    static readonly twoFactorRememberClientTokenName = 'TwoFactorRememberClientToken';
+    static readonly twoFactorRememberClientTokenName =
+        'TwoFactorRememberClientToken';
 
     authenticateModel: AuthenticateModel;
     authenticateResult: AuthenticateResultModel;
@@ -73,11 +79,13 @@ export class LoginService {
         this.clear();
     }
 
-    authenticate(finallyCallback?: () => void, redirectUrl?: string): void {
-        finallyCallback = finallyCallback || (() => { });
+    authenticate(finallyCallback?: () => void, redirectUrl?: string, tenantId?: string): void {
+        finallyCallback = finallyCallback || (() => {});
 
         // We may switch to localStorage instead of cookies
-        this.authenticateModel.twoFactorRememberClientToken = this._utilsService.getCookieValue(LoginService.twoFactorRememberClientTokenName);
+        this.authenticateModel.twoFactorRememberClientToken = this._utilsService.getCookieValue(
+            LoginService.twoFactorRememberClientTokenName
+        );
         this.authenticateModel.singleSignIn = UrlHelper.getSingleSignIn();
         this.authenticateModel.returnUrl = UrlHelper.getReturnUrl();
 
@@ -92,13 +100,21 @@ export class LoginService {
     externalAuthenticate(provider: ExternalLoginProvider): void {
         this.ensureExternalLoginProviderInitialized(provider, () => {
             if (provider.name === ExternalLoginProvider.FACEBOOK) {
-                FB.login(response => {
-                    this.facebookLoginStatusChangeCallback(response);
-                }, { scope: 'email' });
+                FB.login(
+                    response => {
+                        this.facebookLoginStatusChangeCallback(response);
+                    },
+                    { scope: 'email' }
+                );
             } else if (provider.name === ExternalLoginProvider.GOOGLE) {
-                gapi.auth2.getAuthInstance().signIn().then(() => {
-                    this.googleLoginStatusChangeCallback(gapi.auth2.getAuthInstance().isSignedIn.get());
-                });
+                gapi.auth2
+                    .getAuthInstance()
+                    .signIn()
+                    .then(() => {
+                        this.googleLoginStatusChangeCallback(
+                            gapi.auth2.getAuthInstance().isSignedIn.get()
+                        );
+                    });
             } else if (provider.name === ExternalLoginProvider.MICROSOFT) {
                 WL.login({
                     scope: ['wl.signin', 'wl.basic', 'wl.emails']
@@ -111,7 +127,10 @@ export class LoginService {
         this.initExternalLoginProviders();
     }
 
-    private processAuthenticateResult(authenticateResult: AuthenticateResultModel, redirectUrl?: string) {
+    private processAuthenticateResult(
+        authenticateResult: AuthenticateResultModel,
+        redirectUrl?: string
+    ) {
         this.authenticateResult = authenticateResult;
 
         if (authenticateResult.shouldResetPassword) {
@@ -126,12 +145,10 @@ export class LoginService {
             });
 
             this.clear();
-
         } else if (authenticateResult.requiresTwoFactorVerification) {
             // Two factor authentication
 
             this._router.navigate(['account/send-code']);
-
         } else if (authenticateResult.accessToken) {
             // Successfully logged in
             if (authenticateResult.returnUrl && !redirectUrl) {
@@ -146,24 +163,27 @@ export class LoginService {
                 authenticateResult.twoFactorRememberClientToken,
                 redirectUrl
             );
-
         } else {
             // Unexpected result!
 
             this._logService.warn('Unexpected authenticateResult!');
             this._router.navigate(['account/login']);
-
         }
     }
 
-    private login(accessToken: string, encryptedAccessToken: string, expireInSeconds: number, rememberMe?: boolean, twoFactorRememberClientToken?: string, redirectUrl?: string): void {
+    private login(
+        accessToken: string,
+        encryptedAccessToken: string,
+        expireInSeconds: number,
+        rememberMe?: boolean,
+        twoFactorRememberClientToken?: string,
+        redirectUrl?: string
+    ): void {
+        let tokenExpireDate = rememberMe
+            ? new Date(new Date().getTime() + 1000 * expireInSeconds)
+            : undefined;
 
-        let tokenExpireDate = rememberMe ? (new Date(new Date().getTime() + 1000 * expireInSeconds)) : undefined;
-
-        this._tokenService.setToken(
-            accessToken,
-            tokenExpireDate
-        );
+        this._tokenService.setToken(accessToken, tokenExpireDate);
 
         this._utilsService.setCookieValue(
             AppConsts.authorization.encrptedAuthTokenName,
@@ -205,7 +225,10 @@ export class LoginService {
         this._tokenAuthService
             .getExternalAuthenticationProviders()
             .subscribe((providers: ExternalLoginProviderInfoModel[]) => {
-                this.externalLoginProviders = _.map(providers, p => new ExternalLoginProvider(p));
+                this.externalLoginProviders = _.map(
+                    providers,
+                    p => new ExternalLoginProvider(p)
+                );
 
                 if (callback) {
                     callback();
@@ -213,63 +236,79 @@ export class LoginService {
             });
     }
 
-    ensureExternalLoginProviderInitialized(loginProvider: ExternalLoginProvider, callback: () => void) {
+    ensureExternalLoginProviderInitialized(
+        loginProvider: ExternalLoginProvider,
+        callback: () => void
+    ) {
         if (loginProvider.initialized) {
             callback();
             return;
         }
 
         if (loginProvider.name === ExternalLoginProvider.FACEBOOK) {
-            new ScriptLoaderService().load('//connect.facebook.net/en_US/sdk.js').then(() => {
-                FB.init({
-                    appId: loginProvider.clientId,
-                    cookie: false,
-                    xfbml: true,
-                    version: 'v2.5'
-                });
-
-                FB.getLoginStatus(response => {
-                    this.facebookLoginStatusChangeCallback(response);
-                    if (response.status !== 'connected') {
-                        callback();
-                    }
-                });
-            });
-        } else if (loginProvider.name === ExternalLoginProvider.GOOGLE) {
-            new ScriptLoaderService().load('https://apis.google.com/js/api.js').then(() => {
-                gapi.load('client:auth2',
-                    () => {
-                        gapi.client.init({
-                            clientId: loginProvider.clientId,
-                            scope: 'openid profile email'
-                        }).then(() => {
-                            callback();
-                        });
+            new ScriptLoaderService()
+                .load('//connect.facebook.net/en_US/sdk.js')
+                .then(() => {
+                    FB.init({
+                        appId: loginProvider.clientId,
+                        cookie: false,
+                        xfbml: true,
+                        version: 'v2.5'
                     });
-            });
-        } else if (loginProvider.name === ExternalLoginProvider.MICROSOFT) {
-            new ScriptLoaderService().load('//js.live.net/v5.0/wl.js').then(() => {
-                WL.Event.subscribe('auth.login', this.microsoftLogin);
-                WL.init({
-                    client_id: loginProvider.clientId,
-                    scope: ['wl.signin', 'wl.basic', 'wl.emails'],
-                    redirect_uri: AppConsts.appBaseUrl,
-                    response_type: 'token'
+
+                    FB.getLoginStatus(response => {
+                        this.facebookLoginStatusChangeCallback(response);
+                        if (response.status !== 'connected') {
+                            callback();
+                        }
+                    });
                 });
-            });
+        } else if (loginProvider.name === ExternalLoginProvider.GOOGLE) {
+            new ScriptLoaderService()
+                .load('https://apis.google.com/js/api.js')
+                .then(() => {
+                    gapi.load('client:auth2', () => {
+                        gapi.client
+                            .init({
+                                clientId: loginProvider.clientId,
+                                scope: 'openid profile email'
+                            })
+                            .then(() => {
+                                callback();
+                            });
+                    });
+                });
+        } else if (loginProvider.name === ExternalLoginProvider.MICROSOFT) {
+            new ScriptLoaderService()
+                .load('//js.live.net/v5.0/wl.js')
+                .then(() => {
+                    WL.Event.subscribe('auth.login', this.microsoftLogin);
+                    WL.init({
+                        client_id: loginProvider.clientId,
+                        scope: ['wl.signin', 'wl.basic', 'wl.emails'],
+                        redirect_uri: AppConsts.appBaseUrl,
+                        response_type: 'token'
+                    });
+                });
         } else if (loginProvider.name === ExternalLoginProvider.OPENID) {
             const authConfig = this.getOpenIdConnectConfig(loginProvider);
             this.oauthService.configure(authConfig);
             this.oauthService.initImplicitFlow('openIdConnect=1');
         } else if (loginProvider.name === ExternalLoginProvider.WECHAT) {
-            this._tokenAuthService.getWeChatAuthUrl("http://demo.admin.xin-lai.com/account/send-wechat-code",undefined)
-            .subscribe((result) => {
-                window.location.href = result;
-            });
+            this._tokenAuthService
+                .getWeChatAuthUrl(
+                    'http://demo.admin.xin-lai.com/account/send-wechat-code',
+                    undefined
+                )
+                .subscribe(result => {
+                    window.location.href = result;
+                });
         }
     }
 
-    private getOpenIdConnectConfig(loginProvider: ExternalLoginProvider): AuthConfig {
+    private getOpenIdConnectConfig(
+        loginProvider: ExternalLoginProvider
+    ): AuthConfig {
         let authConfig = new AuthConfig();
         authConfig.loginUrl = loginProvider.additionalParams['LoginUrl'];
         authConfig.issuer = loginProvider.additionalParams['Authority'];
@@ -290,21 +329,33 @@ export class LoginService {
             model.singleSignIn = UrlHelper.getSingleSignIn();
             model.returnUrl = UrlHelper.getReturnUrl();
 
-            this._tokenAuthService.externalAuthenticate(model)
+            this._tokenAuthService
+                .externalAuthenticate(model)
                 .subscribe((result: ExternalAuthenticateResultModel) => {
                     if (result.waitingForActivation) {
-                        this._messageService.info('You have successfully registered. Waiting for activation!');
+                        this._messageService.info(
+                            'You have successfully registered. Waiting for activation!'
+                        );
                         return;
                     }
 
-                    this.login(result.accessToken, result.encryptedAccessToken, result.expireInSeconds, false, '', result.returnUrl);
+                    this.login(
+                        result.accessToken,
+                        result.encryptedAccessToken,
+                        result.expireInSeconds,
+                        false,
+                        '',
+                        result.returnUrl
+                    );
                 });
         }
     }
 
     public openIdConnectLoginCallback(resp) {
         this.initExternalLoginProviders(() => {
-            let openIdProvider = _.filter(this.externalLoginProviders, { name: 'OpenIdConnect' })[0];
+            let openIdProvider = _.filter(this.externalLoginProviders, {
+                name: 'OpenIdConnect'
+            })[0];
             let authConfig = this.getOpenIdConnectConfig(openIdProvider);
             this.oauthService.configure(authConfig);
 
@@ -320,15 +371,29 @@ export class LoginService {
                 model.singleSignIn = UrlHelper.getSingleSignIn();
                 model.returnUrl = UrlHelper.getReturnUrl();
 
-                this._tokenAuthService.externalAuthenticate(model)
-                    .pipe(finalize(() => { abp.ui.unblock(); }))
+                this._tokenAuthService
+                    .externalAuthenticate(model)
+                    .pipe(
+                        finalize(() => {
+                            abp.ui.unblock();
+                        })
+                    )
                     .subscribe((result: ExternalAuthenticateResultModel) => {
                         if (result.waitingForActivation) {
-                            this._messageService.info('You have successfully registered. Waiting for activation!');
+                            this._messageService.info(
+                                'You have successfully registered. Waiting for activation!'
+                            );
                             return;
                         }
 
-                        this.login(result.accessToken, result.encryptedAccessToken, result.expireInSeconds, false, '', result.returnUrl);
+                        this.login(
+                            result.accessToken,
+                            result.encryptedAccessToken,
+                            result.expireInSeconds,
+                            false,
+                            '',
+                            result.returnUrl
+                        );
                     });
             });
         });
@@ -338,26 +403,43 @@ export class LoginService {
         if (isSignedIn) {
             const model = new ExternalAuthenticateModel();
             model.authProvider = ExternalLoginProvider.GOOGLE;
-            model.providerAccessCode = gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token;
-            model.providerKey = gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile().getId();
+            model.providerAccessCode = gapi.auth2
+                .getAuthInstance()
+                .currentUser.get()
+                .getAuthResponse().access_token;
+            model.providerKey = gapi.auth2
+                .getAuthInstance()
+                .currentUser.get()
+                .getBasicProfile()
+                .getId();
             model.singleSignIn = UrlHelper.getSingleSignIn();
             model.returnUrl = UrlHelper.getReturnUrl();
 
-            this._tokenAuthService.externalAuthenticate(model)
+            this._tokenAuthService
+                .externalAuthenticate(model)
                 .subscribe((result: ExternalAuthenticateResultModel) => {
                     if (result.waitingForActivation) {
-                        this._messageService.info('You have successfully registered. Waiting for activation!');
+                        this._messageService.info(
+                            'You have successfully registered. Waiting for activation!'
+                        );
                         return;
                     }
 
-                    this.login(result.accessToken, result.encryptedAccessToken, result.expireInSeconds, false, '', result.returnUrl);
+                    this.login(
+                        result.accessToken,
+                        result.encryptedAccessToken,
+                        result.expireInSeconds,
+                        false,
+                        '',
+                        result.returnUrl
+                    );
                 });
         }
     }
 
     /**
-    * Microsoft login is not completed yet, because of an error thrown by zone.js: https://github.com/angular/zone.js/issues/290
-    */
+     * Microsoft login is not completed yet, because of an error thrown by zone.js: https://github.com/angular/zone.js/issues/290
+     */
     private microsoftLogin() {
         this._logService.debug(WL.getSession());
         const model = new ExternalAuthenticateModel();
@@ -367,14 +449,24 @@ export class LoginService {
         model.singleSignIn = UrlHelper.getSingleSignIn();
         model.returnUrl = UrlHelper.getReturnUrl();
 
-        this._tokenAuthService.externalAuthenticate(model)
+        this._tokenAuthService
+            .externalAuthenticate(model)
             .subscribe((result: ExternalAuthenticateResultModel) => {
                 if (result.waitingForActivation) {
-                    this._messageService.info('You have successfully registered. Waiting for activation!');
+                    this._messageService.info(
+                        'You have successfully registered. Waiting for activation!'
+                    );
                     return;
                 }
 
-                this.login(result.accessToken, result.encryptedAccessToken, result.expireInSeconds, false, '', result.returnUrl);
+                this.login(
+                    result.accessToken,
+                    result.encryptedAccessToken,
+                    result.expireInSeconds,
+                    false,
+                    '',
+                    result.returnUrl
+                );
             });
     }
 }

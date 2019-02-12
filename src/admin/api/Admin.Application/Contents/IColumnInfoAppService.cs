@@ -54,6 +54,6 @@ namespace Magicodes.Admin.Contents
         /// 获取导航栏目
         /// </summary>
         /// <returns></returns>
-        Task<List<ColumnInfoListDto>> GetNavColumnInfos();
+        Task<List<ColumnInfoListDto>> GetHearderNavColumnInfos();
     }
 }

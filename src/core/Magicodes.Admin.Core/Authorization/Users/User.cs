@@ -47,15 +47,16 @@ namespace Magicodes.Admin.Authorization.Users
         /// </summary>
         /// <param name="tenantId">Tenant Id</param>
         /// <param name="emailAddress">Email address</param>
+        /// <param name="userName">user name(用户名称为了兼容不选租户登陆添加的)</param>
         /// <returns>Created <see cref="User"/> object</returns>
-        public static User CreateTenantAdminUser(int tenantId, string emailAddress)
+        public static User CreateTenantAdminUser(int tenantId, string emailAddress,string userName=null)
         {
             var user = new User
             {
                 TenantId = tenantId,
-                UserName = AdminUserName,
-                Name = AdminUserName,
-                Surname = AdminUserName,
+                UserName = userName ?? AdminUserName,
+                Name = userName ?? AdminUserName,
+                Surname = userName ?? AdminUserName,
                 EmailAddress = emailAddress
             };
 

@@ -70,5 +70,15 @@ namespace Magicodes.Admin.Contents.Dto
         ///     是否静态
         /// </summary>
         public bool IsStatic { get; set; }
+
+        /// <summary>
+        ///     是否为头部导航
+        /// </summary>
+        public bool IsHeaderNav { get; set; }
+
+        /// <summary>
+        ///     是否为脚部导航
+        /// </summary>
+        public bool IsFooterNav { get; set; }
     }
 }

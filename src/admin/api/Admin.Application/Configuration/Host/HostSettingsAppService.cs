@@ -73,7 +73,8 @@ namespace Magicodes.Admin.Configuration.Host
             {
                 AllowSelfRegistration = await SettingManager.GetSettingValueAsync<bool>(AppSettings.TenantManagement.AllowSelfRegistration),
                 IsNewRegisteredTenantActiveByDefault = await SettingManager.GetSettingValueAsync<bool>(AppSettings.TenantManagement.IsNewRegisteredTenantActiveByDefault),
-                UseCaptchaOnRegistration = await SettingManager.GetSettingValueAsync<bool>(AppSettings.TenantManagement.UseCaptchaOnRegistration)
+                UseCaptchaOnRegistration = await SettingManager.GetSettingValueAsync<bool>(AppSettings.TenantManagement.UseCaptchaOnRegistration),
+                UseEnableTenantLogin = await SettingManager.GetSettingValueAsync<bool>(AppSettings.TenantManagement.UseEnableTenantLogin)
             };
 
             var defaultEditionId = await SettingManager.GetSettingValueAsync(AppSettings.TenantManagement.DefaultEdition);
@@ -237,6 +238,11 @@ namespace Magicodes.Admin.Configuration.Host
             await SettingManager.ChangeSettingForApplicationAsync(
                 AppSettings.TenantManagement.DefaultEdition,
                 settings.DefaultEditionId?.ToString() ?? ""
+            );
+
+            await SettingManager.ChangeSettingForApplicationAsync(
+                AppSettings.TenantManagement.UseEnableTenantLogin,
+                settings.UseEnableTenantLogin.ToString().ToLowerInvariant()
             );
         }
 
